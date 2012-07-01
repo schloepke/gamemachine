@@ -13,13 +13,16 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package gm.game_socket;
+package com.game_machine.socket_server;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
+import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import org.jboss.netty.handler.execution.MemoryAwareThreadPoolExecutor;
 
 /**
  * Receives a list of continent/city pairs from a {@link GameSocketClient} to
@@ -35,13 +38,15 @@ public class GameSocketServer {
 
     public void run() {
         // Configure the server.
+       MemoryAwareThreadPoolExecutor eventExecutor = new MemoryAwareThreadPoolExecutor(5, 1000000, 10000000, 100, TimeUnit.MILLISECONDS);
+       ExecutionHandler executionHandler = new ExecutionHandler(eventExecutor);
         ServerBootstrap bootstrap = new ServerBootstrap(
                 new NioServerSocketChannelFactory(
                         Executors.newCachedThreadPool(),
                         Executors.newCachedThreadPool()));
 
         // Set up the event pipeline factory.
-        bootstrap.setPipelineFactory(new GameSocketServerPipelineFactory());
+        bootstrap.setPipelineFactory(new GameSocketServerPipelineFactory(executionHandler));
 
         // Bind and start to accept incoming connections.
         bootstrap.bind(new InetSocketAddress(port));

@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package gm.game_socket;
+package com.game_machine.socket_server;
 
 import static java.util.Calendar.*;
 
@@ -22,13 +22,14 @@ import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.protobuf.ByteString;
 import org.jboss.netty.channel.ChannelEvent;
 import org.jboss.netty.channel.ChannelHandlerContext;
 import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelUpstreamHandler;
-import gm.game_socket.GameSocketProtocol.*;
+import com.game_machine.socket_server.GameSocketProtocol.*;
 
 
 public class GameSocketServerHandler extends SimpleChannelUpstreamHandler {
@@ -50,7 +51,8 @@ public class GameSocketServerHandler extends SimpleChannelUpstreamHandler {
         Msg msg = (Msg) e.getMessage();
         long currentTime = System.currentTimeMillis();
         Msg.Builder builder = Msg.newBuilder();
-        builder.setName("TESTING");
+        ByteString reply = ByteString.copyFromUtf8("TESTING");
+        builder.setBody(reply);
         e.getChannel().write(builder.build());
     }
 

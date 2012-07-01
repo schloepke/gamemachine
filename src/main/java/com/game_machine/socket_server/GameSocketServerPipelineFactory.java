@@ -13,10 +13,10 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package org.jboss.netty.example.localtime;
+package com.game_machine.socket_server;
 
 import static org.jboss.netty.channel.Channels.*;
-
+import org.jboss.netty.handler.execution.ExecutionHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
@@ -24,17 +24,25 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-public class LocalTimeClientPipelineFactory implements ChannelPipelineFactory {
+public class GameSocketServerPipelineFactory implements ChannelPipelineFactory {
 
+    private final ExecutionHandler executionHandler;
+
+    public GameSocketServerPipelineFactory(ExecutionHandler executionHandler) {
+      this.executionHandler = executionHandler;
+    }
+     
     public ChannelPipeline getPipeline() throws Exception {
         ChannelPipeline p = pipeline();
         p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-        p.addLast("protobufDecoder", new ProtobufDecoder(LocalTimeProtocol.LocalTimes.getDefaultInstance()));
+        p.addLast("protobufDecoder", new ProtobufDecoder(GameSocketProtocol.Msg.getDefaultInstance()));
 
         p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
         p.addLast("protobufEncoder", new ProtobufEncoder());
 
-        p.addLast("handler", new LocalTimeClientHandler());
+        p.addLast("pipelineExecutor", executionHandler);
+        
+        p.addLast("handler", new GameSocketServerHandler());
         return p;
     }
 }

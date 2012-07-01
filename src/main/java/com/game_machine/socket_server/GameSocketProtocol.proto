@@ -1,4 +1,4 @@
-package gm.game_socket;
+package com.game_machine.socket_server;
 
 // How to generate
 // ===============
@@ -10,5 +10,5 @@ package gm.game_socket;
 option optimize_for = SPEED;
 
 message Msg {
-   required string name = 1;
+   required bytes body = 1;
 }
