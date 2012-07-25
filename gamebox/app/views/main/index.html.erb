@@ -1,3 +1,9 @@
+
+
+<div id="input_box" class="input_box">
+  <div id="cell_input" class="cell_input"></div>
+</div>
+
 <div style="position:absolute;top:10;left:10;">
   <table id="rowed3"></table>
   <div id="prowed3"></div>
@@ -44,10 +50,17 @@
     box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
     word-wrap: break-word;
   }
+  .ui-jqgrid {
+    cursor: default;
+  }
 </style>
 
 <script type="text/javascript">
 
+  var current_top;
+  var current_left;
+  var current_height;
+  var current_width;
   function post_data(rowid, cellname, value, iRow, iCol) {
     
     $.ajax({
@@ -62,25 +75,39 @@
       error: function(data, textStatus, xhr) {
       },
       dataType: 'json'
-    });		  		
+    });
+    $("#input_box").css({'left': -10000, 'top': -10000});
   }
   
   function my_input(value, options) {
-    return $("<div class='input_box'></div>");
+    return $("<div>"+value+"</div>");
     return $("<div class='input_box'><div style=''>"+value+"</div></div>");
     return $("<div class='input_box'><div class='cell_input' style=''>"+value+"</div></div>");
   }
 
   function my_value(value) {
-    return value.text();
+    return $("#cell_input").text();
+  }
+  
+  function before_edit_cell(rowid, cellname, value, iRow, iCol) {
+    var td = $("#"+rowid).children()[iCol];
+    current_top = $(td).offset().top;
+    current_left = $(td).offset().left;
+    current_height = $(td).height();
+    current_width = $(td).width();
+    $(td).css({'height': current_height});
+    console.log(current_top,current_left,current_width,current_height);
   }
   
   function my_element_added(el,value) {
-    var cell_input = $("<div class='cell_input'>"+value+"</div>");
-    $(el).css({'position': 'relative', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
-      'min-width': '114px','min-height': '14px', 'max-height': '347px','right': 'auto', 'top': '0', 'left': '0'}
-  )
-    $(el).empty().append(cell_input);
+    //var cell_input = $("<div class='cell_input'>"+value+"</div>");
+    setTimeout(function(){
+      $("#cell_input").text(value);
+      $("#input_box").css({'position': 'absolute', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
+        'min-width': current_width,'min-height': current_height, 'max-height': '347px','right': 'auto', 'top': current_top-2, 'left': current_left-2}
+    )
+    },100);
+    //$(el).empty().append(cell_input);
   }
   
   var lastsel;
@@ -109,6 +136,7 @@
     cellEdit: true,
     cellsubmit: 'clientArray',
     cellurl: '/update_data',
+    beforeEditCell: function(rowid, cellname, value, iRow, iCol){before_edit_cell(rowid, cellname, value, iRow, iCol)},
     beforeSaveCell: function(rowid, cellname, value, iRow, iCol){post_data(rowid, cellname, value, iRow, iCol)},
     //onSelectRow: function(id){
     //  if(id && id!==lastsel){
