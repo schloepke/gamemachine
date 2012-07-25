@@ -13,5 +13,5 @@
 //= require jquery
 //= require jquery_ujs
 //= require_tree .
-//= require jquery_grid/js/jquery.jqGrid.min.js
+//= require jquery_grid/js/jquery.jqGrid.src.js
 //= require jquery_grid/js/i18n/grid.locale-en.js

@@ -1,18 +1,88 @@
-<table id="rowed3"></table>
-<div id="prowed3"></div>
+<div style="position:absolute;top:10;left:10;">
+  <table id="rowed3"></table>
+  <div id="prowed3"></div>
+</div>
+
+<style>
+  .cell_input {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    outline: none;
+    cursor: text;
+    -webkit-user-modify: read-write-plaintext-only;
+    white-space: pre-wrap;
+  }
+  .editnow {
+    color: black;
+    text-align: left;
+    background-color: white;
+    max-width: 1742px;
+    min-width: 114px;
+    min-height: 14px;
+    max-height: 347px;
+    left: 166px;
+    top: 428px;
+    right: auto;
+  }
+  .input_box {
+    position: absolute;
+    font: normal normal 400 13px arial,sans,sans-serif;
+    text-align: left;
+    top: -10000px;
+    left: -10000px;
+    border: 2px #5292F7 solid;
+    padding: 0 2px;
+    margin: 0;
+    z-index: 15;
+    resize: none;
+    overflow: auto;
+    white-space: pre-wrap;
+    outline: none;
+    -webkit-box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
+    -moz-box-shadow: 1px 2px 5px rgba(0,0,0,0.4);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
+    word-wrap: break-word;
+  }
+</style>
 
 <script type="text/javascript">
 
+  function post_data(rowid, cellname, value, iRow, iCol) {
+    
+    $.ajax({
+      type: 'POST',
+      url: "/update_data",
+      async: true,
+      data: {
+        data: {value: value, rowid: rowid, cellname: cellname, irow: iRow, icol: iCol}
+      },
+      success: function(data, textStatus, xhr) {
+      },
+      error: function(data, textStatus, xhr) {
+      },
+      dataType: 'json'
+    });		  		
+  }
+  
   function my_input(value, options) {
-    return $("<div style='-webkit-user-modify:read-write-plaintext-only;width:100%;height:100%;oudtline:none;cursor:text;margin:0px;white-space:pre-wrap;'>"+value+"</div>");
-    return $("<input type='text' size='10' value='"+value+"'/>");
+    return $("<div class='input_box'></div>");
+    return $("<div class='input_box'><div style=''>"+value+"</div></div>");
+    return $("<div class='input_box'><div class='cell_input' style=''>"+value+"</div></div>");
   }
 
-  //afterEditCell: function (rowid, cellname, value, iRow, iCol){
-  //      document.getElementById(iRow+'_'+cellname).select();
-  //    }
+  function my_value(value) {
+    return value.text();
+  }
   
-    
+  function my_element_added(el,value) {
+    var cell_input = $("<div class='cell_input'>"+value+"</div>");
+    $(el).css({'position': 'relative', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
+      'min-width': '114px','min-height': '14px', 'max-height': '347px','right': 'auto', 'top': '0', 'left': '0'}
+  )
+    $(el).empty().append(cell_input);
+  }
+  
   var lastsel;
   jQuery("#rowed3").jqGrid({
    	url:'/data?q=2',
@@ -22,10 +92,10 @@
       {name:'id',index:'id', width:55},
       {name:'invdate',index:'invdate', width:90, editable:true},
       {name:'name',index:'name', width:100,editable:true},
-      {name:'amount',index:'amount', width:80, align:"right",editable:true},
-      {name:'tax',index:'tax', width:80, align:"right",editable:true},		
-      {name:'total',index:'total', width:80,align:"right",editable:true, edittype: 'custom', editoptions: {custom_element:my_input}},		
-      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: {custom_element:my_input}}		
+      {name:'amount',index:'amount', width:80, align:"left",editable:true},
+      {name:'tax',index:'tax', width:80, align:"left",editable:true},		
+      {name:'total',index:'total', width:80,align:"left",editable:true, edittype: 'custom', editoptions: {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input}},		
+      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: {custom_value: my_value, custom_element:my_input}}		
    	],
    	rowNum:5000,
    	rowList:[100,200,300],
@@ -34,10 +104,12 @@
     viewrecords: true,
     sortorder: "desc",
     height: "700",
-    width: "1200",
+    width: "1600",
+    hoverrows: false,
     cellEdit: true,
-    cellsubmit: 'remote',
+    cellsubmit: 'clientArray',
     cellurl: '/update_data',
+    beforeSaveCell: function(rowid, cellname, value, iRow, iCol){post_data(rowid, cellname, value, iRow, iCol)},
     //onSelectRow: function(id){
     //  if(id && id!==lastsel){
     //    jQuery('#rowed3').jqGrid('restoreRow',lastsel);

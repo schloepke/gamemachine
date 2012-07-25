@@ -5861,6 +5861,9 @@ $.extend($.jgrid,{
 						if(celm) {
 							celm = $(celm).addClass("customelement").attr({id:options.id,name:options.name});
 							$(elem).empty().append(celm);
+              if($.isFunction(options.after_custom_element_added)) {
+                options.after_custom_element_added.call($t,celm,vl);
+              }
 						} else {
 							throw "e2";
 						}
