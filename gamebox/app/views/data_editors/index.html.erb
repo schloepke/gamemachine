@@ -1,0 +1,21 @@
+<h1>Listing data_editors</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @data_editors.each do |data_editor| %>
+  <tr>
+    <td><%= link_to 'Show', data_editor %></td>
+    <td><%= link_to 'Edit', edit_data_editor_path(data_editor) %></td>
+    <td><%= link_to 'Destroy', data_editor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Data editor', new_data_editor_path %>

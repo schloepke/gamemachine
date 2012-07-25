@@ -1,0 +1,52 @@
+<table id="rowed3"></table>
+<div id="prowed3"></div>
+
+<script type="text/javascript">
+
+  function my_input(value, options) {
+    return $("<div style='-webkit-user-modify:read-write-plaintext-only;width:100%;height:100%;oudtline:none;cursor:text;margin:0px;white-space:pre-wrap;'>"+value+"</div>");
+    return $("<input type='text' size='10' value='"+value+"'/>");
+  }
+
+  //afterEditCell: function (rowid, cellname, value, iRow, iCol){
+  //      document.getElementById(iRow+'_'+cellname).select();
+  //    }
+  
+    
+  var lastsel;
+  jQuery("#rowed3").jqGrid({
+   	url:'/data?q=2',
+    datatype: "json",
+   	colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
+   	colModel:[
+      {name:'id',index:'id', width:55},
+      {name:'invdate',index:'invdate', width:90, editable:true},
+      {name:'name',index:'name', width:100,editable:true},
+      {name:'amount',index:'amount', width:80, align:"right",editable:true},
+      {name:'tax',index:'tax', width:80, align:"right",editable:true},		
+      {name:'total',index:'total', width:80,align:"right",editable:true, edittype: 'custom', editoptions: {custom_element:my_input}},		
+      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: {custom_element:my_input}}		
+   	],
+   	rowNum:5000,
+   	rowList:[100,200,300],
+   	pager: '#prowed3',
+   	sortname: 'id',
+    viewrecords: true,
+    sortorder: "desc",
+    height: "700",
+    width: "1200",
+    cellEdit: true,
+    cellsubmit: 'remote',
+    cellurl: '/update_data',
+    //onSelectRow: function(id){
+    //  if(id && id!==lastsel){
+    //    jQuery('#rowed3').jqGrid('restoreRow',lastsel);
+    //    jQuery('#rowed3').jqGrid('editRow',id,true);
+    //    lastsel=id;
+    //  }
+    //},
+    //editurl: "/update_data",
+    caption: "Using events example"
+  });
+  jQuery("#rowed3").jqGrid('navGrid',"#prowed3",{edit:false,add:false,del:false});
+</script>
