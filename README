@@ -1,5 +1,4 @@
 == entity_system
-d
 
 Mathematically-speaking, an Entity is a database Key, just as you’d see in any RDBMS.
 
