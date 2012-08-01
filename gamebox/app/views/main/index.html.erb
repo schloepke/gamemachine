@@ -109,7 +109,7 @@
     setTimeout(function(){
       $("#cell_input").text(value);
       $("#input_box").css({'position': 'absolute', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
-        'min-width': current_width,'min-height': current_height, 'max-height': '347px','right': 'auto', 'top': current_top-2, 'left': current_left-2}
+        'min-width': current_width-1,'min-height': current_height, 'max-height': '347px','right': 'auto', 'top': current_top-2, 'left': current_left-2}
     )
     },100);
     //$(el).empty().append(cell_input);
@@ -134,6 +134,10 @@
    	rowList:[100,200,300],
    	pager: '#prowed3',
    	sortname: 'id',
+    rownumbers: true,
+    scroll: true,
+    toolbar: [true,'top'],
+    title: false,
     viewrecords: true,
     sortorder: "desc",
     height: "700",
@@ -153,7 +157,7 @@
     //  }
     //},
     //editurl: "/update_data",
-    caption: "Using events example"
+    caption: "Spreadsheet"
   });
   jQuery("#rowed3").jqGrid('navGrid',"#prowed3",{edit:false,add:false,del:false});
 </script>
