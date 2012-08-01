@@ -76,7 +76,7 @@
       },
       dataType: 'json'
     });
-    $("#input_box").css({'left': -10000, 'top': -10000});
+    
   }
   
   function my_input(value, options) {
@@ -87,6 +87,11 @@
 
   function my_value(value) {
     return $("#cell_input").text();
+  }
+  
+  function after_restore_cell(rowid, value, iRow, iCol) {
+    $("#input_box").css({'left': -10000, 'top': -10000});
+    $("#cell_input").text('');
   }
   
   function before_edit_cell(rowid, cellname, value, iRow, iCol) {
@@ -111,18 +116,19 @@
   }
   
   var lastsel;
+  var edit_options = {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input};
   jQuery("#rowed3").jqGrid({
    	url:'/data?q=2',
     datatype: "json",
    	colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
    	colModel:[
       {name:'id',index:'id', width:55},
-      {name:'invdate',index:'invdate', width:90, editable:true},
-      {name:'name',index:'name', width:100,editable:true},
-      {name:'amount',index:'amount', width:80, align:"left",editable:true},
-      {name:'tax',index:'tax', width:80, align:"left",editable:true},		
-      {name:'total',index:'total', width:80,align:"left",editable:true, edittype: 'custom', editoptions: {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input}},		
-      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: {custom_value: my_value, custom_element:my_input}}		
+      {name:'invdate',index:'invdate', width:90, editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'name',index:'name', width:100,editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'amount',index:'amount', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'tax',index:'tax', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},		
+      {name:'total',index:'total', width:80,align:"left",editable:true, edittype: 'custom', editoptions: edit_options},		
+      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: edit_options}		
    	],
    	rowNum:5000,
    	rowList:[100,200,300],
@@ -138,6 +144,7 @@
     cellurl: '/update_data',
     beforeEditCell: function(rowid, cellname, value, iRow, iCol){before_edit_cell(rowid, cellname, value, iRow, iCol)},
     beforeSaveCell: function(rowid, cellname, value, iRow, iCol){post_data(rowid, cellname, value, iRow, iCol)},
+    afterRestoreCell: function(rowid, cellname, value, iRow, iCol){after_restore_cell(rowid, cellname, value, iRow, iCol)},
     //onSelectRow: function(id){
     //  if(id && id!==lastsel){
     //    jQuery('#rowed3').jqGrid('restoreRow',lastsel);
