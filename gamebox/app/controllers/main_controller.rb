@@ -1,7 +1,7 @@
 class MainController < ApplicationController
 
   def update_data
-    data_editor = DataEditor.find_by_name('test1')
+    data_editor = DataEditor.find_by_name('test13')
     data = params[:data]
     row_id = data[:rowid].to_i
     col_id = data[:icol].to_i
@@ -13,10 +13,10 @@ class MainController < ApplicationController
   end
   
   def data
-    unless data_editor = DataEditor.find_by_name('test1')
+    unless data_editor = DataEditor.find_by_name('test13')
       data_editor = DataEditor.new
       data_editor.data = {:rows => DataEditor.testdata}
-      data_editor.name = 'test1'
+      data_editor.name = 'test13'
       data_editor.save!
     end
     
