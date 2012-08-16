@@ -1,6 +1,5 @@
 == entity_system
 
-
 Mathematically-speaking, an Entity is a database Key, just as you’d see in any RDBMS.
 
 Likewise, from a purely abstracted point of view, the “set of component-instances that comprise Entity #7742″ is, literally, a database Query

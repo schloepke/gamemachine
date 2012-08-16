@@ -1,8 +1,10 @@
+
 <div id="input_box" class="input_box">
   <div id="cell_input" class="cell_input"></div>
 </div>
 
-<div style="position:absolute;left:10px;top:10px;">
+
+<div style="position:absolute;top:10;left:10;">
   <table id="rowed3"></table>
   <div id="prowed3"></div>
 </div>
@@ -48,25 +50,18 @@
     box-shadow: 1px 2px 5px rgba(0, 0, 0, 0.4);
     word-wrap: break-word;
   }
+  .ui-jqgrid {
+    cursor: default;
+  }
 </style>
 
 <script type="text/javascript">
 
-  var current_td_height;
-  var current_td_top;
-  var current_td_left;
-  var current_td_width;
-  
-  function findPos(obj) {
-    var curleft = curtop = 0;
-    if (obj.offsetParent) {
-      do {
-        curleft += obj.offsetLeft;
-        curtop += obj.offsetTop;
-      } while (obj = obj.offsetParent);
-      return [curleft,curtop];
-    }
-  }
+
+  var current_top;
+  var current_left;
+  var current_height;
+  var current_width;
   function post_data(rowid, cellname, value, iRow, iCol) {
     $('#input_box').css({'left': -10000, 'top': -10000});
     $.ajax({
@@ -81,7 +76,9 @@
       error: function(data, textStatus, xhr) {
       },
       dataType: 'json'
-    });	  		
+
+    });
+    
   }
   
   function my_input(value, options) {
@@ -91,55 +88,58 @@
   }
 
   function my_value(value) {
-    return $('#cell_input').text();
+    return $("#cell_input").text();
   }
   
-  function set_cell_height(rowid, cellname, value, iRow, iCol) {
-    console.log(rowid,cellname,iRow,iCol);
-    var tr = $("#"+rowid);
-    var ch = $(tr).children()[iCol];
-    console.log(ch);
-    var ch_height = $(ch).height();
-    current_td_height = ch_height;
-    $(ch).css({'height': ch_height, 'max-height': ch_height});
-    var td_pos = $(ch).position();
-    current_td_top = td_pos.top;
-    current_td_left = td_pos.left;
-    current_td_width = $(ch).width();
-    console.log(current_td_top,current_td_left,current_td_height);
+  function after_restore_cell(rowid, value, iRow, iCol) {
+    $("#input_box").css({'left': -10000, 'top': -10000});
+    $("#cell_input").text('');
+  }
+  
+  function before_edit_cell(rowid, cellname, value, iRow, iCol) {
+    var td = $("#"+rowid).children()[iCol];
+    current_top = $(td).offset().top;
+    current_left = $(td).offset().left;
+    current_height = $(td).height();
+    current_width = $(td).width();
+    $(td).css({'height': current_height});
+    console.log(current_top,current_left,current_width,current_height);
   }
   
   function my_element_added(el,value) {
-    console.log('my_element_added');
+    //var cell_input = $("<div class='cell_input'>"+value+"</div>");
     setTimeout(function(){
-      $('#input_box').css({'position': 'absolute', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
-        'min-width': current_td_width,'min-height': current_td_height, 'max-height': '347px','right': 'auto', 'top': current_td_top+60, 'left': current_td_left+10})
-      $('#cell_input').text(value);
-    },50);
-  }
-   
-  function after_save_cell(rowid, cellname, value, iRow, iCol) {
-    $('#input_box').css({'left': -10000, 'top': -10000});
+      $("#cell_input").text(value);
+      $("#input_box").css({'position': 'absolute', 'color': 'black', 'text-align': 'left','background-color': 'white','max-width': '1742px',
+        'min-width': current_width-1,'min-height': current_height, 'max-height': '347px','right': 'auto', 'top': current_top-2, 'left': current_left-2}
+    )
+    },100);
+    //$(el).empty().append(cell_input);
   }
   
   var lastsel;
+  var edit_options = {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input};
   jQuery("#rowed3").jqGrid({
     url:'/data?q=2',
     datatype: "json",
     colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
     colModel:[
       {name:'id',index:'id', width:55},
-      {name:'invdate',index:'invdate', width:90, editable:true},
-      {name:'name',index:'name', width:100,editable:true},
-      {name:'amount',index:'amount', width:80, align:"left",editable:true},
-      {name:'tax',index:'tax', width:80, align:"left",editable:true},		
-      {name:'total',index:'total', width:80,align:"left",editable:true, edittype: 'custom', editoptions: {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input}},		
-      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input}}		
-    ],
-    rowNum:5000,
-    rowList:[100,200,300],
-    pager: '#prowed3',
-    sortname: 'id',
+      {name:'invdate',index:'invdate', width:90, editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'name',index:'name', width:100,editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'amount',index:'amount', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},
+      {name:'tax',index:'tax', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},		
+      {name:'total',index:'total', width:80,align:"left",editable:true, edittype: 'custom', editoptions: edit_options},		
+      {name:'note',index:'note', width:150, sortable:false,editable:true, edittype: 'custom', editoptions: edit_options}		
+   	],
+   	rowNum:5000,
+   	rowList:[100,200,300],
+   	pager: '#prowed3',
+   	sortname: 'id',
+    rownumbers: true,
+    scroll: true,
+    toolbar: [true,'top'],
+    title: false,
     viewrecords: true,
     sortorder: "desc",
     height: "700",
@@ -148,9 +148,9 @@
     cellEdit: true,
     cellsubmit: 'clientArray',
     cellurl: '/update_data',
-    afterSaveCell: function(rowid, cellname, value, iRow, iCol){post_data(rowid, cellname, value, iRow, iCol)},
-    afterRestoreCell: function(rowid, cellname, value, iRow, iCol){after_save_cell(rowid, cellname, value, iRow, iCol)},
-    beforeEditCell: function(rowid, cellname, value, iRow, iCol){set_cell_height(rowid, cellname, value, iRow, iCol)},
+    beforeEditCell: function(rowid, cellname, value, iRow, iCol){before_edit_cell(rowid, cellname, value, iRow, iCol)},
+    beforeSaveCell: function(rowid, cellname, value, iRow, iCol){post_data(rowid, cellname, value, iRow, iCol)},
+    afterRestoreCell: function(rowid, cellname, value, iRow, iCol){after_restore_cell(rowid, cellname, value, iRow, iCol)},
     //onSelectRow: function(id){
     //  if(id && id!==lastsel){
     //    jQuery('#rowed3').jqGrid('restoreRow',lastsel);
@@ -159,7 +159,7 @@
     //  }
     //},
     //editurl: "/update_data",
-    caption: "Using events example"
+    caption: "Spreadsheet"
   });
   jQuery("#rowed3").jqGrid('navGrid',"#prowed3",{edit:false,add:false,del:false});
 </script>
