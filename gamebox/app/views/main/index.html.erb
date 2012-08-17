@@ -5,6 +5,7 @@
 
 
 <div style="position:absolute;top:10;left:10;">
+  <div style="margin-bottom:10px;"></div>
   <table id="rowed3"></table>
   <div id="prowed3"></div>
 </div>
@@ -62,16 +63,63 @@
   var current_left;
   var current_height;
   var current_width;
+  var my_updates = [];
+  
+  function apply_updates(updates) {
+    if (updates == null) {
+      return false;
+    }
+    for (var i = 0; i < updates.length; i++) {
+      var update = updates[i];
+      console.log("action: "+update['action']);
+      var td = $("#"+update['rowid']).children()[update['iCol']];
+      if (update['action'] == 'enter_cell') {
+        $(td).css({'background-color': 'yellow'});
+      }
+      if (update['action'] == 'restore_cell') {
+        $(td).css({'background-color': 'white'});
+      }
+      if (update['action'] == 'save_cell') {
+        $(td).text(update['value']);
+        $(td).css({'background-color': 'white'});
+      }
+    }
+    
+  }
+  
+  function poll_for_updates() {
+    setTimeout(function(){
+      var updates = {user_id: '<%=params[:user_id]%>', updates: my_updates};
+      my_updates = [];
+      $.ajax({
+        type: 'POST',
+        url: "/poll",
+        async: true,
+        data: updates,
+        success: function(data, textStatus, xhr) {
+          console.log(data['updates']);
+          apply_updates(data['updates']);
+          poll_for_updates();
+        },
+        error: function(data, textStatus, xhr) {
+        },
+        dataType: 'json'
+      });
+    },1000);
+  }
+  
   function post_data(rowid, cellname, value, iRow, iCol) {
     $('#input_box').css({'left': -10000, 'top': -10000});
+    var postdata = {value: value, rowid: rowid, cellname: cellname, irow: iRow, icol: iCol, user_id: '<%=params[:user_id]%>'};
     $.ajax({
       type: 'POST',
       url: "/update_data",
       async: true,
       data: {
-        data: {value: value, rowid: rowid, cellname: cellname, irow: iRow, icol: iCol}
+        data: postdata
       },
       success: function(data, textStatus, xhr) {
+        my_updates.push({action: 'save_cell', value: value, rowid: rowid, cellname: cellname, iRow: iRow, iCol: iCol});
       },
       error: function(data, textStatus, xhr) {
       },
@@ -94,6 +142,8 @@
   function after_restore_cell(rowid, value, iRow, iCol) {
     $("#input_box").css({'left': -10000, 'top': -10000});
     $("#cell_input").text('');
+    my_updates.push({action: 'restore_cell', rowid: rowid, value: value, iRow: iRow, iCol: iCol});
+    console.log('after_restore_cell: '+iCol);
   }
   
   function before_edit_cell(rowid, cellname, value, iRow, iCol) {
@@ -103,7 +153,9 @@
     current_height = $(td).height();
     current_width = $(td).width();
     $(td).css({'height': current_height});
-    console.log(current_top,current_left,current_width,current_height);
+    my_updates.push({action: 'enter_cell', cellname: cellname, rowid: rowid, value: value, iRow: iRow, iCol: iCol});
+    //console.log(current_top,current_left,current_width,current_height);
+    console.log('before_edit_cell');
   }
   
   function my_element_added(el,value) {
@@ -117,6 +169,14 @@
     //$(el).empty().append(cell_input);
   }
   
+  function test_format(cellvalue, options, rowObject) {
+    var row_id = options['rowId'];
+    var col_id = options['colModel']['col_id'];
+    console.log("coord: "+ row_id + " "+ col_id);
+    //console.log('format: '+options['colModel']['name']);
+    //console.log('rowObject: '+rowObject);
+    return '';
+  }
   var lastsel;
   var edit_options = {after_custom_element_added: my_element_added, custom_value: my_value, custom_element:my_input};
   jQuery("#rowed3").jqGrid({
@@ -125,7 +185,7 @@
     colNames:['Inv No','Date', 'Client', 'Amount','Tax','Total','Notes'],
     colModel:[
       {name:'id',index:'id', width:55},
-      {name:'invdate',index:'invdate', width:90, editable:true, edittype: 'custom', editoptions: edit_options},
+      {col_id: 1, name:'invdate',index:'invdate', width:90, editable:true, edittype: 'custom', editoptions: edit_options, formatter: test_format},
       {name:'name',index:'name', width:100,editable:true, edittype: 'custom', editoptions: edit_options},
       {name:'amount',index:'amount', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},
       {name:'tax',index:'tax', width:80, align:"left",editable:true, edittype: 'custom', editoptions: edit_options},		
@@ -162,4 +222,5 @@
     caption: "Spreadsheet"
   });
   jQuery("#rowed3").jqGrid('navGrid',"#prowed3",{edit:false,add:false,del:false});
+  poll_for_updates();
 </script>

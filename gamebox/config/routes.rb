@@ -52,6 +52,7 @@ Gamebox::Application.routes.draw do
   # just remember to delete public/index.html.
   match '/data' => 'main#data'
   match '/update_data' => 'main#update_data'
+  match '/poll' => 'main#poll'
   root :to => 'main#index'
   
 
