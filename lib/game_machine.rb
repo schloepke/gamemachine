@@ -1,6 +1,6 @@
 require 'rubygems'
 require 'socket'
-require 'rack'
+#require 'rack'
 #require 'sinatra'
 require 'java'
 
