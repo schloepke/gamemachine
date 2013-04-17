@@ -2,12 +2,12 @@
 <testng-results skipped="0" failed="0" total="1" passed="1">
   <reporter-output>
   </reporter-output>
-  <suite name="com.game_machine.test.UdtServerTest" duration-ms="344" started-at="2013-04-17T20:46:21Z" finished-at="2013-04-17T20:46:22Z">
+  <suite name="com.game_machine.test.UdtServerTest" duration-ms="856" started-at="2013-04-17T21:55:37Z" finished-at="2013-04-17T21:55:38Z">
     <groups>
     </groups>
-    <test name="Command line test" duration-ms="344" started-at="2013-04-17T20:46:21Z" finished-at="2013-04-17T20:46:22Z">
+    <test name="Command line test" duration-ms="856" started-at="2013-04-17T21:55:37Z" finished-at="2013-04-17T21:55:38Z">
       <class name="com.game_machine.test.UdtServerTest">
-        <test-method status="PASS" signature="runServer()[pri:0, instance:com.game_machine.test.UdtServerTest@318e45a8]" name="runServer" duration-ms="332" started-at="2013-04-17T13:46:21Z" finished-at="2013-04-17T13:46:22Z">
+        <test-method status="PASS" signature="runServer()[pri:0, instance:com.game_machine.test.UdtServerTest@23ac5c8b]" name="runServer" duration-ms="845" started-at="2013-04-17T14:55:37Z" finished-at="2013-04-17T14:55:38Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- runServer -->

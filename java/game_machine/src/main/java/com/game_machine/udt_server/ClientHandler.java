@@ -82,7 +82,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	public void messageReceived(final ChannelHandlerContext ctx, final Msg m) {
 		
 		messageCount++;
-		log.info("CLIENT messageReceived " + messageCount);
+		log.warning("CLIENT messageReceived " + messageCount);
 		
         if (messageCount >= 100) {
         	client.stop();

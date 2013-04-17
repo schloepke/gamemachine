@@ -19,7 +19,6 @@ public class UdtServerTest {
 		Server.logLevel = Level.WARNING;
 		Client.logLevel = Level.WARNING;
 		new Server(1234).run();
-		Thread.sleep(2);
 		Client client = new Client("localhost", 1234);
 		client.run();
 		

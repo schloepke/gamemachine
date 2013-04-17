@@ -15,10 +15,12 @@
  */
 package com.game_machine.udt_server;
 
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.udt.nio.NioUdtProvider;
+import io.netty.util.concurrent.Future;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -48,6 +50,7 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		
 		if (str.equals("QUIT")) {
 			log.warning("QUIT RECEVIED FROM CLIENT");
+			ChannelFuture f = ctx.flush();
 			server.stop();
 		} else {
 			ctx.write(m);
