@@ -3,6 +3,8 @@ package com.game_machine.test;
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
 
+import java.util.logging.Level;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -14,12 +16,13 @@ public class UdtServerTest {
 	
 	@Test
 	public void runServer()  throws Exception {
-		Thread t = Server.start(1234);
+		Server.logLevel = Level.WARNING;
+		Client.logLevel = Level.WARNING;
+		new Server(1234).run();
 		Thread.sleep(2);
-		Client.start();
-		Thread.sleep(5);
-		t.stop();
-		t.join();
+		Client client = new Client("localhost", 1234);
+		client.run();
+		
 		
 		
 	}

@@ -49,6 +49,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
 	public ClientHandler(Client client) {
 		this.client = client;
+		log.setLevel(Client.logLevel);
 	}
 	
 	public Boolean sendMessage(String str) {
@@ -59,22 +60,23 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	        ByteString reply = ByteString.copyFromUtf8(str);
 	        builder.setBody(reply);
 	        ctx.channel().write(builder.build());
+	        ctx.flush();
 			//ctx.write(builder.build());
+	        log.info("sendMessage " + str);
 			return true;
 		}
 	}
 	
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		//log.info("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.info("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		for (int i=0; i<1000; i++) {
+		for (int i=0; i<100; i++) {
 			sendMessage("GO");
-			ctx.flush();
 		}
 		sendMessage("QUIT");
 		ctx.flush();
-		log.info("CLIENT SENT QUIT");
+		
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final Msg m) {
@@ -82,7 +84,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		messageCount++;
 		log.info("CLIENT messageReceived " + messageCount);
 		
-        if (messageCount >= 1000) {
+        if (messageCount >= 100) {
         	client.stop();
         }
 		//meter.mark(in.readableBytes());

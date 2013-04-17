@@ -1,6 +1,5 @@
 package com.game_machine.udt_server;
 
-import io.netty.bootstrap.ChannelFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
@@ -19,15 +18,12 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.*;
 
 import java.util.concurrent.ThreadFactory;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * UDT Byte Stream Server
- * <p>
- * Echoes back any received data from a client.
- */
 public class Server implements Runnable {
 
+	public static Level logLevel = Level.INFO;
 	private static final Logger log = Logger.getLogger(Server.class.getName());
 
 	private final int port;
@@ -36,10 +32,11 @@ public class Server implements Runnable {
 
 	public Server(final int port) {
 		this.port = port;
+		log.setLevel(Server.logLevel);
 	}
 
 	public void run() {
-		log.info("Server Starting");
+		log.warning("Server Starting");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(5);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
@@ -72,27 +69,23 @@ public class Server implements Runnable {
 			ChannelFuture future;
 			try {
 				future = boot.bind(port).sync();
-				future.channel().closeFuture().sync();
+				//future.channel().closeFuture().sync();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				stop();
 			}
 		} finally {
 			// Shut down all event loops to terminate all threads.
-			stop();
+			//stop();
 		}
 	}
 
 	public void stop() {
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
-		log.info("Server stopped");
+		
+		log.warning("Server stopped");
 	}
 
-	public static Thread start(int port) throws Exception {
-		Thread t = new Thread(new Server(port));
-		t.start();
-		return t;
-	}
 
 }
