@@ -15,17 +15,14 @@
  */
 package com.game_machine.udt_server;
 
-import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelHandlerUtil;
-import io.netty.channel.ChannelInboundByteHandlerAdapter;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.udt.nio.NioUdtProvider;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import com.game_machine.udt_server.GameProtocol.Msg;
 
 /**
@@ -40,6 +37,7 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	
 	public ServerHandler(Server server) {
 		this.server = server;
+		log.setLevel(Server.logLevel);
 	}
 	
 	@Override
@@ -49,7 +47,7 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		log.info("SERVER messageReceived " + messageCount + " " + str);
 		
 		if (str.equals("QUIT")) {
-			log.info("QUIT RECEVIED FROM CLIENT");
+			log.warning("QUIT RECEVIED FROM CLIENT");
 			server.stop();
 		} else {
 			ctx.write(m);
@@ -65,7 +63,7 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		//log.info("SERVER ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.info("SERVER ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 	}
 
 	

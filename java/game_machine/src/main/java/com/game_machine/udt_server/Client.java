@@ -34,6 +34,7 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -46,22 +47,20 @@ import java.util.logging.Logger;
  */
 public class Client {
 
+	public static Level logLevel = Level.INFO;
+	
 	private static final Logger log = Logger.getLogger(Client.class.getName());
 
 	private final String host;
 	private final int port;
-	private final int messageSize;
-	private final int messageCount;
-	private NioEventLoopGroup connectGroup;
+private NioEventLoopGroup connectGroup;
 	private Bootstrap boot;
 	private ClientHandler handler;
 	
-	public Client(final String host, final int port, final int messageSize, final int messageCount) {
+	public Client(final String host, final int port) {
 		this.host = host;
 		this.port = port;
-		this.messageSize = messageSize;
-		this.messageCount = messageCount;
-		
+		log.setLevel(Client.logLevel);
 	}
 
 	public void run() {
@@ -103,21 +102,7 @@ public class Client {
 		// Shut down the event loop to terminate all threads.
 		connectGroup.shutdown();
 		boot.shutdown();
-		log.info("CLIENT STOPPED");
-	}
-
-	public static void start() {
-		// client is reporting metrics
-		//UtilConsoleReporter.enable(3, TimeUnit.SECONDS);
-
-		final String host = "localhost";
-		final int port = 1234;
-
-		final int messageSize = 1024;
-
-		Client client = new Client(host, port, messageSize,1);
-		client.run();
-
+		log.warning("CLIENT STOPPED");
 	}
 
 }
