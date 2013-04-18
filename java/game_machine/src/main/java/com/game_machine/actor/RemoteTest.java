@@ -1,19 +1,16 @@
 package com.game_machine.actor;
 
 import java.util.ArrayList;
-import java.util.Properties;
-
-import com.game_machine.actor.Pi.Master;
-import com.typesafe.config.Config;
-import com.typesafe.config.ConfigFactory;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import akka.actor.UntypedActorFactory;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 public class RemoteTest extends UntypedActor {
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
