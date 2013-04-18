@@ -1,0 +1,12 @@
+
+Game engine architecture
+
+- engine = routers + app servers
+- app servers run handlers + persistence layer
+- router receives messages from client
+- routes to handler
+- handler returns response to router, router to client
+
+- users tied to specific app servers.  Can be migrated to other app servers
+- handler runs in thread.  Configurable thread pool
+
