@@ -1,2 +1,7 @@
-target
-lib
+/target/
+.settings
+.classpath
+*.class
+*.jar
+*.war
+*.ear
