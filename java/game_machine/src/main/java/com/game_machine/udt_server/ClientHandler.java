@@ -71,7 +71,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		log.info("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		for (int i=0; i<100; i++) {
+		for (int i=0; i<1000; i++) {
 			sendMessage("GO");
 		}
 		sendMessage("QUIT");
@@ -84,7 +84,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		messageCount++;
 		log.info("CLIENT messageReceived " + messageCount);
 		
-        if (messageCount >= 100) {
+        if (messageCount >= 1000) {
         	client.stop();
         }
 		//meter.mark(in.readableBytes());

@@ -1,1 +1,11 @@
 nbproject
+/target/
+.settings
+.classpath
+*.class
+*.jar
+*.war
+*.ear
+.buildpath
+.idea
+.project
