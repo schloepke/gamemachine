@@ -26,8 +26,10 @@ C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\ud
 C:\game_development\java_projects\game_machine\src\main\java\com\game_machine\udt_server\Server.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\worldclock\WorldClockClient.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\worldclock\WorldClockServer.java
+C:\game_development\java_projects\game_machine\src\main\java\com\game_machine\actor\RemoteTest.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\udt\echo\message\MsgEchoServerHandler.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\udt\echo\rendezvous\package-info.java
+C:\game_development\java_projects\game_machine\src\main\java\com\game_machine\actor\Pi.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\udt\util\UtilConsoleReporter.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\udt\echo\package-info.java
 C:\game_development\java_projects\game_machine\src\main\java\io\netty\example\udt\echo\bytes\ByteEchoServerHandler.java

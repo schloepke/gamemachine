@@ -1,5 +1,6 @@
 io\netty\example\udt\echo\rendezvousBytes\ByteEchoPeerHandler.class
 io\netty\example\worldclock\WorldClockProtocol$LocalTimeOrBuilder.class
+com\game_machine\actor\Pi$Result.class
 com\game_machine\udt_server\GameProtocol$Msg$1.class
 com\game_machine\udt_server\ClientHandler.class
 io\netty\example\worldclock\WorldClockServerHandler.class
@@ -7,12 +8,15 @@ com\game_machine\udt_server\GameProtocol$Msg.class
 io\netty\example\worldclock\WorldClockServerInitializer.class
 io\netty\example\udt\echo\message\MsgEchoClientHandler.class
 io\netty\example\udt\echo\rendezvous\MsgEchoPeerTwo.class
+com\game_machine\actor\Pi.class
 io\netty\example\worldclock\WorldClockClientHandler.class
 io\netty\example\udt\echo\rendezvousBytes\ByteEchoPeerOne.class
+com\game_machine\actor\Pi$Master.class
 io\netty\example\worldclock\WorldClockProtocol$Location.class
 io\netty\example\worldclock\WorldClockProtocol$DayOfWeek$1.class
 io\netty\example\udt\echo\rendezvousBytes\ByteEchoPeerTwo.class
 io\netty\example\udt\echo\bytes\ByteEchoClient$1.class
+com\game_machine\actor\Pi$PiApproximation.class
 io\netty\example\worldclock\WorldClockProtocol$LocalTime.class
 com\game_machine\udt_server\GameProtocol$1.class
 io\netty\example\worldclock\WorldClockProtocol$LocalTime$1.class
@@ -23,7 +27,9 @@ io\netty\example\udt\echo\bytes\ByteEchoServer.class
 io\netty\example\worldclock\WorldClockClient.class
 io\netty\example\udt\echo\message\MsgEchoClient.class
 com\game_machine\udt_server\Client$1.class
+com\game_machine\actor\Pi$Work.class
 io\netty\example\udt\echo\bytes\ByteEchoServerHandler.class
+com\game_machine\actor\Pi$1.class
 io\netty\example\worldclock\WorldClockProtocol$Location$1.class
 io\netty\example\worldclock\WorldClockProtocol$Locations$1.class
 io\netty\example\udt\echo\rendezvous\MsgEchoPeerBase$1.class
@@ -41,7 +47,9 @@ io\netty\example\worldclock\WorldClockProtocol$LocationsOrBuilder.class
 io\netty\example\worldclock\WorldClockProtocol$LocationOrBuilder.class
 io\netty\example\worldclock\WorldClockClientInitializer.class
 io\netty\example\udt\echo\message\MsgEchoServerHandler.class
+com\game_machine\actor\Pi$Listener.class
 io\netty\example\worldclock\WorldClockProtocol$Continent.class
+com\game_machine\actor\Pi$Calculate.class
 io\netty\example\udt\echo\message\MsgEchoClient$1.class
 com\game_machine\udt_server\GameProtocol$Msg$Builder.class
 io\netty\example\worldclock\WorldClockProtocol$Location$Builder.class
@@ -59,6 +67,7 @@ io\netty\example\worldclock\WorldClockProtocol$LocalTimes$1.class
 io\netty\example\udt\util\UtilConsoleReporter$1.class
 io\netty\example\worldclock\WorldClockProtocol$Continent$1.class
 io\netty\example\worldclock\WorldClockProtocol$Locations$Builder.class
+com\game_machine\actor\Pi$Worker.class
 io\netty\example\udt\echo\rendezvous\MsgEchoPeerOne.class
 com\game_machine\udt_server\Server.class
 io\netty\example\worldclock\WorldClockProtocol$LocalTimesOrBuilder.class

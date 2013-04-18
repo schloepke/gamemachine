@@ -1,9 +1,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<properties>
+		<akka_suffix>_2.10</akka_suffix>
+		<akka_version>2.1.2</akka_version>
+	</properties>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>game_machine</groupId>
 	<artifactId>game_machine</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+
+
 	<build>
 		<sourceDirectory>src/main/java</sourceDirectory>
 		<plugins>
@@ -17,13 +25,46 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<id>typesafe</id>
+			<name>Typesafe Repository</name>
+			<url>http://repo.typesafe.com/typesafe/releases/</url>
+		</repository>
+	</repositories>
+
 	<dependencies>
-	
-	<dependency>
-    <groupId>org.testng</groupId>
-    <artifactId>testng</artifactId>
-    <version>6.8.1</version>
-</dependency>
+
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-actor${akka_suffix}</artifactId>
+			<version>${akka_version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-remote${akka_suffix}</artifactId>
+			<version>${akka_version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-testkit${akka_suffix}</artifactId>
+			<version>${akka_version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-kernel${akka_suffix}</artifactId>
+			<version>${akka_version}</version>
+		</dependency>
 
 		<dependency>
 			<groupId>com.barchart.udt</groupId>
@@ -50,10 +91,23 @@
 		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
+			<version>3.5.8.Final</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.0.0.CR1</version>
+		</dependency>
+
+		<!-- <dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty</artifactId>
 			<version>4.0.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/netty-all-4.0.0.CR1.jar</systemPath>
-		</dependency>
+		</dependency> -->
 
 	</dependencies>
 </project>
