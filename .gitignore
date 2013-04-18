@@ -6,3 +6,6 @@ nbproject
 *.jar
 *.war
 *.ear
+.buildpath
+.idea
+.project
