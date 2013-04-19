@@ -89,8 +89,9 @@ public class UdpServer implements GameProtocolServer, Runnable {
 			ClientMsg msg = MessageUtil.buildClientMsg(message,host);
 			ByteBuf buf = MessageUtil.messageToByteBuf(msg);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
-			final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
-			out.add(packet);
+			handler.ctx.channel().write(packet);
+			//final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
+			//out.add(packet);
 		} else {
 			log.warning("Client disconnected from server " + handler.ctx.channel().isActive() + " " + handler.ctx.channel().isOpen() + " " + handler.ctx.channel().remoteAddress());
 		}
