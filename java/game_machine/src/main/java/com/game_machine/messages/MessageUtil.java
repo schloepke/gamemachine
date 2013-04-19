@@ -13,10 +13,11 @@ public class MessageUtil {
 		return Unpooled.copiedBuffer(msg.toByteArray());
 	}
 	
-	public static ClientMsg buildClientMsg(String str) {
+	public static ClientMsg buildClientMsg(String str, String hostname) {
 		ClientMsg.Builder builder = ClientMsg.newBuilder();
 		ByteString reply = ByteString.copyFromUtf8(str);
 		builder.setBody(reply);
+		builder.setHostname(hostname);
 		ClientMsg msg = builder.build();
 		return msg;
 	}
