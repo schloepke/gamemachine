@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.game_machine.udt_server;
+package com.game_machine.server;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -21,13 +21,11 @@ import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.udt.nio.NioUdtProvider;
-import io.netty.util.concurrent.Future;
-import io.netty.util.concurrent.GenericFutureListener;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.udt_server.GameProtocol.Msg;
+import com.game_machine.messages.GameProtocol.Msg;
 
 /**
  * Handler implementation for the echo server.
@@ -52,19 +50,9 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
 		if (str.equals("QUIT")) {
 			log.warning("QUIT RECEVIED FROM CLIENT");
-			ctx.flush().addListener(new ChannelFutureListener() {
-
-				@Override
-				public void operationComplete(ChannelFuture future) throws Exception {
-					// TODO Auto-generated method stub
-					server.stop();
-				}
-
-			});
-			
+			stop(ctx);
 		} else {
 			ctx.write(m);
-			ctx.flush();
 		}
 	}
 
@@ -77,6 +65,15 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		log.info("SERVER ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+	}
+
+	public void stop(ChannelHandlerContext ctx) {
+		ctx.flush().addListener(new ChannelFutureListener() {
+			@Override
+			public void operationComplete(ChannelFuture future) throws Exception {
+				server.stop();
+			}
+		});
 	}
 
 }

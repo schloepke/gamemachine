@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.game_machine.udt_server;
+package com.game_machine.client;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
@@ -36,6 +36,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.game_machine.messages.GameProtocol;
+import com.game_machine.messages.GameProtocol.Msg;
 
 /**
  * UDT Byte Stream Client

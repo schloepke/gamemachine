@@ -1,18 +1,17 @@
 package com.game_machine.test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.fest.assertions.api.Assertions.failBecauseExceptionWasNotThrown;
-
-import java.util.Properties;
 import java.util.logging.Level;
 
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import com.game_machine.actor.Pi;
+import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
+
 import com.game_machine.actor.RemoteTest;
-import com.game_machine.udt_server.Client;
-import com.game_machine.udt_server.Server;
+import com.game_machine.akka.ActorUtil;
+import com.game_machine.client.Client;
+import com.game_machine.server.Router;
+import com.game_machine.server.Server;
 
 public class UdtServerTest {
 
@@ -20,7 +19,7 @@ public class UdtServerTest {
 	public void runServer() throws Exception {
 		Server.logLevel = Level.WARNING;
 		Client.logLevel = Level.WARNING;
-		//new Server(1234).run();
+		//new Server("localhost",1234).run();
 		//Client client = new Client("localhost", 1234);
 		//client.run();
 
@@ -33,7 +32,11 @@ public class UdtServerTest {
 			// systemProperties.setProperty("akka.log-config-on-start", "on");
 			//Pi pi = new Pi();
 			//pi.calculate(4, 10000, 10000);
-			RemoteTest.test();
+			//RemoteTest.test();
+			//Router.start();
+			ActorSystem system = ActorUtil.createSystem("test", "localhost", "3333");
+			ActorRef ref = ActorUtil.createActor(system, Router.class, "router_name");
+			ref.tell("HELLO", ref);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

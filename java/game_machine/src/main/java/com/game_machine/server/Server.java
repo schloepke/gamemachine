@@ -1,4 +1,4 @@
-package com.game_machine.udt_server;
+package com.game_machine.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -24,24 +24,28 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Server implements Runnable {
+import com.game_machine.messages.GameProtocol;
+
+public class Server {
 
 	public static Level logLevel = Level.INFO;
 	private static final Logger log = Logger.getLogger(Server.class.getName());
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	
+	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
 	private NioEventLoopGroup connectGroup;
 	private ServerBootstrap boot;
 
-	public Server(final int port) {
+	public Server(final String hostname, final int port) {
 		this.port = port;
+		this.hostname = hostname;
 		log.setLevel(Server.logLevel);
 	}
 
-	public void run() {
+	public void start() {
 		log.warning("Server Starting");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
@@ -74,12 +78,9 @@ public class Server implements Runnable {
 			// Start the server.
 			ChannelFuture future;
 			try {
-				
-				future = boot.bind(port);
+				future = boot.bind(hostname,port);
 				allChannels.add(future.channel());
 				future.sync();
-				
-				
 				
 				//future.channel().closeFuture().sync();
 			} catch (InterruptedException e) {
@@ -102,7 +103,6 @@ public class Server implements Runnable {
         boot.shutdown();
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
-		
 		log.warning("Server stopped");
 	}
 

@@ -13,9 +13,11 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.game_machine.udt_server;
+package com.game_machine.client;
 
-import com.game_machine.udt_server.GameProtocol.Msg;
+import com.game_machine.messages.GameProtocol;
+import com.game_machine.messages.GameProtocol.Msg;
+import com.game_machine.messages.GameProtocol.Msg.Builder;
 import com.google.protobuf.ByteString;
 import com.yammer.metrics.Metrics;
 import com.yammer.metrics.core.Meter;
