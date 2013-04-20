@@ -1,10 +1,9 @@
 nbproject
-/target/
+target/
 .settings
 .classpath
 *.class
 *.war
-*.jar
 *.ear
 .buildpath
 .idea
