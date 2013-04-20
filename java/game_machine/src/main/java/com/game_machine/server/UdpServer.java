@@ -24,6 +24,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.messages.MessageUtil;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.MessageLite;
@@ -83,22 +84,10 @@ public class UdpServer implements GameProtocolServer, Runnable {
 		}
 	}
 
-	public static ClientMsg buildMessage(String str) {
-		ClientMsg.Builder builder = ClientMsg.newBuilder();
-		ByteString reply = ByteString.copyFromUtf8(str);
-		builder.setBody(reply);
-		ClientMsg msg = builder.build();
-		return msg;
-	}
-
-	public static ByteBuf messageToByteBuf(MessageLite msg) {
-		return Unpooled.copiedBuffer(msg.toByteArray());
-	}
-	
 	public void sendMessage(String message, String host, int port) {
 		if (handler.ctx.channel().isActive() == true) {
-			ClientMsg msg = buildMessage(message);
-			ByteBuf buf = messageToByteBuf(msg);
+			ClientMsg msg = MessageUtil.buildClientMsg(message);
+			ByteBuf buf = MessageUtil.messageToByteBuf(msg);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
 			out.add(packet);
