@@ -50,7 +50,8 @@ public class UdpServer {
 			boot.channel(NioDatagramChannel.class);
 			boot.group(acceptGroup);
 			boot.option(ChannelOption.SO_BROADCAST, false);
-
+			//boot.option(ChannelOption.SO_RCVBUF, 65536);
+			//boot.option(ChannelOption.SO_SNDBUF, 65536);
 			boot.handler(new ChannelInitializer<NioDatagramChannel>() {
 				@Override
 				public void initChannel(final NioDatagramChannel ch) {

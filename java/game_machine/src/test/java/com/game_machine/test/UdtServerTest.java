@@ -17,8 +17,8 @@ public class UdtServerTest {
 	
 	//@Test
 	public void runServer() throws Exception {
-		UdtServer.logLevel = Level.INFO;
-		Client.logLevel = Level.INFO;
+		UdtServer.logLevel = Level.WARNING;
+		Client.logLevel = Level.WARNING;
 		final UdtServerHandler handler = new UdtServerHandler();
 		new UdtServer(hostname,1234).start(handler);
 		Client client = new Client(hostname, 1234);
@@ -28,8 +28,8 @@ public class UdtServerTest {
 
 	@Test
 	public void runUdp() throws Exception {
-		UdpServer.logLevel = Level.FINEST;
-		UdpClient.logLevel = Level.FINEST;
+		UdpServer.logLevel = Level.INFO;
+		UdpClient.logLevel = Level.INFO;
 		final UdpServerHandler handler = new UdpServerHandler();
 		UdpServer server = new UdpServer(hostname,1234);
 		server.start(handler);
