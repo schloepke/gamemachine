@@ -37,7 +37,7 @@ public class UdtServerTest {
 		UdpClient.logLevel = Level.INFO;
 		GameProtocolServer server = new UdpServer(hostname, 1234);
 		server.start();
-		Thread.sleep(5000);
+		Thread.sleep(2000);
 		server.stop();
 		Router.stop();
 		//UdpClient client = new UdpClient(hostname, 1234);
