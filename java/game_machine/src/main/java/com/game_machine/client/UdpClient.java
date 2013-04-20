@@ -14,7 +14,9 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UdpClient {
+import com.game_machine.server.GameProtocolServer;
+
+public class UdpClient implements Runnable {
 
 	public static Level logLevel = Level.INFO;
 
@@ -60,6 +62,11 @@ public class UdpClient {
 		} finally {
 			stop();
 		}
+	}
+	
+	public void start() {
+		Thread t = new Thread(this);
+		t.start();
 	}
 
 	public void stop() {

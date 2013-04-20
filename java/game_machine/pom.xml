@@ -103,7 +103,7 @@
 
 		<dependency>
 			<groupId>io.netty</groupId>
-			<artifactId>netty</artifactId>
+			<artifactId>netty-all</artifactId>
 			<version>4.0.0</version>
 			<scope>system</scope>
 			<systemPath>${project.basedir}/netty-all-4.0.0.CR2-SNAPSHOT.jar</systemPath>

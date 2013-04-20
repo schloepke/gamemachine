@@ -7,9 +7,10 @@ option optimize_for = SPEED;
 
 
 
-message Msg {
+message ClientMsg {
   required bytes body = 1;
   optional int32 seq = 2;
+  optional string hostname = 3;
    
 }
 

@@ -4,8 +4,11 @@ import java.util.logging.Level;
 
 import org.testng.annotations.Test;
 
+import com.game_machine.actor.Pi;
 import com.game_machine.client.Client;
 import com.game_machine.client.UdpClient;
+import com.game_machine.server.GameProtocolServer;
+import com.game_machine.server.Router;
 import com.game_machine.server.UdpServer;
 import com.game_machine.server.UdpServerHandler;
 import com.game_machine.server.UdtServer;
@@ -28,32 +31,27 @@ public class UdtServerTest {
 
 	@Test
 	public void runUdp() throws Exception {
-		Runnable runnable = new Runnable() {
-			public void run() {
-				System.out.println("Run");
-			}
-		};
-		Thread t = new Thread(runnable);
-		t.start();
-		t.stop();
-		t.join();
+		Router.start(hostname,"1234");
+		
 		UdpServer.logLevel = Level.INFO;
 		UdpClient.logLevel = Level.INFO;
-		UdpServer server = new UdpServer(hostname, 1234);
+		GameProtocolServer server = new UdpServer(hostname, 1234);
 		server.start();
-		UdpClient client = new UdpClient(hostname, 1234);
-		client.run();
+		Thread.sleep(5000);
 		server.stop();
+		Router.stop();
+		//UdpClient client = new UdpClient(hostname, 1234);
+		//client.start();
 
 	}
 
-	@Test
+	//@Test
 	public void actor1() {
 		try {
 			// Properties systemProperties = System.getProperties();
 			// systemProperties.setProperty("akka.log-config-on-start", "on");
-			// Pi pi = new Pi();
-			// pi.calculate(4, 10000, 10000);
+			 Pi pi = new Pi();
+			 pi.calculate(4, 10000, 10000);
 			// RemoteTest.test();
 			// Router.start();
 		} catch (Exception e) {

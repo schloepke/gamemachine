@@ -22,10 +22,10 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ClientMessage.Msg;
+import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.google.protobuf.ByteString;
 
-public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
+public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
 
 	private static final Logger log = Logger.getLogger(ClientHandler.class.getName());
 
@@ -44,7 +44,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		if (ctx == null) {
 			return false;
 		} else {
-			Msg.Builder builder = Msg.newBuilder();
+			ClientMsg.Builder builder = ClientMsg.newBuilder();
 	        ByteString reply = ByteString.copyFromUtf8(str);
 	        builder.setBody(reply);
 	        ctx.channel().write(builder.build());
@@ -66,7 +66,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		
 	}
 
-	public void messageReceived(final ChannelHandlerContext ctx, final Msg m) {
+	public void messageReceived(final ChannelHandlerContext ctx, final ClientMsg m) {
 		
 		messageCount++;
 		log.info("CLIENT messageReceived " + messageCount);

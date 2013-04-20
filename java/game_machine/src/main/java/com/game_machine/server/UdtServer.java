@@ -24,7 +24,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ClientMessage;
+import com.game_machine.messages.ProtobufMessages;
 
 public class UdtServer {
 
@@ -66,7 +66,7 @@ public class UdtServer {
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-			        p.addLast("protobufDecoder", new ProtobufDecoder(ClientMessage.Msg.getDefaultInstance()));
+			        p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMsg.getDefaultInstance()));
 
 			        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
 			        p.addLast("protobufEncoder", new ProtobufEncoder());

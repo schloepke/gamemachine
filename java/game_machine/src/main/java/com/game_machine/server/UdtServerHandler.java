@@ -10,10 +10,10 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ClientMessage.Msg;
+import com.game_machine.messages.ProtobufMessages.ClientMsg;
 
 @Sharable
-public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
+public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
 
 	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
 	private UdtServer server;
@@ -29,7 +29,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	}
 
 	@Override
-	public void messageReceived(final ChannelHandlerContext ctx, final Msg m) {
+	public void messageReceived(final ChannelHandlerContext ctx, final ClientMsg m) {
 		String str = new String(m.getBody().toByteArray());
 		messageCount++;
 		log.info("SERVER messageReceived " + messageCount + " " + str);
@@ -39,7 +39,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 			stop();
 		} else {
 			if (Router.isRunning()) {
-				Router.incoming.tell("TEST", Router.incoming);
+				Router.router.tell("TEST", Router.router);
 			}
 			ctx.write(m);
 		}

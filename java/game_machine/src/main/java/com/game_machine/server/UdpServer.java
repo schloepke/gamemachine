@@ -1,6 +1,9 @@
 package com.game_machine.server;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.MessageBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -9,27 +12,34 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.DatagramPacket;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.example.udt.util.UtilThreadFactory;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
+import java.net.InetSocketAddress;
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UdpServer {
+import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.MessageLite;
+
+public class UdpServer implements GameProtocolServer, Runnable {
 
 	public static Level logLevel = Level.INFO;
-	private static final Logger log = Logger.getLogger(UdtServer.class.getName());
+	private static final Logger log = Logger.getLogger(UdpServer.class.getName());
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 
-	private final String hostname;
-	private final int port;
+	public final String hostname;
+	public final int port;
 	private NioEventLoopGroup acceptGroup;
 	private Bootstrap boot;
+	private final UdpServerHandler handler = new UdpServerHandler();
 
 	public UdpServer(final String hostname, final int port) {
 		this.port = port;
@@ -37,14 +47,17 @@ public class UdpServer {
 		log.setLevel(UdpServer.logLevel);
 	}
 
-	private void configure() {
-		final UdpServerHandler handler = new UdpServerHandler();
+	public int getPort() {
+		return this.port;
+	}
+	
+	public void run() {
+		handler.setServer(this);
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		acceptGroup = new NioEventLoopGroup(1, acceptFactory);
 
 		boot = new Bootstrap();
-		handler.setServer(this);
 		boot.channel(NioDatagramChannel.class);
 		boot.group(acceptGroup);
 		boot.option(ChannelOption.SO_BROADCAST, false);
@@ -57,9 +70,7 @@ public class UdpServer {
 				p.addLast(executor, new LoggingHandler(LogLevel.INFO), handler);
 			}
 		});
-	}
 
-	private void run() {
 		ChannelFuture future;
 		try {
 			future = boot.bind(hostname, port);
@@ -72,11 +83,36 @@ public class UdpServer {
 		}
 	}
 
-	public void start() {
-		configure();
-		run();
+	public static ClientMsg buildMessage(String str) {
+		ClientMsg.Builder builder = ClientMsg.newBuilder();
+		ByteString reply = ByteString.copyFromUtf8(str);
+		builder.setBody(reply);
+		ClientMsg msg = builder.build();
+		return msg;
+	}
+
+	public static ByteBuf messageToByteBuf(MessageLite msg) {
+		return Unpooled.copiedBuffer(msg.toByteArray());
 	}
 	
+	public void sendMessage(String message, String host, int port) {
+		if (handler.ctx.channel().isActive() == true) {
+			ClientMsg msg = buildMessage(message);
+			ByteBuf buf = messageToByteBuf(msg);
+			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
+			final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
+			out.add(packet);
+		} else {
+			log.warning("Client disconnected from server " + handler.ctx.channel().isActive() + " " + handler.ctx.channel().isOpen() + " " + handler.ctx.channel().remoteAddress());
+		}
+		
+	}
+
+	public void start() {
+		Thread t = new Thread(this);
+		t.start();
+	}
+
 	public void stop() {
 		ChannelGroupFuture f = allChannels.close();
 		try {

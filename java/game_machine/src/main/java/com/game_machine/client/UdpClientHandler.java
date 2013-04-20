@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ClientMessage.Msg;
+import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.google.protobuf.ByteString;
 
 public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -34,10 +34,10 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		if (ctx == null) {
 			return false;
 		} else {
-			Msg.Builder builder = Msg.newBuilder();
+			ClientMsg.Builder builder = ClientMsg.newBuilder();
 			ByteString reply = ByteString.copyFromUtf8(str);
 			builder.setBody(reply);
-			Msg msg = builder.build();
+			ClientMsg msg = builder.build();
 			ByteBuf bmsg = Unpooled.copiedBuffer(msg.toByteArray());
 			DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
 			final MessageBuf<Object> out = ctx.nextOutboundMessageBuffer();
@@ -67,9 +67,9 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		ByteString b = ByteString.copyFrom(bytes);
-		Msg.Builder builder = Msg.newBuilder();
+		ClientMsg.Builder builder = ClientMsg.newBuilder();
 		builder.setBody(b);
-		Msg msg = builder.build();
+		ClientMsg msg = builder.build();
 
 		if (messageCount >= 1000) {
 			log.warning("Client received all messages back, stopping");

@@ -1,6 +1,5 @@
 package com.game_machine.server;
 
-import io.netty.buffer.MessageBuf;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -11,7 +10,7 @@ import io.netty.channel.socket.DatagramPacket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ClientMessage.Msg;
+import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 @Sharable
@@ -19,7 +18,7 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 
 	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
 	private UdpServer server;
-	private ChannelHandlerContext ctx = null;
+	public ChannelHandlerContext ctx = null;
 	private int messageCount = 0;
 
 	public UdpServerHandler() {
@@ -34,37 +33,21 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
 		m.retain();
 		messageCount++;
-		
+
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		Msg msg = null;
+		ClientMsg msg = null;
 		try {
-			msg = Msg.parseFrom(bytes);
+			msg = ClientMsg.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e1) {
 			e1.printStackTrace();
 		}
 		String str = msg.getBody().toStringUtf8();
-		
-		//log.info("SERVER messageReceived " + str + " " + messageCount);
 
-		if (str.equals("QUIT")) {
-			log.warning("QUIT RECEVIED FROM CLIENT");
-			ctx.flush();
-			//stop();
-		} else {
-			if (Router.isRunning()) {
-				Router.incoming.tell("TEST", Router.incoming);
-			}
-			
-			
-			if (ctx.channel().isActive() != false) {
-				DatagramPacket packet = new DatagramPacket(m.data(), m.remoteAddress());
-				final MessageBuf<Object> out = ctx.nextOutboundMessageBuffer();
-				out.add(packet);
-				//ctx.write(packet);
-			} else {
-				log.warning("Client disconnected from server " + ctx.channel().isActive() + " " + ctx.channel().isOpen() + " " + ctx.channel().remoteAddress());
-			}
+		// log.info("SERVER messageReceived " + str + " " + messageCount);
+
+		if (Router.isRunning()) {
+			Router.router.tell(msg, Router.router);
 		}
 	}
 
@@ -80,8 +63,9 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.info("SERVER ECHO active ");
+		log.info("Server channel active");
 		this.ctx = ctx;
+		Router.router.tell((GameProtocolServer) server, Router.router);
 	}
 
 	public void beforeAdd(ChannelHandlerContext ctx) {
