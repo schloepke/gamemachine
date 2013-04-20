@@ -15,30 +15,16 @@
  */
 package com.game_machine.client;
 
-import com.game_machine.messages.GameProtocol;
-import com.game_machine.messages.GameProtocol.Msg;
-import com.game_machine.messages.GameProtocol.Msg.Builder;
-import com.google.protobuf.ByteString;
-import com.yammer.metrics.Metrics;
-import com.yammer.metrics.core.Meter;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
-import io.netty.channel.ChannelHandlerUtil;
-import io.netty.channel.ChannelInboundByteHandlerAdapter;
 import io.netty.channel.ChannelInboundMessageHandlerAdapter;
-import io.netty.channel.ChannelOption;
 import io.netty.channel.udt.nio.NioUdtProvider;
 
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Handler implementation for the echo client. It initiates the ping-pong
- * traffic between the echo client and server by sending the first message to
- * the server on activation.
- */
+import com.game_machine.messages.ClientMessage.Msg;
+import com.google.protobuf.ByteString;
+
 public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
 	private static final Logger log = Logger.getLogger(ClientHandler.class.getName());
@@ -71,12 +57,11 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 	
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.info("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
 		for (int i=0; i<1000; i++) {
 			sendMessage("GO");
 		}
-		sendMessage("QUIT");
 		ctx.flush();
 		
 	}

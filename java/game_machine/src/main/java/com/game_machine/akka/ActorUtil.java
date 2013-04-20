@@ -23,10 +23,5 @@ public class ActorUtil {
 		Config customConfig = ConfigFactory.parseString(remoteConfig).getConfig(name).withFallback(ConfigFactory.load());
 		return ActorSystem.create(name, customConfig);
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static ActorRef createActor(ActorSystem system, Class klass, String name) {
-		return system.actorOf(new Props(klass), name);
-	}
-	
+		
 }

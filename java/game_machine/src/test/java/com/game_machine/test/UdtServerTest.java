@@ -4,27 +4,41 @@ import java.util.logging.Level;
 
 import org.testng.annotations.Test;
 
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-
-import com.game_machine.actor.RemoteTest;
-import com.game_machine.akka.ActorUtil;
 import com.game_machine.client.Client;
-import com.game_machine.server.Router;
-import com.game_machine.server.Server;
+import com.game_machine.client.UdpClient;
+import com.game_machine.server.UdpServer;
+import com.game_machine.server.UdpServerHandler;
+import com.game_machine.server.UdtServer;
+import com.game_machine.server.UdtServerHandler;
 
 public class UdtServerTest {
 
-	@Test
+	public static String hostname = "192.168.1.3";
+	
+	//@Test
 	public void runServer() throws Exception {
-		Server.logLevel = Level.WARNING;
-		Client.logLevel = Level.WARNING;
-		//new Server("localhost",1234).run();
-		//Client client = new Client("localhost", 1234);
-		//client.run();
+		UdtServer.logLevel = Level.INFO;
+		Client.logLevel = Level.INFO;
+		final UdtServerHandler handler = new UdtServerHandler();
+		new UdtServer(hostname,1234).start(handler);
+		Client client = new Client(hostname, 1234);
+		client.run();
 
 	}
 
+	@Test
+	public void runUdp() throws Exception {
+		UdpServer.logLevel = Level.FINEST;
+		UdpClient.logLevel = Level.FINEST;
+		final UdpServerHandler handler = new UdpServerHandler();
+		UdpServer server = new UdpServer(hostname,1234);
+		server.start(handler);
+		UdpClient client = new UdpClient(hostname, 1234);
+		client.run();
+		server.stop();
+
+	}
+	
 	@Test
 	public void actor1() {
 		try {
@@ -34,9 +48,6 @@ public class UdtServerTest {
 			//pi.calculate(4, 10000, 10000);
 			//RemoteTest.test();
 			//Router.start();
-			ActorSystem system = ActorUtil.createSystem("test", "localhost", "3333");
-			ActorRef ref = ActorUtil.createActor(system, Router.class, "router_name");
-			ref.tell("HELLO", ref);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

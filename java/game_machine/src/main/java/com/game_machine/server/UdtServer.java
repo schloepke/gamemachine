@@ -24,12 +24,12 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.GameProtocol;
+import com.game_machine.messages.ClientMessage;
 
-public class Server {
+public class UdtServer {
 
 	public static Level logLevel = Level.INFO;
-	private static final Logger log = Logger.getLogger(Server.class.getName());
+	private static final Logger log = Logger.getLogger(UdtServer.class.getName());
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	
@@ -39,13 +39,13 @@ public class Server {
 	private NioEventLoopGroup connectGroup;
 	private ServerBootstrap boot;
 
-	public Server(final String hostname, final int port) {
+	public UdtServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		log.setLevel(Server.logLevel);
+		log.setLevel(UdtServer.logLevel);
 	}
 
-	public void start() {
+	public void start(final UdtServerHandler handler) {
 		log.warning("Server Starting");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
@@ -56,7 +56,7 @@ public class Server {
 		// Configure the server.
 		try {
 			boot = new ServerBootstrap();
-			final ServerHandler handler = new ServerHandler(this);
+			handler.setServer(this);
 			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.BYTE_ACCEPTOR);
 			boot.option(ChannelOption.SO_BACKLOG, 10);
 			boot.handler(new LoggingHandler(LogLevel.INFO));
@@ -66,7 +66,7 @@ public class Server {
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-			        p.addLast("protobufDecoder", new ProtobufDecoder(GameProtocol.Msg.getDefaultInstance()));
+			        p.addLast("protobufDecoder", new ProtobufDecoder(ClientMessage.Msg.getDefaultInstance()));
 
 			        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
 			        p.addLast("protobufEncoder", new ProtobufEncoder());
@@ -88,8 +88,6 @@ public class Server {
 				stop();
 			}
 		} finally {
-			// Shut down all event loops to terminate all threads.
-			//stop();
 		}
 	}
 

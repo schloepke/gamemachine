@@ -1,8 +1,5 @@
 package com.game_machine.server;
 
-import com.game_machine.actor.Pi.Listener;
-import com.game_machine.akka.ActorUtil;
-
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -10,25 +7,53 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-public class Router extends UntypedActor {
+import com.game_machine.akka.ActorUtil;
 
-	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-	public static ActorSystem system;
-	public static ActorRef router;
-	
-	public void onReceive(Object message) throws Exception {
-		if (message instanceof String)
-			log.info("Received String message: {}", message);
-		else
-			unhandled(message);
+public class Router {
+
+	public static ActorSystem system = null;
+	public static ActorRef incoming = null;
+	public static ActorRef outgoing = null;
+
+	public static class Incoming extends UntypedActor {
+
+		LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+
+		public void onReceive(Object message) throws Exception {
+			if (message instanceof String)
+				log.info("ROUTER.INCOMING String message: {}", message);
+			else
+				unhandled(message);
+		}
+	}
+
+	public static class Outgoing extends UntypedActor {
+
+		LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+
+		public void onReceive(Object message) throws Exception {
+			if (message instanceof String)
+				log.info("ROUTER.OUTGOING String message: {}", message);
+			else
+				unhandled(message);
+		}
+	}
+
+	public static Boolean isRunning() {
+		if (Router.system == null || Router.system.isTerminated()) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
-	public static void start(String name, String hostname, String port) {
-		Router.system = ActorUtil.createSystem(name, hostname, port);
-		Router.router = ActorUtil.createActor(Router.system, Router.class, name+"_router");
+	public static void start(String hostname, String port) {
+		Router.system = ActorUtil.createSystem("router",hostname, port);
+		Router.incoming = Router.system.actorOf(new Props(Incoming.class), "incoming");
+		Router.outgoing = Router.system.actorOf(new Props(Outgoing.class), "outgoing");
 	}
-	
-	public static void stop() {
+
+	public static void shutdown() {
 		Router.system.shutdown();
 	}
 }

@@ -1,18 +1,3 @@
-/*
- * Copyright 2012 The Netty Project
- *
- * The Netty Project licenses this file to you under the Apache License,
- * version 2.0 (the "License"); you may not use this file except in compliance
- * with the License. You may obtain a copy of the License at:
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations
- * under the License.
- */
 package com.game_machine.server;
 
 import io.netty.channel.ChannelFuture;
@@ -25,21 +10,22 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.GameProtocol.Msg;
+import com.game_machine.messages.ClientMessage.Msg;
 
-/**
- * Handler implementation for the echo server.
- */
 @Sharable
-public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
+public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
-	private static final Logger log = Logger.getLogger(ServerHandler.class.getName());
-	private Server server;
+	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
+	private UdtServer server;
 	private int messageCount = 0;
+	private ChannelHandlerContext ctx = null;
 
-	public ServerHandler(Server server) {
+	public UdtServerHandler() {
+		log.setLevel(UdtServer.logLevel);
+	}
+	
+	public void setServer(UdtServer server) {
 		this.server = server;
-		log.setLevel(Server.logLevel);
 	}
 
 	@Override
@@ -50,12 +36,19 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 
 		if (str.equals("QUIT")) {
 			log.warning("QUIT RECEVIED FROM CLIENT");
-			stop(ctx);
+			stop();
 		} else {
+			if (Router.isRunning()) {
+				Router.incoming.tell("TEST", Router.incoming);
+			}
 			ctx.write(m);
 		}
 	}
 
+	public void sendMessage(String message) {
+		
+	}
+	
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
 		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
@@ -67,8 +60,12 @@ public class ServerHandler extends ChannelInboundMessageHandlerAdapter<Msg> {
 		log.info("SERVER ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 	}
 
-	public void stop(ChannelHandlerContext ctx) {
-		ctx.flush().addListener(new ChannelFutureListener() {
+	public void beforeAdd(ChannelHandlerContext ctx) {
+        this.ctx = ctx;
+    }
+	
+	public void stop() {
+		this.ctx.flush().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
 				server.stop();

@@ -1,0 +1,15 @@
+package com.game_machine.messages;
+
+// protoc File.proto  --java_out= /src/main/java
+
+
+option optimize_for = SPEED;
+
+
+
+message Msg {
+  required bytes body = 1;
+  optional int32 seq = 2;
+   
+}
+
