@@ -10,8 +10,8 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.actors.Master;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.systems.Master;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {

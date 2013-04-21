@@ -127,6 +127,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>3.0</version>
+		</dependency>
+
+		<dependency>
 			<groupId>io.netty</groupId>
 			<artifactId>netty</artifactId>
 			<version>3.5.8.Final</version>

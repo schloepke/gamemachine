@@ -1,4 +1,4 @@
-package com.game_machine.akka;
+package com.game_machine.systems;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;

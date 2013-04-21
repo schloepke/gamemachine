@@ -10,8 +10,8 @@ import io.netty.channel.socket.DatagramPacket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.actors.Master;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.systems.Master;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 @Sharable

@@ -1,4 +1,4 @@
-package com.game_machine.actors;
+package com.game_machine.systems;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
@@ -8,19 +8,28 @@ import akka.actor.UntypedActorFactory;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.akka.ActorUtil;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.game_machine.server.GameProtocolServer;
+import com.game_machine.systems.ActorUtil;
 
 public class Master extends UntypedActor {
 
 	public static ActorSystem system = null;
 	public static ActorRef router = null;
 	private GameProtocolServer server = null;
+	private ActorRef serialization;
 	
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	
 	public Master() {
+		
+		final ActorRef test = this.getSelf();
+		this.serialization = this.getContext().actorOf(new Props(new UntypedActorFactory() {
+			public UntypedActor create() {
+				return new Serialization(test);
+			}
+		}), "serialization");
+		
 	}
 	
 	public void onReceive(Object message) throws Exception {
@@ -51,13 +60,13 @@ public class Master extends UntypedActor {
 	
 	@SuppressWarnings("serial")
 	public static void start(String hostname, String port) {
-		Master.system = ActorUtil.createSystem("routerSystem",hostname, port);
+		Master.system = ActorUtil.createSystem("system",hostname, port);
 		
 		Master.router = system.actorOf(new Props(new UntypedActorFactory() {
 			public UntypedActor create() {
 				return new Master();
 			}
-		}), "router");
+		}), "master");
 	}
 
 	public static void stop() {
