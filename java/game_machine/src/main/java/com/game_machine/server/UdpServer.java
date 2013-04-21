@@ -86,7 +86,7 @@ public class UdpServer implements GameProtocolServer, Runnable {
 
 	public void sendMessage(String message, String host, int port) {
 		if (handler.ctx.channel().isActive() == true) {
-			ClientMsg msg = MessageUtil.buildClientMsg(message);
+			ClientMsg msg = MessageUtil.buildClientMsg(message,host);
 			ByteBuf buf = MessageUtil.messageToByteBuf(msg);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
