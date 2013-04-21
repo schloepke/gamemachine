@@ -10,10 +10,13 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import akka.actor.ActorRef;
+
+import com.game_machine.messages.ProtobufMessages.ClientMessage;
+import com.game_machine.systems.Root;
 
 @Sharable
-public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
+public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
 
 	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
 	private UdtServer server;
@@ -29,7 +32,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 	}
 
 	@Override
-	public void messageReceived(final ChannelHandlerContext ctx, final ClientMsg m) {
+	public void messageReceived(final ChannelHandlerContext ctx, final ClientMessage m) {
 		String str = new String(m.getBody().toByteArray());
 		messageCount++;
 		log.info("SERVER messageReceived " + messageCount + " " + str);
@@ -38,8 +41,9 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 			log.warning("QUIT RECEVIED FROM CLIENT");
 			stop();
 		} else {
-			if (Router.isRunning()) {
-				Router.router.tell("TEST", Router.router);
+			if (Root.isRunning()) {
+				ActorRef ref = Root.system.actorFor("/user/root/outbound");
+				ref.tell(str, ref);
 			}
 			ctx.write(m);
 		}

@@ -14,7 +14,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.server.GameProtocolServer;
 
 public class UdpClient implements Runnable {
 

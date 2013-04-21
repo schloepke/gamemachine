@@ -30,41 +30,26 @@ public final class ProtobufMessages {
      * <code>optional int32 seq = 2;</code>
      */
     int getSeq();
-
-    // optional string hostname = 3;
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    boolean hasHostname();
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    java.lang.String getHostname();
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    com.google.protobuf.ByteString
-        getHostnameBytes();
   }
   /**
    * Protobuf type {@code com.game_machine.messages.ClientMsg}
    */
-  public static final class ClientMsg extends
+  public static final class ClientMessage extends
       com.google.protobuf.GeneratedMessage
       implements ClientMsgOrBuilder {
     // Use ClientMsg.newBuilder() to construct.
-    private ClientMsg(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+    private ClientMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
     }
-    private ClientMsg(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+    private ClientMessage(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
 
-    private static final ClientMsg defaultInstance;
-    public static ClientMsg getDefaultInstance() {
+    private static final ClientMessage defaultInstance;
+    public static ClientMessage getDefaultInstance() {
       return defaultInstance;
     }
 
-    public ClientMsg getDefaultInstanceForType() {
+    public ClientMessage getDefaultInstanceForType() {
       return defaultInstance;
     }
 
@@ -74,7 +59,7 @@ public final class ProtobufMessages {
         getUnknownFields() {
       return this.unknownFields;
     }
-    private ClientMsg(
+    private ClientMessage(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
@@ -107,11 +92,6 @@ public final class ProtobufMessages {
               seq_ = input.readInt32();
               break;
             }
-            case 26: {
-              bitField0_ |= 0x00000004;
-              hostname_ = input.readBytes();
-              break;
-            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -133,21 +113,21 @@ public final class ProtobufMessages {
         internalGetFieldAccessorTable() {
       return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
-              com.game_machine.messages.ProtobufMessages.ClientMsg.class, com.game_machine.messages.ProtobufMessages.ClientMsg.Builder.class);
+              com.game_machine.messages.ProtobufMessages.ClientMessage.class, com.game_machine.messages.ProtobufMessages.ClientMessage.Builder.class);
     }
 
-    public static com.google.protobuf.Parser<ClientMsg> PARSER =
-        new com.google.protobuf.AbstractParser<ClientMsg>() {
-      public ClientMsg parsePartialFrom(
+    public static com.google.protobuf.Parser<ClientMessage> PARSER =
+        new com.google.protobuf.AbstractParser<ClientMessage>() {
+      public ClientMessage parsePartialFrom(
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws com.google.protobuf.InvalidProtocolBufferException {
-        return new ClientMsg(input, extensionRegistry);
+        return new ClientMessage(input, extensionRegistry);
       }
     };
 
     @java.lang.Override
-    public com.google.protobuf.Parser<ClientMsg> getParserForType() {
+    public com.google.protobuf.Parser<ClientMessage> getParserForType() {
       return PARSER;
     }
 
@@ -184,53 +164,9 @@ public final class ProtobufMessages {
       return seq_;
     }
 
-    // optional string hostname = 3;
-    public static final int HOSTNAME_FIELD_NUMBER = 3;
-    private java.lang.Object hostname_;
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    public boolean hasHostname() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    public java.lang.String getHostname() {
-      java.lang.Object ref = hostname_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          hostname_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string hostname = 3;</code>
-     */
-    public com.google.protobuf.ByteString
-        getHostnameBytes() {
-      java.lang.Object ref = hostname_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        hostname_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
     private void initFields() {
       body_ = com.google.protobuf.ByteString.EMPTY;
       seq_ = 0;
-      hostname_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -254,9 +190,6 @@ public final class ProtobufMessages {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, seq_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(3, getHostnameBytes());
-      }
       getUnknownFields().writeTo(output);
     }
 
@@ -274,10 +207,6 @@ public final class ProtobufMessages {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(2, seq_);
       }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, getHostnameBytes());
-      }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -290,53 +219,53 @@ public final class ProtobufMessages {
       return super.writeReplace();
     }
 
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(byte[] data)
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return PARSER.parseFrom(data, extensionRegistry);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(java.io.InputStream input)
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseFrom(input, extensionRegistry);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseDelimitedFrom(java.io.InputStream input)
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseDelimitedFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return PARSER.parseDelimitedFrom(input, extensionRegistry);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return PARSER.parseFrom(input);
     }
-    public static com.game_machine.messages.ProtobufMessages.ClientMsg parseFrom(
+    public static com.game_machine.messages.ProtobufMessages.ClientMessage parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -345,7 +274,7 @@ public final class ProtobufMessages {
 
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(com.game_machine.messages.ProtobufMessages.ClientMsg prototype) {
+    public static Builder newBuilder(com.game_machine.messages.ProtobufMessages.ClientMessage prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -371,7 +300,7 @@ public final class ProtobufMessages {
           internalGetFieldAccessorTable() {
         return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
-                com.game_machine.messages.ProtobufMessages.ClientMsg.class, com.game_machine.messages.ProtobufMessages.ClientMsg.Builder.class);
+                com.game_machine.messages.ProtobufMessages.ClientMessage.class, com.game_machine.messages.ProtobufMessages.ClientMessage.Builder.class);
       }
 
       // Construct using com.game_machine.messages.ProtobufMessages.ClientMsg.newBuilder()
@@ -398,8 +327,6 @@ public final class ProtobufMessages {
         bitField0_ = (bitField0_ & ~0x00000001);
         seq_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        hostname_ = "";
-        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -412,20 +339,20 @@ public final class ProtobufMessages {
         return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_descriptor;
       }
 
-      public com.game_machine.messages.ProtobufMessages.ClientMsg getDefaultInstanceForType() {
-        return com.game_machine.messages.ProtobufMessages.ClientMsg.getDefaultInstance();
+      public com.game_machine.messages.ProtobufMessages.ClientMessage getDefaultInstanceForType() {
+        return com.game_machine.messages.ProtobufMessages.ClientMessage.getDefaultInstance();
       }
 
-      public com.game_machine.messages.ProtobufMessages.ClientMsg build() {
-        com.game_machine.messages.ProtobufMessages.ClientMsg result = buildPartial();
+      public com.game_machine.messages.ProtobufMessages.ClientMessage build() {
+        com.game_machine.messages.ProtobufMessages.ClientMessage result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
 
-      public com.game_machine.messages.ProtobufMessages.ClientMsg buildPartial() {
-        com.game_machine.messages.ProtobufMessages.ClientMsg result = new com.game_machine.messages.ProtobufMessages.ClientMsg(this);
+      public com.game_machine.messages.ProtobufMessages.ClientMessage buildPartial() {
+        com.game_machine.messages.ProtobufMessages.ClientMessage result = new com.game_machine.messages.ProtobufMessages.ClientMessage(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -436,36 +363,27 @@ public final class ProtobufMessages {
           to_bitField0_ |= 0x00000002;
         }
         result.seq_ = seq_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.hostname_ = hostname_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
 
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof com.game_machine.messages.ProtobufMessages.ClientMsg) {
-          return mergeFrom((com.game_machine.messages.ProtobufMessages.ClientMsg)other);
+        if (other instanceof com.game_machine.messages.ProtobufMessages.ClientMessage) {
+          return mergeFrom((com.game_machine.messages.ProtobufMessages.ClientMessage)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
 
-      public Builder mergeFrom(com.game_machine.messages.ProtobufMessages.ClientMsg other) {
-        if (other == com.game_machine.messages.ProtobufMessages.ClientMsg.getDefaultInstance()) return this;
+      public Builder mergeFrom(com.game_machine.messages.ProtobufMessages.ClientMessage other) {
+        if (other == com.game_machine.messages.ProtobufMessages.ClientMessage.getDefaultInstance()) return this;
         if (other.hasBody()) {
           setBody(other.getBody());
         }
         if (other.hasSeq()) {
           setSeq(other.getSeq());
-        }
-        if (other.hasHostname()) {
-          bitField0_ |= 0x00000004;
-          hostname_ = other.hostname_;
-          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -483,11 +401,11 @@ public final class ProtobufMessages {
           com.google.protobuf.CodedInputStream input,
           com.google.protobuf.ExtensionRegistryLite extensionRegistry)
           throws java.io.IOException {
-        com.game_machine.messages.ProtobufMessages.ClientMsg parsedMessage = null;
+        com.game_machine.messages.ProtobufMessages.ClientMessage parsedMessage = null;
         try {
           parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
         } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (com.game_machine.messages.ProtobufMessages.ClientMsg) e.getUnfinishedMessage();
+          parsedMessage = (com.game_machine.messages.ProtobufMessages.ClientMessage) e.getUnfinishedMessage();
           throw e;
         } finally {
           if (parsedMessage != null) {
@@ -567,85 +485,11 @@ public final class ProtobufMessages {
         return this;
       }
 
-      // optional string hostname = 3;
-      private java.lang.Object hostname_ = "";
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public boolean hasHostname() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public java.lang.String getHostname() {
-        java.lang.Object ref = hostname_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          hostname_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public com.google.protobuf.ByteString
-          getHostnameBytes() {
-        java.lang.Object ref = hostname_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          hostname_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public Builder setHostname(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        hostname_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public Builder clearHostname() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        hostname_ = getDefaultInstance().getHostname();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string hostname = 3;</code>
-       */
-      public Builder setHostnameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000004;
-        hostname_ = value;
-        onChanged();
-        return this;
-      }
-
       // @@protoc_insertion_point(builder_scope:com.game_machine.messages.ClientMsg)
     }
 
     static {
-      defaultInstance = new ClientMsg(true);
+      defaultInstance = new ClientMessage(true);
       defaultInstance.initFields();
     }
 
@@ -668,8 +512,8 @@ public final class ProtobufMessages {
     java.lang.String[] descriptorData = {
       "\n;java/game_machine/src/main/resources/P" +
       "rotobufMessages.proto\022\031com.game_machine." +
-      "messages\"8\n\tClientMsg\022\014\n\004body\030\001 \002(\014\022\013\n\003s" +
-      "eq\030\002 \001(\005\022\020\n\010hostname\030\003 \001(\tB\002H\001"
+      "messages\"*\n\rClientMsg\022\014\n\004body\030\001 \002(\014\022" +
+      "\013\n\003seq\030\002 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -681,7 +525,7 @@ public final class ProtobufMessages {
           internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_game_machine_messages_ClientMsg_descriptor,
-              new java.lang.String[] { "Body", "Seq", "Hostname", });
+              new java.lang.String[] { "Body", "Seq", });
           return null;
         }
       };

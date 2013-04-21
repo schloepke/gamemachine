@@ -22,10 +22,10 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.messages.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
 
-public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
+public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
 
 	private static final Logger log = Logger.getLogger(ClientHandler.class.getName());
 
@@ -44,7 +44,7 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg
 		if (ctx == null) {
 			return false;
 		} else {
-			ClientMsg.Builder builder = ClientMsg.newBuilder();
+			ClientMessage.Builder builder = ClientMessage.newBuilder();
 	        ByteString reply = ByteString.copyFromUtf8(str);
 	        builder.setBody(reply);
 	        ctx.channel().write(builder.build());
@@ -59,19 +59,19 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		for (int i=0; i<1000; i++) {
+		for (int i=0; i<10; i++) {
 			sendMessage("GO");
 		}
 		ctx.flush();
 		
 	}
 
-	public void messageReceived(final ChannelHandlerContext ctx, final ClientMsg m) {
+	public void messageReceived(final ChannelHandlerContext ctx, final ClientMessage m) {
 		
 		messageCount++;
 		log.info("CLIENT messageReceived " + messageCount);
 		
-        if (messageCount >= 1000) {
+        if (messageCount >= 10) {
         	client.stop();
         }
 		//meter.mark(in.readableBytes());
