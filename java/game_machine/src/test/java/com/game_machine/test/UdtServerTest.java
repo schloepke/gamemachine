@@ -5,10 +5,10 @@ import java.util.logging.Level;
 import org.testng.annotations.Test;
 
 import com.game_machine.actor.Pi;
+import com.game_machine.actors.Master;
 import com.game_machine.client.Client;
 import com.game_machine.client.UdpClient;
 import com.game_machine.server.GameProtocolServer;
-import com.game_machine.server.Router;
 import com.game_machine.server.UdpServer;
 import com.game_machine.server.UdpServerHandler;
 import com.game_machine.server.UdtServer;
@@ -31,7 +31,7 @@ public class UdtServerTest {
 
 	@Test
 	public void runUdp() throws Exception {
-		Router.start(hostname,"1234");
+		Master.start(hostname,"1234");
 		
 		UdpServer.logLevel = Level.INFO;
 		UdpClient.logLevel = Level.INFO;
@@ -39,7 +39,7 @@ public class UdtServerTest {
 		server.start();
 		Thread.sleep(2000);
 		server.stop();
-		Router.stop();
+		Master.stop();
 		//UdpClient client = new UdpClient(hostname, 1234);
 		//client.start();
 

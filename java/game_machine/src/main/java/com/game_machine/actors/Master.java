@@ -1,6 +1,5 @@
-package com.game_machine.server;
+package com.game_machine.actors;
 
-import io.netty.channel.Channel;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -11,8 +10,9 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.akka.ActorUtil;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.server.GameProtocolServer;
 
-public class Router extends UntypedActor {
+public class Master extends UntypedActor {
 
 	public static ActorSystem system = null;
 	public static ActorRef router = null;
@@ -20,18 +20,18 @@ public class Router extends UntypedActor {
 	
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	
-	public Router() {
+	public Master() {
 	}
 	
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
 			log.info("ROUTER.INCOMING String message: {}", message);
 		} else if (message instanceof ClientMsg) {
-			log.info("Router ClientMsg");
+			//log.info("Router ClientMsg");
 			ClientMsg msg = (ClientMsg) message;
 			
 			// echo it back for now
-			server.sendMessage(msg.getBody().toStringUtf8(), msg.getHostname(), server.getPort());
+			server.sendMessage(msg.getBody().toStringUtf8(), msg.getHostname(), msg.getPort());
 		} else if (message instanceof GameProtocolServer) {
 			log.info("Router GameProtocolServer");
 			server = (GameProtocolServer) message;
@@ -42,24 +42,25 @@ public class Router extends UntypedActor {
 	
 
 	public static Boolean isRunning() {
-		if (Router.system == null || Router.system.isTerminated()) {
+		if (Master.system == null || Master.system.isTerminated()) {
 			return false;
 		} else {
 			return true;
 		}
 	}
 	
+	@SuppressWarnings("serial")
 	public static void start(String hostname, String port) {
-		Router.system = ActorUtil.createSystem("routerSystem",hostname, port);
+		Master.system = ActorUtil.createSystem("routerSystem",hostname, port);
 		
-		Router.router = system.actorOf(new Props(new UntypedActorFactory() {
+		Master.router = system.actorOf(new Props(new UntypedActorFactory() {
 			public UntypedActor create() {
-				return new Router();
+				return new Master();
 			}
 		}), "router");
 	}
 
 	public static void stop() {
-		Router.system.shutdown();
+		Master.system.shutdown();
 	}
 }

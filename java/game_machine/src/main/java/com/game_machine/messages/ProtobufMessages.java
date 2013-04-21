@@ -45,6 +45,16 @@ public final class ProtobufMessages {
      */
     com.google.protobuf.ByteString
         getHostnameBytes();
+
+    // optional int32 port = 4;
+    /**
+     * <code>optional int32 port = 4;</code>
+     */
+    boolean hasPort();
+    /**
+     * <code>optional int32 port = 4;</code>
+     */
+    int getPort();
   }
   /**
    * Protobuf type {@code com.game_machine.messages.ClientMsg}
@@ -110,6 +120,11 @@ public final class ProtobufMessages {
             case 26: {
               bitField0_ |= 0x00000004;
               hostname_ = input.readBytes();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              port_ = input.readInt32();
               break;
             }
           }
@@ -227,10 +242,27 @@ public final class ProtobufMessages {
       }
     }
 
+    // optional int32 port = 4;
+    public static final int PORT_FIELD_NUMBER = 4;
+    private int port_;
+    /**
+     * <code>optional int32 port = 4;</code>
+     */
+    public boolean hasPort() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 port = 4;</code>
+     */
+    public int getPort() {
+      return port_;
+    }
+
     private void initFields() {
       body_ = com.google.protobuf.ByteString.EMPTY;
       seq_ = 0;
       hostname_ = "";
+      port_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -257,6 +289,9 @@ public final class ProtobufMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(3, getHostnameBytes());
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, port_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -277,6 +312,10 @@ public final class ProtobufMessages {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(3, getHostnameBytes());
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, port_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -400,6 +439,8 @@ public final class ProtobufMessages {
         bitField0_ = (bitField0_ & ~0x00000002);
         hostname_ = "";
         bitField0_ = (bitField0_ & ~0x00000004);
+        port_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -440,6 +481,10 @@ public final class ProtobufMessages {
           to_bitField0_ |= 0x00000004;
         }
         result.hostname_ = hostname_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.port_ = port_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -466,6 +511,9 @@ public final class ProtobufMessages {
           bitField0_ |= 0x00000004;
           hostname_ = other.hostname_;
           onChanged();
+        }
+        if (other.hasPort()) {
+          setPort(other.getPort());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -641,6 +689,39 @@ public final class ProtobufMessages {
         return this;
       }
 
+      // optional int32 port = 4;
+      private int port_ ;
+      /**
+       * <code>optional int32 port = 4;</code>
+       */
+      public boolean hasPort() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 port = 4;</code>
+       */
+      public int getPort() {
+        return port_;
+      }
+      /**
+       * <code>optional int32 port = 4;</code>
+       */
+      public Builder setPort(int value) {
+        bitField0_ |= 0x00000008;
+        port_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 port = 4;</code>
+       */
+      public Builder clearPort() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        port_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:com.game_machine.messages.ClientMsg)
     }
 
@@ -668,8 +749,9 @@ public final class ProtobufMessages {
     java.lang.String[] descriptorData = {
       "\n;java/game_machine/src/main/resources/P" +
       "rotobufMessages.proto\022\031com.game_machine." +
-      "messages\"8\n\tClientMsg\022\014\n\004body\030\001 \002(\014\022\013\n\003s" +
-      "eq\030\002 \001(\005\022\020\n\010hostname\030\003 \001(\tB\002H\001"
+      "messages\"F\n\tClientMsg\022\014\n\004body\030\001 \002(\014\022\013\n\003s" +
+      "eq\030\002 \001(\005\022\020\n\010hostname\030\003 \001(\t\022\014\n\004port\030\004 \001(\005" +
+      "B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -681,7 +763,7 @@ public final class ProtobufMessages {
           internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_game_machine_messages_ClientMsg_descriptor,
-              new java.lang.String[] { "Body", "Seq", "Hostname", });
+              new java.lang.String[] { "Body", "Seq", "Hostname", "Port", });
           return null;
         }
       };

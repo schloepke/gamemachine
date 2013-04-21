@@ -11,6 +11,7 @@ message ClientMsg {
   required bytes body = 1;
   optional int32 seq = 2;
   optional string hostname = 3;
+  optional int32 port = 4;
    
 }
 

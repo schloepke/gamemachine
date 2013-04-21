@@ -2,8 +2,6 @@ package com.game_machine.server;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.MessageBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -26,8 +24,6 @@ import java.util.logging.Logger;
 
 import com.game_machine.messages.MessageUtil;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.MessageLite;
 
 public class UdpServer implements GameProtocolServer, Runnable {
 
@@ -56,19 +52,17 @@ public class UdpServer implements GameProtocolServer, Runnable {
 		handler.setServer(this);
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
-		acceptGroup = new NioEventLoopGroup(1, acceptFactory);
+		acceptGroup = new NioEventLoopGroup();
 
 		boot = new Bootstrap();
 		boot.channel(NioDatagramChannel.class);
 		boot.group(acceptGroup);
 		boot.option(ChannelOption.SO_BROADCAST, false);
-		// boot.option(ChannelOption.SO_RCVBUF, 65536);
-		// boot.option(ChannelOption.SO_SNDBUF, 65536);
 		boot.handler(new ChannelInitializer<NioDatagramChannel>() {
 			@Override
 			public void initChannel(final NioDatagramChannel ch) {
 				ChannelPipeline p = ch.pipeline();
-				p.addLast(executor, new LoggingHandler(LogLevel.INFO), handler);
+				p.addLast(executor, "handler", handler);
 			}
 		});
 
@@ -90,6 +84,8 @@ public class UdpServer implements GameProtocolServer, Runnable {
 			ByteBuf buf = MessageUtil.messageToByteBuf(msg);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			handler.ctx.channel().write(packet);
+			handler.ctx.flush();
+			//log.info("Server.sendMessage: " + host+":"+port+" "+message);
 			//final MessageBuf<Object> out = handler.ctx.nextOutboundMessageBuffer();
 			//out.add(packet);
 		} else {

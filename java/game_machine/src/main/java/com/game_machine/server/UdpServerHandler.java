@@ -10,6 +10,7 @@ import io.netty.channel.socket.DatagramPacket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.actors.Master;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
 import com.google.protobuf.InvalidProtocolBufferException;
 
@@ -39,6 +40,10 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		ClientMsg msg = null;
 		try {
 			msg = ClientMsg.parseFrom(bytes);
+			ClientMsg.Builder builder = msg.toBuilder();
+			builder.setHostname(m.remoteAddress().getHostName());
+			builder.setPort(m.remoteAddress().getPort());
+			msg = builder.build();
 		} catch (InvalidProtocolBufferException e1) {
 			e1.printStackTrace();
 			return;
@@ -47,8 +52,8 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 
 		// log.info("SERVER messageReceived " + str + " " + messageCount);
 
-		if (Router.isRunning()) {
-			Router.router.tell(msg, Router.router);
+		if (Master.isRunning()) {
+			Master.router.tell(msg, Master.router);
 		}
 	}
 
@@ -66,7 +71,7 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.info("Server channel active");
 		this.ctx = ctx;
-		Router.router.tell((GameProtocolServer) server, Router.router);
+		Master.router.tell((GameProtocolServer) server, Master.router);
 	}
 
 	public void beforeAdd(ChannelHandlerContext ctx) {

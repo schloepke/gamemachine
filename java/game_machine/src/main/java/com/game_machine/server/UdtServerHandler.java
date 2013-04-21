@@ -10,6 +10,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.actors.Master;
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
 
 @Sharable
@@ -38,8 +39,8 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 			log.warning("QUIT RECEVIED FROM CLIENT");
 			stop();
 		} else {
-			if (Router.isRunning()) {
-				Router.router.tell("TEST", Router.router);
+			if (Master.isRunning()) {
+				Master.router.tell("TEST", Master.router);
 			}
 			ctx.write(m);
 		}
