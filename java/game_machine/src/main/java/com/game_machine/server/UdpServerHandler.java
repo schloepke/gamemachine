@@ -41,6 +41,7 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 			msg = ClientMsg.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e1) {
 			e1.printStackTrace();
+			return;
 		}
 		String str = msg.getBody().toStringUtf8();
 
