@@ -6,6 +6,8 @@ import com.typesafe.config.ConfigFactory;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.actor.UntypedActorFactory;
 
 public class ActorUtil {
 
@@ -23,5 +25,5 @@ public class ActorUtil {
 		Config customConfig = ConfigFactory.parseString(remoteConfig).getConfig(name).withFallback(ConfigFactory.load());
 		return ActorSystem.create(name, customConfig);
 	}
-		
+			
 }

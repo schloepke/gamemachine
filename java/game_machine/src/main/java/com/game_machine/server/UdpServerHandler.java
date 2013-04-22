@@ -10,9 +10,10 @@ import io.netty.channel.socket.DatagramPacket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages.ClientMsg;
-import com.game_machine.systems.Master;
-import com.google.protobuf.InvalidProtocolBufferException;
+import akka.actor.ActorSelection;
+
+import com.game_machine.messages.GameMessage;
+import com.game_machine.systems.Root;
 
 @Sharable
 public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -37,24 +38,11 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		ClientMsg msg = null;
-		try {
-			msg = ClientMsg.parseFrom(bytes);
-			ClientMsg.Builder builder = msg.toBuilder();
-			builder.setHostname(m.remoteAddress().getHostName());
-			builder.setPort(m.remoteAddress().getPort());
-			msg = builder.build();
-		} catch (InvalidProtocolBufferException e1) {
-			e1.printStackTrace();
-			return;
-		}
-		String str = msg.getBody().toStringUtf8();
-
-		// log.info("SERVER messageReceived " + str + " " + messageCount);
-
-		if (Master.isRunning()) {
-			Master.router.tell(msg, Master.router);
-		}
+		
+		GameMessage gameMessage = new GameMessage(bytes,m.remoteAddress().getHostName(),m.remoteAddress().getPort());
+		log.info("MessageReceived length" + bytes.length);
+		ActorSelection ref = Root.system.actorSelection("/user/inbound");
+		ref.tell(gameMessage);
 	}
 
 	public void sendMessage(String message) {
@@ -71,7 +59,9 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.info("Server channel active");
 		this.ctx = ctx;
-		Master.router.tell((GameProtocolServer) server, Master.router);
+		Server.udpServer = server;
+		ActorSelection ref = Root.system.actorSelection("/user/outbound");
+		//ref.tell(server);
 	}
 
 	public void beforeAdd(ChannelHandlerContext ctx) {

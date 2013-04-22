@@ -52,7 +52,7 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
-		for (int i = 0; i < 1000; i++) {
+		for (int i = 0; i < 10; i++) {
 			sendMessage("GO");
 		}
 		sendMessage("QUIT");
@@ -71,7 +71,7 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		builder.setBody(b);
 		ClientMsg msg = builder.build();
 
-		if (messageCount >= 1000) {
+		if (messageCount >= 10) {
 			log.warning("Client received all messages back, stopping");
 			stop();
 		}

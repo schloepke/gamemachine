@@ -10,8 +10,10 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import akka.actor.ActorRef;
+
 import com.game_machine.messages.ProtobufMessages.ClientMsg;
-import com.game_machine.systems.Master;
+import com.game_machine.systems.Root;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
@@ -39,8 +41,9 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 			log.warning("QUIT RECEVIED FROM CLIENT");
 			stop();
 		} else {
-			if (Master.isRunning()) {
-				Master.router.tell("TEST", Master.router);
+			if (Root.isRunning()) {
+				ActorRef ref = Root.system.actorFor("/user/root/outbound");
+				ref.tell(str, ref);
 			}
 			ctx.write(m);
 		}
