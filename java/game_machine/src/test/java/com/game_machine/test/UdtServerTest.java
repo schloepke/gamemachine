@@ -69,7 +69,7 @@ public class UdtServerTest {
 		UdpClient.logLevel = Level.WARNING;
 		UdpServer server = new UdpServer(hostname, 1234);
 		server.start();
-		Thread.sleep(20000);
+		Thread.sleep(2000);
 		server.stop();
 		Root.stop();
 		// UdpClient client = new UdpClient(hostname, 1234);
