@@ -8,7 +8,7 @@ public final class ProtobufMessages {
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
-  public interface ClientMsgOrBuilder
+  public interface ClientMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
     // required bytes body = 1;
@@ -32,12 +32,12 @@ public final class ProtobufMessages {
     int getSeq();
   }
   /**
-   * Protobuf type {@code com.game_machine.messages.ClientMsg}
+   * Protobuf type {@code com.game_machine.messages.ClientMessage}
    */
   public static final class ClientMessage extends
       com.google.protobuf.GeneratedMessage
-      implements ClientMsgOrBuilder {
-    // Use ClientMsg.newBuilder() to construct.
+      implements ClientMessageOrBuilder {
+    // Use ClientMessage.newBuilder() to construct.
     private ClientMessage(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
       super(builder);
       this.unknownFields = builder.getUnknownFields();
@@ -106,12 +106,12 @@ public final class ProtobufMessages {
     }
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_descriptor;
+      return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMessage_descriptor;
     }
 
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable
+      return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMessage_fieldAccessorTable
           .ensureFieldAccessorsInitialized(
               com.game_machine.messages.ProtobufMessages.ClientMessage.class, com.game_machine.messages.ProtobufMessages.ClientMessage.Builder.class);
     }
@@ -286,24 +286,24 @@ public final class ProtobufMessages {
       return builder;
     }
     /**
-     * Protobuf type {@code com.game_machine.messages.ClientMsg}
+     * Protobuf type {@code com.game_machine.messages.ClientMessage}
      */
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements com.game_machine.messages.ProtobufMessages.ClientMsgOrBuilder {
+       implements com.game_machine.messages.ProtobufMessages.ClientMessageOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_descriptor;
+        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMessage_descriptor;
       }
 
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable
+        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMessage_fieldAccessorTable
             .ensureFieldAccessorsInitialized(
                 com.game_machine.messages.ProtobufMessages.ClientMessage.class, com.game_machine.messages.ProtobufMessages.ClientMessage.Builder.class);
       }
 
-      // Construct using com.game_machine.messages.ProtobufMessages.ClientMsg.newBuilder()
+      // Construct using com.game_machine.messages.ProtobufMessages.ClientMessage.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -336,7 +336,7 @@ public final class ProtobufMessages {
 
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMsg_descriptor;
+        return com.game_machine.messages.ProtobufMessages.internal_static_com_game_machine_messages_ClientMessage_descriptor;
       }
 
       public com.game_machine.messages.ProtobufMessages.ClientMessage getDefaultInstanceForType() {
@@ -485,7 +485,7 @@ public final class ProtobufMessages {
         return this;
       }
 
-      // @@protoc_insertion_point(builder_scope:com.game_machine.messages.ClientMsg)
+      // @@protoc_insertion_point(builder_scope:com.game_machine.messages.ClientMessage)
     }
 
     static {
@@ -493,14 +493,14 @@ public final class ProtobufMessages {
       defaultInstance.initFields();
     }
 
-    // @@protoc_insertion_point(class_scope:com.game_machine.messages.ClientMsg)
+    // @@protoc_insertion_point(class_scope:com.game_machine.messages.ClientMessage)
   }
 
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_com_game_machine_messages_ClientMsg_descriptor;
+    internal_static_com_game_machine_messages_ClientMessage_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable;
+      internal_static_com_game_machine_messages_ClientMessage_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -512,7 +512,7 @@ public final class ProtobufMessages {
     java.lang.String[] descriptorData = {
       "\n;java/game_machine/src/main/resources/P" +
       "rotobufMessages.proto\022\031com.game_machine." +
-      "messages\"*\n\rClientMsg\022\014\n\004body\030\001 \002(\014\022" +
+      "messages\"*\n\rClientMessage\022\014\n\004body\030\001 \002(\014\022" +
       "\013\n\003seq\030\002 \001(\005B\002H\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
@@ -520,11 +520,11 @@ public final class ProtobufMessages {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_com_game_machine_messages_ClientMsg_descriptor =
+          internal_static_com_game_machine_messages_ClientMessage_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_com_game_machine_messages_ClientMsg_fieldAccessorTable = new
+          internal_static_com_game_machine_messages_ClientMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_com_game_machine_messages_ClientMsg_descriptor,
+              internal_static_com_game_machine_messages_ClientMessage_descriptor,
               new java.lang.String[] { "Body", "Seq", });
           return null;
         }
