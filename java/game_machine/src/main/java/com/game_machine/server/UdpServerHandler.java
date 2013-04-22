@@ -40,7 +40,7 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		m.data().readBytes(bytes);
 		
 		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getHostName(), m.remoteAddress().getPort());
-		log.info("MessageReceived length" + bytes.length);
+		log.info("MessageReceived length" + bytes.length + " " + new String(bytes));
 		ActorSelection ref = Root.system.actorSelection("/user/inbound");
 		ref.tell(gameMessage);
 	}

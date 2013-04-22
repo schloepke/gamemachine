@@ -6,7 +6,6 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.messages.NetMessage;
-import com.game_machine.server.Server;
 
 public class Game extends UntypedActor {
 

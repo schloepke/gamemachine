@@ -26,7 +26,7 @@ public class Inbound extends UntypedActor {
 				netMessage = NetMessage.copy(netMessage,decode(netMessage.bytes).getBody().toByteArray());
 			}
 			this.getContext().child("game").get().tell(netMessage, this.getSelf());
-			log.info("Inbound GameMessage message: {}", message);
+			log.info("Inbound NetMessage message: {}", message);
 		} else {
 			unhandled(message);
 		}
@@ -36,7 +36,7 @@ public class Inbound extends UntypedActor {
 		try {
 			return ClientMessage.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e1) {
-			log.warning("BYTES: " + new String(bytes));
+			log.warning("BYTES: " + bytes.length + " " + new String(bytes));
 			e1.printStackTrace();
 			throw new RuntimeException("Decoding Error");
 		}
