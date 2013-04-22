@@ -4,7 +4,10 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.messages.GameMessage;
+import com.game_machine.messages.NetMessage;
+import com.game_machine.messages.ProtobufMessages.ClientMessage;
+import com.game_machine.server.Server;
+import com.google.protobuf.ByteString;
 
 public class Outbound extends UntypedActor {
 
@@ -15,15 +18,33 @@ public class Outbound extends UntypedActor {
 
 
 	public void onReceive(Object message) throws Exception {
-		if (message instanceof GameMessage) {
-			//this.getContext().child("game").tell(message, this.getSelf());
-			// log.info("Router ClientMsg");
-			// ClientMsg msg = (ClientMsg) message;
-			// echo it back for now
-			// server.sendMessage(msg.getBody().toStringUtf8(),
-			// msg.getHostname(), msg.getPort());
+		if (message instanceof NetMessage) {
+			log.info("Outbound GameMessage message: {}", message);
+			NetMessage netMessage = (NetMessage) message;
+			byte[] bytesToSend = netMessage.bytes;
+			
+			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {
+				bytesToSend = encode(netMessage.bytes);
+			}
+			
+			if (netMessage.protocol == NetMessage.UDP) {
+				Server.udpServer.send(bytesToSend, netMessage.host, netMessage.port);
+			} else if (netMessage.protocol == NetMessage.UDT) {
+				unhandled(message);
+			} else {
+				unhandled(message);
+			}
+			
 		} else {
 			unhandled(message);
 		}
+	}
+	
+	public byte[] encode(byte[] bytes) {
+		ClientMessage.Builder builder = ClientMessage.newBuilder();
+		ByteString byteString = ByteString.copyFrom(bytes);
+		builder.setBody(byteString);
+		ClientMessage msg = builder.build();
+		return msg.toByteArray();
 	}
 }

@@ -21,8 +21,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.GameMessage;
-
 public class UdpServer implements Runnable {
 
 	public static Level logLevel = Level.INFO;
@@ -30,8 +28,8 @@ public class UdpServer implements Runnable {
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 
-	public final String hostname;
-	public final int port;
+	private final String hostname;
+	private final int port;
 	private NioEventLoopGroup acceptGroup;
 	private Bootstrap boot;
 	private final UdpServerHandler handler = new UdpServerHandler();
@@ -65,17 +63,17 @@ public class UdpServer implements Runnable {
 			future = boot.bind(hostname, port);
 			allChannels.add(future.channel());
 			future.sync();
-			// future.channel().closeFuture().sync();
+			future.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			stop();
 		}
 	}
 
-	public void sendMessage(GameMessage message) {
+	public void send(byte[] bytes, String host, int port) {
 		if (handler.ctx.channel().isActive() == true) {
-			ByteBuf buf = Unpooled.copiedBuffer(message.bytes);
-			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(message.host, message.port));
+			ByteBuf buf = Unpooled.copiedBuffer(bytes);
+			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			handler.ctx.channel().write(packet);
 		} else {
 			log.warning("Client disconnected from server " + handler.ctx.channel().isActive() + " " + handler.ctx.channel().isOpen() + " " + handler.ctx.channel().remoteAddress());

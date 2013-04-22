@@ -66,7 +66,7 @@ public class UdtServer {
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-			        p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMsg.getDefaultInstance()));
+			        p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMessage.getDefaultInstance()));
 
 			        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
 			        p.addLast("protobufEncoder", new ProtobufEncoder());

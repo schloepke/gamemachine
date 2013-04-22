@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
 
-import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.messages.ProtobufMessages.ClientMessage;
 import com.game_machine.systems.Root;
 
 @Sharable
-public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMsg> {
+public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
 
 	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
 	private UdtServer server;
@@ -32,7 +32,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 	}
 
 	@Override
-	public void messageReceived(final ChannelHandlerContext ctx, final ClientMsg m) {
+	public void messageReceived(final ChannelHandlerContext ctx, final ClientMessage m) {
 		String str = new String(m.getBody().toByteArray());
 		messageCount++;
 		log.info("SERVER messageReceived " + messageCount + " " + str);

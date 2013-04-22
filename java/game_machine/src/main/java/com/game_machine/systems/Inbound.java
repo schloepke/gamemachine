@@ -5,38 +5,40 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.messages.GameMessage;
-import com.game_machine.messages.ProtobufMessages.ClientMsg;
+import com.game_machine.messages.NetMessage;
+import com.game_machine.messages.ProtobufMessages.ClientMessage;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class Inbound extends UntypedActor {
 
+	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+	
 	public Inbound() {
-		this.getContext().actorOf(new Props(Game.class), "game");
+		this.getContext().actorOf(Props.create(Game.class), "game");
 	}
 
-	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+	
 
 	public void onReceive(Object message) throws Exception {
-		if (message instanceof GameMessage) {
-			GameMessage gameMessage = (GameMessage) message;
-			this.getContext().child("game").get().tell(gameMessage, this.getSelf());
+		if (message instanceof NetMessage) {
+			NetMessage netMessage = (NetMessage) message;
+			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {
+				netMessage = NetMessage.copy(netMessage,decode(netMessage.bytes).getBody().toByteArray());
+			}
+			this.getContext().child("game").get().tell(netMessage, this.getSelf());
 			log.info("Inbound GameMessage message: {}", message);
 		} else {
 			unhandled(message);
 		}
 	}
 
-	private void decode(GameMessage gameMessage) {
-		ClientMsg msg = null;
+	private ClientMessage decode(byte[] bytes) {
 		try {
-			msg = ClientMsg.parseFrom(gameMessage.bytes);
-			ClientMsg.Builder builder = msg.toBuilder();
-			builder.setHostname(gameMessage.host);
-			builder.setPort(gameMessage.port);
-			msg = builder.build();
+			return ClientMessage.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e1) {
+			log.warning("BYTES: " + new String(bytes));
 			e1.printStackTrace();
+			throw new RuntimeException("Decoding Error");
 		}
 	}
 }

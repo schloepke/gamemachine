@@ -1,0 +1,38 @@
+akka {
+  loglevel = "DEBUG"
+  actor {
+    provider = "akka.remote.RemoteActorRefProvider"
+  }
+  remote {
+     enabled-transports = ["akka.remote.netty.tcp"]
+    netty.tcp {
+      hostname = "127.0.0.1"
+      port = 2552
+    }
+ }
+}
+
+app1 {
+akka {
+  remote {
+     enabled-transports = ["akka.remote.netty.tcp"]
+    netty.tcp {
+      hostname = "127.0.0.1"
+      port = 2553
+    }
+ }
+ }
+}
+
+
+app2 {
+ akka {
+  remote {
+    enabled-transports = ["akka.remote.netty.tcp"]
+    netty.tcp {
+      hostname = "127.0.0.1"
+      port = 2554
+    }
+ }
+ }
+}

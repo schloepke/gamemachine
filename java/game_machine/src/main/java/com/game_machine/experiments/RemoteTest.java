@@ -1,4 +1,4 @@
-package com.game_machine.actor;
+package com.game_machine.experiments;
 
 import java.util.ArrayList;
 

@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 
 import akka.actor.ActorSelection;
 
-import com.game_machine.messages.GameMessage;
+import com.game_machine.messages.NetMessage;
 import com.game_machine.systems.Root;
 
 @Sharable
@@ -39,7 +39,7 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		
-		GameMessage gameMessage = new GameMessage(bytes,m.remoteAddress().getHostName(),m.remoteAddress().getPort());
+		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getHostName(), m.remoteAddress().getPort());
 		log.info("MessageReceived length" + bytes.length);
 		ActorSelection ref = Root.system.actorSelection("/user/inbound");
 		ref.tell(gameMessage);

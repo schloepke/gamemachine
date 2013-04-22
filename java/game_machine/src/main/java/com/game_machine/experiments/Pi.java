@@ -1,4 +1,4 @@
-package com.game_machine.actor;
+package com.game_machine.experiments;
 
 /**
  * Copyright (C) 2009-2012 Typesafe Inc. <http://www.typesafe.com>

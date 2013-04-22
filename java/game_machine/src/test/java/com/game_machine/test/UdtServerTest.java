@@ -7,9 +7,9 @@ import org.testng.annotations.Test;
 
 import com.game_machine.ServerConfig;
 import com.game_machine.InjectConfig;
-import com.game_machine.actor.Pi;
 import com.game_machine.client.Client;
 import com.game_machine.client.UdpClient;
+import com.game_machine.experiments.Pi;
 import com.game_machine.server.UdpServer;
 import com.game_machine.server.UdtServer;
 import com.game_machine.server.UdtServerHandler;
@@ -24,6 +24,7 @@ public class UdtServerTest {
 
 	//@Test
 	public void runServer() throws Exception {
+		
 		UdtServer.logLevel = Level.INFO;
 		Client.logLevel = Level.INFO;
 		final UdtServerHandler handler = new UdtServerHandler();
@@ -45,9 +46,10 @@ public class UdtServerTest {
 		}
 	}
 
-	@Test
+	//@Test
 	public void actorsystem()  {
 		try {
+			
 			Root.start(hostname, "1234");
 			Thread.sleep(2000);
 			Root.stop();
@@ -57,17 +59,17 @@ public class UdtServerTest {
 		
 	}
 	
-	//@Test
+	@Test
 	public void runUdp() throws Exception {
 		
 		
 		Root.start(hostname, "1234");
 		
-		UdpServer.logLevel = Level.INFO;
-		UdpClient.logLevel = Level.INFO;
+		UdpServer.logLevel = Level.WARNING;
+		UdpClient.logLevel = Level.WARNING;
 		UdpServer server = new UdpServer(hostname, 1234);
 		server.start();
-		Thread.sleep(50000);
+		Thread.sleep(20000);
 		server.stop();
 		Root.stop();
 		// UdpClient client = new UdpClient(hostname, 1234);
