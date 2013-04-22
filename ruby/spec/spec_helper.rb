@@ -1,6 +1,6 @@
 
 require 'rubygems'
-require 'wp_test'
+require 'game_machine'
 
 module GameMachine::SpecHelper
   
