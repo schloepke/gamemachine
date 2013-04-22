@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   
   s.require_paths = ["lib"]
 
-  #s.add_development_depSendency 'rake'
+  #s.add_development_dependency 'rake'
   s.add_development_dependency 'rspec'
   
   #s.add_runtime_dependency 'active_support'
