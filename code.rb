@@ -8,7 +8,7 @@ java_import com::game_machine::messages::ProtobufMessages::ClientMessage
 
 threads = []
 
-20.times do
+1.times do
   threads << Thread.new do
 
     port = 1234
@@ -33,7 +33,7 @@ threads = []
         # retry
       end
 
-      #sleep 0.40
+      sleep 0.40
     end
   end
 end
