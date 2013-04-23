@@ -1,12 +1,12 @@
+require "bundler/gem_tasks"
+require 'rspec/core/rake_task'
+require 'rspec/core/rake_task'
+require 'game_machine'
 
+RSpec::Core::RakeTask.new
 
-task :default => :proto_java
+task :default => :spec
 
-task :proto_ruby do
-  system("rprotoc java/game_machine/src/main/resources/ProtobufMessages.proto --out ./ruby/lib")
-  mv 'ProtobufMessages.pb.rb', 'ruby/lib'
-end
-
-task :proto_java do
-  system("protoc java/game_machine/src/main/resources/ProtobufMessages.proto --java_out=java/game_machine/src/main/java")
+task :run do
+  GameMachine::Server.start
 end
