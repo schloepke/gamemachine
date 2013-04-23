@@ -1,13 +1,9 @@
 package com.game_machine.systems;
 
+import akka.actor.ActorSystem;
+
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
-
-import akka.actor.ActorRef;
-import akka.actor.ActorSystem;
-import akka.actor.Props;
-import akka.actor.UntypedActor;
-import akka.actor.UntypedActorFactory;
 
 public class ActorUtil {
 

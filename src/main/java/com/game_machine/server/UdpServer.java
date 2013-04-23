@@ -41,6 +41,7 @@ public class UdpServer implements Runnable {
 	}
 	
 	public void run() {
+		log.info("Starting UdpServer");
 		handler.setServer(this);
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
@@ -66,7 +67,7 @@ public class UdpServer implements Runnable {
 			future.channel().closeFuture().sync();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-			stop();
+			shutdown();
 		}
 	}
 
@@ -81,12 +82,7 @@ public class UdpServer implements Runnable {
 		
 	}
 
-	public void start() {
-		Thread t = new Thread(this);
-		t.start();
-	}
-
-	public void stop() {
+	public void shutdown() {
 		ChannelGroupFuture f = allChannels.close();
 		try {
 			f.sync();

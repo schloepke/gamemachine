@@ -1,7 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+
 	<properties>
+	<!-- make sure build is not platform dependent -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
 		<akka_suffix>_2.10</akka_suffix>
 		<akka_version>2.2-M3</akka_version>
 	</properties>
@@ -35,7 +40,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/java_lib</outputDirectory>
 						</configuration>
 					</execution>
 
@@ -53,7 +58,7 @@
 									<version>${version}</version>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/java_lib</outputDirectory>
 							<stripVersion>false</stripVersion>
 						</configuration>
 					</execution>

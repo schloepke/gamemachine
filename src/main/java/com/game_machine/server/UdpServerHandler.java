@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import akka.actor.ActorSelection;
 
 import com.game_machine.messages.NetMessage;
-import com.game_machine.systems.Root;
+import com.game_machine.systems.Base;
 
 @Sharable
 public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -41,8 +41,8 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		
 		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getHostName(), m.remoteAddress().getPort());
 		log.info("MessageReceived length" + bytes.length + " " + new String(bytes));
-		ActorSelection ref = Root.system.actorSelection("/user/inbound");
-		ref.tell(gameMessage);
+		ActorSelection ref = Base.system.actorSelection("/user/inbound");
+		ref.tell(gameMessage, null);
 	}
 
 	public void sendMessage(String message) {
@@ -59,26 +59,18 @@ public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.info("Server channel active");
 		this.ctx = ctx;
-		Server.udpServer = server;
-		ActorSelection ref = Root.system.actorSelection("/user/outbound");
-		//ref.tell(server);
-	}
-
-	public void beforeAdd(ChannelHandlerContext ctx) {
-		log.warning("beforeAdd Context added");
-		this.ctx = ctx;
 	}
 
 	public void stop() {
 		if (this.ctx == null) {
 			log.warning("Null Context!");
-			server.stop();
+			server.shutdown();
 			return;
 		}
 		this.ctx.flush().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
-				server.stop();
+				server.shutdown();
 			}
 		});
 	}

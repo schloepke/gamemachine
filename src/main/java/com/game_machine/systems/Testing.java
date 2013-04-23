@@ -1,10 +1,10 @@
 package com.game_machine.systems;
 
-import java.util.HashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
+
 
 
 public class Testing {
@@ -21,8 +21,8 @@ public class Testing {
 			//Retrieve a value.(synchronously).
 			//Object someObject=client.get("key");
 			
-			Root.memcachedClient.set("someKey", 3600, "testing");
-			Future<Object> f=Root.memcachedClient.asyncGet("someKey");
+			Base.memcachedClient.set("someKey", 3600, "testing");
+			Future<Object> f=Base.memcachedClient.asyncGet("someKey");
 			try {
 			    f.get(5, TimeUnit.SECONDS);
 			} catch(TimeoutException e) {
