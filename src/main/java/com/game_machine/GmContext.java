@@ -1,6 +1,6 @@
 package com.game_machine;
 
-import com.game_machine.server.UdpServer;
+import com.game_machine.core.net.UdpServer;
 
 public class GmContext {
 
