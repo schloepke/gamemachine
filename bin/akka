@@ -21,4 +21,4 @@ declare AKKA_HOME="$(cd "$(cd "$(dirname "$0")"; pwd -P)"/..; pwd)"
 
 [ -n "$AKKA_CLASSPATH" ] || AKKA_CLASSPATH="$AKKA_HOME/java_lib/scala-library.jar:$AKKA_HOME/config:$AKKA_HOME/java_lib/*"
 
-java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet akka.kernel.Main "$@"
+java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet com.game_machine.GameMachine "$@"
