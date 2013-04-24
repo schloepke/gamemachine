@@ -8,3 +8,4 @@ target/
 .buildpath
 .idea
 .project
+config/application.conf

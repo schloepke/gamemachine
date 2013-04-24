@@ -19,7 +19,7 @@ import com.game_machine.ActorUtil;
 import com.game_machine.core.actors.Inbound;
 import com.game_machine.messages.NetMessage;
 
-@Sharable
+//@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
 	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
@@ -38,7 +38,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getHostName(), m.remoteAddress().getPort());
+		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
 		log.fine("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}
