@@ -25,8 +25,8 @@ threads = []
           text = d[0]
           sender = d[1]
           #puts 'got'
-          #msg = ClientMessage.parse_from(text.to_java_bytes)
-          #puts "got #{msg.get_body.to_string_utf8}"
+          msg = ClientMessage.parse_from(text.to_java_bytes)
+          puts "got #{msg.get_body.to_string_utf8}"
         end
       rescue IO::WaitReadable => e
         #IO.select([s],[],[],0.02)
