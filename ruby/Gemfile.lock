@@ -64,5 +64,6 @@ PLATFORMS
 DEPENDENCIES
   buildr
   game_machine!
+  rake
   rspec
   ruby_protobuf
