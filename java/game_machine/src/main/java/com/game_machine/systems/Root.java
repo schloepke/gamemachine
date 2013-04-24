@@ -22,6 +22,7 @@ public class Root {
 
 	public static void start(String hostname, String port) {
 		Root.system = ActorUtil.createSystem("system", hostname, port);
+		ActorUtil.createSystem("app1", "192.168.1.3", "2553");
 		//Root.system = ActorUtil.createSystem("system", null, null);
 		
 		//Root.system.actorOf(Props.create(Outbound.class), "outbound");

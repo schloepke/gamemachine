@@ -21,7 +21,7 @@ public class ActorUtil {
 			return createSystem(name);
 		}
 		
-		String remoteConfig = name + ".akka.remote.netty.port=\"" + port + "\"\n" + name + ".akka.remote.netty.hostname=\"" + hostname + "\"";
+		String remoteConfig = name + ".akka.remote.netty.tcp.port=\"" + port + "\"\n" + name + ".akka.remote.netty.tcp.hostname=\"" + hostname + "\"";
 		Config customConfig = ConfigFactory.parseString(remoteConfig).getConfig(name).withFallback(ConfigFactory.load());
 		return ActorSystem.create(name, customConfig);
 	}
