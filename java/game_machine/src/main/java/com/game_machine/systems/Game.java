@@ -17,7 +17,7 @@ LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	}
 	
 	
-	public void onReceive(Object message) throws Exception {
+	public void onReceive(NetMessage message) throws Exception {
 		if (message instanceof NetMessage) {
 			log.info("Game GameMessage message: {}", message);
 			ActorSelection ref = this.getContext().actorSelection("/user/outbound");
