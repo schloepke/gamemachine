@@ -133,11 +133,12 @@
 			<artifactId>metrics-core</artifactId>
 			<version>2.2.0</version>
 		</dependency>
-		<dependency>
+		
+		<!-- <dependency>
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java</artifactId>
 			<version>2.5.0</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>org.easytesting</groupId>
@@ -145,11 +146,11 @@
 			<version>2.0M10</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>com.typesafe</groupId>
 			<artifactId>config</artifactId>
 			<version>1.0.0</version>
-		</dependency>
+		</dependency> -->
 
 		<dependency>
 			<groupId>com.google.inject</groupId>

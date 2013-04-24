@@ -59,7 +59,19 @@ public class UdtServerTest {
 		
 	}
 	
-	@Test
+	@Test public void testSystem() {
+		Root.start(hostname, "1234");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Root.stop();
+	}
+	
+	
+	//@Test
 	public void runUdp() throws Exception {
 		
 		

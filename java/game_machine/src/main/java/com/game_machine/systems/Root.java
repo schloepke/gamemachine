@@ -21,8 +21,8 @@ public class Root {
 	}
 
 	public static void start(String hostname, String port) {
-		//Root.system = ActorUtil.createSystem("system", hostname, port);
-		Root.system = ActorUtil.createSystem("system", null, null);
+		Root.system = ActorUtil.createSystem("system", hostname, port);
+		//Root.system = ActorUtil.createSystem("system", null, null);
 		
 		//Root.system.actorOf(Props.create(Outbound.class), "outbound");
 		//Root.system.actorOf(Props.create(Inbound.class), "inbound");
