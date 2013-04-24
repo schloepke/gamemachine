@@ -1,8 +1,0 @@
-== entity_system
-
-Mathematically-speaking, an Entity is a database Key, just as you’d see in any RDBMS.
-
-Likewise, from a purely abstracted point of view, the “set of component-instances that comprise Entity #7742″ is, literally, a database Query
-
-As Raph Koster (amongst others, but IIRC Raph was one of the first to come up with a clear concise description) pointed out close to 10 years ago, the rate at which players consume content vastly excedes the rate at which developers generate it – you have perhaps 50 people working purely on content generation on a modern MMO, and you have perhaps 500,000 people consuming it. The problem is, those 500,000 use Thottbot, so they *share* their discoveries, and consume at a rate proportional to the square of their number, whereas it’s generally produced at a rate more directly proportional to the number of developers.
-There are many ways to work around this issue, but most of them end up producing or managing vast amounts of content (they just get more cunning in exactly how that content is generated).
