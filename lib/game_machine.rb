@@ -7,8 +7,8 @@ Dir["#{File.dirname(__FILE__)}/../../java/game_machine/java_lib/*.jar"].each { |
   module GameMachine
   end
   
-  java_import 'com.game_machine.systems.Root'
-  java_import 'com.game_machine.server.UdpServer'
+  #java_import 'com.game_machine.systems.Root'
+  #java_import 'com.game_machine.server.UdpServer'
   
-  require 'game_machine/server.rb'
+  #require 'game_machine/server.rb'
 
