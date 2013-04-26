@@ -40,7 +40,7 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/java_lib</outputDirectory>
 						</configuration>
 					</execution>
 
@@ -58,7 +58,7 @@
 									<version>${version}</version>
 								</artifactItem>
 							</artifactItems>
-							<outputDirectory>${project.basedir}/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/java_lib</outputDirectory>
 							<stripVersion>false</stripVersion>
 						</configuration>
 					</execution>
