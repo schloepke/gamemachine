@@ -2,7 +2,7 @@ require 'rubygems'
 require 'socket'
 require 'java'
 
-Dir["#{File.dirname(__FILE__)}/../../java/game_machine/java_lib/*.jar"].each { |jar| require jar }
+Dir["#{File.dirname(__FILE__)}/../java_lib/*.jar"].each { |jar| require jar }
   
   module GameMachine
   end
