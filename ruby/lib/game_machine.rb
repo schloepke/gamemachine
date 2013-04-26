@@ -6,4 +6,9 @@ Dir["#{File.dirname(__FILE__)}/../../java/game_machine/bin/*.jar"].each { |jar| 
   
   module GameMachine
   end
+  
+  java_import 'com.game_machine.systems.Root'
+  java_import 'com.game_machine.server.UdpServer'
+  
+  require 'game_machine/server.rb'
 
