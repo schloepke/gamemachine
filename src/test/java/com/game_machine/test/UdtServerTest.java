@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import org.testng.annotations.Test;
 
-import com.game_machine.ServerConfig;
 import com.game_machine.InjectConfig;
 import com.game_machine.client.Client;
 import com.game_machine.client.UdpClient;
@@ -82,7 +81,7 @@ public class UdtServerTest {
 		UdpClient.logLevel = Level.WARNING;
 		UdpServer server = new UdpServer(hostname, 1234);
 		server.start();
-		Thread.sleep(500000);
+		Thread.sleep(2000);
 		server.stop();
 		Root.stop();
 		// UdpClient client = new UdpClient(hostname, 1234);
