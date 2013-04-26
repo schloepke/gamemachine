@@ -1,5 +1,6 @@
 package com.game_machine.systems;
 
+import java.util.HashMap;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -13,6 +14,8 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.GmKernel;
 import com.game_machine.messages.NetMessage;
+import com.game_machine.systems.memorydb.Query;
+import com.game_machine.systems.memorydb.QueryDefinitions;
 
 public class Game extends UntypedActor {
 
@@ -31,7 +34,7 @@ LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 			//Testing.test1();
 			ActorSelection ref;
 			ref = this.getContext().actorSelection("/user/db");
-			ref.tell(message, this.getSelf());
+			ref.tell(new Query("test"), this.getSelf());
 			
 			ref = this.getContext().actorSelection("/user/outbound");
 			ref.tell(message, this.getSelf());

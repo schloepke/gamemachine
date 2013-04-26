@@ -13,6 +13,7 @@ import akka.dispatch.ExecutionContexts;
 import akka.routing.RoundRobinRouter;
 
 import com.game_machine.messages.NetMessage;
+import com.game_machine.systems.memorydb.Db;
 
 public class Base {
 
