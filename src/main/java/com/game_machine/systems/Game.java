@@ -11,6 +11,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
+import com.game_machine.GmKernel;
 import com.game_machine.messages.NetMessage;
 
 public class Game extends UntypedActor {
@@ -25,8 +26,8 @@ LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof NetMessage) {
 			log.info("Game NetMessage message: {}", message);
-			NetMessage nm = Root.agent.get();
-			Root.agent.send(new NetMessage(0, 0, null, null, 0));
+			NetMessage nm = Base.agent.get();
+			Base.agent.send(new NetMessage(0, 0, null, null, 0));
 			//Testing.test1();
 			ActorSelection ref;
 			ref = this.getContext().actorSelection("/user/db");

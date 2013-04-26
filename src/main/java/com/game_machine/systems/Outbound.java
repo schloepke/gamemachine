@@ -4,9 +4,9 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
+import com.game_machine.GmContext;
 import com.game_machine.messages.NetMessage;
 import com.game_machine.messages.ProtobufMessages.ClientMessage;
-import com.game_machine.server.Server;
 import com.google.protobuf.ByteString;
 
 public class Outbound extends UntypedActor {
@@ -28,7 +28,7 @@ public class Outbound extends UntypedActor {
 			}
 			
 			if (netMessage.protocol == NetMessage.UDP) {
-				Server.udpServer.send(bytesToSend, netMessage.host, netMessage.port);
+				GmContext.getUdpServer().send(bytesToSend, netMessage.host, netMessage.port);
 			} else if (netMessage.protocol == NetMessage.UDT) {
 				unhandled(message);
 			} else {
