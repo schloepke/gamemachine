@@ -59,7 +59,8 @@ public class UdtServerTest {
 		
 	}
 	
-	@Test public void testSystem() {
+	//@Test
+	public void testSystem() {
 		Root.start(hostname, "1234");
 		try {
 			Thread.sleep(5000);
@@ -71,17 +72,17 @@ public class UdtServerTest {
 	}
 	
 	
-	//@Test
+	@Test
 	public void runUdp() throws Exception {
 		
 		
 		Root.start(hostname, "1234");
 		
-		UdpServer.logLevel = Level.INFO;
+		UdpServer.logLevel = Level.WARNING;
 		UdpClient.logLevel = Level.WARNING;
 		UdpServer server = new UdpServer(hostname, 1234);
 		server.start();
-		Thread.sleep(5000);
+		Thread.sleep(500000);
 		server.stop();
 		Root.stop();
 		// UdpClient client = new UdpClient(hostname, 1234);
