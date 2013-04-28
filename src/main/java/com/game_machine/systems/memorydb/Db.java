@@ -1,38 +1,55 @@
 package com.game_machine.systems.memorydb;
 
-import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.HashMap;
 
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.messages.NetMessage;
-
 public class Db extends UntypedActor {
 
-	public HashMap map;
+	public HashMap<String, GameObject> gameObjects;
 	public static int count = 0;
 	public static int count2 = 0;
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-	
-	public Db() {
-		log.warning("Db started");
-		map = new HashMap();
-		try {
-			Connection c = DriverManager.getConnection("jdbc:hsqldb:mem:mymemdb", "SA", "");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+	public void test2() {
+		long start = System.currentTimeMillis();
+		
+		log.warning("QUERY TIME: " + Long.toString(System.currentTimeMillis() - start));
 	}
-	public void onReceive(Object message) throws Exception {
+
+	public Db() {
+		log.warning("Db started " + this.getSelf().path().toString());
+		gameObjects = new HashMap<String, GameObject>();
+		Query.update("test", new QueryRunner() {
+			public GameObject apply(GameObject gameObject) {
+				return new Player();
+			}
+		});
+	}
+
+	public void onReceive(Object message) {
 		if (message instanceof Query) {
-				Method m = QueryDefinitions.class.getMethod(((Query) message).getName(), HashMap.class);
-				m.invoke(new QueryDefinitions(),map);
+			
+			Query query = (Query) message;
+			
+			if (query.getType().equals("update")) {
+				if (gameObjects.get(query.getGameObjectId()) != null) {
+					query.getMapper().apply(gameObjects.get(query.getGameObjectId()));
+				}
+			} else if (query.getType().equals("save")) {
+				gameObjects.put(query.getGameObjectId(),query.getGameObject());
+			} else if (query.getType().equals("find")) {
+				this.getSender().tell(gameObjects.get(query.getGameObjectId()),this.getSelf());
+			} else {
+				unhandled(message);
+			}
+			
 		} else {
 			unhandled(message);
 		}
