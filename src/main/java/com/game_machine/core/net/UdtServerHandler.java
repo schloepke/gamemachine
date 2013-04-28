@@ -12,8 +12,10 @@ import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
 
+import com.game_machine.ActorUtil;
+import com.game_machine.core.actors.Outbound;
+import com.game_machine.core.actors.Root;
 import com.game_machine.messages.ProtobufMessages.ClientMessage;
-import com.game_machine.systems.Base;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
@@ -41,10 +43,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 			log.warning("QUIT RECEVIED FROM CLIENT");
 			stop();
 		} else {
-			if (Base.isRunning()) {
-				ActorRef ref = Base.system.actorFor("/user/root/outbound");
-				ref.tell(str, ref);
-			}
+			ActorUtil.getActorByClass(Outbound.class).tell(str, null);
 			ctx.write(m);
 		}
 	}

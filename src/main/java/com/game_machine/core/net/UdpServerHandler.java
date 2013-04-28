@@ -15,8 +15,9 @@ import java.util.logging.Logger;
 
 import akka.actor.ActorSelection;
 
+import com.game_machine.ActorUtil;
+import com.game_machine.core.actors.Inbound;
 import com.game_machine.messages.NetMessage;
-import com.game_machine.systems.Base;
 
 @Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -27,7 +28,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	public UdpServerHandler() {
 		log.setLevel(UdpServer.logLevel);
-		this.inbound = Base.system.actorSelection("/user/inbound");
+		this.inbound = ActorUtil.getActorByClass(Inbound.class);
 	}
 
 	@Override

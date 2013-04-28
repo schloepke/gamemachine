@@ -1,9 +1,15 @@
-package com.game_machine.systems;
+package com.game_machine.game.actors;
 
+import java.io.IOException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Logger;
+
+import net.spy.memcached.AddrUtil;
+import net.spy.memcached.MemcachedClient;
+
+import com.game_machine.core.actors.Root;
 
 
 
@@ -12,7 +18,12 @@ public class Testing {
 	private static final Logger log = Logger.getLogger(Testing.class.getName());
 	
 	public static void test1() {
-		
+		try {
+			MemcachedClient memcachedClient = new MemcachedClient(AddrUtil.getAddresses("192.168.130.128:11211"));
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Unable to init memcached client");
+		}
 		try {
 		for (int i=1;i<3;i++) {
 			//MemcachedClient client=new XMemcachedClient("192.168.130.128",11211);
@@ -21,8 +32,8 @@ public class Testing {
 			//Retrieve a value.(synchronously).
 			//Object someObject=client.get("key");
 			
-			Base.memcachedClient.set("someKey", 3600, "testing");
-			Future<Object> f=Base.memcachedClient.asyncGet("someKey");
+			/*Root.memcachedClient.set("someKey", 3600, "testing");
+			Future<Object> f=Root.memcachedClient.asyncGet("someKey");
 			try {
 			    f.get(5, TimeUnit.SECONDS);
 			} catch(TimeoutException e) {
@@ -30,7 +41,7 @@ public class Testing {
 			    // is not strictly necessary, but it'll save some work on the server.
 			    f.cancel(false);
 			    // Do other timeout related stuff
-			}
+			}*/
 		}
 		} catch (Exception e) {
 			e.printStackTrace();

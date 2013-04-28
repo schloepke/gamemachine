@@ -1,4 +1,4 @@
-package com.game_machine.core.net;
+package com.game_machine.core.actors;
 
 import java.util.logging.Level;
 
@@ -8,15 +8,16 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.GmConfig;
 import com.game_machine.GmContext;
+import com.game_machine.core.net.UdpServer;
 
-public class UdpManager extends UntypedActor {
+public class UdpServerManager extends UntypedActor {
 
 	public static final String CMD_START = "startServer";
 	public static final String CMD_STOP = "stopServer";
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-	public UdpManager() {
+	public UdpServerManager() {
 		if (GmConfig.udpEnabled) {
 			this.getSelf().tell(CMD_START,null);
 		}

@@ -1,4 +1,4 @@
-package com.game_machine.systems;
+package com.game_machine.game.actors;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +10,8 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
+import com.game_machine.ActorUtil;
+import com.game_machine.core.actors.Outbound;
 import com.game_machine.messages.NetMessage;
 
 public class Game extends UntypedActor {
@@ -19,14 +21,14 @@ public class Game extends UntypedActor {
 	private HashMap<String, ActorRef> actors = new HashMap<String, ActorRef>();
 	
 	public Game() {
-		actors.put("combat", this.getContext().actorOf(Props.create(Combat.class), "combat"));
-		actors.put("location", this.getContext().actorOf(Props.create(Location.class), "location"));
+		actors.put("combat", this.getContext().actorOf(Props.create(Combat.class), Combat.class.getSimpleName()));
+		actors.put("location", this.getContext().actorOf(Props.create(Location.class), Location.class.getSimpleName()));
 	}
 
 	public ArrayList<String> getCommandList() {
 		ArrayList<String> commands = new ArrayList<String>();
-		commands.add("attack");
-		commands.add("update_location");
+		commands.add("combat");
+		commands.add("location");
 		return commands;
 	}
 
@@ -44,8 +46,7 @@ public class Game extends UntypedActor {
 			//ref = this.getContext().actorSelection("/user/db");
 			//ref.tell(new Query(), this.getSelf());
 
-			ref = this.getContext().actorSelection("/user/outbound");
-			ref.tell(message, this.getSelf());
+			ActorUtil.getActorByClass(Outbound.class).tell(message, this.getSelf());
 		} else if (message instanceof String) {
 		} else {
 			unhandled(message);

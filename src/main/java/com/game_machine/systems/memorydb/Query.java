@@ -3,7 +3,7 @@ package com.game_machine.systems.memorydb;
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 
-import com.game_machine.systems.Base;
+import com.game_machine.core.actors.Root;
 
 
 /*
@@ -25,7 +25,7 @@ public final class Query {
 	
 	
 	public static final ActorSelection getTarget() {
-		return  Base.system.actorSelection("/user/db");
+		return  Root.system.actorSelection("/user/db");
 	}
 	
 	public static final void find(String gameObjectId, ActorRef sender) {

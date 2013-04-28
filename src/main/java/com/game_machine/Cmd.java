@@ -4,14 +4,13 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.core.net.UdpManager;
-import com.game_machine.systems.Base;
+import com.game_machine.core.actors.Root;
+import com.game_machine.core.actors.UdpServerManager;
 
 public class Cmd extends UntypedActor {
 
@@ -33,15 +32,11 @@ public class Cmd extends UntypedActor {
 	}
 
 	public static ActorRef start() {
-		return Base.system.actorOf(Props.create(Cmd.class), "commands");
-	}
-
-	public static ActorSelection getRefByName(String name) {
-		return Base.system.actorSelection("/user/" + name);
+		return Root.system.actorOf(Props.create(Cmd.class), "commands");
 	}
 	
-	public static String send(String message, String name) {
-		getRefByName(name).tell(message, actor);
+	public static String send(String message, Class klass) {
+		ActorUtil.getActorByClass(klass).tell(message, actor);
 		String result = null;
 		try {
 			result = queue.poll(2, TimeUnit.SECONDS);
@@ -52,6 +47,6 @@ public class Cmd extends UntypedActor {
 	}
 	
 	public static String startUdpServer() {
-		return send(UdpManager.CMD_START,"serverMonitor");
+		return send(UdpServerManager.CMD_START,UdpServerManager.class);
 	}
 }

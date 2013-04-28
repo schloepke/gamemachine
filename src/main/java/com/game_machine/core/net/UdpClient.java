@@ -1,4 +1,4 @@
-package com.game_machine.client;
+package com.game_machine.core.net;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;

@@ -1,4 +1,4 @@
-package com.game_machine.systems;
+package com.game_machine.game.actors;
 
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;

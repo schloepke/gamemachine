@@ -38,6 +38,7 @@ public final class UdpServer implements Runnable {
 	
 	public void run() {
 		log.info("Starting UdpServer");
+		Thread.currentThread().setName("udp-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		acceptGroup = new NioEventLoopGroup();

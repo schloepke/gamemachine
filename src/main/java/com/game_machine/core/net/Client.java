@@ -13,7 +13,7 @@
  * License for the specific language governing permissions and limitations
  * under the License.
  */
-package com.game_machine.client;
+package com.game_machine.core.net;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
