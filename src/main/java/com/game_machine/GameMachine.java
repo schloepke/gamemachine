@@ -23,7 +23,6 @@ public class GameMachine {
 	public void startup() {
 		GmConfig.load();
 		Root.start();
-		log.warning("START COMPLETE");
 		
 	}
 
