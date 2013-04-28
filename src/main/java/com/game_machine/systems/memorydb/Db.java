@@ -20,9 +20,7 @@ public class Db extends UntypedActor {
 	}
 
 	public Db() {
-		log.warning("Db started " + this.getSelf().path().toString());
 		gameObjects = new HashMap<String, GameObject>();
-		
 	}
 
 	public void onReceive(Object message) {

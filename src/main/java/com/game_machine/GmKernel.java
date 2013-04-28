@@ -3,8 +3,10 @@ package com.game_machine;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.messages.CmdMessage;
 import com.game_machine.server.UdpServer;
 import com.game_machine.systems.Base;
+import com.game_machine.systems.ServerMonitor;
 
 public class GmKernel {
 
@@ -16,11 +18,12 @@ public class GmKernel {
 		Base.start();
 		
 		if (GmConfig.udpEnabled) {
-			UdpServer.logLevel = Level.parse(GmConfig.logLevel);
-			UdpServer server = new UdpServer(GmConfig.udpHost, GmConfig.udpPort);
+			CmdMessage msg = Cmd.startUdpServer();
+			//UdpServer.logLevel = Level.parse(GmConfig.logLevel);
+			//UdpServer server = new UdpServer(GmConfig.udpHost, GmConfig.udpPort);
 
-			GmContext.setUdpServer(server);
-			new Thread(server).start();
+			//GmContext.setUdpServer(server);
+			//new Thread(server).start();
 		}
 
 		

@@ -12,6 +12,7 @@ import akka.agent.Agent;
 import akka.dispatch.ExecutionContexts;
 import akka.routing.RoundRobinRouter;
 
+import com.game_machine.Cmd;
 import com.game_machine.messages.NetMessage;
 import com.game_machine.systems.memorydb.Db;
 
@@ -54,6 +55,7 @@ public class Base {
 		Base.system.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), "outbound");
 		Base.system.actorOf(Props.create(ServerMonitor.class), "serverMonitor");
 		
+		Cmd.start();
 		ExecutionContext ec = ExecutionContexts.global();
 		agent = Agent.create(new NetMessage(0, 0, null, "1234", 0), ec);
 	}
