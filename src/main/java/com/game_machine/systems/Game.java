@@ -30,7 +30,7 @@ public class Game extends UntypedActor {
 		return commands;
 	}
 
-	public void onReceive(Object message) throws Exception {
+	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
 			log.info("Game NetMessage message: {}", message);
 

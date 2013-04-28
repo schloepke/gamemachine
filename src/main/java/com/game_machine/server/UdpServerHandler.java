@@ -19,7 +19,7 @@ import com.game_machine.messages.NetMessage;
 import com.game_machine.systems.Base;
 
 @Sharable
-public class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
+public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
 	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
 	public ChannelHandlerContext ctx = null;

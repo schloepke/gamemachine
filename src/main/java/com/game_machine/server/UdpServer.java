@@ -17,24 +17,23 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class UdpServer implements Runnable {
+public final class UdpServer implements Runnable {
 
 	public static Level logLevel = Level.INFO;
 	private static final Logger log = Logger.getLogger(UdpServer.class.getName());
 
-	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
+	private static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 
 	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
-	private Bootstrap boot;
 	private final UdpServerHandler handler;
 
 	public UdpServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
 		log.setLevel(UdpServer.logLevel);
-		handler = new UdpServerHandler();
+		this.handler = new UdpServerHandler();
 	}
 	
 	public void run() {
@@ -43,7 +42,7 @@ public class UdpServer implements Runnable {
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		acceptGroup = new NioEventLoopGroup();
 
-		boot = new Bootstrap();
+		Bootstrap boot = new Bootstrap();
 		boot.channel(NioDatagramChannel.class);
 		boot.group(acceptGroup);
 		boot.option(ChannelOption.SO_BROADCAST, false);

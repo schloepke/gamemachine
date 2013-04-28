@@ -1,9 +1,5 @@
 package com.game_machine.systems.memorydb;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.util.HashMap;
 
 import akka.actor.UntypedActor;
@@ -26,11 +22,7 @@ public class Db extends UntypedActor {
 	public Db() {
 		log.warning("Db started " + this.getSelf().path().toString());
 		gameObjects = new HashMap<String, GameObject>();
-		Query.update("test", new QueryRunner() {
-			public GameObject apply(GameObject gameObject) {
-				return new Player();
-			}
-		});
+		
 	}
 
 	public void onReceive(Object message) {

@@ -5,13 +5,25 @@ import akka.actor.ActorSelection;
 
 import com.game_machine.systems.Base;
 
+
+/*
+ Query.update("test", new QueryRunner() {
+	public GameObject apply(GameObject gameObject) {
+		return new Player();
+	}
+});
+
+*/
+
+
 public final class Query {
 
 	private final String gameObjectId;
 	private final GameObject gameObject;
-	private final QueryRunner mapper;
+	private final QueryRunner queryRunner;
 	private final String queryType;
-
+	
+	
 	public static final ActorSelection getTarget() {
 		return  Base.system.actorSelection("/user/db");
 	}
@@ -26,15 +38,15 @@ public final class Query {
 		getTarget().tell(query, null);
 	}
 	
-	public static final void update(String gameObjectId, QueryRunner mapper) {
-		Query query = new Query(gameObjectId,null,mapper,"update");
+	public static final void update(String gameObjectId, QueryRunner queryRunner) {
+		Query query = new Query(gameObjectId,null,queryRunner,"update");
 		getTarget().tell(query, null);
 	}
 	
-	public Query(String gameObjectId, GameObject gameObject, QueryRunner mapper, String type) {
+	public Query(String gameObjectId, GameObject gameObject, QueryRunner queryRunner, String type) {
 		this.gameObjectId = gameObjectId;
 		this.gameObject = gameObject;
-		this.mapper = mapper;
+		this.queryRunner = queryRunner;
 		this.queryType = type;
 	}
 		
@@ -47,7 +59,7 @@ public final class Query {
 	}
 	
 	public QueryRunner getMapper() {
-		return this.mapper;
+		return this.queryRunner;
 	}
 	
 	public String getType() {

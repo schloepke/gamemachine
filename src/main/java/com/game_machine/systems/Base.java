@@ -52,6 +52,7 @@ public class Base {
 		
 		Base.system.actorOf(Props.create(Inbound.class).withRouter(new RoundRobinRouter(10)), "inbound");
 		Base.system.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), "outbound");
+		Base.system.actorOf(Props.create(ServerMonitor.class), "serverMonitor");
 		
 		ExecutionContext ec = ExecutionContexts.global();
 		agent = Agent.create(new NetMessage(0, 0, null, "1234", 0), ec);
