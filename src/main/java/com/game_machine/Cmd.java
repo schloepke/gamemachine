@@ -10,16 +10,15 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.messages.CmdMessage;
+import com.game_machine.server.UdpManager;
 import com.game_machine.systems.Base;
-import com.game_machine.systems.ServerMonitor;
 
 public class Cmd extends UntypedActor {
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
 	private static ActorRef actor;
-	private static SynchronousQueue<CmdMessage> queue = new SynchronousQueue<CmdMessage>();
+	private static SynchronousQueue<String> queue = new SynchronousQueue<String>();
 
 	public Cmd() {
 		Cmd.actor = this.getSelf();
@@ -27,7 +26,7 @@ public class Cmd extends UntypedActor {
 
 	public void onReceive(Object message) {
 		try {
-			queue.offer((CmdMessage) message,2, TimeUnit.SECONDS);
+			queue.offer((String) message,2, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -41,9 +40,9 @@ public class Cmd extends UntypedActor {
 		return Base.system.actorSelection("/user/" + name);
 	}
 	
-	public static CmdMessage send(CmdMessage cmdMessage, String name) {
-		getRefByName(name).tell(cmdMessage, actor);
-		CmdMessage result = null;
+	public static String send(String message, String name) {
+		getRefByName(name).tell(message, actor);
+		String result = null;
 		try {
 			result = queue.poll(2, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
@@ -52,7 +51,7 @@ public class Cmd extends UntypedActor {
 		return result;
 	}
 	
-	public static CmdMessage startUdpServer() {
-		return send(new CmdMessage(ServerMonitor.CMD_START_UDP_SERVER,null,null,false),"serverMonitor");
+	public static String startUdpServer() {
+		return send(UdpManager.CMD_START,"serverMonitor");
 	}
 }
