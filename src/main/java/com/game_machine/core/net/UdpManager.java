@@ -1,4 +1,4 @@
-package com.game_machine.server;
+package com.game_machine.core.net;
 
 import java.util.logging.Level;
 

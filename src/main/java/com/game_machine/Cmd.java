@@ -10,7 +10,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.server.UdpManager;
+import com.game_machine.core.net.UdpManager;
 import com.game_machine.systems.Base;
 
 public class Cmd extends UntypedActor {

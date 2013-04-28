@@ -1,4 +1,4 @@
-package com.game_machine.server;
+package com.game_machine.core.net;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

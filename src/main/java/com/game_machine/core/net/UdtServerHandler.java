@@ -1,4 +1,4 @@
-package com.game_machine.server;
+package com.game_machine.core.net;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
