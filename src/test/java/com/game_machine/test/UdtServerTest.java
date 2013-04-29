@@ -6,12 +6,9 @@ import java.util.logging.Logger;
 import org.testng.annotations.Test;
 
 import com.game_machine.GameMachine;
-import com.game_machine.InjectConfig;
 import com.game_machine.core.net.Client;
 import com.game_machine.core.net.UdtServer;
 import com.game_machine.core.net.UdtServerHandler;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 public class UdtServerTest {
 
@@ -19,7 +16,6 @@ public class UdtServerTest {
 	
 	// @Test
 	public void runServer() throws Exception {
-		Injector injector = Guice.createInjector(new InjectConfig());
 		UdtServer.logLevel = Level.INFO;
 		Client.logLevel = Level.INFO;
 		final UdtServerHandler handler = new UdtServerHandler();

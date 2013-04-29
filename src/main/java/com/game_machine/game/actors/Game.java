@@ -3,14 +3,22 @@ package com.game_machine.game.actors;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
+import akka.actor.Identify;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.Cmd;
 import com.game_machine.core.actors.Outbound;
 import com.game_machine.messages.NetMessage;
 
@@ -23,6 +31,8 @@ public class Game extends UntypedActor {
 	public Game() {
 		actors.put("combat", this.getContext().actorOf(Props.create(Combat.class), Combat.class.getSimpleName()));
 		actors.put("location", this.getContext().actorOf(Props.create(Location.class), Location.class.getSimpleName()));
+		
+		
 	}
 
 	public ArrayList<String> getCommandList() {
@@ -35,7 +45,10 @@ public class Game extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
 			log.info("Game NetMessage message: {}", message);
-
+			
+			ActorRef a = Cmd.identify(Echo.class);
+			Cmd.ask("echo echo", a);
+			
 			ActorRef commandActor;
 			for (String command : getCommandList()) {
 				commandActor = actors.get(command);

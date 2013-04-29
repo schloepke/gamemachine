@@ -10,24 +10,53 @@ import io.netty.channel.group.ChannelGroupFuture;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
-import io.netty.example.udt.util.UtilThreadFactory;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
-import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.game_machine.GmConfig;
 
 public final class UdpServer implements Runnable {
 
 	public static Level logLevel = Level.INFO;
 	private static final Logger log = Logger.getLogger(UdpServer.class.getName());
-
 	private static final ChannelGroup allChannels = new DefaultChannelGroup("server");
-
+	
+	private static UdpServer udpServer;
+	
 	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
 	private final UdpServerHandler handler;
+
+	
+	public static UdpServer getUdpServer() {
+		return udpServer;
+	}
+	
+	public static void start() {
+
+		// Don't try to start an already running server
+		if (udpServer != null) {
+			return;
+		}
+
+		UdpServer.logLevel = Level.parse(GmConfig.logLevel);
+		udpServer = new UdpServer(GmConfig.udpHost, GmConfig.udpPort);
+		new Thread(udpServer).start();
+	}
+
+	public static void stop() {
+
+		// Don't try to stop a server that's not running
+		if (udpServer == null) {
+			return;
+		}
+
+		udpServer.shutdown();
+		udpServer = null;
+	}
 
 	public UdpServer(final String hostname, final int port) {
 		this.port = port;
@@ -35,12 +64,12 @@ public final class UdpServer implements Runnable {
 		log.setLevel(UdpServer.logLevel);
 		this.handler = new UdpServerHandler();
 	}
-	
+
 	public void run() {
-		log.info("Starting UdpServer port="+this.port + " hostname="+this.hostname);
+		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
-		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
+		// final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		acceptGroup = new NioEventLoopGroup();
 
 		Bootstrap boot = new Bootstrap();
@@ -78,8 +107,9 @@ public final class UdpServer implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		acceptGroup.shutdown();
-		log.warning("Server stopped");
+		if (acceptGroup != null) {
+			acceptGroup.shutdown();
+		}
 	}
 
 }
