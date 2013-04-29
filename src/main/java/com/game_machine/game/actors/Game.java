@@ -21,6 +21,7 @@ import com.game_machine.ActorUtil;
 import com.game_machine.Cmd;
 import com.game_machine.core.actors.Outbound;
 import com.game_machine.messages.NetMessage;
+import com.game_machine.systems.memorydb.Query;
 
 public class Game extends UntypedActor {
 
@@ -46,8 +47,10 @@ public class Game extends UntypedActor {
 		if (message instanceof NetMessage) {
 			log.info("Game NetMessage message: {}", message);
 			
-			ActorRef a = Cmd.identify(Echo.class);
-			Cmd.ask("echo echo", a);
+			//ActorRef a = Cmd.identify(Echo.class);
+			//Cmd.ask("echo echo", a);
+			
+			Query.find("2");
 			
 			ActorRef commandActor;
 			for (String command : getCommandList()) {

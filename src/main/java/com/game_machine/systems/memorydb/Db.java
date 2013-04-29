@@ -25,9 +25,11 @@ public class Db extends UntypedActor {
 	public Db() {
 		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
 		gameObjects = new HashMap<String, GameObject>();
+		gameObjects.put("2", new GameObject());
 	}
 
 	public void onReceive(Object message) {
+		log.info("Db message: {}", message);
 		if (message instanceof Query) {
 			
 			Query query = (Query) message;
