@@ -1,9 +1,8 @@
 package com.game_machine.systems.memorydb;
 
 import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
 
-import com.game_machine.GameMachine;
+import com.game_machine.ActorUtil;
 
 
 /*
@@ -20,30 +19,32 @@ public final class Query {
 
 	private final String gameObjectId;
 	private final GameObject gameObject;
-	private final QueryRunner queryRunner;
+	private final Callable queryRunner;
 	private final String queryType;
 	
 	
-	public static final ActorSelection getTarget() {
-		return GameMachine.actorSystem.actorSelection("/user/db");
-	}
 	
 	public static final void find(String gameObjectId, ActorRef sender) {
 		Query query = new Query(gameObjectId,null,null,"find");
-		getTarget().tell(query, sender);
+		ActorUtil.getSelectionByClass(Db.class).tell(query, sender);
+	}
+	
+	public static final void findSync(String gameObjectId, ActorRef sender) {
+		Query query = new Query(gameObjectId,null,null,"find");
+		ActorUtil.getSelectionByClass(Db.class).tell(query, sender);
 	}
 	
 	public static final void save(String gameObjectId, GameObject gameObject) {
 		Query query = new Query(gameObjectId,gameObject,null,"save");
-		getTarget().tell(query, null);
+		ActorUtil.getSelectionByClass(Db.class).tell(query, null);
 	}
 	
-	public static final void update(String gameObjectId, QueryRunner queryRunner) {
+	public static final void update(String gameObjectId, Callable queryRunner) {
 		Query query = new Query(gameObjectId,null,queryRunner,"update");
-		getTarget().tell(query, null);
+		ActorUtil.getSelectionByClass(Db.class).tell(query, null);
 	}
 	
-	public Query(String gameObjectId, GameObject gameObject, QueryRunner queryRunner, String type) {
+	public Query(String gameObjectId, GameObject gameObject, Callable queryRunner, String type) {
 		this.gameObjectId = gameObjectId;
 		this.gameObject = gameObject;
 		this.queryRunner = queryRunner;
@@ -58,7 +59,7 @@ public final class Query {
 		return this.gameObject;
 	}
 	
-	public QueryRunner getMapper() {
+	public Callable getMapper() {
 		return this.queryRunner;
 	}
 	

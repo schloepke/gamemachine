@@ -18,7 +18,7 @@ public class UdtServerTest {
 	public void runServer() throws Exception {
 		UdtServer.logLevel = Level.INFO;
 		Client.logLevel = Level.INFO;
-		final UdtServerHandler handler = new UdtServerHandler();
+		//final UdtServerHandler handler = new UdtServerHandler();
 		//new UdtServer(hostname, 1234).start(handler);
 		//Client client = new Client(hostname, 1234);
 		//client.run();
@@ -28,8 +28,7 @@ public class UdtServerTest {
 	@Test
 	public void runUdp() {
 		try {
-			GameMachine kernel = new GameMachine();
-			kernel.startup();
+			GameMachine.start();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

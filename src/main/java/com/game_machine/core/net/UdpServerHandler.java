@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import akka.actor.ActorSelection;
+import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.core.actors.Inbound;
@@ -24,10 +25,10 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
-
-	public UdpServerHandler() {
+	
+	public UdpServerHandler(ActorSystem actorSystem) {
 		log.setLevel(UdpServer.logLevel);
-		this.inbound = ActorUtil.getActorByClass(Inbound.class);
+		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
 	}
 
 	@Override

@@ -59,7 +59,7 @@ public class Game extends UntypedActor {
 			//ref = this.getContext().actorSelection("/user/db");
 			//ref.tell(new Query(), this.getSelf());
 
-			ActorUtil.getActorByClass(Outbound.class).tell(message, this.getSelf());
+			ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
 		} else if (message instanceof String) {
 		} else {
 			unhandled(message);

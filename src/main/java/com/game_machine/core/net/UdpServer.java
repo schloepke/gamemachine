@@ -15,7 +15,9 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.GmConfig;
+import akka.actor.ActorSystem;
+
+import com.game_machine.Config;
 
 public final class UdpServer implements Runnable {
 
@@ -35,15 +37,15 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start() {
+	public static void start(ActorSystem actorSystem) {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
 			return;
 		}
 
-		UdpServer.logLevel = Level.parse(GmConfig.logLevel);
-		udpServer = new UdpServer(GmConfig.udpHost, GmConfig.udpPort);
+		UdpServer.logLevel = Level.parse(Config.logLevel);
+		udpServer = new UdpServer(Config.udpHost, Config.udpPort, actorSystem);
 		new Thread(udpServer).start();
 	}
 
@@ -58,15 +60,15 @@ public final class UdpServer implements Runnable {
 		udpServer = null;
 	}
 
-	public UdpServer(final String hostname, final int port) {
+	public UdpServer(final String hostname, final int port, ActorSystem actorSystem) {
 		this.port = port;
 		this.hostname = hostname;
 		log.setLevel(UdpServer.logLevel);
-		this.handler = new UdpServerHandler();
+		this.handler = new UdpServerHandler(actorSystem);
 	}
 
 	public void run() {
-		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
+		log.warning("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		// final ThreadFactory acceptFactory = new UtilThreadFactory("accept");

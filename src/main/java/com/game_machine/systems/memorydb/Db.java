@@ -2,6 +2,9 @@ package com.game_machine.systems.memorydb;
 
 import java.util.HashMap;
 
+import com.game_machine.ActorUtil;
+import com.game_machine.GameMachine;
+
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -20,6 +23,7 @@ public class Db extends UntypedActor {
 	}
 
 	public Db() {
+		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
 		gameObjects = new HashMap<String, GameObject>();
 	}
 

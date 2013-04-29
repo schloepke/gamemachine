@@ -1,7 +1,11 @@
 package com.game_machine;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
@@ -12,20 +16,45 @@ import com.game_machine.core.actors.UdpServerManager;
 import com.game_machine.game.actors.Echo;
 import com.game_machine.systems.memorydb.Db;
 
-public class GameMachine {
+public class GameMachine implements Runnable {
 
 	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
-
-	public static ActorSystem actorSystem;
+	private static ActorSystem actorSystem;
+	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
 
 	public static void main(String[] args) {
-		GameMachine.startup();
+		start();
 	}
 
-	public static void startup() {
-		GmConfig.load();
+	public static void start() {
+		ExecutorService executor = Executors.newFixedThreadPool(1);
+		Runnable worker = new GameMachine();
+		executor.execute(worker);
+		executor.shutdown();
+	}
 
+	public static ActorRef getActorRef(String name) {
+		return actorRefs.get(name);
+	}
+
+	public static void setActorRef(String name, ActorRef ref) {
+		if (ref == null) {
+			actorRefs.remove(name);
+		} else {
+			actorRefs.put(name, ref);
+		}
+
+	}
+
+	public static ActorSystem getActorSystem() {
+
+		return actorSystem;
+	}
+
+	@Override
+	public void run() {
+		Thread.currentThread().setName("game-machine");
 		actorSystem = ActorUtil.createSystem("system");
 
 		// Memory database actor, needs to be pinned to a single thread
@@ -45,10 +74,6 @@ public class GameMachine {
 		actorSystem.actorOf(Props.create(Inbound.class).withRouter(new RoundRobinRouter(10)), Inbound.class.getSimpleName());
 		actorSystem.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), Outbound.class.getSimpleName());
 
-	}
-
-	public static void shutdown() {
-		actorSystem.shutdown();
 	}
 
 }

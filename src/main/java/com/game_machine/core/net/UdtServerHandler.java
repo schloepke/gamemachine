@@ -10,6 +10,8 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import akka.actor.ActorSystem;
+
 import com.game_machine.ActorUtil;
 import com.game_machine.core.actors.Outbound;
 import com.game_machine.messages.ProtobufMessages.ClientMessage;
@@ -21,9 +23,11 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 	private UdtServer server;
 	private int messageCount = 0;
 	private ChannelHandlerContext ctx = null;
-
-	public UdtServerHandler() {
+	private ActorSystem actorSystem;
+	
+	public UdtServerHandler(ActorSystem actorSystem) {
 		log.setLevel(UdtServer.logLevel);
+		this.actorSystem = actorSystem;
 	}
 	
 	public void setServer(UdtServer server) {
@@ -40,7 +44,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<Client
 			log.warning("QUIT RECEVIED FROM CLIENT");
 			stop();
 		} else {
-			ActorUtil.getActorByClass(Outbound.class).tell(str, null);
+			ActorUtil.getSelectionByClass(Outbound.class).tell(str, null);
 			ctx.write(m);
 		}
 	}

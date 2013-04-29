@@ -19,7 +19,7 @@ public class Inbound extends UntypedActor {
 		this.getContext().actorOf(Props.create(Game.class), Game.class.getSimpleName());
 	}
 	
-	public void onReceive(Object message) throws Exception {
+	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
 			NetMessage netMessage = (NetMessage) message;
 			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {

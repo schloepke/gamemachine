@@ -4,7 +4,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.GmConfig;
+import com.game_machine.Config;
 import com.game_machine.core.net.UdpServer;
 
 public class UdpServerManager extends UntypedActor {
@@ -15,14 +15,14 @@ public class UdpServerManager extends UntypedActor {
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
 	public UdpServerManager() {
-		if (GmConfig.udpEnabled) {
-			UdpServer.start();
+		if (Config.udpEnabled) {
+			UdpServer.start(this.getContext().system());
 		}
 	}
 	
 	@Override
 	public void postStop() {
-		if (GmConfig.udpEnabled) {
+		if (Config.udpEnabled) {
 			UdpServer.stop();
 		}
 	}
@@ -33,7 +33,7 @@ public class UdpServerManager extends UntypedActor {
 			if (message.equals(CMD_START)) {
 				UdpServer.stop();
 			} else if (message.equals(CMD_STOP)) {
-				UdpServer.start();
+				UdpServer.start(this.getContext().system());
 			} else {
 				unhandled(message);
 			}

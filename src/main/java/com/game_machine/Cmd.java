@@ -9,6 +9,7 @@ import scala.concurrent.duration.Duration;
 
 import akka.actor.ActorIdentity;
 import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 import akka.actor.Identify;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
@@ -55,7 +56,7 @@ public class Cmd extends UntypedActor {
 	}
 	
 	public static ActorRef identify(Class<?> klass) {
-		ActorUtil.getActorByClass(klass).tell(new Identify("1"), actor);
+		ActorUtil.getSelectionByClass(klass).tell(new Identify("1"), actor);
 		ActorIdentity identity = null;
 		try {
 			identity = identityQueue.poll(2, TimeUnit.SECONDS);
@@ -66,7 +67,7 @@ public class Cmd extends UntypedActor {
 	}
 
 	public static String send(String message, Class<?> klass) {
-		ActorUtil.getActorByClass(klass).tell(message, actor);
+		ActorUtil.getSelectionByClass(klass).tell(message, actor);
 		String result = null;
 		try {
 			result = queue.poll(2, TimeUnit.SECONDS);
@@ -76,7 +77,4 @@ public class Cmd extends UntypedActor {
 		return result;
 	}
 
-	public static String startUdpServer() {
-		return send(UdpServerManager.CMD_START, UdpServerManager.class);
-	}
 }

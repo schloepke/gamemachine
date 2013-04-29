@@ -1,5 +1,6 @@
 package com.game_machine;
 
+import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 
@@ -9,9 +10,14 @@ import com.typesafe.config.ConfigFactory;
 public class ActorUtil {
 
 	
-	public static ActorSelection getActorByClass(Class<?> klass) {
-		return GameMachine.actorSystem.actorSelection("/user/"+ klass.getSimpleName());
+	public static ActorSelection getSelectionByClass(Class<?> klass) {
+		return GameMachine.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());
 	}
+	
+	public static ActorRef getActorByClass(Class<?> klass) {
+		return GameMachine.getActorRef(klass.getSimpleName());
+	}
+	
 	public static ActorSystem createSystem(String name) {
 		return ActorSystem.create(name);
 	}
