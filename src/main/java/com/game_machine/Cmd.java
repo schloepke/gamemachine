@@ -3,14 +3,17 @@ package com.game_machine;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+import akka.actor.ActorIdentity;
 import akka.actor.ActorRef;
-import akka.actor.Props;
+import akka.actor.Identify;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-
-import com.game_machine.core.actors.Root;
-import com.game_machine.core.actors.UdpServerManager;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
 
 public class Cmd extends UntypedActor {
 
@@ -18,6 +21,7 @@ public class Cmd extends UntypedActor {
 
 	private static ActorRef actor;
 	private static SynchronousQueue<String> queue = new SynchronousQueue<String>();
+	private static SynchronousQueue<ActorIdentity> identityQueue = new SynchronousQueue<ActorIdentity>();
 
 	public Cmd() {
 		Cmd.actor = this.getSelf();
@@ -25,18 +29,41 @@ public class Cmd extends UntypedActor {
 
 	public void onReceive(Object message) {
 		try {
-			queue.offer((String) message,2, TimeUnit.SECONDS);
+			if (message instanceof String) {
+				queue.offer((String) message, 2, TimeUnit.SECONDS);
+			} else if (message instanceof ActorIdentity) {
+				identityQueue.offer((ActorIdentity) message, 2, TimeUnit.SECONDS);
+			}
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public static ActorRef start() {
-		return Root.system.actorOf(Props.create(Cmd.class), "commands");
+	public static Object ask(Object message, ActorRef actor) {
+		Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+		Future<Object> future = Patterns.ask(actor, message, timeout);
+		Object result = null;
+		try {
+			result = Await.result(future, timeout.duration());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
-	public static String send(String message, Class klass) {
-		ActorUtil.getActorByClass(klass).tell(message, actor);
+	public static ActorRef identify(Class<?> klass) {
+		ActorUtil.getSelectionByClass(klass).tell(new Identify("1"), actor);
+		ActorIdentity identity = null;
+		try {
+			identity = identityQueue.poll(2, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return identity.getRef();
+	}
+
+	public static String send(String message, Class<?> klass) {
+		ActorUtil.getSelectionByClass(klass).tell(message, actor);
 		String result = null;
 		try {
 			result = queue.poll(2, TimeUnit.SECONDS);
@@ -45,8 +72,5 @@ public class Cmd extends UntypedActor {
 		}
 		return result;
 	}
-	
-	public static String startUdpServer() {
-		return send(UdpServerManager.CMD_START,UdpServerManager.class);
-	}
+
 }
