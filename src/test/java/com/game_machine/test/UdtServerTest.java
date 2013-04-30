@@ -28,10 +28,16 @@ public class UdtServerTest {
 	public void runUdp() {
 		try {
 			GameMachine.start();
+			Thread.sleep(5000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
+	}
+	
+	//@Test
+	public void writeBehindTest() {
+		
 	}
 
 }

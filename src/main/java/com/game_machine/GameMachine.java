@@ -32,6 +32,7 @@ public class GameMachine implements Runnable {
 		Runnable worker = new GameMachine();
 		executor.execute(worker);
 		executor.shutdown();
+		
 	}
 
 	public static ActorRef getActorRef(String name) {

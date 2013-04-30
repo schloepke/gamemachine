@@ -98,7 +98,6 @@ public class UdtServer {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-        boot.shutdown();
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
 		log.warning("Server stopped");

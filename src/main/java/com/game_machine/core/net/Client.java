@@ -100,7 +100,6 @@ private NioEventLoopGroup connectGroup;
 	public void stop() {
 		// Shut down the event loop to terminate all threads.
 		connectGroup.shutdown();
-		boot.shutdown();
 		log.warning("CLIENT STOPPED");
 	}
 

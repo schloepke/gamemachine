@@ -70,7 +70,6 @@ public class UdpClient implements Runnable {
 
 	public void stop() {
 		connectGroup.shutdown();
-		boot.shutdown();
 		log.warning("UdpClient STOPPED");
 	}
 
