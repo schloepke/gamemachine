@@ -28,7 +28,7 @@ public class UdtServerTest {
 	public void runUdp() {
 		try {
 			GameMachine.start();
-			Thread.sleep(5000);
+			Thread.sleep(50000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

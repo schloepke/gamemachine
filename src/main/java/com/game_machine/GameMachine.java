@@ -22,6 +22,7 @@ public class GameMachine implements Runnable {
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
+	
 
 	public static void main(String[] args) {
 		start();

@@ -1,50 +1,111 @@
 package com.game_machine.systems.memorydb;
 
-public class WriteBehindHandler implements Runnable {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
+import scala.concurrent.duration.Duration;
+
+import com.basho.riak.client.IRiakClient;
+import com.basho.riak.client.IRiakObject;
+import com.basho.riak.client.RiakException;
+import com.basho.riak.client.RiakFactory;
+import com.basho.riak.client.RiakRetryFailedException;
+import com.basho.riak.client.bucket.Bucket;
+import com.basho.riak.client.cap.UnresolvedConflictException;
+import com.basho.riak.client.convert.ConversionException;
+import com.basho.riak.client.raw.pbc.PBClientConfig;
+
+import akka.actor.Cancellable;
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import akka.routing.RoundRobinRouter;
+
+public class WriteBehindHandler extends UntypedActor {
+
+	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	private Integer writeInterval = 5000;
 	private Integer maxWritesPerSecond = 50;
-	private Integer msPerWrite = 1000 / maxWritesPerSecond;
+	private Integer minWriteInterval = 1000 / maxWritesPerSecond;
+	private Long lastWrite = System.currentTimeMillis();
+	public HashMap<String, GameObject> gameObjects = new HashMap<String, GameObject>();
+	public HashMap<String, Long> gameObjectUpdates = new HashMap<String, Long>();
+	public ArrayList<GameObject> gameObjectsList = new ArrayList<GameObject>();
+	public GameObject currentGameObject = null;
 
-	public WriteBehindHandler(Integer minWriteInterval, Integer maxWritesPerSecond) {
-		this.writeInterval = minWriteInterval;
-		this.maxWritesPerSecond = maxWritesPerSecond;
-
+	public WriteBehindHandler() {
+		this.getContext().actorOf(Props.create(RiakStore.class).withRouter(new RoundRobinRouter(10)), RiakStore.class.getSimpleName());
+		Cancellable cancellable = this
+				.getContext()
+				.system()
+				.scheduler()
+				.schedule(Duration.Zero(), Duration.create(minWriteInterval, TimeUnit.MILLISECONDS), this.getSelf(), "tick",
+						this.getContext().system().dispatcher(), null);
 	}
 
-	public void write(Object object) {
-
+	public Boolean writeGameObject(GameObject gameObject) {
+		
+		return true;
 	}
 
-	public Object readFromCache() {
-		return null;
+	public Boolean eligibleForWrite(GameObject gameObject) {
+		Long lastUpdated = gameObjectUpdates.get(gameObject.getId());
+
+		if ((System.currentTimeMillis() - lastUpdated) < writeInterval) {
+			// Don't update a specific object more then once every writeInterval
+			return false;
+		} else {
+			return true;
+		}
 	}
 
-	public void run() {
-		int writeCount;
-		Long timePassed;
-		Long intervalStartTime;
-		Long startTime;
-		Long writeTime;
-		Object data;
+	public Boolean busy() {
+		if ((System.currentTimeMillis() - lastWrite) < minWriteInterval) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
-		while (true) {
-			writeCount = 0;
-			timePassed = 0L;
-			startTime = System.currentTimeMillis();
+	public void setGameObject(GameObject gameObject) {
+		gameObjects.put(gameObject.getId(), gameObject);
+		gameObjectUpdates.put(gameObject.getId(), System.currentTimeMillis());
+	}
 
-			try {
-				data = readFromCache();
-				write(data);
-				writeCount++;
-				writeTime = System.currentTimeMillis() - startTime;
-				if (msPerWrite > writeTime) {
-					Thread.sleep(msPerWrite - writeTime);
+	public void onReceive(Object message) {
+		if (message instanceof GameObject) {
+			currentGameObject = (GameObject) message;
+			Boolean writeThrough = true;
+
+			if (gameObjects.containsKey(currentGameObject.getId())) {
+				if (!busy() && eligibleForWrite(currentGameObject)) {
+					writeThrough = true;
+				} else {
+					writeThrough = false;
 				}
-
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+			} else if (busy()) {
+				writeThrough = false;
 			}
+
+			gameObjects.put(currentGameObject.getId(), currentGameObject);
+			if (writeThrough) {
+				if (writeGameObject(currentGameObject)) {
+					gameObjectUpdates.put(currentGameObject.getId(), System.currentTimeMillis());
+				}
+			}
+
+		} else if (message instanceof String) {
+			if (message.equals("tick")) {
+				log.info("TICK");
+				currentGameObject = new GameObject();
+				if (busy()) {
+
+				}
+			}
+		} else {
+			unhandled(message);
 		}
 	}
 }
