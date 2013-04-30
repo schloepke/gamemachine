@@ -1,4 +1,4 @@
-package com.game_machine.core.net;
+package com.game_machine.net.server;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -17,7 +17,7 @@ import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.NetMessage;
-import com.game_machine.core.actors.Inbound;
+import com.game_machine.game.Inbound;
 
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {

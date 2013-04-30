@@ -1,4 +1,4 @@
-package com.game_machine.game.actors;
+package com.game_machine.game;
 
 import java.io.IOException;
 import java.util.logging.Logger;

@@ -1,4 +1,4 @@
-package com.game_machine.core.net;
+package com.game_machine.net.server;
 
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -14,7 +14,7 @@ import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.ProtobufMessages.ClientMessage;
-import com.game_machine.core.actors.Outbound;
+import com.game_machine.game.Outbound;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {

@@ -1,4 +1,4 @@
-package com.game_machine.game.actors;
+package com.game_machine.game;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +12,6 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.NetMessage;
-import com.game_machine.core.actors.Outbound;
 import com.game_machine.persistence.Query;
 
 public class Game extends UntypedActor {

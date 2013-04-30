@@ -1,4 +1,4 @@
-package com.game_machine.core.net;
+package com.game_machine.net.client;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.MessageBuf;

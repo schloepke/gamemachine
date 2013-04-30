@@ -10,10 +10,10 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
 
-import com.game_machine.core.actors.Inbound;
-import com.game_machine.core.actors.Outbound;
-import com.game_machine.core.actors.UdpServerManager;
-import com.game_machine.game.actors.Echo;
+import com.game_machine.game.Echo;
+import com.game_machine.game.Inbound;
+import com.game_machine.game.Outbound;
+import com.game_machine.net.server.UdpServerManager;
 import com.game_machine.persistence.Db;
 
 public class GameMachine implements Runnable {

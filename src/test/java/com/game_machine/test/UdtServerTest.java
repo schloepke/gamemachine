@@ -6,8 +6,8 @@ import java.util.logging.Logger;
 import org.testng.annotations.Test;
 
 import com.game_machine.GameMachine;
-import com.game_machine.core.net.Client;
-import com.game_machine.core.net.UdtServer;
+import com.game_machine.net.client.Client;
+import com.game_machine.net.server.UdtServer;
 
 public class UdtServerTest {
 

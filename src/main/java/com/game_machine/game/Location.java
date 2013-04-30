@@ -1,4 +1,4 @@
-package com.game_machine.game.actors;
+package com.game_machine.game;
 
 import akka.actor.UntypedActor;
 import akka.event.Logging;

@@ -1,4 +1,4 @@
-package com.game_machine.core.actors;
+package com.game_machine.game;
 
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -7,7 +7,6 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
-import com.game_machine.game.actors.Game;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 public class Inbound extends UntypedActor {

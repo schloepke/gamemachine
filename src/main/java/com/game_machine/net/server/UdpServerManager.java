@@ -1,11 +1,10 @@
-package com.game_machine.core.actors;
+package com.game_machine.net.server;
 
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.Config;
-import com.game_machine.core.net.UdpServer;
 
 public class UdpServerManager extends UntypedActor {
 
