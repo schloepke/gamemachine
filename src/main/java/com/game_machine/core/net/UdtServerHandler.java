@@ -13,8 +13,8 @@ import java.util.logging.Logger;
 import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.ProtobufMessages.ClientMessage;
 import com.game_machine.core.actors.Outbound;
-import com.game_machine.messages.ProtobufMessages.ClientMessage;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {

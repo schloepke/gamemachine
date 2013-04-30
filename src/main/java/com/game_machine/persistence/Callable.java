@@ -1,4 +1,4 @@
-package com.game_machine.systems.memorydb;
+package com.game_machine.persistence;
 
 public interface Callable {
 

@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages;
+import com.game_machine.ProtobufMessages;
 
 /**
  * UDT Byte Stream Client

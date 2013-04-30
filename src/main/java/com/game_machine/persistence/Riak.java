@@ -1,4 +1,4 @@
-package com.game_machine.core.net.clients;
+package com.game_machine.persistence;
 
 import com.basho.riak.client.IRiakClient;
 import com.basho.riak.client.IRiakObject;

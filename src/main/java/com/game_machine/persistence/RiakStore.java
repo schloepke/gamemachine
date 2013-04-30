@@ -1,4 +1,4 @@
-package com.game_machine.systems.memorydb;
+package com.game_machine.persistence;
 
 import akka.actor.UntypedActor;
 
@@ -6,7 +6,6 @@ import com.basho.riak.client.RiakRetryFailedException;
 import com.basho.riak.client.bucket.Bucket;
 import com.basho.riak.client.cap.UnresolvedConflictException;
 import com.basho.riak.client.convert.ConversionException;
-import com.game_machine.core.net.clients.Riak;
 
 public class RiakStore extends UntypedActor {
 

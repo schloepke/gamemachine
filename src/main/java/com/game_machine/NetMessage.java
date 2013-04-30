@@ -1,4 +1,4 @@
-package com.game_machine.messages;
+package com.game_machine;
 
 public class NetMessage {
 

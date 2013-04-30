@@ -13,7 +13,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages.ClientMessage;
+import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
 
 public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {

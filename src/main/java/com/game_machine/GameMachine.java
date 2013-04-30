@@ -14,7 +14,7 @@ import com.game_machine.core.actors.Inbound;
 import com.game_machine.core.actors.Outbound;
 import com.game_machine.core.actors.UdpServerManager;
 import com.game_machine.game.actors.Echo;
-import com.game_machine.systems.memorydb.Db;
+import com.game_machine.persistence.Db;
 
 public class GameMachine implements Runnable {
 

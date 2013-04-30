@@ -16,8 +16,8 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.NetMessage;
 import com.game_machine.core.actors.Inbound;
-import com.game_machine.messages.NetMessage;
 
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {

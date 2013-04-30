@@ -22,7 +22,7 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import com.game_machine.messages.ProtobufMessages.ClientMessage;
+import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
 
 public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
