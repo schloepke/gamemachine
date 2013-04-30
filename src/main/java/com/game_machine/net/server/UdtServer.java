@@ -11,7 +11,6 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.udt.UdtChannel;
 import io.netty.channel.udt.nio.NioUdtProvider;
-import io.netty.example.udt.util.UtilThreadFactory;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
@@ -25,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.game_machine.ProtobufMessages;
+import com.game_machine.net.client.UtilThreadFactory;
 
 public class UdtServer {
 

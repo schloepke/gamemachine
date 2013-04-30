@@ -14,7 +14,7 @@
  * under the License.
  */
 
-package io.netty.example.udt.util;
+package com.game_machine.net.client;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
