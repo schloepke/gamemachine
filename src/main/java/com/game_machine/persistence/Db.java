@@ -26,7 +26,7 @@ public class Db extends UntypedActor {
 
 	public Db() {
 		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
-		datastore = this.getContext().actorOf(Props.create(WriteBehindHandler.class), WriteBehindHandler.class.getSimpleName());
+		datastore = this.getContext().actorOf(Props.create(WriteBehindActor.class), WriteBehindActor.class.getSimpleName());
 		gameObjects = new HashMap<String, GameObject>();
 		gameObjects.put("2", new GameObject());
 	}

@@ -12,6 +12,7 @@ public class RiakStore extends UntypedActor {
 	private Bucket bucket;
 
 	public RiakStore() {
+		Riak.init();
 		String bucketName = "test";
 		try {
 			bucket = Riak.getClient().createBucket(bucketName).execute();

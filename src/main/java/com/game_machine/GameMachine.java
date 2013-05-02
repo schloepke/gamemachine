@@ -15,6 +15,7 @@ import com.game_machine.game.Inbound;
 import com.game_machine.game.Outbound;
 import com.game_machine.net.server.UdpServerManager;
 import com.game_machine.persistence.Db;
+import com.game_machine.persistence.Riak;
 
 public class GameMachine implements Runnable {
 
@@ -57,6 +58,8 @@ public class GameMachine implements Runnable {
 	@Override
 	public void run() {
 		Thread.currentThread().setName("game-machine");
+		
+		
 		actorSystem = ActorUtil.createSystem("system");
 
 		// Memory database actor, needs to be pinned to a single thread
