@@ -19,6 +19,8 @@ public class Config {
 	public static int udtPort;
 	public static String udtHost;
 	public static String udtEncoding;
+	
+	public static String objectStore;
 
 
 	static {
@@ -38,6 +40,8 @@ public class Config {
 		udtPort = config.getInt("game_machine.udt.port");
 		udtHost = config.getString("game_machine.udt.host");
 		udtEncoding = config.getString("game_machine.udt.encoding");
+		
+		objectStore = config.getString("game_machine.objectdb.store");
 	}
 	
 }

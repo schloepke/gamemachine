@@ -27,22 +27,22 @@ public final class Query {
 	
 	public static final void findAsync(String gameObjectId, ActorRef sender) {
 		Query query = new Query(gameObjectId,null,null,"find");
-		ActorUtil.getSelectionByClass(Db.class).tell(query, sender);
+		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, sender);
 	}
 	
 	public static final GameObject find(String gameObjectId) {
 		Query query = new Query(gameObjectId,null,null,"find");
-		return (GameObject) Cmd.ask(query, ActorUtil.getActorByClass(Db.class));
+		return (GameObject) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class));
 	}
 	
 	public static final void save(String gameObjectId, GameObject gameObject) {
 		Query query = new Query(gameObjectId,gameObject,null,"save");
-		ActorUtil.getSelectionByClass(Db.class).tell(query, null);
+		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
 	public static final void update(String gameObjectId, Callable callable) {
 		Query query = new Query(gameObjectId,null,callable,"update");
-		ActorUtil.getSelectionByClass(Db.class).tell(query, null);
+		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
 	public Query(String gameObjectId, GameObject gameObject, Callable callable, String type) {

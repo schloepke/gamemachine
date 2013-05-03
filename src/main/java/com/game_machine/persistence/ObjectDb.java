@@ -10,7 +10,7 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.GameMachine;
 
-public class Db extends UntypedActor {
+public class ObjectDb extends UntypedActor {
 
 	public HashMap<String, GameObject> gameObjects;
 	public static int count = 0;
@@ -24,9 +24,9 @@ public class Db extends UntypedActor {
 		log.warning("QUERY TIME: " + Long.toString(System.currentTimeMillis() - start));
 	}
 
-	public Db() {
+	public ObjectDb() {
 		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
-		datastore = this.getContext().actorOf(Props.create(WriteBehindActor.class), WriteBehindActor.class.getSimpleName());
+		datastore = this.getContext().actorOf(Props.create(WriteBehindPersistence.class), WriteBehindPersistence.class.getSimpleName());
 		gameObjects = new HashMap<String, GameObject>();
 		gameObjects.put("2", new GameObject());
 	}

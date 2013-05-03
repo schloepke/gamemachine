@@ -16,7 +16,8 @@ import akka.testkit.TestActorRef;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.persistence.GameObject;
-import com.game_machine.persistence.WriteBehindActor;
+import com.game_machine.persistence.RiakStore;
+import com.game_machine.persistence.WriteBehindPersistence;
 import com.game_machine.persistence.WriteBehindHandler;
 
 import static org.fest.assertions.api.Assertions.*;
@@ -35,7 +36,7 @@ public class WriteBehindHandlerTest {
 	@Test
 	public void firstWriteShouldBeTrue() {
 		
-		WriteBehindHandler handler = new WriteBehindHandler(2000, 50);
+		WriteBehindHandler handler = new WriteBehindHandler(null,2000, 50);
 		GameObject message = new GameObject();
 		message.setId("test");
 		Integer count = 0;
@@ -44,7 +45,7 @@ public class WriteBehindHandlerTest {
 	
 	@Test
 	public void shouldOnlyWriteSameKeyOnceEveryInterval() {
-		WriteBehindHandler handler = new WriteBehindHandler(1000, 50);
+		WriteBehindHandler handler = new WriteBehindHandler(null,1000, 50);
 		GameObject message = new GameObject();
 		message.setId("test");
 		Integer count = 0;
@@ -59,7 +60,7 @@ public class WriteBehindHandlerTest {
 	
 	@Test
 	public void shouldLimitTotalWrites() {
-		WriteBehindHandler handler = new WriteBehindHandler(2000, 50);
+		WriteBehindHandler handler = new WriteBehindHandler(null,2000, 50);
 		GameObject message = new GameObject();
 		Integer count = 0;
 		for(int i=0;i<100;i++) {
@@ -75,14 +76,14 @@ public class WriteBehindHandlerTest {
 		
 		
 	}
-
+	
 	// @Test
 	public static void example() {
 		try {
 			ActorSystem system = ActorUtil.createSystem("system");
-			final Props props = Props.create(WriteBehindActor.class);
-			final TestActorRef<WriteBehindActor> ref = TestActorRef.create(system, props, "testA");
-			final WriteBehindActor actor = ref.underlyingActor();
+			final Props props = Props.create(WriteBehindPersistence.class);
+			final TestActorRef<WriteBehindPersistence> ref = TestActorRef.create(system, props, "testA");
+			final WriteBehindPersistence actor = ref.underlyingActor();
 
 			GameObject o = new GameObject();
 			o.setId("test");

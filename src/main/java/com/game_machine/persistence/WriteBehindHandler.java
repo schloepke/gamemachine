@@ -3,8 +3,11 @@ package com.game_machine.persistence;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import akka.actor.ActorRef;
+
 public class WriteBehindHandler {
 
+	private ActorRef storeActor;
 	private Integer writeInterval = 5000;
 	private Integer maxWritesPerSecond = 50;
 	private Integer minTimeBetweenWrites = 1000 / maxWritesPerSecond;
@@ -19,13 +22,8 @@ public class WriteBehindHandler {
 		return this.minTimeBetweenWrites;
 	}
 
-	public void reset() {
-		this.lastWrite = System.currentTimeMillis() - 10000;
-		this.gameObjectUpdates = new HashMap<String, Long>();
-		this.gameObjectUpdates = new HashMap<String, Long>();
-	}
-
-	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond) {
+	public WriteBehindHandler(ActorRef storeActor, Integer writeInterval, Integer maxWritesPerSecond) {
+		this.storeActor = storeActor;
 		this.maxWritesPerSecond = maxWritesPerSecond;
 		this.writeInterval = writeInterval;
 	}
@@ -60,6 +58,9 @@ public class WriteBehindHandler {
 	}
 
 	public Boolean checkQueue() {
+		if (queue.size() == 0) {
+			return false;
+		}
 		currentGameObject = queue.get(queue.size() - 1);
 		if (!busy() && eligibleForWrite(currentGameObject)) {
 			if (writeGameObject(currentGameObject)) {

@@ -14,8 +14,10 @@ import com.game_machine.game.Echo;
 import com.game_machine.game.Inbound;
 import com.game_machine.game.Outbound;
 import com.game_machine.net.server.UdpServerManager;
-import com.game_machine.persistence.Db;
+import com.game_machine.persistence.ObjectDb;
 import com.game_machine.persistence.Riak;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 
 public class GameMachine implements Runnable {
 
@@ -30,6 +32,7 @@ public class GameMachine implements Runnable {
 	}
 
 	public static void start() {
+		Injector injector = Guice.createInjector(new DevelopmentModule());
 		ExecutorService executor = Executors.newFixedThreadPool(1);
 		Runnable worker = new GameMachine();
 		executor.execute(worker);
@@ -63,7 +66,7 @@ public class GameMachine implements Runnable {
 		actorSystem = ActorUtil.createSystem("system");
 
 		// Memory database actor, needs to be pinned to a single thread
-		actorSystem.actorOf(Props.create(Db.class).withDispatcher("db-dispatcher"), Db.class.getSimpleName());
+		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
 
 		// Manage the udp server
 		actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
