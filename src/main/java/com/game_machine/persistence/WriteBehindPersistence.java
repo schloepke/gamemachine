@@ -18,17 +18,11 @@ public class WriteBehindPersistence extends UntypedActor {
 
 	private WriteBehindHandler handler;
 
-	public WriteBehindPersistence() {
-		
-		
-		Class<?> store = null;
-		try {
-			store = Class.forName(Config.objectStore);
-			ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)), store.getSimpleName());
-			handler = new WriteBehindHandler(storeRef, 5000, 50);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+	public WriteBehindPersistence() throws ClassNotFoundException {
+
+		Class<?> store = Class.forName(Config.objectStore);
+		ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)), store.getSimpleName());
+		handler = new WriteBehindHandler(storeRef, 5000, 50);
 		
 		this.getContext()
 				.system()
