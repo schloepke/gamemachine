@@ -2,12 +2,22 @@ package com.game_machine.persistence;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
+
+import scala.concurrent.duration.Duration;
+
+import com.game_machine.Config;
 
 import akka.actor.ActorRef;
+import akka.actor.Props;
+import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import akka.routing.RoundRobinRouter;
 
-public class WriteBehindHandler {
+public class WriteBehindHandler extends UntypedActor {
 
-	private ActorRef storeActor;
+	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	private Integer writeInterval = 5000;
 	private Integer maxWritesPerSecond = 50;
 	private Integer minTimeBetweenWrites = 1000 / maxWritesPerSecond;
@@ -18,14 +28,34 @@ public class WriteBehindHandler {
 	private HashMap<String, Integer> queueIndex = new HashMap<String, Integer>();
 	private GameObject currentGameObject = null;
 
+	public void onReceive(Object message) {
+		if (message instanceof GameObject) {
+			write(message);
+		} else if (message instanceof String) {
+			if (message.equals("tick")) {
+				checkQueue();
+			}
+		} else {
+			unhandled(message);
+		}
+	}
+	
 	public Integer getMinTimeBetweenWrites() {
 		return this.minTimeBetweenWrites;
 	}
 
-	public WriteBehindHandler(ActorRef storeActor, Integer writeInterval, Integer maxWritesPerSecond) {
-		this.storeActor = storeActor;
-		this.maxWritesPerSecond = maxWritesPerSecond;
+	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond) throws ClassNotFoundException {
 		this.writeInterval = writeInterval;
+		this.maxWritesPerSecond = maxWritesPerSecond;
+		
+		Class<?> store = Class.forName(Config.objectStore);
+		ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)), store.getSimpleName());
+		
+		this.getContext()
+				.system()
+				.scheduler()
+				.schedule(Duration.Zero(), Duration.create(this.getMinTimeBetweenWrites(), TimeUnit.MILLISECONDS), this.getSelf(),
+						"tick", this.getContext().system().dispatcher(), null);
 	}
 
 	public Boolean writeGameObject(GameObject gameObject) {
@@ -34,8 +64,14 @@ public class WriteBehindHandler {
 	}
 
 	public Boolean eligibleForWrite(GameObject gameObject) {
+		
 		Long lastUpdated = gameObjectUpdates.get(gameObject.getId());
-
+		
+		// No lastUpdated means was put in the queue on the first try and was never written
+		if (lastUpdated ==  null) {
+			return true;
+		}
+		
 		if ((System.currentTimeMillis() - lastUpdated) < writeInterval) {
 			// Don't update a specific object more then once every writeInterval
 			return false;

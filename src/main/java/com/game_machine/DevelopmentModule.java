@@ -11,10 +11,10 @@ public class DevelopmentModule extends AbstractModule {
 		
 	}
 	
-	@Provides
-	WriteBehindHandler provideWriteBehindCache() {
-		WriteBehindHandler cache = new WriteBehindHandler(null,5000,50);
-		return cache;
-	}
+	//@Provides
+	//WriteBehindHandler provideWriteBehindCache() {
+	//	WriteBehindHandler cache = new WriteBehindHandler(null,5000,50);
+	//	return cache;
+	//}
 
 }

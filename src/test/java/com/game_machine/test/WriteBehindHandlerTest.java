@@ -1,29 +1,27 @@
 package com.game_machine.test;
 
+import static org.fest.assertions.api.Assertions.assertThat;
+
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.testng.annotations.Test;
 
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
-
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.TestActorRef;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.persistence.GameObject;
-import com.game_machine.persistence.RiakStore;
-import com.game_machine.persistence.WriteBehindPersistence;
+import com.game_machine.persistence.TestGameObject;
 import com.game_machine.persistence.WriteBehindHandler;
-
-import static org.fest.assertions.api.Assertions.*;
 
 public class WriteBehindHandlerTest {
 
+	public static ActorSystem system = ActorUtil.createSystem("system");
+	
 	public void sleep(Integer ms) {
 		try {
 			Thread.sleep(ms);
@@ -36,18 +34,16 @@ public class WriteBehindHandlerTest {
 	@Test
 	public void firstWriteShouldBeTrue() {
 		
-		WriteBehindHandler handler = new WriteBehindHandler(null,2000, 50);
-		GameObject message = new GameObject();
-		message.setId("test");
+		WriteBehindHandler handler = getHandler("test1",2000,50);
+		GameObject message = new TestGameObject("test");
 		Integer count = 0;
 		assertThat(handler.write(message)).isTrue();
 	}
 	
 	@Test
 	public void shouldOnlyWriteSameKeyOnceEveryInterval() {
-		WriteBehindHandler handler = new WriteBehindHandler(null,1000, 50);
-		GameObject message = new GameObject();
-		message.setId("test");
+		WriteBehindHandler handler = getHandler("test2",1000,50);
+		GameObject message = new TestGameObject("test");
 		Integer count = 0;
 		for(int i=0;i<210;i++) {
 			if (handler.write(message)) {
@@ -60,11 +56,11 @@ public class WriteBehindHandlerTest {
 	
 	@Test
 	public void shouldLimitTotalWrites() {
-		WriteBehindHandler handler = new WriteBehindHandler(null,2000, 50);
-		GameObject message = new GameObject();
+		WriteBehindHandler handler = getHandler("test3",2000,50);
+		GameObject message = new TestGameObject("test");
 		Integer count = 0;
 		for(int i=0;i<100;i++) {
-			message.setId(Integer.toString(i));
+			message = new TestGameObject(Integer.toString(i));
 			if (handler.write(message)) {
 				count++;
 			}
@@ -77,16 +73,22 @@ public class WriteBehindHandlerTest {
 		
 	}
 	
+	public WriteBehindHandler getHandler(String name, Integer writeInterval, Integer maxWritesPerSecond) {
+		Props props = Props.create(WriteBehindHandler.class, writeInterval, maxWritesPerSecond);
+		TestActorRef<WriteBehindHandler> ref = TestActorRef.create(system, props, name);
+		return ref.underlyingActor();
+	}
+	
+	
 	// @Test
 	public static void example() {
 		try {
 			ActorSystem system = ActorUtil.createSystem("system");
-			final Props props = Props.create(WriteBehindPersistence.class);
-			final TestActorRef<WriteBehindPersistence> ref = TestActorRef.create(system, props, "testA");
-			final WriteBehindPersistence actor = ref.underlyingActor();
+			final Props props = Props.create(WriteBehindHandler.class);
+			final TestActorRef<WriteBehindHandler> ref = TestActorRef.create(system, props, "testA");
+			final WriteBehindHandler actor = ref.underlyingActor();
 
-			GameObject o = new GameObject();
-			o.setId("test");
+			GameObject o = new TestGameObject("test");
 			final Future<Object> future = akka.pattern.Patterns.ask(ref, o, 3000);
 
 			assertThat(future.isCompleted()).isFalse();

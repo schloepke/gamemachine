@@ -26,9 +26,8 @@ public class ObjectDb extends UntypedActor {
 
 	public ObjectDb() {
 		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
-		datastore = this.getContext().actorOf(Props.create(WriteBehindPersistence.class), WriteBehindPersistence.class.getSimpleName());
+		datastore = this.getContext().actorOf(Props.create(WriteBehindHandler.class, 5000, 50), WriteBehindHandler.class.getSimpleName());
 		gameObjects = new HashMap<String, GameObject>();
-		gameObjects.put("2", new GameObject());
 	}
 
 	public void onReceive(Object message) {
