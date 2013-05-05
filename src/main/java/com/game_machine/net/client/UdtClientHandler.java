@@ -25,32 +25,29 @@ import java.util.logging.Logger;
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
 
-public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
+public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMessage> {
 
-	private static final Logger log = Logger.getLogger(ClientHandler.class.getName());
+	private static final Logger log = Logger.getLogger(UdtClientHandler.class.getName());
 
 	private ChannelHandlerContext ctx = null;
-	private Client client;
+	private UdtClient client;
 	private int messageCount = 0;
 
 	//final Meter meter = Metrics.newMeter(ByteEchoClientHandler.class, "rate", "bytes", TimeUnit.SECONDS);
 
-	public ClientHandler(Client client) {
+	public UdtClientHandler(UdtClient client) {
 		this.client = client;
-		log.setLevel(Client.logLevel);
+		log.setLevel(UdtClient.logLevel);
 	}
 	
-	public Boolean sendMessage(String str) {
+	public Boolean send(byte[] bytes) {
 		if (ctx == null) {
 			return false;
 		} else {
 			ClientMessage.Builder builder = ClientMessage.newBuilder();
-	        ByteString reply = ByteString.copyFromUtf8(str);
+	        ByteString reply = ByteString.copyFrom(bytes);
 	        builder.setBody(reply);
 	        ctx.channel().write(builder.build());
-	        ctx.flush();
-			//ctx.write(builder.build());
-	        log.info("sendMessage " + str);
 			return true;
 		}
 	}
@@ -59,26 +56,14 @@ public class ClientHandler extends ChannelInboundMessageHandlerAdapter<ClientMes
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		for (int i=0; i<10; i++) {
-			sendMessage("GO");
-		}
-		ctx.flush();
+		this.client.callable.send("READY".getBytes());
 		
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final ClientMessage m) {
-		
-		messageCount++;
 		log.info("CLIENT messageReceived " + messageCount);
+		this.client.callable.send(m.toByteArray());
 		
-        if (messageCount >= 10) {
-        	client.stop();
-        }
-		//meter.mark(in.readableBytes());
-		//final ByteBuf out = ctx.nextOutboundByteBuffer();
-		//out.discardReadBytes();
-		//out.writeBytes(in);
-		//ctx.flush();
 	}
 
 	@Override

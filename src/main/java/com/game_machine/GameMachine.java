@@ -16,7 +16,6 @@ import com.game_machine.game.Outbound;
 import com.game_machine.net.server.UdpServerManager;
 import com.game_machine.net.server.UdtServerManager;
 import com.game_machine.persistence.ObjectDb;
-import com.game_machine.persistence.Riak;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
@@ -26,7 +25,7 @@ public class GameMachine implements Runnable {
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
-	
+	private static ExecutorService systemThreadPool;
 
 	public static void main(String[] args) {
 		start();
@@ -34,13 +33,17 @@ public class GameMachine implements Runnable {
 
 	public static void start() {
 		Injector injector = Guice.createInjector(new DevelopmentModule());
-		ExecutorService executor = Executors.newFixedThreadPool(1);
+		systemThreadPool = Executors.newFixedThreadPool(1);
 		Runnable worker = new GameMachine();
-		executor.execute(worker);
-		executor.shutdown();
+		systemThreadPool.execute(worker);
+		systemThreadPool.shutdown();
 		
 	}
 
+	public static void stop() {
+		actorSystem.shutdown();
+	}
+	
 	public static ActorRef getActorRef(String name) {
 		return actorRefs.get(name);
 	}
@@ -62,7 +65,6 @@ public class GameMachine implements Runnable {
 	@Override
 	public void run() {
 		Thread.currentThread().setName("game-machine");
-		
 		
 		actorSystem = ActorUtil.createSystem("system");
 

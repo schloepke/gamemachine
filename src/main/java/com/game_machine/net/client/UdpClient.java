@@ -14,7 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-public class UdpClient implements Runnable {
+public class UdpClient {
 
 	public static Level logLevel = Level.INFO;
 
@@ -25,6 +25,7 @@ public class UdpClient implements Runnable {
 	private NioEventLoopGroup connectGroup;
 	private Bootstrap boot;
 	private UdpClientHandler handler;
+	public ClientCallable callable;
 
 	public UdpClient(final String host, final int port) {
 		this.host = host;
@@ -32,7 +33,11 @@ public class UdpClient implements Runnable {
 		log.setLevel(UdpClient.logLevel);
 	}
 
-	public void run() {
+	public void setCallback(ClientCallable callable) {
+		this.callable = callable;
+	}
+	
+	public void start() {
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
 		connectGroup = new NioEventLoopGroup(5, connectFactory);
 		try {
@@ -62,11 +67,11 @@ public class UdpClient implements Runnable {
 		}
 	}
 	
-	public void start() {
-		Thread t = new Thread(this);
-		t.start();
+	public Boolean send(byte[] bytes) {
+		return this.handler.send(bytes);
 	}
-
+	
+	
 	public void stop() {
 		connectGroup.shutdown();
 		log.warning("UdpClient STOPPED");

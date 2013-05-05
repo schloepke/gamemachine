@@ -43,50 +43,53 @@ import com.game_machine.ProtobufMessages;
  * between the echo client and server by sending the first message to the
  * server.
  */
-public class Client {
+public class UdtClient {
 
 	public static Level logLevel = Level.INFO;
-	
-	private static final Logger log = Logger.getLogger(Client.class.getName());
+
+	private static final Logger log = Logger.getLogger(UdtClient.class.getName());
 
 	private final String host;
 	private final int port;
-private NioEventLoopGroup connectGroup;
+	private NioEventLoopGroup connectGroup;
 	private Bootstrap boot;
-	private ClientHandler handler;
+	private UdtClientHandler handler;
+	public ClientCallable callable;
 	
-	public Client(final String host, final int port) {
+	public UdtClient(final String host, final int port) {
 		this.host = host;
 		this.port = port;
-		log.setLevel(Client.logLevel);
+		log.setLevel(UdtClient.logLevel);
 	}
 
-	public void run() {
+	public void setCallback(ClientCallable callable) {
+		this.callable = callable;
+	}
+	
+	public void start() {
 		// Configure the client.
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
 		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.BYTE_PROVIDER);
 		try {
 			boot = new Bootstrap();
-			handler = new ClientHandler(this);
+			handler = new UdtClientHandler(this);
 			boot.group(connectGroup).channelFactory(NioUdtProvider.BYTE_CONNECTOR).handler(new ChannelInitializer<UdtChannel>() {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-			        p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMessage.getDefaultInstance()));
+					p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMessage.getDefaultInstance()));
 
-			        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
-			        p.addLast("protobufEncoder", new ProtobufEncoder());
-			        
+					p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
+					p.addLast("protobufEncoder", new ProtobufEncoder());
+
 					ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO), handler);
 				}
 			});
 
-			// Start the client.
 			ChannelFuture f;
 			try {
 				f = boot.connect(host, port).sync();
-				// Wait until the connection is closed.
 				f.channel().closeFuture().sync();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -97,9 +100,8 @@ private NioEventLoopGroup connectGroup;
 	}
 
 	public void stop() {
-		// Shut down the event loop to terminate all threads.
 		connectGroup.shutdown();
-		log.warning("CLIENT STOPPED");
+		log.warning("UdtClient STOPPED");
 	}
 
 }

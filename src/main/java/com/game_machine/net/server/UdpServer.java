@@ -15,8 +15,6 @@ import io.netty.util.concurrent.DefaultEventExecutorGroup;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import akka.actor.ActorSystem;
-
 import com.game_machine.Config;
 
 public final class UdpServer implements Runnable {

@@ -30,19 +30,19 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		log.setLevel(UdpClient.logLevel);
 	}
 
-	public Boolean sendMessage(String str) {
+	public Boolean send(byte[] bytes) {
 		if (ctx == null) {
 			return false;
 		} else {
 			ClientMessage.Builder builder = ClientMessage.newBuilder();
-			ByteString reply = ByteString.copyFromUtf8(str);
+			ByteString reply = ByteString.copyFrom(bytes);
 			builder.setBody(reply);
 			ClientMessage msg = builder.build();
 			ByteBuf bmsg = Unpooled.copiedBuffer(msg.toByteArray());
 			DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
 			final MessageBuf<Object> out = ctx.nextOutboundMessageBuffer();
-			out.add(packet);
-			//ctx.write(packet);
+			//out.add(packet);
+			ctx.write(packet);
 			//log.info("sendMessage " + reply.size() + "  " + msg.getBody().toStringUtf8());
 			return true;
 		}
@@ -52,12 +52,7 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
-		for (int i = 0; i < 10; i++) {
-			sendMessage("GO");
-		}
-		sendMessage("QUIT");
-		ctx.flush();
-		//stop();
+		this.client.callable.send("READY".getBytes());
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
@@ -70,6 +65,7 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		ClientMessage.Builder builder = ClientMessage.newBuilder();
 		builder.setBody(b);
 		ClientMessage msg = builder.build();
+		this.client.callable.send(bytes);
 
 		if (messageCount >= 10) {
 			log.warning("Client received all messages back, stopping");

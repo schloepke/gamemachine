@@ -17,13 +17,11 @@ import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
-import io.netty.util.concurrent.*;
+import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
 import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import akka.actor.ActorSystem;
 
 import com.game_machine.Config;
 import com.game_machine.ProtobufMessages;
