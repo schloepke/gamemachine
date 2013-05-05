@@ -22,6 +22,12 @@ public class ServerTest {
 	@BeforeClass
 	public void setup() {
 		GameMachine.start();
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@AfterClass
@@ -41,7 +47,8 @@ public class ServerTest {
 
 		client.setCallback(new ClientCallable() {
 			public void send(byte[] bytes) {
-				log.warning("CLIENT GOT: " + bytes.length);
+				log.warning("UdpClient GOT: " + new String(bytes));
+				client.send("TEST".getBytes());
 				client.stop();
 			}
 		});
@@ -55,8 +62,14 @@ public class ServerTest {
 
 		client.setCallback(new ClientCallable() {
 			public void send(byte[] bytes) {
-				log.warning("CLIENT GOT: " + bytes.length);
-				client.stop();
+				String message = new String(bytes);
+				log.warning("UdtClient GOT: " + message);
+				if (message.equals("READY")) {
+					client.send("STOP".getBytes());
+				}
+				if (message.equals("STOP")) {
+					client.stop();
+				}
 			}
 		});
 		client.start();

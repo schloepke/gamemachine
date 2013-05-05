@@ -47,7 +47,7 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.warning("UdpClient ECHO active ");
+		//log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
 		this.client.callable.send("READY".getBytes());
 	}

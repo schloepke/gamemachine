@@ -24,7 +24,7 @@ public class Inbound extends UntypedActor {
 				netMessage = NetMessage.copy(netMessage,decode(netMessage.bytes).getBody().toByteArray());
 			}
 			this.getContext().child(Game.class.getSimpleName()).get().tell(netMessage, this.getSelf());
-			log.info("Inbound NetMessage message: {}", ((NetMessage) message).host);
+			log.info("Inbound NetMessage message: {}", new String(netMessage.bytes));
 		} else {
 			unhandled(message);
 		}

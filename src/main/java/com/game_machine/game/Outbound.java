@@ -20,7 +20,7 @@ public class Outbound extends UntypedActor {
 
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof NetMessage) {
-			log.info("Outbound GameMessage message: {}", message);
+			log.info("Outbound GameMessage message: {}");
 			NetMessage netMessage = (NetMessage) message;
 			byte[] bytesToSend = netMessage.bytes;
 			

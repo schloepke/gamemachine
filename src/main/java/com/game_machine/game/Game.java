@@ -36,24 +36,25 @@ public class Game extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
-			log.info("Game NetMessage message: {}", message);
+			log.info("Game NetMessage message: {}");
+			ActorUtil.getSelectionByClass(Echo.class).tell(message, this.getSelf());
 			
 			//ActorRef a = Cmd.identify(Echo.class);
 			//Cmd.ask("echo echo", a);
 			
-			Query.find("2",5);
+			//Query.find("2",5);
 			
-			ActorRef commandActor;
-			for (String command : getCommandList()) {
-				commandActor = actors.get(command);
-				commandActor.tell(command,this.getSelf());
-			}
+			//ActorRef commandActor;
+			//for (String command : getCommandList()) {
+			//	commandActor = actors.get(command);
+			//	commandActor.tell(command,this.getSelf());
+			//}
 			
-			ActorSelection ref;
+			//ActorSelection ref;
 			//ref = this.getContext().actorSelection("/user/db");
 			//ref.tell(new Query(), this.getSelf());
 
-			ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
+			//ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
 		} else if (message instanceof String) {
 		} else {
 			unhandled(message);

@@ -38,7 +38,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		m.data().readBytes(bytes);
 		
 		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
-		log.fine("MessageReceived length" + bytes.length + " " + new String(bytes));
+		log.warning("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}
 
@@ -50,7 +50,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.info("Server channel active");
+		log.info("UDP server active");
 		this.ctx = ctx;
 	}
 

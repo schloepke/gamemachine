@@ -53,8 +53,8 @@ public class UdtServer implements Runnable {
 		log.warning("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udt-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
-		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
-		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
+		final ThreadFactory acceptFactory = new UtilThreadFactory("accept-udt");
+		final ThreadFactory connectFactory = new UtilThreadFactory("connect-udt");
 		acceptGroup = new NioEventLoopGroup(1, acceptFactory, NioUdtProvider.MESSAGE_PROVIDER);
 		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
 		
@@ -70,7 +70,8 @@ public class UdtServer implements Runnable {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast(executor, new LoggingHandler(LogLevel.INFO), handler);
+					//p.addLast(new LoggingHandler(LogLevel.INFO), handler);
+					p.addLast(handler);
 				}
 			});
 			
@@ -81,7 +82,7 @@ public class UdtServer implements Runnable {
 				allChannels.add(future.channel());
 				future.sync();
 				
-				//future.channel().closeFuture().sync();
+				future.channel().closeFuture().sync();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				shutdown();

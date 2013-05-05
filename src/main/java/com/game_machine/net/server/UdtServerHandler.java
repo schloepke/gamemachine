@@ -44,10 +44,11 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		
+		log.warning("UDT server got " + new String(bytes));
 		String host = ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
 	    int port = ((InetSocketAddress)ctx.channel().remoteAddress()).getPort();
 	   
-		NetMessage gameMessage = new NetMessage(NetMessage.TCP,NetMessage.ENCODING_PROTOBUF,bytes,host, port);
+		NetMessage gameMessage = new NetMessage(NetMessage.UDT,NetMessage.ENCODING_PROTOBUF,bytes,host, port);
 		this.inbound.tell(gameMessage, null);
 	}
 
@@ -56,6 +57,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
 		this.ctx.channel().write(message);
+		log.warning("UDT server sent " + new String(bytes));
 	}
 	
 	@Override
@@ -66,13 +68,10 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.info("SERVER ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.info("UDT server active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		this.ctx = ctx;
 	}
 
-	public void beforeAdd(ChannelHandlerContext ctx) {
-        this.ctx = ctx;
-    }
-	
 	public void stop() {
 		this.ctx.flush().addListener(new ChannelFutureListener() {
 			@Override

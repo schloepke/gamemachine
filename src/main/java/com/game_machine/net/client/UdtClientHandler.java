@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
 
@@ -30,19 +31,19 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		ClientMessage.Builder builder = ClientMessage.newBuilder();
 		ByteString reply = ByteString.copyFrom(bytes);
 		builder.setBody(reply);
-		ctx.channel().write(builder.build().toByteArray());
 		ClientMessage clientMessage = builder.build();
 
 		ByteBuf buf = Unpooled.copiedBuffer(clientMessage.toByteArray());
 		UdtMessage message = new UdtMessage(buf);
 		this.ctx.channel().write(message);
-
+		this.ctx.flush();
+		log.warning("UDT client sent "+ new String(bytes));
 		return true;
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		//log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
 		this.client.callable.send("READY".getBytes());
 
@@ -52,7 +53,14 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		log.info("CLIENT messageReceived " + messageCount);
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		this.client.callable.send(bytes);
+		try {
+			ClientMessage message = ClientMessage.parseFrom(bytes);
+			this.client.callable.send(message.getBody().toByteArray());
+		} catch (InvalidProtocolBufferException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 

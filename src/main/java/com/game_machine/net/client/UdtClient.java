@@ -92,6 +92,10 @@ public class UdtClient {
 		}
 	}
 
+	public Boolean send(byte[] bytes) {
+		return this.handler.send(bytes);
+	}
+	
 	public void stop() {
 		connectGroup.shutdown();
 		log.warning("UdtClient STOPPED");

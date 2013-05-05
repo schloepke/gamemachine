@@ -1,28 +1,29 @@
-package com.game_machine.net.server;
+package com.game_machine.game;
 
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.Config;
+import com.game_machine.net.server.UdpServer;
 
-public class UdtServerManager extends UntypedActor {
+public class UdpServerManager extends UntypedActor {
 
 	public static final String CMD_START = "startServer";
 	public static final String CMD_STOP = "stopServer";
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 
-	public UdtServerManager() {
-		if (Config.udtEnabled) {
-			UdtServer.start();
+	public UdpServerManager() {
+		if (Config.udpEnabled) {
+			UdpServer.start();
 		}
 	}
 	
 	@Override
 	public void postStop() {
-		if (Config.udtEnabled) {
-			UdtServer.stop();
+		if (Config.udpEnabled) {
+			UdpServer.stop();
 		}
 	}
 	
@@ -30,9 +31,9 @@ public class UdtServerManager extends UntypedActor {
 		if (message instanceof String) {
 			log.warning("Command: " + message);
 			if (message.equals(CMD_START)) {
-				UdtServer.stop();
+				UdpServer.stop();
 			} else if (message.equals(CMD_STOP)) {
-				UdtServer.start();
+				UdpServer.start();
 			} else {
 				unhandled(message);
 			}
