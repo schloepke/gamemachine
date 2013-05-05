@@ -23,7 +23,7 @@ public class ServerTest {
 	public void setup() {
 		GameMachine.start();
 		try {
-			Thread.sleep(10000);
+			Thread.sleep(4000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -41,12 +41,13 @@ public class ServerTest {
 		UdtClient.logLevel = Level.INFO;
 	}
 
+	
 	@Test
-	public void runUdp() {
+	public void UdpEcho() {
 		final UdpClient client = new UdpClient(Config.udpHost, Config.udpPort);
 
 		client.setCallback(new ClientCallable() {
-			public void send(byte[] bytes) {
+			public void apply(byte[] bytes) {
 				log.warning("UdpClient GOT: " + new String(bytes));
 				client.send("TEST".getBytes());
 				client.stop();
@@ -57,17 +58,18 @@ public class ServerTest {
 	}
 
 	@Test
-	public void runUdt() {
+	public void udtEcho() {
 		final UdtClient client = new UdtClient(Config.udtHost, Config.udtPort);
 
 		client.setCallback(new ClientCallable() {
-			public void send(byte[] bytes) {
+			public void apply(byte[] bytes) {
 				String message = new String(bytes);
 				log.warning("UdtClient GOT: " + message);
 				if (message.equals("READY")) {
 					client.send("STOP".getBytes());
 				}
 				if (message.equals("STOP")) {
+					log.warning("UdtClient STOPPING");
 					client.stop();
 				}
 			}

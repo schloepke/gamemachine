@@ -20,7 +20,7 @@ public class Outbound extends UntypedActor {
 
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof NetMessage) {
-			log.info("Outbound GameMessage message: {}");
+			log.info("Outbound message: {}");
 			NetMessage netMessage = (NetMessage) message;
 			byte[] bytesToSend = netMessage.bytes;
 			
@@ -32,7 +32,6 @@ public class Outbound extends UntypedActor {
 				UdpServer.getUdpServer().send(bytesToSend, netMessage.host, netMessage.port);
 			} else if (netMessage.protocol == NetMessage.UDT) {
 				UdtServer.getUdtServer().send(bytesToSend, netMessage.host, netMessage.port);
-				unhandled(message);
 			} else {
 				unhandled(message);
 			}

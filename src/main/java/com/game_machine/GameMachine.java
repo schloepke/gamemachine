@@ -1,9 +1,6 @@
 package com.game_machine;
 
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
@@ -12,10 +9,11 @@ import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
 
 import com.game_machine.game.Echo;
+import com.game_machine.game.Game;
 import com.game_machine.game.Inbound;
 import com.game_machine.game.Outbound;
-import com.game_machine.game.UdpServerManager;
-import com.game_machine.game.UdtServerManager;
+import com.game_machine.net.server.UdpServer;
+import com.game_machine.net.server.UdtServer;
 import com.game_machine.persistence.ObjectDb;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
@@ -32,14 +30,25 @@ public class GameMachine implements Runnable {
 	}
 
 	public static void start() {
-		Injector injector = Guice.createInjector(new DevelopmentModule());
 		new GameMachine().run();
-		
+		if (Config.udpEnabled) {
+			UdpServer.start();
+		}
+		if (Config.udtEnabled) {
+			UdtServer.start();
+		}
+		log.info("GameMachine started");
 	}
 
 	public static void stop() {
+		if (Config.udpEnabled) {
+			UdpServer.stop();
+		}
+		if (Config.udtEnabled) {
+			UdtServer.stop();
+		}
 		actorSystem.shutdown();
-		
+		log.info("GameMachine stopped");
 	}
 	
 	public static ActorRef getActorRef(String name) {
@@ -52,7 +61,6 @@ public class GameMachine implements Runnable {
 		} else {
 			actorRefs.put(name, ref);
 		}
-
 	}
 
 	public static ActorSystem getActorSystem() {
@@ -70,9 +78,9 @@ public class GameMachine implements Runnable {
 		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
 
 		// Manage the udp server
-		actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
+		//actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
 		
-		actorSystem.actorOf(Props.create(UdtServerManager.class), UdtServerManager.class.getSimpleName());
+		//actorSystem.actorOf(Props.create(UdtServerManager.class), UdtServerManager.class.getSimpleName());
 
 		// Uility actor to send and receive commands from outside akka
 		actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());
@@ -82,7 +90,7 @@ public class GameMachine implements Runnable {
 
 		// Main incoming/outgoing channels between game client and game logic
 		// actors
-		actorSystem.actorOf(Props.create(Inbound.class).withRouter(new RoundRobinRouter(10)), Inbound.class.getSimpleName());
+		actorSystem.actorOf(Inbound.mkProps(Game.class, 10), Inbound.class.getSimpleName());
 		actorSystem.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), Outbound.class.getSimpleName());
 
 	}

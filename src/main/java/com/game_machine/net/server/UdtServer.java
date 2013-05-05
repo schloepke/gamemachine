@@ -92,7 +92,7 @@ public class UdtServer implements Runnable {
 	}
 
 	public void send(byte[] bytes, String host, int port) {
-		handler.send(bytes, host, port);
+		handler.sendToClient(bytes, host, port);
 	}
 	
 	public static UdtServer getUdtServer() {
@@ -131,7 +131,7 @@ public class UdtServer implements Runnable {
 		}
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
-		log.warning("Server stopped");
+		log.warning("Udt Server stopped");
 	}
 
 

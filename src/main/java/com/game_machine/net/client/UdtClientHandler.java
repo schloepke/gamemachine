@@ -45,19 +45,18 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
 		//log.warning("CLIENT ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		this.client.callable.send("READY".getBytes());
+		this.client.callable.apply("READY".getBytes());
 
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final UdtMessage m) {
-		log.info("CLIENT messageReceived " + messageCount);
+		log.info("UdtClient messageReceived");
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		try {
 			ClientMessage message = ClientMessage.parseFrom(bytes);
-			this.client.callable.send(message.getBody().toByteArray());
+			this.client.callable.apply(message.getBody().toByteArray());
 		} catch (InvalidProtocolBufferException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

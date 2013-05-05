@@ -49,13 +49,13 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	public void channelActive(final ChannelHandlerContext ctx) {
 		//log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
-		this.client.callable.send("READY".getBytes());
+		this.client.callable.apply("READY".getBytes());
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		this.client.callable.send(bytes);
+		this.client.callable.apply(bytes);
 	}
 
 	@Override
