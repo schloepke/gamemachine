@@ -37,7 +37,7 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start(ActorSystem actorSystem) {
+	public static void start() {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
@@ -45,7 +45,7 @@ public final class UdpServer implements Runnable {
 		}
 
 		UdpServer.logLevel = Level.parse(Config.logLevel);
-		udpServer = new UdpServer(Config.udpHost, Config.udpPort, actorSystem);
+		udpServer = new UdpServer(Config.udpHost, Config.udpPort);
 		new Thread(udpServer).start();
 	}
 
@@ -60,11 +60,11 @@ public final class UdpServer implements Runnable {
 		udpServer = null;
 	}
 
-	public UdpServer(final String hostname, final int port, ActorSystem actorSystem) {
+	public UdpServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
 		log.setLevel(UdpServer.logLevel);
-		this.handler = new UdpServerHandler(actorSystem);
+		this.handler = new UdpServerHandler();
 	}
 
 	public void run() {

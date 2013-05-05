@@ -2,6 +2,7 @@ package com.game_machine;
 
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import scala.concurrent.Await;
 import scala.concurrent.Future;
@@ -39,12 +40,13 @@ public class Cmd extends UntypedActor {
 		}
 	}
 
-	public static Object ask(Object message, ActorRef actor) {
-		Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+	public static Object ask(Object message, ActorRef actor, Integer ms) {
+		Timeout timeout = new Timeout(Duration.create(ms, "ms"));
 		Future<Object> future = Patterns.ask(actor, message, timeout);
 		Object result = null;
 		try {
 			result = Await.result(future, timeout.duration());
+		} catch (TimeoutException e) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

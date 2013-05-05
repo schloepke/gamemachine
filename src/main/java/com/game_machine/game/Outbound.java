@@ -7,6 +7,7 @@ import akka.event.LoggingAdapter;
 import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.game_machine.net.server.UdpServer;
+import com.game_machine.net.server.UdtServer;
 import com.google.protobuf.ByteString;
 
 public class Outbound extends UntypedActor {
@@ -30,6 +31,7 @@ public class Outbound extends UntypedActor {
 			if (netMessage.protocol == NetMessage.UDP) {
 				UdpServer.getUdpServer().send(bytesToSend, netMessage.host, netMessage.port);
 			} else if (netMessage.protocol == NetMessage.UDT) {
+				UdtServer.getUdtServer().send(bytesToSend, netMessage.host, netMessage.port);
 				unhandled(message);
 			} else {
 				unhandled(message);

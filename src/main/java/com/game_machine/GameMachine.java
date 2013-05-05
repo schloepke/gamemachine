@@ -14,6 +14,7 @@ import com.game_machine.game.Echo;
 import com.game_machine.game.Inbound;
 import com.game_machine.game.Outbound;
 import com.game_machine.net.server.UdpServerManager;
+import com.game_machine.net.server.UdtServerManager;
 import com.game_machine.persistence.ObjectDb;
 import com.game_machine.persistence.Riak;
 import com.google.inject.Guice;
@@ -70,6 +71,8 @@ public class GameMachine implements Runnable {
 
 		// Manage the udp server
 		actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
+		
+		actorSystem.actorOf(Props.create(UdtServerManager.class), UdtServerManager.class.getSimpleName());
 
 		// Uility actor to send and receive commands from outside akka
 		actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());

@@ -26,7 +26,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 	
-	public UdpServerHandler(ActorSystem actorSystem) {
+	public UdpServerHandler() {
 		log.setLevel(UdpServer.logLevel);
 		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
 	}

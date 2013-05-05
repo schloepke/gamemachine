@@ -41,7 +41,7 @@ public class Game extends UntypedActor {
 			//ActorRef a = Cmd.identify(Echo.class);
 			//Cmd.ask("echo echo", a);
 			
-			Query.find("2");
+			Query.find("2",5);
 			
 			ActorRef commandActor;
 			for (String command : getCommandList()) {

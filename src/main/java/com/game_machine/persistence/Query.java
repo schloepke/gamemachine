@@ -30,9 +30,9 @@ public final class Query {
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, sender);
 	}
 	
-	public static final GameObject find(String gameObjectId) {
+	public static final GameObject find(String gameObjectId, Integer timeout) {
 		Query query = new Query(gameObjectId,null,null,"find");
-		return (GameObject) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class));
+		return (GameObject) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class), timeout);
 	}
 	
 	public static final void save(String gameObjectId, GameObject gameObject) {

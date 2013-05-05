@@ -20,7 +20,7 @@ public class ObjectDb extends UntypedActor {
 
 	public void test2() {
 		long start = System.currentTimeMillis();
-		
+
 		log.warning("QUERY TIME: " + Long.toString(System.currentTimeMillis() - start));
 	}
 
@@ -33,23 +33,26 @@ public class ObjectDb extends UntypedActor {
 	public void onReceive(Object message) {
 		log.info("Db message: {}", message);
 		if (message instanceof Query) {
-			
+
 			Query query = (Query) message;
-			
+
 			if (query.getType().equals("update")) {
 				if (gameObjects.get(query.getGameObjectId()) != null) {
 					query.getMapper().apply(gameObjects.get(query.getGameObjectId()));
-					datastore.tell(query.getGameObject(),this.getSelf());
+					datastore.tell(query.getGameObject(), this.getSelf());
 				}
 			} else if (query.getType().equals("save")) {
-				gameObjects.put(query.getGameObjectId(),query.getGameObject());
+				gameObjects.put(query.getGameObjectId(), query.getGameObject());
 			} else if (query.getType().equals("find")) {
-				this.getSender().tell(gameObjects.get(query.getGameObjectId()),this.getSelf());
-				datastore.tell(query.getGameObject(),this.getSelf());
+				GameObject gameObject = gameObjects.get(query.getGameObjectId());
+				if (gameObject != null) {
+					this.getSender().tell(gameObject, this.getSelf());
+					datastore.tell(query.getGameObject(), this.getSelf());
+				}
 			} else {
 				unhandled(message);
 			}
-			
+
 		} else {
 			unhandled(message);
 		}

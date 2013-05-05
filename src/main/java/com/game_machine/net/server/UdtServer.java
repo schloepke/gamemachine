@@ -23,30 +23,37 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import akka.actor.ActorSystem;
+
+import com.game_machine.Config;
 import com.game_machine.ProtobufMessages;
 import com.game_machine.net.client.UtilThreadFactory;
 
-public class UdtServer {
+public class UdtServer implements Runnable {
 
 	public static Level logLevel = Level.INFO;
 	private static final Logger log = Logger.getLogger(UdtServer.class.getName());
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	
+	private static UdtServer udtServer;
 	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
 	private NioEventLoopGroup connectGroup;
 	private ServerBootstrap boot;
+	private UdtServerHandler handler;
 
 	public UdtServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
 		log.setLevel(UdtServer.logLevel);
+		handler = new UdtServerHandler();
 	}
 
-	public void start(final UdtServerHandler handler) {
-		log.warning("Server Starting");
+	public void run() {
+		log.warning("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
+		Thread.currentThread().setName("udt-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
@@ -85,13 +92,44 @@ public class UdtServer {
 				//future.channel().closeFuture().sync();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				stop();
+				shutdown();
 			}
 		} finally {
 		}
 	}
 
-	public void stop() {
+	public void send(byte[] bytes, String host, int port) {
+		handler.send(bytes, host, port);
+	}
+	
+	public static UdtServer getUdtServer() {
+		return udtServer;
+	}
+	
+	public static void start() {
+
+		// Don't try to start an already running server
+		if (udtServer != null) {
+			return;
+		}
+
+		UdtServer.logLevel = Level.parse(Config.logLevel);
+		udtServer = new UdtServer(Config.udtHost, Config.udtPort);
+		new Thread(udtServer).start();
+	}
+	
+	public static void stop() {
+
+		// Don't try to stop a server that's not running
+		if (udtServer == null) {
+			return;
+		}
+
+		udtServer.shutdown();
+		udtServer = null;
+	}
+	
+	public void shutdown() {
 		ChannelGroupFuture f = allChannels.close();
         try {
 			f.sync();
