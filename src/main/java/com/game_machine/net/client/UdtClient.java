@@ -69,20 +69,13 @@ public class UdtClient {
 	public void start() {
 		// Configure the client.
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
-		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.BYTE_PROVIDER);
+		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
 		try {
 			boot = new Bootstrap();
 			handler = new UdtClientHandler(this);
-			boot.group(connectGroup).channelFactory(NioUdtProvider.BYTE_CONNECTOR).handler(new ChannelInitializer<UdtChannel>() {
+			boot.group(connectGroup).channelFactory(NioUdtProvider.MESSAGE_CONNECTOR).handler(new ChannelInitializer<UdtChannel>() {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
-					ChannelPipeline p = ch.pipeline();
-					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-					p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMessage.getDefaultInstance()));
-
-					p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
-					p.addLast("protobufEncoder", new ProtobufEncoder());
-
 					ch.pipeline().addLast(new LoggingHandler(LogLevel.INFO), handler);
 				}
 			});

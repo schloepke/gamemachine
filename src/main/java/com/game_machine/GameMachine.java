@@ -3,6 +3,7 @@ package com.game_machine;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
@@ -25,7 +26,6 @@ public class GameMachine implements Runnable {
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
-	private static ExecutorService systemThreadPool;
 
 	public static void main(String[] args) {
 		start();
@@ -33,15 +33,13 @@ public class GameMachine implements Runnable {
 
 	public static void start() {
 		Injector injector = Guice.createInjector(new DevelopmentModule());
-		systemThreadPool = Executors.newFixedThreadPool(1);
-		Runnable worker = new GameMachine();
-		systemThreadPool.execute(worker);
-		systemThreadPool.shutdown();
+		new GameMachine().run();
 		
 	}
 
 	public static void stop() {
 		actorSystem.shutdown();
+		
 	}
 	
 	public static ActorRef getActorRef(String name) {

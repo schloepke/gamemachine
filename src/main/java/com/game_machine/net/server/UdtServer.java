@@ -55,14 +55,14 @@ public class UdtServer implements Runnable {
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
-		acceptGroup = new NioEventLoopGroup(1, acceptFactory, NioUdtProvider.BYTE_PROVIDER);
-		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.BYTE_PROVIDER);
+		acceptGroup = new NioEventLoopGroup(1, acceptFactory, NioUdtProvider.MESSAGE_PROVIDER);
+		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
 		
 		// Configure the server.
 		try {
 			boot = new ServerBootstrap();
 			handler.setServer(this);
-			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.BYTE_ACCEPTOR);
+			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
 			boot.option(ChannelOption.SO_BACKLOG, 10);
 			boot.handler(new LoggingHandler(LogLevel.INFO));
 
@@ -70,12 +70,6 @@ public class UdtServer implements Runnable {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-			        p.addLast("protobufDecoder", new ProtobufDecoder(ProtobufMessages.ClientMessage.getDefaultInstance()));
-
-			        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
-			        p.addLast("protobufEncoder", new ProtobufEncoder());
-			        
 					p.addLast(executor, new LoggingHandler(LogLevel.INFO), handler);
 				}
 			});
