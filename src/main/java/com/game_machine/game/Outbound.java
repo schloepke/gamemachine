@@ -5,10 +5,9 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.NetMessage;
-import com.game_machine.ProtobufMessages.ClientMessage;
+import com.game_machine.net.client.MessageBuilder;
 import com.game_machine.net.server.UdpServer;
 import com.game_machine.net.server.UdtServer;
-import com.google.protobuf.ByteString;
 
 public class Outbound extends UntypedActor {
 
@@ -20,12 +19,12 @@ public class Outbound extends UntypedActor {
 
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof NetMessage) {
-			log.info("Outbound message: {}");
+			log.debug("Outbound message: {}");
 			NetMessage netMessage = (NetMessage) message;
 			byte[] bytesToSend = netMessage.bytes;
 			
 			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {
-				bytesToSend = encode(netMessage.bytes);
+				bytesToSend = MessageBuilder.encode(netMessage.bytes,netMessage.clientId).toByteArray();
 			}
 			
 			if (netMessage.protocol == NetMessage.UDP) {
@@ -39,13 +38,5 @@ public class Outbound extends UntypedActor {
 		} else {
 			unhandled(message);
 		}
-	}
-	
-	public byte[] encode(byte[] bytes) {
-		ClientMessage.Builder builder = ClientMessage.newBuilder();
-		ByteString byteString = ByteString.copyFrom(bytes);
-		builder.setBody(byteString);
-		ClientMessage msg = builder.build();
-		return msg.toByteArray();
 	}
 }

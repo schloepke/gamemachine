@@ -24,6 +24,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.game_machine.Config;
+import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages;
 import com.game_machine.net.client.UtilThreadFactory;
 
@@ -40,13 +41,16 @@ public class UdtServer implements Runnable {
 	private NioEventLoopGroup acceptGroup;
 	private NioEventLoopGroup connectGroup;
 	private ServerBootstrap boot;
+	
+	public static final int ENCODING_NONE = NetMessage.ENCODING_NONE;
+	public static final int ENCODING_PROTOBUF = NetMessage.ENCODING_PROTOBUF;
 	private UdtServerHandler handler;
 
-	public UdtServer(final String hostname, final int port) {
+	public UdtServer(final int messageEncoding, final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		log.setLevel(UdtServer.logLevel);
-		handler = new UdtServerHandler();
+		log.setLevel(Level.parse(Config.logLevel));
+		handler = new UdtServerHandler(messageEncoding);
 	}
 
 	public void run() {
@@ -99,7 +103,7 @@ public class UdtServer implements Runnable {
 		return udtServer;
 	}
 	
-	public static void start() {
+	public static void start(int messageEncoding) {
 
 		// Don't try to start an already running server
 		if (udtServer != null) {
@@ -107,7 +111,7 @@ public class UdtServer implements Runnable {
 		}
 
 		UdtServer.logLevel = Level.parse(Config.logLevel);
-		udtServer = new UdtServer(Config.udtHost, Config.udtPort);
+		udtServer = new UdtServer(messageEncoding,Config.udtHost, Config.udtPort);
 		new Thread(udtServer).start();
 	}
 	

@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import akka.actor.ActorSelection;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.Config;
 import com.game_machine.NetMessage;
 import com.game_machine.game.Inbound;
 
@@ -27,12 +28,14 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	private UdtServer server;
 	private ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
-	
-	public UdtServerHandler() {
-		log.setLevel(UdtServer.logLevel);
+	private Integer messageEncoding;
+
+	public UdtServerHandler(int messageEncoding) {
+		log.setLevel(Level.parse(Config.logLevel));
 		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
+		this.messageEncoding = messageEncoding;
 	}
-	
+
 	public void setServer(UdtServer server) {
 		this.server = server;
 	}
@@ -43,23 +46,23 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		
-		log.warning("UDT server got " + new String(bytes));
-		String host = ((InetSocketAddress)ctx.channel().remoteAddress()).getAddress().getHostAddress();
-	    int port = ((InetSocketAddress)ctx.channel().remoteAddress()).getPort();
-	   
-		NetMessage gameMessage = new NetMessage(NetMessage.UDT,NetMessage.ENCODING_PROTOBUF,bytes,host, port);
+
+		log.fine("UDT server got " + new String(bytes));
+		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
+		log.warning("PORT: " + Integer.toString(port));
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port);
 		this.inbound.tell(gameMessage, null);
 	}
 
 	public void sendToClient(byte[] bytes, String host, int port) {
-		
+
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
 		this.ctx.channel().write(message);
-		log.warning("UDT server sent " + new String(bytes));
+		log.fine("UDT server sent " + new String(bytes));
 	}
-	
+
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
 		log.log(Level.WARNING, "close the connection when an exception is raised", cause);

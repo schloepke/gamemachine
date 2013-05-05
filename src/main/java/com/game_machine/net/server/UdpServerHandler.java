@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import akka.actor.ActorSelection;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.Config;
 import com.game_machine.NetMessage;
 import com.game_machine.game.Inbound;
 
@@ -24,10 +25,12 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
+	private int messageEncoding;
 	
-	public UdpServerHandler() {
-		log.setLevel(UdpServer.logLevel);
+	public UdpServerHandler(int messageEncoding) {
+		log.setLevel(Level.parse(Config.logLevel));
 		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
+		this.messageEncoding = messageEncoding;
 	}
 
 	@Override
@@ -37,8 +40,8 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
-		log.warning("MessageReceived length" + bytes.length + " " + new String(bytes));
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,messageEncoding,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
+		log.fine("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}
 
@@ -50,7 +53,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.info("UDP server active");
+		log.fine("UDP server active");
 		this.ctx = ctx;
 	}
 

@@ -13,41 +13,32 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.Config;
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
 	private static final Logger log = Logger.getLogger(UdpClientHandler.class.getName());
 
-	
 	private ChannelHandlerContext ctx = null;
 	private UdpClient client;
-	private int messageCount = 0;
 
 	public UdpClientHandler(UdpClient client) {
 		this.client = client;
-		log.setLevel(UdpClient.logLevel);
+		log.setLevel(Level.parse(Config.logLevel));
 	}
 
 	public Boolean send(byte[] bytes) {
-		if (ctx == null) {
-			return false;
-		} else {
-			ClientMessage.Builder builder = ClientMessage.newBuilder();
-			ByteString reply = ByteString.copyFrom(bytes);
-			builder.setBody(reply);
-			ClientMessage msg = builder.build();
-			ByteBuf bmsg = Unpooled.copiedBuffer(msg.toByteArray());
-			DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
-			ctx.write(packet);
-			return true;
-		}
+		ByteBuf bmsg = Unpooled.copiedBuffer(bytes);
+		DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
+		ctx.write(packet);
+		return true;
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		//log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
 		this.client.callable.apply("READY".getBytes());
 	}
@@ -72,6 +63,5 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 			}
 		});
 	}
-
 
 }

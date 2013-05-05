@@ -7,12 +7,14 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.game_machine.ActorUtil;
 import com.game_machine.Config;
 import com.game_machine.GameMachine;
-import com.game_machine.net.client.UdtClient;
+import com.game_machine.NetMessage;
+import com.game_machine.ProtobufMessages.ClientMessage;
 import com.game_machine.net.client.ClientCallable;
+import com.game_machine.net.client.MessageBuilder;
 import com.game_machine.net.client.UdpClient;
+import com.game_machine.net.client.UdtClient;
 import com.game_machine.net.server.UdtServer;
 
 public class ServerTest {
@@ -23,9 +25,8 @@ public class ServerTest {
 	public void setup() {
 		GameMachine.start();
 		try {
-			Thread.sleep(4000);
+			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -37,20 +38,24 @@ public class ServerTest {
 
 	// @Test
 	public void runServer() throws Exception {
-		UdtServer.logLevel = Level.INFO;
+		UdtServer.logLevel = Level.parse(Config.logLevel);
 		UdtClient.logLevel = Level.INFO;
 	}
 
 	
-	@Test
+	//@Test
 	public void UdpEcho() {
 		final UdpClient client = new UdpClient(Config.udpHost, Config.udpPort);
 
 		client.setCallback(new ClientCallable() {
 			public void apply(byte[] bytes) {
-				log.warning("UdpClient GOT: " + new String(bytes));
-				client.send("TEST".getBytes());
-				client.stop();
+				String message = new String(bytes);
+				if (message.equals("READY")) {
+					client.send("STOP".getBytes());
+				}
+				if (message.equals("STOP")) {
+					client.stop();
+				}
 			}
 		});
 		client.start();
@@ -59,17 +64,37 @@ public class ServerTest {
 
 	@Test
 	public void udtEcho() {
-		final UdtClient client = new UdtClient(Config.udtHost, Config.udtPort);
+		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF,Config.udtHost, Config.udtPort);
 
 		client.setCallback(new ClientCallable() {
 			public void apply(byte[] bytes) {
 				String message = new String(bytes);
-				log.warning("UdtClient GOT: " + message);
 				if (message.equals("READY")) {
 					client.send("STOP".getBytes());
 				}
 				if (message.equals("STOP")) {
-					log.warning("UdtClient STOPPING");
+					client.stop();
+				}
+			}
+		});
+		client.start();
+	}
+	
+	//@Test
+	public void udtMulti() {
+		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF,Config.udtHost, Config.udtPort);
+
+		client.setCallback(new ClientCallable() {
+			public void apply(byte[] bytes) {
+				ClientMessage message = MessageBuilder.decode(bytes);
+				String body = message.getBody().toStringUtf8();
+				if (body.equals("READY")) {
+					for (int i=0;i<100;i++) {
+						client.send("TEST MESSAGE".getBytes());
+					}
+					client.send("STOP".getBytes());
+				}
+				if (body.equals("STOP")) {
 					client.stop();
 				}
 			}

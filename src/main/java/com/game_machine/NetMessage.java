@@ -16,8 +16,10 @@ public class NetMessage {
 	public final int port;
 	public final int protocol;
 	public final int encoding;
+	public final String clientId;
 	
-	public NetMessage(int protocol, int encoding, byte[] bytes, String host, int port) {
+	public NetMessage(String clientId, int protocol, int encoding, byte[] bytes, String host, int port) {
+		this.clientId = clientId;
 		this.bytes = bytes;
 		this.host = host;
 		this.port = port;
@@ -26,7 +28,7 @@ public class NetMessage {
 	}
 	
 	public static NetMessage copy(NetMessage message, byte[] bytes) {
-		return new NetMessage(message.protocol, message.encoding, bytes, message.host, message.port);
+		return new NetMessage(message.clientId,message.protocol, message.encoding, bytes, message.host, message.port);
 	}
 	
 	

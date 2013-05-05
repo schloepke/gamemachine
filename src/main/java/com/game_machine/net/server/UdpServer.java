@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.game_machine.Config;
+import com.game_machine.NetMessage;
 
 public final class UdpServer implements Runnable {
 
@@ -28,6 +29,9 @@ public final class UdpServer implements Runnable {
 	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
+	
+	public static final int ENCODING_NONE = NetMessage.ENCODING_NONE;
+	public static final int ENCODING_PROTOBUF = NetMessage.ENCODING_PROTOBUF;
 	private final UdpServerHandler handler;
 
 	
@@ -35,7 +39,7 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start() {
+	public static void start(int messageEncoding) {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
@@ -43,7 +47,7 @@ public final class UdpServer implements Runnable {
 		}
 
 		UdpServer.logLevel = Level.parse(Config.logLevel);
-		udpServer = new UdpServer(Config.udpHost, Config.udpPort);
+		udpServer = new UdpServer(messageEncoding, Config.udpHost, Config.udpPort);
 		new Thread(udpServer).start();
 	}
 
@@ -58,11 +62,11 @@ public final class UdpServer implements Runnable {
 		udpServer = null;
 	}
 
-	public UdpServer(final String hostname, final int port) {
+	public UdpServer(final int messageEncoding, final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		log.setLevel(UdpServer.logLevel);
-		this.handler = new UdpServerHandler();
+		log.setLevel(Level.parse(Config.logLevel));
+		this.handler = new UdpServerHandler(messageEncoding);
 	}
 
 	public void run() {

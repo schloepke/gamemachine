@@ -33,7 +33,10 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.Config;
+import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages;
+import com.google.protobuf.MessageLite;
 
 /**
  * UDT Byte Stream Client
@@ -55,11 +58,13 @@ public class UdtClient {
 	private Bootstrap boot;
 	private UdtClientHandler handler;
 	public ClientCallable callable;
+	private int messageEncoding;
 	
-	public UdtClient(final String host, final int port) {
+	public UdtClient(int messageEncoding, final String host, final int port) {
 		this.host = host;
 		this.port = port;
-		log.setLevel(UdtClient.logLevel);
+		this.messageEncoding = messageEncoding;
+		log.setLevel(Level.parse(Config.logLevel));
 	}
 
 	public void setCallback(ClientCallable callable) {
@@ -67,7 +72,6 @@ public class UdtClient {
 	}
 	
 	public void start() {
-		// Configure the client.
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
 		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
 		try {
@@ -92,8 +96,20 @@ public class UdtClient {
 		}
 	}
 
-	public Boolean send(byte[] bytes) {
-		return this.handler.send(bytes);
+	public Boolean send(Object message) {
+		String clientId = Integer.toString(this.hashCode());
+		byte[] bytes;
+		
+		if (message instanceof String) {
+			bytes = ((String) message).getBytes();
+		} else {
+			bytes = (byte[]) message;
+		}
+		if (messageEncoding == NetMessage.ENCODING_PROTOBUF) {
+			return this.handler.send(MessageBuilder.encode(bytes,clientId).toByteArray());
+		} else {
+			return this.handler.send(bytes);
+		}
 	}
 	
 	public void stop() {

@@ -15,12 +15,9 @@ import com.game_machine.game.Outbound;
 import com.game_machine.net.server.UdpServer;
 import com.game_machine.net.server.UdtServer;
 import com.game_machine.persistence.ObjectDb;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 public class GameMachine implements Runnable {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
@@ -30,12 +27,25 @@ public class GameMachine implements Runnable {
 	}
 
 	public static void start() {
+		int udtMessageEncoding = UdtServer.ENCODING_NONE;
+		int udpMessageEncoding = UdpServer.ENCODING_NONE;
+		if (Config.udpEncoding.equals("pb")) {
+			udpMessageEncoding = UdpServer.ENCODING_PROTOBUF;
+		}
+		if (Config.udtEncoding.equals("pb")) {
+			udtMessageEncoding = UdtServer.ENCODING_PROTOBUF;
+		}
+		start(udtMessageEncoding,udpMessageEncoding);
+	}
+	
+	
+	public static void start(int udtMessageEncoding, int udpMessageEncoding) {
 		new GameMachine().run();
 		if (Config.udpEnabled) {
-			UdpServer.start();
+			UdpServer.start(udpMessageEncoding);
 		}
 		if (Config.udtEnabled) {
-			UdtServer.start();
+			UdtServer.start(udtMessageEncoding);
 		}
 		log.info("GameMachine started");
 	}
@@ -76,11 +86,6 @@ public class GameMachine implements Runnable {
 
 		// Memory database actor, needs to be pinned to a single thread
 		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
-
-		// Manage the udp server
-		//actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
-		
-		//actorSystem.actorOf(Props.create(UdtServerManager.class), UdtServerManager.class.getSimpleName());
 
 		// Uility actor to send and receive commands from outside akka
 		actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());

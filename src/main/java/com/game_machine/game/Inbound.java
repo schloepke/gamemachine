@@ -8,7 +8,7 @@ import akka.routing.RoundRobinRouter;
 
 import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
-import com.google.protobuf.InvalidProtocolBufferException;
+import com.game_machine.net.client.MessageBuilder;
 
 public class Inbound extends UntypedActor {
 
@@ -29,22 +29,14 @@ public class Inbound extends UntypedActor {
 		if (message instanceof NetMessage) {
 			NetMessage netMessage = (NetMessage) message;
 			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {
-				netMessage = NetMessage.copy(netMessage,decode(netMessage.bytes).getBody().toByteArray());
+				ClientMessage clientMessage = MessageBuilder.decode(netMessage.bytes);
+				netMessage = new NetMessage(clientMessage.getClientId(),netMessage.protocol, netMessage.encoding, clientMessage.getBody().toByteArray(), netMessage.host, netMessage.port);
 			}
 			this.getContext().child(gameClass.getSimpleName()).get().tell(netMessage, this.getSelf());
-			log.warning("Inbound NetMessage message: {}", new String(netMessage.bytes));
+			log.debug("Inbound NetMessage message: {}", new String(netMessage.bytes));
 		} else {
 			unhandled(message);
 		}
 	}
 
-	private ClientMessage decode(byte[] bytes) {
-		try {
-			return ClientMessage.parseFrom(bytes);
-		} catch (InvalidProtocolBufferException e1) {
-			log.warning("BYTES: " + bytes.length + " " + new String(bytes));
-			e1.printStackTrace();
-			throw new RuntimeException("Decoding Error");
-		}
-	}
 }

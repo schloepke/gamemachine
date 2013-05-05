@@ -36,7 +36,7 @@ public class Game extends UntypedActor {
 
 	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
-			log.info("Game NetMessage message: {}");
+			log.debug("Game NetMessage message: {}");
 			ActorUtil.getSelectionByClass(Echo.class).tell(message, this.getSelf());
 			
 			//ActorRef a = Cmd.identify(Echo.class);
