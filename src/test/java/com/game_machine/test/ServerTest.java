@@ -69,5 +69,34 @@ public class ServerTest {
 		});
 		client.start();
 	}
+	
+	public void udtStress(final String content) {
+		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF, Config.udtHost, Config.udtPort);
+
+		client.setCallback(new ClientCallable() {
+			public void apply(Object obj) {
+				ClientMessage message = (ClientMessage) obj;
+				String body = message.getBody().toStringUtf8();
+				if (body.equals("READY")) {
+					for (int i=0;i<10;i++) {
+						String msg = content+Integer.toString(i);
+						client.send(msg.getBytes());
+					}
+				} else if (body.equals(content+"9")){
+					client.send("STOP".getBytes());
+				} else if (body.equals("STOP")){
+					client.stop();
+				}
+			}
+		});
+		client.start();
+	}
+	
+	@Test
+	public void udtStressTest() {
+		for (int i=0;i<10;i++) {
+			udtStress(Integer.toString(i)+"_");
+		}
+	}
 
 }
