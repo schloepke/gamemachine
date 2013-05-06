@@ -7,6 +7,6 @@ import akka.actor.UntypedActor;
 public class Echo extends UntypedActor {
 
 	public void onReceive(Object message) {
-		ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
+		ActorUtil.getSelectionByClass(Gateway.class).tell(message, this.getSelf());
 	}
 }

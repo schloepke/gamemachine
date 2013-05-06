@@ -12,6 +12,7 @@ import akka.event.LoggingAdapter;
 
 import com.game_machine.ActorUtil;
 import com.game_machine.NetMessage;
+import com.game_machine.ProtobufMessages.ClientMessage;
 import com.game_machine.persistence.Query;
 
 public class Game extends UntypedActor {
@@ -35,7 +36,7 @@ public class Game extends UntypedActor {
 	}
 
 	public void onReceive(Object message) {
-		if (message instanceof NetMessage) {
+		if (message instanceof ClientMessage) {
 			log.debug("Game NetMessage message: {}");
 			ActorUtil.getSelectionByClass(Echo.class).tell(message, this.getSelf());
 			

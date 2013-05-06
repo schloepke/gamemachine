@@ -2,6 +2,7 @@ package com.game_machine.net.server;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
@@ -82,7 +83,7 @@ public class UdtServer implements Runnable {
 			// Start the server.
 			ChannelFuture future;
 			try {
-				future = boot.bind(hostname,port);
+				future = boot.bind(hostname,port).sync();
 				allChannels.add(future.channel());
 				future.sync();
 				
@@ -95,8 +96,8 @@ public class UdtServer implements Runnable {
 		}
 	}
 
-	public void send(byte[] bytes, String host, int port) {
-		handler.sendToClient(bytes, host, port);
+	public void send(byte[] bytes, ChannelHandlerContext ctx) {
+		handler.sendToClient(bytes, ctx);
 	}
 	
 	public static UdtServer getUdtServer() {

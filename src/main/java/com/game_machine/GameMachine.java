@@ -9,9 +9,7 @@ import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
 
 import com.game_machine.game.Echo;
-import com.game_machine.game.Game;
-import com.game_machine.game.Inbound;
-import com.game_machine.game.Outbound;
+import com.game_machine.game.Gateway;
 import com.game_machine.net.server.UdpServer;
 import com.game_machine.net.server.UdtServer;
 import com.game_machine.persistence.ObjectDb;
@@ -21,7 +19,8 @@ public class GameMachine implements Runnable {
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
-
+	private static Class<?> gameHandler;
+	
 	public static void main(String[] args) {
 		start();
 	}
@@ -46,6 +45,13 @@ public class GameMachine implements Runnable {
 		}
 		if (Config.udtEnabled) {
 			UdtServer.start(udtMessageEncoding);
+		}
+		
+		// Allow time for server to start
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		log.info("GameMachine started");
 	}
@@ -74,8 +80,11 @@ public class GameMachine implements Runnable {
 	}
 
 	public static ActorSystem getActorSystem() {
-
 		return actorSystem;
+	}
+	
+	public static Class<?> getGameHandler() {
+		return gameHandler;
 	}
 
 	@Override
@@ -92,12 +101,22 @@ public class GameMachine implements Runnable {
 
 		// For testing
 		actorSystem.actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
+		
+		actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
 
-		// Main incoming/outgoing channels between game client and game logic
-		// actors
-		actorSystem.actorOf(Inbound.mkProps(Game.class, 10), Inbound.class.getSimpleName());
-		actorSystem.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), Outbound.class.getSimpleName());
-
+		// Game logic entry point
+		try {
+			gameHandler = Class.forName(Config.gameHandler);
+			if (Config.gameHandlerRouter.equals("round-robin")) {
+				actorSystem.actorOf(Props.create(gameHandler).withRouter(new RoundRobinRouter(10)), gameHandler.getSimpleName());
+			} else {
+				actorSystem.actorOf(Props.create(gameHandler), gameHandler.getSimpleName());
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

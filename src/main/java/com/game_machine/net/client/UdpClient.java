@@ -13,6 +13,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.Config;
+
 
 public class UdpClient {
 
@@ -26,15 +28,21 @@ public class UdpClient {
 	private Bootstrap boot;
 	private UdpClientHandler handler;
 	public ClientCallable callable;
+	private int messageEncoding;
 
-	public UdpClient(final String host, final int port) {
+	public UdpClient(int messageEncoding, final String host, final int port) {
 		this.host = host;
 		this.port = port;
-		log.setLevel(UdpClient.logLevel);
+		this.messageEncoding = messageEncoding;
+		log.setLevel(Level.parse(Config.logLevel));
 	}
 
 	public void setCallback(ClientCallable callable) {
 		this.callable = callable;
+	}
+	
+	public int getMessageEncoding() {
+		return this.messageEncoding;
 	}
 	
 	public void start() {
@@ -67,8 +75,8 @@ public class UdpClient {
 		}
 	}
 	
-	public Boolean send(byte[] bytes) {
-		return this.handler.send(bytes);
+	public Boolean send(Object message) {
+		return this.handler.send(message);
 	}
 	
 	

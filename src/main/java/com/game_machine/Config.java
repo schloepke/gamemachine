@@ -21,6 +21,8 @@ public class Config {
 	public static String udtEncoding;
 	
 	public static String objectStore;
+	public static String gameHandler;
+	public static String gameHandlerRouter;
 
 
 	static {
@@ -42,6 +44,8 @@ public class Config {
 		udtEncoding = config.getString("game_machine.udt.encoding");
 		
 		objectStore = config.getString("game_machine.objectdb.store");
+		gameHandler = config.getString("game_machine.gameHandler");
+		gameHandlerRouter = config.getString("game_machine.gameHandlerRouter");
 	}
 	
 }

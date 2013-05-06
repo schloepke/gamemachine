@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.game_machine.Config;
+import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -30,7 +31,20 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 		log.setLevel(Level.parse(Config.logLevel));
 	}
 
-	public Boolean send(byte[] bytes) {
+	public Boolean send(Object message) {
+		byte[] bytes;
+
+		if (message instanceof String) {
+			bytes = ((String) message).getBytes();
+		} else {
+			bytes = (byte[]) message;
+		}
+		
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			String clientId = Integer.toString(this.hashCode());
+			bytes = MessageBuilder.encode(bytes, clientId).toByteArray();
+		}
+		
 		ByteBuf bmsg = Unpooled.copiedBuffer(bytes);
 		DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
 		ctx.write(packet);
@@ -40,13 +54,21 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
 		this.ctx = ctx;
-		this.client.callable.apply("READY".getBytes());
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.encode("READY", ""));
+		} else {
+			this.client.callable.apply("READY");
+		}
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		this.client.callable.apply(bytes);
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.decode(bytes));
+		} else {
+			this.client.callable.apply(bytes);
+		}
 	}
 
 	@Override

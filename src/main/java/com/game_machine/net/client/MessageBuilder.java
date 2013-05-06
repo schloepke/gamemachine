@@ -23,7 +23,7 @@ public class MessageBuilder {
 			return ClientMessage.parseFrom(bytes);
 		} catch (InvalidProtocolBufferException e) {
 			e.printStackTrace();
-			throw new RuntimeException("Unable to code bytes");
+			throw new RuntimeException("Unable to decode bytes " + new String(bytes));
 		}
 	}
 

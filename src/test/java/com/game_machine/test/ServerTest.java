@@ -1,10 +1,12 @@
 package com.game_machine.test;
 
-import java.util.logging.Level;
+import static org.fest.assertions.api.Assertions.assertThat;
 import java.util.logging.Logger;
 
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
 import com.game_machine.Config;
@@ -12,48 +14,35 @@ import com.game_machine.GameMachine;
 import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
 import com.game_machine.net.client.ClientCallable;
-import com.game_machine.net.client.MessageBuilder;
 import com.game_machine.net.client.UdpClient;
 import com.game_machine.net.client.UdtClient;
-import com.game_machine.net.server.UdtServer;
 
 public class ServerTest {
 
 	public static final Logger log = Logger.getLogger(ServerTest.class.getName());
 
-	@BeforeClass
+	@BeforeSuite
 	public void setup() {
 		GameMachine.start();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 
-	@AfterClass
+	@AfterSuite
 	public void teardown() {
 		GameMachine.stop();
 	}
 
-	// @Test
-	public void runServer() throws Exception {
-		UdtServer.logLevel = Level.parse(Config.logLevel);
-		UdtClient.logLevel = Level.INFO;
-	}
-
-	
-	//@Test
+	@Test
 	public void UdpEcho() {
-		final UdpClient client = new UdpClient(Config.udpHost, Config.udpPort);
+		final UdpClient client = new UdpClient(NetMessage.ENCODING_PROTOBUF, Config.udpHost, Config.udpPort);
 
 		client.setCallback(new ClientCallable() {
-			public void apply(byte[] bytes) {
-				String message = new String(bytes);
-				if (message.equals("READY")) {
+			public void apply(Object obj) {
+				ClientMessage message = (ClientMessage) obj;
+				String body = message.getBody().toStringUtf8();
+				if (body.equals("READY")) {
 					client.send("STOP".getBytes());
-				}
-				if (message.equals("STOP")) {
+				} else {
+					assertThat(body).isEqualTo("STOP");
 					client.stop();
 				}
 			}
@@ -64,37 +53,16 @@ public class ServerTest {
 
 	@Test
 	public void udtEcho() {
-		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF,Config.udtHost, Config.udtPort);
+		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF, Config.udtHost, Config.udtPort);
 
 		client.setCallback(new ClientCallable() {
-			public void apply(byte[] bytes) {
-				String message = new String(bytes);
-				if (message.equals("READY")) {
-					client.send("STOP".getBytes());
-				}
-				if (message.equals("STOP")) {
-					client.stop();
-				}
-			}
-		});
-		client.start();
-	}
-	
-	//@Test
-	public void udtMulti() {
-		final UdtClient client = new UdtClient(NetMessage.ENCODING_PROTOBUF,Config.udtHost, Config.udtPort);
-
-		client.setCallback(new ClientCallable() {
-			public void apply(byte[] bytes) {
-				ClientMessage message = MessageBuilder.decode(bytes);
+			public void apply(Object obj) {
+				ClientMessage message = (ClientMessage) obj;
 				String body = message.getBody().toStringUtf8();
 				if (body.equals("READY")) {
-					for (int i=0;i<100;i++) {
-						client.send("TEST MESSAGE".getBytes());
-					}
 					client.send("STOP".getBytes());
-				}
-				if (body.equals("STOP")) {
+				} else {
+					assertThat(body).isEqualTo("STOP");
 					client.stop();
 				}
 			}

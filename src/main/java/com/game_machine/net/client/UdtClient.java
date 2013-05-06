@@ -18,14 +18,9 @@ package com.game_machine.net.client;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.udt.UdtChannel;
 import io.netty.channel.udt.nio.NioUdtProvider;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
@@ -35,17 +30,7 @@ import java.util.logging.Logger;
 
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.ProtobufMessages;
-import com.google.protobuf.MessageLite;
 
-/**
- * UDT Byte Stream Client
- * <p>
- * Sends one message when a connection is open and echoes back any received data
- * to the server. Simply put, the echo client initiates the ping-pong traffic
- * between the echo client and server by sending the first message to the
- * server.
- */
 public class UdtClient {
 
 	public static Level logLevel = Level.INFO;
@@ -69,6 +54,10 @@ public class UdtClient {
 
 	public void setCallback(ClientCallable callable) {
 		this.callable = callable;
+	}
+	
+	public int getMessageEncoding() {
+		return this.messageEncoding;
 	}
 	
 	public void start() {
@@ -97,19 +86,7 @@ public class UdtClient {
 	}
 
 	public Boolean send(Object message) {
-		String clientId = Integer.toString(this.hashCode());
-		byte[] bytes;
-		
-		if (message instanceof String) {
-			bytes = ((String) message).getBytes();
-		} else {
-			bytes = (byte[]) message;
-		}
-		if (messageEncoding == NetMessage.ENCODING_PROTOBUF) {
-			return this.handler.send(MessageBuilder.encode(bytes,clientId).toByteArray());
-		} else {
-			return this.handler.send(bytes);
-		}
+		return this.handler.send(message);
 	}
 	
 	public void stop() {

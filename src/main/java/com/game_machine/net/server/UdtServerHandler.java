@@ -19,20 +19,19 @@ import akka.actor.ActorSelection;
 import com.game_machine.ActorUtil;
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.game.Inbound;
+import com.game_machine.game.Gateway;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
 
 	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
 	private UdtServer server;
-	private ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 	private Integer messageEncoding;
 
 	public UdtServerHandler(int messageEncoding) {
 		log.setLevel(Level.parse(Config.logLevel));
-		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
+		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
 		this.messageEncoding = messageEncoding;
 	}
 
@@ -47,20 +46,19 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 
-		log.fine("UDT server got " + new String(bytes));
+		log.info("UDT server got " + new String(bytes));
 		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
 		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
-		log.warning("PORT: " + Integer.toString(port));
-		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port);
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port,ctx);
 		this.inbound.tell(gameMessage, null);
 	}
 
-	public void sendToClient(byte[] bytes, String host, int port) {
+	public void sendToClient(byte[] bytes, ChannelHandlerContext ctx) {
 
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
-		this.ctx.channel().write(message);
-		log.fine("UDT server sent " + new String(bytes));
+		ctx.channel().write(message);
+		log.info("UDT server sent " + new String(bytes));
 	}
 
 	@Override
@@ -71,17 +69,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.info("UDT server active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
-		this.ctx = ctx;
-	}
-
-	public void stop() {
-		this.ctx.flush().addListener(new ChannelFutureListener() {
-			@Override
-			public void operationComplete(ChannelFuture future) throws Exception {
-				server.shutdown();
-			}
-		});
+		log.info("UDT server active "+ NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 	}
 
 }

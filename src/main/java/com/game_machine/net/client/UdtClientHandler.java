@@ -10,6 +10,9 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.game_machine.Config;
+import com.game_machine.NetMessage;
+
 public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
 
 	private static final Logger log = Logger.getLogger(UdtClientHandler.class.getName());
@@ -19,31 +22,53 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	public UdtClientHandler(UdtClient client) {
 		this.client = client;
-		log.setLevel(UdtClient.logLevel);
+		log.setLevel(Level.parse(Config.logLevel));
 	}
 
-	public Boolean send(byte[] bytes) {
+	public Boolean send(Object message) {
+		byte[] bytes;
+
+		if (message instanceof String) {
+			bytes = ((String) message).getBytes();
+		} else {
+			bytes = (byte[]) message;
+		}
+		
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			String clientId = Integer.toString(this.hashCode());
+			bytes = MessageBuilder.encode(bytes, clientId).toByteArray();
+		}
+
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
-		UdtMessage message = new UdtMessage(buf);
-		this.ctx.channel().write(message);
+		UdtMessage udtMessage = new UdtMessage(buf);
+		this.ctx.channel().write(udtMessage);
 		this.ctx.flush();
-		log.fine("UDT client sent "+ new String(bytes));
+		log.info("UDT client sent " + new String(bytes));
 		return true;
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.fine("UdpClient active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.info("UdtClient active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
-		this.client.callable.apply("READY".getBytes());
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.encode("READY", ""));
+		} else {
+			this.client.callable.apply("READY");
+		}
 
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final UdtMessage m) {
-		log.fine("UdtClient messageReceived");
+		log.info("UdtClient messageReceived");
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
-		this.client.callable.apply(bytes);
+
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.decode(bytes));
+		} else {
+			this.client.callable.apply(bytes);
+		}
 	}
 
 	@Override

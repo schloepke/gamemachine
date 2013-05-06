@@ -17,7 +17,7 @@ import akka.actor.ActorSelection;
 import com.game_machine.ActorUtil;
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.game.Inbound;
+import com.game_machine.game.Gateway;
 
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -29,7 +29,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	
 	public UdpServerHandler(int messageEncoding) {
 		log.setLevel(Level.parse(Config.logLevel));
-		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
+		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
 		this.messageEncoding = messageEncoding;
 	}
 
@@ -40,8 +40,8 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,messageEncoding,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
-		log.fine("MessageReceived length" + bytes.length + " " + new String(bytes));
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,messageEncoding,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort(),null);
+		log.info("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}
 
@@ -53,11 +53,11 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.fine("UDP server active");
+		log.info("UDP server active");
 		this.ctx = ctx;
 	}
 
-	public void send(byte[] bytes, String host, int port) {
+	public void send(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
 		if (this.ctx.channel().isActive() == true) {
 			ByteBuf buf = Unpooled.copiedBuffer(bytes);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
