@@ -9,8 +9,10 @@ import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import akka.actor.ActorSelection;
 
@@ -22,13 +24,12 @@ import com.game_machine.game.Gateway;
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
-	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 	private int messageEncoding;
 	
 	public UdpServerHandler(int messageEncoding) {
-		log.setLevel(Level.parse(Config.logLevel));
 		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
 		this.messageEncoding = messageEncoding;
 	}
@@ -47,7 +48,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
+		log.info("close the connection when an exception is raised", cause);
 		ctx.close();
 	}
 
@@ -63,7 +64,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			this.ctx.channel().write(packet);
 		} else {
-			log.warning("Client disconnected from server " + this.ctx.channel().remoteAddress());
+			log.info("Client disconnected from server " + this.ctx.channel().remoteAddress());
 		}
 		
 	}
@@ -72,7 +73,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		this.ctx.flush().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
-				log.warning("UdpHandler channel flushed");
+				log.info("UdpHandler channel flushed");
 			}
 		});
 	}

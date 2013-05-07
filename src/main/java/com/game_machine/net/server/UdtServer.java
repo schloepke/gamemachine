@@ -49,7 +49,7 @@ public class UdtServer implements Runnable {
 	}
 
 	public void run() {
-		log.warn("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
+		log.info("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udt-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept-udt");
@@ -129,7 +129,7 @@ public class UdtServer implements Runnable {
 		}
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
-		log.warn("Udt Server stopped");
+		log.info("Udt Server stopped");
 	}
 
 

@@ -10,17 +10,17 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 import java.util.concurrent.ThreadFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.game_machine.Config;
 
 
 public class UdpClient {
 
-	public static Level logLevel = Level.INFO;
 
-	private static final Logger log = Logger.getLogger(UdpClient.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpClient.class);
 
 	public final String host;
 	public final int port;
@@ -34,7 +34,6 @@ public class UdpClient {
 		this.host = host;
 		this.port = port;
 		this.messageEncoding = messageEncoding;
-		log.setLevel(Level.parse(Config.logLevel));
 	}
 
 	public void setCallback(ClientCallable callable) {
@@ -82,7 +81,7 @@ public class UdpClient {
 	
 	public void stop() {
 		connectGroup.shutdown();
-		log.warning("UdpClient STOPPED");
+		log.info("UdpClient STOPPED");
 	}
 
 }

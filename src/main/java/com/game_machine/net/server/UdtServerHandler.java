@@ -13,6 +13,7 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import akka.actor.ActorSelection;
 
 import com.game_machine.ActorUtil;
@@ -66,7 +67,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.info("UDT server active "+ NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.debug("UDT server active "+ NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 	}
 
 }

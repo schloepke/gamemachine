@@ -1,5 +1,8 @@
 package com.game_machine.net.client;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
@@ -7,22 +10,19 @@ import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.udt.UdtMessage;
 import io.netty.channel.udt.nio.NioUdtProvider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
 
 public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
 
-	private static final Logger log = Logger.getLogger(UdtClientHandler.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdtClientHandler.class);
 
 	private ChannelHandlerContext ctx = null;
 	private UdtClient client;
 
 	public UdtClientHandler(UdtClient client) {
 		this.client = client;
-		log.setLevel(Level.parse(Config.logLevel));
 	}
 
 	public Boolean send(Object message) {
@@ -73,7 +73,7 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
+		log.info("close the connection when an exception is raised", cause);
 		ctx.close();
 	}
 
