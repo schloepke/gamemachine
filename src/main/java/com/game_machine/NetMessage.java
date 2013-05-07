@@ -1,5 +1,7 @@
 package com.game_machine;
 
+import io.netty.channel.ChannelHandlerContext;
+
 public class NetMessage {
 
 	// Protocols
@@ -16,18 +18,17 @@ public class NetMessage {
 	public final int port;
 	public final int protocol;
 	public final int encoding;
+	public final String clientId;
+	public final ChannelHandlerContext ctx;
 	
-	public NetMessage(int protocol, int encoding, byte[] bytes, String host, int port) {
+	public NetMessage(String clientId, int protocol, int encoding, byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
+		this.clientId = clientId;
 		this.bytes = bytes;
 		this.host = host;
 		this.port = port;
 		this.protocol = protocol;
 		this.encoding = encoding;
+		this.ctx = ctx;
 	}
-	
-	public static NetMessage copy(NetMessage message, byte[] bytes) {
-		return new NetMessage(message.protocol, message.encoding, bytes, message.host, message.port);
-	}
-	
 	
 }

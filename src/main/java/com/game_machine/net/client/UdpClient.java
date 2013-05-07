@@ -10,29 +10,41 @@ import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
 import java.util.concurrent.ThreadFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.game_machine.Config;
 
 
-public class UdpClient implements Runnable {
+public class UdpClient {
 
-	public static Level logLevel = Level.INFO;
 
-	private static final Logger log = Logger.getLogger(UdpClient.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpClient.class);
 
 	public final String host;
 	public final int port;
 	private NioEventLoopGroup connectGroup;
 	private Bootstrap boot;
 	private UdpClientHandler handler;
+	public ClientCallable callable;
+	private int messageEncoding;
 
-	public UdpClient(final String host, final int port) {
+	public UdpClient(int messageEncoding, final String host, final int port) {
 		this.host = host;
 		this.port = port;
-		log.setLevel(UdpClient.logLevel);
+		this.messageEncoding = messageEncoding;
 	}
 
-	public void run() {
+	public void setCallback(ClientCallable callable) {
+		this.callable = callable;
+	}
+	
+	public int getMessageEncoding() {
+		return this.messageEncoding;
+	}
+	
+	public void start() {
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect");
 		connectGroup = new NioEventLoopGroup(5, connectFactory);
 		try {
@@ -62,14 +74,14 @@ public class UdpClient implements Runnable {
 		}
 	}
 	
-	public void start() {
-		Thread t = new Thread(this);
-		t.start();
+	public Boolean send(Object message) {
+		return this.handler.send(message);
 	}
-
+	
+	
 	public void stop() {
-		connectGroup.shutdown();
-		log.warning("UdpClient STOPPED");
+		connectGroup.shutdownGracefully();
+		log.info("UdpClient STOPPED");
 	}
 
 }

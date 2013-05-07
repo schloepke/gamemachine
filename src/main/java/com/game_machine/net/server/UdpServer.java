@@ -1,7 +1,11 @@
 package com.game_machine.net.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
@@ -12,17 +16,13 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import akka.actor.ActorSystem;
 
 import com.game_machine.Config;
+import com.game_machine.NetMessage;
 
 public final class UdpServer implements Runnable {
 
-	public static Level logLevel = Level.INFO;
-	private static final Logger log = Logger.getLogger(UdpServer.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
 	private static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	
 	private static UdpServer udpServer;
@@ -30,6 +30,9 @@ public final class UdpServer implements Runnable {
 	private final String hostname;
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
+	
+	public static final int ENCODING_NONE = NetMessage.ENCODING_NONE;
+	public static final int ENCODING_PROTOBUF = NetMessage.ENCODING_PROTOBUF;
 	private final UdpServerHandler handler;
 
 	
@@ -37,15 +40,14 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start(ActorSystem actorSystem) {
+	public static void start(int messageEncoding) {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
 			return;
 		}
 
-		UdpServer.logLevel = Level.parse(Config.logLevel);
-		udpServer = new UdpServer(Config.udpHost, Config.udpPort, actorSystem);
+		udpServer = new UdpServer(messageEncoding, Config.udpHost, Config.udpPort);
 		new Thread(udpServer).start();
 	}
 
@@ -60,15 +62,14 @@ public final class UdpServer implements Runnable {
 		udpServer = null;
 	}
 
-	public UdpServer(final String hostname, final int port, ActorSystem actorSystem) {
+	public UdpServer(final int messageEncoding, final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		log.setLevel(UdpServer.logLevel);
-		this.handler = new UdpServerHandler(actorSystem);
+		this.handler = new UdpServerHandler(messageEncoding);
 	}
 
 	public void run() {
-		log.warning("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
+		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		// final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
@@ -98,8 +99,8 @@ public final class UdpServer implements Runnable {
 		}
 	}
 
-	public void send(byte[] bytes, String host, int port) {
-		handler.send(bytes, host, port);
+	public void send(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
+		handler.send(bytes, host, port, ctx);
 	}
 
 	public void shutdown() {

@@ -4,6 +4,8 @@ import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.util.concurrent.TimeUnit;
 
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import scala.concurrent.Await;
@@ -20,13 +22,22 @@ import com.game_machine.persistence.WriteBehindHandler;
 
 public class WriteBehindHandlerTest {
 
-	public static ActorSystem system = ActorUtil.createSystem("system");
+	public static ActorSystem system;
+	
+	@BeforeClass
+	public void setup() {
+		system = ActorUtil.createSystem("system");
+	}
+	
+	@AfterClass
+	public void teardown() {
+		system.shutdown();
+	}
 	
 	public void sleep(Integer ms) {
 		try {
 			Thread.sleep(ms);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -36,7 +47,6 @@ public class WriteBehindHandlerTest {
 		
 		WriteBehindHandler handler = getHandler("test1",2000,50);
 		GameObject message = new TestGameObject("test");
-		Integer count = 0;
 		assertThat(handler.write(message)).isTrue();
 	}
 	

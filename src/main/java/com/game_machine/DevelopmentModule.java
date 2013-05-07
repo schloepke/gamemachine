@@ -1,10 +1,10 @@
 package com.game_machine;
 
-import com.game_machine.persistence.WriteBehindHandler;
 import com.google.inject.AbstractModule;
-import com.google.inject.Provides;
 
 public class DevelopmentModule extends AbstractModule {
+	
+	//Injector injector = Guice.createInjector(new DevelopmentModule());
 	
 	@Override
     protected void configure() {

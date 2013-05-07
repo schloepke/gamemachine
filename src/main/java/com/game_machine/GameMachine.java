@@ -1,8 +1,10 @@
 package com.game_machine;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
@@ -11,35 +13,79 @@ import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
 
 import com.game_machine.game.Echo;
-import com.game_machine.game.Inbound;
-import com.game_machine.game.Outbound;
-import com.game_machine.net.server.UdpServerManager;
+import com.game_machine.game.Gateway;
+import com.game_machine.net.server.UdpServer;
+import com.game_machine.net.server.UdtServer;
 import com.game_machine.persistence.ObjectDb;
-import com.game_machine.persistence.Riak;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
 
 public class GameMachine implements Runnable {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = Logger.getLogger(GameMachine.class.getName());
 	private static ActorSystem actorSystem;
 	private static ConcurrentHashMap<String, ActorRef> actorRefs = new ConcurrentHashMap<String, ActorRef>();
+	private static Class<?> gameHandler;
 	
-
 	public static void main(String[] args) {
 		start();
 	}
 
+	public static void logsetup() {
+		Properties preferences = new Properties();
+		FileInputStream configFile;
+		try {
+			configFile = new FileInputStream("logging.properties");
+			preferences.load(configFile);
+		    LogManager.getLogManager().readConfiguration(configFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    
+	}
 	public static void start() {
-		Injector injector = Guice.createInjector(new DevelopmentModule());
-		ExecutorService executor = Executors.newFixedThreadPool(1);
-		Runnable worker = new GameMachine();
-		executor.execute(worker);
-		executor.shutdown();
+		int udtMessageEncoding = UdtServer.ENCODING_NONE;
+		int udpMessageEncoding = UdpServer.ENCODING_NONE;
+		if (Config.udpEncoding.equals("pb")) {
+			udpMessageEncoding = UdpServer.ENCODING_PROTOBUF;
+		}
+		if (Config.udtEncoding.equals("pb")) {
+			udtMessageEncoding = UdtServer.ENCODING_PROTOBUF;
+		}
+		start(udtMessageEncoding,udpMessageEncoding);
+	}
+	
+	
+	public static void start(int udtMessageEncoding, int udpMessageEncoding) {
+		logsetup();
+		ConsoleHandler handler = new ConsoleHandler();
+		//java.util.logging.ConsoleHandler   = Level.parse(Config.logLevel);
+		new GameMachine().run();
+		if (Config.udpEnabled) {
+			UdpServer.start(udpMessageEncoding);
+		}
+		if (Config.udtEnabled) {
+			UdtServer.start(udtMessageEncoding);
+		}
 		
+		// Allow time for server to start
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		log.info("GameMachine started");
 	}
 
+	public static void stop() {
+		if (Config.udpEnabled) {
+			UdpServer.stop();
+		}
+		if (Config.udtEnabled) {
+			UdtServer.stop();
+		}
+		actorSystem.shutdown();
+		log.info("GameMachine stopped");
+	}
+	
 	public static ActorRef getActorRef(String name) {
 		return actorRefs.get(name);
 	}
@@ -50,38 +96,46 @@ public class GameMachine implements Runnable {
 		} else {
 			actorRefs.put(name, ref);
 		}
-
 	}
 
 	public static ActorSystem getActorSystem() {
-
 		return actorSystem;
+	}
+	
+	public static Class<?> getGameHandler() {
+		return gameHandler;
 	}
 
 	@Override
 	public void run() {
 		Thread.currentThread().setName("game-machine");
 		
-		
 		actorSystem = ActorUtil.createSystem("system");
 
 		// Memory database actor, needs to be pinned to a single thread
 		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
-
-		// Manage the udp server
-		actorSystem.actorOf(Props.create(UdpServerManager.class), UdpServerManager.class.getSimpleName());
 
 		// Uility actor to send and receive commands from outside akka
 		actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());
 
 		// For testing
 		actorSystem.actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
+		
+		actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
 
-		// Main incoming/outgoing channels between game client and game logic
-		// actors
-		actorSystem.actorOf(Props.create(Inbound.class).withRouter(new RoundRobinRouter(10)), Inbound.class.getSimpleName());
-		actorSystem.actorOf(Props.create(Outbound.class).withRouter(new RoundRobinRouter(10)), Outbound.class.getSimpleName());
-
+		// Game logic entry point
+		try {
+			gameHandler = Class.forName(Config.gameHandler);
+			if (Config.gameHandlerRouter.equals("round-robin")) {
+				actorSystem.actorOf(Props.create(gameHandler).withRouter(new RoundRobinRouter(10)), gameHandler.getSimpleName());
+			} else {
+				actorSystem.actorOf(Props.create(gameHandler), gameHandler.getSimpleName());
+			}
+			
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

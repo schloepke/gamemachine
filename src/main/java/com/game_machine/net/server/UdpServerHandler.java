@@ -9,59 +9,62 @@ import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 import akka.actor.ActorSelection;
-import akka.actor.ActorSystem;
 
 import com.game_machine.ActorUtil;
+import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.game.Inbound;
+import com.game_machine.game.Gateway;
 
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
-	private static final Logger log = Logger.getLogger(UdpServerHandler.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
+	private int messageEncoding;
 	
-	public UdpServerHandler(ActorSystem actorSystem) {
-		log.setLevel(UdpServer.logLevel);
-		this.inbound = ActorUtil.getSelectionByClass(Inbound.class);
+	public UdpServerHandler(int messageEncoding) {
+		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
+		this.messageEncoding = messageEncoding;
 	}
 
 	@Override
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
 		m.retain();
-
-		byte[] bytes = new byte[m.data().readableBytes()];
-		m.data().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(NetMessage.UDP,NetMessage.ENCODING_PROTOBUF,bytes,m.remoteAddress().getAddress().getHostAddress(), m.remoteAddress().getPort());
-		log.fine("MessageReceived length" + bytes.length + " " + new String(bytes));
+		byte[] bytes = new byte[m.content().readableBytes()];
+		m.content().readBytes(bytes);
+		
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,messageEncoding,bytes,m.sender().getHostName(), m.sender().getPort(),null);
+		log.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
+		log.info("close the connection when an exception is raised", cause);
 		ctx.close();
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.info("Server channel active");
+		log.info("UDP server active");
 		this.ctx = ctx;
 	}
 
-	public void send(byte[] bytes, String host, int port) {
+	public void send(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
 		if (this.ctx.channel().isActive() == true) {
 			ByteBuf buf = Unpooled.copiedBuffer(bytes);
 			DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(host, port));
 			this.ctx.channel().write(packet);
 		} else {
-			log.warning("Client disconnected from server " + this.ctx.channel().remoteAddress());
+			log.info("Client disconnected from server " + this.ctx.channel().remoteAddress());
 		}
 		
 	}
@@ -70,7 +73,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		this.ctx.flush().addListener(new ChannelFutureListener() {
 			@Override
 			public void operationComplete(ChannelFuture future) throws Exception {
-				log.warning("UdpHandler channel flushed");
+				log.info("UdpHandler channel flushed");
 			}
 		});
 	}

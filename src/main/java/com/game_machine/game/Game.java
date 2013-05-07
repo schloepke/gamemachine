@@ -4,15 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.ActorUtil;
-import com.game_machine.NetMessage;
-import com.game_machine.persistence.Query;
+import com.game_machine.ProtobufMessages.ClientMessage;
 
 public class Game extends UntypedActor {
 
@@ -35,25 +33,26 @@ public class Game extends UntypedActor {
 	}
 
 	public void onReceive(Object message) {
-		if (message instanceof NetMessage) {
-			log.info("Game NetMessage message: {}", message);
+		if (message instanceof ClientMessage) {
+			log.debug("Game NetMessage message: {}");
+			ActorUtil.getSelectionByClass(Echo.class).tell(message, this.getSelf());
 			
 			//ActorRef a = Cmd.identify(Echo.class);
 			//Cmd.ask("echo echo", a);
 			
-			Query.find("2");
+			//Query.find("2",5);
 			
-			ActorRef commandActor;
-			for (String command : getCommandList()) {
-				commandActor = actors.get(command);
-				commandActor.tell(command,this.getSelf());
-			}
+			//ActorRef commandActor;
+			//for (String command : getCommandList()) {
+			//	commandActor = actors.get(command);
+			//	commandActor.tell(command,this.getSelf());
+			//}
 			
-			ActorSelection ref;
+			//ActorSelection ref;
 			//ref = this.getContext().actorSelection("/user/db");
 			//ref.tell(new Query(), this.getSelf());
 
-			ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
+			//ActorUtil.getSelectionByClass(Outbound.class).tell(message, this.getSelf());
 		} else if (message instanceof String) {
 		} else {
 			unhandled(message);

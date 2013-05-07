@@ -1,7 +1,6 @@
 package com.game_machine.net.client;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.MessageBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -10,76 +9,68 @@ import io.netty.channel.ChannelInboundMessageHandlerAdapter;
 import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import com.game_machine.ProtobufMessages.ClientMessage;
-import com.google.protobuf.ByteString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
+import com.game_machine.Config;
+import com.game_machine.NetMessage;
 
 public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 
-	private static final Logger log = Logger.getLogger(UdpClientHandler.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdpClientHandler.class);
 
-	
 	private ChannelHandlerContext ctx = null;
 	private UdpClient client;
-	private int messageCount = 0;
 
 	public UdpClientHandler(UdpClient client) {
 		this.client = client;
-		log.setLevel(UdpClient.logLevel);
 	}
 
-	public Boolean sendMessage(String str) {
-		if (ctx == null) {
-			return false;
+	public Boolean send(Object message) {
+		byte[] bytes;
+
+		if (message instanceof String) {
+			bytes = ((String) message).getBytes();
 		} else {
-			ClientMessage.Builder builder = ClientMessage.newBuilder();
-			ByteString reply = ByteString.copyFromUtf8(str);
-			builder.setBody(reply);
-			ClientMessage msg = builder.build();
-			ByteBuf bmsg = Unpooled.copiedBuffer(msg.toByteArray());
-			DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
-			final MessageBuf<Object> out = ctx.nextOutboundMessageBuffer();
-			out.add(packet);
-			//ctx.write(packet);
-			//log.info("sendMessage " + reply.size() + "  " + msg.getBody().toStringUtf8());
-			return true;
+			bytes = (byte[]) message;
 		}
+		
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			String clientId = Integer.toString(this.hashCode());
+			bytes = MessageBuilder.encode(bytes, clientId).toByteArray();
+		}
+		
+		ByteBuf bmsg = Unpooled.copiedBuffer(bytes);
+		DatagramPacket packet = new DatagramPacket(bmsg, new InetSocketAddress(client.host, client.port));
+		ctx.write(packet);
+		return true;
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
-		log.warning("UdpClient ECHO active ");
 		this.ctx = ctx;
-		for (int i = 0; i < 10; i++) {
-			sendMessage("GO");
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.encode("READY", ""));
+		} else {
+			this.client.callable.apply("READY");
 		}
-		sendMessage("QUIT");
-		ctx.flush();
-		//stop();
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
-
-		messageCount++;
-		//log.info("UdpClient messageReceived " + messageCount);
-		byte[] bytes = new byte[m.data().readableBytes()];
-		m.data().readBytes(bytes);
-		ByteString b = ByteString.copyFrom(bytes);
-		ClientMessage.Builder builder = ClientMessage.newBuilder();
-		builder.setBody(b);
-		ClientMessage msg = builder.build();
-
-		if (messageCount >= 10) {
-			log.warning("Client received all messages back, stopping");
-			stop();
+		byte[] bytes = new byte[m.content().readableBytes()];
+		m.content().readBytes(bytes);
+		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
+			this.client.callable.apply(MessageBuilder.decode(bytes));
+		} else {
+			this.client.callable.apply(bytes);
 		}
 	}
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
+		log.info("close the connection when an exception is raised", cause);
 		ctx.close();
 	}
 
@@ -91,6 +82,5 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 			}
 		});
 	}
-
 
 }
