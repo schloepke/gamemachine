@@ -9,26 +9,25 @@ import io.netty.channel.udt.UdtMessage;
 import io.netty.channel.udt.nio.NioUdtProvider;
 
 import java.net.InetSocketAddress;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorSelection;
 
 import com.game_machine.ActorUtil;
-import com.game_machine.Config;
 import com.game_machine.NetMessage;
 import com.game_machine.game.Gateway;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
 
-	private static final Logger log = Logger.getLogger(UdtServerHandler.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdtServerHandler.class);
 	private UdtServer server;
 	private ActorSelection inbound;
 	private Integer messageEncoding;
 
 	public UdtServerHandler(int messageEncoding) {
-		log.setLevel(Level.parse(Config.logLevel));
 		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
 		this.messageEncoding = messageEncoding;
 	}
@@ -44,7 +43,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		byte[] bytes = new byte[m.data().readableBytes()];
 		m.data().readBytes(bytes);
 
-		log.info("UDT server got " + new String(bytes));
+		log.debug("UDT server got " + new String(bytes));
 		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
 		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
 		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port,ctx);
@@ -56,12 +55,12 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
 		ctx.channel().write(message);
-		log.info("UDT server sent " + new String(bytes));
+		log.debug("UDT server sent " + new String(bytes));
 	}
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.log(Level.WARNING, "close the connection when an exception is raised", cause);
+		log.debug("close the connection when an exception is raised", cause);
 		ctx.close();
 	}
 

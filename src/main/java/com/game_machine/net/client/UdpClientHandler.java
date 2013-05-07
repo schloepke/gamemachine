@@ -1,7 +1,6 @@
 package com.game_machine.net.client;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.MessageBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
@@ -15,9 +14,6 @@ import java.util.logging.Logger;
 
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.ProtobufMessages.ClientMessage;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
 

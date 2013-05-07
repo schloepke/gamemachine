@@ -29,7 +29,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.game_machine.Config;
-import com.game_machine.NetMessage;
 
 public class UdtClient {
 

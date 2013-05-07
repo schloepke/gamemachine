@@ -1,10 +1,6 @@
 package com.game_machine;
 
-import com.game_machine.persistence.WriteBehindHandler;
 import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import com.google.inject.Provides;
 
 public class DevelopmentModule extends AbstractModule {
 	

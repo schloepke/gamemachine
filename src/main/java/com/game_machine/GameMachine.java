@@ -1,6 +1,10 @@
 package com.game_machine;
 
+import java.io.FileInputStream;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 import akka.actor.ActorRef;
@@ -25,6 +29,18 @@ public class GameMachine implements Runnable {
 		start();
 	}
 
+	public static void logsetup() {
+		Properties preferences = new Properties();
+		FileInputStream configFile;
+		try {
+			configFile = new FileInputStream("logging.properties");
+			preferences.load(configFile);
+		    LogManager.getLogManager().readConfiguration(configFile);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    
+	}
 	public static void start() {
 		int udtMessageEncoding = UdtServer.ENCODING_NONE;
 		int udpMessageEncoding = UdpServer.ENCODING_NONE;
@@ -39,6 +55,9 @@ public class GameMachine implements Runnable {
 	
 	
 	public static void start(int udtMessageEncoding, int udpMessageEncoding) {
+		logsetup();
+		ConsoleHandler handler = new ConsoleHandler();
+		//java.util.logging.ConsoleHandler   = Level.parse(Config.logLevel);
 		new GameMachine().run();
 		if (Config.udpEnabled) {
 			UdpServer.start(udpMessageEncoding);

@@ -4,16 +4,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.ActorUtil;
-import com.game_machine.NetMessage;
 import com.game_machine.ProtobufMessages.ClientMessage;
-import com.game_machine.persistence.Query;
 
 public class Game extends UntypedActor {
 

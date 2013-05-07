@@ -1,11 +1,10 @@
 package com.game_machine.test;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+
 import java.util.logging.Logger;
 
-import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
@@ -92,7 +91,7 @@ public class ServerTest {
 		client.start();
 	}
 	
-	@Test
+	//@Test
 	public void udtStressTest() {
 		for (int i=0;i<10;i++) {
 			udtStress(Integer.toString(i)+"_");

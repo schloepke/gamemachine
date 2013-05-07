@@ -12,27 +12,22 @@ import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.udt.UdtChannel;
 import io.netty.channel.udt.nio.NioUdtProvider;
-import io.netty.handler.codec.protobuf.ProtobufDecoder;
-import io.netty.handler.codec.protobuf.ProtobufEncoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
 import java.util.concurrent.ThreadFactory;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.game_machine.Config;
 import com.game_machine.NetMessage;
-import com.game_machine.ProtobufMessages;
 import com.game_machine.net.client.UtilThreadFactory;
 
 public class UdtServer implements Runnable {
 
-	public static Level logLevel = Level.INFO;
-	private static final Logger log = Logger.getLogger(UdtServer.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(UdtServer.class);
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	
@@ -50,12 +45,11 @@ public class UdtServer implements Runnable {
 	public UdtServer(final int messageEncoding, final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		log.setLevel(Level.parse(Config.logLevel));
 		handler = new UdtServerHandler(messageEncoding);
 	}
 
 	public void run() {
-		log.warning("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
+		log.warn("Starting UdtServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udt-server");
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept-udt");
@@ -69,13 +63,13 @@ public class UdtServer implements Runnable {
 			handler.setServer(this);
 			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
 			boot.option(ChannelOption.SO_BACKLOG, 10);
-			boot.handler(new LoggingHandler(LogLevel.WARN));
+			boot.handler(new LoggingHandler(LogLevel.INFO));
 
 			boot.childHandler(new ChannelInitializer<UdtChannel>() {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
 					ChannelPipeline p = ch.pipeline();
-					//p.addLast(new LoggingHandler(LogLevel.INFO), handler);
+					p.addLast(new LoggingHandler(LogLevel.INFO), handler);
 					p.addLast(handler);
 				}
 			});
@@ -111,7 +105,6 @@ public class UdtServer implements Runnable {
 			return;
 		}
 
-		UdtServer.logLevel = Level.parse(Config.logLevel);
 		udtServer = new UdtServer(messageEncoding,Config.udtHost, Config.udtPort);
 		new Thread(udtServer).start();
 	}
@@ -136,7 +129,7 @@ public class UdtServer implements Runnable {
 		}
 		acceptGroup.shutdown();
 		connectGroup.shutdown();
-		log.warning("Udt Server stopped");
+		log.warn("Udt Server stopped");
 	}
 
 
