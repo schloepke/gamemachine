@@ -17,6 +17,7 @@ public class MessageUtil {
 		ClientMessage.Builder builder = ClientMessage.newBuilder();
 		ByteString reply = ByteString.copyFromUtf8(str);
 		builder.setBody(reply);
+		builder.setClientId("1");
 		ClientMessage msg = builder.build();
 		return msg;
 	}

@@ -91,7 +91,7 @@ public class ServerTest {
 		client.start();
 	}
 	
-	@Test
+	//@Test
 	public void udtStressTest() {
 		for (int i=0;i<10;i++) {
 			udtStress(Integer.toString(i)+"_");

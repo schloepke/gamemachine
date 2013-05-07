@@ -21,6 +21,10 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	private ChannelHandlerContext ctx = null;
 	private UdtClient client;
 
+	public ChannelHandlerContext getContext() {
+		return this.ctx;
+	}
+	
 	public UdtClientHandler(UdtClient client) {
 		this.client = client;
 	}
