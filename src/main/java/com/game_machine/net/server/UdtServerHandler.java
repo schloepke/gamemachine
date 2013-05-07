@@ -41,8 +41,8 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	public void messageReceived(final ChannelHandlerContext ctx, final UdtMessage m) {
 		m.retain();
 
-		byte[] bytes = new byte[m.data().readableBytes()];
-		m.data().readBytes(bytes);
+		byte[] bytes = new byte[m.content().readableBytes()];
+		m.content().readBytes(bytes);
 
 		log.debug("UDT server got " + new String(bytes));
 		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();

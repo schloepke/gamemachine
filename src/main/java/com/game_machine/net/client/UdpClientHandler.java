@@ -59,8 +59,8 @@ public class UdpClientHandler extends ChannelInboundMessageHandlerAdapter<Datagr
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
-		byte[] bytes = new byte[m.data().readableBytes()];
-		m.data().readBytes(bytes);
+		byte[] bytes = new byte[m.content().readableBytes()];
+		m.content().readBytes(bytes);
 		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
 			this.client.callable.apply(MessageBuilder.decode(bytes));
 		} else {

@@ -43,13 +43,13 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		UdtMessage udtMessage = new UdtMessage(buf);
 		this.ctx.channel().write(udtMessage);
 		this.ctx.flush();
-		log.info("UDT client sent " + new String(bytes));
+		log.debug("UDT client sent " + new String(bytes));
 		return true;
 	}
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-		log.info("UdtClient active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+		log.debug("UdtClient active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
 		this.ctx = ctx;
 		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
 			this.client.callable.apply(MessageBuilder.encode("READY", ""));
@@ -60,10 +60,10 @@ public class UdtClientHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	}
 
 	public void messageReceived(final ChannelHandlerContext ctx, final UdtMessage m) {
-		log.info("UdtClient messageReceived");
-		byte[] bytes = new byte[m.data().readableBytes()];
-		m.data().readBytes(bytes);
-
+		log.debug("UdtClient messageReceived");
+		
+		byte[] bytes = new byte[m.content().readableBytes()];
+		m.content().readBytes(bytes);
 		if (this.client.getMessageEncoding() == NetMessage.ENCODING_PROTOBUF) {
 			this.client.callable.apply(MessageBuilder.decode(bytes));
 		} else {

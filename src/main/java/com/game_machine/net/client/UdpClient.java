@@ -80,7 +80,7 @@ public class UdpClient {
 	
 	
 	public void stop() {
-		connectGroup.shutdown();
+		connectGroup.shutdownGracefully();
 		log.info("UdpClient STOPPED");
 	}
 

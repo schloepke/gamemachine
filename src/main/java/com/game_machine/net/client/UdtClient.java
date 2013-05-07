@@ -89,7 +89,7 @@ public class UdtClient {
 	}
 	
 	public void stop() {
-		connectGroup.shutdown();
+		connectGroup.shutdownGracefully();
 		log.info("UdtClient STOPPED");
 	}
 

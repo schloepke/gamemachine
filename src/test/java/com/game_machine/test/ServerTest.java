@@ -77,11 +77,11 @@ public class ServerTest {
 				ClientMessage message = (ClientMessage) obj;
 				String body = message.getBody().toStringUtf8();
 				if (body.equals("READY")) {
-					for (int i=0;i<10;i++) {
+					for (int i=0;i<1000;i++) {
 						String msg = content+Integer.toString(i);
 						client.send(msg.getBytes());
 					}
-				} else if (body.equals(content+"9")){
+				} else if (body.equals(content+"999")){
 					client.send("STOP".getBytes());
 				} else if (body.equals("STOP")){
 					client.stop();
@@ -91,7 +91,7 @@ public class ServerTest {
 		client.start();
 	}
 	
-	//@Test
+	@Test
 	public void udtStressTest() {
 		for (int i=0;i<10;i++) {
 			udtStress(Integer.toString(i)+"_");

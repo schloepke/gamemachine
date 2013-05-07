@@ -127,8 +127,8 @@ public class UdtServer implements Runnable {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		acceptGroup.shutdown();
-		connectGroup.shutdown();
+		acceptGroup.shutdownGracefully();
+		connectGroup.shutdownGracefully();
 		log.info("Udt Server stopped");
 	}
 
