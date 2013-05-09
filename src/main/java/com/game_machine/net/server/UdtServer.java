@@ -91,7 +91,7 @@ public class UdtServer implements Runnable {
 	}
 
 	public void send(byte[] bytes, ChannelHandlerContext ctx) {
-		handler.sendToClient(bytes, ctx);
+		handler.send(bytes, ctx);
 	}
 	
 	public static UdtServer getUdtServer() {

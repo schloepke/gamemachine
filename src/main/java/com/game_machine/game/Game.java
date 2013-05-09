@@ -10,7 +10,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.ActorUtil;
-import com.game_machine.ProtobufMessages.ClientMessage;
+import com.game_machine.Pb.ClientMessage;
 
 public class Game extends UntypedActor {
 

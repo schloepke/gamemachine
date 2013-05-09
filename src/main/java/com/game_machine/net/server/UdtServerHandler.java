@@ -51,7 +51,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		this.inbound.tell(gameMessage, null);
 	}
 
-	public void sendToClient(byte[] bytes, ChannelHandlerContext ctx) {
+	public void send(byte[] bytes, ChannelHandlerContext ctx) {
 
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);

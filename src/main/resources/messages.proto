@@ -1,0 +1,30 @@
+package com.game_machine;
+
+// protoc File.proto  --java_out= /src/main/java
+
+
+option optimize_for = SPEED;
+
+option java_outer_classname = "Pb";
+
+message Item {
+	required string key = 1;
+	required string value = 2;
+}
+	
+message GameCommand {
+	required string name = 1;
+	repeated Item items = 2;
+}
+
+
+message GameCommands {
+	repeated GameCommand gameCommand = 1;
+}
+
+message ClientMessage {
+  required bytes body = 1;
+  required string playerId = 2;
+  optional int64 timestamp = 3;
+  optional int32 seq = 4;
+}
