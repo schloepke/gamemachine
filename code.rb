@@ -47,7 +47,7 @@ tmpcount = 0
         # retry
       end
 
-      sleep 0.80
+      #sleep 0.80
     end
   end
 end
