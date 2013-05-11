@@ -7,24 +7,27 @@ option optimize_for = SPEED;
 
 option java_outer_classname = "Pb";
 
+message Player {
+	optional int32 x = 1;
+	optional int32 y = 2;
+	optional int32 z = 3;
+	required int32 id = 4;
+	optional string name = 5;
+}
+
 message Item {
 	required string key = 1;
-	required string value = 2;
+	optional string value = 2;
 }
 	
 message GameCommand {
-	required string name = 1;
-	repeated Item items = 2;
-}
-
-
-message GameCommands {
-	repeated GameCommand gameCommand = 1;
+	required string name = 2;
+	repeated Item item = 3;
 }
 
 message ClientMessage {
   required bytes body = 1;
-  required string playerId = 2;
-  optional int64 timestamp = 3;
-  optional int32 seq = 4;
+  required string clientId = 2;
+  repeated Player players = 3;
+  repeated GameCommand gameCommands = 4;
 }

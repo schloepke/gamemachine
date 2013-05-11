@@ -27,7 +27,7 @@ public class Gateway extends UntypedActor {
 			NetMessage netMessage = (NetMessage) message;
 			if (netMessage.encoding == NetMessage.ENCODING_PROTOBUF) {
 				ClientMessage clientMessage = MessageBuilder.decode(netMessage.bytes);
-				clients.put(clientMessage.getPlayerId(), netMessage);
+				clients.put(clientMessage.getPlayers(0).getName(), netMessage);
 				ActorUtil.getSelectionByClass(GameMachine.getGameHandler()).tell(clientMessage, this.getSelf());
 				log.debug("Inbound NetMessage message: {}", new String(netMessage.bytes));
 			} else {
@@ -35,7 +35,7 @@ public class Gateway extends UntypedActor {
 			}
 		} else if (message instanceof ClientMessage) {
 			ClientMessage clientMessage = (ClientMessage) message;
-			NetMessage netMessage = clients.get(clientMessage.getPlayerId());
+			NetMessage netMessage = clients.get(clientMessage.getPlayers(0).getName());
 			
 			if (netMessage.protocol == NetMessage.UDP) {
 				UdpServer.getUdpServer().send(clientMessage.toByteArray(), netMessage.host, netMessage.port, netMessage.ctx);

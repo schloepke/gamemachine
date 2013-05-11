@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
 import com.game_machine.Pb.ClientMessage;
+import com.game_machine.Pb.Player;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.MessageLite;
 
@@ -17,7 +18,7 @@ public class MessageUtil {
 		ClientMessage.Builder builder = ClientMessage.newBuilder();
 		ByteString reply = ByteString.copyFromUtf8(str);
 		builder.setBody(reply);
-		builder.setPlayerId("1");
+		builder.addPlayers(Player.newBuilder().setName("1").build());
 		ClientMessage msg = builder.build();
 		return msg;
 	}

@@ -97,7 +97,7 @@ public class WriteBehindHandlerTest {
 			final Props props = Props.create(WriteBehindHandler.class);
 			final TestActorRef<WriteBehindHandler> ref = TestActorRef.create(system, props, "testA");
 			final WriteBehindHandler actor = ref.underlyingActor();
-
+			
 			GameObject o = new TestGameObject("test");
 			final Future<Object> future = akka.pattern.Patterns.ask(ref, o, 3000);
 

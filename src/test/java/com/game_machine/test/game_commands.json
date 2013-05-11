@@ -1,6 +1,21 @@
 {
-    "game_commands":{
-        "name":"combat",
-        "key1":"something"
-    }
+    "test1":[
+        {
+            "key1":"something",
+            "playerId":"1"
+        },
+        {
+            "playerId":"1",
+           "key1":"something"
+        }
+    ],
+    "test2":[
+        {
+            "key1":"something"
+        },
+        {
+            "playerId":"2",
+            "key1":"something"
+        }
+    ]
 }
