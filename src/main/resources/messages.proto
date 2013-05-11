@@ -7,6 +7,14 @@ option optimize_for = SPEED;
 
 option java_outer_classname = "Pb";
 
+message Component {
+  
+}
+
+message Entity {
+  repeated Component component = 1;
+}
+
 message Player {
 	optional int32 x = 1;
 	optional int32 y = 2;
@@ -21,13 +29,12 @@ message Item {
 }
 	
 message GameCommand {
-	required string name = 2;
-	repeated Item item = 3;
+	required string name = 1;
+	repeated Item item = 2;
 }
 
 message ClientMessage {
-  required bytes body = 1;
-  required string clientId = 2;
-  repeated Player players = 3;
-  repeated GameCommand gameCommands = 4;
+  optional bytes data = 1;
+  repeated Player players = 2;
+  repeated GameCommand gameCommands = 3;
 }

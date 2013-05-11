@@ -5,16 +5,15 @@ import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import com.game_machine.MessageUtil;
 import com.barchart.udt.SocketUDT;
 import com.barchart.udt.TypeUDT;
-import com.game_machine.MessageUtil;
 import com.game_machine.Pb.ClientMessage;
 
 
 public class Client {
 
-	private static final Logger log = LoggerFactory.getLogger(UdtClientHandler.class);
+	private static final Logger log = LoggerFactory.getLogger(Client.class);
 
 	public static void test() throws Exception {
 		SocketUDT socket = new SocketUDT(TypeUDT.DATAGRAM);
@@ -26,9 +25,11 @@ public class Client {
 
 		try {
 
-			for (int i = 0; i < 100; i++) {
-				ClientMessage message = MessageUtil.buildClientMsg("TEST", "localhost");
+			for (int i = 0; i < 1; i++) {
+				ClientMessage message = MessageUtil.getEchoMessage("1");
 				socket.send(message.toByteArray());
+				final byte[] array = new byte[1024];
+				socket.receive(array);
 			}
 			socket.close();
 			// final int count = is.read(data);

@@ -1,12 +1,19 @@
 package com.game_machine.game;
 
-import com.game_machine.ActorUtil;
-
 import akka.actor.UntypedActor;
+
+import com.game_machine.MessageUtil;
+import com.game_machine.Pb.ClientMessage;
 
 public class Echo extends UntypedActor {
 
 	public void onReceive(Object message) {
-		ActorUtil.getSelectionByClass(Gateway.class).tell(message, this.getSelf());
+		if (message instanceof EchoCommand) {
+			EchoCommand echo = (EchoCommand) message;
+			ClientMessage clientMessage = MessageUtil.createClientMessage(null, null, echo.getClientId().getBytes());
+			Gateway.sendToClient(echo.getClientId(), clientMessage.toByteArray());
+		} else {
+			unhandled(message);
+		}
 	}
 }

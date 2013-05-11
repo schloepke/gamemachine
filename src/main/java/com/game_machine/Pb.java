@@ -1099,11 +1099,11 @@ public final class Pb {
   public interface GameCommandOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required string name = 2;
+    // required string name = 1;
     boolean hasName();
     String getName();
     
-    // repeated .com.game_machine.Item item = 3;
+    // repeated .com.game_machine.Item item = 2;
     java.util.List<com.game_machine.Pb.Item> 
         getItemList();
     com.game_machine.Pb.Item getItem(int index);
@@ -1142,8 +1142,8 @@ public final class Pb {
     }
     
     private int bitField0_;
-    // required string name = 2;
-    public static final int NAME_FIELD_NUMBER = 2;
+    // required string name = 1;
+    public static final int NAME_FIELD_NUMBER = 1;
     private java.lang.Object name_;
     public boolean hasName() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
@@ -1174,8 +1174,8 @@ public final class Pb {
       }
     }
     
-    // repeated .com.game_machine.Item item = 3;
-    public static final int ITEM_FIELD_NUMBER = 3;
+    // repeated .com.game_machine.Item item = 2;
+    public static final int ITEM_FIELD_NUMBER = 2;
     private java.util.List<com.game_machine.Pb.Item> item_;
     public java.util.List<com.game_machine.Pb.Item> getItemList() {
       return item_;
@@ -1222,10 +1222,10 @@ public final class Pb {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(2, getNameBytes());
+        output.writeBytes(1, getNameBytes());
       }
       for (int i = 0; i < item_.size(); i++) {
-        output.writeMessage(3, item_.get(i));
+        output.writeMessage(2, item_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1238,11 +1238,11 @@ public final class Pb {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getNameBytes());
+          .computeBytesSize(1, getNameBytes());
       }
       for (int i = 0; i < item_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, item_.get(i));
+          .computeMessageSize(2, item_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1514,12 +1514,12 @@ public final class Pb {
               }
               break;
             }
-            case 18: {
+            case 10: {
               bitField0_ |= 0x00000001;
               name_ = input.readBytes();
               break;
             }
-            case 26: {
+            case 18: {
               com.game_machine.Pb.Item.Builder subBuilder = com.game_machine.Pb.Item.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addItem(subBuilder.buildPartial());
@@ -1531,7 +1531,7 @@ public final class Pb {
       
       private int bitField0_;
       
-      // required string name = 2;
+      // required string name = 1;
       private java.lang.Object name_ = "";
       public boolean hasName() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
@@ -1567,7 +1567,7 @@ public final class Pb {
         onChanged();
       }
       
-      // repeated .com.game_machine.Item item = 3;
+      // repeated .com.game_machine.Item item = 2;
       private java.util.List<com.game_machine.Pb.Item> item_ =
         java.util.Collections.emptyList();
       private void ensureItemIsMutable() {
@@ -1767,15 +1767,11 @@ public final class Pb {
   public interface ClientMessageOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
     
-    // required bytes body = 1;
-    boolean hasBody();
-    com.google.protobuf.ByteString getBody();
+    // optional bytes data = 1;
+    boolean hasData();
+    com.google.protobuf.ByteString getData();
     
-    // required string clientId = 2;
-    boolean hasClientId();
-    String getClientId();
-    
-    // repeated .com.game_machine.Player players = 3;
+    // repeated .com.game_machine.Player players = 2;
     java.util.List<com.game_machine.Pb.Player> 
         getPlayersList();
     com.game_machine.Pb.Player getPlayers(int index);
@@ -1785,7 +1781,7 @@ public final class Pb {
     com.game_machine.Pb.PlayerOrBuilder getPlayersOrBuilder(
         int index);
     
-    // repeated .com.game_machine.GameCommand gameCommands = 4;
+    // repeated .com.game_machine.GameCommand gameCommands = 3;
     java.util.List<com.game_machine.Pb.GameCommand> 
         getGameCommandsList();
     com.game_machine.Pb.GameCommand getGameCommands(int index);
@@ -1824,50 +1820,18 @@ public final class Pb {
     }
     
     private int bitField0_;
-    // required bytes body = 1;
-    public static final int BODY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString body_;
-    public boolean hasBody() {
+    // optional bytes data = 1;
+    public static final int DATA_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString data_;
+    public boolean hasData() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
-    public com.google.protobuf.ByteString getBody() {
-      return body_;
+    public com.google.protobuf.ByteString getData() {
+      return data_;
     }
     
-    // required string clientId = 2;
-    public static final int CLIENTID_FIELD_NUMBER = 2;
-    private java.lang.Object clientId_;
-    public boolean hasClientId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    public String getClientId() {
-      java.lang.Object ref = clientId_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        if (com.google.protobuf.Internal.isValidUtf8(bs)) {
-          clientId_ = s;
-        }
-        return s;
-      }
-    }
-    private com.google.protobuf.ByteString getClientIdBytes() {
-      java.lang.Object ref = clientId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8((String) ref);
-        clientId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-    
-    // repeated .com.game_machine.Player players = 3;
-    public static final int PLAYERS_FIELD_NUMBER = 3;
+    // repeated .com.game_machine.Player players = 2;
+    public static final int PLAYERS_FIELD_NUMBER = 2;
     private java.util.List<com.game_machine.Pb.Player> players_;
     public java.util.List<com.game_machine.Pb.Player> getPlayersList() {
       return players_;
@@ -1887,8 +1851,8 @@ public final class Pb {
       return players_.get(index);
     }
     
-    // repeated .com.game_machine.GameCommand gameCommands = 4;
-    public static final int GAMECOMMANDS_FIELD_NUMBER = 4;
+    // repeated .com.game_machine.GameCommand gameCommands = 3;
+    public static final int GAMECOMMANDS_FIELD_NUMBER = 3;
     private java.util.List<com.game_machine.Pb.GameCommand> gameCommands_;
     public java.util.List<com.game_machine.Pb.GameCommand> getGameCommandsList() {
       return gameCommands_;
@@ -1909,8 +1873,7 @@ public final class Pb {
     }
     
     private void initFields() {
-      body_ = com.google.protobuf.ByteString.EMPTY;
-      clientId_ = "";
+      data_ = com.google.protobuf.ByteString.EMPTY;
       players_ = java.util.Collections.emptyList();
       gameCommands_ = java.util.Collections.emptyList();
     }
@@ -1919,14 +1882,6 @@ public final class Pb {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
       
-      if (!hasBody()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
-      if (!hasClientId()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getPlayersCount(); i++) {
         if (!getPlayers(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -1947,16 +1902,13 @@ public final class Pb {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, body_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, getClientIdBytes());
+        output.writeBytes(1, data_);
       }
       for (int i = 0; i < players_.size(); i++) {
-        output.writeMessage(3, players_.get(i));
+        output.writeMessage(2, players_.get(i));
       }
       for (int i = 0; i < gameCommands_.size(); i++) {
-        output.writeMessage(4, gameCommands_.get(i));
+        output.writeMessage(3, gameCommands_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -1969,19 +1921,15 @@ public final class Pb {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, body_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, getClientIdBytes());
+          .computeBytesSize(1, data_);
       }
       for (int i = 0; i < players_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, players_.get(i));
+          .computeMessageSize(2, players_.get(i));
       }
       for (int i = 0; i < gameCommands_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, gameCommands_.get(i));
+          .computeMessageSize(3, gameCommands_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2109,19 +2057,17 @@ public final class Pb {
       
       public Builder clear() {
         super.clear();
-        body_ = com.google.protobuf.ByteString.EMPTY;
+        data_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        clientId_ = "";
-        bitField0_ = (bitField0_ & ~0x00000002);
         if (playersBuilder_ == null) {
           players_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
         } else {
           playersBuilder_.clear();
         }
         if (gameCommandsBuilder_ == null) {
           gameCommands_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
         } else {
           gameCommandsBuilder_.clear();
         }
@@ -2166,24 +2112,20 @@ public final class Pb {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.body_ = body_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.clientId_ = clientId_;
+        result.data_ = data_;
         if (playersBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
             players_ = java.util.Collections.unmodifiableList(players_);
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000002);
           }
           result.players_ = players_;
         } else {
           result.players_ = playersBuilder_.build();
         }
         if (gameCommandsBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+          if (((bitField0_ & 0x00000004) == 0x00000004)) {
             gameCommands_ = java.util.Collections.unmodifiableList(gameCommands_);
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000004);
           }
           result.gameCommands_ = gameCommands_;
         } else {
@@ -2205,17 +2147,14 @@ public final class Pb {
       
       public Builder mergeFrom(com.game_machine.Pb.ClientMessage other) {
         if (other == com.game_machine.Pb.ClientMessage.getDefaultInstance()) return this;
-        if (other.hasBody()) {
-          setBody(other.getBody());
-        }
-        if (other.hasClientId()) {
-          setClientId(other.getClientId());
+        if (other.hasData()) {
+          setData(other.getData());
         }
         if (playersBuilder_ == null) {
           if (!other.players_.isEmpty()) {
             if (players_.isEmpty()) {
               players_ = other.players_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000002);
             } else {
               ensurePlayersIsMutable();
               players_.addAll(other.players_);
@@ -2228,7 +2167,7 @@ public final class Pb {
               playersBuilder_.dispose();
               playersBuilder_ = null;
               players_ = other.players_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000002);
               playersBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getPlayersFieldBuilder() : null;
@@ -2241,7 +2180,7 @@ public final class Pb {
           if (!other.gameCommands_.isEmpty()) {
             if (gameCommands_.isEmpty()) {
               gameCommands_ = other.gameCommands_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
             } else {
               ensureGameCommandsIsMutable();
               gameCommands_.addAll(other.gameCommands_);
@@ -2254,7 +2193,7 @@ public final class Pb {
               gameCommandsBuilder_.dispose();
               gameCommandsBuilder_ = null;
               gameCommands_ = other.gameCommands_;
-              bitField0_ = (bitField0_ & ~0x00000008);
+              bitField0_ = (bitField0_ & ~0x00000004);
               gameCommandsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getGameCommandsFieldBuilder() : null;
@@ -2268,14 +2207,6 @@ public final class Pb {
       }
       
       public final boolean isInitialized() {
-        if (!hasBody()) {
-          
-          return false;
-        }
-        if (!hasClientId()) {
-          
-          return false;
-        }
         for (int i = 0; i < getPlayersCount(); i++) {
           if (!getPlayers(i).isInitialized()) {
             
@@ -2316,21 +2247,16 @@ public final class Pb {
             }
             case 10: {
               bitField0_ |= 0x00000001;
-              body_ = input.readBytes();
+              data_ = input.readBytes();
               break;
             }
             case 18: {
-              bitField0_ |= 0x00000002;
-              clientId_ = input.readBytes();
-              break;
-            }
-            case 26: {
               com.game_machine.Pb.Player.Builder subBuilder = com.game_machine.Pb.Player.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addPlayers(subBuilder.buildPartial());
               break;
             }
-            case 34: {
+            case 26: {
               com.game_machine.Pb.GameCommand.Builder subBuilder = com.game_machine.Pb.GameCommand.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addGameCommands(subBuilder.buildPartial());
@@ -2342,73 +2268,37 @@ public final class Pb {
       
       private int bitField0_;
       
-      // required bytes body = 1;
-      private com.google.protobuf.ByteString body_ = com.google.protobuf.ByteString.EMPTY;
-      public boolean hasBody() {
+      // optional bytes data = 1;
+      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
+      public boolean hasData() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
-      public com.google.protobuf.ByteString getBody() {
-        return body_;
+      public com.google.protobuf.ByteString getData() {
+        return data_;
       }
-      public Builder setBody(com.google.protobuf.ByteString value) {
+      public Builder setData(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
   bitField0_ |= 0x00000001;
-        body_ = value;
+        data_ = value;
         onChanged();
         return this;
       }
-      public Builder clearBody() {
+      public Builder clearData() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        body_ = getDefaultInstance().getBody();
+        data_ = getDefaultInstance().getData();
         onChanged();
         return this;
       }
       
-      // required string clientId = 2;
-      private java.lang.Object clientId_ = "";
-      public boolean hasClientId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      public String getClientId() {
-        java.lang.Object ref = clientId_;
-        if (!(ref instanceof String)) {
-          String s = ((com.google.protobuf.ByteString) ref).toStringUtf8();
-          clientId_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      public Builder setClientId(String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000002;
-        clientId_ = value;
-        onChanged();
-        return this;
-      }
-      public Builder clearClientId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        clientId_ = getDefaultInstance().getClientId();
-        onChanged();
-        return this;
-      }
-      void setClientId(com.google.protobuf.ByteString value) {
-        bitField0_ |= 0x00000002;
-        clientId_ = value;
-        onChanged();
-      }
-      
-      // repeated .com.game_machine.Player players = 3;
+      // repeated .com.game_machine.Player players = 2;
       private java.util.List<com.game_machine.Pb.Player> players_ =
         java.util.Collections.emptyList();
       private void ensurePlayersIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
           players_ = new java.util.ArrayList<com.game_machine.Pb.Player>(players_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000002;
          }
       }
       
@@ -2524,7 +2414,7 @@ public final class Pb {
       public Builder clearPlayers() {
         if (playersBuilder_ == null) {
           players_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000002);
           onChanged();
         } else {
           playersBuilder_.clear();
@@ -2580,7 +2470,7 @@ public final class Pb {
           playersBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.game_machine.Pb.Player, com.game_machine.Pb.Player.Builder, com.game_machine.Pb.PlayerOrBuilder>(
                   players_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  ((bitField0_ & 0x00000002) == 0x00000002),
                   getParentForChildren(),
                   isClean());
           players_ = null;
@@ -2588,13 +2478,13 @@ public final class Pb {
         return playersBuilder_;
       }
       
-      // repeated .com.game_machine.GameCommand gameCommands = 4;
+      // repeated .com.game_machine.GameCommand gameCommands = 3;
       private java.util.List<com.game_machine.Pb.GameCommand> gameCommands_ =
         java.util.Collections.emptyList();
       private void ensureGameCommandsIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
+        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
           gameCommands_ = new java.util.ArrayList<com.game_machine.Pb.GameCommand>(gameCommands_);
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000004;
          }
       }
       
@@ -2710,7 +2600,7 @@ public final class Pb {
       public Builder clearGameCommands() {
         if (gameCommandsBuilder_ == null) {
           gameCommands_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000004);
           onChanged();
         } else {
           gameCommandsBuilder_.clear();
@@ -2766,7 +2656,7 @@ public final class Pb {
           gameCommandsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               com.game_machine.Pb.GameCommand, com.game_machine.Pb.GameCommand.Builder, com.game_machine.Pb.GameCommandOrBuilder>(
                   gameCommands_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
+                  ((bitField0_ & 0x00000004) == 0x00000004),
                   getParentForChildren(),
                   isClean());
           gameCommands_ = null;
@@ -2818,12 +2708,11 @@ public final class Pb {
       ".game_machine\"C\n\006Player\022\t\n\001x\030\001 \001(\005\022\t\n\001y\030" +
       "\002 \001(\005\022\t\n\001z\030\003 \001(\005\022\n\n\002id\030\004 \002(\005\022\014\n\004name\030\005 \001" +
       "(\t\"\"\n\004Item\022\013\n\003key\030\001 \002(\t\022\r\n\005value\030\002 \001(\t\"A" +
-      "\n\013GameCommand\022\014\n\004name\030\002 \002(\t\022$\n\004item\030\003 \003(" +
-      "\0132\026.com.game_machine.Item\"\217\001\n\rClientMess" +
-      "age\022\014\n\004body\030\001 \002(\014\022\020\n\010clientId\030\002 \002(\t\022)\n\007p" +
-      "layers\030\003 \003(\0132\030.com.game_machine.Player\0223" +
-      "\n\014gameCommands\030\004 \003(\0132\035.com.game_machine." +
-      "GameCommandB\006B\002PbH\001"
+      "\n\013GameCommand\022\014\n\004name\030\001 \002(\t\022$\n\004item\030\002 \003(" +
+      "\0132\026.com.game_machine.Item\"}\n\rClientMessa" +
+      "ge\022\014\n\004data\030\001 \001(\014\022)\n\007players\030\002 \003(\0132\030.com." +
+      "game_machine.Player\0223\n\014gameCommands\030\003 \003(" +
+      "\0132\035.com.game_machine.GameCommandB\006B\002PbH\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -2859,7 +2748,7 @@ public final class Pb {
           internal_static_com_game_machine_ClientMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_com_game_machine_ClientMessage_descriptor,
-              new java.lang.String[] { "Body", "ClientId", "Players", "GameCommands", },
+              new java.lang.String[] { "Data", "Players", "GameCommands", },
               com.game_machine.Pb.ClientMessage.class,
               com.game_machine.Pb.ClientMessage.Builder.class);
           return null;

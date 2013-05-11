@@ -47,6 +47,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		log.debug("UDT server got " + new String(bytes));
 		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
 		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
+		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);
 		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port,ctx);
 		this.inbound.tell(gameMessage, null);
 	}
@@ -56,7 +57,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
 		ctx.channel().write(message);
-		log.debug("UDT server sent " + new String(bytes));
+		log.debug("UDT server sent " + new String(bytes) + " " + bytes.length);
 	}
 
 	@Override

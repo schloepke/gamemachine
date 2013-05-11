@@ -26,7 +26,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.game_machine.ActorUtil;
-import com.game_machine.MessageBuilder;
+import com.game_machine.MessageUtil;
 import com.game_machine.Pb.ClientMessage;
 import com.game_machine.Pb.GameCommand;
 import com.game_machine.game.GameCommandRouter;
@@ -54,7 +54,7 @@ public class GameCommandsTest {
 	
 	@Test
 	public void gameCommands() {
-		gameCommands = MessageBuilder.loadGameCommands();
+		gameCommands = MessageUtil.loadGameCommands();
 		//ClientMessage message = MessageBuilder.encode(gameCommands.get("test1").toByteArray(), "player");
 		//GameCommandRouter router = getHandler("router1");
 		//router.onReceive(message);
