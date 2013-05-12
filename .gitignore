@@ -1,5 +1,6 @@
 nbproject
 target/
+build
 .settings
 .classpath
 *.class
