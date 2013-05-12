@@ -3,8 +3,6 @@ package com.game_machine;
 import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game_machine.proto.Entities;
-import com.game_machine.proto.Entity;
 import com.game_machine.proto.GameCommand;
 
 public class MessageUtil {
@@ -12,10 +10,10 @@ public class MessageUtil {
 	
 	public static Entities createEchoCommand() {
 		Entities entities = new Entities();
-		Entity entity = new Entity();
+		Entity entity = new Entity(1);
 		GameCommand gameCommand = new GameCommand();
 		gameCommand.setName("Echo");
-		entity.setGameCommand(gameCommand);
+		entity.addComponent(gameCommand);
 		entities.addEntity(entity);
 		return entities;
 	}

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import akka.actor.UntypedActor;
 
-import com.game_machine.proto.Entities;
-import com.game_machine.proto.Entity;
+import com.game_machine.Entities;
+import com.game_machine.Entity;
 
 public class Echo extends UntypedActor {
 
@@ -13,10 +13,8 @@ public class Echo extends UntypedActor {
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
 			Entities entities = new Entities();
-			ArrayList<Entity> entityList = new ArrayList<Entity>();
-			entityList.add(entity);
-			entities.setEntityList(entityList);
-			Gateway.sendToClient(entity.getClientId(),entities.toByteArray());
+			entities.addEntity(entity);
+			Gateway.sendToClient(entity.getClientId(),entities.toComponents().toByteArray());
 		} else {
 			unhandled(message);
 		}

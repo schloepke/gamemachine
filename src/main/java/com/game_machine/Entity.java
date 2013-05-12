@@ -5,8 +5,27 @@ import java.util.HashMap;
 public class Entity {
 
 	private HashMap<String,Component> components = new HashMap<String,Component>();
+	private final Integer id;
+	private String clientId;
 	
-	public Entity() {
+	public Entity(Integer id) {
+		this.id = id;
+	}
+		
+	public Integer getId() {
+		return this.id;
+	}
+	
+	public String getClientId() {
+		return this.clientId;
+	}
+	
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+	
+	public HashMap<String,Component> getComponents() {
+		return this.components;
 	}
 	
 	public void addComponent(Component component) {
@@ -21,6 +40,7 @@ public class Entity {
 		components.remove(component.getClass().getSimpleName());
 	}
 
+	@SuppressWarnings("unchecked")
 	public <T extends Component> T getComponent(String name) {
 		return (T) components.get(name);
 	}

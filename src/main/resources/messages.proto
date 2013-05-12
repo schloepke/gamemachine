@@ -12,7 +12,7 @@ message Player {
 	optional int32 entityId = 6;
 }
 
-message Players {
+message PlayersAroundMe {
   repeated Player player = 1;
   optional int32 entityId = 2;
 }
@@ -20,4 +20,10 @@ message Players {
 message GameCommand {
 	required string name = 1;
 	optional int32 entityId = 2;
+}
+
+message Components {
+  repeated Player player = 1;
+  repeated PlayersAroundMe playersAroundMe = 2;
+  repeated GameCommand gameCommand = 3;
 }

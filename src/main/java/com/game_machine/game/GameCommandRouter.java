@@ -8,12 +8,6 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.GatewayMessage;
-import com.game_machine.MessageUtil;
-import com.game_machine.proto.Entities;
-import com.game_machine.proto.Entity;
-import com.game_machine.proto.GameCommand;
-
 public class GameCommandRouter extends UntypedActor {
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
@@ -28,7 +22,7 @@ public class GameCommandRouter extends UntypedActor {
 	public void onReceive(Object message) {
 		log.info("GameCommandRouter got message " + message.toString());
 		
-		if (message instanceof GatewayMessage) {
+		/*if (message instanceof GatewayMessage) {
 			GatewayMessage gatewayMessage = (GatewayMessage) message;
 			Entities entities = Entities.parseFrom(gatewayMessage.getBytes());
 			log.info("JSON " +entities.toJson().toString());
@@ -46,6 +40,6 @@ public class GameCommandRouter extends UntypedActor {
 			}
 		} else {
 			unhandled(message);
-		}
+		}*/
 	}
 }

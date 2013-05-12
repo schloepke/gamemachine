@@ -47,6 +47,7 @@ dependencies {
     compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
+    compile 'org.jruby:jruby-complete:1.7.3'
     
     
     
