@@ -12,11 +12,21 @@ import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
 import com.dyuproject.protostuff.Output;
+
+import java.io.ByteArrayOutputStream;
+import com.game_machine.Config;
+import com.dyuproject.protostuff.JsonIOUtil;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class GameCommand implements Externalizable, Message<GameCommand>, Schema<GameCommand>
+public final class GameCommand extends com.game_machine.Component implements Externalizable, Message<GameCommand>, Schema<GameCommand>
 {
 
     public static Schema<GameCommand> getSchema()
@@ -33,6 +43,7 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
 
     
     private String name;
+    private Integer entityId;
 
     public GameCommand()
     {
@@ -58,6 +69,18 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
     public void setName(String name)
     {
         this.name = name;
+    }
+
+    // entityId
+
+    public Integer getEntityId()
+    {
+        return entityId;
+    }
+
+    public void setEntityId(Integer entityId)
+    {
+        this.entityId = entityId;
     }
 
     // java serialization
@@ -118,6 +141,9 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
                 case 1:
                     message.name = input.readString();
                     break;
+                case 2:
+                    message.entityId = input.readInt32();
+                    break;
                 default:
                     input.handleUnknownField(number, this);
             }   
@@ -130,6 +156,9 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
         if(message.name == null)
             throw new UninitializedMessageException(message);
         output.writeString(1, message.name, false);
+
+        if(message.entityId != null)
+            output.writeInt32(2, message.entityId, false);
     }
 
     public String getFieldName(int number)
@@ -137,6 +166,7 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
         switch(number)
         {
             case 1: return "name";
+            case 2: return "entityId";
             default: return null;
         }
     }
@@ -151,6 +181,7 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
     static
     {
         __fieldMap.put("name", 1);
+        __fieldMap.put("entityId", 2);
     }
     
     static final Pipe.Schema<GameCommand> PIPE_SCHEMA = new Pipe.Schema<GameCommand>(DEFAULT_INSTANCE)
@@ -167,6 +198,9 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
                         input.transferByteRangeTo(output, true, number, false);
                         break;
 
+                    case 2:
+                        output.writeInt32(number, input.readInt32(), false);
+                        break;
                     default:
                         input.handleUnknownField(number, wrappedSchema);
                 }
@@ -177,6 +211,48 @@ public final class GameCommand implements Externalizable, Message<GameCommand>, 
     public static Pipe.Schema<GameCommand> getPipeSchema()
     {
         return PIPE_SCHEMA;
+    }
+
+    public static GameCommand parseFrom(byte[] bytes) {
+    	GameCommand message = new GameCommand();
+    	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(GameCommand.class));
+    	return message;
+    }
+    	
+    public byte[] toByteArray() {
+    	if (Config.messageEncoding.equals("protobuf")) {
+    		return toProtobuf();
+    	} else if (Config.messageEncoding.equals("json")) {
+    		return toJson();
+    	} else {
+    		throw new RuntimeException("No encoding specified");
+    	}
+    }
+
+    public byte[] toJson() {
+    	boolean numeric = false;
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	try {
+    		JsonIOUtil.writeTo(out, this, GameCommand.getSchema(), numeric);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Json encoding failed");
+    	}
+    	return out.toByteArray();
+    }
+    		
+    public byte[] toProtobuf() {
+    	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+    	byte[] bytes = null;
+
+    	try {
+    		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(GameCommand.class), buffer);
+    		buffer.clear();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Protobuf encoding failed");
+    	}
+    	return bytes;
     }
 
 }

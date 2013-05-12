@@ -30,8 +30,8 @@ public class GameCommandRouter extends UntypedActor {
 		
 		if (message instanceof GatewayMessage) {
 			GatewayMessage gatewayMessage = (GatewayMessage) message;
-			Entities entities = MessageUtil.decode(gatewayMessage.getBytes());
-			log.info("JSON " +MessageUtil.toJson(entities));
+			Entities entities = Entities.parseFrom(gatewayMessage.getBytes());
+			log.info("JSON " +entities.toJson().toString());
 			for (Entity entity : entities.getEntityList()) {
 				entity.setClientId(gatewayMessage.getClientId());
 				GameCommand gameCommand = entity.getGameCommand();

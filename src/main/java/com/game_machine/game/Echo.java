@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import akka.actor.UntypedActor;
 
-import com.game_machine.MessageUtil;
 import com.game_machine.proto.Entities;
 import com.game_machine.proto.Entity;
 
@@ -17,7 +16,7 @@ public class Echo extends UntypedActor {
 			ArrayList<Entity> entityList = new ArrayList<Entity>();
 			entityList.add(entity);
 			entities.setEntityList(entityList);
-			Gateway.sendToClient(entity.getClientId(),MessageUtil.encode(entities));
+			Gateway.sendToClient(entity.getClientId(),entities.toByteArray());
 		} else {
 			unhandled(message);
 		}

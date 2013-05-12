@@ -26,7 +26,7 @@ public class Client {
 		try {
 
 			for (int i = 0; i < 1; i++) {
-				byte[] message = MessageUtil.encode(MessageUtil.createEchoCommand());
+				byte[] message = MessageUtil.createEchoCommand().toByteArray();
 				log.info("Client Sent "+ message.length + " bytes");
 				socket.send(message);
 				final byte[] array = new byte[1024];

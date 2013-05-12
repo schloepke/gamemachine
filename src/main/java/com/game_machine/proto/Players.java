@@ -14,30 +14,39 @@ import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
 import com.dyuproject.protostuff.Output;
+
+import java.io.ByteArrayOutputStream;
+import com.game_machine.Config;
+import com.dyuproject.protostuff.JsonIOUtil;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 
-public final class Entity implements com.game_machine.MessageBase, Externalizable, Message<Entity>, Schema<Entity>
+public final class Players extends com.game_machine.Component implements Externalizable, Message<Players>, Schema<Players>
 {
 
-    public static Schema<Entity> getSchema()
+    public static Schema<Players> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static Entity getDefaultInstance()
+    public static Players getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final Entity DEFAULT_INSTANCE = new Entity();
+    static final Players DEFAULT_INSTANCE = new Players();
 
     
     private List<Player> player;
-    private GameCommand gameCommand;
-    private String clientId;
+    private Integer entityId;
 
-    public Entity()
+    public Players()
     {
         
     }
@@ -73,28 +82,16 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
         this.player.add(player);
     }
 
-    // gameCommand
+    // entityId
 
-    public GameCommand getGameCommand()
+    public Integer getEntityId()
     {
-        return gameCommand;
+        return entityId;
     }
 
-    public void setGameCommand(GameCommand gameCommand)
+    public void setEntityId(Integer entityId)
     {
-        this.gameCommand = gameCommand;
-    }
-
-    // clientId
-
-    public String getClientId()
-    {
-        return clientId;
-    }
-
-    public void setClientId(String clientId)
-    {
-        this.clientId = clientId;
+        this.entityId = entityId;
     }
 
     // java serialization
@@ -111,39 +108,39 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
 
     // message method
 
-    public Schema<Entity> cachedSchema()
+    public Schema<Players> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public Entity newMessage()
+    public Players newMessage()
     {
-        return new Entity();
+        return new Players();
     }
 
-    public Class<Entity> typeClass()
+    public Class<Players> typeClass()
     {
-        return Entity.class;
+        return Players.class;
     }
 
     public String messageName()
     {
-        return Entity.class.getSimpleName();
+        return Players.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return Entity.class.getName();
+        return Players.class.getName();
     }
 
-    public boolean isInitialized(Entity message)
+    public boolean isInitialized(Players message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, Entity message) throws IOException
+    public void mergeFrom(Input input, Players message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -158,11 +155,7 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
                     break;
 
                 case 2:
-                    message.gameCommand = input.mergeObject(message.gameCommand, GameCommand.getSchema());
-                    break;
-
-                case 3:
-                    message.clientId = input.readString();
+                    message.entityId = input.readInt32();
                     break;
                 default:
                     input.handleUnknownField(number, this);
@@ -171,7 +164,7 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
     }
 
 
-    public void writeTo(Output output, Entity message) throws IOException
+    public void writeTo(Output output, Players message) throws IOException
     {
         if(message.player != null)
         {
@@ -183,12 +176,8 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
         }
 
 
-        if(message.gameCommand != null)
-             output.writeObject(2, message.gameCommand, GameCommand.getSchema(), false);
-
-
-        if(message.clientId != null)
-            output.writeString(3, message.clientId, false);
+        if(message.entityId != null)
+            output.writeInt32(2, message.entityId, false);
     }
 
     public String getFieldName(int number)
@@ -196,8 +185,7 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
         switch(number)
         {
             case 1: return "player";
-            case 2: return "gameCommand";
-            case 3: return "clientId";
+            case 2: return "entityId";
             default: return null;
         }
     }
@@ -212,11 +200,10 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
     static
     {
         __fieldMap.put("player", 1);
-        __fieldMap.put("gameCommand", 2);
-        __fieldMap.put("clientId", 3);
+        __fieldMap.put("entityId", 2);
     }
     
-    static final Pipe.Schema<Entity> PIPE_SCHEMA = new Pipe.Schema<Entity>(DEFAULT_INSTANCE)
+    static final Pipe.Schema<Players> PIPE_SCHEMA = new Pipe.Schema<Players>(DEFAULT_INSTANCE)
     {
         protected void transfer(Pipe pipe, Input input, Output output) throws IOException
         {
@@ -231,13 +218,8 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
                         break;
 
                     case 2:
-                        output.writeObject(number, pipe, GameCommand.getPipeSchema(), false);
+                        output.writeInt32(number, input.readInt32(), false);
                         break;
-
-                    case 3:
-                        input.transferByteRangeTo(output, true, number, false);
-                        break;
-
                     default:
                         input.handleUnknownField(number, wrappedSchema);
                 }
@@ -245,9 +227,51 @@ public final class Entity implements com.game_machine.MessageBase, Externalizabl
         }
     };
 
-    public static Pipe.Schema<Entity> getPipeSchema()
+    public static Pipe.Schema<Players> getPipeSchema()
     {
         return PIPE_SCHEMA;
+    }
+
+    public static Players parseFrom(byte[] bytes) {
+    	Players message = new Players();
+    	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Players.class));
+    	return message;
+    }
+    	
+    public byte[] toByteArray() {
+    	if (Config.messageEncoding.equals("protobuf")) {
+    		return toProtobuf();
+    	} else if (Config.messageEncoding.equals("json")) {
+    		return toJson();
+    	} else {
+    		throw new RuntimeException("No encoding specified");
+    	}
+    }
+
+    public byte[] toJson() {
+    	boolean numeric = false;
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	try {
+    		JsonIOUtil.writeTo(out, this, Players.getSchema(), numeric);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Json encoding failed");
+    	}
+    	return out.toByteArray();
+    }
+    		
+    public byte[] toProtobuf() {
+    	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+    	byte[] bytes = null;
+
+    	try {
+    		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Players.class), buffer);
+    		buffer.clear();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Protobuf encoding failed");
+    	}
+    	return bytes;
     }
 
 }

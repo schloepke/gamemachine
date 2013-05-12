@@ -1,53 +1,6 @@
 group game_machine : java_bean;
 
-map_value_prefix ::= [
-    "Int64":  "new Long(",
-    "UInt64":  "new Long(",
-    "SInt64":  "new Long(",
-    "Fixed64":  "new Long(",
-    "SFixed64":  "new Long(",
-    "Float": "new Float(",
-    "Double": "new Double(",
-    "Bool": "new Boolean(",
-    "Bytes": "ByteString.bytesDefaultValue(\"",
-    "String": "ByteString.stringDefaultValue(\"",
-    "EnumField": ,
-    default: "new Integer("
-]
 
-map_value_suffix ::= [
-    "Int64": "l)",
-    "UInt64": "l)",
-    "SInt64": "l)",
-    "Fixed64": "l)",
-    "SFixed64": "l)",
-    "Float": "f)",
-    "Double": "d)",
-    "Bytes": "\")",
-    "String": "\")",
-    "EnumField": ,
-    default: ")"
-]
-
-map_primitive_wrapper ::= [
-    "int": "Integer",
-    "long": "Long",
-    "float": "Float",
-    "double": "Double",
-    "boolean": "Boolean",
-    default: key
-]
-
-map_primitive_number_suffix ::= [
-    "Int64": "l",
-    "UInt64": "l",
-    "SInt64": "l",
-    "Fixed64": "l",
-    "SFixed64": "l",
-    "Float": "f",
-    "Double": "d",
-    default: 
-]
 
 //#enum begin
 
@@ -102,7 +55,7 @@ message_block(message, module, options, nested) ::= <<
 <message:message_header(message=it, module=module, options=options)>
 <endif>
 
-public <if(nested)>static <endif>final class <message.name> <options.(message.name + ".extends_declaration"); format=" "><message:message_impl_declaration(message=it, options=options)>
+public <if(nested)>static <endif>final class <message.name> extends com.game_machine.Component <options.(message.name + ".extends_declaration"); format=" "><message:message_impl_declaration(message=it, options=options)>
 {
     <message.nestedMessages:message_block(message=it, module=module, options=options, nested="true")>
     <message.nestedEnumGroups:enum_block(eg=it, module=module, options=options, nested="true")>
@@ -150,6 +103,16 @@ import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
 import com.dyuproject.protostuff.Output;
+
+import java.io.ByteArrayOutputStream;
+import com.game_machine.Config;
+import com.dyuproject.protostuff.JsonIOUtil;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+
 <if(options.generate_pipe_schema)>
 import com.dyuproject.protostuff.Pipe;
 <endif>
@@ -675,6 +638,48 @@ public static Pipe.Schema\<<message.name>\> getPipeSchema()
     return PIPE_SCHEMA;
 }
 
+public static <message.name> parseFrom(byte[] bytes) {
+	<message.name> message = new <message.name>();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<message.name>.class));
+	return message;
+}
+	
+public byte[] toByteArray() {
+	if (Config.messageEncoding.equals("protobuf")) {
+		return toProtobuf();
+	} else if (Config.messageEncoding.equals("json")) {
+		return toJson();
+	} else {
+		throw new RuntimeException("No encoding specified");
+	}
+}
+
+public byte[] toJson() {
+	boolean numeric = false;
+	ByteArrayOutputStream out = new ByteArrayOutputStream();
+	try {
+		JsonIOUtil.writeTo(out, this, <message.name>.getSchema(), numeric);
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw new RuntimeException("Json encoding failed");
+	}
+	return out.toByteArray();
+}
+		
+public byte[] toProtobuf() {
+	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+	byte[] bytes = null;
+
+	try {
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(<message.name>.class), buffer);
+		buffer.clear();
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException("Protobuf encoding failed");
+	}
+	return bytes;
+}
+
 >>
 
 field_transfer_switch(field, options) ::= <<
@@ -699,20 +704,4 @@ break;
 output.write<field.class.simpleName>(number, input.read<field.class.simpleName>(), <field.repeated>);
 break;
 <endif>
->>
-
-to_protobuf(message, options) ::= <<
-public static byte[] toProtobuf(<message.name> message) {
-	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
-	byte[] bytes = null;
-
-	try {
-		bytes = ProtobufIOUtil.toByteArray(message, RuntimeSchema.getSchema(<message.name>.class), buffer);
-		buffer.clear();
-	} catch (Exception e) {
-		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
-	}
-	return bytes;
-}
 >>

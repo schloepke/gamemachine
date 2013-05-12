@@ -3,27 +3,21 @@ package com.game_machine.proto;
 
 option optimize_for = SPEED;
 
-
-message Entity {
-  repeated Player player = 1;
-  optional GameCommand gameCommand = 2;
-  optional string clientId = 3;
-}
-
 message Player {
 	optional int32 x = 1;
 	optional int32 y = 2;
 	optional int32 z = 3;
 	required int32 id = 4;
 	optional string name = 5;
+	optional int32 entityId = 6;
 }
 
+message Players {
+  repeated Player player = 1;
+  optional int32 entityId = 2;
+}
 	
 message GameCommand {
 	required string name = 1;
+	optional int32 entityId = 2;
 }
-
-message Entities {
-  repeated Entity entity = 1;
-  }
-

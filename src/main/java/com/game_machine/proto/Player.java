@@ -12,11 +12,21 @@ import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
 import com.dyuproject.protostuff.Output;
+
+import java.io.ByteArrayOutputStream;
+import com.game_machine.Config;
+import com.dyuproject.protostuff.JsonIOUtil;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.ProtostuffIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class Player implements Externalizable, Message<Player>, Schema<Player>
+public final class Player extends com.game_machine.Component implements Externalizable, Message<Player>, Schema<Player>
 {
 
     public static Schema<Player> getSchema()
@@ -37,6 +47,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     private Integer z;
     private Integer id;
     private String name;
+    private Integer entityId;
 
     public Player()
     {
@@ -112,6 +123,18 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         this.name = name;
     }
 
+    // entityId
+
+    public Integer getEntityId()
+    {
+        return entityId;
+    }
+
+    public void setEntityId(Integer entityId)
+    {
+        this.entityId = entityId;
+    }
+
     // java serialization
 
     public void readExternal(ObjectInput in) throws IOException
@@ -182,6 +205,9 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
                 case 5:
                     message.name = input.readString();
                     break;
+                case 6:
+                    message.entityId = input.readInt32();
+                    break;
                 default:
                     input.handleUnknownField(number, this);
             }   
@@ -206,6 +232,9 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 
         if(message.name != null)
             output.writeString(5, message.name, false);
+
+        if(message.entityId != null)
+            output.writeInt32(6, message.entityId, false);
     }
 
     public String getFieldName(int number)
@@ -217,6 +246,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
             case 3: return "z";
             case 4: return "id";
             case 5: return "name";
+            case 6: return "entityId";
             default: return null;
         }
     }
@@ -235,6 +265,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         __fieldMap.put("z", 3);
         __fieldMap.put("id", 4);
         __fieldMap.put("name", 5);
+        __fieldMap.put("entityId", 6);
     }
     
     static final Pipe.Schema<Player> PIPE_SCHEMA = new Pipe.Schema<Player>(DEFAULT_INSTANCE)
@@ -263,6 +294,9 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
                         input.transferByteRangeTo(output, true, number, false);
                         break;
 
+                    case 6:
+                        output.writeInt32(number, input.readInt32(), false);
+                        break;
                     default:
                         input.handleUnknownField(number, wrappedSchema);
                 }
@@ -273,6 +307,48 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     public static Pipe.Schema<Player> getPipeSchema()
     {
         return PIPE_SCHEMA;
+    }
+
+    public static Player parseFrom(byte[] bytes) {
+    	Player message = new Player();
+    	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Player.class));
+    	return message;
+    }
+    	
+    public byte[] toByteArray() {
+    	if (Config.messageEncoding.equals("protobuf")) {
+    		return toProtobuf();
+    	} else if (Config.messageEncoding.equals("json")) {
+    		return toJson();
+    	} else {
+    		throw new RuntimeException("No encoding specified");
+    	}
+    }
+
+    public byte[] toJson() {
+    	boolean numeric = false;
+    	ByteArrayOutputStream out = new ByteArrayOutputStream();
+    	try {
+    		JsonIOUtil.writeTo(out, this, Player.getSchema(), numeric);
+    	} catch (IOException e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Json encoding failed");
+    	}
+    	return out.toByteArray();
+    }
+    		
+    public byte[] toProtobuf() {
+    	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+    	byte[] bytes = null;
+
+    	try {
+    		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Player.class), buffer);
+    		buffer.clear();
+    	} catch (Exception e) {
+    		e.printStackTrace();
+    		throw new RuntimeException("Protobuf encoding failed");
+    	}
+    	return bytes;
     }
 
 }
