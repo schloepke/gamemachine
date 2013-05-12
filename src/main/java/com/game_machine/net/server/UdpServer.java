@@ -31,8 +31,6 @@ public final class UdpServer implements Runnable {
 	private final int port;
 	private NioEventLoopGroup acceptGroup;
 	
-	public static final int ENCODING_NONE = NetMessage.ENCODING_NONE;
-	public static final int ENCODING_PROTOBUF = NetMessage.ENCODING_PROTOBUF;
 	private final UdpServerHandler handler;
 
 	
@@ -40,14 +38,14 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start(int messageEncoding) {
+	public static void start() {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
 			return;
 		}
 
-		udpServer = new UdpServer(messageEncoding, Config.udpHost, Config.udpPort);
+		udpServer = new UdpServer(Config.udpHost, Config.udpPort);
 		new Thread(udpServer).start();
 	}
 
@@ -62,10 +60,10 @@ public final class UdpServer implements Runnable {
 		udpServer = null;
 	}
 
-	public UdpServer(final int messageEncoding, final String hostname, final int port) {
+	public UdpServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		this.handler = new UdpServerHandler(messageEncoding);
+		this.handler = new UdpServerHandler();
 	}
 
 	public void run() {
@@ -111,7 +109,7 @@ public final class UdpServer implements Runnable {
 			e.printStackTrace();
 		}
 		if (acceptGroup != null) {
-			acceptGroup.shutdown();
+			acceptGroup.shutdownGracefully();
 		}
 	}
 

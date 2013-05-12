@@ -1,13 +1,13 @@
-package com.game_machine;
+package com.game_machine.proto;
 
 import com.dyuproject.protostuff.Tag;
 
-public final class ModelTest extends GameModel{
+public final class PsModelTest extends GameModel{
 
 	@Tag(1)
 	private final String name;
 	
-	public ModelTest(String name) {
+	public PsModelTest(String name) {
 		this.name = name;
 	}
 	

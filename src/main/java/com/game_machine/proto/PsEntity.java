@@ -1,14 +1,14 @@
-package com.game_machine;
+package com.game_machine.proto;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.dyuproject.protostuff.Tag;
 
-public class Entity {
+public class PsEntity {
 
 	@Tag(2)
-	public ModelTest model = null;
+	public PsModelTest model = null;
 	
 	@Tag(3)
 	public ArrayList<String> componentList = new ArrayList<String>();
@@ -17,17 +17,17 @@ public class Entity {
 	public HashMap<String,String> map = new HashMap<String,String>();
 	
 	@Tag(5)
-	public HashMap<String,Component> components = new HashMap<String,Component>();
+	public HashMap<String,PsComponent> components = new HashMap<String,PsComponent>();
 	
-	public Entity() {
+	public PsEntity() {
 		
 	}
 	
-	public void addComponent(Component component) {
+	public void addComponent(PsComponent component) {
 		components.put(component.getName(), component);
 	}
 	
-	public <T extends Component> T getComponent(String name) {
+	public <T extends PsComponent> T getComponent(String name) {
 		return (T) components.get(name);
 	}
 }

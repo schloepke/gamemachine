@@ -38,14 +38,12 @@ public class UdtServer implements Runnable {
 	private NioEventLoopGroup connectGroup;
 	private ServerBootstrap boot;
 	
-	public static final int ENCODING_NONE = NetMessage.ENCODING_NONE;
-	public static final int ENCODING_PROTOBUF = NetMessage.ENCODING_PROTOBUF;
 	private UdtServerHandler handler;
 
-	public UdtServer(final int messageEncoding, final String hostname, final int port) {
+	public UdtServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		handler = new UdtServerHandler(messageEncoding);
+		handler = new UdtServerHandler();
 	}
 
 	public void run() {
@@ -98,14 +96,14 @@ public class UdtServer implements Runnable {
 		return udtServer;
 	}
 	
-	public static void start(int messageEncoding) {
+	public static void start() {
 
 		// Don't try to start an already running server
 		if (udtServer != null) {
 			return;
 		}
 
-		udtServer = new UdtServer(messageEncoding,Config.udtHost, Config.udtPort);
+		udtServer = new UdtServer(Config.udtHost, Config.udtPort);
 		new Thread(udtServer).start();
 	}
 	

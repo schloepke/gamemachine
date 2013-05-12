@@ -26,11 +26,9 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	private static final Logger log = LoggerFactory.getLogger(UdtServerHandler.class);
 	private UdtServer server;
 	private ActorSelection inbound;
-	private Integer messageEncoding;
 
-	public UdtServerHandler(int messageEncoding) {
+	public UdtServerHandler() {
 		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
-		this.messageEncoding = messageEncoding;
 	}
 
 	public void setServer(UdtServer server) {
@@ -48,7 +46,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
 		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
 		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);
-		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, messageEncoding, bytes, host, port,ctx);
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, bytes, host, port,ctx);
 		this.inbound.tell(gameMessage, null);
 	}
 

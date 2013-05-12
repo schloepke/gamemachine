@@ -5,10 +5,10 @@ import java.net.InetSocketAddress;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.game_machine.MessageUtil;
+
 import com.barchart.udt.SocketUDT;
 import com.barchart.udt.TypeUDT;
-import com.game_machine.Pb.ClientMessage;
+import com.game_machine.MessageUtil;
 
 
 public class Client {
@@ -26,8 +26,9 @@ public class Client {
 		try {
 
 			for (int i = 0; i < 1; i++) {
-				ClientMessage message = MessageUtil.getEchoMessage("1");
-				socket.send(message.toByteArray());
+				byte[] message = MessageUtil.encode(MessageUtil.createEchoCommand());
+				log.info("Client Sent "+ message.length + " bytes");
+				socket.send(message);
 				final byte[] array = new byte[1024];
 				socket.receive(array);
 			}

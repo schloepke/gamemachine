@@ -1,17 +1,23 @@
 package com.game_machine.game;
 
+import java.util.ArrayList;
+
 import akka.actor.UntypedActor;
 
 import com.game_machine.MessageUtil;
-import com.game_machine.Pb.ClientMessage;
+import com.game_machine.proto.Entities;
+import com.game_machine.proto.Entity;
 
 public class Echo extends UntypedActor {
 
 	public void onReceive(Object message) {
-		if (message instanceof EchoCommand) {
-			EchoCommand echo = (EchoCommand) message;
-			ClientMessage clientMessage = MessageUtil.createClientMessage(null, null, echo.getClientId().getBytes());
-			Gateway.sendToClient(echo.getClientId(), clientMessage.toByteArray());
+		if (message instanceof Entity) {
+			Entity entity = (Entity) message;
+			Entities entities = new Entities();
+			ArrayList<Entity> entityList = new ArrayList<Entity>();
+			entityList.add(entity);
+			entities.setEntityList(entityList);
+			Gateway.sendToClient(entity.getClientId(),MessageUtil.encode(entities));
 		} else {
 			unhandled(message);
 		}

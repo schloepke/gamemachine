@@ -44,6 +44,9 @@ dependencies {
     compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
     
     
     
@@ -51,6 +54,13 @@ dependencies {
   
   task protoc << {
   	def proc = "protoc src\\main\\resources\\messages.proto --java_out=src\\main\\java".execute() 
+    proc.in.eachLine {line -> println line} 
+    proc.err.eachLine {line -> println 'ERROR: ' + line} 
+    proc.waitFor() 
+  }
+  
+  task protostuff << {
+  	def proc = "java -jar protostuff-compiler-1.0.7-jarjar.jar protostuff.properties".execute() 
     proc.in.eachLine {line -> println line} 
     proc.err.eachLine {line -> println 'ERROR: ' + line} 
     proc.waitFor() 

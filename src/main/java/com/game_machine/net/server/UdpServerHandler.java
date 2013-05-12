@@ -27,11 +27,9 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	private static final Logger log = LoggerFactory.getLogger(UdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
-	private int messageEncoding;
 	
-	public UdpServerHandler(int messageEncoding) {
+	public UdpServerHandler() {
 		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
-		this.messageEncoding = messageEncoding;
 	}
 
 	@Override
@@ -41,7 +39,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,messageEncoding,bytes,m.sender().getHostName(), m.sender().getPort(),null);
+		NetMessage gameMessage = new NetMessage(null,NetMessage.UDP,bytes,m.sender().getHostName(), m.sender().getPort(),null);
 		log.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(gameMessage, null);
 	}

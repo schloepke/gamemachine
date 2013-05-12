@@ -14,9 +14,9 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import com.game_machine.Entity;
-import com.game_machine.ErrorComponent;
-import com.game_machine.ModelTest;
+import com.game_machine.proto.PsEntity;
+import com.game_machine.proto.PsErrorComponent;
+import com.game_machine.proto.PsModelTest;
 
 public class SerializationTesting {
 
@@ -27,33 +27,33 @@ public class SerializationTesting {
 		try {
 			LinkedBuffer buffer = LinkedBuffer.allocate(512);
 
-			ModelTest model = new ModelTest("TEST");
-			Entity entity = new Entity();
+			PsModelTest model = new PsModelTest("TEST");
+			PsEntity entity = new PsEntity();
 			entity.model = model;
 			entity.componentList.add("element1");
 			entity.map.put("one", "one");
 
-			ErrorComponent error = new ErrorComponent();
+			PsErrorComponent error = new PsErrorComponent();
 			error.setMessage("help!");
 			entity.addComponent(error);
 
 			assertThat(entity.componentList.get(0)).isEqualTo("element1");
 			assertThat(entity.map.get("one")).isEqualTo("one");
-			assertThat(entity.getComponent("ErrorComponent")).isInstanceOf(ErrorComponent.class);
+			assertThat(entity.getComponent("PsErrorComponent")).isInstanceOf(PsErrorComponent.class);
 
-			Schema<Entity> schema = RuntimeSchema.getSchema(Entity.class);
-
+			Schema<PsEntity> schema = RuntimeSchema.getSchema(PsEntity.class);
+			log.info("SCHEMA="+schema.getFieldName(5));
 			byte[] data = ProtobufIOUtil.toByteArray(entity, schema, buffer);
 			buffer.clear();
 
-			Entity entity2 = new Entity();
+			PsEntity entity2 = new PsEntity();
 			assertThat(entity2.model).isEqualTo(null);
 			ProtobufIOUtil.mergeFrom(data, entity2, schema);
 
-			assertThat(entity2.getComponent("ErrorComponent")).isInstanceOf(ErrorComponent.class);
+			assertThat(entity2.getComponent("PsErrorComponent")).isInstanceOf(PsErrorComponent.class);
 			assertThat(entity2.componentList.get(0)).isEqualTo("element1");
 			assertThat(entity2.map.get("one")).isEqualTo("one");
-			assertThat(entity2.model.getClass().getSimpleName()).isEqualTo("ModelTest");
+			assertThat(entity2.model.getClass().getSimpleName()).isEqualTo("PsModelTest");
 			assertThat(entity2.model.getName()).isEqualTo("TEST");
 		} catch (Exception e) {
 			e.printStackTrace();

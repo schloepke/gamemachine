@@ -1,18 +1,13 @@
-package com.game_machine;
-
-// protoc File.proto  --java_out= /src/main/java
+package com.game_machine.proto;
 
 
 option optimize_for = SPEED;
 
-option java_outer_classname = "Pb";
-
-message Component {
-  
-}
 
 message Entity {
-  repeated Component component = 1;
+  repeated Player player = 1;
+  optional GameCommand gameCommand = 2;
+  optional string clientId = 3;
 }
 
 message Player {
@@ -23,18 +18,12 @@ message Player {
 	optional string name = 5;
 }
 
-message Item {
-	required string key = 1;
-	optional string value = 2;
-}
 	
 message GameCommand {
 	required string name = 1;
-	repeated Item item = 2;
 }
 
-message ClientMessage {
-  optional bytes data = 1;
-  repeated Player players = 2;
-  repeated GameCommand gameCommands = 3;
-}
+message Entities {
+  repeated Entity entity = 1;
+  }
+

@@ -26,25 +26,12 @@ public class GameMachine implements Runnable {
 	}
 
 	public static void start() {
-		int udtMessageEncoding = UdtServer.ENCODING_NONE;
-		int udpMessageEncoding = UdpServer.ENCODING_NONE;
-		if (Config.udpEncoding.equals("pb")) {
-			udpMessageEncoding = UdpServer.ENCODING_PROTOBUF;
-		}
-		if (Config.udtEncoding.equals("pb")) {
-			udtMessageEncoding = UdtServer.ENCODING_PROTOBUF;
-		}
-		start(udtMessageEncoding,udpMessageEncoding);
-	}
-	
-	
-	public static void start(int udtMessageEncoding, int udpMessageEncoding) {
 		new GameMachine().run();
 		if (Config.udpEnabled) {
-			UdpServer.start(udpMessageEncoding);
+			UdpServer.start();
 		}
 		if (Config.udtEnabled) {
-			UdtServer.start(udtMessageEncoding);
+			UdtServer.start();
 		}
 		
 		// Allow time for server to start

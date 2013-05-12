@@ -1,8 +1,8 @@
-package com.game_machine;
+package com.game_machine.proto;
 
 import com.dyuproject.protostuff.Tag;
 
-public class ErrorComponent extends Component {
+public class PsErrorComponent extends PsComponent {
 
 	@Tag(1)
 	public String name;
@@ -10,7 +10,7 @@ public class ErrorComponent extends Component {
 	@Tag(2)
 	public String message;
 	
-	public ErrorComponent() {
+	public PsErrorComponent() {
 		this.name = this.getClass().getSimpleName();
 	}
 		

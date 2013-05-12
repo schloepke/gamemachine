@@ -1,16 +1,12 @@
 package com.game_machine.test;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-
 import java.util.logging.Logger;
 
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import com.game_machine.Config;
 import com.game_machine.GameMachine;
-import com.game_machine.Pb.ClientMessage;
 import com.game_machine.net.client.Client;
 
 
