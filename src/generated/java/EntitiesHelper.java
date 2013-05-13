@@ -24,12 +24,22 @@ public class EntitiesHelper {
 		Components components = new Components();
 		for (Entity entity : entities.getEntities().values()) {
 			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
-				<% names.each do |name| %>
-				<% name = name.slice!(0).upcase + name %>
-				if (entry.getKey().equals("<%=name%>")) {
-					components.add<%=name%>(<%=name%>.class.cast(entry.getValue()));
+				
+				
+				if (entry.getKey().equals("Player")) {
+					components.addPlayer(Player.class.cast(entry.getValue()));
 				}
-				<% end %>
+				
+				
+				if (entry.getKey().equals("PlayersAroundMe")) {
+					components.addPlayersAroundMe(PlayersAroundMe.class.cast(entry.getValue()));
+				}
+				
+				
+				if (entry.getKey().equals("GameCommand")) {
+					components.addGameCommand(GameCommand.class.cast(entry.getValue()));
+				}
+				
 			}
 		}
 		return components;

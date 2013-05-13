@@ -51,15 +51,6 @@ public class Entities {
 		
 	}
 
-	public static void template() {
-		ArrayList<String> fieldNames = new ArrayList<String>();
-		fieldNames.add("Player");
-		fieldNames.add("PlayersAroundMe");
-		fieldNames.add("GameCommand");
-		Object[] args = new Object[] {fieldNames};
-		Ruby.run("template.rb", "create_components", args, Boolean.class);
-	}
-	
 	public Components toComponents() {
 		Components components = new Components();
 		for (Entity entity : this.entities.values()) {
@@ -86,7 +77,6 @@ public class Entities {
 		Class<? extends Component> klass = null;
 		String methodName = null;
 
-		EntitiesHelper.
 		ArrayList<Component> componentList = new ArrayList<Component>();
 		Entities entities = new Entities();
 		String fieldName = null;

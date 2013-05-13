@@ -1,4 +1,4 @@
-package com.game_machine.proto;
+package com.game_machine;
 
 public class GameModel {
 

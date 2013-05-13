@@ -12,6 +12,22 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 
+sourceSets {
+  main {
+    java {
+      srcDirs "src/generated/java"
+    }
+    resources {
+      srcDir "src/generated/resources"
+    }
+  }
+  test {
+    java {
+      srcDir "src/generated/test"
+    }
+  }
+}
+
 
 repositories {
        
@@ -50,7 +66,6 @@ dependencies {
     compile 'org.jruby:jruby-complete:1.7.3'
     
     
-    
   }
   
   task protoc << {
@@ -61,7 +76,7 @@ dependencies {
   }
   
   task protostuff << {
-  	def proc = "java -jar protostuff-compiler-1.0.7-jarjar.jar protostuff.properties".execute() 
+  	def proc = "java -jar third_party\\protostuff-compiler-1.0.7.jar protostuff.properties".execute() 
     proc.in.eachLine {line -> println line} 
     proc.err.eachLine {line -> println 'ERROR: ' + line} 
     proc.waitFor() 

@@ -12,6 +12,7 @@ import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import com.game_machine.Entities;
 import com.game_machine.Entity;
+import com.game_machine.ErbTemplate;
 import com.game_machine.proto.Components;
 import com.game_machine.proto.GameCommand;
 import com.game_machine.proto.Player;
@@ -47,7 +48,7 @@ public class SerializationTesting {
 	@Test
 	public void EntityTest() {
 		try {
-			Entities.template();
+			ErbTemplate.createEntitiesHelper();
 			Entities entities = testEntities1();
 			Components components = entities.toComponents();
 			assertThat(components.getPlayerCount()).isEqualTo(1);
