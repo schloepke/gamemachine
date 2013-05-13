@@ -33,7 +33,7 @@ dependencies {
     compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
-    compile 'org.jruby:jruby-complete:1.7.3'
+    //compile 'org.jruby:jruby-complete:1.7.3'
   }
  
 
@@ -58,6 +58,12 @@ task uberjar(type: Jar) {
  	File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
     commandLine 'java','-jar',jar,configFile
 }
+
+  task install_libs(type: Copy) {
+    into "$buildDir/../lib"
+    from configurations.runtime
+    from "$buildDir/libs"
+  }
 
   test {
   	useTestNG()

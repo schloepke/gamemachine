@@ -16,10 +16,10 @@ public class ErbTemplate {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		createEntitiesHelper();
+		//createEntitiesHelper();
 	}
 	
-	public static void createEntitiesHelper() {
+	/*public static void createEntitiesHelper() {
 		ArrayList<String> fieldNames = new ArrayList<String>();
 		String fieldName = null;
 	
@@ -33,6 +33,6 @@ public class ErbTemplate {
 		}
 		Object[] args = new Object[] {fieldNames};
 		Ruby.run("template.rb", "create_components", args, Boolean.class);
-	}
+	}*/
 
 }

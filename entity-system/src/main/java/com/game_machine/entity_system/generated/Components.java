@@ -22,6 +22,8 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
@@ -315,37 +317,94 @@ public final class Components extends com.game_machine.entity_system.Component i
         return PIPE_SCHEMA;
     }
 
-  
-    public Entities toEntities() {
-    	
-    }
     
-public static Components entitiesToComponents(Entities entities) {
-	Components components = new Components();
-	for (Entity entity : entities.getEntities().values()) {
-		for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
-			
-			
-			if (entry.getKey().equals("Player")) {
-				components.addPlayer(Player.class.cast(entry.getValue()));
-			}
-			
-			
-			if (entry.getKey().equals("PlayersAroundMe")) {
-				components.addPlayersAroundMe(PlayersAroundMe.class.cast(entry.getValue()));
-			}
-			
-			
-			if (entry.getKey().equals("GameCommand")) {
-				components.addGameCommand(GameCommand.class.cast(entry.getValue()));
-			}
-			
-		}
+	public Entities toEntities() {
+   		Entities entities = new Entities();
+   		Entity entity = null;
+   		Integer entityId = null;
+    	
+    		
+   		for (Player player : this.getPlayerList()) {
+   			entityId = player.getEntityId();
+   			if (entities.hasEntity(entityId)) {
+   				entities.getEntity(entityId).addComponent(player);
+   			} else {
+   				entity = new Entity(entityId);
+   				entity.addComponent(player);
+   				entities.addEntity(entity);
+   			}
+   		}
+   		
+    		
+   		for (PlayersAroundMe playersAroundMe : this.getPlayersAroundMeList()) {
+   			entityId = playersAroundMe.getEntityId();
+   			if (entities.hasEntity(entityId)) {
+   				entities.getEntity(entityId).addComponent(playersAroundMe);
+   			} else {
+   				entity = new Entity(entityId);
+   				entity.addComponent(playersAroundMe);
+   				entities.addEntity(entity);
+   			}
+   		}
+   		
+    		
+   		for (GameCommand gameCommand : this.getGameCommandList()) {
+   			entityId = gameCommand.getEntityId();
+   			if (entities.hasEntity(entityId)) {
+   				entities.getEntity(entityId).addComponent(gameCommand);
+   			} else {
+   				entity = new Entity(entityId);
+   				entity.addComponent(gameCommand);
+   				entities.addEntity(entity);
+   			}
+   		}
+   		
+   		return entities;
 	}
-	return components;
-}
+    
+	public static Components fromEntities(Entities entities) {
+		Components components = new Components();
+		for (Entity entity : entities.getEntities().values()) {
+			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
+				
+				
+				if (entry.getKey().equals("Player")) {
+					components.addPlayer(Player.class.cast(entry.getValue()));
+				}
+				
+				
+				if (entry.getKey().equals("PlayersAroundMe")) {
+					components.addPlayersAroundMe(PlayersAroundMe.class.cast(entry.getValue()));
+				}
+				
+				
+				if (entry.getKey().equals("GameCommand")) {
+					components.addGameCommand(GameCommand.class.cast(entry.getValue()));
+				}
+				
+			}
+		}
+		return components;
+	}
 
 
+
+
+    public static List<String> getFields() {
+    	ArrayList<String> fieldNames = new ArrayList<String>();
+    	String fieldName = null;
+    	Integer i = 1;
+    	
+        while(true) { 
+    		fieldName = Components.getSchema().getFieldName(i);
+    		i++;
+    		if (fieldName == null) {
+    			break;
+    		}
+    		fieldNames.add(fieldName);
+    	}
+    	return fieldNames;
+    }
 
     public static Components parseFrom(byte[] bytes) {
     	Components message = new Components();

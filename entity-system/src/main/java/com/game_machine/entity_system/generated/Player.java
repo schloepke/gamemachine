@@ -20,6 +20,8 @@ import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
@@ -313,6 +315,23 @@ public final class Player extends com.game_machine.entity_system.Component imple
     }
 
     //__REPLACE_1__
+
+
+    public static List<String> getFields() {
+    	ArrayList<String> fieldNames = new ArrayList<String>();
+    	String fieldName = null;
+    	Integer i = 1;
+    	
+        while(true) { 
+    		fieldName = Components.getSchema().getFieldName(i);
+    		i++;
+    		if (fieldName == null) {
+    			break;
+    		}
+    		fieldNames.add(fieldName);
+    	}
+    	return fieldNames;
+    }
 
     public static Player parseFrom(byte[] bytes) {
     	Player message = new Player();

@@ -3,7 +3,9 @@ package com.game_machine;
 import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game_machine.generated.GameCommand;
+import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.Entity;
+import com.game_machine.entity_system.generated.GameCommand;
 
 public class MessageUtil {
 
