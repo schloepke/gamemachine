@@ -1,5 +1,5 @@
 
-package com.game_machine;
+package com.game_machine.generated;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -10,10 +10,19 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.proto.Components;
-import com.game_machine.proto.GameCommand;
-import com.game_machine.proto.Player;
-import com.game_machine.proto.PlayersAroundMe;
+import com.game_machine.Entities;
+import com.game_machine.Entity;
+import com.game_machine.Component;
+
+import com.game_machine.generated.Components;
+
+import com.game_machine.generated.Player;
+
+import com.game_machine.generated.PlayersAroundMe;
+
+import com.game_machine.generated.GameCommand;
+
+
 
 public class EntitiesHelper {
 

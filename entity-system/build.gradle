@@ -1,0 +1,69 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+
+group = 'game_machine_messages'
+  version = '0.0.1-SNAPSHOT'
+ 
+ manifest {
+        attributes "Main-Class" : "com.game_machine.entity_system.ErbTemplate"
+    }
+
+description = """"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+
+repositories {
+       
+     flatDir(dirs: 'third_party') 
+     mavenRepo url: "http://repo.typesafe.com/typesafe/releases/"
+     mavenRepo url: "http://files.couchbase.com/maven2/"
+     mavenRepo url: "http://repo.maven.apache.org/maven2"
+}
+dependencies {
+ compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+    compile group: 'org.testng', name: 'testng', version:'6.8.1'
+    compile group: 'org.easytesting', name: 'fest-assert-core', version:'2.0M10'
+    compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
+    compile 'org.jruby:jruby-complete:1.7.3'
+  }
+ 
+
+task uberjar(type: Jar) {
+    from files(sourceSets.main.output.classesDir)
+    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
+
+    manifest {
+        attributes "Main-Class" : "com.game_machine.entity_system.ErbTemplate"
+    }
+}
+
+ task protoupdate(type: Exec) {
+ 	File configFile = file('src/main/resources/protostuff.properties')
+ 	File jar = file('build/libs/entity-system-0.0.1-SNAPSHOT.jar')
+    commandLine 'java','-jar',jar,configFile
+}
+
+  
+ task protogen(type: Exec) {
+ 	File configFile = file('src/main/resources/protostuff.properties')
+ 	File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
+    commandLine 'java','-jar',jar,configFile
+}
+
+  test {
+  	useTestNG()
+	outputs.upToDateWhen { false }
+ 	testLogging.showStandardStreams = true
+ 	dependsOn cleanTest
+ 	testLogging { exceptionFormat "full" }
+  }
+  

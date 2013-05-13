@@ -13,10 +13,10 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import com.game_machine.Entities;
 import com.game_machine.Entity;
 import com.game_machine.ErbTemplate;
-import com.game_machine.proto.Components;
-import com.game_machine.proto.GameCommand;
-import com.game_machine.proto.Player;
-import com.game_machine.proto.PlayersAroundMe;
+import com.game_machine.generated.Components;
+import com.game_machine.generated.GameCommand;
+import com.game_machine.generated.Player;
+import com.game_machine.generated.PlayersAroundMe;
 
 public class SerializationTesting {
 

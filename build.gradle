@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
+apply plugin:'application'
 
 group = 'game_machine'
   version = '0.0.1-SNAPSHOT'
@@ -11,6 +12,7 @@ description = """"""
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+mainClassName = "com.game_machine.GameMachine"
 
 sourceSets {
   main {
@@ -75,13 +77,12 @@ dependencies {
     proc.waitFor() 
   }
   
-  task protostuff << {
-  	def proc = "java -jar third_party\\protostuff-compiler-1.0.7.jar protostuff.properties".execute() 
-    proc.in.eachLine {line -> println line} 
-    proc.err.eachLine {line -> println 'ERROR: ' + line} 
-    proc.waitFor() 
-  }
-  
+ task protostuff(type: Exec) {
+ 	File configFile = file('src/main/resources/protostuff.properties')
+ 	File jar = file('third_party/protostuff-compiler-1.0.7-jarjar.jar')
+    commandLine 'java','-jar',jar,configFile
+}
+
   test {
   	useTestNG()
 	outputs.upToDateWhen { false }

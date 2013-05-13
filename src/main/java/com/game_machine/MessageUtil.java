@@ -3,7 +3,7 @@ package com.game_machine;
 import java.io.File;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.game_machine.proto.GameCommand;
+import com.game_machine.generated.GameCommand;
 
 public class MessageUtil {
 
