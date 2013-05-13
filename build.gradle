@@ -76,7 +76,7 @@ dependencies {
   }
   
   task install_libs(type: Copy) {
-    into "$buildDir/../java_lib"
+    into "$buildDir/../lib"
     from configurations.runtime
     from "$buildDir/libs"
 }

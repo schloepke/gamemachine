@@ -86,6 +86,7 @@ public class Entities {
 		Class<? extends Component> klass = null;
 		String methodName = null;
 
+		EntitiesHelper.
 		ArrayList<Component> componentList = new ArrayList<Component>();
 		Entities entities = new Entities();
 		String fieldName = null;
