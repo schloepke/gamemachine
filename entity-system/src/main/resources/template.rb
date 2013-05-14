@@ -2,8 +2,8 @@ require 'erb'
 require 'java'
 require 'pathname'
 
-dir = File.join(Dir.getwd,'lib').gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
-Dir.entries(dir).each { |jar| puts jar; require File.join(dir,jar) unless File.directory?(jar)}
+dir = File.join(Dir.getwd,'build','libs').gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
+Dir.entries(dir).each { |jar| require File.join(dir,jar) unless File.directory?(jar)}
   
 java_import java.lang.System
 java_import com.game_machine.entity_system.generated.Components

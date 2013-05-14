@@ -228,11 +228,11 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
     	
         while(true) { 
     		fieldName = Components.getSchema().getFieldName(i);
-    		i++;
     		if (fieldName == null) {
     			break;
     		}
     		fieldNames.add(fieldName);
+    		i++;
     	}
     	return fieldNames;
     }
