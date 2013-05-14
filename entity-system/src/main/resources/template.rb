@@ -18,7 +18,6 @@ class Template
   def create_components(names)
     user_dir =  System.getProperties["user.dir"]
     template_file = File.join(user_dir,'src','main','resources','entities.erb')
-    output_file = File.join(user_dir,'src','main','java','com','game_machine','entity_system','generated','EntitiesHelper.java')
     components_file = File.join(user_dir,'src','main','java','com','game_machine','entity_system','generated','Components.java')
     out = ERB.new(File.read(template_file)).result(binding)
     components_src = File.read(components_file)

@@ -659,7 +659,7 @@ public static List\<String\> getFields() {
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = Components.getSchema().getFieldName(i);
+		fieldName = <message.name>.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}

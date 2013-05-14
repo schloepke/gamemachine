@@ -330,7 +330,7 @@ public final class Player extends com.game_machine.entity_system.Component imple
     	Integer i = 1;
     	
         while(true) { 
-    		fieldName = Components.getSchema().getFieldName(i);
+    		fieldName = Player.getSchema().getFieldName(i);
     		if (fieldName == null) {
     			break;
     		}

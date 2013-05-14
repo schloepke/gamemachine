@@ -253,7 +253,7 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
     	Integer i = 1;
     	
         while(true) { 
-    		fieldName = Components.getSchema().getFieldName(i);
+    		fieldName = PlayersAroundMe.getSchema().getFieldName(i);
     		if (fieldName == null) {
     			break;
     		}
