@@ -7,6 +7,9 @@
     		<% varname = name.clone %><% klass = name.slice!(0).upcase + name %>
    		for (<%=klass%> <%=varname%> : this.get<%=klass%>List()) {
    			entityId = <%=varname%>.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
    			if (entities.hasEntity(entityId)) {
    				entities.getEntity(entityId).addComponent(<%=varname%>);
    			} else {

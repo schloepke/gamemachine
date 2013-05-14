@@ -2,8 +2,14 @@ require 'erb'
 require 'java'
 require 'pathname'
 
-dir = File.join(Dir.getwd,'build','libs').gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
-Dir.entries(dir).each { |jar| require File.join(dir,jar) unless File.directory?(jar)}
+dir = File.join(Dir.getwd,'lib').gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
+Dir.entries(dir).each do |jar|
+  file = File.join(dir,jar).gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
+  unless File.directory?(file)
+    puts "Loading #{file}"
+    require file
+  end
+end
   
 java_import java.lang.System
 java_import com.game_machine.entity_system.generated.Components
@@ -16,7 +22,7 @@ class Template
     components_file = File.join(user_dir,'src','main','java','com','game_machine','entity_system','generated','Components.java')
     out = ERB.new(File.read(template_file)).result(binding)
     components_src = File.read(components_file)
-    components_src.sub!('//__REPLACE_1__',out)
+    components_src.sub!(/\/\/__REPLACE_1_START__.*\/\/__REPLACE_1_END__/m,out)
     File.open(components_file,'w') {|f| f.write components_src}
     true
   end

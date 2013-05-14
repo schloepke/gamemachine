@@ -1,0 +1,34 @@
+
+task :default do
+  
+end
+
+task :build do
+  sh "gradle clean"
+  sh "gradle protogen"
+  sh "gradle -Dskip.tests build"
+  sh "gradle install_libs"
+  sh "gradle codegen"
+  sh "gradle install_libs"
+end
+
+task :clean do
+  sh "gradle clean"
+  clean_dir('lib')
+end
+
+task :install do
+  cp File.join('build','libs','')
+end
+
+
+
+
+def clean_dir(dir)
+  path = File.join(Dir.getwd,dir)
+  Dir.entries(dir).collect {|jar|File.join(dir,jar)}.each do |file|
+    unless File.directory?(file)
+      rm file
+    end
+  end
+end

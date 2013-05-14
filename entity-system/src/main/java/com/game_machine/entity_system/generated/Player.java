@@ -314,7 +314,14 @@ public final class Player extends com.game_machine.entity_system.Component imple
         return PIPE_SCHEMA;
     }
 
-    //__REPLACE_1__
+    //__REPLACE_1_START__
+    public Entities toEntities() {
+      return null;
+    }
+    public static Components fromEntities(Entities entities) {
+      return null;
+    }
+    //__REPLACE_1_END__
 
 
     public static List<String> getFields() {

@@ -1,11 +1,9 @@
 package com.game_machine.game;
 
-import java.util.ArrayList;
-
 import akka.actor.UntypedActor;
 
-import com.game_machine.Entities;
-import com.game_machine.Entity;
+import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.Entity;
 
 public class Echo extends UntypedActor {
 

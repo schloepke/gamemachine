@@ -34,6 +34,7 @@ public class Entity {
 			throw new RuntimeException("Entity already has a component named " + componentName);
 		}
 		components.put(componentName, component);
+		//component.setEntityId(this.getId());
 	}
 
 	public void removeComponent(Component component) {

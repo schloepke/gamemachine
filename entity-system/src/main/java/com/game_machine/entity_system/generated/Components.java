@@ -326,6 +326,9 @@ public final class Components extends com.game_machine.entity_system.Component i
     		
    		for (Player player : this.getPlayerList()) {
    			entityId = player.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
    			if (entities.hasEntity(entityId)) {
    				entities.getEntity(entityId).addComponent(player);
    			} else {
@@ -338,6 +341,9 @@ public final class Components extends com.game_machine.entity_system.Component i
     		
    		for (PlayersAroundMe playersAroundMe : this.getPlayersAroundMeList()) {
    			entityId = playersAroundMe.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
    			if (entities.hasEntity(entityId)) {
    				entities.getEntity(entityId).addComponent(playersAroundMe);
    			} else {
@@ -350,6 +356,9 @@ public final class Components extends com.game_machine.entity_system.Component i
     		
    		for (GameCommand gameCommand : this.getGameCommandList()) {
    			entityId = gameCommand.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
    			if (entities.hasEntity(entityId)) {
    				entities.getEntity(entityId).addComponent(gameCommand);
    			} else {

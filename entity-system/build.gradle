@@ -10,6 +10,16 @@ description = """"""
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
+task assembleManifestClasspath {
+    doLast {
+        jar {
+			manifest {
+				attributes("Class-Path": configurations.runtime.collect { it.name }.join(' ')) 
+			}
+		}
+	}
+}
+jar.dependsOn assembleManifestClasspath
 
 repositories {
      mavenRepo url: "http://repo.maven.apache.org/maven2"
@@ -33,23 +43,31 @@ task uberjar(type: Jar) {
     from files(sourceSets.main.output.classesDir)
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 
-    manifest {
-        attributes "Main-Class" : "com.game_machine.entity_system.ErbTemplate"
-    }
 }
 
- task protogen(type: Exec) {
+ task protogen(type: Exec)  {
  	File configFile = file('src/main/resources/protostuff.properties')
  	File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
     commandLine 'java','-jar',jar,configFile
-    tasks.uberjar.execute();
 }
 
-task codegen(type: Exec, dependsOn: 'protogen') {
+task codegen(type: Exec) {
 	File templateFile = file('src/main/resources/template.rb')
     commandLine 'jruby',templateFile
-    tasks.uberjar.execute();
 }
+
+task copy_lib(type: Copy) {
+    from 'build/libs'
+    into '../lib'
+}
+
+
+ task install_libs(type: Copy) {
+    into "$buildDir/../lib"
+    from configurations.runtime
+    from "$buildDir/libs"
+}
+
 
   test {
   	useTestNG()

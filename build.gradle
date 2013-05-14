@@ -12,23 +12,6 @@ description = """"""
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-mainClassName = "com.game_machine.GameMachine"
-
-sourceSets {
-  main {
-    java {
-      srcDirs "src/generated/java"
-    }
-    resources {
-      srcDir "src/generated/resources"
-    }
-  }
-  test {
-    java {
-      srcDir "src/generated/test"
-    }
-  }
-}
 
 
 repositories {
@@ -66,10 +49,12 @@ dependencies {
     compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
     compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
     compile 'org.jruby:jruby-complete:1.7.3'
+    compile files('entity-system/build/libs/entity-system-0.0.1-SNAPSHOT.jar')
     
     
   }
   
+  //build.dependsOn 'entity-system:codegen'
   task protoc << {
   	def proc = "protoc src\\main\\resources\\messages.proto --java_out=src\\main\\java".execute() 
     proc.in.eachLine {line -> println line} 
