@@ -1,0 +1,39 @@
+
+	public Entities toEntities() {
+   		Entities entities = new Entities();
+   		Entity entity = null;
+   		Integer entityId = null;
+    	<% components_fields.each do |name| %>
+    		<% varname = name.clone %><% klass = name.slice!(0).upcase + name %>
+   		for (<%=klass%> <%=varname%> : this.get<%=klass%>List()) {
+   			entityId = <%=varname%>.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
+   			if (entities.hasEntity(entityId)) {
+   				entities.getEntity(entityId).addComponent(<%=varname%>);
+   			} else {
+   				entity = new Entity(entityId);
+   				entity.addComponent(<%=varname%>);
+   				entities.addEntity(entity);
+   			}
+   		}
+   		<% end %>
+   		return entities;
+	}
+    
+	public static Components fromEntities(Entities entities) {
+		Components components = new Components();
+		for (Entity entity : entities.getEntities().values()) {
+			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
+				<% components_fields.each do |name| %>
+				<% name = name.slice!(0).upcase + name %>
+				if (entry.getKey().equals("<%=name%>")) {
+					components.add<%=name%>(<%=name%>.class.cast(entry.getValue()));
+				}
+				<% end %>
+			}
+		}
+		return components;
+	}
+
