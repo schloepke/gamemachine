@@ -11,6 +11,14 @@ Dir.entries(dir).each do |jar|
   end
 end
   
+def get_type(field)
+  if field.getJavaType.to_s == 'int'
+    return 'Integer'
+  else
+    return field.getJavaType
+  end
+end
+
 java_import java.lang.System
 java_import com.dyuproject.protostuff.compiler.CachingProtoLoader
 java_import java.io.FileNotFoundException
@@ -28,7 +36,7 @@ proto.getMessages.each do |message|
   klass = message.getName
   puts "Message: #{message.getName}"
   out = ERB.new(File.read(template_file),nil,'-').result(binding)
-  src_file = File.join(user_dir,'src','main','resources',"#{message.getName}.java")
+  src_file = File.join(user_dir,'src','main','java','com','game_machine','entity_system','generated',"#{message.getName}.java")
   File.open(src_file,'w') {|f| f.write out}
   message.getFields.each do |field|
     puts field.getJavaType

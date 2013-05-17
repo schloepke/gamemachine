@@ -29,6 +29,7 @@ import com.game_machine.entity_system.Component;
 
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
+import com.dyuproject.protostuff.UninitializedMessageException;
 
 public final class <%=klass%> extends com.game_machine.entity_system.Component implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
 {
@@ -47,9 +48,9 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
 
     <%- message.getFields.each do |field| -%>
     <%- if field.isRepeated -%>
-    private List<<%=field.getJavaType%>> <%=field.name -%>;
+    private List<<%=get_type(field)%>> <%=field.name -%>;
     <%- else -%>
-    private <%=field.getJavaType%> <%=field.name -%>;
+    private <%=get_type(field)%> <%=field.name -%>;
     <%- end -%>
     <%- end -%>
     
@@ -60,33 +61,34 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
     }
 
 <%- message.getFields.each do |field| -%>
+<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
 <%- if field.isRepeated -%>
-	public List<<%=field.getJavaType%>> get<%=field.getJavaType -%>List() {
+	public List<<%=get_type(field)%>> get<%=field_name -%>List() {
 		return <%= field.name %>;
 	}
 
-	public void set<%=field.getJavaType %>List(List<<%=field.getJavaType%>> <%=field.name%>) {
+	public void set<%=field_name %>List(List<<%=get_type(field)%>> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
 	}
 
-	public <%=field.getJavaType %> get<%=field.getJavaType %>(int index)  {
+	public <%=get_type(field) %> get<%=field_name %>(int index)  {
         return <%=field.name%> == null ? null : <%=field.name%>.get(index);
     }
 
-    public int get<%=field.getJavaType %>Count()  {
+    public int get<%=field_name %>Count()  {
         return <%=field.name%> == null ? 0 : <%=field.name%>.size();
     }
 
-    public void add<%=field.getJavaType %>(<%=field.getJavaType %> <%=field.name%>)  {
+    public void add<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
         if(this.<%=field.name%> == null)
-            this.<%=field.name%> = new ArrayList<<%=field.getJavaType %>>();
+            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
         this.<%=field.name%>.add(<%=field.name%>);
     }
 <%- else -%>
-	public <%=field.getJavaType%> get<%=field.getJavaType -%>() {
+	public <%=get_type(field)%> get<%=field_name -%>() {
 		return <%= field.name %>;
 	}
-	public void set<%=field.getJavaType %>(<%=field.getJavaType%> <%=field.name%>) {
+	public void set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
 	}
 <%- end -%>
@@ -151,12 +153,18 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
             	case <%=field.number%>:
             	<%- if field.isRepeated -%>
             		if(message.<%=field.name%> == null)
-                        message.<%=field.name%> = new ArrayList<<%=field.getJavaType%>>();
-                    message.<%=field.name%>.add(input.mergeObject(null, <%=field.getJavaType%>.getSchema()));
+                        message.<%=field.name%> = new ArrayList<<%=get_type(field)%>>();
+                    message.<%=field.name%>.add(input.mergeObject(null, <%=get_type(field)%>.getSchema()));
                     break;
                 <%- else -%>
-                	message.x = input.read<%=field.getClass.getSimpleName%>();
+                	<%- if field.isMessageField -%>
+                	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
                     break;
+                	<%- else -%>
+                	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
+                	break;
+                	<%- end -%>
+                	
                 <%- end -%>
             	<%- end -%>
             
@@ -169,44 +177,43 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
 
     public void writeTo(Output output, <%=klass%> message) throws IOException
     {
-        if(message.player != null)
+    	<%- message.getFields.each do |field| -%>
+    	
+    	<%- if field.isRequired -%>
+    	if(message.<%=field.name%> == null)
+            throw new UninitializedMessageException(message);
+    	<%- end %>
+    	
+    	<%- if field.isRepeated -%>
+    	if(message.<%=field.name%> != null)
         {
-            for(Player player : message.player)
+            for(<%=get_type(field)%> <%=field.name%> : message.<%=field.name%>)
             {
-                if(player != null)
-                    output.writeObject(1, player, Player.getSchema(), true);
+                if(<%=field.name%> != null)
+                    output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
             }
         }
-
-
-        if(message.playersAroundMe != null)
-        {
-            for(PlayersAroundMe playersAroundMe : message.playersAroundMe)
-            {
-                if(playersAroundMe != null)
-                    output.writeObject(2, playersAroundMe, PlayersAroundMe.getSchema(), true);
-            }
-        }
-
-
-        if(message.gameCommand != null)
-        {
-            for(GameCommand gameCommand : message.gameCommand)
-            {
-                if(gameCommand != null)
-                    output.writeObject(3, gameCommand, GameCommand.getSchema(), true);
-            }
-        }
-
+    	<%- else -%>
+    	<%- if field.isMessageField -%>
+    	if(message.<%=field.name%> != null)
+    		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
+    	<%- else -%>
+    	if(message.<%=field.name%> != null)
+            output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+    	<%- end -%>
+    	
+    	<%- end -%>
+        <%- end -%>
+    	
     }
 
     public String getFieldName(int number)
     {
         switch(number)
         {
-            case 1: return "player";
-            case 2: return "playersAroundMe";
-            case 3: return "gameCommand";
+        	<%- message.getFields.each do |field| -%>
+        	case <%=field.number%>: return "<%=field.name%>";
+        	<%- end -%>
             default: return null;
         }
     }
@@ -220,45 +227,108 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-        __fieldMap.put("player", 1);
-        __fieldMap.put("playersAroundMe", 2);
-        __fieldMap.put("gameCommand", 3);
+    	<%- message.getFields.each do |field| -%>
+    	__fieldMap.put("<%=field.name%>", <%=field.number%>);
+    	<%- end -%>
     }
+   
+   public static List<String> getFields() {
+	ArrayList<String> fieldNames = new ArrayList<String>();
+	String fieldName = null;
+	Integer i = 1;
+	
+    while(true) { 
+		fieldName = <%=klass%>.getSchema().getFieldName(i);
+		if (fieldName == null) {
+			break;
+		}
+		fieldNames.add(fieldName);
+		i++;
+	}
+	return fieldNames;
+}
+
+public static <%=klass%> parseFrom(byte[] bytes) {
+	<%=klass%> message = new <%=klass%>();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class));
+	return message;
+}
+	
+public byte[] toByteArray(String encoding) {
+	if (encoding.equals("protobuf")) {
+		return toProtobuf();
+	} else if (encoding.equals("json")) {
+		return toJson();
+	} else {
+		throw new RuntimeException("No encoding specified");
+	}
+}
+
+public byte[] toJson() {
+	boolean numeric = false;
+	ByteArrayOutputStream out = new ByteArrayOutputStream();
+	try {
+		JsonIOUtil.writeTo(out, this, <%=klass%>.getSchema(), numeric);
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw new RuntimeException("Json encoding failed");
+	}
+	return out.toByteArray();
+}
+		
+public byte[] toProtobuf() {
+	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+	byte[] bytes = null;
+
+	try {
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(<%=klass%>.class), buffer);
+		buffer.clear();
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException("Protobuf encoding failed");
+	}
+	return bytes;
+}
+
+   <%- if klass == 'Components' -%>
+    public Entities toEntities() {
+   		Entities entities = new Entities();
+   		Entity entity = null;
+   		Integer entityId = null;
+   		<%- message.getFields.each do |field| -%>
+    	<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
+   		for (<%=get_type(field)%> <%=field.name%> : this.get<%=field_name%>List()) {
+   			entityId = <%=field.name%>.getEntityId();
+   			if (entityId == null) {
+   				continue;
+   		 	}
+   			if (entities.hasEntity(entityId)) {
+   				entities.getEntity(entityId).addComponent(<%=field.name%>);
+   			} else {
+   				entity = new Entity(entityId);
+   				entity.addComponent(<%=field.name%>);
+   				entities.addEntity(entity);
+   			}
+   		}
+   		<% end %>
+   		return entities;
+	}
     
-    static final Pipe.Schema<<%=klass%>> PIPE_SCHEMA = new Pipe.Schema<<%=klass%>>(DEFAULT_INSTANCE)
-    {
-        protected void transfer(Pipe pipe, Input input, Output output) throws IOException
-        {
-            for(int number = input.readFieldNumber(wrappedSchema);; number = input.readFieldNumber(wrappedSchema))
-            {
-                switch(number)
-                {
-                    case 0:
-                        return;
-                    case 1:
-                        output.writeObject(number, pipe, Player.getPipeSchema(), true);
-                        break;
-
-                    case 2:
-                        output.writeObject(number, pipe, PlayersAroundMe.getPipeSchema(), true);
-                        break;
-
-                    case 3:
-                        output.writeObject(number, pipe, GameCommand.getPipeSchema(), true);
-                        break;
-
-                    default:
-                        input.handleUnknownField(number, wrappedSchema);
-                }
-            }
-        }
-    };
-
-    public static Pipe.Schema<<%=klass%>> getPipeSchema()
-    {
-        return PIPE_SCHEMA;
-    }
-
+	public static Components fromEntities(Entities entities) {
+		Components components = new Components();
+		for (Entity entity : entities.getEntities().values()) {
+			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
+				<%- message.getFields.each do |field| -%>
+				<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
+				if (entry.getKey().equals("<%=field.name%>")) {
+					components.add<%=field_name%>(<%=field_name%>.class.cast(entry.getValue()));
+				}
+				<%- end -%>
+			}
+		}
+		return components;
+	}
+   <%- end -%> 
     
 
 }
