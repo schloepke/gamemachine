@@ -1,3 +1,4 @@
 source 'http://rubygems.org'
 
 gem 'buildr-resolver'
+gem 'ruby_protobuf'

@@ -30,6 +30,7 @@ public class Entity {
 	
 	public void addComponent(Component component) {
 		String componentName = component.getClass().getSimpleName();
+		
 		if (components.containsKey(componentName)) {
 			throw new RuntimeException("Entity already has a component named " + componentName);
 		}
