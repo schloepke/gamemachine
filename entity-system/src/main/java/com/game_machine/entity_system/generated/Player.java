@@ -8,6 +8,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
@@ -23,8 +24,8 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.generated.Entity;
 import com.game_machine.entity_system.Component;
 
 import com.dyuproject.protostuff.Pipe;
@@ -277,6 +278,13 @@ public static Player parseFrom(byte[] bytes) {
 	Player message = new Player();
 	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Player.class));
 	return message;
+}
+
+public Player clone() {
+	byte[] bytes = this.toByteArray("protobuf");
+	Player player = Player.parseFrom(bytes);
+	player.setEntityId(null);
+	return player;
 }
 	
 public byte[] toByteArray(String encoding) {

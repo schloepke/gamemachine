@@ -13,7 +13,14 @@ message Player {
 }
 
 message TestObject {
-  optional string blah = 1;
+  optional string optionalString = 1;
+  required string requiredString = 2;
+  repeated int32 numbers = 3;
+  optional bytes bstring = 4;
+  optional bool bvalue = 5;
+  optional double dvalue = 6;
+  optional float fvalue = 7;
+  optional int64 numbers64 = 8;
 }
   
   

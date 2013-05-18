@@ -1,39 +1,55 @@
+package com.game_machine.entity_system.generated;
 
-	public Entities toEntities() {
-   		Entities entities = new Entities();
-   		Entity entity = null;
-   		Integer entityId = null;
-    	<% components_fields.each do |name| %>
-    		<% varname = name.clone %><% klass = name.slice!(0).upcase + name %>
-   		for (<%=klass%> <%=varname%> : this.get<%=klass%>List()) {
-   			entityId = <%=varname%>.getEntityId();
-   			if (entityId == null) {
-   				continue;
-   		 	}
-   			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).addComponent(<%=varname%>);
-   			} else {
-   				entity = new Entity(entityId);
-   				entity.addComponent(<%=varname%>);
-   				entities.addEntity(entity);
-   			}
-   		}
-   		<% end %>
-   		return entities;
+import java.util.HashMap;
+
+public class Entity {
+
+	<%- messages.each do |message| -%>
+	private <%=message.getName%> <%=varname(message.getName)%>;
+	<%- end -%>
+	private final Integer id;
+	private String clientId;
+	
+	public Entity(Integer id) {
+		this.id = id;
 	}
-    
-	public static Components fromEntities(Entities entities) {
-		Components components = new Components();
-		for (Entity entity : entities.getEntities().values()) {
-			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
-				<% components_fields.each do |name| %>
-				<% name = name.slice!(0).upcase + name %>
-				if (entry.getKey().equals("<%=name%>")) {
-					components.add<%=name%>(<%=name%>.class.cast(entry.getValue()));
-				}
-				<% end %>
-			}
+		
+	public Integer getId() {
+		return this.id;
+	}
+	
+	public String getClientId() {
+		return this.clientId;
+	}
+	
+	public void setClientId(String clientId) {
+		this.clientId = clientId;
+	}
+	
+	<%- messages.each do |message| -%>
+	// <%=message.getName%>
+	public void set<%=message.getName%>(<%=message.getName%> <%=varname(message.getName)%>) {
+		if (<%=varname(message.getName)%>.hasEntityId()) {
+			<%=varname(message.getName)%> = <%=varname(message.getName)%>.clone();
 		}
-		return components;
+		
+		this.<%=varname(message.getName)%> = <%=varname(message.getName)%>;
+		this.<%=varname(message.getName)%>.setEntityId(this.getId());
 	}
+	
+	public <%=message.getName%> get<%=message.getName%>() {
+		return this.<%=varname(message.getName)%>;
+	}
+	
+	public Boolean has<%=message.getName%>() {
+		return (this.<%=varname(message.getName)%> != null);
+	}
+	
+	
+	
+	<%- end -%>
+	
+	
 
+}
+	

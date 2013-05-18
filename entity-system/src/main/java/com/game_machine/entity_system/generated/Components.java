@@ -8,6 +8,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
@@ -23,8 +24,8 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.generated.Entity;
 import com.game_machine.entity_system.Component;
 
 import com.dyuproject.protostuff.Pipe;
@@ -282,6 +283,13 @@ public static Components parseFrom(byte[] bytes) {
 	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Components.class));
 	return message;
 }
+
+public Components clone() {
+	byte[] bytes = this.toByteArray("protobuf");
+	Components components = Components.parseFrom(bytes);
+	components.setEntityId(null);
+	return components;
+}
 	
 public byte[] toByteArray(String encoding) {
 	if (encoding.equals("protobuf")) {
@@ -329,10 +337,10 @@ public byte[] toProtobuf() {
    				continue;
    		 	}
    			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).addComponent(player);
+   				entities.getEntity(entityId).setPlayer(player);
    			} else {
    				entity = new Entity(entityId);
-   				entity.addComponent(player);
+   				entity.setPlayer(player);
    				entities.addEntity(entity);
    			}
    		}
@@ -342,10 +350,10 @@ public byte[] toProtobuf() {
    				continue;
    		 	}
    			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).addComponent(playersAroundMe);
+   				entities.getEntity(entityId).setPlayersAroundMe(playersAroundMe);
    			} else {
    				entity = new Entity(entityId);
-   				entity.addComponent(playersAroundMe);
+   				entity.setPlayersAroundMe(playersAroundMe);
    				entities.addEntity(entity);
    			}
    		}
@@ -355,10 +363,10 @@ public byte[] toProtobuf() {
    				continue;
    		 	}
    			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).addComponent(gameCommand);
+   				entities.getEntity(entityId).setGameCommand(gameCommand);
    			} else {
    				entity = new Entity(entityId);
-   				entity.addComponent(gameCommand);
+   				entity.setGameCommand(gameCommand);
    				entities.addEntity(entity);
    			}
    		}
@@ -369,16 +377,14 @@ public byte[] toProtobuf() {
 	public static Components fromEntities(Entities entities) {
 		Components components = new Components();
 		for (Entity entity : entities.getEntities().values()) {
-			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
-				if (entry.getKey().equals("player")) {
-					components.addPlayer(Player.class.cast(entry.getValue()));
-				}
-				if (entry.getKey().equals("playersAroundMe")) {
-					components.addPlayersAroundMe(PlayersAroundMe.class.cast(entry.getValue()));
-				}
-				if (entry.getKey().equals("gameCommand")) {
-					components.addGameCommand(GameCommand.class.cast(entry.getValue()));
-				}
+			if (entity.hasPlayer()) {
+				components.addPlayer(entity.getPlayer());
+			}
+			if (entity.hasPlayersAroundMe()) {
+				components.addPlayersAroundMe(entity.getPlayersAroundMe());
+			}
+			if (entity.hasGameCommand()) {
+				components.addGameCommand(entity.getGameCommand());
 			}
 		}
 		return components;

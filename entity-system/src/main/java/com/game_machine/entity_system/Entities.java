@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.game_machine.entity_system.generated.Components;
+import com.game_machine.entity_system.generated.Entity;
 import com.game_machine.entity_system.generated.GameCommand;
 import com.game_machine.entity_system.generated.Player;
 import com.game_machine.entity_system.generated.PlayersAroundMe;

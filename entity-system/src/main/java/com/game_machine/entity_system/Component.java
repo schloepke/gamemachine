@@ -17,4 +17,8 @@ public class Component {
         this.entityId = entityId;
     }
     
+    public Boolean hasEntityId() {
+    	return (this.entityId != null);
+    }
+    
 }

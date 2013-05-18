@@ -8,6 +8,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
@@ -23,8 +24,8 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.generated.Entity;
 import com.game_machine.entity_system.Component;
 
 import com.dyuproject.protostuff.Pipe;
@@ -253,6 +254,13 @@ public static <%=klass%> parseFrom(byte[] bytes) {
 	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class));
 	return message;
 }
+
+public <%=klass%> clone() {
+	byte[] bytes = this.toByteArray("protobuf");
+	<%=klass%> <%=varname(klass)%> = <%=klass%>.parseFrom(bytes);
+	<%=varname(klass)%>.setEntityId(null);
+	return <%=varname(klass)%>;
+}
 	
 public byte[] toByteArray(String encoding) {
 	if (encoding.equals("protobuf")) {
@@ -296,17 +304,16 @@ public byte[] toProtobuf() {
    		Entity entity = null;
    		Integer entityId = null;
    		<%- message.getFields.each do |field| -%>
-    	<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
-   		for (<%=get_type(field)%> <%=field.name%> : this.get<%=field_name%>List()) {
+   		for (<%=get_type(field)%> <%=field.name%> : this.get<%=classname(field.name)%>List()) {
    			entityId = <%=field.name%>.getEntityId();
    			if (entityId == null) {
    				continue;
    		 	}
    			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).addComponent(<%=field.name%>);
+   				entities.getEntity(entityId).set<%=classname(field.name)%>(<%=field.name%>);
    			} else {
    				entity = new Entity(entityId);
-   				entity.addComponent(<%=field.name%>);
+   				entity.set<%=classname(field.name)%>(<%=field.name%>);
    				entities.addEntity(entity);
    			}
    		}
@@ -317,14 +324,11 @@ public byte[] toProtobuf() {
 	public static Components fromEntities(Entities entities) {
 		Components components = new Components();
 		for (Entity entity : entities.getEntities().values()) {
-			for (Map.Entry<String, Component> entry : entity.getComponents().entrySet()) {
-				<%- message.getFields.each do |field| -%>
-				<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
-				if (entry.getKey().equals("<%=field.name%>")) {
-					components.add<%=field_name%>(<%=field_name%>.class.cast(entry.getValue()));
-				}
-				<%- end -%>
+			<%- message.getFields.each do |field| -%>
+			if (entity.has<%=classname(field.name)%>()) {
+				components.add<%=classname(field.name)%>(entity.get<%=classname(field.name)%>());
 			}
+			<%- end -%>
 		}
 		return components;
 	}
