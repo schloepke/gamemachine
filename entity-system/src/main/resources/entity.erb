@@ -37,6 +37,10 @@ public class Entity {
 		this.<%=varname(message.getName)%>.setEntityId(this.getId());
 	}
 	
+	public void remove<%=message.getName%>() {
+		this.<%=varname(message.getName)%> = null;
+	}
+	
 	public <%=message.getName%> get<%=message.getName%>() {
 		return this.<%=varname(message.getName)%>;
 	}

@@ -307,16 +307,16 @@ public static <%=klass%> parseFrom(byte[] bytes) {
 }
 
 public <%=klass%> clone() {
-	byte[] bytes = this.toByteArray("protobuf");
+	byte[] bytes = this.toByteArray();
 	<%=klass%> <%=varname(klass)%> = <%=klass%>.parseFrom(bytes);
 	<%=varname(klass)%>.setEntityId(null);
 	return <%=varname(klass)%>;
 }
 	
-public byte[] toByteArray(String encoding) {
-	if (encoding.equals("protobuf")) {
+public byte[] toByteArray() {
+	if (Entities.encoding.equals("protobuf")) {
 		return toProtobuf();
-	} else if (encoding.equals("json")) {
+	} else if (Entities.encoding.equals("json")) {
 		return toJson();
 	} else {
 		throw new RuntimeException("No encoding specified");

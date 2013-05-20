@@ -1,0 +1,29 @@
+package com.game_machine.generated;
+
+
+option optimize_for = SPEED;
+
+message Player {
+	optional int32 x = 1;
+	optional int32 y = 2;
+	optional int32 z = 3;
+	required int32 id = 4;
+	optional string name = 5;
+	optional int32 entityId = 6;
+}
+
+message PlayersAroundMe {
+  repeated Player player = 1;
+  optional int32 entityId = 2;
+}
+	
+message GameCommand {
+	required string name = 1;
+	optional int32 entityId = 2;
+}
+
+message Components {
+  repeated Player player = 1;
+  repeated PlayersAroundMe playersAroundMe = 2;
+  repeated GameCommand gameCommand = 3;
+}

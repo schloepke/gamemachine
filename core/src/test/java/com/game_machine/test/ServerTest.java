@@ -6,8 +6,8 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import com.game_machine.GameMachine;
-import com.game_machine.net.client.Client;
+import com.game_machine.core.GameMachine;
+import com.game_machine.core.net.client.Client;
 
 
 public class ServerTest {

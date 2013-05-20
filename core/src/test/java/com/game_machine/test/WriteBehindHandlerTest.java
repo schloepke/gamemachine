@@ -15,10 +15,10 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.TestActorRef;
 
-import com.game_machine.ActorUtil;
-import com.game_machine.persistence.GameObject;
-import com.game_machine.persistence.TestGameObject;
-import com.game_machine.persistence.WriteBehindHandler;
+import com.game_machine.core.ActorUtil;
+import com.game_machine.core.persistence.GameObject;
+import com.game_machine.core.persistence.TestGameObject;
+import com.game_machine.core.persistence.WriteBehindHandler;
 
 public class WriteBehindHandlerTest {
 

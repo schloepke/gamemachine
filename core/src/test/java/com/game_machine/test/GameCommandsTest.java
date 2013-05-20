@@ -8,8 +8,8 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.testkit.TestActorRef;
 
-import com.game_machine.ActorUtil;
-import com.game_machine.game.GameCommandRouter;
+import com.game_machine.core.ActorUtil;
+import com.game_machine.core.game.GameCommandRouter;
 
 public class GameCommandsTest {
 

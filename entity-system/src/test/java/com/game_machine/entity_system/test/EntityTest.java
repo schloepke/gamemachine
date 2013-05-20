@@ -32,5 +32,13 @@ public class EntityTest {
 		assertThat(entity.getPlayer().getEntityId()).isEqualTo(1);
 	}
 	
+	@Test
+	public void remove_component_should_set_component_null() {
+		Entity entity = new Entity(1);
+		entity.setPlayer(new Player());
+		entity.removePlayer();
+		assertThat(entity.getPlayer()).isNull();
+	}
+	
 	
 }

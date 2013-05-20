@@ -16,6 +16,8 @@ import com.game_machine.entity_system.generated.PlayersAroundMe;
 
 public class Entities {
 
+	public static String encoding = "protobuf";
+	
 	private static final Logger log = LoggerFactory.getLogger(Entities.class);
 
 	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
