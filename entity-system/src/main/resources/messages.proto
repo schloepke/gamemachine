@@ -12,16 +12,28 @@ message Player {
 	optional int32 entityId = 6;
 }
 
-//message TestObject {
-  //optional string optionalString = 1;
-  //required string requiredString = 2;
-  //repeated int32 numbers = 3;
-  //optional bytes bstring = 4;
-  //optional bool bvalue = 5;
-  //optional double dvalue = 6;
-  //optional float fvalue = 7;
-  //optional int64 numbers64 = 8;
-//}
+message TestObject {
+  optional string optionalString = 1;
+  required string requiredString = 2;
+  repeated int32 numbers = 3;
+  optional bytes bstring = 4;
+  optional bool bvalue = 5;
+  optional double dvalue = 6;
+  optional float fvalue = 7;
+  optional int64 numbers64 = 8;
+  repeated Player player = 9;
+  enum Corpus {
+    UNIVERSAL = 0;
+    WEB = 1;
+    IMAGES = 2;
+    LOCAL = 3;
+    NEWS = 4;
+    PRODUCTS = 5;
+    VIDEO = 6;
+  }
+  optional Corpus corpus = 10;
+  repeated Corpus corpus2 = 11;
+}
   
   
 message PlayersAroundMe {
@@ -32,7 +44,7 @@ message PlayersAroundMe {
 message GameCommand {
 	required string name = 1;
 	optional int32 entityId = 2;
-	//optional TestObject testObject = 3;
+	optional TestObject testObject = 3;
 }
 
 message Components {

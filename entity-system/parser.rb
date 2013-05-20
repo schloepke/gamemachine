@@ -11,6 +11,7 @@ Dir.entries(dir).each do |jar|
   end
 end
 
+require 'protostuff-compiler-1.0.7-jarjar.jar'
 java_import java.lang.System
 java_import com.dyuproject.protostuff.compiler.CachingProtoLoader
 java_import java.io.FileNotFoundException
@@ -21,6 +22,8 @@ java_import com.dyuproject.protostuff.parser.ProtoUtil
 def get_type(field)
   if field.getJavaType.to_s == 'int'
     return 'Integer'
+  elsif ['boolean','double','float','long'].include?(field.getJavaType.to_s)
+    return field.getJavaType.to_s.clone.capitalize
   else
     return field.getJavaType
   end
@@ -43,6 +46,7 @@ def write_components(proto)
     out = ERB.new(File.read(template_file),nil,'-').result(binding)
     src_file = File.join(@user_dir,'src','main','java','com','game_machine','entity_system','generated',"#{message.getName}.java")
     File.open(src_file,'w') {|f| f.write out}
+    puts message.nestedEnumGroups
     message.getFields.each do |field|
       puts field.getJavaType
       puts field.toString

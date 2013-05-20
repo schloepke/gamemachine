@@ -35,6 +35,39 @@ import com.dyuproject.protostuff.UninitializedMessageException;
 public final class <%=klass%> extends com.game_machine.entity_system.Component implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
 {
 
+<%- message.nestedEnumGroups.each do |group| -%>
+	public enum <%=group.name %> implements com.dyuproject.protostuff.EnumLite<<%=group.name %>>
+    {
+    	<%- group.values.each do |value| -%>
+    	<%= "#{value.getName}(#{value.getNumber})" %><%= value.getNumber == (group.values.length - 1) ? ";" : "," %>
+    	<%- end -%>
+        
+        public final int number;
+        
+        private Corpus (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Corpus valueOf(int number)
+        {
+            switch(number) 
+            {
+            	<%- group.values.each do |value| -%>
+    			case <%= "#{value.getNumber}: return (#{value.getName})" %>;
+    			<%- end -%>
+                default: return null;
+            }
+        }
+    }
+<%- end -%>
+
+
     public static Schema<<%=klass%>> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -155,11 +188,20 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
             	<%- if field.isRepeated -%>
             		if(message.<%=field.name%> == null)
                         message.<%=field.name%> = new ArrayList<<%=get_type(field)%>>();
+                    <%- if field.isMessageField -%>
                     message.<%=field.name%>.add(input.mergeObject(null, <%=get_type(field)%>.getSchema()));
+                    <%- elsif field.enumField -%>
+                    message.<%=field.name%>.add(<%=get_type(field)%>.valueOf(input.readEnum()));
+                    <%- else -%>
+                	message.<%=field.name%>.add(input.read<%=field.getClass.getSimpleName%>());
+                	<%- end -%>
                     break;
                 <%- else -%>
                 	<%- if field.isMessageField -%>
                 	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
+                    break;
+                    <%- elsif field.enumField -%>
+                    message.<%=field.name%> = <%=classname(field.name)%>.valueOf(input.readEnum());
                     break;
                 	<%- else -%>
                 	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
@@ -190,14 +232,23 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
         {
             for(<%=get_type(field)%> <%=field.name%> : message.<%=field.name%>)
             {
-                if(<%=field.name%> != null)
-                    output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
+                if(<%=field.name%> != null) {
+                   	<%- if field.isMessageField -%>
+    				output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
+    				<%- elsif field.enumField -%>
+    				output.writeEnum(<%=field.number%>, <%=field.name%>.number, true);
+    				<%- else -%>
+            		output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, <%=field.name%>, true);
+    				<%- end -%>
+    			}
             }
         }
     	<%- else -%>
     	<%- if field.isMessageField -%>
     	if(message.<%=field.name%> != null)
     		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
+    	<%- elsif field.enumField -%>
+    	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
     	<%- else -%>
     	if(message.<%=field.name%> != null)
             output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
