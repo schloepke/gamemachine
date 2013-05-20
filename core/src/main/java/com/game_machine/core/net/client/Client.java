@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import com.barchart.udt.SocketUDT;
 import com.barchart.udt.TypeUDT;
 import com.game_machine.core.MessageUtil;
+import com.game_machine.entity_system.generated.Components;
 
 
 public class Client {
@@ -26,16 +27,14 @@ public class Client {
 		try {
 
 			for (int i = 0; i < 1; i++) {
-				/*byte[] message = MessageUtil.createEchoCommand().toByteArray();
+				byte[] message = Components.fromEntities(MessageUtil.createEchoCommand()).toByteArray();
 				log.info("Client Sent "+ message.length + " bytes");
 				socket.send(message);
 				final byte[] array = new byte[1024];
-				socket.receive(array);*/
+				socket.receive(array);
 			}
 			socket.close();
-			// final int count = is.read(data);
-			// final String str = new String(data, 0, count);
-			// log.info("|{}|", str);
+			 
 
 		} catch (final IOException e) {
 			e.printStackTrace();

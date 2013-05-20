@@ -2,6 +2,12 @@ package com.game_machine.core.game;
 
 import java.util.HashMap;
 
+import com.game_machine.core.GatewayMessage;
+import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.generated.Components;
+import com.game_machine.entity_system.generated.Entity;
+import com.game_machine.entity_system.generated.GameCommand;
+
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
@@ -21,12 +27,11 @@ public class GameCommandRouter extends UntypedActor {
 
 	public void onReceive(Object message) {
 		log.info("GameCommandRouter got message " + message.toString());
-		
-		/*if (message instanceof GatewayMessage) {
+		if (message instanceof GatewayMessage) {
 			GatewayMessage gatewayMessage = (GatewayMessage) message;
-			Entities entities = Entities.parseFrom(gatewayMessage.getBytes());
-			log.info("JSON " +entities.toJson().toString());
-			for (Entity entity : entities.getEntityList()) {
+			Components components = Components.parseFrom(gatewayMessage.getBytes());
+			Entities entities = components.toEntities();
+			for (Entity entity : entities.getEntities().values()) {
 				entity.setClientId(gatewayMessage.getClientId());
 				GameCommand gameCommand = entity.getGameCommand();
 				if (gameCommand != null) {
@@ -40,6 +45,6 @@ public class GameCommandRouter extends UntypedActor {
 			}
 		} else {
 			unhandled(message);
-		}*/
+		}
 	}
 }

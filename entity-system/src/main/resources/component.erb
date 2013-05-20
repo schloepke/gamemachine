@@ -355,20 +355,22 @@ public byte[] toProtobuf() {
    		Entity entity = null;
    		Integer entityId = null;
    		<%- message.getFields.each do |field| -%>
-   		for (<%=get_type(field)%> <%=field.name%> : this.get<%=classname(field.name)%>List()) {
-   			entityId = <%=field.name%>.getEntityId();
-   			if (entityId == null) {
-   				continue;
-   		 	}
-   			if (entities.hasEntity(entityId)) {
-   				entities.getEntity(entityId).set<%=classname(field.name)%>(<%=field.name%>);
-   			} else {
-   				entity = new Entity(entityId);
-   				entity.set<%=classname(field.name)%>(<%=field.name%>);
-   				entities.addEntity(entity);
+   		if (this.get<%=classname(field.name)%>List() != null) {
+   			for (<%=get_type(field)%> <%=field.name%> : this.get<%=classname(field.name)%>List()) {
+   				entityId = <%=field.name%>.getEntityId();
+   				if (entityId == null) {
+   					continue;
+   		 		}
+   				if (entities.hasEntity(entityId)) {
+   					entities.getEntity(entityId).set<%=classname(field.name)%>(<%=field.name%>);
+   				} else {
+   					entity = new Entity(entityId);
+   					entity.set<%=classname(field.name)%>(<%=field.name%>);
+   					entities.addEntity(entity);
+   				}
    			}
    		}
-   		<% end %>
+   		<%- end -%>
    		return entities;
 	}
     
