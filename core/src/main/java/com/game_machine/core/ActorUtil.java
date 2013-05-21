@@ -14,6 +14,10 @@ public class ActorUtil {
 		return GameMachine.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());
 	}
 	
+	public static ActorSelection getSelectionByName(String name) {
+		return GameMachine.getActorSystem().actorSelection("/user/"+ name);
+	}
+	
 	public static ActorRef getActorByClass(Class<?> klass) {
 		return GameMachine.getActorRef(klass.getSimpleName());
 	}
