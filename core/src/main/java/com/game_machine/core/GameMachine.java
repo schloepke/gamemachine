@@ -22,6 +22,7 @@ public class GameMachine implements Runnable {
 	private static Class<?> gameHandler;
 	
 	public static void main(String[] args) {
+		
 		start();
 	}
 
@@ -78,7 +79,14 @@ public class GameMachine implements Runnable {
 	public void run() {
 		Thread.currentThread().setName("game-machine");
 		
-		actorSystem = ActorUtil.createSystem("system");
+		String port = System.getProperty("port");
+		String hostname = System.getProperty("hostname");
+		if (port !=null && hostname != null) {
+			actorSystem = ActorUtil.createSystem("system",hostname,port);
+		} else {
+			actorSystem = ActorUtil.createSystem("system");
+		}
+		
 
 		// Memory database actor, needs to be pinned to a single thread
 		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());

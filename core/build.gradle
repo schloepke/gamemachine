@@ -31,6 +31,7 @@ dependencies {
     compile group: 'com.typesafe.akka', name: "akka-camel_$scala_version", version:"$akka_version"
     compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
     compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
+    compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
     compile group: 'com.barchart.udt', name: 'barchart-udt-bundle', version:'2.3.0'
     compile group: 'com.yammer.metrics', name: 'metrics-core', version:'2.2.0'
     compile group: 'org.easytesting', name: 'fest-assert-core', version:'2.0M10'
