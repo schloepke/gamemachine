@@ -4,8 +4,6 @@ import java.util.HashMap;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 import com.game_machine.entity_system.Entities;
 import com.game_machine.entity_system.generated.Entity;
@@ -13,7 +11,6 @@ import com.game_machine.entity_system.generated.GameCommand;
 
 public class GameCommandRouter extends GameActor {
 
-	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	private HashMap<String, ActorRef> actors = new HashMap<String, ActorRef>();
 
 	public GameCommandRouter() {
