@@ -12,6 +12,10 @@ import com.game_machine.core.GatewayMessage;
 import com.game_machine.core.NetMessage;
 import com.game_machine.core.net.server.UdpServer;
 import com.game_machine.core.net.server.UdtServer;
+import com.game_machine.entity_system.Entities;
+import com.game_machine.entity_system.generated.ClientConnection;
+import com.game_machine.entity_system.generated.Components;
+import com.game_machine.entity_system.generated.Entity;
 
 public class Gateway extends UntypedActor {
 
@@ -21,7 +25,18 @@ public class Gateway extends UntypedActor {
 	public Gateway() {
 	}
 
-	public static void sendToClient(String clientId, byte[] bytes) {
+	public static void send(String clientId, Entities entities) {
+		byte[] bytes = Components.fromEntities(entities).toByteArray();
+		send(clientId,bytes);
+	}
+	
+	public static void send(String clientId, Entity entity) {
+		Entities entities = new Entities();
+		entities.addEntity(entity);
+		send(clientId,entities);
+	}
+	
+	public static void send(String clientId, byte[] bytes) {
 		GatewayMessage gatewayMessage = new GatewayMessage(bytes,clientId);
 		ActorUtil.getSelectionByClass(Gateway.class).tell(gatewayMessage, null);	
 	}
@@ -33,8 +48,10 @@ public class Gateway extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
 			NetMessage netMessage = (NetMessage) message;
-			GatewayMessage gatewayMessage = new GatewayMessage(netMessage.bytes,getClientId(netMessage));
-			clients.put(gatewayMessage.getClientId(), netMessage);
+			String clientId = getClientId(netMessage);
+			
+			GatewayMessage gatewayMessage = new GatewayMessage(netMessage.bytes,clientId);
+			clients.put(clientId, netMessage);
 			ActorUtil.getSelectionByClass(GameMachine.getGameHandler()).tell(gatewayMessage, this.getSelf());
 			log.debug("Inbound NetMessage message: {}", new String(netMessage.bytes));
 

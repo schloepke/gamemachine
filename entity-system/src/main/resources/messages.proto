@@ -3,6 +3,11 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message ClientConnection {
+	required string id = 1;
+	required bool connected = 2;
+}
+
 message Player {
 	optional int32 x = 1;
 	optional int32 y = 2;
@@ -51,4 +56,5 @@ message Components {
   repeated Player player = 1;
   repeated PlayersAroundMe playersAroundMe = 2;
   repeated GameCommand gameCommand = 3;
+  repeated ClientConnection clientConnection = 4;
 }

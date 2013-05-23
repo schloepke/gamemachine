@@ -8,7 +8,6 @@ public class Entity {
 	private <%=message.getName%> <%=varname(message.getName)%>;
 	<%- end -%>
 	private final Integer id;
-	private String clientId;
 	
 	public Entity(Integer id) {
 		this.id = id;
@@ -17,15 +16,7 @@ public class Entity {
 	public Integer getId() {
 		return this.id;
 	}
-	
-	public String getClientId() {
-		return this.clientId;
-	}
-	
-	public void setClientId(String clientId) {
-		this.clientId = clientId;
-	}
-	
+		
 	<%- messages.each do |message| -%>
 	// <%=message.getName%>
 	public void set<%=message.getName%>(<%=message.getName%> <%=varname(message.getName)%>) {

@@ -11,8 +11,12 @@ import akka.actor.Props;
 import akka.testkit.TestActorRef;
 
 import com.game_machine.core.ActorUtil;
+import com.game_machine.core.GameMessage;
 import com.game_machine.core.game.GameCommandRouter;
 import com.game_machine.core.persistence.HashRing;
+import com.game_machine.entity_system.Component;
+import com.game_machine.entity_system.generated.ClientConnection;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 public class GameCommandsTest {
 
@@ -43,6 +47,14 @@ public class GameCommandsTest {
 		//ClientMessage message = MessageBuilder.encode(gameCommands.get("test1").toByteArray(), "player");
 		//GameCommandRouter router = getHandler("router1");
 		//router.onReceive(message);
+	}
+	
+	@Test
+	public void gameMessageTest() {
+		ClientConnection c = new ClientConnection();
+		GameMessage message = new GameMessage("test",null,null,c);
+		assertThat(message.getComponent() instanceof ClientConnection).isTrue();
+		assertThat(message.getComponent() instanceof Component).isTrue();
 	}
 	
 	@Test

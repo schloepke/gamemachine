@@ -8,6 +8,7 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinRouter;
 
+import com.game_machine.core.game.ClientRegistry;
 import com.game_machine.core.game.Echo;
 import com.game_machine.core.game.Gateway;
 import com.game_machine.core.net.server.UdpServer;
@@ -98,6 +99,8 @@ public class GameMachine implements Runnable {
 		actorSystem.actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
 		
 		actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
+		
+		actorSystem.actorOf(Props.create(ClientRegistry.class), ClientRegistry.class.getSimpleName());
 
 		// Game logic entry point
 		try {

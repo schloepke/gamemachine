@@ -39,23 +39,29 @@ public class WriteBehindHandler extends UntypedActor {
 			unhandled(message);
 		}
 	}
-	
+
 	public Integer getMinTimeBetweenWrites() {
 		return this.minTimeBetweenWrites;
 	}
 
-	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond) throws ClassNotFoundException {
+	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond)
+			throws ClassNotFoundException {
 		this.writeInterval = writeInterval;
 		this.maxWritesPerSecond = maxWritesPerSecond;
-		
+
 		Class<?> store = Class.forName(Config.objectStore);
-		ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)), store.getSimpleName());
-		
+		ActorRef storeRef = this.getContext().actorOf(
+				Props.create(store).withRouter(new RoundRobinRouter(10)),
+				store.getSimpleName());
+
 		this.getContext()
 				.system()
 				.scheduler()
-				.schedule(Duration.Zero(), Duration.create(this.getMinTimeBetweenWrites(), TimeUnit.MILLISECONDS), this.getSelf(),
-						"tick", this.getContext().system().dispatcher(), null);
+				.schedule(
+						Duration.Zero(),
+						Duration.create(this.getMinTimeBetweenWrites(),
+								TimeUnit.MILLISECONDS), this.getSelf(), "tick",
+						this.getContext().system().dispatcher(), null);
 	}
 
 	public Boolean writeGameObject(GameObject gameObject) {
@@ -64,14 +70,15 @@ public class WriteBehindHandler extends UntypedActor {
 	}
 
 	public Boolean eligibleForWrite(GameObject gameObject) {
-		
+
 		Long lastUpdated = gameObjectUpdates.get(gameObject.getId());
-		
-		// No lastUpdated means was put in the queue on the first try and was never written
-		if (lastUpdated ==  null) {
+
+		// No lastUpdated means was put in the queue on the first try and was
+		// never written
+		if (lastUpdated == null) {
 			return true;
 		}
-		
+
 		if ((System.currentTimeMillis() - lastUpdated) < writeInterval) {
 			// Don't update a specific object more then once every writeInterval
 			return false;
@@ -100,7 +107,8 @@ public class WriteBehindHandler extends UntypedActor {
 		currentGameObject = queue.get(queue.size() - 1);
 		if (!busy() && eligibleForWrite(currentGameObject)) {
 			if (writeGameObject(currentGameObject)) {
-				gameObjectUpdates.put(currentGameObject.getId(), System.currentTimeMillis());
+				gameObjectUpdates.put(currentGameObject.getId(),
+						System.currentTimeMillis());
 				queue.remove(queue.size() - 1);
 				queueIndex.remove(currentGameObject.getId());
 				return true;
@@ -126,7 +134,8 @@ public class WriteBehindHandler extends UntypedActor {
 		gameObjects.put(currentGameObject.getId(), currentGameObject);
 		if (writeThrough) {
 			if (writeGameObject(currentGameObject)) {
-				gameObjectUpdates.put(currentGameObject.getId(), System.currentTimeMillis());
+				gameObjectUpdates.put(currentGameObject.getId(),
+						System.currentTimeMillis());
 				return writeThrough;
 			}
 		} else {
