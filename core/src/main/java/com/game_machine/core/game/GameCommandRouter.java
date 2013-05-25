@@ -14,27 +14,22 @@ public class GameCommandRouter extends GameActor {
 	private HashMap<String, ActorRef> actors = new HashMap<String, ActorRef>();
 
 	public GameCommandRouter() {
-		actors.put(
-				Combat.class.getSimpleName(),
-				this.getContext().actorOf(Props.create(Combat.class),
-						Combat.class.getSimpleName()));
-		actors.put(
-				Location.class.getSimpleName(),
-				this.getContext().actorOf(Props.create(Location.class),
-						Location.class.getSimpleName()));
-		actors.put(
-				Echo.class.getSimpleName(),
-				this.getContext().actorOf(Props.create(Echo.class),
-						Echo.class.getSimpleName()));
+		actors.put(Combat.class.getSimpleName(),
+				this.getContext().actorOf(Props.create(Combat.class), Combat.class.getSimpleName()));
+		actors.put(Location.class.getSimpleName(),
+				this.getContext().actorOf(Props.create(Location.class), Location.class.getSimpleName()));
+		ActorRef a = this.getContext().actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
+		log.info("PATH= " + a.path().address().toString());
+		actors.put(Echo.class.getSimpleName(), a);
 	}
 
 	public void onReceive(Entities entities) {
-		ClientRegistry.setConnected(getClientId());
+		ClientRegistry.register(getClientId());
 		for (Entity entity : entities.getEntities().values()) {
 			if (entity.hasGameCommand()) {
 				GameCommand gameCommand = entity.getGameCommand();
 				log.info("GameCommand: " + gameCommand.getName());
-				sendTo(gameCommand.getName(),entity);
+				sendTo(gameCommand.getName(), entity);
 			}
 		}
 	}

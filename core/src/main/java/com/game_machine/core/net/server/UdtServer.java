@@ -95,14 +95,14 @@ public class UdtServer implements Runnable {
 		return udtServer;
 	}
 	
-	public static void start() {
+	public static void start(String host, Integer port) {
 
 		// Don't try to start an already running server
 		if (udtServer != null) {
 			return;
 		}
 
-		udtServer = new UdtServer(Config.udtHost, Config.udtPort);
+		udtServer = new UdtServer(host, port);
 		new Thread(udtServer).start();
 	}
 	

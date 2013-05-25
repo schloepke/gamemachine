@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import scala.concurrent.duration.Duration;
 
 import com.game_machine.core.Config;
+import com.game_machine.entity_system.generated.Entity;
 
 import akka.actor.ActorRef;
 import akka.actor.Props;
@@ -22,14 +23,14 @@ public class WriteBehindHandler extends UntypedActor {
 	private Integer maxWritesPerSecond = 50;
 	private Integer minTimeBetweenWrites = 1000 / maxWritesPerSecond;
 	private Long lastWrite = System.currentTimeMillis() - 10000;
-	private HashMap<String, GameObject> gameObjects = new HashMap<String, GameObject>();
-	private HashMap<String, Long> gameObjectUpdates = new HashMap<String, Long>();
-	private ArrayList<GameObject> queue = new ArrayList<GameObject>();
+	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
+	private HashMap<Integer, Long> entityUpdates = new HashMap<Integer, Long>();
+	private ArrayList<Entity> queue = new ArrayList<Entity>();
 	private HashMap<String, Integer> queueIndex = new HashMap<String, Integer>();
-	private GameObject currentGameObject = null;
+	private Entity currentEntity = null;
 
 	public void onReceive(Object message) {
-		if (message instanceof GameObject) {
+		if (message instanceof Entity) {
 			write(message);
 		} else if (message instanceof String) {
 			if (message.equals("tick")) {
@@ -44,34 +45,29 @@ public class WriteBehindHandler extends UntypedActor {
 		return this.minTimeBetweenWrites;
 	}
 
-	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond)
-			throws ClassNotFoundException {
+	public WriteBehindHandler(Integer writeInterval, Integer maxWritesPerSecond) throws ClassNotFoundException {
 		this.writeInterval = writeInterval;
 		this.maxWritesPerSecond = maxWritesPerSecond;
 
 		Class<?> store = Class.forName(Config.objectStore);
-		ActorRef storeRef = this.getContext().actorOf(
-				Props.create(store).withRouter(new RoundRobinRouter(10)),
+		ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)),
 				store.getSimpleName());
 
 		this.getContext()
 				.system()
 				.scheduler()
-				.schedule(
-						Duration.Zero(),
-						Duration.create(this.getMinTimeBetweenWrites(),
-								TimeUnit.MILLISECONDS), this.getSelf(), "tick",
-						this.getContext().system().dispatcher(), null);
+				.schedule(Duration.Zero(), Duration.create(this.getMinTimeBetweenWrites(), TimeUnit.MILLISECONDS),
+						this.getSelf(), "tick", this.getContext().system().dispatcher(), null);
 	}
 
-	public Boolean writeGameObject(GameObject gameObject) {
+	public Boolean writeEntity(Entity entity) {
 		this.lastWrite = System.currentTimeMillis();
 		return true;
 	}
 
-	public Boolean eligibleForWrite(GameObject gameObject) {
+	public Boolean eligibleForWrite(Entity gameObject) {
 
-		Long lastUpdated = gameObjectUpdates.get(gameObject.getId());
+		Long lastUpdated = entityUpdates.get(gameObject.getId());
 
 		// No lastUpdated means was put in the queue on the first try and was
 		// never written
@@ -95,22 +91,21 @@ public class WriteBehindHandler extends UntypedActor {
 		}
 	}
 
-	public void setGameObject(GameObject gameObject) {
-		gameObjects.put(gameObject.getId(), gameObject);
-		gameObjectUpdates.put(gameObject.getId(), System.currentTimeMillis());
+	public void setEntity(Entity entity) {
+		entities.put(entity.getId(), entity);
+		entityUpdates.put(entity.getId(), System.currentTimeMillis());
 	}
 
 	public Boolean checkQueue() {
 		if (queue.size() == 0) {
 			return false;
 		}
-		currentGameObject = queue.get(queue.size() - 1);
-		if (!busy() && eligibleForWrite(currentGameObject)) {
-			if (writeGameObject(currentGameObject)) {
-				gameObjectUpdates.put(currentGameObject.getId(),
-						System.currentTimeMillis());
+		currentEntity = queue.get(queue.size() - 1);
+		if (!busy() && eligibleForWrite(currentEntity)) {
+			if (writeEntity(currentEntity)) {
+				entityUpdates.put(currentEntity.getId(), System.currentTimeMillis());
 				queue.remove(queue.size() - 1);
-				queueIndex.remove(currentGameObject.getId());
+				queueIndex.remove(currentEntity.getId());
 				return true;
 			}
 		}
@@ -118,11 +113,11 @@ public class WriteBehindHandler extends UntypedActor {
 	}
 
 	public Boolean write(Object message) {
-		currentGameObject = (GameObject) message;
+		currentEntity = (Entity) message;
 		Boolean writeThrough = true;
 
-		if (gameObjects.containsKey(currentGameObject.getId())) {
-			if (!busy() && eligibleForWrite(currentGameObject)) {
+		if (entities.containsKey(currentEntity.getId())) {
+			if (!busy() && eligibleForWrite(currentEntity)) {
 				writeThrough = true;
 			} else {
 				writeThrough = false;
@@ -131,17 +126,16 @@ public class WriteBehindHandler extends UntypedActor {
 			writeThrough = false;
 		}
 
-		gameObjects.put(currentGameObject.getId(), currentGameObject);
+		entities.put(currentEntity.getId(), currentEntity);
 		if (writeThrough) {
-			if (writeGameObject(currentGameObject)) {
-				gameObjectUpdates.put(currentGameObject.getId(),
-						System.currentTimeMillis());
+			if (writeEntity(currentEntity)) {
+				entityUpdates.put(currentEntity.getId(), System.currentTimeMillis());
 				return writeThrough;
 			}
 		} else {
 			// queue for later write
-			if (!queueIndex.containsKey(currentGameObject.getId())) {
-				queue.add(0, currentGameObject);
+			if (!queueIndex.containsKey(currentEntity.getId())) {
+				queue.add(0, currentEntity);
 			}
 		}
 		return writeThrough;

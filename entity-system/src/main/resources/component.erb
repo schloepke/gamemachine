@@ -101,8 +101,9 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
 		return <%= field.name %>;
 	}
 
-	public void set<%=field_name %>List(List<<%=get_type(field)%>> <%=field.name%>) {
+	public <%=klass%> set<%=field_name %>List(List<<%=get_type(field)%>> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
+		return this;
 	}
 
 	public <%=get_type(field) %> get<%=field_name %>(int index)  {
@@ -113,17 +114,21 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
         return <%=field.name%> == null ? 0 : <%=field.name%>.size();
     }
 
-    public void add<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
+    public <%=klass%> add<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
         if(this.<%=field.name%> == null)
             this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
         this.<%=field.name%>.add(<%=field.name%>);
+        return this;
     }
+    
 <%- else -%>
 	public <%=get_type(field)%> get<%=field_name -%>() {
 		return <%= field.name %>;
 	}
-	public void set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
+	
+	public <%= field_name == 'EntityId' ? 'void' : klass%> set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
+		<%= field_name == 'EntityId' ? '' : 'return this;'%>
 	}
 <%- end -%>
 <%- end -%>

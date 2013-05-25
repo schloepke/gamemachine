@@ -9,10 +9,11 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.core.GameMachine;
+import com.game_machine.entity_system.generated.Entity;
 
 public class ObjectDb extends UntypedActor {
 
-	public HashMap<String, GameObject> gameObjects;
+	public HashMap<Integer, Entity> entities;
 	public static int count = 0;
 	public static int count2 = 0;
 	private ActorRef datastore;
@@ -26,8 +27,9 @@ public class ObjectDb extends UntypedActor {
 
 	public ObjectDb() {
 		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
-		datastore = this.getContext().actorOf(Props.create(WriteBehindHandler.class, 5000, 50), WriteBehindHandler.class.getSimpleName());
-		gameObjects = new HashMap<String, GameObject>();
+		datastore = this.getContext().actorOf(Props.create(WriteBehindHandler.class, 5000, 50),
+				WriteBehindHandler.class.getSimpleName());
+		entities = new HashMap<Integer, Entity>();
 	}
 
 	public void onReceive(Object message) {
@@ -37,17 +39,17 @@ public class ObjectDb extends UntypedActor {
 			Query query = (Query) message;
 
 			if (query.getType().equals("update")) {
-				if (gameObjects.get(query.getGameObjectId()) != null) {
-					query.getMapper().apply(gameObjects.get(query.getGameObjectId()));
-					datastore.tell(query.getGameObject(), this.getSelf());
+				if (entities.get(query.getEntityId()) != null) {
+					query.getMapper().apply(entities.get(query.getEntityId()));
+					datastore.tell(query.getEntity(), this.getSelf());
 				}
 			} else if (query.getType().equals("save")) {
-				gameObjects.put(query.getGameObjectId(), query.getGameObject());
+				entities.put(query.getEntityId(), query.getEntity());
 			} else if (query.getType().equals("find")) {
-				GameObject gameObject = gameObjects.get(query.getGameObjectId());
-				if (gameObject != null) {
-					this.getSender().tell(gameObject, this.getSelf());
-					datastore.tell(query.getGameObject(), this.getSelf());
+				Entity Entity = entities.get(query.getEntityId());
+				if (Entity != null) {
+					this.getSender().tell(Entity, this.getSelf());
+					datastore.tell(query.getEntity(), this.getSelf());
 				}
 			} else {
 				unhandled(message);

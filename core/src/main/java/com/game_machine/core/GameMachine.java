@@ -30,10 +30,10 @@ public class GameMachine implements Runnable {
 	public static void start() {
 		new GameMachine().run();
 		if (Config.udpEnabled) {
-			UdpServer.start();
+			UdpServer.start(Config.udpHost,Config.udpPort);
 		}
 		if (Config.udtEnabled) {
-			UdtServer.start();
+			UdtServer.start(Config.udtHost,Config.udtPort);
 		}
 		
 		// Allow time for server to start
@@ -95,8 +95,6 @@ public class GameMachine implements Runnable {
 		// Uility actor to send and receive commands from outside akka
 		actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());
 
-		// For testing
-		actorSystem.actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
 		
 		actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
 		

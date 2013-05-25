@@ -38,14 +38,14 @@ public final class UdpServer implements Runnable {
 		return udpServer;
 	}
 	
-	public static void start() {
+	public static void start(String host, Integer port) {
 
 		// Don't try to start an already running server
 		if (udpServer != null) {
 			return;
 		}
 
-		udpServer = new UdpServer(Config.udpHost, Config.udpPort);
+		udpServer = new UdpServer(host, port);
 		new Thread(udpServer).start();
 	}
 

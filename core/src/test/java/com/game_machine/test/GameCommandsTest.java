@@ -60,7 +60,7 @@ public class GameCommandsTest {
 	@Test
 	public void hashtest() {
 		HashRing ring = new HashRing("test",10);
-		log.info("BUCKET= " + ring.stringToBucket("chris"));
+		/*log.info("BUCKET= " + ring.stringToBucket("chris"));
 		ring = new HashRing("test",9);
 		log.info("BUCKET= " + ring.stringToBucket("chris"));
 		ring = new HashRing("test",8);
@@ -76,7 +76,7 @@ public class GameCommandsTest {
 		ring = new HashRing("test",3);
 		log.info("BUCKET= " + ring.stringToBucket("chris"));
 		ring = new HashRing("test",2);
-		log.info("BUCKET= " + ring.stringToBucket("chris"));
+		log.info("BUCKET= " + ring.stringToBucket("chris"));*/
 		
 	}
 }

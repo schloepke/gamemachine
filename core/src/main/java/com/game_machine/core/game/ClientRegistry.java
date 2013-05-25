@@ -9,27 +9,23 @@ import com.game_machine.core.ActorUtil;
 import com.game_machine.core.GameMessage;
 import com.game_machine.entity_system.Component;
 import com.game_machine.entity_system.generated.ClientConnection;
-import com.game_machine.entity_system.generated.Entity;
 
 public class ClientRegistry extends GameActor {
 
-	private HashMap<String,Long> clients = new HashMap<String,Long>();
-	
+	private HashMap<String, Long> clients = new HashMap<String, Long>();
+
 	public ClientRegistry() {
 		this.getContext()
-		.system()
-		.scheduler()
-		.schedule(
-				Duration.Zero(),
-				Duration.create(1000,
-						TimeUnit.MILLISECONDS), this.getSelf(), "checkExpired",
-				this.getContext().system().dispatcher(), null);
+				.system()
+				.scheduler()
+				.schedule(Duration.Zero(), Duration.create(1000, TimeUnit.MILLISECONDS), this.getSelf(),
+						"checkExpired", this.getContext().system().dispatcher(), null);
 	}
-	
+
 	public void onReceive(String command) {
-		log.info("CheckExpired");
+		//log.info("CheckExpired");
 	}
-	
+
 	public void onReceive(Component component) {
 		ClientConnection clientConnection = (ClientConnection) component;
 		if (clientConnection.getConnected() == true) {
@@ -38,16 +34,22 @@ public class ClientRegistry extends GameActor {
 			clients.remove(clientConnection.getId());
 		}
 	}
-	
+
 	private long currentTime() {
 		return System.currentTimeMillis() / 1000;
 	}
-	
-	public static void setConnected(String clientId) {
-		ClientConnection clientConnection = new ClientConnection();
-		clientConnection.setId(clientId);
-		clientConnection.setConnected(true);
-		GameMessage gameMessage = new GameMessage(clientId,null,null,clientConnection);
-		ActorUtil.getSelectionByName("ClientRegistry").tell(gameMessage,null);
+
+	public static ClientConnection getClientConnection(String clientId, Boolean connected) {
+		return new ClientConnection().setId(clientId).setConnected(connected);
+	}
+
+	public static void register(String clientId) {
+		GameMessage gameMessage = new GameMessage(clientId, null, null, getClientConnection(clientId, true));
+		ActorUtil.getSelectionByName("ClientRegistry").tell(gameMessage, null);
+	}
+
+	public static void unregister(String clientId) {
+		GameMessage gameMessage = new GameMessage(clientId, null, null, getClientConnection(clientId, false));
+		ActorUtil.getSelectionByName("ClientRegistry").tell(gameMessage, null);
 	}
 }

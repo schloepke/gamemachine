@@ -4,11 +4,12 @@ import akka.actor.ActorRef;
 
 import com.game_machine.core.ActorUtil;
 import com.game_machine.core.Cmd;
+import com.game_machine.entity_system.generated.Entity;
 
 
 /*
  Query.update("test", new Callable() {
-	public GameObject apply(GameObject gameObject) {
+	public entity apply(entity entity) {
 		return new Player();
 	}
 });
@@ -18,46 +19,46 @@ import com.game_machine.core.Cmd;
 
 public final class Query {
 
-	private final String gameObjectId;
-	private final GameObject gameObject;
+	private final Integer entityId;
+	private final Entity entity;
 	private final Callable callable;
 	private final String queryType;
 	
 	
 	
-	public static final void findAsync(String gameObjectId, ActorRef sender) {
-		Query query = new Query(gameObjectId,null,null,"find");
+	public static final void findAsync(Integer entityId, ActorRef sender) {
+		Query query = new Query(entityId,null,null,"find");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, sender);
 	}
 	
-	public static final GameObject find(String gameObjectId, Integer timeout) {
-		Query query = new Query(gameObjectId,null,null,"find");
-		return (GameObject) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class), timeout);
+	public static final Entity find(Integer entityId, Integer timeout) {
+		Query query = new Query(entityId,null,null,"find");
+		return (Entity) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class), timeout);
 	}
 	
-	public static final void save(String gameObjectId, GameObject gameObject) {
-		Query query = new Query(gameObjectId,gameObject,null,"save");
+	public static final void save(Integer entityId, Entity entity) {
+		Query query = new Query(entityId,entity,null,"save");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
-	public static final void update(String gameObjectId, Callable callable) {
-		Query query = new Query(gameObjectId,null,callable,"update");
+	public static final void update(Integer entityId, Callable callable) {
+		Query query = new Query(entityId,null,callable,"update");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
-	public Query(String gameObjectId, GameObject gameObject, Callable callable, String type) {
-		this.gameObjectId = gameObjectId;
-		this.gameObject = gameObject;
+	public Query(Integer entityId, Entity entity, Callable callable, String type) {
+		this.entityId = entityId;
+		this.entity = entity;
 		this.callable = callable;
 		this.queryType = type;
 	}
 		
-	public String getGameObjectId() {
-		return this.gameObjectId;
+	public Integer getEntityId() {
+		return this.entityId;
 	}
 	
-	public GameObject getGameObject() {
-		return this.gameObject;
+	public Entity getEntity() {
+		return this.entity;
 	}
 	
 	public Callable getMapper() {

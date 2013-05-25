@@ -27,30 +27,30 @@ public class Gateway extends UntypedActor {
 
 	public static void send(String clientId, Entities entities) {
 		byte[] bytes = Components.fromEntities(entities).toByteArray();
-		send(clientId,bytes);
+		send(clientId, bytes);
 	}
-	
+
 	public static void send(String clientId, Entity entity) {
 		Entities entities = new Entities();
 		entities.addEntity(entity);
-		send(clientId,entities);
+		send(clientId, entities);
 	}
-	
+
 	public static void send(String clientId, byte[] bytes) {
-		GatewayMessage gatewayMessage = new GatewayMessage(bytes,clientId);
-		ActorUtil.getSelectionByClass(Gateway.class).tell(gatewayMessage, null);	
+		GatewayMessage gatewayMessage = new GatewayMessage(bytes, clientId);
+		ActorUtil.getSelectionByClass(Gateway.class).tell(gatewayMessage, null);
 	}
-	
+
 	private String getClientId(NetMessage netMessage) {
-		return netMessage.host+":"+netMessage.port;
+		return netMessage.host + ":" + netMessage.port;
 	}
 
 	public void onReceive(Object message) {
 		if (message instanceof NetMessage) {
 			NetMessage netMessage = (NetMessage) message;
 			String clientId = getClientId(netMessage);
-			
-			GatewayMessage gatewayMessage = new GatewayMessage(netMessage.bytes,clientId);
+
+			GatewayMessage gatewayMessage = new GatewayMessage(netMessage.bytes, clientId);
 			clients.put(clientId, netMessage);
 			ActorUtil.getSelectionByClass(GameMachine.getGameHandler()).tell(gatewayMessage, this.getSelf());
 			log.debug("Inbound NetMessage message: {}", new String(netMessage.bytes));
@@ -61,7 +61,8 @@ public class Gateway extends UntypedActor {
 			NetMessage netMessage = clients.get(gatewayMessage.getClientId());
 
 			if (netMessage.protocol == NetMessage.UDP) {
-				UdpServer.getUdpServer().send(gatewayMessage.getBytes(), netMessage.host, netMessage.port, netMessage.ctx);
+				UdpServer.getUdpServer().send(gatewayMessage.getBytes(), netMessage.host, netMessage.port,
+						netMessage.ctx);
 			} else if (netMessage.protocol == NetMessage.UDT) {
 				UdtServer.getUdtServer().send(gatewayMessage.getBytes(), netMessage.ctx);
 			} else {
