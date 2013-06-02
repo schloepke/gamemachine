@@ -1,0 +1,12 @@
+---
+:message_encoding: protobuf
+:udp:
+  :port: 8100
+  :host: 192.168.1.2
+  :enabled: true
+  :log_level: WARNING
+:udt:
+  :port: 8101
+  :host: 192.168.1.2
+  :enabled: true
+  :log_level: WARNING
