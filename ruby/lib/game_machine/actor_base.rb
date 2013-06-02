@@ -25,7 +25,7 @@ module GameMachine
         else
           props = Props.new(self)
         end
-        Systems.register(self.name,compoonents)
+        Systems.register(self,components)
         actor_system.actor_of(props, self.name)
       end
 

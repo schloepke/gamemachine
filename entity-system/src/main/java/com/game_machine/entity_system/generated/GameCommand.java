@@ -37,6 +37,7 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 
 
 
+
     public static Schema<GameCommand> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,15 +50,28 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 
     static final GameCommand DEFAULT_INSTANCE = new GameCommand();
 
+
+
     private String name;
+
+
+
     private Integer entityId;
+
+
+
     private TestObject testObject;
+
+
     
 
     public GameCommand()
     {
         
     }
+
+
+
 
 	public String getName() {
 		return name;
@@ -67,6 +81,10 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 		this.name = name;
 		return this;
 	}
+
+
+
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -75,6 +93,10 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 		this.entityId = entityId;
 		
 	}
+
+
+
+
 	public TestObject getTestObject() {
 		return testObject;
 	}
@@ -83,6 +105,8 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 		this.testObject = testObject;
 		return this;
 	}
+
+
 
   
     // java serialization
@@ -139,18 +163,34 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
             {
                 case 0:
                     return;
+
             	case 1:
+
+
                 	message.name = input.readString();
                 	break;
+
                 	
+
+
             	case 2:
+
+
                 	message.entityId = input.readInt32();
                 	break;
+
                 	
+
+
             	case 3:
+
+
                 	message.testObject = input.mergeObject(message.testObject, TestObject.getSchema());
                     break;
+
                 	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -161,26 +201,43 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
 
     public void writeTo(Output output, GameCommand message) throws IOException
     {
+
     	
+
     	if(message.name == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.name != null)
             output.writeString(1, message.name, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.entityId != null)
             output.writeInt32(2, message.entityId, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.testObject != null)
     		output.writeObject(3, message.testObject, TestObject.getSchema(), false);
+
     	
+
+
     	
     }
 
@@ -188,9 +245,13 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
     {
         switch(number)
         {
+
         	case 1: return "name";
+
         	case 2: return "entityId";
+
         	case 3: return "testObject";
+
             default: return null;
         }
     }
@@ -204,9 +265,13 @@ public final class GameCommand extends com.game_machine.entity_system.Component 
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("name", 1);
+
     	__fieldMap.put("entityId", 2);
+
     	__fieldMap.put("testObject", 3);
+
     }
    
    public static List<String> getFields() {

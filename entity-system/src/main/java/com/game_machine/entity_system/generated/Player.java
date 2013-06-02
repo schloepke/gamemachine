@@ -37,6 +37,7 @@ public final class Player extends com.game_machine.entity_system.Component imple
 
 
 
+
     public static Schema<Player> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,18 +50,40 @@ public final class Player extends com.game_machine.entity_system.Component imple
 
     static final Player DEFAULT_INSTANCE = new Player();
 
+
+
     private Integer x;
+
+
+
     private Integer y;
+
+
+
     private Integer z;
+
+
+
     private Integer id;
+
+
+
     private String name;
+
+
+
     private Integer entityId;
+
+
     
 
     public Player()
     {
         
     }
+
+
+
 
 	public Integer getX() {
 		return x;
@@ -70,6 +93,10 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.x = x;
 		return this;
 	}
+
+
+
+
 	public Integer getY() {
 		return y;
 	}
@@ -78,6 +105,10 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.y = y;
 		return this;
 	}
+
+
+
+
 	public Integer getZ() {
 		return z;
 	}
@@ -86,6 +117,10 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.z = z;
 		return this;
 	}
+
+
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -94,6 +129,10 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.id = id;
 		return this;
 	}
+
+
+
+
 	public String getName() {
 		return name;
 	}
@@ -102,6 +141,10 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.name = name;
 		return this;
 	}
+
+
+
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -110,6 +153,8 @@ public final class Player extends com.game_machine.entity_system.Component imple
 		this.entityId = entityId;
 		
 	}
+
+
 
   
     // java serialization
@@ -166,30 +211,61 @@ public final class Player extends com.game_machine.entity_system.Component imple
             {
                 case 0:
                     return;
+
             	case 1:
+
+
                 	message.x = input.readInt32();
                 	break;
+
                 	
+
+
             	case 2:
+
+
                 	message.y = input.readInt32();
                 	break;
+
                 	
+
+
             	case 3:
+
+
                 	message.z = input.readInt32();
                 	break;
+
                 	
+
+
             	case 4:
+
+
                 	message.id = input.readInt32();
                 	break;
+
                 	
+
+
             	case 5:
+
+
                 	message.name = input.readString();
                 	break;
+
                 	
+
+
             	case 6:
+
+
                 	message.entityId = input.readInt32();
                 	break;
+
                 	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -200,44 +276,76 @@ public final class Player extends com.game_machine.entity_system.Component imple
 
     public void writeTo(Output output, Player message) throws IOException
     {
+
     	
 
     	
+
+
     	if(message.x != null)
             output.writeInt32(1, message.x, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.y != null)
             output.writeInt32(2, message.y, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.z != null)
             output.writeInt32(3, message.z, false);
+
     	
+
+
     	
+
     	if(message.id == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.id != null)
             output.writeInt32(4, message.id, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.name != null)
             output.writeString(5, message.name, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.entityId != null)
             output.writeInt32(6, message.entityId, false);
+
     	
+
+
     	
     }
 
@@ -245,12 +353,19 @@ public final class Player extends com.game_machine.entity_system.Component imple
     {
         switch(number)
         {
+
         	case 1: return "x";
+
         	case 2: return "y";
+
         	case 3: return "z";
+
         	case 4: return "id";
+
         	case 5: return "name";
+
         	case 6: return "entityId";
+
             default: return null;
         }
     }
@@ -264,12 +379,19 @@ public final class Player extends com.game_machine.entity_system.Component imple
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("x", 1);
+
     	__fieldMap.put("y", 2);
+
     	__fieldMap.put("z", 3);
+
     	__fieldMap.put("id", 4);
+
     	__fieldMap.put("name", 5);
+
     	__fieldMap.put("entityId", 6);
+
     }
    
    public static List<String> getFields() {

@@ -2,11 +2,11 @@ module GameMachine
   class Systems
 
     def self.systems
-      @@systems ||= ConcurrentHashMap
+      @@systems ||= ConcurrentHashMap.new
     end
 
     def self.systems_with_component(component)
-      systems.fetch(component,[])
+      systems[component] || []
     end
 
     def self.register(system,components)

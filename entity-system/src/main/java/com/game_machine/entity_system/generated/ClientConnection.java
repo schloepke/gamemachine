@@ -37,6 +37,7 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
 
 
+
     public static Schema<ClientConnection> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,16 +50,32 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
     static final ClientConnection DEFAULT_INSTANCE = new ClientConnection();
 
+
+
     private String id;
+
+
+
     private Boolean connected;
+
+
+
     private String authorizationToken;
+
+
+
     private Integer entityId;
+
+
     
 
     public ClientConnection()
     {
         
     }
+
+
+
 
 	public String getId() {
 		return id;
@@ -68,6 +85,10 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 		this.id = id;
 		return this;
 	}
+
+
+
+
 	public Boolean getConnected() {
 		return connected;
 	}
@@ -76,6 +97,10 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 		this.connected = connected;
 		return this;
 	}
+
+
+
+
 	public String getAuthorizationToken() {
 		return authorizationToken;
 	}
@@ -84,6 +109,10 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 		this.authorizationToken = authorizationToken;
 		return this;
 	}
+
+
+
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -92,6 +121,8 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 		this.entityId = entityId;
 		
 	}
+
+
 
   
     // java serialization
@@ -148,22 +179,43 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
             {
                 case 0:
                     return;
+
             	case 1:
+
+
                 	message.id = input.readString();
                 	break;
+
                 	
+
+
             	case 2:
+
+
                 	message.connected = input.readBool();
                 	break;
+
                 	
+
+
             	case 3:
+
+
                 	message.authorizationToken = input.readString();
                 	break;
+
                 	
+
+
             	case 4:
+
+
                 	message.entityId = input.readInt32();
                 	break;
+
                 	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -174,34 +226,57 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
     public void writeTo(Output output, ClientConnection message) throws IOException
     {
+
     	
+
     	if(message.id == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.id != null)
             output.writeString(1, message.id, false);
+
     	
+
+
     	
+
     	if(message.connected == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.connected != null)
             output.writeBool(2, message.connected, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.authorizationToken != null)
             output.writeString(3, message.authorizationToken, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.entityId != null)
             output.writeInt32(4, message.entityId, false);
+
     	
+
+
     	
     }
 
@@ -209,10 +284,15 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
     {
         switch(number)
         {
+
         	case 1: return "id";
+
         	case 2: return "connected";
+
         	case 3: return "authorizationToken";
+
         	case 4: return "entityId";
+
             default: return null;
         }
     }
@@ -226,10 +306,15 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("id", 1);
+
     	__fieldMap.put("connected", 2);
+
     	__fieldMap.put("authorizationToken", 3);
+
     	__fieldMap.put("entityId", 4);
+
     }
    
    public static List<String> getFields() {

@@ -37,6 +37,7 @@ public final class Components extends com.game_machine.entity_system.Component i
 
 
 
+
     public static Schema<Components> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,17 +50,36 @@ public final class Components extends com.game_machine.entity_system.Component i
 
     static final Components DEFAULT_INSTANCE = new Components();
 
+
+
     private List<Player> player;
+
+
+
     private List<PlayersAroundMe> playersAroundMe;
+
+
+
     private List<GameCommand> gameCommand;
+
+
+
     private List<ClientConnection> clientConnection;
+
+
+
     private List<ChatMessage> chatMessage;
+
+
     
 
     public Components()
     {
         
     }
+
+
+
 
 	public List<Player> getPlayerList() {
 		return player;
@@ -85,6 +105,10 @@ public final class Components extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public List<PlayersAroundMe> getPlayersAroundMeList() {
 		return playersAroundMe;
 	}
@@ -109,6 +133,10 @@ public final class Components extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public List<GameCommand> getGameCommandList() {
 		return gameCommand;
 	}
@@ -133,6 +161,10 @@ public final class Components extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public List<ClientConnection> getClientConnectionList() {
 		return clientConnection;
 	}
@@ -157,6 +189,10 @@ public final class Components extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public List<ChatMessage> getChatMessageList() {
 		return chatMessage;
 	}
@@ -181,6 +217,8 @@ public final class Components extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
 
   
     // java serialization
@@ -237,31 +275,57 @@ public final class Components extends com.game_machine.entity_system.Component i
             {
                 case 0:
                     return;
+
             	case 1:
+
             		if(message.player == null)
                         message.player = new ArrayList<Player>();
+
                     message.player.add(input.mergeObject(null, Player.getSchema()));
+
                     break;
+
+
             	case 2:
+
             		if(message.playersAroundMe == null)
                         message.playersAroundMe = new ArrayList<PlayersAroundMe>();
+
                     message.playersAroundMe.add(input.mergeObject(null, PlayersAroundMe.getSchema()));
+
                     break;
+
+
             	case 3:
+
             		if(message.gameCommand == null)
                         message.gameCommand = new ArrayList<GameCommand>();
+
                     message.gameCommand.add(input.mergeObject(null, GameCommand.getSchema()));
+
                     break;
+
+
             	case 4:
+
             		if(message.clientConnection == null)
                         message.clientConnection = new ArrayList<ClientConnection>();
+
                     message.clientConnection.add(input.mergeObject(null, ClientConnection.getSchema()));
+
                     break;
+
+
             	case 5:
+
             		if(message.chatMessage == null)
                         message.chatMessage = new ArrayList<ChatMessage>();
+
                     message.chatMessage.add(input.mergeObject(null, ChatMessage.getSchema()));
+
                     break;
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -272,66 +336,92 @@ public final class Components extends com.game_machine.entity_system.Component i
 
     public void writeTo(Output output, Components message) throws IOException
     {
+
     	
 
     	
+
     	if(message.player != null)
         {
             for(Player player : message.player)
             {
                 if(player != null) {
+
     				output.writeObject(1, player, Player.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
     	if(message.playersAroundMe != null)
         {
             for(PlayersAroundMe playersAroundMe : message.playersAroundMe)
             {
                 if(playersAroundMe != null) {
+
     				output.writeObject(2, playersAroundMe, PlayersAroundMe.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
     	if(message.gameCommand != null)
         {
             for(GameCommand gameCommand : message.gameCommand)
             {
                 if(gameCommand != null) {
+
     				output.writeObject(3, gameCommand, GameCommand.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
     	if(message.clientConnection != null)
         {
             for(ClientConnection clientConnection : message.clientConnection)
             {
                 if(clientConnection != null) {
+
     				output.writeObject(4, clientConnection, ClientConnection.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
     	if(message.chatMessage != null)
         {
             for(ChatMessage chatMessage : message.chatMessage)
             {
                 if(chatMessage != null) {
+
     				output.writeObject(5, chatMessage, ChatMessage.getSchema(), true);
+
     			}
             }
         }
+
+
     	
     }
 
@@ -339,11 +429,17 @@ public final class Components extends com.game_machine.entity_system.Component i
     {
         switch(number)
         {
+
         	case 1: return "player";
+
         	case 2: return "playersAroundMe";
+
         	case 3: return "gameCommand";
+
         	case 4: return "clientConnection";
+
         	case 5: return "chatMessage";
+
             default: return null;
         }
     }
@@ -357,11 +453,17 @@ public final class Components extends com.game_machine.entity_system.Component i
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("player", 1);
+
     	__fieldMap.put("playersAroundMe", 2);
+
     	__fieldMap.put("gameCommand", 3);
+
     	__fieldMap.put("clientConnection", 4);
+
     	__fieldMap.put("chatMessage", 5);
+
     }
    
    public static List<String> getFields() {
@@ -429,10 +531,12 @@ public byte[] toProtobuf() {
 	return bytes;
 }
 
+
     public Entities toEntities() {
    		Entities entities = new Entities();
    		Entity entity = null;
    		Integer entityId = null;
+
    		if (this.getPlayerList() != null) {
    			for (Player player : this.getPlayerList()) {
    				entityId = player.getEntityId();
@@ -448,6 +552,7 @@ public byte[] toProtobuf() {
    				}
    			}
    		}
+
    		if (this.getPlayersAroundMeList() != null) {
    			for (PlayersAroundMe playersAroundMe : this.getPlayersAroundMeList()) {
    				entityId = playersAroundMe.getEntityId();
@@ -463,6 +568,7 @@ public byte[] toProtobuf() {
    				}
    			}
    		}
+
    		if (this.getGameCommandList() != null) {
    			for (GameCommand gameCommand : this.getGameCommandList()) {
    				entityId = gameCommand.getEntityId();
@@ -478,6 +584,7 @@ public byte[] toProtobuf() {
    				}
    			}
    		}
+
    		if (this.getClientConnectionList() != null) {
    			for (ClientConnection clientConnection : this.getClientConnectionList()) {
    				entityId = clientConnection.getEntityId();
@@ -493,6 +600,7 @@ public byte[] toProtobuf() {
    				}
    			}
    		}
+
    		if (this.getChatMessageList() != null) {
    			for (ChatMessage chatMessage : this.getChatMessageList()) {
    				entityId = chatMessage.getEntityId();
@@ -508,27 +616,34 @@ public byte[] toProtobuf() {
    				}
    			}
    		}
+
    		return entities;
 	}
     
 	public static Components fromEntities(Entities entities) {
 		Components components = new Components();
 		for (Entity entity : entities.getEntities().values()) {
+
 			if (entity.hasPlayer()) {
 				components.addPlayer(entity.getPlayer());
 			}
+
 			if (entity.hasPlayersAroundMe()) {
 				components.addPlayersAroundMe(entity.getPlayersAroundMe());
 			}
+
 			if (entity.hasGameCommand()) {
 				components.addGameCommand(entity.getGameCommand());
 			}
+
 			if (entity.hasClientConnection()) {
 				components.addClientConnection(entity.getClientConnection());
 			}
+
 			if (entity.hasChatMessage()) {
 				components.addChatMessage(entity.getChatMessage());
 			}
+
 		}
 		return components;
 	}

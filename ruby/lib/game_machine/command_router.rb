@@ -1,26 +1,23 @@
 module GameMachine
   class CommandRouter < ActorBase
 
-
-    
-
-
     def on_receive(gateway_message)
       puts "CommandRouter got #{gateway_message}"
-      
+
       entities = Components.parse_from(gateway_message.get_bytes).to_entities
       client_id = gateway_message.get_client_id
 
+      dispatch_map = {}
       entities.get_entities.values.each do |entity|
         entity.component_names.each do |component_name|
-          self.class.systems.each do |system|
-            if system.components.include?(component_name)
-              system.tell(entity)
-            end
-          end
+          dispatch_map[entity] ||= []
+          dispatch_map[entity] += Systems.systems_with_component(component_name)
         end
       end
-      Gateway.send_to_client(client_id, gateway_message.get_bytes)
+      dispatch_map.each do |entity,systems|
+        systems.sort.each {|system| system.tell(entity)}
+      end
+
     end
 
   end

@@ -37,6 +37,7 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 
 
 
+
     public static Schema<ChatMessage> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,15 +50,28 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 
     static final ChatMessage DEFAULT_INSTANCE = new ChatMessage();
 
+
+
     private String text;
+
+
+
     private String target;
+
+
+
     private Integer entityId;
+
+
     
 
     public ChatMessage()
     {
         
     }
+
+
+
 
 	public String getText() {
 		return text;
@@ -67,6 +81,10 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 		this.text = text;
 		return this;
 	}
+
+
+
+
 	public String getTarget() {
 		return target;
 	}
@@ -75,6 +93,10 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 		this.target = target;
 		return this;
 	}
+
+
+
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -83,6 +105,8 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 		this.entityId = entityId;
 		
 	}
+
+
 
   
     // java serialization
@@ -139,18 +163,34 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
             {
                 case 0:
                     return;
+
             	case 1:
+
+
                 	message.text = input.readString();
                 	break;
+
                 	
+
+
             	case 2:
+
+
                 	message.target = input.readString();
                 	break;
+
                 	
+
+
             	case 3:
+
+
                 	message.entityId = input.readInt32();
                 	break;
+
                 	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -161,28 +201,46 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
 
     public void writeTo(Output output, ChatMessage message) throws IOException
     {
+
     	
+
     	if(message.text == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.text != null)
             output.writeString(1, message.text, false);
+
     	
+
+
     	
+
     	if(message.target == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.target != null)
             output.writeString(2, message.target, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.entityId != null)
             output.writeInt32(3, message.entityId, false);
+
     	
+
+
     	
     }
 
@@ -190,9 +248,13 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
     {
         switch(number)
         {
+
         	case 1: return "text";
+
         	case 2: return "target";
+
         	case 3: return "entityId";
+
             default: return null;
         }
     }
@@ -206,9 +268,13 @@ public final class ChatMessage extends com.game_machine.entity_system.Component 
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("text", 1);
+
     	__fieldMap.put("target", 2);
+
     	__fieldMap.put("entityId", 3);
+
     }
    
    public static List<String> getFields() {

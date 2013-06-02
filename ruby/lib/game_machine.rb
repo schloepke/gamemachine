@@ -58,6 +58,7 @@ require 'game_machine/client'
 require 'game_machine/proxy_actor'
 require 'game_machine/local_echo'
 require 'game_machine/connection_manager'
+require 'game_machine/systems'
 
 
 unless ENV['GAME_ENV']

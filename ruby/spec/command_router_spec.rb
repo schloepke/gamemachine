@@ -32,9 +32,9 @@ module GameMachine
 
     describe "Authentication" do
       it "should do something" do
-       Gateway.should_receive(:send_to_client).and_return(true)
-       ConnectionManager.should_receive(:tell).with(kind_of(Entity))
-       subject.onReceive(gateway_message)
+        Systems.register(ConnectionManager,ConnectionManager.components)
+        ConnectionManager.should_receive(:tell).with(kind_of(Entity))
+        subject.onReceive(gateway_message)
       end
     end
 

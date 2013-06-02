@@ -35,15 +35,24 @@ import com.dyuproject.protostuff.UninitializedMessageException;
 public final class TestObject extends com.game_machine.entity_system.Component implements Externalizable, Message<TestObject>, Schema<TestObject>
 {
 
+
 	public enum Corpus implements com.dyuproject.protostuff.EnumLite<Corpus>
     {
+
     	UNIVERSAL(0),
+
     	WEB(1),
+
     	IMAGES(2),
+
     	LOCAL(3),
+
     	NEWS(4),
+
     	PRODUCTS(5),
+
     	VIDEO(6);
+
         
         public final int number;
         
@@ -61,17 +70,26 @@ public final class TestObject extends com.game_machine.entity_system.Component i
         {
             switch(number) 
             {
+
     			case 0: return (UNIVERSAL);
+
     			case 1: return (WEB);
+
     			case 2: return (IMAGES);
+
     			case 3: return (LOCAL);
+
     			case 4: return (NEWS);
+
     			case 5: return (PRODUCTS);
+
     			case 6: return (VIDEO);
+
                 default: return null;
             }
         }
     }
+
 
 
     public static Schema<TestObject> getSchema()
@@ -86,23 +104,60 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 
     static final TestObject DEFAULT_INSTANCE = new TestObject();
 
+
+
     private String optionalString;
+
+
+
     private String requiredString;
+
+
+
     private List<Integer> numbers;
+
+
+
     private ByteString bstring;
+
+
+
     private Boolean bvalue;
+
+
+
     private Double dvalue;
+
+
+
     private Float fvalue;
+
+
+
     private Long numbers64;
+
+
+
     private List<Player> player;
+
+
+
     private Corpus corpus;
+
+
+
     private List<Corpus> corpus2;
+
+
     
 
     public TestObject()
     {
         
     }
+
+
+
 
 	public String getOptionalString() {
 		return optionalString;
@@ -112,6 +167,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.optionalString = optionalString;
 		return this;
 	}
+
+
+
+
 	public String getRequiredString() {
 		return requiredString;
 	}
@@ -120,6 +179,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.requiredString = requiredString;
 		return this;
 	}
+
+
+
+
 	public List<Integer> getNumbersList() {
 		return numbers;
 	}
@@ -144,6 +207,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public ByteString getBstring() {
 		return bstring;
 	}
@@ -152,6 +219,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.bstring = bstring;
 		return this;
 	}
+
+
+
+
 	public Boolean getBvalue() {
 		return bvalue;
 	}
@@ -160,6 +231,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.bvalue = bvalue;
 		return this;
 	}
+
+
+
+
 	public Double getDvalue() {
 		return dvalue;
 	}
@@ -168,6 +243,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.dvalue = dvalue;
 		return this;
 	}
+
+
+
+
 	public Float getFvalue() {
 		return fvalue;
 	}
@@ -176,6 +255,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.fvalue = fvalue;
 		return this;
 	}
+
+
+
+
 	public Long getNumbers64() {
 		return numbers64;
 	}
@@ -184,6 +267,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.numbers64 = numbers64;
 		return this;
 	}
+
+
+
+
 	public List<Player> getPlayerList() {
 		return player;
 	}
@@ -208,6 +295,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
+
+
 	public Corpus getCorpus() {
 		return corpus;
 	}
@@ -216,6 +307,10 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 		this.corpus = corpus;
 		return this;
 	}
+
+
+
+
 	public List<Corpus> getCorpus2List() {
 		return corpus2;
 	}
@@ -240,6 +335,8 @@ public final class TestObject extends com.game_machine.entity_system.Component i
         return this;
     }
     
+
+
 
   
     // java serialization
@@ -296,53 +393,109 @@ public final class TestObject extends com.game_machine.entity_system.Component i
             {
                 case 0:
                     return;
+
             	case 1:
+
+
                 	message.optionalString = input.readString();
                 	break;
+
                 	
+
+
             	case 2:
+
+
                 	message.requiredString = input.readString();
                 	break;
+
                 	
+
+
             	case 3:
+
             		if(message.numbers == null)
                         message.numbers = new ArrayList<Integer>();
+
                 	message.numbers.add(input.readInt32());
+
                     break;
+
+
             	case 4:
+
+
                 	message.bstring = input.readBytes();
                 	break;
+
                 	
+
+
             	case 5:
+
+
                 	message.bvalue = input.readBool();
                 	break;
+
                 	
+
+
             	case 6:
+
+
                 	message.dvalue = input.readDouble();
                 	break;
+
                 	
+
+
             	case 7:
+
+
                 	message.fvalue = input.readFloat();
                 	break;
+
                 	
+
+
             	case 8:
+
+
                 	message.numbers64 = input.readInt64();
                 	break;
+
                 	
+
+
             	case 9:
+
             		if(message.player == null)
                         message.player = new ArrayList<Player>();
+
                     message.player.add(input.mergeObject(null, Player.getSchema()));
+
                     break;
+
+
             	case 10:
+
+
                     message.corpus = Corpus.valueOf(input.readEnum());
                     break;
+
                 	
+
+
             	case 11:
+
             		if(message.corpus2 == null)
                         message.corpus2 = new ArrayList<Corpus>();
+
                     message.corpus2.add(Corpus.valueOf(input.readEnum()));
+
                     break;
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -353,91 +506,148 @@ public final class TestObject extends com.game_machine.entity_system.Component i
 
     public void writeTo(Output output, TestObject message) throws IOException
     {
+
     	
 
     	
+
+
     	if(message.optionalString != null)
             output.writeString(1, message.optionalString, false);
+
     	
+
+
     	
+
     	if(message.requiredString == null)
             throw new UninitializedMessageException(message);
 
     	
+
+
     	if(message.requiredString != null)
             output.writeString(2, message.requiredString, false);
+
     	
+
+
     	
 
     	
+
     	if(message.numbers != null)
         {
             for(Integer numbers : message.numbers)
             {
                 if(numbers != null) {
+
             		output.writeInt32(3, numbers, true);
+
     			}
             }
         }
+
+
     	
 
     	
+
+
     	if(message.bstring != null)
             output.writeBytes(4, message.bstring, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.bvalue != null)
             output.writeBool(5, message.bvalue, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.dvalue != null)
             output.writeDouble(6, message.dvalue, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.fvalue != null)
             output.writeFloat(7, message.fvalue, false);
+
     	
+
+
     	
 
     	
+
+
     	if(message.numbers64 != null)
             output.writeInt64(8, message.numbers64, false);
+
     	
+
+
     	
 
     	
+
     	if(message.player != null)
         {
             for(Player player : message.player)
             {
                 if(player != null) {
+
     				output.writeObject(9, player, Player.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
+
     	 	output.writeEnum(10, message.corpus.number, false);
+
     	
+
+
     	
 
     	
+
     	if(message.corpus2 != null)
         {
             for(Corpus corpus2 : message.corpus2)
             {
                 if(corpus2 != null) {
+
     				output.writeEnum(11, corpus2.number, true);
+
     			}
             }
         }
+
+
     	
     }
 
@@ -445,17 +655,29 @@ public final class TestObject extends com.game_machine.entity_system.Component i
     {
         switch(number)
         {
+
         	case 1: return "optionalString";
+
         	case 2: return "requiredString";
+
         	case 3: return "numbers";
+
         	case 4: return "bstring";
+
         	case 5: return "bvalue";
+
         	case 6: return "dvalue";
+
         	case 7: return "fvalue";
+
         	case 8: return "numbers64";
+
         	case 9: return "player";
+
         	case 10: return "corpus";
+
         	case 11: return "corpus2";
+
             default: return null;
         }
     }
@@ -469,17 +691,29 @@ public final class TestObject extends com.game_machine.entity_system.Component i
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("optionalString", 1);
+
     	__fieldMap.put("requiredString", 2);
+
     	__fieldMap.put("numbers", 3);
+
     	__fieldMap.put("bstring", 4);
+
     	__fieldMap.put("bvalue", 5);
+
     	__fieldMap.put("dvalue", 6);
+
     	__fieldMap.put("fvalue", 7);
+
     	__fieldMap.put("numbers64", 8);
+
     	__fieldMap.put("player", 9);
+
     	__fieldMap.put("corpus", 10);
+
     	__fieldMap.put("corpus2", 11);
+
     }
    
    public static List<String> getFields() {

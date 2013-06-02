@@ -5,12 +5,19 @@ import java.util.ArrayList;
 
 public class Entity {
 
+
 	private ClientConnection clientConnection;
+
 	private ChatMessage chatMessage;
+
 	private Player player;
+
 	private TestObject testObject;
+
 	private PlayersAroundMe playersAroundMe;
+
 	private GameCommand gameCommand;
+
 	private final Integer id;
 	
 	public Entity(Integer id) {
@@ -23,27 +30,35 @@ public class Entity {
 	
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
+
 		if (this.hasClientConnection()) {
 			names.add(this.clientConnection.getClass().getSimpleName());
 		}
+
 		if (this.hasChatMessage()) {
 			names.add(this.chatMessage.getClass().getSimpleName());
 		}
+
 		if (this.hasPlayer()) {
 			names.add(this.player.getClass().getSimpleName());
 		}
+
 		if (this.hasTestObject()) {
 			names.add(this.testObject.getClass().getSimpleName());
 		}
+
 		if (this.hasPlayersAroundMe()) {
 			names.add(this.playersAroundMe.getClass().getSimpleName());
 		}
+
 		if (this.hasGameCommand()) {
 			names.add(this.gameCommand.getClass().getSimpleName());
 		}
+
 		return names;
 	}
 		
+
 	// ClientConnection
 	public void setClientConnection(ClientConnection clientConnection) {
 		if (clientConnection.hasEntityId()) {
@@ -72,6 +87,7 @@ public class Entity {
 	
 	
 	
+
 	// ChatMessage
 	public void setChatMessage(ChatMessage chatMessage) {
 		if (chatMessage.hasEntityId()) {
@@ -100,6 +116,7 @@ public class Entity {
 	
 	
 	
+
 	// Player
 	public void setPlayer(Player player) {
 		if (player.hasEntityId()) {
@@ -128,6 +145,7 @@ public class Entity {
 	
 	
 	
+
 	// TestObject
 	public void setTestObject(TestObject testObject) {
 		if (testObject.hasEntityId()) {
@@ -156,6 +174,7 @@ public class Entity {
 	
 	
 	
+
 	// PlayersAroundMe
 	public void setPlayersAroundMe(PlayersAroundMe playersAroundMe) {
 		if (playersAroundMe.hasEntityId()) {
@@ -184,6 +203,7 @@ public class Entity {
 	
 	
 	
+
 	// GameCommand
 	public void setGameCommand(GameCommand gameCommand) {
 		if (gameCommand.hasEntityId()) {
@@ -212,6 +232,7 @@ public class Entity {
 	
 	
 	
+
 	
 	
 

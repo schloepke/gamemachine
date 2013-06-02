@@ -37,6 +37,7 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
 
 
 
+
     public static Schema<PlayersAroundMe> getSchema()
     {
         return DEFAULT_INSTANCE;
@@ -49,14 +50,24 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
 
     static final PlayersAroundMe DEFAULT_INSTANCE = new PlayersAroundMe();
 
+
+
     private List<Player> player;
+
+
+
     private Integer entityId;
+
+
     
 
     public PlayersAroundMe()
     {
         
     }
+
+
+
 
 	public List<Player> getPlayerList() {
 		return player;
@@ -82,6 +93,10 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
         return this;
     }
     
+
+
+
+
 	public Integer getEntityId() {
 		return entityId;
 	}
@@ -90,6 +105,8 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
 		this.entityId = entityId;
 		
 	}
+
+
 
   
     // java serialization
@@ -146,15 +163,26 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
             {
                 case 0:
                     return;
+
             	case 1:
+
             		if(message.player == null)
                         message.player = new ArrayList<Player>();
+
                     message.player.add(input.mergeObject(null, Player.getSchema()));
+
                     break;
+
+
             	case 2:
+
+
                 	message.entityId = input.readInt32();
                 	break;
+
                 	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -165,24 +193,35 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
 
     public void writeTo(Output output, PlayersAroundMe message) throws IOException
     {
+
     	
 
     	
+
     	if(message.player != null)
         {
             for(Player player : message.player)
             {
                 if(player != null) {
+
     				output.writeObject(1, player, Player.getSchema(), true);
+
     			}
             }
         }
+
+
     	
 
     	
+
+
     	if(message.entityId != null)
             output.writeInt32(2, message.entityId, false);
+
     	
+
+
     	
     }
 
@@ -190,8 +229,11 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
     {
         switch(number)
         {
+
         	case 1: return "player";
+
         	case 2: return "entityId";
+
             default: return null;
         }
     }
@@ -205,8 +247,11 @@ public final class PlayersAroundMe extends com.game_machine.entity_system.Compon
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
+
     	__fieldMap.put("player", 1);
+
     	__fieldMap.put("entityId", 2);
+
     }
    
    public static List<String> getFields() {
