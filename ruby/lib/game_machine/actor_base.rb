@@ -4,20 +4,29 @@ module GameMachine
       alias_method :apply, :new
       alias_method :create, :new
 
-      def self.systems
-        [ConnectionManager, LocalEcho]
-      end
-
       def components
         []
+      end
+
+      def add_system
+        components.each do |component|
+          systems[component] ||= []
+          systems[component] << self.name
+        end
       end
 
       def actor_system
         GameMachineLoader.get_actor_system
       end
 
-      def start
-        actor_system.actor_of(Props.new(self), self.name)
+      def start(options={})
+        if options[:router]
+          props = Props.new(self).with_router(options[:router].new(options[:router_size]))
+        else
+          props = Props.new(self)
+        end
+        Systems.register(self.name,compoonents)
+        actor_system.actor_of(props, self.name)
       end
 
       def ask(message, &blk)

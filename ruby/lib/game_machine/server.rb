@@ -48,7 +48,7 @@ module GameMachine
       actor_system = GameMachineLoader.get_actor_system
       LocalEcho.start
       ConnectionManager.start
-      actor_system.actor_of(Props.new(CommandRouter).withRouter(RoundRobinRouter.new(20)), CommandRouter.name)
+      CommandRouter.start(:router => RoundRobinRouter, :router_size => 20)
     end
   end
 end

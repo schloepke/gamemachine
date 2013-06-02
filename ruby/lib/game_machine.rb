@@ -14,6 +14,7 @@ Dir.entries(dir).each do |jar|
   end
 end
 
+java_import 'java.util.concurrent.ConcurrentHashMap'
 java_import 'com.game_machine.core.GameMachineLoader'
 java_import 'com.game_machine.core.AskProxy'
 java_import 'com.game_machine.core.ActorUtil'

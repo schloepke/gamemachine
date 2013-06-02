@@ -2,9 +2,7 @@ module GameMachine
   class CommandRouter < ActorBase
 
 
-    def self.systems
-      [ConnectionManager, LocalEcho]
-    end
+    
 
 
     def on_receive(gateway_message)
