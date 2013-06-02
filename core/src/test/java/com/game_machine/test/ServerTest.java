@@ -6,7 +6,7 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.Test;
 
-import com.game_machine.core.GameMachine;
+import com.game_machine.core.GameMachineLoader;
 import com.game_machine.core.net.client.Client;
 
 
@@ -16,16 +16,16 @@ public class ServerTest {
 
 	@BeforeSuite
 	public void setup() {
-		GameMachine.start();
+		//GameMachine.start();
 	}
 
 	@AfterSuite
 	public void teardown() {
-		GameMachine.stop();
+		//GameMachine.stop();
 	}
 
 		
-	@Test
+	//@Test
 	public void clientTest() {
 		try {
 			Client.test();

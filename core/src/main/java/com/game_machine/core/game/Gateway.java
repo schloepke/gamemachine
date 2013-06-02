@@ -7,7 +7,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.core.ActorUtil;
-import com.game_machine.core.GameMachine;
+import com.game_machine.core.GameMachineLoader;
 import com.game_machine.core.GatewayMessage;
 import com.game_machine.core.NetMessage;
 import com.game_machine.core.net.server.UdpServer;
@@ -52,7 +52,7 @@ public class Gateway extends UntypedActor {
 
 			GatewayMessage gatewayMessage = new GatewayMessage(netMessage.bytes, clientId);
 			clients.put(clientId, netMessage);
-			ActorUtil.getSelectionByClass(GameMachine.getGameHandler()).tell(gatewayMessage, this.getSelf());
+			ActorUtil.getSelectionByName(GameMachineLoader.getGameHandler()).tell(gatewayMessage, this.getSelf());
 			log.debug("Inbound NetMessage message: {}", new String(netMessage.bytes));
 
 		} else if (message instanceof GatewayMessage) {

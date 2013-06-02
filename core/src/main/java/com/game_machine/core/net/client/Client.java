@@ -26,7 +26,7 @@ public class Client {
 
 		try {
 
-			for (int i = 0; i < 1; i++) {
+			for (int i = 0; i < 10000; i++) {
 				byte[] message = Components.fromEntities(MessageUtil.createEchoCommand()).toByteArray();
 				log.info("Client Sent "+ message.length + " bytes");
 				socket.send(message);

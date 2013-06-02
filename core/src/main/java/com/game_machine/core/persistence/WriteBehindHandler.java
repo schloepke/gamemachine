@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
 
-import com.game_machine.core.Config;
+import com.game_machine.core.GameMachineConfig;
 import com.game_machine.entity_system.generated.Entity;
 
 import akka.actor.ActorRef;
@@ -49,7 +49,7 @@ public class WriteBehindHandler extends UntypedActor {
 		this.writeInterval = writeInterval;
 		this.maxWritesPerSecond = maxWritesPerSecond;
 
-		Class<?> store = Class.forName(Config.objectStore);
+		Class<?> store = Class.forName(GameMachineConfig.objectStore);
 		ActorRef storeRef = this.getContext().actorOf(Props.create(store).withRouter(new RoundRobinRouter(10)),
 				store.getSimpleName());
 

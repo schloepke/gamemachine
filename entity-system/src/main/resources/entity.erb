@@ -1,6 +1,7 @@
 package com.game_machine.entity_system.generated;
 
 import java.util.HashMap;
+import java.util.ArrayList;
 
 public class Entity {
 
@@ -15,6 +16,16 @@ public class Entity {
 		
 	public Integer getId() {
 		return this.id;
+	}
+	
+	public ArrayList<String> componentNames() {
+		ArrayList<String> names = new ArrayList<String>();
+	<%- messages.each do |message| -%>
+		if (this.has<%=message.getName%>()) {
+			names.add(this.<%=varname(message.getName)%>.getClass().getSimpleName());
+		}
+	<%- end -%>
+		return names;
 	}
 		
 	<%- messages.each do |message| -%>
@@ -34,6 +45,10 @@ public class Entity {
 	
 	public <%=message.getName%> get<%=message.getName%>() {
 		return this.<%=varname(message.getName)%>;
+	}
+	
+	public <%=message.getName%> clone<%=message.getName%>() {
+		return this.<%=varname(message.getName)%>.clone();
 	}
 	
 	public Boolean has<%=message.getName%>() {

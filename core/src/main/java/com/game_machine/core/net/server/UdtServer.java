@@ -21,7 +21,7 @@ import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.core.Config;
+import com.game_machine.core.GameMachineConfig;
 import com.game_machine.core.net.client.UtilThreadFactory;
 
 public class UdtServer implements Runnable {

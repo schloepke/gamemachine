@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
-import com.game_machine.core.Config;
+import com.game_machine.core.GameMachineConfig;
 import com.game_machine.core.NetMessage;
 import com.game_machine.core.game.Gateway;
 
@@ -34,7 +34,7 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 
 	@Override
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
-		m.retain();
+		//m.retain();
 		
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);

@@ -11,17 +11,13 @@ public class ActorUtil {
 
 	
 	public static ActorSelection getSelectionByClass(Class<?> klass) {
-		return GameMachine.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());
+		return GameMachineLoader.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());
 	}
 	
 	public static ActorSelection getSelectionByName(String name) {
-		return GameMachine.getActorSystem().actorSelection("/user/"+ name);
+		return GameMachineLoader.getActorSystem().actorSelection("/user/"+ name);
 	}
-	
-	public static ActorRef getActorByClass(Class<?> klass) {
-		return GameMachine.getActorRef(klass.getSimpleName());
-	}
-	
+		
 	public static ActorSystem createSystem(String name) {
 		return ActorSystem.create(name);
 	}
@@ -32,6 +28,11 @@ public class ActorUtil {
 		}
 		
 		String remoteConfig = name + ".akka.remote.netty.tcp.port=\"" + port + "\"\n" + name + ".akka.remote.netty.tcp.hostname=\"" + hostname + "\"";
+		Config customConfig = ConfigFactory.parseString(remoteConfig).getConfig(name).withFallback(ConfigFactory.load());
+		return ActorSystem.create(name, customConfig);
+	}
+
+	public static ActorSystem createSystem(String name, String remoteConfig) {
 		Config customConfig = ConfigFactory.parseString(remoteConfig).getConfig(name).withFallback(ConfigFactory.load());
 		return ActorSystem.create(name, customConfig);
 	}

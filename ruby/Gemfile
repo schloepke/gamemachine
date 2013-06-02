@@ -1,7 +1,5 @@
-source "http://gems.github.com"
-source 'http://rubygems.org'
+# A sample Gemfile
+source "https://rubygems.org"
 
-gem 'ruby_protobuf'
-
-gemspec
-
+gem 'rjack-logback'
+gem 'rspec'

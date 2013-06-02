@@ -8,7 +8,6 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.core.GameMachine;
 import com.game_machine.entity_system.generated.Entity;
 
 public class ObjectDb extends UntypedActor {
@@ -26,30 +25,29 @@ public class ObjectDb extends UntypedActor {
 	}
 
 	public ObjectDb() {
-		GameMachine.setActorRef(this.getClass().getSimpleName(), this.getSelf());
 		datastore = this.getContext().actorOf(Props.create(WriteBehindHandler.class, 5000, 50),
 				WriteBehindHandler.class.getSimpleName());
 		entities = new HashMap<Integer, Entity>();
 	}
 
 	public void onReceive(Object message) {
-		log.info("Db message: {}", message);
+		log.debug("Db message: {}", message);
 		if (message instanceof Query) {
 
 			Query query = (Query) message;
 
 			if (query.getType().equals("update")) {
 				if (entities.get(query.getEntityId()) != null) {
-					query.getMapper().apply(entities.get(query.getEntityId()));
-					datastore.tell(query.getEntity(), this.getSelf());
+					Entity entity = entities.get(query.getEntityId());
+					query.getMapper().apply(entity);
+					datastore.tell(entity, this.getSelf());
 				}
-			} else if (query.getType().equals("save")) {
+			} else if (query.getType().equals("put")) {
 				entities.put(query.getEntityId(), query.getEntity());
-			} else if (query.getType().equals("find")) {
-				Entity Entity = entities.get(query.getEntityId());
-				if (Entity != null) {
-					this.getSender().tell(Entity, this.getSelf());
-					datastore.tell(query.getEntity(), this.getSelf());
+			} else if (query.getType().equals("get")) {
+				Entity entity = entities.get(query.getEntityId());
+				if (entity != null) {
+					this.getSender().tell(entity, this.getSelf());
 				}
 			} else {
 				unhandled(message);

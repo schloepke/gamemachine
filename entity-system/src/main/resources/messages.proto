@@ -6,6 +6,14 @@ option optimize_for = SPEED;
 message ClientConnection {
 	required string id = 1;
 	required bool connected = 2;
+	optional string authorizationToken = 3;
+	optional int32 entityId = 4;
+}
+
+message ChatMessage {
+	required string text = 1;
+	required string target = 2;
+	optional int32 entityId = 3;
 }
 
 message Player {
@@ -57,4 +65,5 @@ message Components {
   repeated PlayersAroundMe playersAroundMe = 2;
   repeated GameCommand gameCommand = 3;
   repeated ClientConnection clientConnection = 4;
+  repeated ChatMessage chatMessage = 5;
 }

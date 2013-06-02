@@ -19,7 +19,6 @@ public class GameCommandRouter extends GameActor {
 		actors.put(Location.class.getSimpleName(),
 				this.getContext().actorOf(Props.create(Location.class), Location.class.getSimpleName()));
 		ActorRef a = this.getContext().actorOf(Props.create(Echo.class), Echo.class.getSimpleName());
-		log.info("PATH= " + a.path().address().toString());
 		actors.put(Echo.class.getSimpleName(), a);
 	}
 

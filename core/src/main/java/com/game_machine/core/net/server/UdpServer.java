@@ -17,7 +17,7 @@ import io.netty.channel.socket.nio.NioDatagramChannel;
 import io.netty.util.concurrent.DefaultEventExecutorGroup;
 
 
-import com.game_machine.core.Config;
+import com.game_machine.core.GameMachineConfig;
 import com.game_machine.core.NetMessage;
 
 public final class UdpServer implements Runnable {
@@ -50,7 +50,7 @@ public final class UdpServer implements Runnable {
 	}
 
 	public static void stop() {
-
+		log.info("Stopping UDP server");
 		// Don't try to stop a server that's not running
 		if (udpServer == null) {
 			return;
@@ -69,7 +69,7 @@ public final class UdpServer implements Runnable {
 	public void run() {
 		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
-		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
+		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(50);
 		// final ThreadFactory acceptFactory = new UtilThreadFactory("accept");
 		acceptGroup = new NioEventLoopGroup();
 

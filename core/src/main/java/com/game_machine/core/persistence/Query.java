@@ -3,6 +3,8 @@ package com.game_machine.core.persistence;
 import akka.actor.ActorRef;
 
 import com.game_machine.core.ActorUtil;
+import com.game_machine.core.AskCallable;
+import com.game_machine.core.AskProxy;
 import com.game_machine.core.Cmd;
 import com.game_machine.entity_system.generated.Entity;
 
@@ -21,32 +23,32 @@ public final class Query {
 
 	private final Integer entityId;
 	private final Entity entity;
-	private final Callable callable;
+	private final QueryCallable callable;
 	private final String queryType;
 	
 	
 	
-	public static final void findAsync(Integer entityId, ActorRef sender) {
-		Query query = new Query(entityId,null,null,"find");
+	public static final void get(Integer entityId, ActorRef sender) {
+		Query query = new Query(entityId,null,null,"get");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, sender);
 	}
 	
-	public static final Entity find(Integer entityId, Integer timeout) {
-		Query query = new Query(entityId,null,null,"find");
-		return (Entity) Cmd.ask(query, ActorUtil.getActorByClass(ObjectDb.class), timeout);
+	public static final void get(Integer entityId, AskCallable callable) {
+		Query query = new Query(entityId,null,null,"get");
+		AskProxy.ask(query, ObjectDb.class.getSimpleName(), callable);
 	}
 	
-	public static final void save(Integer entityId, Entity entity) {
-		Query query = new Query(entityId,entity,null,"save");
+	public static final void put(Integer entityId, Entity entity) {
+		Query query = new Query(entityId,entity,null,"put");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
-	public static final void update(Integer entityId, Callable callable) {
+	public static final void update(Integer entityId, QueryCallable callable) {
 		Query query = new Query(entityId,null,callable,"update");
 		ActorUtil.getSelectionByClass(ObjectDb.class).tell(query, null);
 	}
 	
-	public Query(Integer entityId, Entity entity, Callable callable, String type) {
+	public Query(Integer entityId, Entity entity, QueryCallable callable, String type) {
 		this.entityId = entityId;
 		this.entity = entity;
 		this.callable = callable;
@@ -61,7 +63,7 @@ public final class Query {
 		return this.entity;
 	}
 	
-	public Callable getMapper() {
+	public QueryCallable getMapper() {
 		return this.callable;
 	}
 	

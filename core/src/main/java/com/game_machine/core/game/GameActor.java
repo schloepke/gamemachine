@@ -1,20 +1,16 @@
 package com.game_machine.core.game;
 
-import scala.Option;
+import akka.actor.ActorSelection;
+import akka.actor.UntypedActor;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 
-import com.game_machine.core.ActorUtil;
 import com.game_machine.core.GameMessage;
 import com.game_machine.core.GatewayMessage;
 import com.game_machine.entity_system.Component;
 import com.game_machine.entity_system.Entities;
 import com.game_machine.entity_system.generated.Components;
 import com.game_machine.entity_system.generated.Entity;
-
-import akka.actor.ActorRef;
-import akka.actor.ActorSelection;
-import akka.actor.UntypedActor;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class GameActor extends UntypedActor {
 

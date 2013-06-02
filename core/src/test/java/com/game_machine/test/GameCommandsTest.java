@@ -41,7 +41,7 @@ public class GameCommandsTest {
 		return ref.underlyingActor();
 	}
 	
-	@Test
+	//@Test
 	public void gameCommands() {
 		//gameCommands = MessageUtil.loadGameCommands();
 		//ClientMessage message = MessageBuilder.encode(gameCommands.get("test1").toByteArray(), "player");
@@ -49,7 +49,7 @@ public class GameCommandsTest {
 		//router.onReceive(message);
 	}
 	
-	@Test
+	//@Test
 	public void gameMessageTest() {
 		ClientConnection c = new ClientConnection();
 		GameMessage message = new GameMessage("test",null,null,c);
@@ -57,7 +57,7 @@ public class GameCommandsTest {
 		assertThat(message.getComponent() instanceof Component).isTrue();
 	}
 	
-	@Test
+	//@Test
 	public void hashtest() {
 		HashRing ring = new HashRing("test",10);
 		/*log.info("BUCKET= " + ring.stringToBucket("chris"));
