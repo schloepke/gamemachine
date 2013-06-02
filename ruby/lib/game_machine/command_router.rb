@@ -8,25 +8,25 @@ module GameMachine
 
 
     def on_receive(gateway_message)
-
+      puts "CommandRouter got #{gateway_message}"
+      
       entities = Components.parse_from(gateway_message.get_bytes).to_entities
       client_id = gateway_message.get_client_id
 
-      ConnectionManager.tell({:client_id => client_id, :authorized => true},get_self)
-
-      #LocalEcho.ask(gateway_message) do |m|
-      #  #puts "M=#{m.inspect}"
-      #end
-
-
-      Gateway.send(client_id, gateway_message.get_bytes)
       entities.get_entities.values.each do |entity|
         entity.component_names.each do |component_name|
-          
+          self.class.systems.each do |system|
+            if system.components.include?(component_name)
+              system.tell(entity)
+            end
+          end
         end
       end
+      Gateway.send_to_client(client_id, gateway_message.get_bytes)
     end
+
   end
+
 end
 
 

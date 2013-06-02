@@ -27,7 +27,7 @@ public class Gateway extends UntypedActor {
 
 	public static void send(String clientId, Entities entities) {
 		byte[] bytes = Components.fromEntities(entities).toByteArray();
-		send(clientId, bytes);
+		sendToClient(clientId, bytes);
 	}
 
 	public static void send(String clientId, Entity entity) {
@@ -36,7 +36,7 @@ public class Gateway extends UntypedActor {
 		send(clientId, entities);
 	}
 
-	public static void send(String clientId, byte[] bytes) {
+	public static void sendToClient(String clientId, byte[] bytes) {
 		GatewayMessage gatewayMessage = new GatewayMessage(bytes, clientId);
 		ActorUtil.getSelectionByClass(Gateway.class).tell(gatewayMessage, null);
 	}

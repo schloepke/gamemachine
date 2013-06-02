@@ -1,7 +1,7 @@
 module GameMachine
   class ConnectionManager < ActorBase
 
-    def self.wants_components
+    def self.components
       ['ClientConnection']
     end
 

@@ -4,6 +4,14 @@ module GameMachine
       alias_method :apply, :new
       alias_method :create, :new
 
+      def self.systems
+        [ConnectionManager, LocalEcho]
+      end
+
+      def components
+        []
+      end
+
       def actor_system
         GameMachineLoader.get_actor_system
       end
@@ -19,10 +27,13 @@ module GameMachine
       end
 
       def tell(message,sender=nil)
-        actor_selection = ActorUtil.get_actor_selection_by_name(self.name)
+        actor_selection = ActorUtil.get_selection_by_name(self.name)
         actor_selection.tell(message,sender)
       end
 
+    end
+
+    def initialize
     end
 
     def onReceive(message)

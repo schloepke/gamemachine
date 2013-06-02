@@ -26,6 +26,12 @@ public class GameMachineLoader {
 		return gameHandler;
 	}
 
+	public void run_test() {
+		actorSystem = ActorUtil.createSystem("system");
+		gameHandler = "GameMachine::CommandRouter";
+		log.info("GameMachineLoader started in test mode");
+	}
+	
 	public void run(String name, String config) {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = ActorUtil.createSystem(name,config);
