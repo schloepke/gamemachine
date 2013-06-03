@@ -3,9 +3,9 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
-message ClientConnection {
-	required string id = 1;
-	required bool connected = 2;
+message PlayerConnection {
+  required string id = 1;
+	required Player player = 2;
 	optional string authorizationToken = 3;
 	optional int32 entityId = 4;
 }
@@ -64,6 +64,6 @@ message Components {
   repeated Player player = 1;
   repeated PlayersAroundMe playersAroundMe = 2;
   repeated GameCommand gameCommand = 3;
-  repeated ClientConnection clientConnection = 4;
+  repeated PlayerConnection playerConnection = 4;
   repeated ChatMessage chatMessage = 5;
 }

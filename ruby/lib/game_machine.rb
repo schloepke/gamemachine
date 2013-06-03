@@ -35,7 +35,7 @@ java_import 'com.game_machine.entity_system.Entities'
 java_import 'com.game_machine.entity_system.generated.Entity'
 java_import 'com.game_machine.entity_system.generated.Components'
 java_import 'com.game_machine.entity_system.generated.GameCommand'
-java_import 'com.game_machine.entity_system.generated.ClientConnection'
+java_import 'com.game_machine.entity_system.generated.PlayerConnection'
 java_import 'com.game_machine.entity_system.generated.ChatMessage'
 java_import 'com.game_machine.entity_system.generated.Player'
 java_import 'com.game_machine.entity_system.generated.PlayersAroundMe'
@@ -50,6 +50,7 @@ java_import 'com.game_machine.core.persistence.QueryCallable'
 java_import 'java.util.concurrent.atomic.AtomicInteger'
 java_import 'akka.testkit.TestActorRef'
 
+require 'game_machine/game_message'
 require 'game_machine/config'
 require 'game_machine/actor_base'
 require 'game_machine/server'
@@ -69,6 +70,24 @@ module GameMachine
   def self.env
     ENV['GAME_ENV']
   end
+
+  def self.configure_logging
+
+    @@logger = RJack::SLF4J[ 'game_machine' ]
+
+    RJack::Logback.configure do
+      console = RJack::Logback::ConsoleAppender.new do |a|
+
+      end
+      RJack::Logback.root.add_appender( console )
+      RJack::Logback.root.level = RJack::Logback::INFO
+    end
+  end
+
+  def self.logger
+    @@logger
+  end
+
 end
 
 puts "GAME_ENV is #{GameMachine.env}"

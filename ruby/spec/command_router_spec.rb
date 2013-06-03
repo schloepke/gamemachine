@@ -7,10 +7,10 @@ module GameMachine
 
     let(:entity) do
       entity = Entity.new(1)
-      client_connection = ClientConnection.new
-      client_connection.set_id('client1')
-      client_connection.set_connected(false)
-      entity.set_client_connection(client_connection)
+      player_connection = PlayerConnection.new
+      player_connection.set_id('client1')
+      player_connection.set_player(Player.new.set_id(1))
+      entity.set_player_connection(player_connection)
       entity
     end
 
@@ -30,10 +30,11 @@ module GameMachine
       ref.underlying_actor
     end
 
-    describe "Authentication" do
-      it "should do something" do
+    describe "#on_receive" do
+
+      it "dispatches entities to the correct systems" do
         Systems.register(ConnectionManager,ConnectionManager.components)
-        ConnectionManager.should_receive(:tell).with(kind_of(Entity))
+        ConnectionManager.should_receive(:tell).with(kind_of(GameMessage))
         subject.onReceive(gateway_message)
       end
     end

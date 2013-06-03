@@ -56,6 +56,10 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
 
 
+    private Player player;
+
+
+
     private Boolean connected;
 
 
@@ -83,6 +87,18 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 	
 	public ClientConnection setId(String id) {
 		this.id = id;
+		return this;
+	}
+
+
+
+
+	public Player getPlayer() {
+		return player;
+	}
+	
+	public ClientConnection setPlayer(Player player) {
+		this.player = player;
 		return this;
 	}
 
@@ -192,13 +208,22 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
             	case 2:
 
 
+                	message.player = input.mergeObject(message.player, Player.getSchema());
+                    break;
+
+                	
+
+
+            	case 3:
+
+
                 	message.connected = input.readBool();
                 	break;
 
                 	
 
 
-            	case 3:
+            	case 4:
 
 
                 	message.authorizationToken = input.readString();
@@ -207,7 +232,7 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
                 	
 
 
-            	case 4:
+            	case 5:
 
 
                 	message.entityId = input.readInt32();
@@ -243,6 +268,20 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
     	
 
+    	if(message.player == null)
+            throw new UninitializedMessageException(message);
+
+    	
+
+
+    	if(message.player != null)
+    		output.writeObject(2, message.player, Player.getSchema(), false);
+
+    	
+
+
+    	
+
     	if(message.connected == null)
             throw new UninitializedMessageException(message);
 
@@ -250,7 +289,7 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
 
     	if(message.connected != null)
-            output.writeBool(2, message.connected, false);
+            output.writeBool(3, message.connected, false);
 
     	
 
@@ -261,7 +300,7 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
 
     	if(message.authorizationToken != null)
-            output.writeString(3, message.authorizationToken, false);
+            output.writeString(4, message.authorizationToken, false);
 
     	
 
@@ -272,7 +311,7 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
 
     	if(message.entityId != null)
-            output.writeInt32(4, message.entityId, false);
+            output.writeInt32(5, message.entityId, false);
 
     	
 
@@ -287,11 +326,13 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
         	case 1: return "id";
 
-        	case 2: return "connected";
+        	case 2: return "player";
 
-        	case 3: return "authorizationToken";
+        	case 3: return "connected";
 
-        	case 4: return "entityId";
+        	case 4: return "authorizationToken";
+
+        	case 5: return "entityId";
 
             default: return null;
         }
@@ -309,11 +350,13 @@ public final class ClientConnection extends com.game_machine.entity_system.Compo
 
     	__fieldMap.put("id", 1);
 
-    	__fieldMap.put("connected", 2);
+    	__fieldMap.put("player", 2);
 
-    	__fieldMap.put("authorizationToken", 3);
+    	__fieldMap.put("connected", 3);
 
-    	__fieldMap.put("entityId", 4);
+    	__fieldMap.put("authorizationToken", 4);
+
+    	__fieldMap.put("entityId", 5);
 
     }
    

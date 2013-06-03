@@ -23,13 +23,6 @@ public class GameCommandRouter extends GameActor {
 	}
 
 	public void onReceive(Entities entities) {
-		ClientRegistry.register(getClientId());
-		for (Entity entity : entities.getEntities().values()) {
-			if (entity.hasGameCommand()) {
-				GameCommand gameCommand = entity.getGameCommand();
-				log.info("GameCommand: " + gameCommand.getName());
-				sendTo(gameCommand.getName(), entity);
-			}
-		}
+		
 	}
 }

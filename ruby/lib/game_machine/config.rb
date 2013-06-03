@@ -17,19 +17,5 @@ module GameMachine
       File.read(File.expand_path(File.join(File.dirname(__FILE__), '../../application.conf')))
     end
 
-    def self.configure_logging
-
-      log = RJack::SLF4J[ 'game_machine' ]
-      log.info "About to reconfigure..."
-
-      RJack::Logback.configure do
-        console = RJack::Logback::ConsoleAppender.new do |a|
-
-        end
-        RJack::Logback.root.add_appender( console )
-        RJack::Logback.root.level = RJack::Logback::INFO
-      end
-    end
-
   end
 end

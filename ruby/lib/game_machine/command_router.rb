@@ -2,7 +2,7 @@ module GameMachine
   class CommandRouter < ActorBase
 
     def on_receive(gateway_message)
-      puts "CommandRouter got #{gateway_message}"
+      GameMachine.logger.info "CommandRouter got #{gateway_message}"
 
       entities = Components.parse_from(gateway_message.get_bytes).to_entities
       client_id = gateway_message.get_client_id
@@ -15,7 +15,8 @@ module GameMachine
         end
       end
       dispatch_map.each do |entity,systems|
-        systems.sort.each {|system| system.tell(entity)}
+        game_message = GameMessage.new(client_id,entity)
+        systems.sort.each {|system| system.tell(game_message)}
       end
 
     end

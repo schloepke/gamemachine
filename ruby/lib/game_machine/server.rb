@@ -31,7 +31,7 @@ module GameMachine
 
     def self.start
       Config.load
-      Config.configure_logging
+      GameMachine.configure_logging
       if GameMachine.env == 'test'
         GameMachineLoader.new.run_test
       else

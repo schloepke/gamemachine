@@ -64,7 +64,7 @@ public final class Components extends com.game_machine.entity_system.Component i
 
 
 
-    private List<ClientConnection> clientConnection;
+    private List<PlayerConnection> playerConnection;
 
 
 
@@ -165,27 +165,27 @@ public final class Components extends com.game_machine.entity_system.Component i
 
 
 
-	public List<ClientConnection> getClientConnectionList() {
-		return clientConnection;
+	public List<PlayerConnection> getPlayerConnectionList() {
+		return playerConnection;
 	}
 
-	public Components setClientConnectionList(List<ClientConnection> clientConnection) {
-		this.clientConnection = clientConnection;
+	public Components setPlayerConnectionList(List<PlayerConnection> playerConnection) {
+		this.playerConnection = playerConnection;
 		return this;
 	}
 
-	public ClientConnection getClientConnection(int index)  {
-        return clientConnection == null ? null : clientConnection.get(index);
+	public PlayerConnection getPlayerConnection(int index)  {
+        return playerConnection == null ? null : playerConnection.get(index);
     }
 
-    public int getClientConnectionCount()  {
-        return clientConnection == null ? 0 : clientConnection.size();
+    public int getPlayerConnectionCount()  {
+        return playerConnection == null ? 0 : playerConnection.size();
     }
 
-    public Components addClientConnection(ClientConnection clientConnection)  {
-        if(this.clientConnection == null)
-            this.clientConnection = new ArrayList<ClientConnection>();
-        this.clientConnection.add(clientConnection);
+    public Components addPlayerConnection(PlayerConnection playerConnection)  {
+        if(this.playerConnection == null)
+            this.playerConnection = new ArrayList<PlayerConnection>();
+        this.playerConnection.add(playerConnection);
         return this;
     }
     
@@ -308,10 +308,10 @@ public final class Components extends com.game_machine.entity_system.Component i
 
             	case 4:
 
-            		if(message.clientConnection == null)
-                        message.clientConnection = new ArrayList<ClientConnection>();
+            		if(message.playerConnection == null)
+                        message.playerConnection = new ArrayList<PlayerConnection>();
 
-                    message.clientConnection.add(input.mergeObject(null, ClientConnection.getSchema()));
+                    message.playerConnection.add(input.mergeObject(null, PlayerConnection.getSchema()));
 
                     break;
 
@@ -392,13 +392,13 @@ public final class Components extends com.game_machine.entity_system.Component i
 
     	
 
-    	if(message.clientConnection != null)
+    	if(message.playerConnection != null)
         {
-            for(ClientConnection clientConnection : message.clientConnection)
+            for(PlayerConnection playerConnection : message.playerConnection)
             {
-                if(clientConnection != null) {
+                if(playerConnection != null) {
 
-    				output.writeObject(4, clientConnection, ClientConnection.getSchema(), true);
+    				output.writeObject(4, playerConnection, PlayerConnection.getSchema(), true);
 
     			}
             }
@@ -436,7 +436,7 @@ public final class Components extends com.game_machine.entity_system.Component i
 
         	case 3: return "gameCommand";
 
-        	case 4: return "clientConnection";
+        	case 4: return "playerConnection";
 
         	case 5: return "chatMessage";
 
@@ -460,7 +460,7 @@ public final class Components extends com.game_machine.entity_system.Component i
 
     	__fieldMap.put("gameCommand", 3);
 
-    	__fieldMap.put("clientConnection", 4);
+    	__fieldMap.put("playerConnection", 4);
 
     	__fieldMap.put("chatMessage", 5);
 
@@ -585,17 +585,17 @@ public byte[] toProtobuf() {
    			}
    		}
 
-   		if (this.getClientConnectionList() != null) {
-   			for (ClientConnection clientConnection : this.getClientConnectionList()) {
-   				entityId = clientConnection.getEntityId();
+   		if (this.getPlayerConnectionList() != null) {
+   			for (PlayerConnection playerConnection : this.getPlayerConnectionList()) {
+   				entityId = playerConnection.getEntityId();
    				if (entityId == null) {
    					continue;
    		 		}
    				if (entities.hasEntity(entityId)) {
-   					entities.getEntity(entityId).setClientConnection(clientConnection);
+   					entities.getEntity(entityId).setPlayerConnection(playerConnection);
    				} else {
    					entity = new Entity(entityId);
-   					entity.setClientConnection(clientConnection);
+   					entity.setPlayerConnection(playerConnection);
    					entities.addEntity(entity);
    				}
    			}
@@ -636,8 +636,8 @@ public byte[] toProtobuf() {
 				components.addGameCommand(entity.getGameCommand());
 			}
 
-			if (entity.hasClientConnection()) {
-				components.addClientConnection(entity.getClientConnection());
+			if (entity.hasPlayerConnection()) {
+				components.addPlayerConnection(entity.getPlayerConnection());
 			}
 
 			if (entity.hasChatMessage()) {

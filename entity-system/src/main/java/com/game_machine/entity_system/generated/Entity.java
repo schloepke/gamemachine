@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Entity {
 
 
-	private ClientConnection clientConnection;
+	private PlayerConnection playerConnection;
 
 	private ChatMessage chatMessage;
 
@@ -31,8 +31,8 @@ public class Entity {
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
 
-		if (this.hasClientConnection()) {
-			names.add(this.clientConnection.getClass().getSimpleName());
+		if (this.hasPlayerConnection()) {
+			names.add(this.playerConnection.getClass().getSimpleName());
 		}
 
 		if (this.hasChatMessage()) {
@@ -59,30 +59,30 @@ public class Entity {
 	}
 		
 
-	// ClientConnection
-	public void setClientConnection(ClientConnection clientConnection) {
-		if (clientConnection.hasEntityId()) {
-			clientConnection = clientConnection.clone();
+	// PlayerConnection
+	public void setPlayerConnection(PlayerConnection playerConnection) {
+		if (playerConnection.hasEntityId()) {
+			playerConnection = playerConnection.clone();
 		}
 		
-		this.clientConnection = clientConnection;
-		this.clientConnection.setEntityId(this.getId());
+		this.playerConnection = playerConnection;
+		this.playerConnection.setEntityId(this.getId());
 	}
 	
-	public void removeClientConnection() {
-		this.clientConnection = null;
+	public void removePlayerConnection() {
+		this.playerConnection = null;
 	}
 	
-	public ClientConnection getClientConnection() {
-		return this.clientConnection;
+	public PlayerConnection getPlayerConnection() {
+		return this.playerConnection;
 	}
 	
-	public ClientConnection cloneClientConnection() {
-		return this.clientConnection.clone();
+	public PlayerConnection clonePlayerConnection() {
+		return this.playerConnection.clone();
 	}
 	
-	public Boolean hasClientConnection() {
-		return (this.clientConnection != null);
+	public Boolean hasPlayerConnection() {
+		return (this.playerConnection != null);
 	}
 	
 	
