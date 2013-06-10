@@ -22,11 +22,11 @@ java_import 'akka.actor.ActorRef'
 java_import 'akka.actor.ActorSystem'
 java_import 'akka.actor.Props'
 java_import 'akka.actor.UntypedActor'
-java_import 'com.game_machine.core.game.Gateway'
 java_import 'com.game_machine.core.GatewayMessage'
+java_import 'com.game_machine.core.net.server.UdpServerHandler'
 java_import 'com.game_machine.core.net.server.UdpServer'
 java_import 'com.game_machine.core.net.server.UdtServer'
-
+java_import 'com.game_machine.core.NetMessage'
 java_import 'java.net.InetSocketAddress'
 java_import 'com.barchart.udt.SocketUDT'
 java_import 'com.barchart.udt.TypeUDT'
@@ -39,9 +39,7 @@ java_import 'com.game_machine.entity_system.generated.PlayerConnection'
 java_import 'com.game_machine.entity_system.generated.ChatMessage'
 java_import 'com.game_machine.entity_system.generated.Player'
 java_import 'com.game_machine.entity_system.generated.PlayersAroundMe'
-java_import 'com.game_machine.core.game.Gateway'
 java_import 'akka.routing.RoundRobinRouter'
-java_import 'com.game_machine.core.net.client.Client'
 java_import 'com.typesafe.config.Config'
 java_import 'com.typesafe.config.ConfigFactory'
 java_import 'com.game_machine.core.persistence.ObjectDb'
@@ -51,15 +49,15 @@ java_import 'java.util.concurrent.atomic.AtomicInteger'
 java_import 'akka.testkit.TestActorRef'
 
 require 'game_machine/game_message'
+require 'game_machine/gateway'
 require 'game_machine/config'
-require 'game_machine/actor_base'
+require 'game_machine/game_system'
 require 'game_machine/server'
 require 'game_machine/command_router'
 require 'game_machine/client'
 require 'game_machine/proxy_actor'
 require 'game_machine/local_echo'
 require 'game_machine/connection_manager'
-require 'game_machine/systems'
 
 
 unless ENV['GAME_ENV']
@@ -80,7 +78,7 @@ module GameMachine
 
       end
       RJack::Logback.root.add_appender( console )
-      RJack::Logback.root.level = RJack::Logback::INFO
+      RJack::Logback.root.level = RJack::Logback::DEBUG
     end
   end
 

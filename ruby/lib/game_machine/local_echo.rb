@@ -1,5 +1,5 @@
 module GameMachine
-  class LocalEcho < ActorBase
+  class LocalEcho < GameSystem
     
     def on_receive(message)
       puts "LocalEcho got #{message}"

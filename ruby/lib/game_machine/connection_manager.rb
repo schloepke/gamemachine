@@ -1,5 +1,5 @@
 module GameMachine
-  class ConnectionManager < ActorBase
+  class ConnectionManager < GameSystem
 
     def self.components
       ['PlayerConnection']

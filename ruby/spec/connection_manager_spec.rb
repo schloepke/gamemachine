@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module GameMachine
   describe ConnectionManager do
-    before(:all) {Server.start}
-    after(:all) {Server.stop}
+    #before(:all) {Server.start}
+    #after(:all) {Server.stop}
 
     subject do
       props = Props.new(ConnectionManager);

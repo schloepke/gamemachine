@@ -2,7 +2,11 @@ module GameMachine
   class Config
 
     def self.filename
-      File.expand_path(File.join(File.dirname(__FILE__), '../../config.yml'))
+      File.expand_path(
+        File.join(File.dirname(__FILE__),
+                  "../../config/#{GameMachine.env}_config.yml"
+        )
+      )
     end
 
     def self.load
@@ -14,7 +18,12 @@ module GameMachine
     end
 
     def self.akka_config
-      File.read(File.expand_path(File.join(File.dirname(__FILE__), '../../application.conf')))
+      File.read(
+        File.expand_path(
+          File.join(File.dirname(__FILE__),
+                    "../../config/#{GameMachine.env}_akka.conf")
+        )
+      )
     end
 
   end

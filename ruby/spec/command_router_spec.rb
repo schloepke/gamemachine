@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module GameMachine
   describe CommandRouter do
-    before(:all) {Server.start}
-    after(:all) {Server.stop}
+    before(:all) {Server.new.start_actor_system}
+    after(:all) {Server.new.stop_actor_system}
 
     let(:entity) do
       entity = Entity.new(1)
@@ -33,7 +33,6 @@ module GameMachine
     describe "#on_receive" do
 
       it "dispatches entities to the correct systems" do
-        Systems.register(ConnectionManager,ConnectionManager.components)
         ConnectionManager.should_receive(:tell).with(kind_of(GameMessage))
         subject.onReceive(gateway_message)
       end

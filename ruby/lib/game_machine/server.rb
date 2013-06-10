@@ -1,54 +1,76 @@
 module GameMachine
   class Server
 
-
-    def self.start_netservers
-      if GameMachine.env != 'test'
-        if Config.config[:udp][:enabled]
-          UdpServer.start(Config.config[:udp][:host],Config.config[:udp][:port])
-        end
-        if Config.config[:udt][:enabled]
-          UdtServer.start(Config.config[:udt][:host],Config.config[:udt][:port])
-        end
-      end
-    end
-
-    def self.stop_netservers
-      if GameMachine.env != 'test'
-        if Config.config[:udp][:enabled]
-          UdpServer.stop
-        end
-        if Config.config[:udt][:enabled]
-          UdtServer.stop
-        end
-      end
-    end
-
-    def self.stop
-      GameMachineLoader.get_actor_system.shutdown
-      stop_netservers
-    end
-
-    def self.start
+    def initialize
       Config.load
       GameMachine.configure_logging
-      if GameMachine.env == 'test'
-        GameMachineLoader.new.run_test
-      else
-        GameMachineLoader.new.run('system',Config.akka_config)
-        start_netservers
-        load_system
-      end
-
-
-
     end
 
-    def self.load_system
+    def udp_enabled
+      Config.config[:udp][:enabled]
+    end
+
+    def udt_enabled
+      Config.config[:udt][:enabled]
+    end
+
+    def stop_udpserver
+      if udp_enabled
+        UdpServer.stop
+      end
+    end
+
+    def stop_udtserver
+      if udt_enabled
+        UdtServer.stop
+      end
+    end
+
+    def start_udpserver
+      if udp_enabled
+        UdpServer.start(Config.config[:udp][:host],Config.config[:udp][:port])
+      end
+    end
+
+    def start_udtserver
+      if udt_enabled
+        UdtServer.start(Config.config[:udt][:host],Config.config[:udt][:port])
+      end
+    end
+
+    def start_actor_system
+      GameMachineLoader.new.run('system',
+                                Config.akka_config,
+                                Config.config[:game_handler]
+                               )
+    end
+
+    def stop_actor_system
+      GameMachineLoader.get_actor_system.shutdown
+    end
+
+    def stop
+      stop_udpserver
+      stop_udtserver
+      stop_actor_system
+    end
+
+    def start
+      start_actor_system
+      start_udpserver
+      start_udtserver
+      start_game_systems
+    end
+
+    def start_game_systems
       actor_system = GameMachineLoader.get_actor_system
+      props = Props.new(Gateway)
+      actor_system.actor_of(props, 'Gateway')
+
       LocalEcho.start
       ConnectionManager.start
       CommandRouter.start(:router => RoundRobinRouter, :router_size => 20)
     end
+
   end
 end

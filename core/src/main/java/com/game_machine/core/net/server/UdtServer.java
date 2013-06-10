@@ -87,7 +87,7 @@ public class UdtServer implements Runnable {
 		}
 	}
 
-	public void send(byte[] bytes, ChannelHandlerContext ctx) {
+	public void sendToClient(byte[] bytes, ChannelHandlerContext ctx) {
 		handler.send(bytes, ctx);
 	}
 	

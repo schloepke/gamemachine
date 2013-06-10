@@ -61,10 +61,10 @@ public class Gateway extends UntypedActor {
 			NetMessage netMessage = clients.get(gatewayMessage.getClientId());
 
 			if (netMessage.protocol == NetMessage.UDP) {
-				UdpServer.getUdpServer().send(gatewayMessage.getBytes(), netMessage.host, netMessage.port,
+				UdpServer.getUdpServer().sendToClient(gatewayMessage.getBytes(), netMessage.host, netMessage.port,
 						netMessage.ctx);
 			} else if (netMessage.protocol == NetMessage.UDT) {
-				UdtServer.getUdtServer().send(gatewayMessage.getBytes(), netMessage.ctx);
+				UdtServer.getUdtServer().sendToClient(gatewayMessage.getBytes(), netMessage.ctx);
 			} else {
 				unhandled(message);
 			}

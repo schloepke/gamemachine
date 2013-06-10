@@ -1,5 +1,23 @@
 module GameMachine
   class Client
+ 
+
+    def initialize
+      @host = '192.168.1.2'
+      @port = 8100
+      @socket = UDPSocket.new
+      @socket.connect(@host,@port)
+    end
+
+    def send_message(message)
+      str = String.from_java_bytes(message)
+      @socket.send(str,@host,@port)
+    end
+
+    def receive_message
+      @socket.recvfrom(1024)
+    end
+
     def self.client3
       port =8100
       host = "192.168.1.2"

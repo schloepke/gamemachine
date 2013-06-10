@@ -59,6 +59,10 @@ public final class UdpServer implements Runnable {
 		udpServer.shutdown();
 		udpServer = null;
 	}
+	
+	public UdpServerHandler getHandler() {
+		return this.handler;
+	}
 
 	public UdpServer(final String hostname, final int port) {
 		this.port = port;
@@ -97,7 +101,7 @@ public final class UdpServer implements Runnable {
 		}
 	}
 
-	public void send(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
+	public void sendToClient(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
 		handler.send(bytes, host, port, ctx);
 	}
 

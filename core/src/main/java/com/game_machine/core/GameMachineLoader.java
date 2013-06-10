@@ -26,17 +26,23 @@ public class GameMachineLoader {
 		return gameHandler;
 	}
 
-	public void run_test() {
+	public void run_test(String gameHandler) {
 		actorSystem = ActorUtil.createSystem("system");
-		gameHandler = "GameMachine::CommandRouter";
+		this.gameHandler = gameHandler;
 		log.info("GameMachineLoader started in test mode");
 	}
 	
-	public void run(String name, String config) {
+	public void run(String name, String config, String gameHandler) {
+		this.gameHandler = gameHandler;
 		Thread.currentThread().setName("game-machine");
-		actorSystem = ActorUtil.createSystem(name,config);
 		
-		gameHandler = GameMachineConfig.gameHandler;
+		if (name.equals("test")) {
+			actorSystem = ActorUtil.createSystem("system");
+		} else {
+			actorSystem = ActorUtil.createSystem(name,config);
+		}
+		
+		
 		// Memory database actor, needs to be pinned to a single thread
 		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
 
@@ -44,7 +50,7 @@ public class GameMachineLoader {
 		//actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());
 
 		
-		actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
+		//actorSystem.actorOf(Props.create(Gateway.class), Gateway.class.getSimpleName());
 		
 		//actorSystem.actorOf(Props.create(ClientRegistry.class), ClientRegistry.class.getSimpleName());
 

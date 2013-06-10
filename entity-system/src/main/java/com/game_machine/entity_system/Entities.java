@@ -1,18 +1,11 @@
 package com.game_machine.entity_system;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.entity_system.generated.Components;
 import com.game_machine.entity_system.generated.Entity;
-import com.game_machine.entity_system.generated.GameCommand;
-import com.game_machine.entity_system.generated.Player;
-import com.game_machine.entity_system.generated.PlayersAroundMe;
 
 public class Entities {
 

@@ -13,13 +13,10 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
-import com.game_machine.core.GameMachineConfig;
 import com.game_machine.core.NetMessage;
-import com.game_machine.core.game.Gateway;
 
 //@Sharable
 public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<DatagramPacket> {
@@ -29,12 +26,11 @@ public final class UdpServerHandler extends ChannelInboundMessageHandlerAdapter<
 	private ActorSelection inbound;
 	
 	public UdpServerHandler() {
-		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
+		this.inbound = ActorUtil.getSelectionByName("Gateway");
 	}
 
 	@Override
 	public void messageReceived(final ChannelHandlerContext ctx, final DatagramPacket m) {
-		//m.retain();
 		
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
