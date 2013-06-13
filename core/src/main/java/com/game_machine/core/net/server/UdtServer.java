@@ -29,6 +29,7 @@ public class UdtServer implements Runnable {
 	private static final Logger log = LoggerFactory.getLogger(UdtServer.class);
 
 	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
+	private static Thread serverThread;
 	
 	private static UdtServer udtServer;
 	private final String hostname;
@@ -103,7 +104,8 @@ public class UdtServer implements Runnable {
 		}
 
 		udtServer = new UdtServer(host, port);
-		new Thread(udtServer).start();
+		serverThread = new Thread(udtServer);
+		serverThread.start();
 	}
 	
 	public static void stop() {

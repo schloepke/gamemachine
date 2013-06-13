@@ -1,0 +1,43 @@
+---
+defaults: &defaults
+
+development:
+  <<: *defaults
+  game_handler: GameMachine::CommandRouter
+  message_encoding: protobuf
+  udp:
+    port: 8100
+    host: 192.168.1.2
+    enabled: true
+    log_level: INFO
+  udt:
+    port: 8101
+    host: 192.168.1.2
+    enabled: true
+    log_level: INFO
+  servers:
+    - 'chris-ubuntu'
+    - app01
+    - app02
+
+test:
+  <<: *defaults
+  game_handler: GameMachine::CommandRouter
+  message_encoding: protobuf
+  udp:
+    port: 8100
+    host: 192.168.1.2
+    enabled: true
+    log_level: INFO
+  udt:
+    port: 8101
+    host: 192.168.1.2
+    enabled: true
+    log_level: INFO
+  servers:
+    - 'chris-ubuntu'
+    - app01
+    - app02
+
+production:
+  <<: *defaults

@@ -1,9 +1,13 @@
 module GameMachine
+
+  class DuplicateHashringError < StandardError;end
+
   class GameSystem < UntypedActor
     class << self
       alias_method :apply, :new
       alias_method :create, :new
 
+      
       def systems
         [GameMachine::CommandRouter,GameMachine::LocalEcho,GameMachine::ConnectionManager].freeze
       end
@@ -12,17 +16,21 @@ module GameMachine
         []
       end
 
-      def actor_system
-        GameMachineLoader.get_actor_system
+      def hashrings
+        @@hashrings ||= java.util.concurrent.ConcurrentHashMap.new
       end
 
-      def start(options={})
-        if options[:router]
-          props = Props.new(self).with_router(options[:router].new(options[:router_size]))
-        else
-          props = Props.new(self)
-        end
-        actor_system.actor_of(props, self.name)
+      def hashring
+        hashrings.fetch(self.name)
+      end
+
+      def hashring=(hashring)
+        raise DuplicateHashringError if hashrings[self.name]
+        hashrings[self.name] = hashring
+      end
+
+      def actor_system
+        GameMachineLoader.get_actor_system
       end
 
       def ask(message, &blk)
@@ -36,9 +44,6 @@ module GameMachine
         actor_selection.tell(message,sender)
       end
 
-    end
-
-    def initialize
     end
 
     def onReceive(message)

@@ -45,14 +45,14 @@ public class WriteBehindHandlerTest {
 	public void firstWriteShouldBeTrue() {
 		
 		WriteBehindHandler handler = getHandler("test1",2000,50);
-		Entity message = new Entity(1);
+		Entity message = new Entity();
 		assertThat(handler.write(message)).isTrue();
 	}
 	
 	@Test
 	public void shouldOnlyWriteSameKeyOnceEveryInterval() {
 		WriteBehindHandler handler = getHandler("test2",1000,50);
-		Entity message = new Entity(1);
+		Entity message = new Entity();
 		Integer count = 0;
 		for(int i=0;i<210;i++) {
 			if (handler.write(message)) {
@@ -66,10 +66,10 @@ public class WriteBehindHandlerTest {
 	@Test
 	public void shouldLimitTotalWrites() {
 		WriteBehindHandler handler = getHandler("test3",2000,50);
-		Entity message = new Entity(1);
+		Entity message = new Entity();
 		Integer count = 0;
 		for(int i=0;i<100;i++) {
-			message = new Entity(i);
+			message = new Entity();
 			if (handler.write(message)) {
 				count++;
 			}
@@ -97,7 +97,7 @@ public class WriteBehindHandlerTest {
 			final TestActorRef<WriteBehindHandler> ref = TestActorRef.create(system, props, "testA");
 			final WriteBehindHandler actor = ref.underlyingActor();
 			
-			Entity o = new Entity(1);
+			Entity o = new Entity();
 			final Future<Object> future = akka.pattern.Patterns.ask(ref, o, 3000);
 
 			assertThat(future.isCompleted()).isFalse();

@@ -2,46 +2,37 @@ module GameMachine
   class Server
 
     def initialize
-      Config.load
       GameMachine.configure_logging
     end
 
-    def udp_enabled
-      Config.config[:udp][:enabled]
-    end
-
-    def udt_enabled
-      Config.config[:udt][:enabled]
-    end
-
     def stop_udpserver
-      if udp_enabled
+      if Settings.udp.enabled
         UdpServer.stop
       end
     end
 
     def stop_udtserver
-      if udt_enabled
+      if Settings.udt.enabled
         UdtServer.stop
       end
     end
 
     def start_udpserver
-      if udp_enabled
-        UdpServer.start(Config.config[:udp][:host],Config.config[:udp][:port])
+      if Settings.udp.enabled
+        UdpServer.start(Settings.udp.host,Settings.udp.port)
       end
     end
 
     def start_udtserver
-      if udt_enabled
-        UdtServer.start(Config.config[:udt][:host],Config.config[:udt][:port])
+      if Settings.udt.enabled
+        UdtServer.start(Settings.udt.host,Settings.udt.port)
       end
     end
 
     def start_actor_system
       GameMachineLoader.new.run('system',
                                 Config.akka_config,
-                                Config.config[:game_handler]
+                                Settings.game_handler
                                )
     end
 
@@ -63,13 +54,10 @@ module GameMachine
     end
 
     def start_game_systems
-      actor_system = GameMachineLoader.get_actor_system
-      props = Props.new(Gateway)
-      actor_system.actor_of(props, 'Gateway')
-
-      LocalEcho.start
-      ConnectionManager.start
-      CommandRouter.start(:router => RoundRobinRouter, :router_size => 20)
+      ActorBuilder.new(Gateway).with_name('Gateway').start
+      ActorBuilder.new(LocalEcho).start
+      ActorBuilder.new(ConnectionManager).start
+      ActorBuilder.new(CommandRouter).with_router(RoundRobinRouter,20).start
     end
 
   end

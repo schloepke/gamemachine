@@ -4,15 +4,15 @@ module GameMachine
     def on_receive(gateway_message)
       GameMachine.logger.info "CommandRouter got #{gateway_message}"
 
-      entities = Components.parse_from(gateway_message.get_bytes).to_entities
+      entities = EntityList.parse_from(gateway_message.get_bytes).get_entity_list
       client_id = gateway_message.get_client_id
 
-      entities.get_entities.values.each do |entity|
+      entities.each do |entity|
         GameSystem.systems.each do |klass|
           next if klass.components.empty?
           if (klass.components & entity.component_names).size == klass.components.size
-            game_message = GameMessage.new(client_id,entity)
-            klass.tell(game_message)
+            entity.set_client_id(ClientId.new.set_id(client_id))
+            klass.tell(entity)
           end
         end
       end

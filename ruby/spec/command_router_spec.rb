@@ -6,7 +6,8 @@ module GameMachine
     after(:all) {Server.new.stop_actor_system}
 
     let(:entity) do
-      entity = Entity.new(1)
+      entity = Entity.new
+      entity.set_id(1)
       player_connection = PlayerConnection.new
       player_connection.set_id('client1')
       player_connection.set_player(Player.new.set_id(1))
@@ -15,13 +16,13 @@ module GameMachine
     end
 
     let(:entities) do
-      entities = Entities.new
+      entities = EntityList.new
       entities.add_entity(entity)
       entities
     end
 
     let(:gateway_message) do
-      GatewayMessage.new(Components.from_entities(entities).to_byte_array,'client1')
+      GatewayMessage.new(entities.to_byte_array,'client1')
     end
 
     subject do
@@ -33,7 +34,7 @@ module GameMachine
     describe "#on_receive" do
 
       it "dispatches entities to the correct systems" do
-        ConnectionManager.should_receive(:tell).with(kind_of(GameMessage))
+        ConnectionManager.should_receive(:tell).with(kind_of(Entity))
         subject.onReceive(gateway_message)
       end
     end

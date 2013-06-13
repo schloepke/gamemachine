@@ -41,7 +41,7 @@ end
 
 def write_components(proto)
   template_file = File.join(@user_dir,'src','main','resources','component.erb')
-  
+  messages = proto.getMessages.reject {|message| message.getName == 'Components'}
   proto.getMessages.each do |message|
     klass = message.getName
     puts "Message: #{message.getName}"
@@ -70,6 +70,6 @@ loader = CachingProtoLoader.new
 file = java.io.File.new(protofile)
 proto = ProtoUtil.parseProto(file)
 
-write_entity(proto)
+#write_entity(proto)
 write_components(proto)
 

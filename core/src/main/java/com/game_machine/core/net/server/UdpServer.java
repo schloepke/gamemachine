@@ -24,6 +24,7 @@ public final class UdpServer implements Runnable {
 
 	private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
 	private static final ChannelGroup allChannels = new DefaultChannelGroup("server");
+	private static Thread serverThread;
 	
 	private static UdpServer udpServer;
 	
@@ -46,7 +47,8 @@ public final class UdpServer implements Runnable {
 		}
 
 		udpServer = new UdpServer(host, port);
-		new Thread(udpServer).start();
+		serverThread = new Thread(udpServer);
+		serverThread.start();
 	}
 
 	public static void stop() {
@@ -95,6 +97,7 @@ public final class UdpServer implements Runnable {
 			allChannels.add(future.channel());
 			future.sync();
 			future.channel().closeFuture().sync();
+			executor.shutdownGracefully();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			shutdown();
@@ -115,6 +118,7 @@ public final class UdpServer implements Runnable {
 		if (acceptGroup != null) {
 			acceptGroup.shutdownGracefully();
 		}
+		log.info("UDP server shutdown complete");
 	}
 
 }

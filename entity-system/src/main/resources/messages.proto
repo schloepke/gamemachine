@@ -3,17 +3,19 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message ClientId {
+	required string id = 1;
+}
+
 message PlayerConnection {
   required string id = 1;
 	required Player player = 2;
 	optional string authorizationToken = 3;
-	optional int32 entityId = 4;
 }
 
 message ChatMessage {
 	required string text = 1;
 	required string target = 2;
-	optional int32 entityId = 3;
 }
 
 message Player {
@@ -22,7 +24,6 @@ message Player {
 	optional int32 z = 3;
 	required int32 id = 4;
 	optional string name = 5;
-	optional int32 entityId = 6;
 }
 
 message TestObject {
@@ -51,19 +52,23 @@ message TestObject {
   
 message PlayersAroundMe {
   repeated Player player = 1;
-  optional int32 entityId = 2;
 }
 	
 message GameCommand {
 	required string name = 1;
-	optional int32 entityId = 2;
 	optional TestObject testObject = 3;
 }
 
-message Components {
-  repeated Player player = 1;
-  repeated PlayersAroundMe playersAroundMe = 2;
-  repeated GameCommand gameCommand = 3;
-  repeated PlayerConnection playerConnection = 4;
-  repeated ChatMessage chatMessage = 5;
+message Entity {
+	optional Player player = 1;
+  	optional PlayersAroundMe playersAroundMe = 2;
+  	optional GameCommand gameCommand = 3;
+  	optional PlayerConnection playerConnection = 4;
+  	optional ChatMessage chatMessage = 5;
+  	optional ClientId clientId = 6;
+  	required int32 id = 7;
+}
+
+message EntityList {
+	repeated Entity entity = 1;
 }

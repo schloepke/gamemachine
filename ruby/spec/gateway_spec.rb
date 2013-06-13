@@ -29,6 +29,7 @@ module GameMachine
       it "sends a GatewayMessage to onReceive" do
         subject.should_receive(:onReceive)
         Gateway.send_to_client('test',bytes)
+        sleep 1
       end
     end
 

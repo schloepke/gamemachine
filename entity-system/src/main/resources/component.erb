@@ -24,15 +24,13 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import com.game_machine.entity_system.Entities;
 import com.game_machine.entity_system.generated.Entity;
-import com.game_machine.entity_system.Component;
 
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class <%=klass%> extends com.game_machine.entity_system.Component implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
+public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
 {
 
 <%- message.nestedEnumGroups.each do |group| -%>
@@ -89,13 +87,32 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
     <%- end -%>
     
 
+
     public <%=klass%>()
     {
         
     }
 
+
+<%- if klass == 'Entity' -%>
+	public ArrayList<String> componentNames() {
+		ArrayList<String> names = new ArrayList<String>();
+	<%- messages.each do |m| -%>
+	  <%- if message.getFields.collect {|f| f.name}.include?(varname(m.getName)) -%>
+		if (this.has<%=m.getName%>()) {
+			names.add(this.<%=varname(m.getName)%>.getClass().getSimpleName());
+		}
+	  <%- end -%>
+	<%- end -%>
+		return names;
+	}
+<%- end -%>
+
 <%- message.getFields.each do |field| -%>
 <%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
+
+	
+    
 <%- if field.isRepeated -%>
 	public List<<%=get_type(field)%>> get<%=field_name -%>List() {
 		return <%= field.name %>;
@@ -130,6 +147,10 @@ public final class <%=klass%> extends com.game_machine.entity_system.Component i
 		this.<%=field.name%> = <%=field.name%>;
 		<%= field_name == 'EntityId' ? '' : 'return this;'%>
 	}
+	
+	public Boolean has<%=field_name %>()  {
+        return <%=field.name%> == null ? false : true;
+    }
 <%- end -%>
 <%- end -%>
 
@@ -314,18 +335,12 @@ public static <%=klass%> parseFrom(byte[] bytes) {
 public <%=klass%> clone() {
 	byte[] bytes = this.toByteArray();
 	<%=klass%> <%=varname(klass)%> = <%=klass%>.parseFrom(bytes);
-	<%=varname(klass)%>.setEntityId(null);
 	return <%=varname(klass)%>;
 }
 	
 public byte[] toByteArray() {
-	if (Entities.encoding.equals("protobuf")) {
-		return toProtobuf();
-	} else if (Entities.encoding.equals("json")) {
-		return toJson();
-	} else {
-		throw new RuntimeException("No encoding specified");
-	}
+	return toProtobuf();
+	//return toJson();
 }
 
 public byte[] toJson() {
@@ -353,44 +368,5 @@ public byte[] toProtobuf() {
 	}
 	return bytes;
 }
-
-   <%- if klass == 'Components' -%>
-    public Entities toEntities() {
-   		Entities entities = new Entities();
-   		Entity entity = null;
-   		Integer entityId = null;
-   		<%- message.getFields.each do |field| -%>
-   		if (this.get<%=classname(field.name)%>List() != null) {
-   			for (<%=get_type(field)%> <%=field.name%> : this.get<%=classname(field.name)%>List()) {
-   				entityId = <%=field.name%>.getEntityId();
-   				if (entityId == null) {
-   					continue;
-   		 		}
-   				if (entities.hasEntity(entityId)) {
-   					entities.getEntity(entityId).set<%=classname(field.name)%>(<%=field.name%>);
-   				} else {
-   					entity = new Entity(entityId);
-   					entity.set<%=classname(field.name)%>(<%=field.name%>);
-   					entities.addEntity(entity);
-   				}
-   			}
-   		}
-   		<%- end -%>
-   		return entities;
-	}
-    
-	public static Components fromEntities(Entities entities) {
-		Components components = new Components();
-		for (Entity entity : entities.getEntities().values()) {
-			<%- message.getFields.each do |field| -%>
-			if (entity.has<%=classname(field.name)%>()) {
-				components.add<%=classname(field.name)%>(entity.get<%=classname(field.name)%>());
-			}
-			<%- end -%>
-		}
-		return components;
-	}
-   <%- end -%> 
-    
 
 }

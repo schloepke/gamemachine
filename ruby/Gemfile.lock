@@ -21,6 +21,7 @@ GEM
     rspec-expectations (2.11.3)
       diff-lcs (~> 1.1.3)
     rspec-mocks (2.11.3)
+    settingslogic (2.0.9)
     slop (3.4.5)
     spoon (0.0.4)
       ffi
@@ -34,3 +35,5 @@ DEPENDENCIES
   rspec
   rspec-expectations
   rspec-mocks
+  settingslogic
+  slop

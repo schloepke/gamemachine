@@ -1,13 +1,10 @@
 package com.game_machine.core;
 
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
-import com.game_machine.core.game.Gateway;
 import com.game_machine.core.persistence.ObjectDb;
 
 public class GameMachineLoader {

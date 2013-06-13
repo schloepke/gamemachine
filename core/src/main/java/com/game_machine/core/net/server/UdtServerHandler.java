@@ -13,12 +13,10 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
 import com.game_machine.core.NetMessage;
-import com.game_machine.core.game.Gateway;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMessage> {
@@ -28,7 +26,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	private ActorSelection inbound;
 
 	public UdtServerHandler() {
-		this.inbound = ActorUtil.getSelectionByClass(Gateway.class);
+		this.inbound = ActorUtil.getSelectionByName("Gateway");
 	}
 
 	public void setServer(UdtServer server) {
