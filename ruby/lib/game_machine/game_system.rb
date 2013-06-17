@@ -7,6 +7,7 @@ module GameMachine
   class MissingHashringError < StandardError;end
 
   class GameSystem < UntypedActor
+
     class << self
       alias_method :apply, :new
       alias_method :create, :new
@@ -27,13 +28,15 @@ module GameMachine
         @@hashrings ||= java.util.concurrent.ConcurrentHashMap.new
       end
 
-      def hashring
-        hashrings.fetch(self.name,nil)
+      def hashring(name)
+        hashrings.fetch(name,nil)
       end
 
-      def hashring=(hashring)
-        raise DuplicateHashringError if hashrings[self.name]
-        hashrings[self.name] = hashring
+      def add_hashring(name,hashring)
+        if hashring(name)
+          raise DuplicateHashringError, "name=#{name}"
+        end
+        hashrings[name] = hashring
       end
 
       def actor_system
@@ -48,38 +51,41 @@ module GameMachine
         "#{remote_base_uri(server)}/user/#{name}"
       end
 
-      def distributed_path(id)
-        server = hashring.server_for(id)
-        bucket = hashring.bucket_for(id)
+      def distributed_path(id,name)
+        server = hashring(name).server_for(id)
+        bucket = hashring(name).bucket_for(id)
         remote_path(server,bucket)
       end
 
       def local_path(name)
-        "/user/#{self.name}"
+        "/user/#{name}"
       end
 
-      def actor_selection(message,options={})
+      def make_path(options)
+        name = options[:name] || self.name
         if options[:key]
           if hashring
-            path = distributed_path(options[:key])
+            distributed_path(options[:key], name)
           else
             raise MissingHashringError
           end
         elsif options[:server]
-          path = remote_path(options[:server],self.name)
+          remote_path(options[:server],name)
         else
-          path = local_path(self.name)
+          local_path(name)
         end
-        actor_system.actor_selection(path)
+      end
+
+      def actor_selection(options)
+        actor_system.actor_selection(make_path(options))
       end
 
       def tell(message,options={})
-        actor_selection(message,options).tell(message,options[:sender])
+        actor_selection(options).tell(message,options[:sender])
       end
 
       def ask(message,options={:timeout => 1})
-        selection = actor_selection(message,options)
-        ref = AskableActorSelection.new(selection)
+        ref = AskableActorSelection.new(actor_selection(options))
         future = ref.ask(message,Timeout.new(options[:timeout]))
         Await.result(future, Duration.create(options[:timeout], TimeUnit::MILLISECONDS))
       rescue Java::JavaUtilConcurrent::TimeoutException => e

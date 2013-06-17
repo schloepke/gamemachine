@@ -6,7 +6,8 @@ module GameMachine
     def initialize(*args)
       @klass = args.shift
       @name = @klass.name
-      @hashring = nil
+      @create_hashring = false
+      @hashring_size = 0
       @props = Props.new(ActorFactory.new(@klass,args))
     end
 
@@ -23,13 +24,15 @@ module GameMachine
     end
 
     def distributed(count)
-      create_hashring(count)
+      @create_hashring = true
+      @hashring_size = count
       self
     end
 
     def start
-      if @hashring
-        @hashring.buckets.each do |bucket_name|
+      if @create_hashring
+        hashring = create_hashring(@hashring_size)
+        hashring.buckets.each do |bucket_name|
           actor_system.actor_of(@props, bucket_name)
         end
       else
@@ -45,11 +48,12 @@ module GameMachine
     end
 
     def create_hashring(bucket_count)
-        @hashring = Hashring.new(
+        hashring = Hashring.new(
           Settings.servers.keys,
           @name
         )
-        @klass.hashring = @hashring
+        @klass.add_hashring(@name,hashring)
+        hashring
     end
 
   end
