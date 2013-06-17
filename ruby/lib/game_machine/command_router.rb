@@ -1,5 +1,5 @@
 module GameMachine
-  class CommandRouter <GameSystem 
+  class CommandRouter < GameSystem 
 
     def on_receive(gateway_message)
       GameMachine.logger.info "CommandRouter got #{gateway_message}"

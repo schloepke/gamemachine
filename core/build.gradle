@@ -81,3 +81,9 @@ dependencies {
     from "$buildDir/libs"
 }
 
+task install_libs_ruby(type: Copy) {
+    into "$buildDir/../../ruby/java_lib"
+    from configurations.runtime
+    from "$buildDir/libs"
+}
+

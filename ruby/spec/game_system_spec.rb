@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module GameMachine
   describe GameSystem do
-    before(:each) {Server.new.start_actor_system}
-    after(:each) {Server.new.stop_actor_system}
 
     subject do
       props = Props.new(GameSystem);
@@ -11,6 +9,11 @@ module GameMachine
       ref.underlying_actor
     end
 
+    describe "#tell" do
+      it "should tell" do
+        LocalEcho.tell("test", :server => 'default', :sender => nil)
+      end
+    end
     describe "#hashring=" do
       it "should set the hashring" do
         GameSystem.hashring = 'test'

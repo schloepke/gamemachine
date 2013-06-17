@@ -1,49 +1,26 @@
 module GameMachine
   class Hashring
 
-    attr_reader :buckets, :servers
-    def initialize(servers,bucket_name,bucket_count)
-      @servers = servers
-      @bucket_name = bucket_name
-      @bucket_count = bucket_count
-      @buckets = {}
-      @buckets_for_server = nil
-    end
-
-    def hash!
-      i = 0
-      @servers.cycle do |server|
-        if i < @bucket_count
-          @buckets["#{@bucket_name}#{i}"] = server
-          i+= 1
-        else
-          break
-        end
-      end
-    end
-
-    def buckets_for_server(server)
-      @buckets_for_server ||= buckets.keys.select {|bucket_name| @buckets.fetch(bucket_name) == server}
+    RING_SIZE = 160
+    REPLICAS = 160
+    attr_reader :buckets
+    def initialize(servers,bucket_name)
+      @buckets = (0..RING_SIZE).map {|r| "#{bucket_name}#{r}"}
+      @server_ring = ConsistentHashing::Ring.new(servers,REPLICAS)
+      @bucket_ring = ConsistentHashing::Ring.new(buckets,REPLICAS)
     end
 
     def remove_server(server)
-      @servers.delete_if {|s| s == server}
-      @buckets.keys.each do |bucket_name|
-        if @buckets[bucket_name] == server
-          @buckets[bucket_name] = @servers[rand(@servers.size)]
-        end
-      end
-      @buckets_for_server = nil
+      @server_ring.delete(server)
     end
 
-    def bucket_for_string(value)
-      "#{@bucket_name}#{string_to_bucket(value)}"
+    def server_for(value)
+      @server_ring.node_for(value)
     end
 
-    private
-
-    def string_to_bucket(value)
-      Hashing.consistentHash(Hashing.md5.hashString(value), @bucket_count)
+    def bucket_for(value)
+      @bucket_ring.node_for(value)
     end
+
   end
 end

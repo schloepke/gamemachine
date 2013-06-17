@@ -4,17 +4,14 @@ require 'java'
 require 'benchmark'
 require 'socket'
 require 'settingslogic'
+require 'spoon'
+require 'consistent_hashing'
 
-dir = File.join(Dir.getwd,'../core/lib').gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
-#$CLASSPATH << "#{dir}/"
-Dir.entries(dir).each do |jar|
-  file = File.join(dir,jar).gsub(File::SEPARATOR,File::ALT_SEPARATOR || File::SEPARATOR)
-  unless File.directory?(file)
-    #puts "Loading #{file}"
-    require file
-  end
-end
 
+jars = Dir[File.join(File.dirname(__FILE__), '../java_lib', '*.jar')]
+jars.each {|jar| require jar}
+
+java_import 'akka.actor.UntypedActorFactory'
 java_import 'java.util.concurrent.ConcurrentHashMap'
 java_import 'com.game_machine.core.GameMachineLoader'
 java_import 'com.game_machine.core.AskProxy'
@@ -42,13 +39,20 @@ java_import 'com.game_machine.entity_system.generated.ClientId'
 java_import 'akka.routing.RoundRobinRouter'
 java_import 'com.typesafe.config.Config'
 java_import 'com.typesafe.config.ConfigFactory'
-java_import 'com.game_machine.core.persistence.ObjectDb'
+#java_import 'com.game_machine.core.persistence.ObjectDb'
 java_import 'com.game_machine.core.persistence.Query'
 java_import 'com.game_machine.core.persistence.QueryCallable'
 java_import 'java.util.concurrent.atomic.AtomicInteger'
 java_import 'akka.testkit.TestActorRef'
 java_import 'com.google.common.hash.HashFunction'
 java_import 'com.google.common.hash.Hashing'
+java_import 'akka.actor.Terminated'
+java_import 'scala.concurrent.duration.Duration'
+java_import 'java.util.concurrent.TimeUnit'
+java_import 'akka.pattern.Patterns'
+java_import 'scala.concurrent.Await'
+java_import 'scala.concurrent.Future'
+java_import 'akka.pattern.AskableActorSelection'
 
 
 
@@ -80,18 +84,21 @@ module GameMachine
   end
 end
 
-require 'game_machine/settings'
-require 'game_machine/hashring'
-require 'game_machine/game_message'
-require 'game_machine/gateway'
-require 'game_machine/config'
-require 'game_machine/game_system'
-require 'game_machine/server'
-require 'game_machine/command_router'
-require 'game_machine/client'
-require 'game_machine/proxy_actor'
-require 'game_machine/local_echo'
-require 'game_machine/connection_manager'
-require 'game_machine/actor_builder'
+require_relative 'game_machine/settings'
+require_relative 'game_machine/actor_factory'
+require_relative 'game_machine/hashring'
+require_relative 'game_machine/game_message'
+require_relative 'game_machine/gateway'
+require_relative 'game_machine/game_system'
+require_relative 'game_machine/server'
+require_relative 'game_machine/command_router'
+require_relative 'game_machine/client'
+require_relative 'game_machine/proxy_actor'
+require_relative 'game_machine/local_echo'
+require_relative 'game_machine/connection_manager'
+require_relative 'game_machine/actor_builder'
+require_relative 'game_machine/object_db'
+require_relative 'game_machine/dbquery'
+require_relative 'game_machine/system_monitor'
 
 puts "GAME_ENV is #{GameMachine.env}"

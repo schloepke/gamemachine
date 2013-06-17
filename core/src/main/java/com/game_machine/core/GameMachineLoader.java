@@ -41,7 +41,7 @@ public class GameMachineLoader {
 		
 		
 		// Memory database actor, needs to be pinned to a single thread
-		actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
+		//actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());
 
 		// Uility actor to send and receive commands from outside akka
 		//actorSystem.actorOf(Props.create(Cmd.class), Cmd.class.getSimpleName());

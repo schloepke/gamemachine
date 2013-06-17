@@ -2,13 +2,6 @@ require 'spec_helper'
 
 module GameMachine
   describe  'Gateway' do
-    before(:each) do
-      Server.new.start_actor_system
-    end
-    after(:each) do
-      Server.new.stop_actor_system
-    end
-
     let(:client_id) {"localhost:8100"}
     let(:bytes) {"test".to_java_bytes}
     let(:net_message) do

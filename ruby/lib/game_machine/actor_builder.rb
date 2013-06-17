@@ -3,13 +3,12 @@ module GameMachine
 
     attr_reader :name
 
-    def initialize(klass)
-      @klass = klass
+    def initialize(*args)
+      @klass = args.shift
       @name = @klass.name
       @hashring = nil
-      @props = Props.new(@klass)
+      @props = Props.new(ActorFactory.new(@klass,args))
     end
-
 
     def with_name(name)
       @name = name
@@ -30,8 +29,7 @@ module GameMachine
 
     def start
       if @hashring
-        bucket_names = @hashring.buckets_for_server(Socket.gethostname)
-        bucket_names.each do |bucket_name|
+        @hashring.buckets.each do |bucket_name|
           actor_system.actor_of(@props, bucket_name)
         end
       else
@@ -48,11 +46,10 @@ module GameMachine
 
     def create_hashring(bucket_count)
         @hashring = Hashring.new(
-          Settings.servers,
-          @name,
-          bucket_count
+          Settings.servers.keys,
+          @name
         )
-        @hashring.hash!
+        @klass.hashring = @hashring
     end
 
   end

@@ -2,8 +2,6 @@ require 'spec_helper'
 
 module GameMachine
   describe CommandRouter do
-    before(:all) {Server.new.start_actor_system}
-    after(:all) {Server.new.stop_actor_system}
 
     let(:entity) do
       entity = Entity.new
@@ -27,7 +25,7 @@ module GameMachine
 
     subject do
       props = Props.new(CommandRouter);
-      ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, CommandRouter.name);
+      ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, 'commandrouter1');
       ref.underlying_actor
     end
 
