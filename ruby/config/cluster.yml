@@ -1,0 +1,14 @@
+---
+defaults: &defaults
+
+development:
+  <<: *defaults
+  servers:
+    - localhost:2553
+    - localhost:2554
+    - localhost:2555
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults

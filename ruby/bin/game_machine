@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+require 'slop'
+
+opts = Slop.parse(:help => true) do
+  banner 'Usage: datacube [options]'
+
+  on '--cluster',  'Scanner supervisor'
+  on 'name=',  'Server name'
+  on '--server',  'Scanner supervisor'
+  on '--stop',  'Scanner supervisor'
+
+  help
+end
+
+begin
+  require "game_machine"
+rescue LoadError
+  require_relative "../lib/game_machine"
+end
+
+if opts.stop?
+  GameMachine::Server.instance.init!
+  GameMachine::Server.instance.kill_all
+end
+
+if opts.server?
+  GameMachine::Server.instance.init!(opts[:name] || 'default')
+  GameMachine::Server.instance.start
+end
+
