@@ -64,7 +64,7 @@ module GameMachine
       def make_path(options)
         name = options[:name] || self.name
         if options[:key]
-          if hashring
+          if hashring(name)
             distributed_path(options[:key], name)
           else
             raise MissingHashringError
@@ -84,10 +84,13 @@ module GameMachine
         actor_selection(options).tell(message,options[:sender])
       end
 
-      def ask(message,options={:timeout => 1})
+      def ask(message,options={})
+        options = {:timeout => 100}.merge(options)
+        duration = Duration.create(options[:timeout], TimeUnit::MILLISECONDS)
+        timeout = Timeout.new(duration)
         ref = AskableActorSelection.new(actor_selection(options))
-        future = ref.ask(message,Timeout.new(options[:timeout]))
-        Await.result(future, Duration.create(options[:timeout], TimeUnit::MILLISECONDS))
+        future = ref.ask(message,timeout)
+        Await.result(future, duration)
       rescue Java::JavaUtilConcurrent::TimeoutException => e
         GameMachine.logger.warn("TimeoutException caught in ask (timeout = #{options[:timeout]})")
       end

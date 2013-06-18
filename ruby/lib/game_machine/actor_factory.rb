@@ -9,7 +9,7 @@ module GameMachine
 
     def create
       actor = @klass.new
-      if @args.size >= 1 && actor.respond_to?(:post_init)
+      if actor.respond_to?(:post_init)
         actor.post_init(*@args)
       end
       actor

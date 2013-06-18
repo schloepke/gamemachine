@@ -108,7 +108,7 @@ module GameMachine
     end
 
     def start_game_systems
-      ActorBuilder.new(ObjectDb).start
+      ActorBuilder.new(ObjectDb).distributed(100).start
       ActorBuilder.new(SystemMonitor).start
       ActorBuilder.new(Gateway).with_name('Gateway').start
       ActorBuilder.new(LocalEcho,'arg1').distributed(160).start

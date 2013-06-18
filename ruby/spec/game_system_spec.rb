@@ -30,22 +30,17 @@ module GameMachine
         path.match(/\/user\/test/).should be_true
       end
     end
+
     describe "#tell" do
       it "should tell" do
         LocalEcho.tell("test", :server => 'default', :sender => nil)
       end
-
-      it "server option should create remote path" do
-      end
-
-      it "key option should create distributed path" do
-      end
     end
-    describe "#hashring=" do
-      it "should set the hashring" do
-        GameSystem.hashring = 'test'
-        GameSystem.hashring.should == 'test'
-        GameSystem.hashrings[GameSystem.name].should == 'test'
+
+    describe "#add_hashring" do
+      it "should add the hashring" do
+        GameSystem.add_hashring('test','ring')
+        GameSystem.hashring('test').should == 'ring'
       end
     end
 

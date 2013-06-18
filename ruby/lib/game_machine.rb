@@ -98,7 +98,6 @@ require_relative 'game_machine/local_echo'
 require_relative 'game_machine/connection_manager'
 require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/object_db'
-require_relative 'game_machine/dbquery'
 require_relative 'game_machine/system_monitor'
 
 puts "GAME_ENV is #{GameMachine.env}"
