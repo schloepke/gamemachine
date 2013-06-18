@@ -1,5 +1,5 @@
 module GameMachine
-  class LocalEcho < GameSystem
+  class LocalEcho < GameActor
     
     def post_init(*args)
     end

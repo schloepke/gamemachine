@@ -6,7 +6,7 @@ module GameMachine
   class DuplicateHashringError < StandardError;end
   class MissingHashringError < StandardError;end
 
-  class GameSystem < UntypedActor
+  class GameActor < UntypedActor
 
     class << self
       alias_method :apply, :new
@@ -39,8 +39,20 @@ module GameMachine
         hashrings[name] = hashring
       end
 
-      def actor_system
-        GameMachineLoader.get_actor_system
+      def find(name=self.name)
+        GameActorRef.new(local_path(name))
+      end
+
+      def find_remote(server,name=self.name)
+        GameActorRef.new(remote_path(server,name))
+      end
+
+      def find_distributed(id,name=self.name)
+        if hashring(name)
+          GameActorRef.new(distributed_path(id, name))
+        else
+          raise MissingHashringError
+        end
       end
 
       def remote_base_uri(server)
@@ -60,41 +72,6 @@ module GameMachine
       def local_path(name)
         "/user/#{name}"
       end
-
-      def make_path(options)
-        name = options[:name] || self.name
-        if options[:key]
-          if hashring(name)
-            distributed_path(options[:key], name)
-          else
-            raise MissingHashringError
-          end
-        elsif options[:server]
-          remote_path(options[:server],name)
-        else
-          local_path(name)
-        end
-      end
-
-      def actor_selection(options)
-        actor_system.actor_selection(make_path(options))
-      end
-
-      def tell(message,options={})
-        actor_selection(options).tell(message,options[:sender])
-      end
-
-      def ask(message,options={})
-        options = {:timeout => 100}.merge(options)
-        duration = Duration.create(options[:timeout], TimeUnit::MILLISECONDS)
-        timeout = Timeout.new(duration)
-        ref = AskableActorSelection.new(actor_selection(options))
-        future = ref.ask(message,timeout)
-        Await.result(future, duration)
-      rescue Java::JavaUtilConcurrent::TimeoutException => e
-        GameMachine.logger.warn("TimeoutException caught in ask (timeout = #{options[:timeout]})")
-      end
-
     end
 
     def onReceive(message)

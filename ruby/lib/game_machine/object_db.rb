@@ -1,5 +1,5 @@
 module GameMachine
-  class ObjectDb < GameSystem
+  class ObjectDb < GameActor
 
     UpdateMessage = Struct.new(:entity_id, :blk)
     GetMessage = Struct.new(:entity_id)
@@ -7,15 +7,19 @@ module GameMachine
 
     class << self
       def update(entity_id, &blk)
-        ask(UpdateMessage.new(entity_id,blk), :key => entity_id)
+        ref = find_distributed(entity_id)
+        message = UpdateMessage.new(entity_id,blk)
+        ref.send_message(message, :blocking => true)
       end
 
       def put(entity)
-        tell(PutMessage.new(entity), :key => entity.get_id)
+        ref = find_distributed(entity.get_id)
+        ref.send_message(PutMessage.new(entity))
       end
 
       def get(entity_id)
-        ask(GetMessage.new(entity_id), :key => entity_id)
+        ref = find_distributed(entity_id)
+        ref.send_message(GetMessage.new(entity_id), :blocking => true)
       end
     end
 
@@ -29,7 +33,7 @@ module GameMachine
         message.blk.call @entities[message.entity_id]
         self.sender.tell(true,nil)
       elsif message.is_a?(PutMessage)
-        @entities[message.get_id] = message
+        @entities[message.entity.get_id] = message.entity
         self.sender.tell(true,nil)
       elsif message.is_a?(GetMessage)
         self.sender.tell(@entities[message.entity_id] || false,nil)

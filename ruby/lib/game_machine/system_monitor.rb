@@ -1,5 +1,5 @@
 module GameMachine
-  class SystemMonitor < GameSystem
+  class SystemMonitor < GameActor
 
     def on_receive(message)
 

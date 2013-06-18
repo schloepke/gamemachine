@@ -90,7 +90,7 @@ module GameMachine
     def stop_actor_system
       GameMachineLoader.get_actor_system.shutdown
       GameMachineLoader.get_actor_system.awaitTermination
-      GameSystem.reset_hashrings
+      GameActor.reset_hashrings
     end
 
     def stop
