@@ -143,9 +143,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 		return <%= field.name %>;
 	}
 	
-	public <%= field_name == 'EntityId' ? 'void' : klass%> set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
+	public <%= field_name == '_EntityId' ? 'void' : klass%> set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
-		<%= field_name == 'EntityId' ? '' : 'return this;'%>
+		<%= field_name == '_EntityId' ? '' : 'return this;'%>
 	}
 	
 	public Boolean has<%=field_name %>()  {

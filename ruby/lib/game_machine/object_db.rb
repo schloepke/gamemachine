@@ -1,25 +1,21 @@
 module GameMachine
   class ObjectDb < GameActor
 
-    UpdateMessage = Struct.new(:entity_id, :blk)
-    GetMessage = Struct.new(:entity_id)
-    PutMessage = Struct.new(:entity)
-
     class << self
-      def update(entity_id, &blk)
+      def update(entity_id, klass,method)
         ref = find_distributed(entity_id)
-        message = UpdateMessage.new(entity_id,blk)
+        message = ObjectdbUpdate.new.set_entity_id(entity_id).set_update_class(klass).set_update_method(method)
         ref.send_message(message, :blocking => true)
       end
 
       def put(entity)
         ref = find_distributed(entity.get_id)
-        ref.send_message(PutMessage.new(entity))
+        ref.send_message(ObjectdbPut.new.set_entity(entity))
       end
 
       def get(entity_id)
         ref = find_distributed(entity_id)
-        ref.send_message(GetMessage.new(entity_id), :blocking => true)
+        ref.send_message(ObjectdbGet.new.set_entity_id(entity_id), :blocking => true)
       end
     end
 
@@ -28,15 +24,15 @@ module GameMachine
     end
 
     def on_receive(message)
-      GameMachine.logger.info("ObjectDb message #{message.inspect}")
-      if message.is_a?(UpdateMessage)
-        message.blk.call @entities[message.entity_id]
+      if message.is_a?(ObjectdbUpdate)
+        entity = @entities[message.get_entity_id]
+        Object.const_get(message.get_update_class).send(message.get_update_method.to_sym,entity)
         self.sender.tell(true,nil)
-      elsif message.is_a?(PutMessage)
-        @entities[message.entity.get_id] = message.entity
+      elsif message.is_a?(ObjectdbPut)
+        @entities[message.get_entity.get_id] = message.get_entity
         self.sender.tell(true,nil)
-      elsif message.is_a?(GetMessage)
-        self.sender.tell(@entities[message.entity_id] || false,nil)
+      elsif message.is_a?(ObjectdbGet)
+        self.sender.tell(@entities[message.get_entity_id] || false,nil)
       else
         unhandled(message)
       end

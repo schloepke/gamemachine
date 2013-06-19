@@ -23,10 +23,10 @@ module GameMachine
         shutdown
       end
 
-      Signal.trap("INT") do
-        GameMachine.logger.warn('Caught signal INT, shutting down')
-        shutdown
-      end
+      #Signal.trap("INT") do
+      #  GameMachine.logger.warn('Caught signal INT, shutting down')
+      #  shutdown
+      #end
     end
 
     def shutdown

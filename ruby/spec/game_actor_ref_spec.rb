@@ -3,25 +3,23 @@ require 'spec_helper'
 module GameMachine
   describe GameActorRef do
 
-    describe "#initialize" do
-
-      it "sets the path" do
-        GameActorRef.new('test').path.should == 'test'
-      end
-    end
-
-    describe "#send_message" do
-
     let(:local_echo) do
       props = Props.new(LocalEcho);
       ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, 'localecho1');
       ref.underlying_actor
     end
 
-      subject do
-        GameActorRef.new('test')
-      end
+    subject do
+      GameActorRef.new('test')
+    end
 
+    describe "#initialize" do
+      it "sets the path" do
+        GameActorRef.new('test').path.should == 'test'
+      end
+    end
+
+    describe "#send_message" do
       it "default should call tell with message and nil sender" do
         subject.should_receive(:tell).with('test',nil)
         subject.send_message('test')

@@ -12,6 +12,8 @@ jars = Dir[File.join(File.dirname(__FILE__), '../java_lib', '*.jar')]
 jars.each {|jar| require jar}
 
 java_import 'akka.actor.UntypedActorFactory'
+java_import 'akka.serialization.SerializationExtension'
+java_import 'akka.serialization.Serializer'
 java_import 'java.util.concurrent.ConcurrentHashMap'
 java_import 'com.game_machine.core.GameMachineLoader'
 java_import 'com.game_machine.core.AskProxy'
@@ -28,6 +30,9 @@ java_import 'com.game_machine.core.NetMessage'
 java_import 'java.net.InetSocketAddress'
 java_import 'com.barchart.udt.SocketUDT'
 java_import 'com.barchart.udt.TypeUDT'
+java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
+java_import 'com.game_machine.entity_system.generated.ObjectdbGet'
+java_import 'com.game_machine.entity_system.generated.ObjectdbUpdate'
 java_import 'com.game_machine.entity_system.generated.Entity'
 java_import 'com.game_machine.entity_system.generated.EntityList'
 java_import 'com.game_machine.entity_system.generated.GameCommand'
@@ -53,6 +58,8 @@ java_import 'akka.pattern.Patterns'
 java_import 'scala.concurrent.Await'
 java_import 'scala.concurrent.Future'
 java_import 'akka.pattern.AskableActorSelection'
+java_import 'akka.actor.DeadLetter'
+java_import 'java.io.Serializable'
 
 
 

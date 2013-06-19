@@ -23,8 +23,8 @@ public class WriteBehindHandler extends UntypedActor {
 	private Integer maxWritesPerSecond = 50;
 	private Integer minTimeBetweenWrites = 1000 / maxWritesPerSecond;
 	private Long lastWrite = System.currentTimeMillis() - 10000;
-	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
-	private HashMap<Integer, Long> entityUpdates = new HashMap<Integer, Long>();
+	private HashMap<String, Entity> entities = new HashMap<String, Entity>();
+	private HashMap<String, Long> entityUpdates = new HashMap<String, Long>();
 	private ArrayList<Entity> queue = new ArrayList<Entity>();
 	private HashMap<String, Integer> queueIndex = new HashMap<String, Integer>();
 	private Entity currentEntity = null;

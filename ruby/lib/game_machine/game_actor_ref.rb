@@ -7,10 +7,6 @@ module GameMachine
       @path = path
     end
 
-    def <<(message)
-      tell(message)
-    end
-
     def send_message(message,options={})
       default_options = {:sender => nil, :timeout => 100, :blocking => false}
       options = default_options.merge(options)

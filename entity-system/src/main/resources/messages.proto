@@ -3,6 +3,20 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message ObjectdbGet {
+	required string entityId = 1;
+}
+
+message ObjectdbPut {
+	required Entity entity = 1;
+}
+
+message ObjectdbUpdate {
+	required string entityId = 1;
+	required string updateClass = 2;
+	required string updateMethod = 3;
+}
+
 message ClientId {
 	required string id = 1;
 }
@@ -22,7 +36,7 @@ message Player {
 	optional int32 x = 1;
 	optional int32 y = 2;
 	optional int32 z = 3;
-	required int32 id = 4;
+	required string id = 4;
 	optional string name = 5;
 }
 
@@ -66,7 +80,7 @@ message Entity {
   	optional PlayerConnection playerConnection = 4;
   	optional ChatMessage chatMessage = 5;
   	optional ClientId clientId = 6;
-  	required int32 id = 7;
+  	required string id = 7;
 }
 
 message EntityList {
