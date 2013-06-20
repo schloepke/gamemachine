@@ -2,16 +2,15 @@ module GameMachine
   class Client
  
 
-    def initialize
-      @host = '192.168.1.2'
-      @port = 8100
+    def initialize(server)
+      @host = Settings.servers.send(server).udp.host
+      @port = Settings.servers.send(server).udp.port
       @socket = UDPSocket.new
       @socket.connect(@host,@port)
     end
 
     def send_message(message)
-      str = String.from_java_bytes(message)
-      @socket.send(str,@host,@port)
+      @socket.send(String.from_java_bytes(message),@host,@port)
     end
 
     def receive_message
@@ -58,7 +57,7 @@ module GameMachine
       socket = SocketUDT.new(TypeUDT::DATAGRAM)
       socket.setBlocking(true)
 
-      address = InetSocketAddress.new("192.168.1.2", 8101)
+      address = InetSocketAddress.new(Settings.servers.default.udp.host, Settings.servers.default.udp.port)
       socket.connect(address)
       message = Components.fromEntities(MessageUtil.createEchoCommand()).toByteArray
 

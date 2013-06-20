@@ -106,4 +106,6 @@ require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/object_db'
 require_relative 'game_machine/system_monitor'
 
+app_classes = Dir[File.join(File.dirname(__FILE__), '../app', '*.rb')]
+app_classes.each {|app_class| require app_class}
 puts "GAME_ENV is #{GameMachine.env}"

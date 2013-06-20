@@ -11,7 +11,7 @@ module GameMachine
 
     describe "#server_for" do
       it "returns server for value" do
-        puts subject.server_for('test')
+        subject.server_for('test')
       end
     end
   end

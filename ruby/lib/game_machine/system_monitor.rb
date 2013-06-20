@@ -8,7 +8,6 @@ module GameMachine
     end
 
     def on_receive(message)
-      GameMachine.logger.error("SystemMonitor #{message.inspect}")
     end
   end
 end

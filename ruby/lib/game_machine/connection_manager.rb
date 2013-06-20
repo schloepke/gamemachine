@@ -9,8 +9,8 @@ module GameMachine
       @authorized_clients = {}
     end
 
-    def on_receive(game_message)
-      
+    def on_receive(message)
+      GameMachine.logger.info("ConnectionManager got #{message}")
     end
   end
 end

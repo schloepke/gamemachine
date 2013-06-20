@@ -9,7 +9,7 @@ module GameMachine
       config = File.read(
         File.expand_path(
           File.join(File.dirname(__FILE__),
-                    "../../config/#{GameMachine.env}_akka.conf")
+                    "../../config/akka.conf")
         )
       )
       config.sub!('HOST',akka_host)

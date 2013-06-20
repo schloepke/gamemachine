@@ -11,12 +11,12 @@ public class EventStreamHandler extends UntypedActor {
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	
 	public EventStreamHandler() {
-		log.error("subscribing to deadletter");
+		log.info("subscribing to deadletter");
 		this.getContext().system().eventStream().subscribe(this.getSelf(), DeadLetter.class);
 	}
 	@Override
 	public void onReceive(Object message) throws Exception {
-		log.error(message.toString());
+		log.info(message.toString());
 		ActorSelection sel = ActorUtil.getSelectionByName("GameMachine::SystemMonitor");
 		sel.tell(message,this.getSelf());
 		
