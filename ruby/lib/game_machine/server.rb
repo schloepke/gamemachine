@@ -110,8 +110,11 @@ module GameMachine
     def start_game_systems
       ActorBuilder.new(ObjectDb).distributed(100).start
       ActorBuilder.new(SystemMonitor).start
-      ActorBuilder.new(Gateway).with_name('Gateway').start
+      ActorBuilder.new(UdpServerActor).start
+      ActorBuilder.new(UdtServerActor).start
       ActorBuilder.new(LocalEcho,'arg1').distributed(160).start
+      ActorBuilder.new(LocalEcho).with_name('LocalEchoRemote').start
+      ActorBuilder.new(RemoteEcho).start
       ActorBuilder.new(ConnectionManager).start
       ActorBuilder.new(CommandRouter).with_router(RoundRobinRouter,20).start
     end

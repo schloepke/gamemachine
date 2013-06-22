@@ -5,7 +5,7 @@ module GameMachine
     end
 
     def on_receive(message)
-      GameMachine.logger.info("LocalEcho got #{message}")
+      GameMachine.logger.debug("LocalEcho got #{message}")
       get_sender.tell(message,get_self)
     end
   end

@@ -14,7 +14,7 @@ module GameMachine
     end
 
     def receive_message
-      @socket.recvfrom(1024)
+      @socket.recvfrom(1024)[0]
     end
 
     def self.client3

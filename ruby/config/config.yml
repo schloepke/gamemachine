@@ -10,12 +10,12 @@ development:
       udp:
         port: 8100
         host: localhost
-        enabled: true
+        enabled: false
         log_level: INFO
       udt:
         port: 8101
         host: localhost
-        enabled: true
+        enabled: false
         log_level: INFO
       akka:
         host: localhost
@@ -24,7 +24,7 @@ development:
       udp:
         port: 8100
         host: localhost
-        enabled: true
+        enabled: false
         log_level: INFO
       udt:
         port: 8101
@@ -34,20 +34,6 @@ development:
       akka:
         host: localhost
         port: 2553
-    app02:
-      udp:
-        port: 8100
-        host: localhost
-        enabled: false
-        log_level: INFO
-      udt:
-        port: 8101
-        host: localhost
-        enabled: false
-        log_level: INFO
-      akka:
-        host: localhost
-        port: 2554
 
 test:
   <<: *defaults

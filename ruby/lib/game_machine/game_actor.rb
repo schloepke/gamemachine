@@ -13,7 +13,7 @@ module GameMachine
       alias_method :create, :new
 
       def systems
-        [GameMachine::CommandRouter,GameMachine::LocalEcho,GameMachine::ConnectionManager].freeze
+        [GameMachine::RemoteEcho,GameMachine::CommandRouter,GameMachine::LocalEcho,GameMachine::ConnectionManager].freeze
       end
 
       def components

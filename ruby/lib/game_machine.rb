@@ -60,6 +60,9 @@ java_import 'scala.concurrent.Future'
 java_import 'akka.pattern.AskableActorSelection'
 java_import 'akka.actor.DeadLetter'
 java_import 'java.io.Serializable'
+java_import 'akka.io.Udp'
+java_import 'akka.io.UdpMessage'
+java_import 'akka.util.ByteString'
 
 
 
@@ -94,17 +97,20 @@ end
 require_relative 'game_machine/settings'
 require_relative 'game_machine/actor_factory'
 require_relative 'game_machine/hashring'
-require_relative 'game_machine/gateway'
+require_relative 'game_machine/udt_server_actor'
 require_relative 'game_machine/game_actor'
 require_relative 'game_machine/game_actor_ref'
 require_relative 'game_machine/server'
 require_relative 'game_machine/command_router'
 require_relative 'game_machine/client'
 require_relative 'game_machine/local_echo'
+require_relative 'game_machine/remote_echo'
 require_relative 'game_machine/connection_manager'
 require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/object_db'
+require_relative 'game_machine/udp_server_actor'
 require_relative 'game_machine/system_monitor'
+require_relative 'game_machine/client_message'
 
 app_classes = Dir[File.join(File.dirname(__FILE__), '../app', '*.rb')]
 app_classes.each {|app_class| require app_class}

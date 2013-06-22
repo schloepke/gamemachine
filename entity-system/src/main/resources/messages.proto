@@ -19,6 +19,7 @@ message ObjectdbUpdate {
 
 message ClientId {
 	required string id = 1;
+	optional string gateway = 2;
 }
 
 message PlayerConnection {
