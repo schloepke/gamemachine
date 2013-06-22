@@ -20,6 +20,20 @@ development:
       akka:
         host: localhost
         port: 2552
+    seed1:
+      udp:
+        port: 8100
+        host: localhost
+        enabled: false
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: true
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2551
     app01:
       udp:
         port: 8100

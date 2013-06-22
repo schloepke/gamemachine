@@ -13,8 +13,8 @@ module GameMachine
     end
 
     it "marshal" do
-      system = GameMachineLoader.get_actor_system
-      serialization = SerializationExtension.get(system)
+      system = Server.instance.actor_system
+      serialization = JavaLib::SerializationExtension.get(system)
       serializer = serialization.findSerializerFor(entity)
       bytes = serializer.toBinary(entity)
       new_entity = serializer.fromBinary(bytes,entity.get_class)

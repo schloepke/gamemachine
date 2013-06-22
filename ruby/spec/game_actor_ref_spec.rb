@@ -4,8 +4,8 @@ module GameMachine
   describe GameActorRef do
 
     let(:local_echo) do
-      props = Props.new(LocalEcho);
-      ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, 'localecho1');
+      props = JavaLib::Props.new(LocalEcho);
+      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'localecho1');
       ref.underlying_actor
     end
 

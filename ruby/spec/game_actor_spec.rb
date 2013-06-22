@@ -4,8 +4,8 @@ module GameMachine
   describe GameActor do
 
     subject do
-      props = Props.new(GameActor);
-      ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, GameActor.name);
+      props = JavaLib::Props.new(GameActor);
+      ref = JavaLib::TestActorRef.create(Server.instance.ctor_system, props, GameActor.name);
       ref.underlying_actor
     end
 

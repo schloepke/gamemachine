@@ -3,6 +3,8 @@ require 'integration_helper'
 module GameMachine
 
   describe "basic" do 
+
+
     let(:entity) do
       entity = Entity.new
       entity.set_id('1')

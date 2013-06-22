@@ -6,7 +6,7 @@ module GameMachine
   class DuplicateHashringError < StandardError;end
   class MissingHashringError < StandardError;end
 
-  class GameActor < UntypedActor
+  class GameActor < JavaLib::UntypedActor
 
     class << self
       alias_method :apply, :new

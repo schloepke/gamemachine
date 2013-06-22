@@ -8,7 +8,7 @@ module GameMachine
       @name = @klass.name
       @create_hashring = false
       @hashring_size = 0
-      @props = Props.new(ActorFactory.new(@klass,args))
+      @props = JavaLib::Props.new(ActorFactory.new(@klass,args))
     end
 
     def with_name(name)
@@ -44,7 +44,7 @@ module GameMachine
     private
 
     def actor_system
-      GameMachineLoader.get_actor_system
+      Server.instance.actor_system
     end
 
     def create_hashring(bucket_count)

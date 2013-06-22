@@ -1,5 +1,5 @@
 module GameMachine
-  class UdtServerActor < UntypedActor
+  class UdtServerActor < JavaLib::UntypedActor
 
     class << self
       alias_method :apply, :new

@@ -24,8 +24,8 @@ module GameMachine
     end
 
     subject do
-      props = Props.new(CommandRouter);
-      ref = TestActorRef.create(GameMachineLoader.get_actor_system, props, 'commandrouter1');
+      props = JavaLib::Props.new(CommandRouter);
+      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'commandrouter1');
       ref.underlying_actor
     end
 

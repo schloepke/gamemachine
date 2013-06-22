@@ -5,6 +5,7 @@ opts = Slop.parse(:help => true) do
   banner 'Usage: datacube [options]'
 
   on '--cluster',  'Scanner supervisor'
+  on '--seed',  'Scanner supervisor'
   on 'name=',  'Server name'
   on '--server',  'Scanner supervisor'
   on '--stop',  'Scanner supervisor'
@@ -23,8 +24,18 @@ if opts.stop?
   GameMachine::Server.instance.kill_all
 end
 
-if opts.server?
-  GameMachine::Server.instance.init!(opts[:name] || 'default')
-  GameMachine::Server.instance.start
+server_opts = {}
+
+if opts.cluster?
+  server_opts[:cluster] = true
+  if opts.seed?
+    server_opts[:seed] = true
+  end
 end
 
+if opts.server? || opts.cluster?
+  GameMachine::Server.instance.init!(
+    (opts[:name] || 'default'), server_opts
+  )
+  GameMachine::Server.instance.start
+end

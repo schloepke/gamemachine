@@ -21,7 +21,7 @@ module GameMachine
     private
 
     def actor_selection
-      GameMachineLoader.get_actor_system.actor_selection(path)
+      Server.instance.actor_system.actor_selection(path)
     end
 
     def tell(message,sender)
@@ -29,11 +29,11 @@ module GameMachine
     end
 
     def ask(message,timeout)
-      duration = Duration.create(timeout, TimeUnit::MILLISECONDS)
-      t = Timeout.new(duration)
-      ref = AskableActorSelection.new(actor_selection)
+      duration = JavaLib::Duration.create(timeout, JavaLib::TimeUnit::MILLISECONDS)
+      t = JavaLib::Timeout.new(duration)
+      ref = JavaLib::AskableActorSelection.new(actor_selection)
       future = ref.ask(message,t)
-      Await.result(future, duration)
+      JavaLib::Await.result(future, duration)
     rescue Java::JavaUtilConcurrent::TimeoutException => e
       GameMachine.logger.warn("TimeoutException caught in ask (timeout = #{timeout})")
       false

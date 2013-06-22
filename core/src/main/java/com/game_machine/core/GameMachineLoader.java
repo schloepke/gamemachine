@@ -29,15 +29,11 @@ public class GameMachineLoader {
 		log.info("GameMachineLoader started in test mode");
 	}
 	
-	public void run(String name, String config, String gameHandler) {
+	public void run(ActorSystem newActorSystem, String gameHandler) {
 		this.gameHandler = gameHandler;
 		Thread.currentThread().setName("game-machine");
+		actorSystem = newActorSystem;
 		
-		if (name.equals("test")) {
-			actorSystem = ActorUtil.createSystem("system");
-		} else {
-			actorSystem = ActorUtil.createSystem(name,config);
-		}
 		
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		//actorSystem.actorOf(Props.create(UdpListener.class), UdpListener.class.getSimpleName());
