@@ -13,14 +13,14 @@ module GameMachine
       it "should return ref with correctly formatted path" do
         ActorBuilder.new(LocalEcho).distributed(1).with_name('echotest').start
         actor_ref = LocalEcho.find_distributed('testid','echotest')
-        actor_ref.path.match(/akka.tcp:\/\/system@localhost:2552\/user\/echotest[\d]{1,2}/).should be_true
+        actor_ref.path.match(/akka.tcp:\/\/system@localhost:2551\/user\/echotest[\d]{1,2}/).should be_true
       end
     end
 
     describe "#find_remote" do
       it "should return ref with correctly formatted path" do
         actor_ref = LocalEcho.find_remote('default','test')
-        actor_ref.path.match(/akka.tcp:\/\/system@localhost:2552\/user\/test/).should be_true
+        actor_ref.path.match(/akka.tcp:\/\/system@localhost:2551\/user\/test/).should be_true
       end
     end
 

@@ -35,7 +35,7 @@ public class GameMachineLoader {
 		actorSystem = newActorSystem;
 		
 		
-		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
+		//actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		//actorSystem.actorOf(Props.create(UdpListener.class), UdpListener.class.getSimpleName());
 		// Memory database actor, needs to be pinned to a single thread
 		//actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());

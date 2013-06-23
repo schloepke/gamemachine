@@ -88,17 +88,17 @@ test:
     default:
       udp:
         port: 8100
-        host: 192.168.1.2
+        host: localhost
         enabled: true
         log_level: INFO
       udt:
         port: 8101
-        host: 192.168.1.2
+        host: localhost
         enabled: true
         log_level: INFO
       akka:
         host: localhost
-        port: 2552
+        port: 2551
 
 production:
   <<: *defaults
