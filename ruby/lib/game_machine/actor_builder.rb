@@ -48,10 +48,7 @@ module GameMachine
     end
 
     def create_hashring(bucket_count)
-        hashring = Hashring.new(
-          Settings.servers.keys,
-          @name
-        )
+        hashring = Hashring.create_actor_ring(@name)
         @klass.add_hashring(@name,hashring)
         hashring
     end

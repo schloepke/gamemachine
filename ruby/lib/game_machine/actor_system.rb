@@ -7,6 +7,10 @@ module GameMachine
       @name = name
     end
 
+    def address
+      actor_system.to_string
+    end
+
     def config
 		  @config ||= JavaLib::ConfigFactory.parseString(@config_str).getConfig(name).withFallback(JavaLib::ConfigFactory.load)
     end

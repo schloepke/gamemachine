@@ -28,6 +28,9 @@ public class GameMachineLoader {
 		this.gameHandler = gameHandler;
 		log.info("GameMachineLoader started in test mode");
 	}
+	public static void startEventStreamHandler() {
+		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
+	}
 	
 	public void run(ActorSystem newActorSystem, String gameHandler) {
 		this.gameHandler = gameHandler;
@@ -35,7 +38,6 @@ public class GameMachineLoader {
 		actorSystem = newActorSystem;
 		
 		
-		//actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		//actorSystem.actorOf(Props.create(UdpListener.class), UdpListener.class.getSimpleName());
 		// Memory database actor, needs to be pinned to a single thread
 		//actorSystem.actorOf(Props.create(ObjectDb.class).withDispatcher("db-dispatcher"), ObjectDb.class.getSimpleName());

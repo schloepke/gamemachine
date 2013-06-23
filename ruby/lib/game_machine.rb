@@ -71,6 +71,8 @@ require_relative 'game_machine/object_db'
 require_relative 'game_machine/udp_server_actor'
 require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/client_message'
+require_relative 'game_machine/scheduler'
+require_relative 'game_machine/daemon'
 
 app_classes = Dir[File.join(File.dirname(__FILE__), '../app', '*.rb')]
 app_classes.each {|app_class| require app_class}

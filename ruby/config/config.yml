@@ -64,7 +64,7 @@ development:
         log_level: INFO
       akka:
         host: localhost
-        port: 0
+        port: 2554
     member02:
       udp:
         port: 8100
@@ -78,7 +78,7 @@ development:
         log_level: INFO
       akka:
         host: localhost
-        port: 0
+        port: 2555
 
 test:
   <<: *defaults

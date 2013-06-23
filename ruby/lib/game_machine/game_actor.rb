@@ -55,16 +55,12 @@ module GameMachine
         end
       end
 
-      def remote_base_uri(server)
-        "akka.tcp://#{Server.instance.config_name}@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
-      end
-
       def remote_path(server,name)
-        "#{remote_base_uri(server)}/user/#{name}"
+        "#{Server.address_for(server)}/user/#{name}"
       end
 
       def distributed_path(id,name)
-        server = hashring(name).server_for(id)
+        server = Server.instance.hashring.bucket_for(id)
         bucket = hashring(name).bucket_for(id)
         remote_path(server,bucket)
       end

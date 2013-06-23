@@ -5,11 +5,13 @@ module GameMachine
     include Singleton
 
     attr_reader :config, :name, :cluster
+
+    def self.address_for(server)
+      "akka.tcp://#{Server.instance.config_name}@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
+    end
+
     def initialize
-      setup_signal_handlers
       GameMachine.configure_logging
-      @tmp_dir = '/tmp/game_machine'
-      FileUtils.mkdir_p @tmp_dir
     end
 
     def init!(name='default', opts={})
@@ -20,43 +22,16 @@ module GameMachine
       @cluster = opts[:cluster]
     end
 
-    def setup_signal_handlers
-      Signal.trap('TERM') do
-        GameMachine.logger.warn('Caught signal TERM, shutting down')
-        shutdown
-      end
-
-      #Signal.trap("INT") do
-      #  GameMachine.logger.warn('Caught signal INT, shutting down')
-      #  shutdown
-      #end
+    def daemon
+      @daemon ||= Daemon.new
     end
 
-    def shutdown
-      stop
-      System.exit 0
+    def hashring
+      @hashring ||= Hashring.new([address])
     end
 
-    def pidfile(pid)
-      File.join(@tmp_dir,"#{pid}.pid")
-    end
-
-    def pidfiles
-      Dir[File.join(@tmp_dir, '*.pid')]
-    end
-
-    def write_pidfile
-      File.open(pidfile($$),'w') {|f| f.write($$)}
-    end
-
-    def kill_all
-      pidfiles.each do |pidfile|
-        pid = File.read(pidfile)
-        cmd = "kill -9 #{pid}"
-        GameMachine.logger.info cmd
-        system(cmd)
-        FileUtils.rm pidfile
-      end
+    def cluster_members
+      @cluster_members ||= {}
     end
 
     def akka_config
@@ -65,6 +40,10 @@ module GameMachine
 
     def actor_system
       @actor_system.actor_system
+    end
+
+    def address
+      self.class.address_for(name)
     end
 
     def cluster?
@@ -93,13 +72,11 @@ module GameMachine
     def start
       start_actor_system
       start_game_systems
-      write_pidfile
+      daemon.write_pidfile
     end
 
     def start_game_systems
-
       if config.udp.enabled
-        GameMachine.logger.info("UdpServerActor starting")
         ActorBuilder.new(UdpServerActor).start
       end
       if config.udt.enabled
@@ -113,10 +90,7 @@ module GameMachine
       ActorBuilder.new(RemoteEcho).start
       ActorBuilder.new(ConnectionManager).start
       ActorBuilder.new(CommandRouter).with_router(JavaLib::RoundRobinRouter,20).start
-    end
-
-    def to_s
-      "#{config.akka.host}:#{config.akka.port}"
+      ActorBuilder.new(Scheduler).start
     end
 
   end

@@ -6,12 +6,12 @@ module GameMachine
     let(:servers) {['server1','server2']}
     let(:bucket_name) {'test_bucket'}
     subject do
-      Hashring.new(servers,bucket_name)
+      Hashring.new(servers)
     end
 
-    describe "#server_for" do
-      it "returns server for value" do
-        subject.server_for('test')
+    describe "#bucket_for" do
+      it "returns bucket for value" do
+        subject.bucket_for('test')
       end
     end
   end
