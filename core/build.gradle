@@ -35,6 +35,14 @@ dependencies {
     compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
     compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
     compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
+    
+    compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
+    compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
+    
     compile group: 'com.barchart.udt', name: 'barchart-udt-bundle', version:'2.3.0'
     compile group: 'com.yammer.metrics', name: 'metrics-core', version:'2.2.0'
     compile group: 'org.easytesting', name: 'fest-assert-core', version:'2.0M10'
@@ -45,7 +53,7 @@ dependencies {
     compile(group: 'spy', name: 'spymemcached', version:'2.8.4')
     compile(group: 'com.google.guava', name: 'guava', version: '14.0.1')
     compile(group: 'io.netty', name: 'netty-all', version:'4.0.0.CR3')
-    compile files('../entity-system/build/libs/entity-system-0.0.1-SNAPSHOT.jar')
+    //compile files('../entity-system/build/libs/entity-system-0.0.1-SNAPSHOT.jar')
     
     
   }
@@ -56,17 +64,13 @@ dependencies {
 
 }
 
-  //build.dependsOn 'entity-system:codegen'
-  task protoc << {
-  	def proc = "protoc src\\main\\resources\\messages.proto --java_out=src\\main\\java".execute() 
-    proc.in.eachLine {line -> println line} 
-    proc.err.eachLine {line -> println 'ERROR: ' + line} 
-    proc.waitFor() 
-  }
-  
- task protostuff(type: Exec) {
+task codegen(type: Exec) {
+	File templateFile = file('src/main/resources/codegen.rb')
+    commandLine 'jruby',templateFile
+}
+task protogen(type: Exec)  {
  	File configFile = file('src/main/resources/protostuff.properties')
- 	File jar = file('third_party/protostuff-compiler-1.0.7-jarjar.jar')
+ 	File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
     commandLine 'java','-jar',jar,configFile
 }
 
