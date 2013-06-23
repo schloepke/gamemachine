@@ -75,22 +75,9 @@ module GameMachine
       daemon.write_pidfile
     end
 
-    def start_game_systems
-      if config.udp.enabled
-        ActorBuilder.new(UdpServerActor).start
-      end
-      if config.udt.enabled
-        ActorBuilder.new(UdtServerActor).start
-      end
 
-      ActorBuilder.new(ObjectDb).distributed(100).start
-      ActorBuilder.new(SystemMonitor).start
-      ActorBuilder.new(LocalEcho,'arg1').distributed(160).start
-      ActorBuilder.new(LocalEcho).with_name('LocalEchoRemote').start
-      ActorBuilder.new(RemoteEcho).start
-      ActorBuilder.new(ConnectionManager).start
-      ActorBuilder.new(CommandRouter).with_router(JavaLib::RoundRobinRouter,20).start
-      ActorBuilder.new(Scheduler).start
+    def start_game_systems
+      GameSystems.new.start
     end
 
   end

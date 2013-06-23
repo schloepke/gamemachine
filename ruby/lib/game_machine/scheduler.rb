@@ -9,8 +9,8 @@ module GameMachine
     end
 
     def on_receive(message)
-      puts Server.instance.cluster_members.keys.map(&:to_string).inspect
-      puts Server.instance.hashring.buckets.inspect
+      #puts Server.instance.cluster_members.keys.map(&:to_string).inspect
+      #puts Server.instance.hashring.buckets.inspect
     end
   end
 end

@@ -36,7 +36,6 @@ module GameMachine
   end
 
   def self.configure_logging
-
     @@logger = RJack::SLF4J[ 'game_machine' ]
 
     RJack::Logback.configure do
@@ -52,6 +51,8 @@ module GameMachine
     @@logger
   end
 end
+
+ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')
 
 require_relative 'game_machine/settings'
 require_relative 'game_machine/actor_system'
@@ -73,7 +74,5 @@ require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/client_message'
 require_relative 'game_machine/scheduler'
 require_relative 'game_machine/daemon'
+require_relative 'game_machine/game_systems'
 
-app_classes = Dir[File.join(File.dirname(__FILE__), '../app', '*.rb')]
-app_classes.each {|app_class| require app_class}
-puts "GAME_ENV is #{GameMachine.env}"

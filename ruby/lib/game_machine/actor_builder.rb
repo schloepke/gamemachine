@@ -38,6 +38,7 @@ module GameMachine
       else
         actor_system.actor_of(@props, @name)
       end
+      GameMachine.logger.debug "Game actor #{@name} started"
     end
 
 

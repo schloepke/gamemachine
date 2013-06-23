@@ -23,6 +23,8 @@ if opts.stop?
   GameMachine::Server.instance.kill_all
 end
 
+ENV['APP_ROOT'] ||= File.join(Dir.getwd, '/app')
+
 server_opts = {}
 
 if opts.cluster?

@@ -13,7 +13,12 @@ module GameMachine
       alias_method :create, :new
 
       def systems
-        [GameMachine::RemoteEcho,GameMachine::CommandRouter,GameMachine::LocalEcho,GameMachine::ConnectionManager].freeze
+        []
+      end
+
+      def register_system(system_class)
+        systems << system_class
+        GameMachine.logger.debug "#{system_class} registered"
       end
 
       def components
@@ -62,7 +67,7 @@ module GameMachine
       def distributed_path(id,name)
         server = Server.instance.hashring.bucket_for(id)
         bucket = hashring(name).bucket_for(id)
-        remote_path(server,bucket)
+        "#{server}/user/#{bucket}"
       end
 
       def local_path(name)
