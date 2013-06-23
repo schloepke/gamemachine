@@ -13,7 +13,6 @@ jars.each {|jar| require jar}
 
 require_relative 'game_machine/java_lib'
 
-java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
 java_import 'com.game_machine.entity_system.generated.ObjectdbGet'
 java_import 'com.game_machine.entity_system.generated.ObjectdbUpdate'
 java_import 'com.game_machine.entity_system.generated.Entity'
@@ -24,6 +23,8 @@ java_import 'com.game_machine.entity_system.generated.ChatMessage'
 java_import 'com.game_machine.entity_system.generated.Player'
 java_import 'com.game_machine.entity_system.generated.PlayersAroundMe'
 java_import 'com.game_machine.entity_system.generated.ClientId'
+java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
+
 
 unless ENV['GAME_ENV']
   ENV['GAME_ENV'] = 'development'

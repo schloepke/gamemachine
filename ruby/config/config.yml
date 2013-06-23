@@ -68,20 +68,6 @@ test:
       akka:
         host: localhost
         port: 2552
-    app01:
-      udp:
-        port: 8100
-        host: localhost
-        enabled: false
-        log_level: INFO
-      udt:
-        port: 8101
-        host: localhost
-        enabled: false
-        log_level: INFO
-      akka:
-        host: localhost
-        port: 2553
 
 production:
   <<: *defaults

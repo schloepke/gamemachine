@@ -29,7 +29,7 @@ module GameMachine
     end
 
     def ask(message,timeout)
-      duration = JavaLib::Duration.create(timeout, JavaLib::TimeUnit::MILLISECONDS)
+      duration = JavaLib::Duration.create(timeout, java.util.concurrent.TimeUnit::MILLISECONDS)
       t = JavaLib::Timeout.new(duration)
       ref = JavaLib::AskableActorSelection.new(actor_selection)
       future = ref.ask(message,t)

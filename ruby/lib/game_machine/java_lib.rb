@@ -3,7 +3,6 @@ module GameMachine
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
     include_package 'akka.serialization'
-    include_package 'java.util.concurrent'
     include_package 'com.game_machine.core'
     include_package 'akka.actor.UntypedActor'
     include_package 'com.game_machine.core.net.server'
