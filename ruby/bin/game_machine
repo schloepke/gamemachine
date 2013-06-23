@@ -5,7 +5,6 @@ opts = Slop.parse(:help => true) do
   banner 'Usage: datacube [options]'
 
   on '--cluster',  'Scanner supervisor'
-  on '--seed',  'Scanner supervisor'
   on 'name=',  'Server name'
   on '--server',  'Scanner supervisor'
   on '--stop',  'Scanner supervisor'
@@ -28,9 +27,6 @@ server_opts = {}
 
 if opts.cluster?
   server_opts[:cluster] = true
-  if opts.seed?
-    server_opts[:seed] = true
-  end
 end
 
 if opts.server? || opts.cluster?

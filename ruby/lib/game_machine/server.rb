@@ -4,7 +4,7 @@ module GameMachine
   class Server
     include Singleton
 
-    attr_reader :config, :name, :cluster, :seed
+    attr_reader :config, :name, :cluster
     def initialize
       setup_signal_handlers
       GameMachine.configure_logging
@@ -13,12 +13,11 @@ module GameMachine
     end
 
     def init!(name='default', opts={})
-      default_opts = {:cluster => false, :seed => false}
+      default_opts = {:cluster => false}
       opts = default_opts.merge(opts)
       @name = name
       @config = Settings.servers.send(name)
       @cluster = opts[:cluster]
-      @seed = opts[:seed]
     end
 
     def setup_signal_handlers
@@ -68,8 +67,16 @@ module GameMachine
       @actor_system.actor_system
     end
 
+    def cluster?
+      cluster ? true : false
+    end
+
+    def config_name
+      @cluster ? 'cluster' : 'system'
+    end
+
     def start_actor_system
-      @actor_system = ActorSystem.new('system',akka_config)
+      @actor_system = ActorSystem.new(config_name,akka_config)
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
     end
@@ -92,6 +99,7 @@ module GameMachine
     def start_game_systems
 
       if config.udp.enabled
+        GameMachine.logger.info("UdpServerActor starting")
         ActorBuilder.new(UdpServerActor).start
       end
       if config.udt.enabled

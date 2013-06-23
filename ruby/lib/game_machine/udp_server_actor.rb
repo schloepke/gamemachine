@@ -11,6 +11,7 @@ module GameMachine
 
     def on_receive(message)
       if message.kind_of?(JavaLib::Udp::Bound)
+        GameMachine.logger.info("UdpServerActor started")
         @socket = getSender
       elsif message.is_a?(ClientMessage)
         sender = @clients.fetch(message.client_id.get_id)

@@ -56,7 +56,7 @@ module GameMachine
       end
 
       def remote_base_uri(server)
-        "akka.tcp://system@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
+        "akka.tcp://#{Server.instance.config_name}@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
       end
 
       def remote_path(server,name)
