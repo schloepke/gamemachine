@@ -4,13 +4,19 @@ module GameMachine
     def preStart
       scheduler = get_context.system.scheduler
       dispatcher = get_context.system.dispatcher
-      duration = JavaLib::Duration.create(1, java.util.concurrent.TimeUnit::SECONDS)
-      cancellable = scheduler.schedule(duration, duration, get_self, "Tick", dispatcher, nil)
+
+      every_second = JavaLib::Duration.create(1, java.util.concurrent.TimeUnit::SECONDS)
+      scheduler.schedule(every_second, every_second, get_self, "every_second", dispatcher, nil)
+
+      every_10_seconds = JavaLib::Duration.create(10, java.util.concurrent.TimeUnit::SECONDS)
+      scheduler.schedule(every_10_seconds, every_10_seconds, get_self, "every_10_seconds", dispatcher, nil)
     end
 
     def on_receive(message)
-      #puts Server.instance.cluster_members.keys.map(&:to_string).inspect
-      #puts Server.instance.hashring.buckets.inspect
+      if message == 'every_10_seconds'
+        GameMachine.logger.debug "Cluster members #{ClusterMonitor.cluster_members.keys.to_a.inspect}"
+        GameMachine.logger.debug "Hashrings #{Server.instance.hashring.buckets.inspect}"
+      end
     end
   end
 end

@@ -4,7 +4,7 @@ module GameMachine
   class Server
     include Singleton
 
-    attr_reader :config, :name, :cluster
+    attr_reader :config, :name, :cluster, :hashring, :address
 
     def self.address_for(server)
       "akka.tcp://#{Server.instance.config_name}@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
@@ -20,18 +20,17 @@ module GameMachine
       @name = name
       @config = Settings.servers.send(name)
       @cluster = opts[:cluster]
+      @address = self.class.address_for(@name)
+      @hashring = Hashring.new([@address])
+    end
+
+    def init_cluster!(address)
+      @address = address
+      @hashring = Hashring.new([address])
     end
 
     def daemon
       @daemon ||= Daemon.new
-    end
-
-    def hashring
-      @hashring ||= Hashring.new([address])
-    end
-
-    def cluster_members
-      @cluster_members ||= {}
     end
 
     def akka_config
@@ -40,10 +39,6 @@ module GameMachine
 
     def actor_system
       @actor_system.actor_system
-    end
-
-    def address
-      self.class.address_for(name)
     end
 
     def cluster?

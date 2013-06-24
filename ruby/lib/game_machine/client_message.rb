@@ -9,9 +9,6 @@ module GameMachine
     end
 
     def send_to_client
-      if @data.respond_to?(:to_byte_array)
-        #@data = @data.to_byte_array
-      end
       GameActor.find(client_id.get_gateway).send_message(self)
     end
   end
