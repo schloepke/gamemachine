@@ -17,15 +17,14 @@ message ObjectdbUpdate {
 	required string updateMethod = 3;
 }
 
-message ClientId {
+message ClientConnection {
 	required string id = 1;
 	optional string gateway = 2;
 }
 
 message PlayerConnection {
-  required string id = 1;
-	required Player player = 2;
-	optional string authorizationToken = 3;
+	required Player player = 1;
+	optional string authorizationToken = 2;
 }
 
 message ChatMessage {
@@ -80,7 +79,7 @@ message Entity {
   	optional GameCommand gameCommand = 3;
   	optional PlayerConnection playerConnection = 4;
   	optional ChatMessage chatMessage = 5;
-  	optional ClientId clientId = 6;
+  	optional ClientConnection clientConnection = 6;
   	required string id = 7;
 }
 

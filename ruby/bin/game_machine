@@ -4,10 +4,10 @@ require 'slop'
 opts = Slop.parse(:help => true) do
   banner 'Usage: datacube [options]'
 
-  on '--cluster',  'Scanner supervisor'
+  on '--cluster',  'start in cluster mode'
   on 'name=',  'Server name'
-  on '--server',  'Scanner supervisor'
-  on '--stop',  'Scanner supervisor'
+  on '--server',  'start in standalone server mode'
+  on '--stop',  'stop all nodes'
 
   help
 end

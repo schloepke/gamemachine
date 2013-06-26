@@ -22,7 +22,7 @@ java_import 'com.game_machine.entity_system.generated.PlayerConnection'
 java_import 'com.game_machine.entity_system.generated.ChatMessage'
 java_import 'com.game_machine.entity_system.generated.Player'
 java_import 'com.game_machine.entity_system.generated.PlayersAroundMe'
-java_import 'com.game_machine.entity_system.generated.ClientId'
+java_import 'com.game_machine.entity_system.generated.ClientConnection'
 java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
 
 
@@ -76,4 +76,5 @@ require_relative 'game_machine/client_message'
 require_relative 'game_machine/scheduler'
 require_relative 'game_machine/daemon'
 require_relative 'game_machine/game_systems'
+require_relative 'game_machine/pubsub/subscriber'
 

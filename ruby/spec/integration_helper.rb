@@ -3,7 +3,7 @@ require 'game_machine'
 
 RSpec.configure do |config|
   config.before(:suite) do
-    GameMachine::Server.instance.init!
+    GameMachine::Server.instance.init!('member01', :cluster => true)
     GameMachine::Server.instance.start_actor_system
     GameMachine::Server.instance.start_game_systems
     puts "before suite"

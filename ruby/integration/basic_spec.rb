@@ -9,7 +9,6 @@ module GameMachine
       entity = Entity.new
       entity.set_id('1')
       player_connection = PlayerConnection.new
-      player_connection.set_id('client1')
       player_connection.set_player(Player.new.set_id('1'))
       entity.set_player_connection(player_connection)
       entity
@@ -21,13 +20,13 @@ module GameMachine
       entity_list
     end
 
-    let(:client) {Client.new(:app01)}
+    let(:client) {Client.new(:seed01)}
 
     context "test" do
 
       describe "sending messages to remote actors" do
         it "there and back again" do
-          ref = LocalEcho.find_remote('app01','LocalEchoRemote')
+          ref = LocalEcho.find_remote('seed01','LocalEchoRemote')
           ref.send_message('blah', :blocking => true, :timeout => 1000).should == 'blah'
           returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
           returned_entity.should be_kind_of(Entity)
@@ -46,19 +45,30 @@ module GameMachine
 
       describe "sending messages via udp" do
         it "should do" do
-          client.send_message(entity_list.to_byte_array)
-          message = client.receive_message
-          e = Entity.parse_from(message.to_java_bytes)
-          e.get_id.should == entity.get_id
+
+          threads = []
+          10.times do |ti|
+            threads << Thread.new do
+              c = Client.new(:seed01)
+              1000.times do |i|
+                c.send_message(entity_list.to_byte_array)
+                message = c.receive_message
+                e = Entity.parse_from(message.to_java_bytes)
+                e.get_id.should == entity.get_id
+              end
+            end
+          end
+          threads.map(&:join)
+
         end
       end
 
       describe "stress test" do
         it "distributed stress" do
           threads = []
-          1.times do |ti|
+          10.times do |ti|
             threads << Thread.new do
-              1.times do |i|
+              1000.times do |i|
                 ref = LocalEcho.find_distributed(i.to_s)
                 returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
                 returned_entity.get_id.should == entity.get_id
@@ -66,7 +76,6 @@ module GameMachine
             end
           end
           threads.map(&:join)
-          sleep 2
         end
       end
 

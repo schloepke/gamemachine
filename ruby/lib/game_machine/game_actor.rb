@@ -1,5 +1,4 @@
 
-java_import 'akka.util.Timeout'
 
 module GameMachine
 
@@ -13,7 +12,7 @@ module GameMachine
       alias_method :create, :new
 
       def systems
-        []
+        @@systems ||= []
       end
 
       def register_system(system_class)

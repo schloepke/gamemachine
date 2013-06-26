@@ -23,6 +23,7 @@ module GameMachine
       end
         
       ActorBuilder.new(ObjectDb).distributed(100).start
+      ActorBuilder.new(Pubsub::Subscriber).start
       ActorBuilder.new(SystemMonitor).start
       ActorBuilder.new(ClusterMonitor).start
       ActorBuilder.new(CommandRouter).with_router(JavaLib::RoundRobinRouter,20).start

@@ -5,7 +5,7 @@ module GameMachine
     end
 
     def preStart
-      getContext.system.eventStream.subscribe(getSelf, JavaLib::DeadLetter.java_class)
+      #getContext.system.eventStream.subscribe(getSelf, JavaLib::DeadLetter.java_class)
     end
 
     def on_receive(message)

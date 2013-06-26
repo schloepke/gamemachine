@@ -16,6 +16,14 @@ module GameMachine
       @ring = ConsistentHashing::Ring.new(@buckets,REPLICAS)
     end
 
+    def points
+      @ring.points
+    end
+
+    def nodes
+      @ring.nodes
+    end
+
     def remove_bucket(bucket)
       if @buckets.include?(bucket)
         @buckets.delete_if {|b| b == bucket}
