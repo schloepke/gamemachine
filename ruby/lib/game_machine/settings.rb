@@ -1,7 +1,7 @@
 module GameMachine
   class Settings < Settingslogic
     source  File.expand_path(
-      File.join(File.dirname(__FILE__), "../../config/config.yml")
+      File.join(GameMachine.app_root, "config/config.yml")
     )
     namespace GameMachine.env
 
@@ -36,7 +36,7 @@ module GameMachine
 
       def load_akka_config(name)
         File.read(File.expand_path(File.join(
-            File.dirname(__FILE__),"../../config/#{name}.conf")
+            GameMachine.app_root,"config/#{name}.conf")
           )
         )
       end

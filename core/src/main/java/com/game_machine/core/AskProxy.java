@@ -1,16 +1,14 @@
 package com.game_machine.core;
 
-import java.util.concurrent.atomic.AtomicLong;
-import akka.actor.Props;
-import scala.concurrent.duration.Duration;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
+import scala.concurrent.duration.Duration;
 import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import akka.pattern.AskableActorSelection;
 
 public class AskProxy extends UntypedActor {
 

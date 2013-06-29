@@ -49,10 +49,18 @@ module GameMachine
       @cluster ? 'cluster' : 'system'
     end
 
+    def start_camel_extension
+      if Server.instance.config.http_enabled
+        JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
+        camel = JavaLib::CamelExtension.get(Server.instance.actor_system)
+        camel_context = camel.context
+      end
+    end
+
     def start_actor_system
       @actor_system = ActorSystem.new(config_name,akka_config)
       @actor_system.create!
-      JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
+      start_camel_extension
     end
 
     def stop_actor_system

@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
-import com.game_machine.core.persistence.ObjectDb;
-
 public class GameMachineLoader {
 
 	private static final Logger log = Logger.getLogger(GameMachineLoader.class.getName());

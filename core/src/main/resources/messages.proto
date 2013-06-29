@@ -22,15 +22,16 @@ message ClientConnection {
 	optional string gateway = 2;
 }
 
-message PlayerConnection {
-	required Player player = 1;
-	optional string authorizationToken = 2;
-}
-
 message ChatMessage {
 	required string text = 1;
 	required string target = 2;
 }
+
+message PlayerLogin {
+	required string playerId = 1;
+	required string password = 2;
+}
+
 
 message Player {
 	optional int32 x = 1;
@@ -38,8 +39,14 @@ message Player {
 	optional int32 z = 3;
 	required string id = 4;
 	optional string name = 5;
+	optional bool authenticated = 6;
+	optional string authtoken = 7;
 }
 
+message EchoTest {
+	required string message = 1;
+}
+	
 message TestObject {
   optional string optionalString = 1;
   required string requiredString = 2;
@@ -77,12 +84,14 @@ message Entity {
 	optional Player player = 1;
   	optional PlayersAroundMe playersAroundMe = 2;
   	optional GameCommand gameCommand = 3;
-  	optional PlayerConnection playerConnection = 4;
-  	optional ChatMessage chatMessage = 5;
-  	optional ClientConnection clientConnection = 6;
+  	optional ChatMessage chatMessage = 4;
+  	optional ClientConnection clientConnection = 5;
+  	optional EchoTest echoTest = 6;
   	required string id = 7;
+  	optional PlayerLogin playerLogin = 8;
 }
 
 message EntityList {
 	repeated Entity entity = 1;
+	optional Player player = 2;
 }

@@ -11,6 +11,8 @@ module GameMachine
     include_package 'akka.serialization'
     include_package 'akka.contrib.pattern'
     include_package 'akka.event'
+    include_package 'akka.camel.javaapi'
+    include_package 'akka.camel'
     include_package 'com.game_machine.core'
     include_package 'com.game_machine.core.net.server'
     include_package 'java.net'

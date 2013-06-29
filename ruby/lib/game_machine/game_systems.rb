@@ -21,16 +21,22 @@ module GameMachine
       if Server.instance.config.udt.enabled
         ActorBuilder.new(UdtServerActor).start
       end
-        
+      
+      if Server.instance.config.http_enabled
+        props = JavaLib::Props.new(HttpServer)
+        Server.instance.actor_system.actor_of(props,HttpServer.name)
+      end
+
       ActorBuilder.new(ObjectDb).distributed(100).start
       ActorBuilder.new(Pubsub::Subscriber).start
       ActorBuilder.new(SystemMonitor).start
       ActorBuilder.new(ClusterMonitor).start
-      ActorBuilder.new(CommandRouter).with_router(JavaLib::RoundRobinRouter,20).start
+      ActorBuilder.new(DefaultGameHandler).with_router(JavaLib::RoundRobinRouter,20).start
       ActorBuilder.new(Scheduler).start
+      ActorBuilder.new(PlayerAuthentication).start
 
-      ActorBuilder.new(LocalEcho,'arg1').distributed(160).start
-      ActorBuilder.new(LocalEcho).with_name('LocalEchoRemote').start
+      ActorBuilder.new(LocalEcho).start
+      ActorBuilder.new(LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
       ActorBuilder.new(RemoteEcho).start
       ActorBuilder.new(ConnectionManager).start
 

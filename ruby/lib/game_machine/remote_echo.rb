@@ -2,10 +2,7 @@ module GameMachine
   class RemoteEcho < GameActor
     
     def self.components
-      ['PlayerConnection']
-    end
-
-    def post_init(*args)
+      ['EchoTest']
     end
 
     def on_receive(message)

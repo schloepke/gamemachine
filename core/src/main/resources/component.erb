@@ -78,13 +78,13 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
 
-    <%- message.getFields.each do |field| -%>
+<%- message.getFields.each do |field| -%>
     <%- if field.isRepeated -%>
-    private List<<%=get_type(field)%>> <%=field.name -%>;
-    <%- else -%>
-    private <%=get_type(field)%> <%=field.name -%>;
+    public List<<%=get_type(field)%>> <%=field.name -%>;
+	<%- else -%>
+    public <%=get_type(field)%> <%=field.name -%>;
     <%- end -%>
-    <%- end -%>
+<%- end -%>
     
 
 
@@ -109,11 +109,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 <%- end -%>
 
 <%- message.getFields.each do |field| -%>
-<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
-
-	
+	<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
     
-<%- if field.isRepeated -%>
+	<%- if field.isRepeated -%>
 	public List<<%=get_type(field)%>> get<%=field_name -%>List() {
 		return <%= field.name %>;
 	}
@@ -138,7 +136,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         return this;
     }
     
-<%- else -%>
+	<%- else -%>
 	public <%=get_type(field)%> get<%=field_name -%>() {
 		return <%= field.name %>;
 	}
@@ -151,7 +149,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 	public Boolean has<%=field_name %>()  {
         return <%=field.name%> == null ? false : true;
     }
-<%- end -%>
+	<%- end -%>
 <%- end -%>
 
   
@@ -356,7 +354,7 @@ public byte[] toJson() {
 }
 		
 public byte[] toProtobuf() {
-	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+	LinkedBuffer buffer = LinkedBuffer.allocate(8024);
 	byte[] bytes = null;
 
 	try {
