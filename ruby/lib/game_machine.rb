@@ -85,8 +85,4 @@ require_relative 'game_machine/game_systems'
 require_relative 'game_machine/pubsub/subscriber'
 require_relative 'game_machine/http_server'
 require_relative 'game_machine/player_authentication'
-require_relative 'game_machine/component'
-require_relative 'game_machine/component_one'
-require_relative 'game_machine/component_two'
-require_relative 'game_machine/game_entity'
 

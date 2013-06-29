@@ -1,5 +1,4 @@
 require 'spec_helper'
-
 module GameMachine
   describe "misc" do 
     let(:entity) do 
@@ -12,23 +11,8 @@ module GameMachine
       entity
     end
 
-    it "msgpacks" do
-      e = GameEntity.new
-      e.one = GameEntity.new(
-        :one => 'adfasdfas',
-        :two => GameEntity.new(:one => ComponentOne.new, :three => 3)
-      )
-      e.two = ComponentOne.new(:one => 123)
-      puts e.kind_of?(Component)
-      puts e.is_a?(Component)
-      h = e.to_hash
-      puts h.inspect
-      puts Benchmark.realtime {50000.times {e.to_hash}}
-      e = GameEntity.from_hash(h)
-      packed = e.pack
-      puts packed.inspect
-      unpacked = GameEntity.unpack(packed)
-      puts Benchmark.realtime {50.times {e.pack}}
+    it "define new method" do
+      Entity.new.test
     end
 
     it "marshal" do
