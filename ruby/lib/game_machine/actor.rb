@@ -10,7 +10,7 @@ module GameMachine
       alias_method :create, :new
 
       def components
-        @components ||= []
+        @components ||= Set.new
       end
 
       def register_component(component)
@@ -45,16 +45,29 @@ module GameMachine
         ActorRef.new(remote_path(server,name))
       end
 
-      def find_distributed(id,name=self.name)
-        if hashring(name)
-          ActorRef.new(distributed_path(id, name))
-        else
+      def ensure_hashring(name)
+        unless hashring(name)
           raise MissingHashringError
         end
       end
 
+      def find_distributed_local(id,name=self.name)
+        ensure_hashring(name)
+        ActorRef.new(local_distributed_path(id, name))
+      end
+
+      def find_distributed(id,name=self.name)
+        ensure_hashring(name)
+        ActorRef.new(distributed_path(id, name))
+      end
+
       def remote_path(server,name)
         "#{Server.address_for(server)}/user/#{name}"
+      end
+
+      def local_distributed_path(id,name)
+        bucket = hashring(name).bucket_for(id)
+        "/user/#{bucket}"
       end
 
       def distributed_path(id,name)
@@ -68,13 +81,17 @@ module GameMachine
       end
     end
 
+    def send_to_client(message)
+      ClientMessage.new(message,client_connection).send_to_client
+    end
+
+    def client_connection
+      @client_connection
+    end
+
     def onReceive(message)
-      @client_connection = nil
-      if message.is_a?(Entity)
-        if message.has_client_connection
-          @client_connection = message.client_connection
-        end
-      end
+      GameMachine.logger.debug("#{self.class.name} got #{message}")
+      set_client_connection(message)
       on_receive(message)
     end
 
@@ -84,6 +101,17 @@ module GameMachine
 
     def sender
       ActorRef.new(get_sender)
+    end
+
+    private
+
+    def set_client_connection(message)
+      @client_connection = nil
+      if message.is_a?(Entity)
+        if message.has_client_connection
+          @client_connection = message.client_connection
+        end
+      end
     end
 
   end

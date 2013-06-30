@@ -1,9 +1,13 @@
 module GameMachine
   module Systems
-    class PlayerAuthentication < Actor
+    class AuthenticationHandler < Actor
 
       def post_init
         @authenticated_players = {}
+      end
+
+      def login(username,password)
+        'authtoken'
       end
 
       def authenticated?(player)
@@ -15,14 +19,15 @@ module GameMachine
       end
 
       def on_receive(entity_list)
+        handler = EntityDispatcher.find
         player = entity_list.player
         if authenticated?(player)
           player.authenticated = true
-          sender.send_message(entity_list,:sender => get_self)
+          handler.send_message(entity_list)
         elsif authenticate(player)
           @authenticated_players[player.id] = true
           player.authenticated = true
-          sender.send_message(entity_list,:sender => get_self)
+          handler.send_message(entity_list)
         end
       end
 

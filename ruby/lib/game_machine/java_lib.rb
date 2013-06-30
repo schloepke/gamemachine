@@ -22,5 +22,6 @@ module GameMachine
     include_package 'scala.concurrent.duration'
     include_package 'scala.concurrent'
     include_package 'java.io.Serializable'
+    include_package 'java.util'
   end
 end

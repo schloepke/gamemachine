@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module GameMachine
   module Systems
-    describe DefaultHandler do
+    describe RequestHandler do
 
       let(:entity) do
         entity = Entity.new
@@ -25,7 +25,7 @@ module GameMachine
       end
 
       subject do
-        props = JavaLib::Props.new(DefaultHandler);
+        props = JavaLib::Props.new(RequestHandler);
         ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'commandrouter1');
         ref.underlying_actor
       end

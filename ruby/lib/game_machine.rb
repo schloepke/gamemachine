@@ -35,11 +35,11 @@ ENV['GAME_ENV'] ||= 'development'
 
 module GameMachine
   def self.env
-    ENV['GAME_ENV']
+    ENV.fetch('GAME_ENV')
   end
 
   def self.app_root
-    ENV['APP_ROOT']
+    ENV.fetch('APP_ROOT')
   end
 
   def self.configure_logging
@@ -67,11 +67,11 @@ require_relative 'game_machine/hashring'
 require_relative 'game_machine/actor'
 require_relative 'game_machine/actor_ref'
 require_relative 'game_machine/server'
-require_relative 'game_machine/systems/default_handler'
+require_relative 'game_machine/systems/request_handler'
+require_relative 'game_machine/systems/entity_dispatcher'
 require_relative 'game_machine/client'
 require_relative 'game_machine/systems/local_echo'
 require_relative 'game_machine/systems/remote_echo'
-require_relative 'game_machine/systems/connection_manager'
 require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/object_db'
 require_relative 'game_machine/system_monitor'
@@ -84,5 +84,5 @@ require_relative 'game_machine/protocols/udt'
 require_relative 'game_machine/protocols/udp'
 require_relative 'game_machine/protocols/http'
 require_relative 'game_machine/pubsub/subscriber'
-require_relative 'game_machine/systems/player_authentication'
+require_relative 'game_machine/systems/authentication_handler'
 

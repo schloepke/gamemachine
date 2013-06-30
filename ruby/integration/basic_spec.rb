@@ -17,7 +17,7 @@ module GameMachine
     let(:entity) do
       entity = Entity.new
       entity.set_id(STR.to_java_string)
-      entity.set_player(player)
+      entity.player = player
       echo_test = EchoTest.new.set_message('testing')
       entity.set_echo_test(echo_test)
       entity
@@ -52,87 +52,25 @@ module GameMachine
 
     context "test" do
 
-      describe "udt" do
-
-        it "should send/receive" do
-
-          threads = []
-          1.times do |ti|
-            threads << Thread.new do
-              Client.udt_test(large_entity_list.to_byte_array)
-            end
-          end
-          threads.map(&:join)
-
-        end
-      end
-
       describe "sending messages to remote actors" do
         it "there and back again" do
           ref = Systems::LocalEcho.find_remote('seed01')
           ref.send_message('blah', :blocking => true, :timeout => 1000).should == 'blah'
           returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
-          returned_entity.should be_kind_of(Entity)
           returned_entity.get_id.should == entity.get_id
         end
 
         it "distributed messaging should return answer" do
-          10.times do |i|
-            ref = Systems::LocalEcho.find_distributed(i.to_s, 'DistributedLocalEcho')
-            returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
-            returned_entity.get_id.should == entity.get_id
-          end
-
+          ref = Systems::LocalEcho.find_distributed('blah', 'DistributedLocalEcho')
+          returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
+          returned_entity.get_id.should == entity.get_id
         end
-      end
 
-      describe "sending messages via udp" do
-        it "should do" do
-          puts 'starting udp client test'
-          threads = []
-          10.times do |ti|
-            threads << Thread.new do
-              c = Client.new(:seed01)
-              1000.times do |i|
-                message = nil
-                time = Benchmark.realtime do
-                  c.send_message(entity_list.to_byte_array)
-                  message = c.receive_message
-                end
-                if time > 0.010
-                  puts time
-                end
-                e = Entity.parse_from(message.to_java_bytes)
-                e.get_id.should == entity.get_id
-              end
-            end
-          end
-          threads.map(&:join)
-          puts 'udp client test done'
-        end
-      end
-
-      describe "stress test" do
-        it "distributed stress" do
-          threads = []
-          10.times do |ti|
-            threads << Thread.new do
-              100.times do |i|
-                ref = Systems::LocalEcho.find_distributed(i.to_s,'DistributedLocalEcho')
-                returned_entity = nil
-                time = Benchmark.realtime {returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000) }
-                if time > 0.010
-                  #puts time
-                end
-                if returned_entity 
-                  returned_entity.get_id.should == entity.get_id
-                else
-                  puts 'Timeout'
-                end
-              end
-            end
-          end
-          threads.map(&:join)
+        it "udt should get response" do
+          bytes = entity_list.to_byte_array
+          Thread.current['s'] ||= Client.connect_udt
+          result = Client.send_udt(Thread.current['s'],bytes)
+          Entity.parse_from(result).id.should == entity.id
         end
       end
 

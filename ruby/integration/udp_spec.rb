@@ -39,7 +39,7 @@ module GameMachine
             Thread.current['c'] ||= Client.new(:seed01)
             Thread.current['c'].send_message(bytes)
             message = Thread.current['c'].receive_message
-            #EntityList.parse_from(message.to_java_bytes)
+            Entity.parse_from(message.to_java_bytes)
           end
           puts 'udp client test done'
         end

@@ -25,31 +25,20 @@ module GameMachine
       @hashring = Hashring.new([address])
     end
 
-    def daemon
-      @daemon ||= Daemon.new
-    end
-
-    def akka_config
-      @cluster ? Settings.akka_cluster_config : Settings.akka_config
+    def cluster?
+      cluster ? true : false
     end
 
     def actor_system
       @actor_system.actor_system
     end
 
-    def cluster?
-      cluster ? true : false
-    end
-
     def config_name
       @cluster ? 'cluster' : 'system'
     end
 
-    def start_camel_extension
-      if Server.instance.config.http_enabled
-        camel = JavaLib::CamelExtension.get(Server.instance.actor_system)
-        camel_context = camel.context
-      end
+    def akka_config
+      @cluster ? Settings.akka_cluster_config : Settings.akka_config
     end
 
     def start_actor_system
@@ -74,9 +63,21 @@ module GameMachine
       daemon.write_pidfile
     end
 
-
     def start_game_systems
       SystemManager.new.start
+    end
+
+    private
+
+    def start_camel_extension
+      if Server.instance.config.http_enabled
+        camel = JavaLib::CamelExtension.get(Server.instance.actor_system)
+        camel_context = camel.context
+      end
+    end
+
+    def daemon
+      @daemon ||= Daemon.new
     end
 
   end

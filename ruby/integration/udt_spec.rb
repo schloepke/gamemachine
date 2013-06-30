@@ -53,19 +53,21 @@ module GameMachine
     context "test" do
       describe "udt" do
 
-        it "should send/receive" do
-          address = JavaLib::InetSocketAddress.new(Settings.servers.seed01.udt.host, Settings.servers.seed01.udt.port)
+        it "stress with small payload" do
           bytes = entity_list.to_byte_array
           measure(10,10000) do
-            unless Thread.current['s']
-              s = JavaLib::SocketUDT.new(JavaLib::TypeUDT::DATAGRAM)
-              s.setBlocking(true)
-              s.connect(address)
-              Thread.current['s'] = s
-            end
-            Thread.current['s'].send(bytes)
-            array = Java::byte[1024].new
-            Thread.current['s'].receive(array)
+            Thread.current['s'] ||= Client.connect_udt
+            result = Client.send_udt(Thread.current['s'],bytes)
+            Entity.parse_from(result)
+          end
+        end
+
+        it "stress with large payload" do
+          bytes = large_entity_list.to_byte_array
+          measure(10,10000) do
+            Thread.current['s'] ||= Client.connect_udt
+            result = Client.send_udt(Thread.current['s'],bytes)
+            Entity.parse_from(result)
           end
         end
 

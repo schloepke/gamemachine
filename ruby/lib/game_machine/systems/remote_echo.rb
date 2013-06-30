@@ -6,7 +6,7 @@ module GameMachine
 
       def on_receive(message)
         GameMachine.logger.debug("RemoteEcho client_id: #{message.get_client_connection.get_id} message: #{message}")
-        ClientMessage.new(message,message.client_connection).send_to_client
+        send_to_client(message)
       end
     end
   end
