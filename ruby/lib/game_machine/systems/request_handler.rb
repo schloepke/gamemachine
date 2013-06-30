@@ -8,6 +8,7 @@ module GameMachine
           reset_player_authentication(entity_list.get_player)
           actor_ref = AuthenticationHandler.find_distributed_local(entity_list.player.id)
           actor_ref.send_message(entity_list,:sender => get_self)
+        elsif message.is_a?(PlayerLogin)
         else
           unhandled(message)
         end

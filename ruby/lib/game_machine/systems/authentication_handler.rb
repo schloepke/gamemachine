@@ -6,10 +6,6 @@ module GameMachine
         @authenticated_players = {}
       end
 
-      def login(username,password)
-        'authtoken'
-      end
-
       def authenticated?(player)
         (player && @authenticated_players.fetch(player.id,nil)) ? true : false
       end

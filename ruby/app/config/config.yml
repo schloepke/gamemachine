@@ -5,6 +5,11 @@ development:
   <<: *defaults
   game_handler: GameMachine::Systems::RequestHandler
   message_encoding: protobuf
+  login_username: 'player'
+  login_password: 'pass'
+  authtoken: 'authorized'
+  http_host: localhost
+  http_port: 8080
   seeds:
     - seed01
     - seed02

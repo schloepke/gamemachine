@@ -7,11 +7,18 @@ module GameMachine
       end
 
       def getEndpointUri
-        return "jetty:http://localhost:8877/"
+        return "jetty:http://#{Settings.http_host}:#{Settings.http_port}/"
       end
 
       def onReceive(message)
-        response = {:server => 'localhost:8100', :authtoken => 'authorized'}
+        entity = Entity.parse_from(message)
+        player_login = entity.player_login
+        auth = LoginHandler.find.send_message(player_login,
+                                                :sender => get_self,
+                                                :blocking => true
+                                             )
+        server = "#{Settings.http_host}:#{Settings.http_port}"
+        response = {:server => server, :authtoken => auth}
         getSender.tell(JSON.generate(response),get_self)
       end
     end

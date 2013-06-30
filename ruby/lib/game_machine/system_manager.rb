@@ -2,6 +2,15 @@ module GameMachine
   class SystemManager
 
     class << self
+
+      def register_handler(name,handler)
+        handlers[name] = handler
+      end
+
+      def handlers
+        @@handlers ||= java.util.concurrent.ConcurrentHashMap.new
+      end
+
       def registered
         @@registered ||= Set.new
       end
@@ -45,6 +54,7 @@ module GameMachine
       ActorBuilder.new(ClusterMonitor).start
       ActorBuilder.new(Scheduler).start
 
+      ActorBuilder.new(Systems::LoginHandler).with_router(JavaLib::RoundRobinRouter,20).start
       ActorBuilder.new(Systems::RequestHandler).with_router(JavaLib::RoundRobinRouter,20).start
       ActorBuilder.new(Systems::AuthenticationHandler).distributed(160).start
       ActorBuilder.new(Systems::EntityDispatcher).with_router(JavaLib::RoundRobinRouter,20).start

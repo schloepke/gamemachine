@@ -28,7 +28,7 @@ message ChatMessage {
 }
 
 message PlayerLogin {
-	required string playerId = 1;
+	required string username = 1;
 	required string password = 2;
 }
 

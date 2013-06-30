@@ -19,6 +19,38 @@ module GameMachine
       end
     end
 
+    describe "#ask" do
+      it "should accept an actor ref" do
+        ref = ActorRef.new(local_echo.get_self)
+        ref.ask('test',1).should == 'test'
+      end
+
+      it "should accept a path" do
+        ActorBuilder.new(Systems::LocalEcho).with_name('echotest3').start
+        ref = Systems::LocalEcho.find('echotest3')
+        ref.ask('test',1).should == 'test'
+      end
+    end
+
+    describe "#tell" do
+      it 'sender argument is optional' do
+        subject.tell('test').should be_nil
+      end
+
+      it "should accept a path" do
+        Systems::LocalEcho.should_receive(:echo).with('test')
+        ActorBuilder.new(Systems::LocalEcho).with_name('echotest4').start
+        ref = Systems::LocalEcho.find('echotest4')
+        ref.tell('test',nil)
+      end
+
+      it "should accept an actor ref" do
+        Systems::LocalEcho.should_receive(:echo).with('test')
+        ref = ActorRef.new(local_echo.get_self)
+        ref.tell('test',nil)
+      end
+    end
+
     describe "#send_message" do
 
       it "default should call tell with message and nil sender" do
