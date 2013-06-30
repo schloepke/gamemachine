@@ -3,7 +3,7 @@ require 'spec_helper'
 module GameMachine
   describe ActorBuilder do
 
-    let(:actor_class) {LocalEcho}
+    let(:actor_class) {Systems::LocalEcho}
     subject do
      ActorBuilder.new(actor_class)
     end

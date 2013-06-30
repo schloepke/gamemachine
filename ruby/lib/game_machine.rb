@@ -7,7 +7,6 @@ require 'settingslogic'
 require 'spoon'
 require 'consistent_hashing'
 require 'json'
-require 'msgpack'
 require 'benchmark'
 
 
@@ -58,31 +57,31 @@ module GameMachine
     @@logger
   end
 end
-
+GameMachine.configure_logging
 
 require_relative 'game_machine/settings'
 require_relative 'game_machine/actor_system'
 require_relative 'game_machine/actor_factory'
 require_relative 'game_machine/hashring'
-require_relative 'game_machine/udt_server_actor'
-require_relative 'game_machine/game_actor'
-require_relative 'game_machine/game_actor_ref'
+require_relative 'game_machine/actor'
+require_relative 'game_machine/actor_ref'
 require_relative 'game_machine/server'
-require_relative 'game_machine/default_game_handler'
+require_relative 'game_machine/systems/default_handler'
 require_relative 'game_machine/client'
-require_relative 'game_machine/local_echo'
-require_relative 'game_machine/remote_echo'
-require_relative 'game_machine/connection_manager'
+require_relative 'game_machine/systems/local_echo'
+require_relative 'game_machine/systems/remote_echo'
+require_relative 'game_machine/systems/connection_manager'
 require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/object_db'
-require_relative 'game_machine/udp_server_actor'
 require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/cluster_monitor'
 require_relative 'game_machine/client_message'
 require_relative 'game_machine/scheduler'
 require_relative 'game_machine/daemon'
-require_relative 'game_machine/game_systems'
+require_relative 'game_machine/system_manager'
+require_relative 'game_machine/protocols/udt'
+require_relative 'game_machine/protocols/udp'
+require_relative 'game_machine/protocols/http'
 require_relative 'game_machine/pubsub/subscriber'
-require_relative 'game_machine/http_server'
-require_relative 'game_machine/player_authentication'
+require_relative 'game_machine/systems/player_authentication'
 

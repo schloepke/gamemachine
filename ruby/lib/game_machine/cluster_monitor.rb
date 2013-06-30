@@ -1,5 +1,5 @@
 module GameMachine
-  class ClusterMonitor < GameActor
+  class ClusterMonitor < Actor
 
     def self.cluster_members
       @@cluster_members ||= java.util.concurrent.ConcurrentHashMap.new

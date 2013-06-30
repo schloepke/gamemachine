@@ -26,7 +26,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 	private ActorSelection inbound;
 
 	public UdtServerHandler() {
-		this.inbound = ActorUtil.getSelectionByName("Gateway");
+		this.inbound = ActorUtil.getSelectionByName("GameMachine::Protocols::Udt");
 	}
 
 	public void setServer(UdtServer server) {
@@ -35,7 +35,7 @@ public class UdtServerHandler extends ChannelInboundMessageHandlerAdapter<UdtMes
 
 	@Override
 	public void messageReceived(final ChannelHandlerContext ctx, final UdtMessage m) {
-		m.retain();
+		//m.retain();
 
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);

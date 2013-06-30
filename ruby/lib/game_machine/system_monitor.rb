@@ -1,5 +1,5 @@
 module GameMachine
-  class SystemMonitor < GameActor
+  class SystemMonitor < Actor
 
     def post_init(*args)
     end

@@ -3,16 +3,16 @@ module GameMachine
   describe "misc" do 
     let(:entity) do 
       entity = Entity.new
-      entity.set_id('1')
+      entity.id = '1'
       player = Player.new
-      player.set_authtoken('authorized')
-      player.set_id('2')
-      entity.set_player(player)
+      player.authtoken = 'authorized'
+      player.id = '2'
+      entity.player = player
       entity
     end
 
-    it "define new method" do
-      Entity.new.test
+    it "registers" do
+
     end
 
     it "marshal" do

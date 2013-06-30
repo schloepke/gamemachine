@@ -1,6 +1,6 @@
 module GameMachine
   module Pubsub
-    class Publisher < GameActor
+    class Publisher < Actor
 
       def preStart
        @mediator = JavaLib::DistributedPubSubExtension.get(get_context.system).mediator

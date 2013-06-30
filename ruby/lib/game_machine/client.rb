@@ -53,19 +53,18 @@ module GameMachine
       Client.test
     end
 
-    def self.client
-      socket = SocketUDT.new(TypeUDT::DATAGRAM)
+    def self.udt_test(message)
+      socket = JavaLib::SocketUDT.new(JavaLib::TypeUDT::DATAGRAM)
       socket.setBlocking(true)
 
-      address = InetSocketAddress.new(Settings.servers.default.udp.host, Settings.servers.default.udp.port)
+      address = JavaLib::InetSocketAddress.new(Settings.servers.seed01.udt.host, Settings.servers.seed01.udt.port)
       socket.connect(address)
-      message = Components.fromEntities(MessageUtil.createEchoCommand()).toByteArray
 
-      1.upto(1) do |i|
-        puts i if i % 10000 == 0
-        puts "send " + Benchmark.realtime {socket.send(message)}.to_s
+      1.upto(1000) do |i|
+        puts i if i % 1000 == 0
+        socket.send(message)
         array = Java::byte[1024].new
-        puts "receive " + Benchmark.realtime {socket.receive(array)}.to_s
+        socket.receive(array)
       end
     end
   end

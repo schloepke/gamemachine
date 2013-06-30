@@ -30,6 +30,7 @@ module GameMachine
     end
 
     def start
+      GameMachine.logger.debug "Game actor #{@name} starting"
       if @create_hashring
         hashring = create_hashring(@hashring_size)
         hashring.buckets.each do |bucket_name|
@@ -38,7 +39,6 @@ module GameMachine
       else
         actor_system.actor_of(@props, @name)
       end
-      GameMachine.logger.debug "Game actor #{@name} started"
     end
 
 

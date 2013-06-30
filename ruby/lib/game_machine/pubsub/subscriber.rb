@@ -1,6 +1,6 @@
 module GameMachine
   module Pubsub
-    class Subscriber < GameActor
+    class Subscriber < Actor
 
       def preStart
         if getContext.system.name == 'cluster'

@@ -9,7 +9,7 @@ module GameMachine
     end
 
     def send_to_client
-      GameActor.find(client_connection.get_gateway).send_message(self)
+      Actor.find(client_connection.get_gateway).send_message(self)
     end
   end
 end
