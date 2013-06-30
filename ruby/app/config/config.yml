@@ -1,0 +1,110 @@
+---
+defaults: &defaults
+
+development:
+  <<: *defaults
+  game_handler: GameMachine::Systems::DefaultHandler
+  message_encoding: protobuf
+  seeds:
+    - seed01
+    - seed02
+  servers:
+    default:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: true
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2551
+    seed01:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: true
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2552
+    seed02:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: false
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2553
+    member01:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: false
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 0
+    member02:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: false
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2555
+
+test:
+  <<: *defaults
+  game_handler: GameMachine::CommandRouter
+  message_encoding: protobuf
+  servers:
+    default:
+      http_enabled: false
+      udp:
+        port: 8100
+        host: localhost
+        enabled: true
+        log_level: INFO
+      udt:
+        port: 8101
+        host: localhost
+        enabled: false
+        log_level: INFO
+      akka:
+        host: localhost
+        port: 2551
+
+production:
+  <<: *defaults
