@@ -8,6 +8,7 @@ require 'spoon'
 require 'consistent_hashing'
 require 'json'
 require 'benchmark'
+require 'descriptive_statistics'
 
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java_lib', '*.jar')]

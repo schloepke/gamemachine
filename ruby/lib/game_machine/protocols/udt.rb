@@ -23,7 +23,7 @@ module GameMachine
             message.data.to_byte_array,
             @clients[message.client_connection.get_id].ctx
           )
-          @clients.delete(message.client_connection.get_id)
+          #@clients.delete(message.client_connection.get_id)
         else 
           unhandled(message)
         end

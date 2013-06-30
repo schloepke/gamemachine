@@ -19,6 +19,7 @@ module GameMachine
           @socket.tell(client_to_udp_message(message), get_self)
           #@clients.delete(message.client_id.get_id)
         elsif message.kind_of?(JavaLib::Udp::Received)
+          #echo(message)
           client_message = udp_to_client_message(message)
           Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
         elsif message == JavaLib::UdpMessage::unbind
@@ -31,6 +32,12 @@ module GameMachine
       end
 
       private
+
+      def echo(message)
+        byte_string = JavaLib::ByteString.from_array(message.data.to_array)
+        udp_message = JavaLib::UdpMessage.send(byte_string, message.sender)
+        @socket.tell(udp_message,get_self)
+      end
 
       def client_to_udp_message(client_message)
         sender = @clients.fetch(client_message.client_connection.get_id)

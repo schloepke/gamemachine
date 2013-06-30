@@ -5,6 +5,7 @@ GEM
     coderay (1.0.9)
     consistent-hashing (0.2.1)
       avl_tree (>= 1.1.3)
+    descriptive_statistics (1.1.1)
     diff-lcs (1.1.3)
     ffi (1.8.1)
     ffi (1.8.1-java)
@@ -42,6 +43,7 @@ PLATFORMS
 
 DEPENDENCIES
   consistent-hashing
+  descriptive_statistics
   json
   pry
   rjack-logback

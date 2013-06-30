@@ -19,7 +19,6 @@ public class EventStreamHandler extends UntypedActor {
 		this.getContext().system().eventStream()
 				.subscribe(this.getSelf(), DeadLetter.class);
 
-		
 //		if (this.getContext().system().name().equals("cluster")) {
 //			// Add subscription of cluster events
 //			Cluster.get(this.getContext().system()).subscribe(getSelf(),

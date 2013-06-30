@@ -34,16 +34,16 @@ module GameMachine
 
     let(:entity_list) do 
       entity_list = EntityList.new
-      100.times do
-        entity_list.add_entity(entity)
-      end
+      entity_list.add_entity(entity)
       entity_list.set_player(player)
       entity_list
     end
 
     let(:large_entity_list) do 
       entity_list = EntityList.new
-      entity_list.add_entity(large_entity)
+      10.times do
+        entity_list.add_entity(entity)
+      end
       entity_list.set_player(player)
       entity_list
     end
@@ -88,33 +88,47 @@ module GameMachine
 
       describe "sending messages via udp" do
         it "should do" do
-
+          puts 'starting udp client test'
           threads = []
-          1.times do |ti|
+          10.times do |ti|
             threads << Thread.new do
               c = Client.new(:seed01)
-              100.times do |i|
-                c.send_message(entity_list.to_byte_array)
-                message = c.receive_message
+              1000.times do |i|
+                message = nil
+                time = Benchmark.realtime do
+                  c.send_message(entity_list.to_byte_array)
+                  message = c.receive_message
+                end
+                if time > 0.010
+                  puts time
+                end
                 e = Entity.parse_from(message.to_java_bytes)
-                #e.get_id.should == entity.get_id
+                e.get_id.should == entity.get_id
               end
             end
           end
           threads.map(&:join)
-
+          puts 'udp client test done'
         end
       end
 
       describe "stress test" do
         it "distributed stress" do
           threads = []
-          1.times do |ti|
+          10.times do |ti|
             threads << Thread.new do
               100.times do |i|
                 ref = Systems::LocalEcho.find_distributed(i.to_s,'DistributedLocalEcho')
-                returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
-                returned_entity.get_id.should == entity.get_id
+                returned_entity = nil
+                time = Benchmark.realtime {returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000) }
+                if time > 0.010
+                  #puts time
+                end
+                if returned_entity 
+                  returned_entity.get_id.should == entity.get_id
+                else
+                  puts 'Timeout'
+                end
               end
             end
           end

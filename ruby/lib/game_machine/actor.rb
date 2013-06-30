@@ -69,11 +69,21 @@ module GameMachine
     end
 
     def onReceive(message)
+      @client_connection = nil
+      if message.is_a?(Entity)
+        if message.has_client_connection
+          @client_connection = message.client_connection
+        end
+      end
       on_receive(message)
     end
 
     def on_receive(message)
       unhandled(message)
+    end
+
+    def sender
+      ActorRef.new(get_sender)
     end
 
   end

@@ -20,6 +20,7 @@ module GameMachine
     end
 
     describe "#send_message" do
+
       it "default should call tell with message and nil sender" do
         subject.should_receive(:tell).with('test',nil)
         subject.send_message('test')

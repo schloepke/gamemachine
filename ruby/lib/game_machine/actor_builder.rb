@@ -9,6 +9,11 @@ module GameMachine
       @create_hashring = false
       @hashring_size = 0
       @props = JavaLib::Props.new(ActorFactory.new(@klass,args))
+      @actor_system = Server.instance.actor_system
+    end
+
+    def with_parent(actor_ref)
+      @actor_system = actor_ref
     end
 
     def with_name(name)
@@ -34,19 +39,15 @@ module GameMachine
       if @create_hashring
         hashring = create_hashring(@hashring_size)
         hashring.buckets.each do |bucket_name|
-          actor_system.actor_of(@props, bucket_name)
+          @actor_system.actor_of(@props, bucket_name)
         end
       else
-        actor_system.actor_of(@props, @name)
+        @actor_system.actor_of(@props, @name)
       end
     end
 
 
     private
-
-    def actor_system
-      Server.instance.actor_system
-    end
 
     def create_hashring(bucket_count)
         hashring = Hashring.create_actor_ring(@name)

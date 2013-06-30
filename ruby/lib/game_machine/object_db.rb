@@ -47,15 +47,15 @@ module GameMachine
         if entity = @entities[message.get_entity_id]
           returned_entity = self.class.dbprocs[procname].call(entity)
           @entities[message.get_entity_id] = returned_entity
-          self.sender.tell(returned_entity || false,nil)
+          self.sender.send_message(returned_entity || false)
         else
-          self.sender.tell(false,nil)
+          self.sender.send_message(false)
         end
       elsif message.is_a?(ObjectdbPut)
         @entities[message.get_entity.get_id] = message.get_entity
-        self.sender.tell(true,nil)
+        self.sender.send_message(true)
       elsif message.is_a?(ObjectdbGet)
-        self.sender.tell(@entities[message.get_entity_id] || false,nil)
+        self.sender.send_message(@entities[message.get_entity_id] || false)
       else
         unhandled(message)
       end

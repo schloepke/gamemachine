@@ -7,12 +7,13 @@ module GameMachine
     end
 
     def send_message(message,options={})
-      default_options = {:sender => nil, :timeout => 100, :blocking => false}
       options = default_options.merge(options)
+      sender = sender_for(options[:sender])
+
       if options[:blocking]
         ask(message,options[:timeout])
       else
-        tell(message,options[:sender])
+        tell(message,sender)
         true
       end
     end
@@ -27,6 +28,14 @@ module GameMachine
 
 
     private
+
+    def sender_for(sender)
+      sender.is_a?(Actor) ? sender.get_self : sender
+    end
+
+    def default_options
+      {:sender => nil, :timeout => 100, :blocking => false}
+    end
 
     def actor_selection
       Server.instance.actor_system.actor_selection(@path_or_actor_ref)

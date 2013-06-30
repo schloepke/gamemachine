@@ -5,8 +5,15 @@ module GameMachine
 
     subject do
       props = JavaLib::Props.new(Actor);
-      ref = JavaLib::TestActorRef.create(Server.instance.ctor_system, props, Actor.name);
+      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, Actor.name);
       ref.underlying_actor
+    end
+
+    describe "#sender" do
+
+      it "returns an actor ref" do
+        subject.sender.should be_kind_of(ActorRef)
+      end
     end
 
     describe "#find_distributed" do

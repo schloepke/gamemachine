@@ -18,11 +18,11 @@ module GameMachine
         player = entity_list.player
         if authenticated?(player)
           player.authenticated = true
-          sender.tell(entity_list,get_self)
+          sender.send_message(entity_list,:sender => get_self)
         elsif authenticate(player)
           @authenticated_players[player.id] = true
           player.authenticated = true
-          sender.tell(entity_list,get_self)
+          sender.send_message(entity_list,:sender => get_self)
         end
       end
 

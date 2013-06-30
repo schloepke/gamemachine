@@ -21,3 +21,20 @@ RSpec.configure do |config|
   end
 end
 
+def measure(num_threads,loops, &blk)
+  threads = []
+  num_threads.times do |thread_id|
+    threads << Thread.new do
+      results = []
+      loops.times do |i|
+        results << Benchmark.realtime do
+          yield
+        end
+      end
+      puts "Number = #{results.number} Average #{results.mean} Standard deviation #{results.standard_deviation}"
+    end
+  end
+  threads.map(&:join)
+end
+
+
