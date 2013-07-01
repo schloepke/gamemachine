@@ -39,23 +39,39 @@ module GameMachine
 
     def post_init(*args)
       @entities = {}
+      @client = DataStores::Couchbase.instance.client
+    end
+
+    def set_entity(entity)
+      @entities[entity.id] = entity
+      WriteBehindCache.find_distributed(entity.id).tell(entity)
+    end
+
+    def get_entity(entity_id)
+      entity = @entities.fetch(entity_id,nil)
+      if entity.nil?
+        if bytes = @client.get(entity_id)
+          entity = Entity.parse_from(bytes)
+        end
+      end
+      entity
     end
 
     def on_receive(message)
       if message.is_a?(ObjectdbUpdate)
         procname = message.get_update_method.to_sym
-        if entity = @entities[message.get_entity_id]
+        if entity = get_entity(message.get_entity_id)
           returned_entity = self.class.dbprocs[procname].call(entity)
-          @entities[message.get_entity_id] = returned_entity
+          set_entity(returned_entity)
           self.sender.send_message(returned_entity || false)
         else
           self.sender.send_message(false)
         end
       elsif message.is_a?(ObjectdbPut)
-        @entities[message.get_entity.get_id] = message.get_entity
+        set_entity(message.get_entity)
         self.sender.send_message(true)
       elsif message.is_a?(ObjectdbGet)
-        self.sender.send_message(@entities[message.get_entity_id] || false)
+        self.sender.send_message(get_entity(message.get_entity_id) || false)
       else
         unhandled(message)
       end

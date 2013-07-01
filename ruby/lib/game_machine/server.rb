@@ -51,6 +51,7 @@ module GameMachine
     def stop_actor_system
       @actor_system.shutdown!
       Actor.reset_hashrings
+      DataStores::Couchbase.instance.shutdown
     end
 
     def stop

@@ -4,9 +4,7 @@ module GameMachine
 
       def on_receive(message)
         if message.is_a?(ClientMessage)
-          if message.has_player_login
-            LoginHandler.find.tell(message)
-          elsif message.has_player
+          if message.has_player
             message.get_entity_list.each do |entity|
               entity.set_client_connection(message.client_connection)
             end

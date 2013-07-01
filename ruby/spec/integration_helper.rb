@@ -28,13 +28,21 @@ STR2 = Array.new(1000) {|i| CHARS.sample}.join
 
 def player
   player = Player.new
-  player.set_id('2')
+  player.set_id(rand(5000).to_s)
+  player.set_name(STR.to_java_string)
+  player.set_authtoken('authorized')
+end
+
+def large_player
+  player = Player.new
+  player.set_id(rand(5000).to_s)
+  player.set_name(STR2.to_java_string)
   player.set_authtoken('authorized')
 end
 
 def entity
   entity = Entity.new
-  entity.set_id(STR.to_java_string)
+  entity.set_id(rand(5000).to_s)
   entity.player = player
   echo_test = EchoTest.new.set_message('testing')
   entity.set_echo_test(echo_test)
@@ -43,8 +51,8 @@ end
 
 def large_entity
   entity = Entity.new
-  entity.set_id(STR2.to_java_string)
-  entity.set_player(player)
+  entity.set_id(rand(5000).to_s)
+  entity.set_player(large_player)
   echo_test = EchoTest.new.set_message('testing')
   entity.set_echo_test(echo_test)
   entity

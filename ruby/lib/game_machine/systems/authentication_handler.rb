@@ -11,7 +11,7 @@ module GameMachine
       end
 
       def authenticate(player)
-        true
+        player.authtoken == Settings.authtoken
       end
 
       def on_receive(client_message)
@@ -25,6 +25,8 @@ module GameMachine
           @authenticated_players[player.id] = true
           player.authenticated = true
           handler.send_message(client_message)
+        else
+          send_to_client(ClientMessage.new)
         end
       end
 

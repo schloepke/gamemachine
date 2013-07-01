@@ -44,6 +44,11 @@ module GameMachine
          response = JSON.parse(response)
          response['authtoken'].should == Settings.authtoken
         end
+
+        it "write behind cache writes to couchbase" do
+          ObjectDb.put(entity)
+          ObjectDb.get(entity.id).id.should == entity.id
+        end
       end
 
     end

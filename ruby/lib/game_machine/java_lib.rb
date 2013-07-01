@@ -23,5 +23,6 @@ module GameMachine
     include_package 'scala.concurrent'
     include_package 'java.io.Serializable'
     include_package 'java.util'
+    include_package 'com.couchbase.client'
   end
 end
