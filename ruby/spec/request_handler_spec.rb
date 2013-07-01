@@ -14,14 +14,14 @@ module GameMachine
         entity
       end
 
-      let(:entities) do
-        entities = EntityList.new
-        entities.add_entity(entity)
-        entities
+      let(:client_request) do
+        client_request = ClientRequest.new
+        client_request.add_entity(entity)
+        client_request
       end
 
       let(:gateway_message) do
-        GatewayMessage.new(entities.to_byte_array,'client1')
+        GatewayMessage.new(client_request.to_byte_array,'client1')
       end
 
       subject do
@@ -32,7 +32,7 @@ module GameMachine
 
       describe "#on_receive" do
 
-        it "dispatches entities to the correct systems" do
+        it "dispatches client_request to the correct systems" do
           #ConnectionManager.should_receive(:tell).with(kind_of(GameMachine::Entity))
           #subject.onReceive(gateway_message)
         end

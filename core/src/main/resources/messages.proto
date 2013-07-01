@@ -91,7 +91,9 @@ message Entity {
   	optional PlayerLogin playerLogin = 8;
 }
 
-message EntityList {
+message ClientMessage {
 	repeated Entity entity = 1;
 	optional Player player = 2;
+	optional PlayerLogin playerLogin = 3;
+	optional ClientConnection clientConnection = 4;
 }

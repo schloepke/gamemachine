@@ -16,6 +16,11 @@ module GameMachine
       @socket.recvfrom(1024)[0]
     end
 
+    def self.http_post(path,data)
+      uri = URI.parse("http://localhost:8080#{path}")
+      response = Net::HTTP.post_form(uri, data)
+      response.body
+    end
 
     def self.connect_udt
       address = JavaLib::InetSocketAddress.new(Settings.servers.seed01.udt.host, Settings.servers.seed01.udt.port)

@@ -14,16 +14,17 @@ module GameMachine
         true
       end
 
-      def on_receive(entity_list)
+      def on_receive(client_message)
         handler = EntityDispatcher.find
-        player = entity_list.player
+        player = client_message.player
+        player.authenticated = false
         if authenticated?(player)
           player.authenticated = true
-          handler.send_message(entity_list)
+          handler.send_message(client_message)
         elsif authenticate(player)
           @authenticated_players[player.id] = true
           player.authenticated = true
-          handler.send_message(entity_list)
+          handler.send_message(client_message)
         end
       end
 

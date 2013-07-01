@@ -2,15 +2,16 @@ module GameMachine
   module Systems
     class LoginHandler < Actor
 
-      def on_receive(player_login)
+      def on_receive(client_message)
+        player_login = client_message.player_login
         auth = login(player_login.username,player_login.password)
-        sender.send_message(auth)
+        get_sender.tell(auth,nil)
       end
 
       private
       
-      def login(username,password)
-        if username == self.username && password == self.password
+      def login(user,pass)
+        if user == username && pass == password
           Settings.authtoken
         else
           false

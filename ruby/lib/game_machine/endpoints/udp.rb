@@ -1,5 +1,5 @@
 module GameMachine
-  module Protocols
+  module Endpoints
     class Udp < Actor
       def post_init(*args)
         @clients = {}
@@ -16,12 +16,9 @@ module GameMachine
         if message.kind_of?(JavaLib::Udp::Bound)
           @socket = getSender
         elsif message.is_a?(ClientMessage)
-          @socket.tell(client_to_udp_message(message), get_self)
-          #@clients.delete(message.client_id.get_id)
+          handle_outgoing(message)
         elsif message.kind_of?(JavaLib::Udp::Received)
-          #echo(message)
-          client_message = udp_to_client_message(message)
-          Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
+          handle_incoming(message)
         elsif message == JavaLib::UdpMessage::unbind
           @socket.tell(message, get_self)
         elsif message.kind_of?(JavaLib::Udp::Unbound)
@@ -33,23 +30,35 @@ module GameMachine
 
       private
 
+      def handle_outgoing(message)
+        sender = @clients.fetch(message.client_connection.id)
+        byte_string = JavaLib::ByteString.from_array(message.to_byte_array)
+        udp_message = JavaLib::UdpMessage.send(byte_string, sender)
+        @socket.tell(udp_message, get_self)
+      rescue Exception => e
+        GameMachine.logger.error "#{self.class.name} #{e.to_s}"
+      end
+
+      def handle_incoming(message)
+        @clients[message.sender.to_s] = message.sender
+        client_message = create_client_message(message.data.to_array,message.sender.to_s)
+        Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
+      rescue Exception => e
+        GameMachine.logger.error "#{self.class.name} #{e.to_s}"
+      end
+
+      def create_client_message(data,client_id)
+        ClientMessage.parse_from(data).set_client_connection(
+          ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+        )
+      end
+
       def echo(message)
         byte_string = JavaLib::ByteString.from_array(message.data.to_array)
         udp_message = JavaLib::UdpMessage.send(byte_string, message.sender)
         @socket.tell(udp_message,get_self)
       end
 
-      def client_to_udp_message(client_message)
-        sender = @clients.fetch(client_message.client_connection.get_id)
-        byte_string = JavaLib::ByteString.from_array(client_message.data.to_byte_array)
-        JavaLib::UdpMessage.send(byte_string, sender)
-      end
-
-      def udp_to_client_message(udp_message)
-        @clients[udp_message.sender.to_s] = udp_message.sender
-        client_connection = ClientConnection.new.set_id(udp_message.sender.to_s).set_gateway(self.class.name)
-        client_message = ClientMessage.new(udp_message.data.to_array,client_connection)
-      end
     end
   end
 end

@@ -79,10 +79,21 @@ module GameMachine
       def local_path(name)
         "/user/#{name}"
       end
+
+      def send_to_client(message,client_connection,sender=nil)
+        if message.is_a?(Entity)
+          client_message = ClientMessage.new
+          client_message.add_entity(message)
+        elsif message.is_a?(ClientMessage)
+          client_message = message
+        end
+        client_message.set_client_connection(client_connection)
+        Actor.find(client_connection.gateway).tell(client_message,sender)
+      end
     end
 
     def send_to_client(message)
-      ClientMessage.new(message,client_connection).send_to_client
+      self.class.send_to_client(message,client_connection,self)
     end
 
     def client_connection

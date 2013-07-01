@@ -23,10 +23,26 @@ module GameMachine
         end
 
         it "udt should get response" do
-          bytes = entity_list.to_byte_array
+          bytes = client_message.to_byte_array
           Thread.current['s'] ||= Client.connect_udt
           result = Client.send_udt(Thread.current['s'],bytes)
-          Entity.parse_from(result).id.should == entity.id
+          client_message = ClientMessage.parse_from(result)
+          client_message.get_entity_list.first.id.should == entity.id
+        end
+
+        it "udp should get response" do
+          bytes = client_message.to_byte_array
+          c = Client.new(:seed01)
+          c.send_message(bytes)
+          message = c.receive_message
+          ClientMessage.parse_from(message.to_java_bytes)
+          client_message.get_entity_list.first.id.should == entity.id
+        end
+
+        it "player should be able to login via http" do
+         response = Client.http_post('/auth',{:username => 'player', :password => 'pass'})
+         response = JSON.parse(response)
+         response['authtoken'].should == Settings.authtoken
         end
       end
 

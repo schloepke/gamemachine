@@ -3,7 +3,7 @@ module GameMachine
     class EntityDispatcher < Actor 
 
       def on_receive(message)
-        if message.is_a?(EntityList)
+        if message.is_a?(ClientMessage)
           dispatch_entities(message.get_entity_list)
         else
           unhandled(message)

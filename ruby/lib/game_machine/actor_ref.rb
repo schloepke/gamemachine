@@ -23,7 +23,7 @@ module GameMachine
     end
 
     def tell(message,sender=nil)
-      actor.tell(message,sender)
+      actor.tell(message,sender_for(sender))
     end
 
     def ask(message,timeout)

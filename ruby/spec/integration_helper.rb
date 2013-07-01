@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'net/http'
 require 'game_machine'
 
 RSpec.configure do |config|
@@ -49,20 +50,20 @@ def large_entity
   entity
 end
 
-def entity_list
-  entity_list = EntityList.new
-  entity_list.add_entity(entity)
-  entity_list.set_player(player)
-  entity_list
+def client_message
+  client_message = ClientMessage.new
+  client_message.add_entity(entity)
+  client_message.set_player(player)
+  client_message
 end
 
-def large_entity_list
-  entity_list = EntityList.new
+def large_client_message
+  client_message = ClientMessage.new
   10.times do
-    entity_list.add_entity(entity)
+    client_message.add_entity(entity)
   end
-  entity_list.set_player(player)
-  entity_list
+  client_message.set_player(player)
+  client_message
 end
 
 def measure(num_threads,loops, &blk)

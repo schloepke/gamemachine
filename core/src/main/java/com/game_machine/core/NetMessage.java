@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 
 public class NetMessage {
 
-	// Protocols
+	// Endpoints
 	public static final int UDP = 0;
 	public static final int UDT = 1;
 	public static final int TCP = 2;

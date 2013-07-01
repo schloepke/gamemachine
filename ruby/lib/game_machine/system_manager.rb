@@ -36,16 +36,16 @@ module GameMachine
 
     def start
       if Server.instance.config.udp.enabled
-        ActorBuilder.new(Protocols::Udp).start
+        ActorBuilder.new(Endpoints::Udp).start
       end
       if Server.instance.config.udt.enabled
-        ActorBuilder.new(Protocols::Udt).start
+        ActorBuilder.new(Endpoints::Udt).start
         JavaLib::UdtServer.start(Server.instance.config.udt.host,Server.instance.config.udt.port)
       end
       
       if Server.instance.config.http_enabled
-        props = JavaLib::Props.new(Protocols::Http)
-        Server.instance.actor_system.actor_of(props,Protocols::Http.name)
+        props = JavaLib::Props.new(Endpoints::Http::Auth)
+        Server.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
       end
 
       ActorBuilder.new(ObjectDb).distributed(100).start
