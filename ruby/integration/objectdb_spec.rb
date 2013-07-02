@@ -6,16 +6,24 @@ module GameMachine
 
     describe "stress" do
       it "stress with small payload" do
-        measure(10,100000) do
-          ObjectDb.put(entity)
-          ObjectDb.get(entity.id)
+        measure(10,10000) do
+          e = entity
+          id = e.id
+          ObjectDb.put(e)
+          if returned_entity = ObjectDb.get(id)
+            returned_entity.id.should == id
+          end
         end
       end
 
       it "stress with large payload" do
-        measure(10,100000) do
-          ObjectDb.put(large_entity)
-          ObjectDb.get(large_entity.id)
+        measure(10,10000) do
+          e = large_entity
+          id = e.id
+          ObjectDb.put(e)
+          if returned_entity = ObjectDb.get(id)
+            returned_entity.id.should == id
+          end
         end
       end
     end

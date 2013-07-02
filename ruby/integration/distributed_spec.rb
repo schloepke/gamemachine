@@ -6,21 +6,23 @@ module GameMachine
 
     describe "sending messages to remote actors" do
       it "distributed messaging should return answer" do
+         e = entity.clone
         10.times do |i|
           ref = Systems::LocalEcho.find_distributed(i.to_s, 'DistributedLocalEcho')
-          returned_entity = ref.send_message(entity, :blocking => true, :timeout => 1000)
-          returned_entity.get_id.should == entity.get_id
+          returned_entity = ref.send_message(e, :blocking => true, :timeout => 1000)
+          returned_entity.get_id.should == e.id
         end
       end
     end
 
     describe "stress test" do
       it "distributed stress" do
+        e = entity.clone
         measure(10,10000) do
           Thread.current['ref'] ||= Systems::LocalEcho.find_distributed(rand(100).to_s,'DistributedLocalEcho')
-          returned_entity = Thread.current['ref'].send_message(entity, :blocking => true, :timeout => 1000)
+          returned_entity = Thread.current['ref'].send_message(e, :blocking => true, :timeout => 1000)
           if returned_entity 
-            returned_entity.get_id.should == entity.get_id
+            returned_entity.id.should == e.id
           else
             puts 'Timeout'
           end

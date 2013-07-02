@@ -3,14 +3,6 @@ module GameMachine
 
     class << self
 
-      def register_handler(name,handler)
-        handlers[name] = handler
-      end
-
-      def handlers
-        @@handlers ||= java.util.concurrent.ConcurrentHashMap.new
-      end
-
       def registered
         @@registered ||= Set.new
       end
