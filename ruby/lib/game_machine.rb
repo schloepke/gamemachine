@@ -29,6 +29,8 @@ java_import 'com.game_machine.entity_system.generated.PlayersAroundMe'
 java_import 'com.game_machine.entity_system.generated.ClientConnection'
 java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
 java_import 'com.game_machine.entity_system.generated.EchoTest'
+java_import 'com.game_machine.entity_system.generated.Publish'
+java_import 'com.game_machine.entity_system.generated.Subscribe'
 
 
 ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')
@@ -74,6 +76,8 @@ require_relative 'game_machine/client'
 require_relative 'game_machine/systems/local_echo'
 require_relative 'game_machine/systems/remote_echo'
 require_relative 'game_machine/actor_builder'
+require_relative 'game_machine/message_queue'
+require_relative 'game_machine/systems/chat'
 require_relative 'game_machine/object_db'
 require_relative 'game_machine/write_behind_cache'
 require_relative 'game_machine/data_stores/memory'
@@ -87,7 +91,6 @@ require_relative 'game_machine/system_manager'
 require_relative 'game_machine/endpoints/udt'
 require_relative 'game_machine/endpoints/udp'
 require_relative 'game_machine/endpoints/http/auth'
-require_relative 'game_machine/pubsub/subscriber'
 require_relative 'game_machine/systems/authentication_handler'
 
 

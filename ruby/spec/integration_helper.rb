@@ -40,6 +40,15 @@ def large_player
   player.set_authtoken('authorized')
 end
 
+def static_entity
+  entity = Entity.new
+  entity.set_id('1')
+  entity.player = player
+  echo_test = EchoTest.new.set_message('testing')
+  entity.set_echo_test(echo_test)
+  entity
+end
+
 def entity
   entity = Entity.new
   entity.set_id(rand(5000).to_s)
@@ -61,6 +70,13 @@ end
 def client_message
   client_message = ClientMessage.new
   client_message.add_entity(entity)
+  client_message.set_player(player)
+  client_message
+end
+
+def static_client_message
+  client_message = ClientMessage.new
+  client_message.add_entity(static_entity)
   client_message.set_player(player)
   client_message
 end

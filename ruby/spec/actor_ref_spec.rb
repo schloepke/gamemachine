@@ -76,7 +76,8 @@ module GameMachine
       it "actor should get a message" do
         local_echo.should_receive(:on_receive).with('hi')
         ref = Systems::LocalEcho.find('localecho1')
-        ref.send_message('hi')
+        ref.tell('hi')
+        sleep 0.200
       end
 
       it "should get returned message" do

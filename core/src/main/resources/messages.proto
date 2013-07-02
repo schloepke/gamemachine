@@ -3,6 +3,15 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message Subscribe {
+	required string topic = 1;
+}
+
+message Publish {
+	required string topic = 1;
+	required Entity message = 2;
+}
+	
 message ObjectdbGet {
 	required string entityId = 1;
 }
