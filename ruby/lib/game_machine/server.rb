@@ -46,12 +46,13 @@ module GameMachine
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
       start_camel_extension
+      DataStore.instance
     end
 
     def stop_actor_system
       @actor_system.shutdown!
       Actor.reset_hashrings
-      DataStores::Couchbase.instance.shutdown
+      DataStore.instance.shutdown
     end
 
     def stop

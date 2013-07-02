@@ -1,18 +1,17 @@
 module GameMachine
   module DataStores
     class Couchbase
-      include Singleton
+      extend Forwardable
 
-      attr_accessor :client
-      def initialize
-        hosts ||= [java.net.URI.new("http://127.0.0.1:8091/pools")]
-        @client ||= JavaLib::CouchbaseClient.new(hosts, 'default'.to_java_string, ''.to_java_string)
+      def_delegators :@client, :get, :set, :shutdown
+
+      def connect
+        @client ||= JavaLib::CouchbaseClient.new(servers, 'default'.to_java_string, ''.to_java_string)
       end
 
-      def shutdown
-        @client.shutdown
+      def servers
+        Settings.couchbase_servers.map {|server| java.net.URI.new(server)}
       end
-
     end
   end
 end

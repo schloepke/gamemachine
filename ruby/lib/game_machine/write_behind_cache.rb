@@ -1,33 +1,55 @@
 module GameMachine
   class WriteBehindCache < Actor
 
+    attr_accessor :write_interval, :max_writes_per_second
+
     def post_init(*args)
-      @write_interval = 10
-      @client = DataStores::Couchbase.instance.client
-      @entities = {}
+      @write_interval = Settings.write_behind_cache.write_interval
+      @max_writes_per_second = Settings.write_behind_cache.max_writes_per_second
+      @store = DataStore.instance
+      @cache = {}
       @updates = {}
       @queued = []
-      @last_write = current_time
-      @max_writes_per_second = 100
-      @min_time_between_writes = 1000.to_f / @max_writes_per_second.to_f
+      @last_write = current_time - (120 * 1000)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
       schedule_queue_run
       schedule_queue_stats
     end
 
+    def on_receive(message)
+      if message.is_a?(String)
+        handle_scheduled_message(message)
+      else
+        if new_message?(message)
+          write(message)
+        elsif eligible_for_write?(message)
+          write(message)
+        end
+        set_message(message)
+      end
+    end
+
+    private
+
+    def last_updated(message)
+      @updates.fetch(message.id,nil)
+    end
+
+    def new_message?(message)
+      @updates.has_key?(message.id) ? false : true
+    end
+
+    def eligible_for_write?(message)
+      (current_time - last_updated(message)) > write_interval
+    end
+
+    def min_time_between_writes
+      1000.to_f / max_writes_per_second.to_f
+    end
+
     def current_time
       java.lang.System.currentTimeMillis
-    end
-
-    def schedule_queue_run
-      duration = JavaLib::Duration.create(50, java.util.concurrent.TimeUnit::MILLISECONDS)
-      @scheduler.schedule(duration, duration, get_self, "check_queue", @dispatcher, nil)
-    end
-
-    def schedule_queue_stats
-      duration = JavaLib::Duration.create(10, java.util.concurrent.TimeUnit::SECONDS)
-      @scheduler.schedule(duration, duration, get_self, "queue_stats", @dispatcher, nil)
     end
 
     def queue_stats
@@ -38,58 +60,57 @@ module GameMachine
 
     def check_queue
       return if @queued.empty?
-      if entity = get_entity(@queued.shift)
-        write(entity)
+      if message = get_message(@queued.shift)
+        write(message)
       end
     end
 
-    def set_entity(entity)
-      @entities[entity.id] = entity
+    def set_message(message)
+      @cache[message.id] = message
     end
 
-    def get_entity(entity_id)
-      @entities.fetch(entity_id,nil)
+    def get_message(message_id)
+      @cache.fetch(message_id,nil)
     end
 
-    def busy?
-      elapsed = current_time - @last_write
-      if elapsed < @min_time_between_writes
-        #puts "busy #{elapsed} < #{@min_time_between_writes} (#{current_time} - #{@last_write})"
-        true
-      else
-        false
-      end
+    def busy?(message)
+      (current_time - @last_write) < min_time_between_writes
+    end
+
+    def set_updated_at(message)
+      @updates[message.id] = @last_write
+    end
+
+    def enqueue(message_id)
+      @queued << message_id
     end
 
     def write(message)
-      if busy?
-        @queued << message.id
-        return
+      if busy?(message)
+        enqueue(message.id)
+      else
+        @store.set(message.id, message.to_byte_array)
+        @last_write = current_time
+        set_updated_at(message)
       end
-      @client.set(message.id, message.to_byte_array)
-      @last_write = current_time
-      @updates[message.id] = @last_write
-      #puts "Write #{message.id}"
     end
 
-    def on_receive(message)
-      if message.is_a?(String)
-        if message == 'check_queue'
-          check_queue
-        elsif message == 'queue_stats'
-          queue_stats
-        end
-        return
+    def handle_scheduled_message(message)
+      if message == 'check_queue'
+        check_queue
+      elsif message == 'queue_stats'
+        queue_stats
       end
-      if last_updated = @updates.fetch(message.id,nil)
-        time_passed = current_time - last_updated
-        if time_passed > @write_interval
-          write(message)
-        end
-      else
-        write(message)
-      end
-      set_entity(message)
+    end
+
+    def schedule_queue_run
+      duration = JavaLib::Duration.create(50, java.util.concurrent.TimeUnit::MILLISECONDS)
+      @scheduler.schedule(duration, duration, get_self, "check_queue", @dispatcher, nil)
+    end
+
+    def schedule_queue_stats
+      duration = JavaLib::Duration.create(10, java.util.concurrent.TimeUnit::SECONDS)
+      @scheduler.schedule(duration, duration, get_self, "queue_stats", @dispatcher, nil)
     end
   end
 end

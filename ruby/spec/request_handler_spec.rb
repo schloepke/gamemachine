@@ -6,7 +6,7 @@ module GameMachine
 
       let(:entity) do
         entity = Entity.new
-        entity.set_id(1)
+        entity.set_id('1')
         player = Player.new
         player.set_authtoken('authorized')
         player.set_id('2')

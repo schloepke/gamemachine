@@ -46,7 +46,7 @@ module GameMachine
 
     describe "#get" do
       it "should return false if object does not exist" do
-        ObjectDb.get('1').should be_false
+        ObjectDb.get('xx').should be_false
       end
 
       it "should return object if exists" do

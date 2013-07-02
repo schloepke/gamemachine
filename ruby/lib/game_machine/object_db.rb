@@ -39,7 +39,7 @@ module GameMachine
 
     def post_init(*args)
       @entities = {}
-      @client = DataStores::Couchbase.instance.client
+      @store = DataStore.instance
     end
 
     def set_entity(entity)
@@ -50,7 +50,7 @@ module GameMachine
     def get_entity(entity_id)
       entity = @entities.fetch(entity_id,nil)
       if entity.nil?
-        if bytes = @client.get(entity_id)
+        if bytes = @store.get(entity_id)
           entity = Entity.parse_from(bytes)
         end
       end
