@@ -12,11 +12,12 @@ module GameMachine
     end
 
     def config
-		  @config ||= JavaLib::ConfigFactory.parseString(@config_str).getConfig(name).withFallback(JavaLib::ConfigFactory.load)
+      @config ||= JavaLib::ConfigFactory.parseString(@config_str).
+        getConfig(name).withFallback(JavaLib::ConfigFactory.load)
     end
 
     def create!
-		  @actor_system ||= JavaLib::ActorSystem.create(name, config)
+      @actor_system ||= JavaLib::ActorSystem.create(name, config)
     end
 
     def shutdown!
