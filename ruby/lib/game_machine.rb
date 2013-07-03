@@ -53,7 +53,7 @@ module GameMachine
 
       end
       RJack::Logback.root.add_appender( console )
-      RJack::Logback.root.level = RJack::Logback::INFO
+      RJack::Logback.root.level = RJack::Logback::WARN
     end
   end
 
