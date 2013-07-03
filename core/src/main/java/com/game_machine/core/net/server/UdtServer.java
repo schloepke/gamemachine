@@ -28,7 +28,6 @@ public class UdtServer implements Runnable {
 
 	private static final Logger log = LoggerFactory.getLogger(UdtServer.class);
 
-	static final ChannelGroup allChannels = new DefaultChannelGroup("server");
 	private static Thread serverThread;
 	
 	private static UdtServer udtServer;
@@ -60,15 +59,14 @@ public class UdtServer implements Runnable {
 			boot = new ServerBootstrap();
 			handler.setServer(this);
 			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
-			boot.option(ChannelOption.SO_BACKLOG, 10);
-			boot.handler(new LoggingHandler(LogLevel.INFO));
+			boot.option(ChannelOption.SO_BACKLOG, 100);
+			//boot.handler(new LoggingHandler(LogLevel.WARN));
 
 			boot.childHandler(new ChannelInitializer<UdtChannel>() {
 				@Override
 				public void initChannel(final UdtChannel ch) throws Exception {
-					ChannelPipeline p = ch.pipeline();
-					p.addLast(new LoggingHandler(LogLevel.INFO), handler);
-					p.addLast(handler);
+					//ch.pipeline().addLast(new LoggingHandler(LogLevel.WARN), handler);
+					ch.pipeline().addLast(handler);
 				}
 			});
 			
@@ -76,7 +74,6 @@ public class UdtServer implements Runnable {
 			ChannelFuture future;
 			try {
 				future = boot.bind(hostname,port).sync();
-				allChannels.add(future.channel());
 				future.sync();
 				
 				future.channel().closeFuture().sync();
@@ -120,12 +117,6 @@ public class UdtServer implements Runnable {
 	}
 	
 	public void shutdown() {
-		ChannelGroupFuture f = allChannels.close();
-        try {
-			f.sync();
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		acceptGroup.shutdownGracefully();
 		connectGroup.shutdownGracefully();
 		log.info("Udt Server stopped");
