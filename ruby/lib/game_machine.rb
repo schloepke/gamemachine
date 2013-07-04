@@ -31,6 +31,9 @@ java_import 'com.game_machine.entity_system.generated.ObjectdbPut'
 java_import 'com.game_machine.entity_system.generated.EchoTest'
 java_import 'com.game_machine.entity_system.generated.Publish'
 java_import 'com.game_machine.entity_system.generated.Subscribe'
+java_import 'com.game_machine.entity_system.generated.ChatChannel'
+java_import 'com.game_machine.entity_system.generated.JoinChatChannels'
+java_import 'com.game_machine.entity_system.generated.LeaveChatChannels'
 
 
 ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')
@@ -53,7 +56,7 @@ module GameMachine
 
       end
       RJack::Logback.root.add_appender( console )
-      RJack::Logback.root.level = RJack::Logback::WARN
+      RJack::Logback.root.level = RJack::Logback::INFO
     end
   end
 
@@ -92,6 +95,7 @@ require_relative 'game_machine/endpoints/udt'
 require_relative 'game_machine/endpoints/udp'
 require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/systems/authentication_handler'
+require_relative 'game_machine/protobuf_extensions/client_message_sender'
 
 
 java.util.concurrent.TimeUnit::MILLISECONDS

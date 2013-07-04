@@ -13,6 +13,11 @@ module GameMachine
         @components ||= Set.new
       end
 
+      def register_components(components_to_register)
+        components_to_register.each {|c| components << c}
+        GameMachine.logger.info "Components #{components_to_register.inspect} registered to #{self.name}"
+      end
+
       def register_component(component)
         components << component
         GameMachine.logger.debug "Component #{component} registered to #{self.name}"
@@ -79,30 +84,10 @@ module GameMachine
       def local_path(name)
         "/user/#{name}"
       end
-
-      def send_to_client(message,client_connection,sender=nil)
-        if message.is_a?(Entity)
-          client_message = ClientMessage.new
-          client_message.add_entity(message)
-        elsif message.is_a?(ClientMessage)
-          client_message = message
-        end
-        client_message.set_client_connection(client_connection)
-        Actor.find(client_connection.gateway).tell(client_message,sender)
-      end
-    end
-
-    def send_to_client(message)
-      self.class.send_to_client(message,client_connection,self)
-    end
-
-    def client_connection
-      @client_connection
     end
 
     def onReceive(message)
       GameMachine.logger.debug("#{self.class.name} got #{message}")
-      set_client_connection(message)
       on_receive(message)
     end
 
@@ -112,17 +97,6 @@ module GameMachine
 
     def sender
       ActorRef.new(get_sender)
-    end
-
-    private
-
-    def set_client_connection(message)
-      @client_connection = nil
-      if message.is_a?(Entity)
-        if message.has_client_connection
-          @client_connection = message.client_connection
-        end
-      end
     end
 
   end

@@ -26,7 +26,7 @@ module GameMachine
           player.authenticated = true
           handler.send_message(client_message)
         else
-          send_to_client(ClientMessage.new)
+          ClientMessage.new.send_to_client
         end
       end
 

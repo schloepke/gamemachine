@@ -3,7 +3,29 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message ChatChannel {
+	required string name = 1;
+}
+
+message JoinChatChannels {
+	repeated ChatChannel chatChannel = 1;
+}
+
+message LeaveChatChannels {
+	repeated ChatChannel chatChannel = 1;
+}
+
+message ChatMessage {
+	required ChatChannel chatChannel = 1;
+	required string message = 2;
+	required string type = 3;
+}
+
 message Subscribe {
+	required string topic = 1;
+}
+
+message Unsubscribe {
 	required string topic = 1;
 }
 
@@ -31,10 +53,6 @@ message ClientConnection {
 	optional string gateway = 2;
 }
 
-message ChatMessage {
-	required string text = 1;
-	required string target = 2;
-}
 
 message PlayerLogin {
 	required string username = 1;
@@ -98,6 +116,12 @@ message Entity {
   	optional EchoTest echoTest = 6;
   	required string id = 7;
   	optional PlayerLogin playerLogin = 8;
+  	optional Subscribe subscribe = 9;
+  	optional Publish publish = 10;
+  	optional ChatChannel chatChannel = 11;
+  	optional JoinChatChannels joinChatChannels = 12;
+  	optional LeaveChatChannels leaveChatChannels = 13;
+  	optional Unsubscribe unsubscribe = 14;
 }
 
 message ClientMessage {

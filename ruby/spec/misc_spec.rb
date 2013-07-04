@@ -12,7 +12,6 @@ module GameMachine
     end
 
     it "registers" do
-      MessageQueue
     end
 
     it "marshal" do
