@@ -54,10 +54,10 @@ module GameMachine
       ActorBuilder.new(Systems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
       ActorBuilder.new(Systems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
       ActorBuilder.new(Systems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
-      ActorBuilder.new(Systems::Chat).start
+      ActorBuilder.new(ChatManager).start
 
       self.class.register(Systems::RemoteEcho)
-      self.class.register(Systems::Chat)
+      self.class.register(ChatManager)
       self.class.register(Systems::LocalEcho)
 
       load_user_systems

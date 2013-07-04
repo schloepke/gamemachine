@@ -7,11 +7,11 @@ message ChatChannel {
 	required string name = 1;
 }
 
-message JoinChatChannels {
+message JoinChat {
 	repeated ChatChannel chatChannel = 1;
 }
 
-message LeaveChatChannels {
+message LeaveChat {
 	repeated ChatChannel chatChannel = 1;
 }
 
@@ -119,8 +119,8 @@ message Entity {
   	optional Subscribe subscribe = 9;
   	optional Publish publish = 10;
   	optional ChatChannel chatChannel = 11;
-  	optional JoinChatChannels joinChatChannels = 12;
-  	optional LeaveChatChannels leaveChatChannels = 13;
+  	optional JoinChat joinChat = 12;
+  	optional LeaveChat leaveChat = 13;
   	optional Unsubscribe unsubscribe = 14;
 }
 

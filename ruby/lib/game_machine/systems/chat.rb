@@ -2,14 +2,13 @@ module GameMachine
   module Systems
     class Chat < Actor
 
-      register_components %w(ChatMessage JoinChatChannels LeaveChatChannels)
-
       def on_receive(message)
-        if message.has_join_chat_channels
-          join_channels(message.get_chat_channel_list)
+        puts "CHAT got #{message}"
+        if message.has_join_chat
+          join_channels(message.join_chat.get_chat_channel_list)
         end
-        if message.has_leave_chat_channels
-          leave_channels(message.get_chat_channel_list)
+        if message.has_leave_chat
+          leave_channels(message.leave_chat.get_chat_channel_list)
         end
         if message.has_chat_message
           send_message(message.chat_message)

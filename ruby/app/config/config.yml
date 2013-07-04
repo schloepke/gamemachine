@@ -107,6 +107,8 @@ test:
   write_behind_cache:
     write_interval: 10
     max_writes_per_second: 100
+  seeds:
+    - default
   servers:
     default:
       http_enabled: false

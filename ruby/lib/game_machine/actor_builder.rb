@@ -12,8 +12,9 @@ module GameMachine
       @actor_system = Server.instance.actor_system
     end
 
-    def with_parent(actor_ref)
-      @actor_system = actor_ref
+    def with_parent(context)
+      @actor_system = context
+      self
     end
 
     def with_name(name)
