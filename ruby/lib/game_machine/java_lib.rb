@@ -24,5 +24,6 @@ module GameMachine
     include_package 'java.io.Serializable'
     include_package 'java.util'
     include_package 'com.couchbase.client'
+    include_package 'io.netty.channel'
   end
 end

@@ -17,6 +17,9 @@ jars.each {|jar| require jar}
 
 require_relative 'game_machine/java_lib'
 
+java_import 'com.game_machine.core.net.client.UdtClient'
+java_import 'com.game_machine.core.net.client.UdtClientHandler'
+
 java_import 'com.game_machine.entity_system.generated.ObjectdbGet'
 java_import 'com.game_machine.entity_system.generated.ObjectdbUpdate'
 java_import 'com.game_machine.entity_system.generated.Entity'
@@ -85,6 +88,7 @@ require_relative 'game_machine/actor_builder'
 require_relative 'game_machine/message_queue'
 require_relative 'game_machine/chat_manager'
 require_relative 'game_machine/systems/chat'
+require_relative 'game_machine/systems/chat_topic'
 require_relative 'game_machine/object_db'
 require_relative 'game_machine/write_behind_cache'
 require_relative 'game_machine/data_stores/memory'
@@ -99,7 +103,12 @@ require_relative 'game_machine/endpoints/udp'
 require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/systems/authentication_handler'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'
+require_relative 'game_machine/helpers/game_message'
+
+require_relative 'game_machine/botnet/master'
+require_relative 'game_machine/botnet/player_bot'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
+
 

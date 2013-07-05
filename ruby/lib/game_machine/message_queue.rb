@@ -28,17 +28,22 @@ module GameMachine
     private
 
     def subscribe(message)
-      sub = JavaLib::DistributedPubSubMediator::Subscribe.new(message.topic, get_sender)
+      sub = Java::akka::contrib::pattern::DistributedPubSubMediator::Subscribe.new(message.topic, get_sender)
       @mediator.tell(sub, get_sender)
     end
 
     def unsubscribe(message)
-      sub = JavaLib::DistributedPubSubMediator::Unsubscribe.new(message.topic, get_sender)
+      sub = Java::akka::contrib::pattern::DistributedPubSubMediator::Unsubscribe.new(message.topic, get_sender)
       @mediator.tell(sub, get_sender)
     end
 
-    def publish(message)
-      message = JavaLib::DistributedPubSubMediator::Publish.new(message.topic, message.message)
+    def publish(publish)
+      if publish.message.has_chat_message
+        publish_message = publish.message.chat_message.message
+      else
+        public_message = publish.message
+      end
+      message = Java::akka::contrib::pattern::DistributedPubSubMediator::Publish.new(publish.topic, publish_message)
       @mediator.tell(message, get_sender)
     end
 

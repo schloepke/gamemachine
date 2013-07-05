@@ -6,7 +6,7 @@ module GameMachine
 
     describe "stress" do
       it "stress with small payload" do
-        measure(10,100000) do
+        measure(10,10000) do
           e = entity
           id = e.id
           ObjectDb.put(e)
@@ -17,7 +17,7 @@ module GameMachine
       end
 
       it "stress with large payload" do
-        measure(10,100000) do
+        measure(10,10000) do
           e = large_entity
           id = e.id
           ObjectDb.put(e)

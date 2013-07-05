@@ -4,7 +4,9 @@ module GameMachine
 
       def on_receive(message)
         if message.is_a?(ClientMessage)
-          dispatch_entities(message.get_entity_list)
+          if message.get_entity_list
+            dispatch_entities(message.get_entity_list)
+          end
         else
           unhandled(message)
         end

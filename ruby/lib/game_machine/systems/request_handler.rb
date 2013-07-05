@@ -5,8 +5,11 @@ module GameMachine
       def on_receive(message)
         if message.is_a?(ClientMessage)
           if message.has_player
-            message.get_entity_list.each do |entity|
-              entity.set_client_connection(message.client_connection)
+            if message.get_entity_list
+              message.get_entity_list.each do |entity|
+                entity.set_player(message.player)
+                entity.set_client_connection(message.client_connection)
+              end
             end
             AuthenticationHandler.find_distributed_local(
               message.player.id

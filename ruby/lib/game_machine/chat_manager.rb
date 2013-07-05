@@ -13,7 +13,7 @@ module GameMachine
 
     def on_receive(entity)
       unless @chat_actors.has_key?(entity.player.id)
-        create_child(entity.player.id)
+        create_child(entity.player.id,entity.client_connection)
       end
       forward_chat_request(entity)
     end
@@ -28,8 +28,9 @@ module GameMachine
       @chat_actors[entity.player.id].tell(entity,nil)
     end
 
-    def create_child(player_id)
-      child = ActorBuilder.new(Systems::Chat).with_parent(context).with_name(child_name(player_id)).start
+    def create_child(player_id,client_connection)
+      builder = ActorBuilder.new(Systems::Chat,player_id,client_connection)
+      child = builder.with_parent(context).with_name(child_name(player_id)).start
       @chat_actors[player_id] = child
     end
   end
