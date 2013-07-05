@@ -9,18 +9,15 @@ module GameMachine
       alias_method :apply, :new
       alias_method :create, :new
 
-      def components
-        @components ||= Set.new
+      def aspects
+        @aspects ||= []
       end
-
-      def register_components(components_to_register)
-        components_to_register.each {|c| components << c}
-        GameMachine.logger.info "Components #{components_to_register.inspect} registered to #{self.name}"
-      end
-
-      def register_component(component)
-        components << component
-        GameMachine.logger.debug "Component #{component} registered to #{self.name}"
+      
+      def aspect(new_aspects)
+        aspects << new_aspects
+        unless SystemManager.registered.include?(self)
+          SystemManager.register(self)
+        end
       end
 
       def reset_hashrings

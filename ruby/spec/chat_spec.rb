@@ -7,6 +7,10 @@ module GameMachine
 
       let(:chat_channel) { ChatChannel.new.set_name('channel1') }
 
+      let(:player) do
+        player = Player.new.set_authtoken('authorized').set_id('1')
+      end
+
       let(:chat_message) do
         message = ChatMessage.new
         message.set_chat_channel(chat_channel)
@@ -14,8 +18,23 @@ module GameMachine
         message.set_type('group')
       end
 
-      let(:player) do
-        player = Player.new.set_authtoken('authorized').set_id('1')
+      let(:private_chat_message) do
+        message = ChatMessage.new
+        message.set_chat_channel(chat_channel)
+        message.set_message('test')
+        message.set_type('private')
+      end
+
+      let(:public_chat_request) do
+        Entity.new.set_id('1').
+          set_player(player).
+          set_chat_message(chat_message)
+      end
+
+      let(:private_chat_request) do
+        Entity.new.set_id('1').
+          set_player(player).
+          set_chat_message(private_chat_message)
       end
 
       let(:join_chat) do
@@ -104,6 +123,20 @@ module GameMachine
           Chat.any_instance.should_receive(:send_message).once
           Chat.should_receive_message(all_requests) do
             Chat.find.tell(all_requests)
+          end
+        end
+
+        it "send a private chat message" do
+          Chat.any_instance.should_receive(:send_private_message).once
+          Chat.should_receive_message(private_chat_request) do
+            Chat.find.tell(private_chat_request)
+          end
+        end
+
+        it "send a group chat message" do
+          Chat.any_instance.should_receive(:send_group_message).once
+          Chat.should_receive_message(public_chat_request) do
+            Chat.find.tell(public_chat_request)
           end
         end
 

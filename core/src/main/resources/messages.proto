@@ -21,6 +21,9 @@ message ChatMessage {
 	required string type = 3;
 }
 
+message ChatRegister {
+}
+
 message Subscribe {
 	required string topic = 1;
 }
@@ -122,6 +125,7 @@ message Entity {
   	optional JoinChat joinChat = 12;
   	optional LeaveChat leaveChat = 13;
   	optional Unsubscribe unsubscribe = 14;
+  	optional ChatRegister chatRegister = 15;
 }
 
 message ClientMessage {

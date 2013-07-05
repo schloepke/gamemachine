@@ -29,7 +29,7 @@ module GameMachine
 
         it "creates chat actor for player if it does not exist" do
           ChatManager.any_instance.stub(:forward_chat_request)
-          ChatManager.any_instance.should_receive(:create_chat_child)
+          ChatManager.any_instance.should_receive(:create_child)
           ChatManager.should_receive_message(chat_message) do
             ChatManager.find.tell(chat_message)
           end

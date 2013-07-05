@@ -1,15 +1,19 @@
 module GameMachine
     class ChatManager < Actor
 
-    register_components %w(ChatMessage JoinChat LeaveChat)
+
+    aspect %w(ChatRegister Player ClientConnection)
+    aspect %w(ChatMessage Player ClientConnection)
+    aspect %w(JoinChat Player ClientConnection)
+    aspect %w(LeaveChat Player ClientConnection)
 
     def post_init(*args)
-      @players = {}
+      @chat_actors = {}
     end
 
     def on_receive(entity)
-      unless @players.has_key?(entity.player.id)
-        create_chat_child(entity.player.id)
+      unless @chat_actors.has_key?(entity.player.id)
+        create_child(entity.player.id)
       end
       forward_chat_request(entity)
     end
@@ -21,12 +25,12 @@ module GameMachine
     end
 
     def forward_chat_request(entity)
-      @players[entity.player.id].tell(entity,nil)
+      @chat_actors[entity.player.id].tell(entity,nil)
     end
 
-    def create_chat_child(player_id)
+    def create_child(player_id)
       child = ActorBuilder.new(Systems::Chat).with_parent(context).with_name(child_name(player_id)).start
-      @players[player_id] = child
+      @chat_actors[player_id] = child
     end
   end
 end

@@ -56,10 +56,6 @@ module GameMachine
       ActorBuilder.new(Systems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
       ActorBuilder.new(ChatManager).start
 
-      self.class.register(Systems::RemoteEcho)
-      self.class.register(ChatManager)
-      self.class.register(Systems::LocalEcho)
-
       load_user_systems
     end
   end
