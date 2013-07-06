@@ -17,8 +17,7 @@ public class UdtClient implements Runnable {
     private final int port;
     private final String address;
     private UdtClientHandler handler;
-    private static Thread clientThread;
-	public static UdtClient udtClient;
+    public Thread clientThread;
 	private NioEventLoopGroup connectGroup;
 	
 	
@@ -32,16 +31,12 @@ public class UdtClient implements Runnable {
 		handler.send(bytes, ctx);
 	}
     
-    public static void start(String name, String host, Integer port) {
+    public static UdtClient start(String name, String host, Integer port) {
 
-		// Don't try to start an already running server
-		if (udtClient != null) {
-			return;
-		}
-
-		udtClient = new UdtClient(name, host, port);
-		clientThread = new Thread(udtClient);
-		clientThread.start();
+		UdtClient udtClient = new UdtClient(name, host, port);
+		udtClient.clientThread = new Thread(udtClient);
+		udtClient.clientThread.start();
+		return udtClient;
 	}
     
     public void shutdown() {

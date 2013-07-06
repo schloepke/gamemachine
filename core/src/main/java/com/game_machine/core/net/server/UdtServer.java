@@ -59,7 +59,7 @@ public class UdtServer implements Runnable {
 			boot = new ServerBootstrap();
 			handler.setServer(this);
 			boot.group(acceptGroup, connectGroup).channelFactory(NioUdtProvider.MESSAGE_ACCEPTOR);
-			boot.option(ChannelOption.SO_BACKLOG, 100);
+			boot.option(ChannelOption.SO_BACKLOG, 10);
 			//boot.handler(new LoggingHandler(LogLevel.WARN));
 
 			boot.childHandler(new ChannelInitializer<UdtChannel>() {

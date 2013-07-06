@@ -8,6 +8,7 @@ module GameMachine
       end
 
       def on_receive(message)
+        Metric.increment(self.class.name,:on_receive)
         if message.is_a?(String)
           receive_chat_message(message)
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)

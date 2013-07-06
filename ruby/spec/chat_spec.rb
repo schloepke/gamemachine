@@ -90,16 +90,12 @@ module GameMachine
         end
 
         it "sends an unsubscribe message to message queue" do
-          actor_ref.should_receive(:tell).exactly(1).times
-          Chat.should_receive_message(leave_request) do
-            Chat.find.tell(leave_request)
+          Chat.should_receive_message(join_request) do
+            Chat.find.tell(join_request)
           end
-        end
-
-        it "sends multiple messages to message queue" do
-          actor_ref.should_receive(:tell).exactly(2).times
-          Chat.should_receive_message(leave_request_multiple) do
-            Chat.find.tell(leave_request_multiple)
+          Chat.should_receive_message(leave_request) do
+            actor_ref.should_receive(:tell).with(kind_of(Unsubscribe),anything())
+            Chat.find.tell(leave_request)
           end
         end
 

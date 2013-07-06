@@ -11,17 +11,14 @@ module GameMachine
       def on_receive(entity)
         if entity.has_join_chat
           join_channels(entity.join_chat.get_chat_channel_list)
-          GameMachine.logger.info 'join_chat'
+        end
+
+        if entity.has_chat_message
+          send_message(entity.chat_message)
         end
 
         if entity.has_leave_chat
           leave_channels(entity.leave_chat.get_chat_channel_list)
-          GameMachine.logger.info 'leave_chat'
-        end
-
-        if entity.has_chat_message
-          GameMachine.logger.info "chat_message #{entity.chat_message}"
-          send_message(entity.chat_message)
         end
       end
 
@@ -31,21 +28,30 @@ module GameMachine
         MessageQueue.find
       end
 
+      def topic_handler_for(name)
+        @topic_handlers.fetch(name)
+      end
+
       def create_topic_handler(topic)
+        name = "topic#{@player_id}#{topic}"
         builder = ActorBuilder.new(Systems::ChatTopic,@player_id,@client_connection)
-        @topic_handlers[topic] = builder.with_parent(context).with_name("topic#{@player_id}#{topic}").start
+        ref = builder.with_parent(context).with_name(name).start
+        actor_ref = ActorRef.new(ref,Systems::ChatTopic.name)
+        @topic_handlers[topic] = actor_ref
       end
 
       def join_channels(chat_channels)
         chat_channels.each do |channel|
           create_topic_handler(channel.name)
-          message_queue.tell(Subscribe.new.set_topic(channel.name),@topic_handlers[channel.name])
+          message = Subscribe.new.set_topic(channel.name)
+          message_queue.tell(message,topic_handler_for(channel.name).actor)
         end
       end
 
       def leave_channels(chat_channels)
         chat_channels.each do |channel|
-          message_queue.tell(Unsubscribe.new.set_topic(channel.name),@topic_handlers[channel.name])
+          message = Unsubscribe.new.set_topic(channel.name)
+          message_queue.tell(message,topic_handler_for(channel.name).actor)
         end
       end
 
@@ -53,7 +59,8 @@ module GameMachine
         if @players.has_key?(chat_message.chat_channel.name)
           client_connection = @players.fetch(chat_message.chat_channel.name)
           client_message = ClientMessage.new
-          client_message.add_entity(Entity.new.set_id('0').set_chat_message(chat_message))
+          entity = Entity.new.set_id('0').set_chat_message(chat_message)
+          client_message.add_entity(entity)
           client_message.set_client_connection(client_connection)
           client_message.send_to_client
         end
@@ -64,7 +71,7 @@ module GameMachine
         entity = Entity.new.set_id('0').set_chat_message(chat_message)
         publish = Publish.new
         publish.set_topic(topic).set_message(entity)
-        message_queue.tell(publish,@topic_handlers[topic])
+        message_queue.tell(publish,topic_handler_for(topic).actor)
       end
 
       def send_message(chat_message)

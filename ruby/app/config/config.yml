@@ -27,7 +27,7 @@ development:
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8200
         host: localhost
         enabled: true
         log_level: INFO
@@ -42,7 +42,7 @@ development:
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8200
         host: localhost
         enabled: true
         log_level: INFO
@@ -52,12 +52,12 @@ development:
     seed02:
       http_enabled: false
       udp:
-        port: 8100
+        port: 8101
         host: localhost
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8201
         host: localhost
         enabled: false
         log_level: INFO
@@ -67,14 +67,14 @@ development:
     member01:
       http_enabled: false
       udp:
-        port: 8100
+        port: 8102
         host: localhost
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8202
         host: localhost
-        enabled: false
+        enabled: true
         log_level: INFO
       akka:
         host: localhost
@@ -82,18 +82,18 @@ development:
     member02:
       http_enabled: false
       udp:
-        port: 8100
+        port: 8103
         host: localhost
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8204
         host: localhost
-        enabled: false
+        enabled: true
         log_level: INFO
       akka:
         host: localhost
-        port: 2555
+        port: 0
 
 test:
   <<: *defaults
@@ -118,7 +118,7 @@ test:
         enabled: true
         log_level: INFO
       udt:
-        port: 8101
+        port: 8200
         host: localhost
         enabled: false
         log_level: INFO

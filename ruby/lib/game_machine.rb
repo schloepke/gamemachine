@@ -104,6 +104,7 @@ require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/systems/authentication_handler'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/helpers/game_message'
+require_relative 'game_machine/metric'
 
 require_relative 'game_machine/botnet/master'
 require_relative 'game_machine/botnet/player_bot'

@@ -41,6 +41,7 @@ module GameMachine
       end
 
       ActorBuilder.new(ObjectDb).distributed(100).start
+      ActorBuilder.new(Metric).start
       ActorBuilder.new(MessageQueue).start
       ActorBuilder.new(SystemMonitor).start
       ActorBuilder.new(ClusterMonitor).start

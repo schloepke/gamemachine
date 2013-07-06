@@ -37,3 +37,4 @@ if opts.server? || opts.cluster?
   )
   GameMachine::Server.instance.start
 end
+

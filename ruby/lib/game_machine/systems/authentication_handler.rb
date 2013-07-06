@@ -20,11 +20,11 @@ module GameMachine
         player.authenticated = false
         if authenticated?(player)
           player.authenticated = true
-          handler.send_message(client_message)
+          handler.tell(client_message)
         elsif authenticate(player)
           @authenticated_players[player.id] = true
           player.authenticated = true
-          handler.send_message(client_message)
+          handler.tell(client_message)
         else
           ClientMessage.new.send_to_client
         end

@@ -23,17 +23,21 @@ module GameMachine
       def call_dbproc(name,entity_id,blocking=true)
         ref = find_distributed(entity_id)
         message = ObjectdbUpdate.new.set_entity_id(entity_id).set_update_class('deprecated').set_update_method(name)
-        ref.send_message(message, :blocking => blocking)
+        if blocking
+          ref.ask(message, 100)
+        else
+          ref.tell(message)
+        end
       end
 
       def put(entity)
         ref = find_distributed(entity.get_id)
-        ref.send_message(ObjectdbPut.new.set_entity(entity))
+        ref.tell(ObjectdbPut.new.set_entity(entity))
       end
 
       def get(entity_id)
         ref = find_distributed(entity_id)
-        ref.send_message(ObjectdbGet.new.set_entity_id(entity_id), :blocking => true)
+        ref.ask(ObjectdbGet.new.set_entity_id(entity_id), 100)
       end
     end
 
@@ -63,15 +67,15 @@ module GameMachine
         if entity = get_entity(message.get_entity_id)
           returned_entity = self.class.dbprocs[procname].call(entity)
           set_entity(returned_entity)
-          self.sender.send_message(returned_entity || false)
+          sender.tell(returned_entity || false)
         else
-          self.sender.send_message(false)
+          sender.tell(false)
         end
       elsif message.is_a?(ObjectdbPut)
         set_entity(message.get_entity)
-        self.sender.send_message(true)
+        sender.tell(true)
       elsif message.is_a?(ObjectdbGet)
-        self.sender.send_message(get_entity(message.get_entity_id) || false)
+        sender.tell(get_entity(message.get_entity_id) || false)
       else
         unhandled(message)
       end

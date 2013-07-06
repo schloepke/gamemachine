@@ -9,7 +9,7 @@ module GameMachine
       def on_receive(message)
         GameMachine.logger.debug("LocalEcho got #{message}")
         self.class.echo(message)
-        sender.send_message(message,:sender => self)
+        sender.tell(message,self)
       end
     end
   end

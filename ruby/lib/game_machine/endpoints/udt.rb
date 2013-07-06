@@ -11,6 +11,7 @@ module GameMachine
       end
 
       def onReceive(message)
+        Metric.increment(self.class.name,:on_receive)
         GameMachine.logger.debug("UdtServer onReceive #{message}")
         if message.is_a?(JavaLib::NetMessage)
           client_id = get_client_id(message)

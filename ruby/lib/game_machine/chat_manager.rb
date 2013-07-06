@@ -20,18 +20,15 @@ module GameMachine
 
     private
 
-    def child_name(player_id)
-      "chat#{player_id}"
-    end
-
     def forward_chat_request(entity)
       @chat_actors[entity.player.id].tell(entity,nil)
     end
 
     def create_child(player_id,client_connection)
+      name = "chat#{player_id}"
       builder = ActorBuilder.new(Systems::Chat,player_id,client_connection)
-      child = builder.with_parent(context).with_name(child_name(player_id)).start
-      @chat_actors[player_id] = child
+      child = builder.with_parent(context).with_name(name).start
+      @chat_actors[player_id] = ActorRef.new(child,Systems::Chat.name)
     end
   end
 end

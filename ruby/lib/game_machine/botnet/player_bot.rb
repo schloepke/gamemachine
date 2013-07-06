@@ -7,17 +7,20 @@ module GameMachine
       def post_init(*args)
         @client = args.first
         @ctx = args[1]
-        @player_id = args.last
+        @player_id = args[2]
+        @all_players = args[3]
         @scheduler = get_context.system.scheduler
         @dispatcher = get_context.system.dispatcher
         #login
         join_chat_groups
-        schedule_activities
+        #schedule_activities
         #echo
       end
 
+      
       def schedule_activities
-        duration = JavaLib::Duration.create(rand(5) + 1, java.util.concurrent.TimeUnit::SECONDS)
+        sleep(rand(10))
+        duration = JavaLib::Duration.create(rand(10) + 1, java.util.concurrent.TimeUnit::SECONDS)
         @scheduler.schedule(duration, duration, get_self, "send_chat_message", @dispatcher, nil)
       end
 
@@ -43,6 +46,7 @@ module GameMachine
         send_to_server(message)
       end
 
+
       def send_chat_message
         message = GameMachine::Helpers::GameMessage.new(@player_id)
         CHAT_CHANNELS.each do |name|
@@ -54,6 +58,7 @@ module GameMachine
       def on_receive(message)
         if message == 'send_chat_message'
           send_chat_message
+        else
         end
       end
 
