@@ -92,7 +92,7 @@ internal lan, as all updates are done in memory.
 
 In tests done on a home pentium I5 system, I was getting over 20,000 writes per
 second using blocking calls, with around 8000 writes per second happening to
-the couchbase backend store.  This was done using 1000kb of data per data
+the couchbase backend store.  This was done using 1000 bytes of data per data
 object, which is fairly heavy.  The client was a mixture of udp and udt.
 
 ## UDT, Udp, and Http
