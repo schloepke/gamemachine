@@ -12,6 +12,11 @@ import io.netty.handler.logging.LoggingHandler;
 
 import java.util.concurrent.ThreadFactory;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.game_machine.core.net.server.UdtServer;
+
 public class UdtClient implements Runnable {
 
     private final int port;
@@ -19,7 +24,7 @@ public class UdtClient implements Runnable {
     private UdtClientHandler handler;
     public Thread clientThread;
 	private NioEventLoopGroup connectGroup;
-	
+	private static final Logger log = LoggerFactory.getLogger(UdtClient.class);
 	
     public UdtClient(String name, String address, int port) {
     	this.address = address;
@@ -32,7 +37,7 @@ public class UdtClient implements Runnable {
 	}
     
     public static UdtClient start(String name, String host, Integer port) {
-
+    	log.info("UdtClient start");
 		UdtClient udtClient = new UdtClient(name, host, port);
 		udtClient.clientThread = new Thread(udtClient);
 		udtClient.clientThread.start();
@@ -45,6 +50,7 @@ public class UdtClient implements Runnable {
 	}
     
     public void run() {
+    	log.info("UdtClient run");
         // Configure the client.
         final ThreadFactory connectFactory = new UtilThreadFactory("connect");
         connectGroup = new NioEventLoopGroup(1,
@@ -59,7 +65,9 @@ public class UdtClient implements Runnable {
                             ch.pipeline().addLast(handler);
                         }
                     });
-            // Start the client.
+            // Start the client
+            log.info("UDT Client connecting to " + address + ":" + port);
+        
             final ChannelFuture f = boot.connect(address, port).sync();
             // Wait until the connection is closed.
             f.channel().closeFuture().sync();

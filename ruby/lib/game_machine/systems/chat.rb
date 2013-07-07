@@ -6,6 +6,7 @@ module GameMachine
         @player_id = args.first
         @client_connection = args.last
         @topic_handlers = {}
+        @subscriptions = []
       end
 
       def on_receive(entity)
@@ -20,9 +21,17 @@ module GameMachine
         if entity.has_leave_chat
           leave_channels(entity.leave_chat.get_chat_channel_list)
         end
+        send_client_update(entity)
       end
 
       private
+
+      def send_client_update(entity)
+        m = Helpers::GameMessage.new(@player_id)
+        m.chat_channels(@subscriptions)
+        m.client_connection(entity.client_connection)
+        m.client_message.send_to_client
+      end
 
       def message_queue
         MessageQueue.find
@@ -42,9 +51,11 @@ module GameMachine
 
       def join_channels(chat_channels)
         chat_channels.each do |channel|
+          next if @topic_handlers[channel.name]
           create_topic_handler(channel.name)
           message = Subscribe.new.set_topic(channel.name)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
+          @subscriptions << channel.name
         end
       end
 
@@ -52,6 +63,7 @@ module GameMachine
         chat_channels.each do |channel|
           message = Unsubscribe.new.set_topic(channel.name)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
+          @subscriptions.delete_if {|sub| sub == channel.name}
         end
       end
 

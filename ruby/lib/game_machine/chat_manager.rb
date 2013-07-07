@@ -2,7 +2,6 @@ module GameMachine
     class ChatManager < Actor
 
 
-    aspect %w(ChatRegister Player ClientConnection)
     aspect %w(ChatMessage Player ClientConnection)
     aspect %w(JoinChat Player ClientConnection)
     aspect %w(LeaveChat Player ClientConnection)

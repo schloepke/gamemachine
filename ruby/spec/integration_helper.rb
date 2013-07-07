@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'net/http'
 require 'game_machine'
+require_relative '../lib/game_machine/test_client'
 
 RSpec.configure do |config|
   config.before(:suite) do
@@ -105,5 +106,4 @@ def measure(num_threads,loops, &blk)
   end
   threads.map(&:join)
 end
-
 

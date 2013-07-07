@@ -37,8 +37,11 @@ java_import 'com.game_machine.entity_system.generated.Publish'
 java_import 'com.game_machine.entity_system.generated.Subscribe'
 java_import 'com.game_machine.entity_system.generated.Unsubscribe'
 java_import 'com.game_machine.entity_system.generated.ChatChannel'
+java_import 'com.game_machine.entity_system.generated.ChatChannels'
+java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.JoinChat'
 java_import 'com.game_machine.entity_system.generated.LeaveChat'
+java_import 'com.game_machine.entity_system.generated.ClientDisconnect'
 
 
 ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')

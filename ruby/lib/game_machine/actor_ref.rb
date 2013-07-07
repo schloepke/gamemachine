@@ -40,6 +40,7 @@ module GameMachine
     def tell(message,sender=nil)
       Metric.increment(string_path,:tell)
       actor.tell(message,sender_for(sender))
+      true
     end
 
     def ask(message,timeout)

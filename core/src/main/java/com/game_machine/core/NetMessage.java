@@ -8,6 +8,7 @@ public class NetMessage {
 	public static final int UDP = 0;
 	public static final int UDT = 1;
 	public static final int TCP = 2;
+	public static final int DISCONNECTED = 3;
 		
 	public final byte[] bytes;
 	public final String host;

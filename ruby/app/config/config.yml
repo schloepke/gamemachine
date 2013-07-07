@@ -25,12 +25,10 @@ development:
         port: 8100
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
         port: 8200
         host: localhost
         enabled: true
-        log_level: INFO
       akka:
         host: localhost
         port: 2551
@@ -40,12 +38,10 @@ development:
         port: 8100
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
         port: 8200
         host: localhost
         enabled: true
-        log_level: INFO
       akka:
         host: localhost
         port: 2552
@@ -55,27 +51,23 @@ development:
         port: 8101
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
         port: 8201
         host: localhost
         enabled: false
-        log_level: INFO
       akka:
         host: localhost
         port: 2553
     member01:
       http_enabled: false
       udp:
-        port: 8102
+        port: 8199
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
-        port: 8202
+        port: 8299
         host: localhost
         enabled: true
-        log_level: INFO
       akka:
         host: localhost
         port: 0
@@ -85,12 +77,10 @@ development:
         port: 8103
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
         port: 8204
         host: localhost
         enabled: true
-        log_level: INFO
       akka:
         host: localhost
         port: 0
@@ -116,12 +106,10 @@ test:
         port: 8100
         host: localhost
         enabled: true
-        log_level: INFO
       udt:
         port: 8200
         host: localhost
         enabled: false
-        log_level: INFO
       akka:
         host: localhost
         port: 2551

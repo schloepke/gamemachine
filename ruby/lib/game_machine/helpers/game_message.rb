@@ -33,6 +33,18 @@ module GameMachine
         @current_entity_name = name
       end
 
+      def client_connection(con)
+        client_message.set_client_connection(con)
+      end
+
+      def chat_channels(names)
+        channels = ChatChannels.new
+        names.each do |name|
+          channels.add_chat_channel(chat_channel(name))
+        end
+        current_entity.set_chat_channels(channels)
+      end
+
       def chat_channel(topic)
         ChatChannel.new.set_name(topic)
       end

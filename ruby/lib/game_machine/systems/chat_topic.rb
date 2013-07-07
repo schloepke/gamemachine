@@ -12,7 +12,6 @@ module GameMachine
         if message.is_a?(String)
           receive_chat_message(message)
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
-          return
         else
           unhandled(message)
         end
@@ -21,6 +20,7 @@ module GameMachine
       private
 
       def receive_chat_message(text)
+        GameMachine.logger.info "Sending chat message #{text} to #{@player_id} connection=#{@client_connection}"
         message = GameMachine::Helpers::GameMessage.new(@player_id)
         message.chat_message('group',text,@player_id)
         client_message = message.client_message

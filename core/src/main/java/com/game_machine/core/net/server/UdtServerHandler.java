@@ -18,6 +18,7 @@ import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
 import com.game_machine.core.NetMessage;
+import com.game_machine.entity_system.generated.ClientDisconnect;
 
 @Sharable
 public class UdtServerHandler extends ChannelInboundHandlerAdapter {
@@ -34,6 +35,15 @@ public class UdtServerHandler extends ChannelInboundHandlerAdapter {
 		this.server = server;
 	}
 
+	public void sendToGateway(ChannelHandlerContext ctx, byte[] bytes, int type) {
+		log.debug("UDT server got " + bytes);
+		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
+		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
+		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);
+		NetMessage gameMessage = new NetMessage(null,type, bytes, host, port,ctx);
+		this.inbound.tell(gameMessage, null);
+	}
+	
 	@Override
 	public void messageReceived(ChannelHandlerContext ctx, MessageList<Object> msgs) {
 		MessageList<UdtMessage> buffers = msgs.cast();
@@ -42,16 +52,8 @@ public class UdtServerHandler extends ChannelInboundHandlerAdapter {
             byte[] bytes = new byte[m.content().readableBytes()];
     		m.content().readBytes(bytes);
     		m.content().release();
-    		
-    		log.debug("UDT server got " + bytes);
-    		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
-    		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
-    		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);
-    		NetMessage gameMessage = new NetMessage(null,NetMessage.UDT, bytes, host, port,ctx);
-    		this.inbound.tell(gameMessage, null);
+    		sendToGateway(ctx,bytes,NetMessage.UDT);
         }
-		
-		
 	}
 
 	public void send(byte[] bytes, ChannelHandlerContext ctx) {
@@ -67,6 +69,8 @@ public class UdtServerHandler extends ChannelInboundHandlerAdapter {
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
 		log.info("close the connection when an exception is raised", cause);
+		ClientDisconnect message = new ClientDisconnect();
+		sendToGateway(ctx,message.toByteArray(),NetMessage.DISCONNECTED);
 		ctx.close();
 	}
 

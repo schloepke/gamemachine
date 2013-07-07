@@ -3,6 +3,17 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message ClientDisconnect {
+}
+
+message ErrorMessage {
+	required string error = 1;
+}
+	
+message ChatChannels {
+	repeated ChatChannel chatChannel = 1;
+}
+
 message ChatChannel {
 	required string name = 1;
 }
@@ -126,6 +137,8 @@ message Entity {
   	optional LeaveChat leaveChat = 13;
   	optional Unsubscribe unsubscribe = 14;
   	optional ChatRegister chatRegister = 15;
+  	optional ChatChannels chatChannels = 16;
+  	optional ErrorMessage errorMessage = 17;
 }
 
 message ClientMessage {

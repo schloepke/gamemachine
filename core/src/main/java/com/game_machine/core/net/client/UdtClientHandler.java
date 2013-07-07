@@ -40,14 +40,14 @@ public class UdtClientHandler extends ChannelInboundHandlerAdapter {
     
     @Override
     public void channelActive(final ChannelHandlerContext ctx) throws Exception {
-        log.info("ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
+        log.debug("ECHO active " + NioUdtProvider.socketUDT(ctx.channel()).toStringOptions());
         this.inbound.tell(ctx,null);
     }
 
     @Override
     public void exceptionCaught(final ChannelHandlerContext ctx,
             final Throwable cause) {
-        log.warn("close the connection when an exception is raised", cause);
+        //log.warn("close the connection when an exception is raised", cause);
         ctx.close();
     }
 
@@ -61,7 +61,7 @@ public class UdtClientHandler extends ChannelInboundHandlerAdapter {
     		m.content().readBytes(bytes);
     		m.content().release();
     		
-    		log.debug("UDT server got " + bytes);
+    		log.info("UDT server got " + bytes);
     		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
     		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
     		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);

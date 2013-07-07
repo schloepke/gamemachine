@@ -30,6 +30,7 @@ module GameMachine
     end
 
     def on_receive(message)
+      return
       if message == 'every_10_seconds'
         lines = []
         self.class.measurements.keys.each do |key|
