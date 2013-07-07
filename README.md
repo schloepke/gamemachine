@@ -134,3 +134,17 @@ some formats that were considered, however briefly:
 1. MsgPack - No message types, not a good fit
 2. Json - Too heavy, not a sparse format
 
+## Why Jruby?
+Originally I had planned on making Game Machine a framework that you could use
+with any jvm language.  While you can write game systems using java or clojure
+and get access to most of the core functionality, I decided against making that
+a primary goal.  My experience has been that trying to do too much usually ends
+badly, and in this case would probably mean I'd be forever just getting a first
+version out the door.
+
+That said, there is very little functionality you miss if you write your game
+systems in another jvm language.  Passing a message from a jruby actor to a
+clojure or scala actor works just fine.  All actors inherit from the core akka
+actor classes which are in scala, and all messages are protocol buffers,
+not ruby objects.
+
