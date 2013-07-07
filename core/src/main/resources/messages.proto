@@ -4,6 +4,7 @@ package com.game_machine.entity_system.generated;
 option optimize_for = SPEED;
 
 message ClientDisconnect {
+	required string clientId = 1;
 }
 
 message ErrorMessage {

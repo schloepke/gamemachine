@@ -20,7 +20,7 @@ module GameMachine
       private
 
       def receive_chat_message(text)
-        GameMachine.logger.info "Sending chat message #{text} to #{@player_id} connection=#{@client_connection}"
+        GameMachine.logger.debug "Sending chat message #{text} to #{@player_id} connection=#{@client_connection}"
         message = GameMachine::Helpers::GameMessage.new(@player_id)
         message.chat_message('group',text,@player_id)
         client_message = message.client_message

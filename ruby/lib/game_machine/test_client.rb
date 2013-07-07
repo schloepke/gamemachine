@@ -70,18 +70,17 @@ module GameMachine
       actual.clear
     end
 
-    def entity_with_component(component,&blk)
+    def entity_with_component(component,wait=0.100,&blk)
       found = false
       10.times do
         actual.each do |entity|
           if entity.component_names.include?(component)
-            puts "FOUND #{entity}"
             yield entity if block_given?
             found = entity
           end
         end
         return found if found
-        sleep 1.100
+        sleep wait
       end
       found
     end
@@ -132,10 +131,6 @@ module GameMachine
       @ctx = nil
     end
 
-    def preStart
-      GameMachine.logger.info "#{@name} started"
-    end
-
     def on_receive(message)
       if message.is_a?(JavaLib::DefaultChannelHandlerContext)
         @ctx = message
@@ -147,7 +142,7 @@ module GameMachine
         @proxy.actual ||= []
         client_message = ClientMessage.parse_from(message.bytes)
         client_message.get_entity_list.each do |entity|
-        GameMachine.logger.info "GOT #{entity.component_names.join(' | ')}"
+          GameMachine.logger.info "GOT #{entity.component_names.join(' | ')}"
           @proxy.actual << entity
         end
       end

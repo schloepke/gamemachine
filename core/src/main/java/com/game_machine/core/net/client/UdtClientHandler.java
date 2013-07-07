@@ -61,7 +61,7 @@ public class UdtClientHandler extends ChannelInboundHandlerAdapter {
     		m.content().readBytes(bytes);
     		m.content().release();
     		
-    		log.info("UDT server got " + bytes);
+    		log.debug("UDT server got " + bytes);
     		String host = ((InetSocketAddress) ctx.channel().remoteAddress()).getAddress().getHostAddress();
     		int port = ((InetSocketAddress) ctx.channel().remoteAddress()).getPort();
     		log.debug("UDT RemoteHost:" + host + " RemotePort:" + port);

@@ -68,9 +68,9 @@ public class UdtServerHandler extends ChannelInboundHandlerAdapter {
 
 	@Override
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		log.info("close the connection when an exception is raised", cause);
-		ClientDisconnect message = new ClientDisconnect();
-		sendToGateway(ctx,message.toByteArray(),NetMessage.DISCONNECTED);
+		//log.info("close the connection when an exception is raised", cause);
+		log.info("close the connection when an exception is raised");
+		sendToGateway(ctx,null,NetMessage.DISCONNECTED);
 		ctx.close();
 	}
 
