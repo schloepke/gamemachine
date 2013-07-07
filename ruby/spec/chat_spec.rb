@@ -5,76 +5,44 @@ module GameMachine
     
     describe Chat do
 
-      let(:chat_channel) { ChatChannel.new.set_name('channel1') }
+      let(:player_id) {'player1'}
+      let(:topic) {'test_topic'}
+      let(:chat_text) {'test text'}
+      let(:client_id) {'player1_id'}
+      let(:gateway) {'blah'}
 
-      let(:player) do
-        player = Player.new.set_authtoken('authorized').set_id('1')
-      end
-
-      let(:chat_message) do
-        message = ChatMessage.new
-        message.set_chat_channel(chat_channel)
-        message.set_message('test')
-        message.set_type('group')
-      end
-
-      let(:private_chat_message) do
-        message = ChatMessage.new
-        message.set_chat_channel(chat_channel)
-        message.set_message('test')
-        message.set_type('private')
-      end
-
-      let(:public_chat_request) do
-        Entity.new.set_id('1').
-          set_player(player).
-          set_chat_message(chat_message)
-      end
-
-      let(:private_chat_request) do
-        Entity.new.set_id('1').
-          set_player(player).
-          set_chat_message(private_chat_message)
-      end
-
-      let(:join_chat) do
-        JoinChat.new.add_chat_channel(chat_channel)
-      end
-
-      let(:leave_chat) do
-        LeaveChat.new.add_chat_channel(chat_channel)
-      end
-
-      let(:join_request) do
-        Entity.new.set_id('1').set_player(player).set_join_chat(join_chat)
+      let(:game_message) do
+        Helpers::GameMessage.new(player_id,client_id,gateway)
       end
 
       let(:leave_request) do
-        Entity.new.set_id('1').set_player(player).set_leave_chat(leave_chat)
+        game_message.leave_chat(topic)
+        game_message.to_entity
       end
 
-      let(:leave_request_multiple) do
-        leave_request.set_leave_chat(leave_chat.add_chat_channel(chat_channel))
+      let(:join_request) do
+        game_message.join_chat(topic)
+        game_message.to_entity
       end
 
-      let(:join_request_multiple) do
-        leave_request.set_leave_chat(leave_chat.add_chat_channel(chat_channel))
+      let(:public_chat_request) do
+        game_message.chat_message('group',chat_text,topic)
+        game_message.to_entity
+      end
+
+      let(:private_chat_request) do
+        game_message.chat_message('private',chat_text,topic)
+        game_message.to_entity
       end
 
       let(:all_requests) do
-        entity = Entity.new.set_id('1').set_player(player)
-        entity.set_join_chat(join_chat)
-        entity.set_leave_chat(leave_chat)
-        entity.set_chat_message(chat_message)
+        game_message.join_chat(topic)
+        game_message.chat_message('group',chat_text,topic)
+        game_message.leave_chat(topic)
+        game_message.to_entity
       end
 
-      let(:chat) do
-        props = JavaLib::Props.new(Systems::Chat);
-        ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'chat_test');
-        ref.underlying_actor
-      end
-
-      let(:actor_ref) {mock('ActorRef', :tell => true)}
+      let(:actor_ref) {double('ActorRef', :tell => true)}
 
       describe "joining and leaving channels" do
         before(:each) do

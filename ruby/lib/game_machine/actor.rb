@@ -47,12 +47,6 @@ module GameMachine
         ActorRef.new(remote_path(server,name),name)
       end
 
-      def ensure_hashring(name)
-        unless hashring(name)
-          raise MissingHashringError
-        end
-      end
-
       def find_distributed_local(id,name=self.name)
         ensure_hashring(name)
         ActorRef.new(local_distributed_path(id, name),name)
@@ -61,6 +55,14 @@ module GameMachine
       def find_distributed(id,name=self.name)
         ensure_hashring(name)
         ActorRef.new(distributed_path(id, name),name)
+      end
+
+      private
+
+      def ensure_hashring(name)
+        unless hashring(name)
+          raise MissingHashringError
+        end
       end
 
       def remote_path(server,name)
@@ -84,7 +86,6 @@ module GameMachine
     end
 
     def onReceive(message)
-      Metric.increment(self.class.name,:on_receive)
       GameMachine.logger.debug("#{self.class.name} got #{message}")
       on_receive(message)
     end

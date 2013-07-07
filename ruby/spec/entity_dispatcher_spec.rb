@@ -16,7 +16,7 @@ module GameMachine
       let(:bad_entity) {Entity.new.set_id('1').set_publish(Publish.new)}
       let(:empty_entity) {Entity.new.set_id('1')}
 
-      let(:actor_ref) {mock('ActorRef')}
+      let(:actor_ref) {double('ActorRef')}
 
       describe "aspects" do
         before(:each) do

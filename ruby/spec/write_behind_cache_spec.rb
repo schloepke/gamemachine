@@ -8,7 +8,7 @@ module GameMachine
     end
 
     let(:data_store) do
-      mock("DataStore", :put => true, :get => nil, :shutdown => true)
+      double("DataStore", :put => true, :get => nil, :shutdown => true)
     end
 
     subject do

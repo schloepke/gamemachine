@@ -1,5 +1,10 @@
 require 'spec_helper'
 
 module GameMachine
-end
 
+  describe Endpoints::Udp do
+
+    
+  end
+
+end

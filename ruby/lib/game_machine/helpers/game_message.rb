@@ -7,14 +7,23 @@ module GameMachine
 
       attr_reader :player_id, :client_message
 
-      def initialize(player_id)
-        @player_id = player_id
-        @client_message = ClientMessage.new
-        @client_message.set_player(player(player_id))
+      def initialize(player_id,client_id=nil,gateway=nil)
         @current_entity_id = 0
         @entities = {}
         @current_entity_name = :default
+        @client_message = create_client_message(player_id,client_id,gateway)
         set_entity(@current_entity_name)
+      end
+
+      def create_client_message(player_id,client_id,gateway)
+        client_message = ClientMessage.new
+        client_message.set_player(player(player_id))
+        if client_id && gateway
+          client_message.set_client_connection(
+            ClientConnection.new.set_id(client_id).set_gateway(gateway)
+          )
+        end
+        client_message
       end
 
       def current_entity
@@ -33,8 +42,13 @@ module GameMachine
         @current_entity_name = name
       end
 
-      def client_connection(con)
-        client_message.set_client_connection(con)
+      def to_entity
+        current_entity.set_client_connection(client_message.client_connection)
+        current_entity.set_player(client_message.player)
+      end
+
+      def client_connection(client_connection)
+        client_message.set_client_connection(client_connection)
       end
 
       def chat_channels(names)

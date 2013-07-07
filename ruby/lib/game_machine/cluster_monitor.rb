@@ -5,14 +5,10 @@ module GameMachine
       @@cluster_members ||= java.util.concurrent.ConcurrentHashMap.new
     end
 
-    def post_init(*args)
-    end
-
     def preStart
       if getContext.system.name == 'cluster'
         cluster = JavaLib::Cluster.get(getContext.system)
-        address = cluster.self_address
-        Server.instance.init_cluster!(address.to_string)
+        Server.instance.init_cluster!(cluster.self_address.to_string)
         cluster.subscribe(getSelf, JavaLib::ClusterEvent::ClusterDomainEvent.java_class)
       end
     end

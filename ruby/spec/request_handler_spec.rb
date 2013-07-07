@@ -18,7 +18,7 @@ module GameMachine
           add_entity(entity)
       end
 
-      let(:actor_ref) {mock('ActorRef', :tell => true)}
+      let(:actor_ref) {double('ActorRef', :tell => true)}
 
       describe "#on_receive" do
 

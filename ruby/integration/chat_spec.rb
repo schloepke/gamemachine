@@ -41,12 +41,5 @@ module GameMachine
       
     end
 
-    it "echo request" do
-      message = Helpers::GameMessage.new('player1')
-      message.echo_test('one')
-      @client.send_to_server(message.client_message)
-      @client.entity_with_component('EchoTest').should be_true
-    end
-
   end
 end

@@ -29,9 +29,9 @@ module GameMachine
       self
     end
 
-    def distributed(count)
+    def distributed(hashring_size)
       @create_hashring = true
-      @hashring_size = count
+      @hashring_size = hashring_size
       self
     end
 

@@ -3,14 +3,34 @@ require 'spec_helper'
 module GameMachine
   describe Actor do
 
+    let(:aspect) {['one','two']}
+
     subject do
       props = JavaLib::Props.new(Actor);
       ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, Actor.name);
       ref.underlying_actor
     end
 
-    describe "#sender" do
+    describe "#onReceive" do
+      it "forwards the message to on_receive" do
+        expect(subject).to receive(:on_receive).with('test')
+        subject.onReceive('test')
+      end
+    end
 
+    describe "#aspect" do
+      it "adds the aspects" do
+        Actor.aspect(aspect)
+        expect(Actor.aspects.first).to eq(aspect)
+      end
+
+      it "registeres the class in the system manager" do
+        Actor.aspect(aspect)
+        expect(SystemManager.registered.include?(Actor)).to be_true
+      end
+    end
+
+    describe "#sender" do
       it "returns an actor ref" do
         subject.sender.should be_kind_of(ActorRef)
       end
@@ -39,8 +59,8 @@ module GameMachine
     end
 
     describe "#add_hashring" do
-      it "should add the hashring" do
-        Actor.add_hashring('test','ring')
+      it "adds the hashring and returns it" do
+        expect(Actor.add_hashring('test','ring')).to eq(Actor.hashring('test'))
         Actor.hashring('test').should == 'ring'
       end
     end

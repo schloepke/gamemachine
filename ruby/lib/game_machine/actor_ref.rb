@@ -27,24 +27,12 @@ module GameMachine
       @path_or_actor_ref.is_a?(String) ? @path_or_actor_ref : nil
     end
 
-    def string_path
-      if @metric_name
-        @metric_name
-      elsif @path_or_actor_ref.is_a?(String)
-        @path_or_actor_ref
-      else
-        actor.get_class.get_name
-      end
-    end
-
     def tell(message,sender=nil)
-      Metric.increment(string_path,:tell)
       actor.tell(message,sender_for(sender))
       true
     end
 
     def ask(message,timeout)
-      Metric.increment(string_path,:ask)
       duration = duration_in_ms(timeout)
       t = JavaLib::Timeout.new(duration)
       if actor.is_a?(JavaLib::ActorSelection)
