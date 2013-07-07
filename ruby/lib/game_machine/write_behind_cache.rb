@@ -85,10 +85,22 @@ module GameMachine
       @queued << message_id
     end
 
+    #  If there are items in queue, write one of those and put
+    # the current message at the end of the queue
+    def swap_if_queued_exists(message)
+      if queued_message = get_message(@queued.shift)
+        enqueue(message)
+        queued_message
+      else
+        message
+      end
+    end
+
     def write(message)
       if busy?(message)
         enqueue(message.id)
       else
+        message = swap_if_queued_exists(message)
         @store.set(message.id, message.to_byte_array)
         @last_write = current_time
         set_updated_at(message)

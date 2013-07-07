@@ -8,7 +8,7 @@ development:
   couchbase_servers: 
     - http://127.0.0.1:8091/pools
   write_behind_cache:
-    write_interval: 5000
+    write_interval: 10000
     max_writes_per_second: 10
   login_username: 'player'
   login_password: 'pass'
@@ -95,8 +95,8 @@ test:
   http_port: 8080
   data_store: memory
   write_behind_cache:
-    write_interval: 10
-    max_writes_per_second: 100
+    write_interval: 10000
+    max_writes_per_second: 10
   seeds:
     - default
   servers:

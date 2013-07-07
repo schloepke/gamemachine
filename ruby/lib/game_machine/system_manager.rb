@@ -45,7 +45,7 @@ module GameMachine
       ActorBuilder.new(SystemMonitor).start
       ActorBuilder.new(ClusterMonitor).start
       ActorBuilder.new(Scheduler).start
-      ActorBuilder.new(WriteBehindCache).distributed(160).start
+      ActorBuilder.new(WriteBehindCache).distributed(100).start
 
       ActorBuilder.new(Systems::RequestHandler).with_router(JavaLib::RoundRobinRouter,20).start
       ActorBuilder.new(Systems::AuthenticationHandler).distributed(160).start
