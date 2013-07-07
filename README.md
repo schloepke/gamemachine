@@ -1,9 +1,9 @@
 
 #Game Machine
 
-Game Machine is a highly performant, scaleable game engine written in [Jruby](http://www.jruby.org)
+Game Machine is a highly performant, scalable game engine written in [Jruby](http://www.jruby.org)
 It is based on [Akka](http://www.akka.io), an actor based messaging system
-built on the JVM.  Game machine makes it simple to write performant, scaleable
+built on the JVM.  Game machine makes it simple to write performant, scalable
 code using higher level abstractions.  
 
 Game Machine is opinionated software.  It comes from several years of working
@@ -21,7 +21,7 @@ The model for client/server communication is messaging based, and there is no
 message ordering or set request/response cycle. One of the main reasons why
 most mmo game engines scale poorly is because they force ordered messaging
 and try to have reliable messaging when such a thing simply cannot exist
-without suffering from extreme performance and scaleability issues.
+without suffering from extreme performance and scalability issues.
 
 Game Machine is based on on the 'let it crash' model.  Systems can self heal
 and notify other systems when there is a problem. Instead of message
