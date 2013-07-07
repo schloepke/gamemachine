@@ -58,13 +58,42 @@ back to the client.
 
 
 ## Distributed data store
-Game Machine has a unique distributed memory store that writes behind to any nosql key/value store.
-It supports fully consistent updates at high write volume.  The write behind cache is fully tunable.
-Most nosql databases are eventually consistent, which doesn't work too well in high write volume 
-environments that massive multiplayer games have.  Game Machine has eventually durable writes that are
-fully consistent.  Except for eventually durable, updates are transactional and
-atomic.  Write/read times are deterministic and fast.  You can also choose to have specific
-updates be fully durable if needed, and bypass the write behind cache.
+Game Machine has a unique distributed memory store that is designed
+specifically for games.  We trade eventual consistency for eventual durability,
+and gain fully consistent writes that are transactional.
+
+Most updates in games are to data that changes often, and if it is lost, is not
+the end of the world. What effects you have on you, your current hit points,
+your last location, are all things that do not need to be written to disk at
+every update.  We take advantage of this by having a memory store with a
+tunable write behind cache to your favorite key/value store.
+
+The write behind cache has two tuning knobs.  The interval to write a specific
+player's data, and the maximum number of writes per second across all players.
+
+Transactions are accomplished through creating a ring of actors and hashing
+object id's to the actors using consistent hashing.  Every object id is hashed
+to a specific actor.  This means all get/put requests for a specific id are
+serialized.  For updates we provide something akin to a remote procedure.  You
+specify a block of code to run on update.  That code runs on the actor, the
+actor hands you your object, and you update it and return the updated object.
+This all happens in a completely serialized, transactional manner.
+
+The consistent hashing ring is across all servers in the cluster.  The cluster
+dynamically adapts to servers being added and removed.  When a server goes
+down, there are a few seconds where messages will either be lost, or your
+update will return a timeout message letting you retry or handle the failure in
+some other way.
+
+For all data store operations, you can choose to use a blocking or non blocking
+call.  Blocking calls guarantee that the action was performed, although at a
+small cost.  The amount of time you block is usually just network time on the
+internal lan, as all updates are done in memory.
+
+In tests done on a home pentium I5 system, I was getting over 20,000 writes per
+second using blocking calls, with around 8000 writes per second happening to
+the couchbase backend store.  This was done using 1000kb of data per data
+object, which is fairly heavy.  The client was a mixture of udp and udt.
 
 ## UDT, Udp, and Http
 Reliable Udp is supported via UDT.  Udp is also provided, and http is used for things like user login's
