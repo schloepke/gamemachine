@@ -6,8 +6,8 @@ module GameMachine
         UdtClient.start(name,'localhost',port)
       end
 
-      def self.start(name,port,all_players,player_list)
-        ActorBuilder.new(self,all_players,player_list).with_name(name).start
+      def self.start(name,port,player_id)
+        ActorBuilder.new(self,player_id).with_name(name).start
         client = start_udt_client(name,port)
         master_ref = self.find(name)
         master_ref.tell(client)
@@ -17,21 +17,16 @@ module GameMachine
          break if ctx
          sleep 0.100
         end
-        master_ref.tell('start_players')
+        master_ref.tell('start_player')
       end
 
       def send_message_loop
-        sleep 5
+        sleep 3
         Thread.new do
           loop do
             begin
-              @all_players.each do |player_id|
-                name = "player#{player_id}"
-                if player = @players.fetch(name,nil)
-                  player.tell('send_chat_message',get_self)
-                  sleep 0.010
-                end
-              end
+              @player.tell('send_chat_message',get_self)
+              sleep 0.050
             rescue Exception => e
               puts e
             end
@@ -40,19 +35,16 @@ module GameMachine
       end
 
       def post_init(*args)
-        @all_players = args.first
-        @player_list = args.last
+        @player_id = args.first
         @client = nil
         @ctx = nil
-        @players = {}
+        @player = nil
       end
 
-      def start_players
-        @player_list.each do |i|
-          name = "player#{i}"
-          child = ActorBuilder.new(PlayerBot,@client,@ctx,name,@all_players).with_parent(context).with_name(name).start
-          @players[name] = child
-        end
+      def start_player
+        name = "player#{@player_id}"
+        child = ActorBuilder.new(PlayerBot,@client,@ctx,name,@player_id).with_parent(context).with_name(name).start
+        @player = child
       end
 
       def on_receive(message)
@@ -62,13 +54,12 @@ module GameMachine
           @client = message
         elsif message == 'ctx'
           sender.tell(@ctx) if @ctx
-        elsif message == 'start_players'
-          start_players
+        elsif message == 'start_player'
+          start_player
           send_message_loop
         else
           client_message = ClientMessage.parse_from(message.bytes)
-          player = client_message.player
-          @players.fetch(player.id).tell(client_message,get_self)
+          @player.tell(client_message,get_self)
         end
       end
     end

@@ -11,21 +11,19 @@ module GameMachine
       end
 
       def onReceive(message)
-        Metric.increment(self.class.name,:on_receive)
         GameMachine.logger.debug("UdtServer onReceive #{message}")
         if message.is_a?(JavaLib::NetMessage)
           client_id = get_client_id(message)
 
           if message.protocol == JavaLib::NetMessage::DISCONNECTED
-            if @clients[client_id]
-              ClientObserver.notify_observers(client_id)
-              @clients.delete(client_id)
-            end
-            return
+            client_disconnect = ClientDisconnect.new.set_client_id(client_id)
+            client_message = ClientMessage.new.set_client_disconnect(client_disconnect)
+            @clients.delete(client_id) if @clients[client_id]
+          else
+            @clients[client_id] = message
+            client_message = create_client_message(message.bytes,client_id)
           end
 
-          @clients[client_id] = message
-          client_message = create_client_message(message.bytes,client_id)
           Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
         elsif message.is_a?(ClientMessage)
           if @clients[message.client_connection.id]

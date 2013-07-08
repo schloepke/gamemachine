@@ -8,7 +8,6 @@ module GameMachine
         @client = args.first
         @ctx = args[1]
         @player_id = args[2]
-        @all_players = args[3]
         @scheduler = get_context.system.scheduler
         @dispatcher = get_context.system.dispatcher
         #login

@@ -33,9 +33,6 @@ module GameMachine
         end
 
         it "does not dispatch when aspect not found" do
-          SystemManager.registered.each do |klass|
-            expect(klass).not_to receive(:find)
-          end
           client_message = ClientMessage.new.add_entity(empty_entity)
           EntityDispatcher.should_receive_message(client_message,'dispatch_test') do
             EntityDispatcher.find('dispatch_test').tell(client_message)

@@ -27,17 +27,11 @@ module GameMachine
 
       let(:actor_builder) {mock('ActorBuilder', :with_parent => actor_builder, :start => true)}
 
-      let(:chat_manager) do
-        props = JavaLib::Props.new(Systems::ChatManager);
-        ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'chat_test_manager');
-        ref.underlying_actor
+      let(:disconnected) do
+        Disconnected.new.set_client_id(client_id).set_player_id(player_id)
       end
 
-      let(:client_disconnect) {ClientDisconnect.new.set_client_id(client_id)}
-
       describe "managing chat messages" do
-        before(:each) do
-        end
 
         it "creates chat actor for player if it does not exist" do
           Chat.any_instance.should_receive(:on_receive).with(chat_message)
@@ -50,9 +44,9 @@ module GameMachine
           ChatManager.should_receive_message(join_request) do
             ChatManager.find.tell(join_request)
           end
-          ChatManager.any_instance.should_receive(:destroy_child).with(client_disconnect)
-          ChatManager.should_receive_message(client_disconnect) do
-            ChatManager.find.tell(client_disconnect)
+          ChatManager.any_instance.should_receive(:destroy_child).with(disconnected)
+          ChatManager.should_receive_message(disconnected) do
+            ChatManager.find.tell(disconnected)
           end
         end
 

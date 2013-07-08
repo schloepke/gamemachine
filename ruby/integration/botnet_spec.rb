@@ -12,11 +12,10 @@ module GameMachine
 
     describe "chat client bot" do
       it "starts client" do
-        players = (0..200).to_a
-        group1 = players[0..98]
-        group2 = players[100..-1]
-        GameMachine::Botnet::Master.start('botnet1',8200,players,group1)
-        #GameMachine::Botnet::Master.start('botnet2',8204,players,group2)
+        10.times do |i|
+          player_id = "player#{i}"
+          GameMachine::Botnet::Master.start(player_id,8200,player_id)
+        end
         sleep 20000
       end
     end

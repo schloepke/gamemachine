@@ -39,7 +39,6 @@ module GameMachine
 
     describe "#start" do
       it "creates the actor and returns the actor ref" do
-        expect_any_instance_of(Systems::LocalEcho).to receive(:post_init)
         expect(subject.with_name('blah').start).to be_kind_of((JavaLib::ActorRef))
       end
 

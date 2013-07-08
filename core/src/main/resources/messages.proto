@@ -3,6 +3,15 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message Disconnected {
+	required string playerId = 1;
+	required string clientId = 2;
+}
+
+message PlayerLogout {
+	required string playerId = 1;
+}
+
 message ClientDisconnect {
 	required string clientId = 1;
 }
@@ -148,4 +157,6 @@ message ClientMessage {
 	optional Player player = 2;
 	optional PlayerLogin playerLogin = 3;
 	optional ClientConnection clientConnection = 4;
+	optional ClientDisconnect clientDisconnect = 5;
+	optional PlayerLogout playerLogout = 6;
 }

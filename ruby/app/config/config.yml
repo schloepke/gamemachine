@@ -61,11 +61,11 @@ development:
     member01:
       http_enabled: false
       udp:
-        port: 8199
+        port: 8102
         host: localhost
         enabled: true
       udt:
-        port: 8299
+        port: 8202
         host: localhost
         enabled: true
       akka:
@@ -78,7 +78,7 @@ development:
         host: localhost
         enabled: true
       udt:
-        port: 8204
+        port: 8203
         host: localhost
         enabled: true
       akka:

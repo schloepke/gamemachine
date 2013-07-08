@@ -14,17 +14,28 @@ module GameMachine
         player.authtoken == Settings.authtoken
       end
 
+      def register_player(client_message)
+        PlayerRegistry.register_player(
+          client_message.player.id,
+          client_message.client_connection.client_id
+        )
+      end
+
+      def handler
+        EntityDispatcher.find
+      end
+
       def on_receive(client_message)
-        handler = EntityDispatcher.find
         player = client_message.player
         player.authenticated = false
         if authenticated?(player)
           player.authenticated = true
           handler.tell(client_message)
         elsif authenticate(player)
-          @authenticated_players[player.id] = true
           player.authenticated = true
+          @authenticated_players[player.id] = true
           handler.tell(client_message)
+          register_player(client_message)
         else
           ClientMessage.new.send_to_client
         end

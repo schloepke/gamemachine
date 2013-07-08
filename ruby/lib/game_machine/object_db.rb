@@ -54,7 +54,6 @@ module GameMachine
     def get_entity(entity_id)
       entity = @entities.fetch(entity_id,nil)
       if entity.nil?
-        GameMachine.logger.warn "Entity #{entity_id} not in memory"
         if bytes = @store.get(entity_id)
           entity = Entity.parse_from(bytes)
         end

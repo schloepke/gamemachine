@@ -5,7 +5,7 @@ module GameMachine
       
     before(:all) do
       @client = TestClient.start('test1',8200)
-      @client2 = TestClient.start('test2',8299)
+      @client2 = TestClient.start('test2',8202)
     end
 
     after(:all) do

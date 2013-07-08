@@ -42,6 +42,8 @@ java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.JoinChat'
 java_import 'com.game_machine.entity_system.generated.LeaveChat'
 java_import 'com.game_machine.entity_system.generated.ClientDisconnect'
+java_import 'com.game_machine.entity_system.generated.Disconnected'
+java_import 'com.game_machine.entity_system.generated.PlayerLogout'
 
 
 ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')
@@ -107,7 +109,7 @@ require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/systems/authentication_handler'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/helpers/game_message'
-require_relative 'game_machine/client_observer'
+require_relative 'game_machine/player_registry'
 
 require_relative 'game_machine/botnet/master'
 require_relative 'game_machine/botnet/player_bot'
