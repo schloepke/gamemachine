@@ -17,7 +17,10 @@ module GameMachine
       def register_player(client_message)
         PlayerRegistry.register_player(
           client_message.player.id,
-          client_message.client_connection.client_id
+          client_message.client_connection
+        )
+        PlayerRegistry.register_observer(
+          client_message.player.id,ActorRef.new(get_self)
         )
       end
 
@@ -25,19 +28,23 @@ module GameMachine
         EntityDispatcher.find
       end
 
-      def on_receive(client_message)
-        player = client_message.player
-        player.authenticated = false
-        if authenticated?(player)
-          player.authenticated = true
-          handler.tell(client_message)
-        elsif authenticate(player)
-          player.authenticated = true
-          @authenticated_players[player.id] = true
-          handler.tell(client_message)
-          register_player(client_message)
+      def on_receive(message)
+        if message.is_a?(Disconnected)
+          @authenticated_players[message.player_id] = false
         else
-          ClientMessage.new.send_to_client
+          player = message.player
+          player.authenticated = false
+          if authenticated?(player)
+            player.authenticated = true
+            handler.tell(message)
+          elsif authenticate(player)
+            player.authenticated = true
+            @authenticated_players[player.id] = true
+            register_player(message)
+            handler.tell(message)
+          else
+            error_message = Helpers::GameMessage.new(player.id)
+          end
         end
       end
 

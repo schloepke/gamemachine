@@ -12,7 +12,7 @@ module GameMachine
       let(:gateway) {'blah'}
 
       let(:game_message) do
-        Helpers::GameMessage.new(player_id,client_id,gateway)
+        Helpers::GameMessage.new(player_id)
       end
 
       let(:join_request) do
@@ -32,6 +32,13 @@ module GameMachine
       end
 
       describe "managing chat messages" do
+
+        before(:each) do
+          PlayerRegistry.register_player(
+            game_message.client_message.player.id,
+            game_message.client_connection(client_id,gateway)
+          )
+        end
 
         it "creates chat actor for player if it does not exist" do
           Chat.any_instance.should_receive(:on_receive).with(chat_message)

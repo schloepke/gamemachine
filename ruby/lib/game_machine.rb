@@ -44,6 +44,7 @@ java_import 'com.game_machine.entity_system.generated.LeaveChat'
 java_import 'com.game_machine.entity_system.generated.ClientDisconnect'
 java_import 'com.game_machine.entity_system.generated.Disconnected'
 java_import 'com.game_machine.entity_system.generated.PlayerLogout'
+java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 
 
 ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')

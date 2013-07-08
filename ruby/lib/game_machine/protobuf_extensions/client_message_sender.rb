@@ -1,8 +1,18 @@
 module GameMachine
   module ProtobufExtensions
     module ClientMessageSender
-      def send_to_client(sender=nil)
-        Actor.find(self.client_connection.gateway).tell(self,sender)
+      def send_to_player
+        if self.player.nil? || self.player.id.nil?
+          raise "player/player_id not set on ClientMessage!"
+        end
+
+        player = self.player
+        if client_connection = PlayerRegistry.client_connection_for(player.id)
+          self.set_client_connection(client_connection)
+          Actor.find(client_connection.gateway).tell(self)
+        else
+          raise "Unable to get client_connection for player_id #{player.id}"
+        end
       end
     end
   end

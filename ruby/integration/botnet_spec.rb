@@ -12,7 +12,7 @@ module GameMachine
 
     describe "chat client bot" do
       it "starts client" do
-        10.times do |i|
+        3.times do |i|
           player_id = "player#{i}"
           GameMachine::Botnet::Master.start(player_id,8200,player_id)
         end

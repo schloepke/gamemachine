@@ -12,7 +12,7 @@ module GameMachine
       let(:gateway) {'blah'}
 
       let(:game_message) do
-        Helpers::GameMessage.new(player_id,client_id,gateway)
+        Helpers::GameMessage.new(player_id)
       end
 
       let(:leave_request) do
@@ -46,8 +46,12 @@ module GameMachine
 
       describe "joining and leaving channels" do
         before(:each) do
-          ActorBuilder.new(Systems::Chat).start
+          ActorBuilder.new(Systems::Chat,player_id).start
           MessageQueue.stub(:find).and_return(actor_ref)
+          PlayerRegistry.register_player(
+            game_message.client_message.player.id,
+            game_message.client_connection(client_id,gateway)
+          )
         end
 
         it "processes the entity as a leave channel request" do

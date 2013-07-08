@@ -13,11 +13,12 @@ message PlayerLogout {
 }
 
 message ClientDisconnect {
-	required string clientId = 1;
+	required ClientConnection clientConnection = 1;
 }
 
 message ErrorMessage {
-	required string error = 1;
+	required string code = 1;
+	required string message = 2;
 }
 	
 message ChatChannels {
@@ -159,4 +160,5 @@ message ClientMessage {
 	optional ClientConnection clientConnection = 4;
 	optional ClientDisconnect clientDisconnect = 5;
 	optional PlayerLogout playerLogout = 6;
+	optional ErrorMessage errorMessage = 17;
 }

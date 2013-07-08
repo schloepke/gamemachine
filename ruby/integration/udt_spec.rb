@@ -8,22 +8,20 @@ module GameMachine
       describe "udt" do
 
         it "stress with small payload" do
-          bytes = client_message.to_byte_array
-          measure(10,10000) do
+          measure(10,100000) do
+            Thread.current['bytes'] ||= client_message.to_byte_array
             Thread.current['s'] ||= Client.connect_udt
-            result = Client.send_udt(Thread.current['s'],bytes)
+            result = Client.send_udt(Thread.current['s'],Thread.current['bytes'])
             ClientMessage.parse_from(result)
-            sleep 0.001
           end
         end
 
         it "stress with large payload" do
-          bytes = large_client_message.to_byte_array
-          measure(10,10000) do
+          measure(10,100000) do
+            Thread.current['bytes'] ||= client_message.to_byte_array
             Thread.current['s'] ||= Client.connect_udt
-            result = Client.send_udt(Thread.current['s'],bytes)
+            result = Client.send_udt(Thread.current['s'],Thread.current['bytes'])
             ClientMessage.parse_from(result)
-            sleep 0.001
           end
         end
 

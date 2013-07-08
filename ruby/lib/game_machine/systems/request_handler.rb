@@ -9,7 +9,7 @@ module GameMachine
           elsif message.has_client_disconnect
             disconnected(message)
           elsif message.has_player
-            process_entities(message)
+            update_entities(message)
             authenticate_player(message)
           else
             unhandled(message)
@@ -28,14 +28,15 @@ module GameMachine
       end
 
       def disconnected(message)
-        PlayerRegistry.client_disconnect(message.client_disconnect.client_id)
+        PlayerRegistry.client_disconnect(
+          message.client_disconnect.client_connection
+        )
       end
 
-      def process_entities(message)
+      def update_entities(message)
         if message.get_entity_list
           message.get_entity_list.each do |entity|
             entity.set_player(message.player)
-            entity.set_client_connection(message.client_connection)
           end
         end
       end

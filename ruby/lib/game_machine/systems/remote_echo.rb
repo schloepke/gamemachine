@@ -5,12 +5,10 @@ module GameMachine
       aspect %w(EchoTest)
 
       def on_receive(message)
-        GameMachine.logger.debug("RemoteEcho client_id: #{message.get_client_connection.get_id} message: #{message}")
-        client_message = ClientMessage.new
-        client_message.add_entity(message)
-        client_message.set_client_connection(message.client_connection)
-        client_message.set_player(message.player)
-        client_message.send_to_client
+        GameMachine.logger.debug("RemoteEcho player_id: #{message.player.id} message: #{message}")
+        response = Helpers::GameMessage.new(message.player.id)
+        response.client_message.add_entity(message)
+        response.send_to_player
       end
     end
   end

@@ -4,7 +4,6 @@ module GameMachine
 
       def post_init(*args)
         @player_id = args.first
-        @client_connection = args.last
         @topic_handlers = {}
         @subscriptions = []
       end
@@ -21,16 +20,15 @@ module GameMachine
         if entity.has_leave_chat
           leave_channels(entity.leave_chat.get_chat_channel_list)
         end
-        send_client_update(entity)
+        send_player_update
       end
 
       private
 
-      def send_client_update(entity)
-        m = Helpers::GameMessage.new(@player_id)
-        m.chat_channels(@subscriptions)
-        m.client_connection(entity.client_connection)
-        m.client_message.send_to_client
+      def send_player_update
+        message = Helpers::GameMessage.new(@player_id)
+        message.chat_channels(@subscriptions)
+        message.send_to_player
       end
 
       def message_queue
@@ -38,12 +36,12 @@ module GameMachine
       end
 
       def topic_handler_for(name)
-        @topic_handlers.fetch(name)
+        @topic_handlers.fetch(name,nil)
       end
 
       def create_topic_handler(topic)
         name = "topic#{@player_id}#{topic}"
-        builder = ActorBuilder.new(Systems::ChatTopic,@player_id,@client_connection)
+        builder = ActorBuilder.new(Systems::ChatTopic,@player_id)
         ref = builder.with_parent(context).with_name(name).start
         actor_ref = ActorRef.new(ref,Systems::ChatTopic.name)
         @topic_handlers[topic] = actor_ref
@@ -61,9 +59,13 @@ module GameMachine
 
       def leave_channels(chat_channels)
         chat_channels.each do |channel|
-          message = Unsubscribe.new.set_topic(channel.name)
-          message_queue.tell(message,topic_handler_for(channel.name).actor)
-          @subscriptions.delete_if {|sub| sub == channel.name}
+          if topic_handler = topic_handler_for(channel.name)
+            message = Unsubscribe.new.set_topic(channel.name)
+            message_queue.tell(message,topic_handler_for(channel.name).actor)
+            @subscriptions.delete_if {|sub| sub == channel.name}
+          else
+            GameMachine.logger.info "leave_channel: no topic handler found for #{topic}"
+          end
         end
       end
 
@@ -80,10 +82,14 @@ module GameMachine
 
       def send_group_message(chat_message)
         topic = chat_message.chat_channel.name
-        entity = Entity.new.set_id('0').set_chat_message(chat_message)
-        publish = Publish.new
-        publish.set_topic(topic).set_message(entity)
-        message_queue.tell(publish,topic_handler_for(topic).actor)
+        if topic_handler = topic_handler_for(topic)
+          entity = Entity.new.set_id('0').set_chat_message(chat_message)
+          publish = Publish.new
+          publish.set_topic(topic).set_message(entity)
+          message_queue.tell(publish,topic_handler_for(topic).actor)
+        else
+          GameMachine.logger.info "send_message: no topic handler found for #{topic}"
+        end
       end
 
       def send_message(chat_message)

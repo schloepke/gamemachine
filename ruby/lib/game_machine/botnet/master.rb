@@ -26,7 +26,7 @@ module GameMachine
           loop do
             begin
               @player.tell('send_chat_message',get_self)
-              sleep 0.050
+              sleep 0.100
             rescue Exception => e
               puts e
             end

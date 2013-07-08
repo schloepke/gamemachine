@@ -16,8 +16,7 @@ module GameMachine
           client_id = get_client_id(message)
 
           if message.protocol == JavaLib::NetMessage::DISCONNECTED
-            client_disconnect = ClientDisconnect.new.set_client_id(client_id)
-            client_message = ClientMessage.new.set_client_disconnect(client_disconnect)
+            client_message = client_disconnect_message(client_id)
             @clients.delete(client_id) if @clients[client_id]
           else
             @clients[client_id] = message
@@ -40,6 +39,14 @@ module GameMachine
       end
 
       private
+
+      def client_disconnect_message(client_id)
+        ClientMessage.new.set_client_disconnect(
+          ClientDisconnect.new.set_client_connection(
+            ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+          )
+        )
+      end
 
       def create_client_message(data,client_id)
         ClientMessage.parse_from(data).set_client_connection(

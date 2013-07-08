@@ -7,27 +7,31 @@ module GameMachine
 
       attr_reader :player_id, :client_message
 
-      def initialize(player_id,client_id=nil,gateway=nil)
+      def initialize(player_id)
+        @player_id = player_id
         @current_entity_id = 0
         @entities = {}
         @current_entity_name = :default
-        @client_message = create_client_message(player_id,client_id,gateway)
+        @client_message = create_client_message(player_id)
         set_entity(@current_entity_name)
       end
 
-      def create_client_message(player_id,client_id,gateway)
+      def create_client_message(player_id)
         client_message = ClientMessage.new
         client_message.set_player(player(player_id))
-        if client_id && gateway
-          client_message.set_client_connection(
-            ClientConnection.new.set_id(client_id).set_gateway(gateway)
-          )
-        end
-        client_message
+      end
+
+      def send_to_player
+        client_message.send_to_player
       end
 
       def current_entity
         @entities.fetch(@current_entity_name)
+      end
+
+      def add_entity(name,entity)
+        client_message.add_entity(entity)
+        @entities[name] = entity
       end
 
       def set_entity(name)
@@ -47,8 +51,28 @@ module GameMachine
         current_entity.set_player(client_message.player)
       end
 
-      def client_connection(client_connection)
-        client_message.set_client_connection(client_connection)
+      def error_message(code,message)
+        client_message.set_error_message(
+          ErrorMessage.new.set_code(code).set_message(message)
+        )
+      end
+
+      def client_disconnect(client_id,gateway)
+        client_message.set_client_disconnect(
+          ClientDisconnect.new.set_client_connection(
+            client_connection(client_id,gateway)
+          )
+        )
+      end
+
+      def player_logout
+        client_message.set_player_logout(
+          PlayerLogout.new.set_player_id(@player_id)
+        )
+      end
+
+      def client_connection(client_id,gateway)
+        ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
       end
 
       def chat_channels(names)

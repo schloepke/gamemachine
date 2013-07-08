@@ -50,23 +50,12 @@ module GameMachine
           ObjectDb.get(static_entity.id).id.should == static_entity.id
         end
 
-        it "join chat request" do
-          GameMachine::TestClient.start('test1',8200)
-          #GameMachine::TestClient.start('test1',8202)
-          GameMachine::TestClient.should_receive_component('ChatChannels','test1') do
-            message = GameMachine::Helpers::GameMessage.new('player1')
-            message.join_chat('mygroup')
-            GameMachine::TestClient.send_to_server('test1',message.client_message)
-          end
-        end
-
         it "echo request" do
-          TestClient.start('test2',8200)
-          TestClient.should_receive_component('EchoTest','test2') do
-            message = Helpers::GameMessage.new('player1')
-            message.echo_test('one')
-            TestClient.send_to_server('test2',message.client_message)
-          end
+          client = TestClient.start('test2',8200)
+          message = Helpers::GameMessage.new('player1')
+          message.echo_test('one')
+          client.send_to_server(message.client_message)
+          expect(client.entity_with_component('EchoTest')).to be_true
         end
       end
 
