@@ -22,15 +22,11 @@ module GameMachine
       private
 
       def logged_out(message)
-        PlayerRegistry.player_logout(
-          message.player_logout.player_id
-        )
+        PlayerRegistry.find.tell(message.player_logout)
       end
 
       def disconnected(message)
-        PlayerRegistry.client_disconnect(
-          message.client_disconnect.client_connection
-        )
+        PlayerRegistry.find.tell(message.client_disconnect)
       end
 
       def update_entities(message)

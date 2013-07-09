@@ -2,7 +2,23 @@ module GameMachine
   class PlayerRegistry < Actor
 
     def on_receive(message)
+      if message.is_a?(PlayerRegister)
+        self.class.register_player(message.player_id,message.client_connection)
+        if message.observer
+          observer_ref = Actor.find(message.observer)
+          self.class.register_observer(message.player_id,observer_ref)
+        end
+        get_sender.tell(true,nil)
+        GameMachine.logger.info "PlayerRegister #{message.player_id}"
 
+      elsif message.is_a?(ClientDisconnect)
+        player_id = self.class.client_disconnect(message.client_connection)
+        GameMachine.logger.info "ClientDisconnect #{player_id}"
+
+      elsif message.is_a?(PlayerLogout)
+        self.class.player_logout(message.player_id)
+        GameMachine.logger.info "PlayerLogout #{message.player_id}"
+      end
     end
 
     class << self
@@ -11,6 +27,7 @@ module GameMachine
         if player_id = player_id_for(client_connection.id)
           notify_observers(player_id,client_connection.id)
         end
+        player_id
       end
 
       def player_logout(player_id)
@@ -26,6 +43,7 @@ module GameMachine
               set_client_id(client_id).
               set_player_id(player_id)
             actor_ref.tell(message)
+            GameMachine.logger.debug "Oberver Notified #{player_id} #{actor_ref}"
           end
           unregister_player(player_id)
           remove_observers(player_id)
@@ -51,6 +69,7 @@ module GameMachine
           observers[player_id] = []
         end
         observers[player_id] << actor_ref
+        GameMachine.logger.debug "Observer Registered #{player_id} #{actor_ref}"
         true
       end
 
@@ -61,7 +80,6 @@ module GameMachine
       end
 
       def register_player(player_id,client_connection)
-        GameMachine.logger.info "REGISTER_PLAYER player_id=#{player_id} client_id=#{client_connection.id} gateway=#{client_connection.gateway}"
         client_id = client_connection.id
         player_ids[client_id] = player_id
         client_connections[player_id] = client_connection
@@ -87,6 +105,8 @@ module GameMachine
         client_connections.fetch(player_id,nil)
       end
 
+      # clear mainly needed for unit tests, rspec can't reset 
+      # ConcurrentHashMap correctly
       def clear_observers
         observers.clear
       end

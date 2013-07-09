@@ -40,6 +40,7 @@ module GameMachine
         Server.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
       end
 
+      ActorBuilder.new(PlayerRegistry).start
       ActorBuilder.new(ObjectDb).distributed(100).start
       ActorBuilder.new(MessageQueue).start
       ActorBuilder.new(SystemMonitor).start

@@ -55,7 +55,10 @@ module GameMachine
           message = Helpers::GameMessage.new('player1')
           message.echo_test('one')
           client.send_to_server(message.client_message)
-          expect(client.entity_with_component('EchoTest')).to be_true
+          expect(client.entity_with_component('EchoTest',0.200)).to be_true
+          logout = Helpers::GameMessage.new('player1')
+          logout.player_logout
+          client.send_to_server(logout.client_message)
         end
       end
 

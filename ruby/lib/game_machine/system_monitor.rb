@@ -10,9 +10,9 @@ module GameMachine
 
     def on_receive(message)
       if message.is_a?(JavaLib::DeadLetter)
-        GameMachine.logger.debug("DeadLetter #{message.message}")
+        #GameMachine.logger.debug("DeadLetter #{message.message}")
       else
-        GameMachine.logger.info("Unrecognized message #{message}")
+        #GameMachine.logger.info("Unrecognized message #{message}")
       end
     end
   end

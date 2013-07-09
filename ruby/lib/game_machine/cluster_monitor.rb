@@ -28,7 +28,7 @@ module GameMachine
           Server.instance.hashring.add_bucket(member.address.to_string)
         end
       else
-        GameMachine.logger.info("Unrecognized message #{message}")
+        #GameMachine.logger.info("Unrecognized message #{message}")
       end
     end
   end

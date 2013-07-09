@@ -9,16 +9,14 @@ module GameMachine
 
       def initialize(player_id)
         @player_id = player_id
-        @current_entity_id = 0
-        @entities = {}
-        @current_entity_name = :default
-        @client_message = create_client_message(player_id)
-        set_entity(@current_entity_name)
+        @default_entity_id = 'default'
+        @current_entity_id = @default_entity_id.clone
+        @client_message = create_client_message(@player_id)
+        add_default_entity
       end
 
-      def create_client_message(player_id)
-        client_message = ClientMessage.new
-        client_message.set_player(player(player_id))
+      def to_byte_array
+        client_message.to_byte_array
       end
 
       def send_to_player
@@ -26,28 +24,18 @@ module GameMachine
       end
 
       def current_entity
-        @entities.fetch(@current_entity_name)
+        client_message.get_entity_list.select {|entity| entity.id == @current_entity_id}.first
       end
 
-      def add_entity(name,entity)
-        client_message.add_entity(entity)
-        @entities[name] = entity
-      end
-
-      def set_entity(name)
-        unless @entities.fetch(name,nil)
-          @entities[name] = Entity.new.set_id(next_entity_id)
-          client_message.add_entity(@entities.fetch(name))
+      def entity(id)
+        @current_entity_id = id
+        unless current_entity
+          client_message.add_entity(Entity.new.set_id(@current_entity_id))
         end
-      end
-
-      def use_entity(name)
-        set_entity(name)
-        @current_entity_name = name
+        current_entity
       end
 
       def to_entity
-        current_entity.set_client_connection(client_message.client_connection)
         current_entity.set_player(client_message.player)
       end
 
@@ -72,7 +60,7 @@ module GameMachine
       end
 
       def client_connection(client_id,gateway)
-        ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+        ClientConnection.new.set_id(client_id).set_gateway(gateway)
       end
 
       def chat_channels(names)
@@ -115,15 +103,20 @@ module GameMachine
 
       private
 
+      def create_client_message(player_id)
+        client_message = ClientMessage.new
+        client_message.set_player(player(player_id))
+      end
+
+      def add_default_entity
+        client_message.add_entity(Entity.new.set_id(@default_entity_id))
+      end
+
       def player(player_id)
         player = Player.new.
           set_id(player_id).
           set_name(player_id).
           set_authtoken('authorized')
-      end
-
-      def next_entity_id
-        (@current_entity_id += 1).to_s
       end
 
     end
