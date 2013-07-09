@@ -11,3 +11,4 @@ build
 .project
 config/application.conf
 *.swp
+.gradle
