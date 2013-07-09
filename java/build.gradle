@@ -81,7 +81,7 @@ task protogen(type: Exec)  {
 }
 
 task install_libs_ruby(type: Copy) {
-    into "$buildDir/../../java_lib"
+    into "$buildDir/../lib"
     from configurations.runtime
     from "$buildDir/libs"
 }

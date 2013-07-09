@@ -12,7 +12,7 @@ require 'descriptive_statistics'
 require "uri"
 
 
-jars = Dir[File.join(File.dirname(__FILE__), '../java_lib', '*.jar')]
+jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
 jars.each {|jar| require jar}
 
 require_relative 'game_machine/java_lib'
