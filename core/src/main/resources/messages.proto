@@ -1,6 +1,5 @@
 package com.game_machine.entity_system.generated;
 
-
 option optimize_for = SPEED;
 
 message PlayerRegister {

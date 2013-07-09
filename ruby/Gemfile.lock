@@ -22,6 +22,8 @@ GEM
     guard-rspec (3.0.2)
       guard (>= 1.8)
       rspec (~> 2.13)
+    guard-shell (0.5.1)
+      guard (>= 1.1.0)
     json (1.8.0)
     json (1.8.0-java)
     listen (1.2.2)
@@ -69,6 +71,7 @@ DEPENDENCIES
   consistent-hashing
   descriptive_statistics
   guard-jruby-rspec
+  guard-shell
   json
   pry
   rjack-logback
