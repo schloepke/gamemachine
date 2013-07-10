@@ -1,5 +1,5 @@
 module GameMachine
-  module Systems
+  module GameSystem
     class ChatTopic < Actor
 
       def post_init(*args)

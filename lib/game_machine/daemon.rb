@@ -21,7 +21,7 @@ module GameMachine
 
     def shutdown
       Server.instance.stop
-      System.exit 0
+      GameSystem.exit 0
     end
 
     def pidfile(pid)

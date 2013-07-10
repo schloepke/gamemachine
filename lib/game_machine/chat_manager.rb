@@ -45,9 +45,9 @@ module GameMachine
 
     def create_child(player_id)
       name = child_name(player_id)
-      builder = ActorBuilder.new(Systems::Chat,player_id)
+      builder = ActorBuilder.new(GameSystem::Chat,player_id)
       child = builder.with_parent(context).with_name(name).start
-      @chat_actors[player_id] = ActorRef.new(child,Systems::Chat.name)
+      @chat_actors[player_id] = ActorRef.new(child,GameSystem::Chat.name)
       GameMachine.logger.warn "Chat child for #{player_id} created"
     end
   end

@@ -48,13 +48,13 @@ module GameMachine
       ActorBuilder.new(Scheduler).start
       ActorBuilder.new(WriteBehindCache).distributed(100).start
 
-      ActorBuilder.new(Systems::RequestHandler).with_router(JavaLib::RoundRobinRouter,20).start
-      ActorBuilder.new(Systems::AuthenticationHandler).distributed(160).start
-      ActorBuilder.new(Systems::EntityDispatcher).with_router(JavaLib::RoundRobinRouter,20).start
+      ActorBuilder.new(Handler::Request).with_router(JavaLib::RoundRobinRouter,20).start
+      ActorBuilder.new(Handler::Authentication).distributed(160).start
+      ActorBuilder.new(GameSystem::EntityDispatcher).with_router(JavaLib::RoundRobinRouter,20).start
 
-      ActorBuilder.new(Systems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
-      ActorBuilder.new(Systems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
-      ActorBuilder.new(Systems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
+      ActorBuilder.new(GameSystem::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
+      ActorBuilder.new(GameSystem::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
+      ActorBuilder.new(GameSystem::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
       ActorBuilder.new(ChatManager).start
 
       load_user_systems

@@ -1,5 +1,5 @@
 module GameMachine
-  module Systems
+  module GameSystem
     class LocalEcho < Actor
       
       # Used in tests to see if actor got the message

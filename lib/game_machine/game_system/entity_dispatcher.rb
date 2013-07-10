@@ -1,5 +1,5 @@
 module GameMachine
-  module Systems
+  module GameSystem
     class EntityDispatcher < Actor 
 
       def on_receive(message)

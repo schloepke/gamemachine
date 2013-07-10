@@ -1,6 +1,6 @@
 module GameMachine
-  module Systems
-    class RequestHandler < Actor
+  module Handler
+    class Request < Actor
 
       def on_receive(message)
         if message.is_a?(ClientMessage)
@@ -38,7 +38,7 @@ module GameMachine
       end
 
       def authenticate_player(message)
-        AuthenticationHandler.find_distributed_local(
+        Handler::Authentication.find_distributed_local(
           message.player.id
         ).tell(message,self)
       end

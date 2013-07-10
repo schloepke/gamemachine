@@ -1,4 +1,3 @@
-require 'singleton'
 
 module GameMachine
   class Server

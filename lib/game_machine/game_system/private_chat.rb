@@ -1,5 +1,5 @@
 module GameMachine
-  module Systems
+  module GameSystem
     class PrivateChat < Actor
 
       def preStart

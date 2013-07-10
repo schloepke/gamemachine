@@ -1,6 +1,6 @@
 module GameMachine
-  module Systems
-    class AuthenticationHandler < Actor
+  module RequestHandler
+    class Authentication < Actor
 
       def post_init
         @authenticated_players = {}
@@ -28,7 +28,7 @@ module GameMachine
 
       def on_receive(message)
         if message.is_a?(Disconnected)
-          GameMachine.logger.debug "AuthenticationHandler Disconnected #{message.player_id}"
+          GameMachine.logger.debug "RequestHandler::Authentication Disconnected #{message.player_id}"
           @authenticated_players.delete(message.player_id)
         else
           player = message.player

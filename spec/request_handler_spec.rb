@@ -34,7 +34,7 @@ module GameMachine
       describe "#on_receive" do
 
         before(:each) do
-          AuthenticationHandler.stub(:find_distributed_local).and_return(actor_ref)
+          RequestHandler::Authentication.stub(:find_distributed_local).and_return(actor_ref)
           ActorBuilder.new(RequestHandler).with_name('test_request_handler').start
         end
 
