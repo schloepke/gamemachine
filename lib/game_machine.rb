@@ -15,7 +15,7 @@ require 'singleton'
 
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
-jars.each {|jar| puts jar;require jar}
+jars.each {|jar| require jar}
 
 require_relative 'game_machine/java_lib'
 
