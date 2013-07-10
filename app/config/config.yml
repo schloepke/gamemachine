@@ -3,7 +3,7 @@ defaults: &defaults
 
 development:
   <<: *defaults
-  game_handler: GameMachine::Systems::RequestHandler
+  game_handler: GameMachine::Handler::Request
   data_store: couchbase
   couchbase_servers: 
     - http://127.0.0.1:8091/pools
@@ -87,7 +87,7 @@ development:
 
 test:
   <<: *defaults
-  game_handler: GameMachine::Systems::RequestHandler
+  game_handler: GameMachine::Handler::Request
   login_username: 'player'
   login_password: 'pass'
   authtoken: 'authorized'

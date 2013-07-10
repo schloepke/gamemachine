@@ -1,5 +1,5 @@
 module GameMachine
-  module RequestHandler
+  module Handler
     class Authentication < Actor
 
       def post_init
@@ -23,7 +23,7 @@ module GameMachine
       end
 
       def handler
-        EntityDispatcher.find
+        GameSystem::EntityDispatcher.find
       end
 
       def on_receive(message)

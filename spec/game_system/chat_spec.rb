@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module GameMachine
-  module Systems
+  module GameSystem
     
     describe Chat do
 
@@ -46,7 +46,7 @@ module GameMachine
 
       describe "joining and leaving channels" do
         before(:each) do
-          ActorBuilder.new(Systems::Chat,player_id).start
+          ActorBuilder.new(GameSystem::Chat,player_id).start
           MessageQueue.stub(:find).and_return(actor_ref)
           PlayerRegistry.register_player(
             game_message.client_message.player.id,

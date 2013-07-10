@@ -38,7 +38,7 @@ module GameMachine
       end
 
       def authenticate_player(message)
-        Handler::Authentication.find_distributed_local(
+        Authentication.find_distributed_local(
           message.player.id
         ).tell(message,self)
       end

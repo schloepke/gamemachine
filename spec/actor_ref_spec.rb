@@ -4,7 +4,7 @@ module GameMachine
   describe ActorRef do
 
     let(:local_echo) do
-      props = JavaLib::Props.new(Systems::LocalEcho);
+      props = JavaLib::Props.new(GameSystem::LocalEcho);
       ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'localecho1');
       ref.underlying_actor
     end
@@ -26,8 +26,8 @@ module GameMachine
       end
 
       it "should accept a path" do
-        ActorBuilder.new(Systems::LocalEcho).with_name('echotest3').start
-        ref = Systems::LocalEcho.find('echotest3')
+        ActorBuilder.new(GameSystem::LocalEcho).with_name('echotest3').start
+        ref = GameSystem::LocalEcho.find('echotest3')
         ref.ask('test',1000).should == 'test'
       end
     end
@@ -38,9 +38,9 @@ module GameMachine
       end
 
       it "should accept a path" do
-        ActorBuilder.new(Systems::LocalEcho).with_name('echotest4').start
-        Systems::LocalEcho.should_receive_message('test','echotest4') do
-          ref = Systems::LocalEcho.find('echotest4')
+        ActorBuilder.new(GameSystem::LocalEcho).with_name('echotest4').start
+        GameSystem::LocalEcho.should_receive_message('test','echotest4') do
+          ref = GameSystem::LocalEcho.find('echotest4')
           ref.tell('test',nil)
         end
       end
@@ -71,19 +71,19 @@ module GameMachine
 
       it "actor should get a message" do
         local_echo.should_receive(:on_receive).with('hi')
-        ref = Systems::LocalEcho.find('localecho1')
+        ref = GameSystem::LocalEcho.find('localecho1')
         ref.tell('hi')
         sleep 0.200
       end
 
       it "should get returned message" do
-        ActorBuilder.new(Systems::LocalEcho).with_name('echotest2').start
-        ref = Systems::LocalEcho.find('echotest2')
+        ActorBuilder.new(GameSystem::LocalEcho).with_name('echotest2').start
+        ref = GameSystem::LocalEcho.find('echotest2')
         ref.send_message('hi', :blocking => true, :timeout => 1000).should == 'hi'
       end
 
       it "should return false on timeout" do
-        ref = Systems::LocalEcho.find('blah')
+        ref = GameSystem::LocalEcho.find('blah')
         ref.send_message('hi', :blocking => true, :timeout => 1).should be_false
       end
     end

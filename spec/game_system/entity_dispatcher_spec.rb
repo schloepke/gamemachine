@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module GameMachine
-  module Systems
+  module GameSystem
     
     describe EntityDispatcher do
 

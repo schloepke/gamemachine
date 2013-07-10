@@ -7,12 +7,11 @@ module GameMachine
 
       attr_reader :player_id, :client_message
 
-      def initialize(player_id)
+      def initialize(player_id,default_entity_id=nil)
         @player_id = player_id
-        @default_entity_id = 'default'
-        @current_entity_id = @default_entity_id.clone
+        @default_entity_id = default_entity_id || 'default'
+        @current_entity_id = nil
         @client_message = create_client_message(@player_id)
-        add_default_entity
       end
 
       def to_byte_array
@@ -24,6 +23,10 @@ module GameMachine
       end
 
       def current_entity
+        if @current_entity_id.nil?
+          add_default_entity
+          @current_entity_id = @default_entity_id
+        end
         client_message.get_entity_list.select {|entity| entity.id == @current_entity_id}.first
       end
 
