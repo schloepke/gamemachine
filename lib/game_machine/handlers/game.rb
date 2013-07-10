@@ -1,6 +1,6 @@
 module GameMachine
   module Handlers
-    class Game < Actor 
+    class Game < Actor::Base 
 
       def on_receive(message)
         if message.is_a?(ClientMessage)

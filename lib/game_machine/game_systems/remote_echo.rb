@@ -1,6 +1,6 @@
 module GameMachine
   module GameSystems
-    class RemoteEcho < Actor
+    class RemoteEcho < Actor::Base
       
       aspect %w(EchoTest)
 

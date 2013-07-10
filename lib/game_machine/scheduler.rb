@@ -1,5 +1,5 @@
 module GameMachine
-  class Scheduler < Actor
+  class Scheduler < Actor::Base
 
     def preStart
       scheduler = get_context.system.scheduler

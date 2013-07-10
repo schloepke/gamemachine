@@ -1,5 +1,5 @@
 module GameMachine
-    class ChatManager < Actor
+    class ChatManager < Actor::Base
 
 
     aspect %w(ChatMessage Player ClientConnection)
@@ -16,7 +16,7 @@ module GameMachine
       else
         unless @chat_actors.has_key?(message.player.id)
           create_child(message.player.id)
-          PlayerRegistry.register_observer(message.player.id,ActorRef.new(get_self))
+          PlayerRegistry.register_observer(message.player.id,Actor::Ref.new(get_self))
         end
         forward_chat_request(message.player.id,message)
       end
@@ -45,9 +45,9 @@ module GameMachine
 
     def create_child(player_id)
       name = child_name(player_id)
-      builder = ActorBuilder.new(GameSystems::Chat,player_id)
+      builder = Actor::Builder.new(GameSystems::Chat,player_id)
       child = builder.with_parent(context).with_name(name).start
-      @chat_actors[player_id] = ActorRef.new(child,GameSystems::Chat.name)
+      @chat_actors[player_id] = Actor::Ref.new(child,GameSystems::Chat.name)
       GameMachine.logger.warn "Chat child for #{player_id} created"
     end
   end

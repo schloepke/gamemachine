@@ -111,13 +111,13 @@ module GameMachine
   end
 
 
-  class TestClient < Actor
+  class TestClient < Actor::Base
 
     class << self
       def start(name,port)
         client = UdtClient.start(name,'localhost',port)
         proxy = TestClientProxy.new(name,client)
-        ActorBuilder.new(self,name,port,proxy).with_name(name).start
+        Actor::Builder.new(self,name,port,proxy).with_name(name).start
         proxy.wait_for_ctx
         proxy
       end
@@ -132,7 +132,7 @@ module GameMachine
     end
 
     def on_receive(message)
-      if message.is_a?(JavaLib::DefaultChannelHandlersContext)
+      if message.is_a?(JavaLib::DefaultChannelHandlerContext)
         @ctx = message
       elsif message == 'ctx'
         sender.tell(@ctx) if @ctx

@@ -38,17 +38,15 @@ module GameMachine
     end
 
     def start
-      @actor_system = ActorSystem.new(config_name,akka_config)
+      @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
       start_camel_extension
-      DataStore.instance
     end
 
     def stop
       @actor_system.shutdown!
-      Actor.reset_hashrings
-      DataStore.instance.shutdown
+      Actor::Base.reset_hashrings
     end
 
     private

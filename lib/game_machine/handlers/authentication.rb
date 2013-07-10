@@ -1,6 +1,6 @@
 module GameMachine
   module Handlers
-    class Authentication < Actor
+    class Authentication < Actor::Base
 
       def post_init
         @authenticated_players = {}

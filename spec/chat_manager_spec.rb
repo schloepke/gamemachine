@@ -25,7 +25,7 @@ module GameMachine
         game_message.to_entity
       end
 
-      let(:actor_builder) {mock('ActorBuilder', :with_parent => actor_builder, :start => true)}
+      let(:actor_builder) {mock('Actor::Builder', :with_parent => actor_builder, :start => true)}
 
       let(:disconnected) do
         Disconnected.new.set_client_id(client_id).set_player_id(player_id)

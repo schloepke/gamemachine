@@ -29,13 +29,13 @@ module GameMachine
           add_entity(entity)
       end
 
-      let(:actor_ref) {double('ActorRef', :tell => true)}
+      let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
       describe "#on_receive" do
 
         before(:each) do
           Handlers::Authentication.stub(:find_distributed_local).and_return(actor_ref)
-          ActorBuilder.new(Request).with_name('test_request_handler').start
+          Actor::Builder.new(Request).with_name('test_request_handler').start
         end
 
         it "logs out player if PlayerLogout present" do

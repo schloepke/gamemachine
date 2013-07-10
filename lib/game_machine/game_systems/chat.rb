@@ -1,6 +1,6 @@
 module GameMachine
   module GameSystems
-    class Chat < Actor
+    class Chat < Actor::Base
 
       def post_init(*args)
         @player_id = args.first
@@ -41,9 +41,9 @@ module GameMachine
 
       def create_topic_handler(topic)
         name = "topic#{@player_id}#{topic}"
-        builder = ActorBuilder.new(GameSystems::ChatTopic,@player_id)
+        builder = Actor::Builder.new(GameSystems::ChatTopic,@player_id)
         ref = builder.with_parent(context).with_name(name).start
-        actor_ref = ActorRef.new(ref,GameSystems::ChatTopic.name)
+        actor_ref = Actor::Ref.new(ref,GameSystems::ChatTopic.name)
         @topic_handlers[topic] = actor_ref
       end
 

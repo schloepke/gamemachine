@@ -65,7 +65,7 @@ module InstanceMethods
 
 end
 result = []
-ObjectSpace.each_object(::Class) {|klass| result << klass if klass < GameMachine::Actor }
+ObjectSpace.each_object(::Class) {|klass| result << klass if klass < GameMachine::Actor::Base }
 result.each do |klass|
   klass.send(:include, InstanceMethods)
   klass.send(:extend, ClassMethods)

@@ -1,4 +1,4 @@
 
 require_relative 'simple_mmo/echo'
 
-GameMachine::ActorBuilder.new(SimpleMmo::Echo).start
+GameMachine::Actor::Builder.new(SimpleMmo::Echo).start

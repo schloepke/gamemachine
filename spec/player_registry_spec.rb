@@ -5,7 +5,7 @@ module GameMachine
 
     let(:client_id) {'client'}
     let(:player_id) {'player'}
-    let(:actor_ref) {double('ActorRef')}
+    let(:actor_ref) {double('Actor::Ref')}
 
     let(:player_logout) {PlayerLogout.new.set_player_id(player_id)}
 
@@ -53,7 +53,7 @@ module GameMachine
         expect(subject).to receive(:register_player).
           with(message.player_id,message.client_connection)
         expect(subject).to_not receive(:register_observer).
-          with(message.player_id,kind_of(ActorRef))
+          with(message.player_id,kind_of(Actor::Ref))
         player_registry.on_receive(message)
       end
 

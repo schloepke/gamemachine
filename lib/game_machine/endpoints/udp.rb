@@ -1,6 +1,6 @@
 module GameMachine
   module Endpoints
-    class Udp < Actor
+    class Udp < Actor::Base
       def post_init(*args)
         @clients = {}
         @socket = nil
@@ -8,7 +8,10 @@ module GameMachine
 
       def preStart
         mgr = JavaLib::Udp.get(getContext.system).getManager
-        inet = JavaLib::InetSocketAddress.new(Application.config.udp.host, Application.config.udp.port)
+        inet = JavaLib::InetSocketAddress.new(
+          Application.config.udp.host,
+          Application.config.udp.port
+        )
         mgr.tell( JavaLib::UdpMessage.bind(getSelf,inet), getSelf)
       end
 
@@ -41,8 +44,12 @@ module GameMachine
 
       def handle_incoming(message)
         @clients[message.sender.to_s] = message.sender
-        client_message = create_client_message(message.data.to_array,message.sender.to_s)
-        Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
+        client_message = create_client_message(
+          message.data.to_array,message.sender.to_s
+        )
+        Actor::Base.find(Settings.game_handler).send_message(
+          client_message, :sender => get_self
+        )
       rescue Exception => e
         GameMachine.logger.error "#{self.class.name} #{e.to_s}"
       end

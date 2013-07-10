@@ -1,10 +1,10 @@
 module GameMachine
   module GameSystems
-    class PrivateChat < Actor
+    class PrivateChat < Actor::Base
 
       def preStart
         message = Subscribe.new.set_topic('private')
-        MessageQueuel.find.tell(message,ActorRef.new(get_self))
+        MessageQueuel.find.tell(message,Actor::Ref.new(get_self))
       end
 
       def on_receive(message)

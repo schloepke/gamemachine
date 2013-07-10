@@ -12,7 +12,7 @@ module GameMachine
     end
   end
 
-  class ObjectDb < Actor
+  class ObjectDb < Actor::Base
 
     class << self
 

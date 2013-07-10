@@ -1,5 +1,5 @@
 module SimpleMmo
-  class Echo < GameMachine::Actor
+  class Echo < GameMachine::Actor::Base
     
     def post_init(*args)
     end

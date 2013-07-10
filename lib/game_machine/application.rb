@@ -30,10 +30,12 @@ module GameMachine
 
       def stop
         akka.stop
+        DataStore.instance.shutdown
       end
 
       def start
         akka.start
+        DataStore.instance
         start_game_systems
       end
 
@@ -62,10 +64,10 @@ module GameMachine
 
       def start_game_systems
         if config.udp.enabled
-          ActorBuilder.new(Endpoints::Udp).start
+          Actor::Builder.new(Endpoints::Udp).start
         end
         if config.udt.enabled
-          ActorBuilder.new(Endpoints::Udt).start
+          Actor::Builder.new(Endpoints::Udt).start
           JavaLib::UdtServer.start(config.udt.host,config.udt.port)
         end
         
@@ -74,22 +76,22 @@ module GameMachine
           Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
         end
 
-        ActorBuilder.new(PlayerRegistry).start
-        ActorBuilder.new(ObjectDb).distributed(100).start
-        ActorBuilder.new(MessageQueue).start
-        ActorBuilder.new(SystemMonitor).start
-        ActorBuilder.new(ClusterMonitor).start
-        ActorBuilder.new(Scheduler).start
-        ActorBuilder.new(WriteBehindCache).distributed(100).start
+        Actor::Builder.new(PlayerRegistry).start
+        Actor::Builder.new(ObjectDb).distributed(100).start
+        Actor::Builder.new(MessageQueue).start
+        Actor::Builder.new(SystemMonitor).start
+        Actor::Builder.new(ClusterMonitor).start
+        Actor::Builder.new(Scheduler).start
+        Actor::Builder.new(WriteBehindCache).distributed(100).start
 
-        ActorBuilder.new(Handlers::Request).with_router(JavaLib::RoundRobinRouter,20).start
-        ActorBuilder.new(Handlers::Authentication).distributed(160).start
-        ActorBuilder.new(Handlers::Game).with_router(JavaLib::RoundRobinRouter,20).start
+        Actor::Builder.new(Handlers::Request).with_router(JavaLib::RoundRobinRouter,20).start
+        Actor::Builder.new(Handlers::Authentication).distributed(160).start
+        Actor::Builder.new(Handlers::Game).with_router(JavaLib::RoundRobinRouter,20).start
 
-        ActorBuilder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
-        ActorBuilder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
-        ActorBuilder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
-        ActorBuilder.new(ChatManager).start
+        Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(ChatManager).start
 
         load_user_systems
       end

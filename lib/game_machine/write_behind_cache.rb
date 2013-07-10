@@ -1,5 +1,5 @@
 module GameMachine
-  class WriteBehindCache < Actor
+  class WriteBehindCache < Actor::Base
 
     attr_accessor :write_interval, :max_writes_per_second
 

@@ -1,6 +1,6 @@
 module GameMachine
   module GameSystems
-    class LocalEcho < Actor
+    class LocalEcho < Actor::Base
       
       # Used in tests to see if actor got the message
       def self.echo(message)

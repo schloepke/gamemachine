@@ -1,5 +1,5 @@
 module GameMachine
-  class MessageQueue < Actor
+  class MessageQueue < Actor::Base
 
     def preStart
       if getContext.system.name == 'cluster'

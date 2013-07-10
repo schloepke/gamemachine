@@ -1,6 +1,6 @@
 module GameMachine
   module GameSystems
-    class ChatTopic < Actor
+    class ChatTopic < Actor::Base
 
       def post_init(*args)
         @player_id = args.first

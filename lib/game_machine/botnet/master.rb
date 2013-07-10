@@ -1,13 +1,13 @@
 module GameMachine
   module Botnet
-    class Master < Actor
+    class Master < Actor::Base
 
       def self.start_udt_client(name,port)
         UdtClient.start(name,'localhost',port)
       end
 
       def self.start(name,port,player_id)
-        ActorBuilder.new(self,player_id).with_name(name).start
+        Actor::Builder.new(self,player_id).with_name(name).start
         client = start_udt_client(name,port)
         master_ref = self.find(name)
         master_ref.tell(client)
@@ -43,12 +43,12 @@ module GameMachine
 
       def start_player
         name = "player#{@player_id}"
-        child = ActorBuilder.new(PlayerBot,@client,@ctx,name,@player_id).with_parent(context).with_name(name).start
+        child = Actor::Builder.new(PlayerBot,@client,@ctx,name,@player_id).with_parent(context).with_name(name).start
         @player = child
       end
 
       def on_receive(message)
-        if message.is_a?(JavaLib::DefaultChannelHandlersContext)
+        if message.is_a?(JavaLib::DefaultChannelHandlerContext)
           @ctx = message
         elsif message.is_a?(UdtClient)
           @client = message

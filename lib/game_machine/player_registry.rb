@@ -1,11 +1,11 @@
 module GameMachine
-  class PlayerRegistry < Actor
+  class PlayerRegistry < Actor::Base
 
     def on_receive(message)
       if message.is_a?(PlayerRegister)
         self.class.register_player(message.player_id,message.client_connection)
         if message.observer
-          observer_ref = Actor.find(message.observer)
+          observer_ref = Actor::Base.find(message.observer)
           self.class.register_observer(message.player_id,observer_ref)
         end
         get_sender.tell(true,nil)

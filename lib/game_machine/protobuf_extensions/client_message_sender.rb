@@ -9,7 +9,7 @@ module GameMachine
         player = self.player
         if client_connection = PlayerRegistry.client_connection_for(player.id)
           self.set_client_connection(client_connection)
-          Actor.find(client_connection.gateway).tell(self)
+          Actor::Base.find(client_connection.gateway).tell(self)
         else
           raise "Unable to get client_connection for player_id #{player.id}"
         end

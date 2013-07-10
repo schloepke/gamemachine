@@ -16,11 +16,11 @@ module GameMachine
       let(:bad_entity) {Entity.new.set_id('1').set_publish(Publish.new)}
       let(:empty_entity) {Entity.new.set_id('1')}
 
-      let(:actor_ref) {double('DispatcherActorRef')}
+      let(:actor_ref) {double('DispatcherActor::Ref')}
 
       describe "aspects" do
         before(:each) do
-          ActorBuilder.new(Game).with_name('dispatch_test').start
+          Actor::Builder.new(Game).with_name('dispatch_test').start
         end
 
         it "dispatches entities to correct system" do

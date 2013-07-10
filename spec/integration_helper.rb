@@ -1,13 +1,13 @@
 require 'rubygems'
 require 'net/http'
-require 'game_machine'
+require_relative '../config/application'
 require_relative '../lib/game_machine/test_client'
 
 RSpec.configure do |config|
   config.before(:suite) do
-    GameMachine::Akka.instance.init!('member01', :cluster => true)
-    GameMachine::Akka.instance.start_actor_system
-    GameMachine::Akka.instance.start_game_systems
+    GameMachine::Application.initialize!('member01', true)
+    GameMachine::Application.start_actor_system
+    GameMachine::Application.start_game_systems
     puts "before suite"
   end
 
@@ -19,7 +19,7 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     puts "after suite"
-    GameMachine::Akka.instance.stop_actor_system
+    GameMachine::Application.stop_actor_system
   end
 end
 

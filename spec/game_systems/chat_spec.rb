@@ -42,11 +42,11 @@ module GameMachine
         game_message.to_entity
       end
 
-      let(:actor_ref) {double('ActorRef', :tell => true)}
+      let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
       describe "joining and leaving channels" do
         before(:each) do
-          ActorBuilder.new(GameSystems::Chat,player_id).start
+          Actor::Builder.new(GameSystems::Chat,player_id).start
           MessageQueue.stub(:find).and_return(actor_ref)
           PlayerRegistry.register_player(
             game_message.client_message.player.id,
