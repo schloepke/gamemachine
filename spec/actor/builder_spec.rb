@@ -39,7 +39,7 @@ module GameMachine
 
     describe "#start" do
       it "creates the actor and returns the actor ref" do
-        expect(subject.with_name('blah').start).to be_kind_of((JavaLib::Actor::Ref))
+        expect(subject.with_name('blah').start).to be_kind_of((JavaLib::ActorRef))
       end
 
       it "adds a hashring if distributed" do
