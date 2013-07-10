@@ -15,7 +15,7 @@ module GameMachine
     end
 
     it "marshal" do
-      system = Server.instance.actor_system
+      system = Akka.instance.actor_system
       serialization = JavaLib::SerializationExtension.get(system)
       serializer = serialization.findSerializerFor(entity)
       bytes = serializer.toBinary(entity)

@@ -13,7 +13,7 @@ module GameMachine
 
     subject do
       props = JavaLib::Props.new(WriteBehindCache);
-      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, WriteBehindCache.name);
+      ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, WriteBehindCache.name);
       ref.underlying_actor.stub(:schedule_queue_run)
       ref.underlying_actor.stub(:schedule_queue_stats)
       ref.underlying_actor.post_init

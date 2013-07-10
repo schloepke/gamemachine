@@ -7,7 +7,7 @@ module GameMachine
 
     subject do
       props = JavaLib::Props.new(Actor);
-      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, Actor.name);
+      ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Actor.name);
       ref.underlying_actor
     end
 
@@ -26,7 +26,7 @@ module GameMachine
 
       it "registeres the class in the system manager" do
         Actor.aspect(aspect)
-        expect(SystemManager.registered.include?(Actor)).to be_true
+        expect(Application.registered.include?(Actor)).to be_true
       end
     end
 

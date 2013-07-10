@@ -15,8 +15,8 @@ module GameMachine
       
       def aspect(new_aspects)
         aspects << new_aspects
-        unless SystemManager.registered.include?(self)
-          SystemManager.register(self)
+        unless Application.registered.include?(self)
+          Application.register(self)
         end
       end
 
@@ -66,7 +66,7 @@ module GameMachine
       end
 
       def remote_path(server,name)
-        "#{Server.address_for(server)}/user/#{name}"
+        "#{Akka.address_for(server)}/user/#{name}"
       end
 
       def local_distributed_path(id,name)
@@ -75,7 +75,7 @@ module GameMachine
       end
 
       def distributed_path(id,name)
-        server = Server.instance.hashring.bucket_for(id)
+        server = Akka.instance.hashring.bucket_for(id)
         bucket = hashring(name).bucket_for(id)
         "#{server}/user/#{bucket}"
       end

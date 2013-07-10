@@ -50,10 +50,8 @@ java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.PlayerRegister'
 
 
-ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../')
-ENV['GAME_ENV'] ||= 'development'
-
 module GameMachine
+
   def self.env
     ENV.fetch('GAME_ENV')
   end
@@ -80,6 +78,7 @@ module GameMachine
 end
 GameMachine.configure_logging
 
+require_relative 'game_machine/configuration'
 require_relative 'game_machine/settings'
 require_relative 'game_machine/actor_system'
 require_relative 'game_machine/actor'
@@ -87,9 +86,9 @@ require_relative 'game_machine/actor_factory'
 require_relative 'game_machine/actor_ref'
 require_relative 'game_machine/handlers/authentication'
 require_relative 'game_machine/hashring'
-require_relative 'game_machine/system_manager'
+require_relative 'game_machine/application'
 require_relative 'game_machine/handlers/request'
-require_relative 'game_machine/game_systems/entity_dispatcher'
+require_relative 'game_machine/handlers/game'
 require_relative 'game_machine/client'
 require_relative 'game_machine/game_systems/local_echo'
 require_relative 'game_machine/game_systems/remote_echo'
@@ -113,7 +112,7 @@ require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
-require_relative 'game_machine/server'
+require_relative 'game_machine/akka'
 
 require_relative 'game_machine/botnet/master'
 require_relative 'game_machine/botnet/player_bot'

@@ -20,7 +20,7 @@ module GameMachine
     end
 
     def shutdown
-      Server.instance.stop
+      Akka.instance.stop
       GameSystems.exit 0
     end
 

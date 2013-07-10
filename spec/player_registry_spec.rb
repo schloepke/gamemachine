@@ -31,7 +31,7 @@ module GameMachine
 
     let(:player_registry) do
       props = JavaLib::Props.new(PlayerRegistry);
-      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'test_registry');
+      ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'test_registry');
       ref.underlying_actor
     end
 

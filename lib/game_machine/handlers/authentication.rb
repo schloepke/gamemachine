@@ -23,7 +23,7 @@ module GameMachine
       end
 
       def handler
-        GameSystems::EntityDispatcher.find
+        Handlers::Game.find
       end
 
       def on_receive(message)

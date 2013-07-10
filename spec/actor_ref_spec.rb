@@ -5,7 +5,7 @@ module GameMachine
 
     let(:local_echo) do
       props = JavaLib::Props.new(GameSystems::LocalEcho);
-      ref = JavaLib::TestActorRef.create(Server.instance.actor_system, props, 'localecho1');
+      ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'localecho1');
       ref.underlying_actor
     end
 

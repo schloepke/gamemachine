@@ -11,7 +11,7 @@ module GameMachine
       end
 
       def onReceive(message)
-        GameMachine.logger.debug("UdtServer onReceive #{message}")
+        GameMachine.logger.debug("UdtAkka onReceive #{message}")
         if message.is_a?(JavaLib::NetMessage)
           client_id = get_client_id(message)
 
@@ -26,7 +26,7 @@ module GameMachine
           Actor.find(Settings.game_handler).send_message(client_message, :sender => get_self)
         elsif message.is_a?(ClientMessage)
           if @clients[message.client_connection.id]
-            JavaLib::UdtServer.get_udt_server.send_to_client(
+            JavaLib::UdtAkka.get_udt_server.send_to_client(
               message.to_byte_array,
               @clients[message.client_connection.id].ctx
             )

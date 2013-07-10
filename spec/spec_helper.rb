@@ -1,21 +1,21 @@
 
 ENV['GAME_ENV'] = 'test'
 require 'rubygems'
-require 'game_machine'
+require_relative '../config/application'
 
 RSpec.configure do |config|
   config.before(:suite) do
-    GameMachine::Server.instance.init!('default', :cluster => true)
+    GameMachine::Application.initialize!('default',true)
     puts "before suite"
   end
 
   config.before(:each) do
-    GameMachine::Server.instance.start_actor_system
-    GameMachine::Server.instance.start_game_systems
+    GameMachine::Application.start_actor_system
+    GameMachine::Application.start_game_systems
   end
 
   config.after(:each) do
-    GameMachine::Server.instance.stop_actor_system
+    GameMachine::Application.stop_actor_system
 
   end
 

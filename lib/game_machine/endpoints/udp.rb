@@ -8,7 +8,7 @@ module GameMachine
 
       def preStart
         mgr = JavaLib::Udp.get(getContext.system).getManager
-        inet = JavaLib::InetSocketAddress.new(Server.instance.config.udp.host, Server.instance.config.udp.port)
+        inet = JavaLib::InetSocketAddress.new(Application.config.udp.host, Application.config.udp.port)
         mgr.tell( JavaLib::UdpMessage.bind(getSelf,inet), getSelf)
       end
 

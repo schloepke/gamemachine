@@ -9,7 +9,7 @@ module GameMachine
       @create_hashring = false
       @hashring_size = 0
       @props = JavaLib::Props.new(ActorFactory.new(@klass,args))
-      @actor_system = Server.instance.actor_system
+      @actor_system = Akka.instance.actor_system
     end
 
     def with_parent(context)

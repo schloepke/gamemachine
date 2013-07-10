@@ -62,7 +62,7 @@ module GameMachine
     end
 
     def actor_selection
-      Server.instance.actor_system.actor_selection(@path_or_actor_ref)
+      Akka.instance.actor_system.actor_selection(@path_or_actor_ref)
     end
 
   end
