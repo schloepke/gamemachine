@@ -90,11 +90,6 @@ call.  Blocking calls guarantee that the action was performed, although at a
 small cost.  The amount of time you block is usually just network time on the
 internal lan, as all updates are done in memory.
 
-In tests done on a home pentium I5 system, I was getting over 20,000 writes per
-second using blocking calls, with around 8000 writes per second happening to
-the couchbase backend store.  This was done using 1000 bytes of data per data
-object, which is fairly heavy.  The client was a mixture of udp and udt.
-
 ## UDT, Udp, and Http
 Reliable Udp is supported via UDT.  Udp is also provided, and http is used for things like user login's
 where you need the ssl security that http can provide out of the box.
