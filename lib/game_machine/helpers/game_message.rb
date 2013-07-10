@@ -9,8 +9,7 @@ module GameMachine
 
       def initialize(player_id,default_entity_id=nil)
         @player_id = player_id
-        @default_entity_id = default_entity_id || 'default'
-        @current_entity_id = nil
+        @current_entity_id = default_entity_id || 'default'
         @client_message = create_client_message(@player_id)
       end
 
@@ -22,19 +21,23 @@ module GameMachine
         client_message.send_to_player
       end
 
+      def entities
+        client_message.get_entity_list.to_a
+      end
+
+      def has_entity?(id)
+        entities.select {|entity| entity.id == id}.first ? true : false
+      end
+
       def current_entity
-        if @current_entity_id.nil?
-          add_default_entity
-          @current_entity_id = @default_entity_id
+        unless has_entity?(@current_entity_id)
+          add_entity(@current_entity_id)
         end
-        client_message.get_entity_list.select {|entity| entity.id == @current_entity_id}.first
+        entities.select {|entity| entity.id == @current_entity_id}.first
       end
 
       def entity(id)
         @current_entity_id = id
-        unless current_entity
-          client_message.add_entity(Entity.new.set_id(@current_entity_id))
-        end
         current_entity
       end
 
@@ -111,8 +114,8 @@ module GameMachine
         client_message.set_player(player(player_id))
       end
 
-      def add_default_entity
-        client_message.add_entity(Entity.new.set_id(@default_entity_id))
+      def add_entity(id)
+        client_message.add_entity(Entity.new.set_id(id))
       end
 
       def player(player_id)

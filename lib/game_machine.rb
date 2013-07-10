@@ -50,7 +50,7 @@ java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.PlayerRegister'
 
 
-ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../app')
+ENV['APP_ROOT'] ||= File.join(File.dirname(__FILE__), '../')
 ENV['GAME_ENV'] ||= 'development'
 
 module GameMachine

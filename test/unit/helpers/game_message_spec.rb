@@ -16,8 +16,8 @@ module GameMachine
 
       describe "creating a new message" do
 
-        it "new message has default entity" do
-          expect(subject.current_entity.id).to eq('default')
+        it "new message has no entity" do
+          expect(subject.client_message.get_entity_list).to be_nil
         end
 
         it "new message has player" do

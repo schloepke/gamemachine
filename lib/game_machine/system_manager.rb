@@ -16,7 +16,7 @@ module GameMachine
     def load_user_systems
       verify_app_root!
       GameMachine.logger.debug "APP_ROOT = #{GameMachine.app_root}"
-      app_classes = Dir[File.join(GameMachine.app_root,'lib', '*.rb')]
+      app_classes = Dir[File.join(GameMachine.app_root,'app','lib', '*.rb')]
       app_classes.each {|app_class| require app_class}
     end
 
