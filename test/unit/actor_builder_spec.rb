@@ -3,7 +3,7 @@ require 'spec_helper'
 module GameMachine
   describe ActorBuilder do
 
-    let(:actor_class) {GameSystem::LocalEcho}
+    let(:actor_class) {GameSystems::LocalEcho}
 
     let(:router) {double('Router')}
 
@@ -43,8 +43,8 @@ module GameMachine
       end
 
       it "adds a hashring if distributed" do
-        expect(GameSystem::LocalEcho).to receive(:add_hashring).with(
-          GameSystem::LocalEcho.name,kind_of(Hashring)
+        expect(GameSystems::LocalEcho).to receive(:add_hashring).with(
+          GameSystems::LocalEcho.name,kind_of(Hashring)
         )
         subject.distributed(1).start
       end

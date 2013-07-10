@@ -132,7 +132,7 @@ module GameMachine
     end
 
     def on_receive(message)
-      if message.is_a?(JavaLib::DefaultChannelHandlerContext)
+      if message.is_a?(JavaLib::DefaultChannelHandlersContext)
         @ctx = message
       elsif message == 'ctx'
         sender.tell(@ctx) if @ctx

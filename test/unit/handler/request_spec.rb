@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module GameMachine
-  module Handler
+  module Handlers
     describe Request do
 
       let(:player) {Player.new.set_id('1')}
@@ -34,7 +34,7 @@ module GameMachine
       describe "#on_receive" do
 
         before(:each) do
-          Handler::Authentication.stub(:find_distributed_local).and_return(actor_ref)
+          Handlers::Authentication.stub(:find_distributed_local).and_return(actor_ref)
           ActorBuilder.new(Request).with_name('test_request_handler').start
         end
 

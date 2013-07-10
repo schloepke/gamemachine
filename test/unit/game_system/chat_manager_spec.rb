@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module GameMachine
-  module GameSystem
+  module GameSystems
     
     describe ChatManager do
 

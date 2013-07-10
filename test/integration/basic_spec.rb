@@ -10,14 +10,14 @@ module GameMachine
 
       describe "sending messages to remote actors" do
         it "there and back again" do
-          ref = GameSystem::LocalEcho.find_remote('seed01')
+          ref = GameSystems::LocalEcho.find_remote('seed01')
           ref.send_message('blah', :blocking => true, :timeout => 1000).should == 'blah'
           returned_entity = ref.send_message(static_entity, :blocking => true, :timeout => 1000)
           returned_entity.get_id.should == static_entity.get_id
         end
 
         it "distributed messaging should return answer" do
-          ref = GameSystem::LocalEcho.find_distributed('blah', 'DistributedLocalEcho')
+          ref = GameSystems::LocalEcho.find_distributed('blah', 'DistributedLocalEcho')
           returned_entity = ref.send_message(static_entity, :blocking => true, :timeout => 1000)
           returned_entity.get_id.should == static_entity.get_id
         end

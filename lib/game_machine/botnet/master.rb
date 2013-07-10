@@ -48,7 +48,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(JavaLib::DefaultChannelHandlerContext)
+        if message.is_a?(JavaLib::DefaultChannelHandlersContext)
           @ctx = message
         elsif message.is_a?(UdtClient)
           @client = message
