@@ -17,7 +17,6 @@ module GameMachine
     include_package 'com.game_machine.core.net.server'
     include_package 'java.net'
     include_package 'com.barchart.udt'
-    include_package 'com.game_machine.core.persistence'
     include_package 'java.util.concurrent.atomic'
     include_package 'scala.concurrent.duration'
     include_package 'scala.concurrent'

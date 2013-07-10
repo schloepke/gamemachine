@@ -13,3 +13,6 @@ config/application.conf
 *.swp
 .gradle
 lib/bin
+java/bin
+java/build
+java/third_party
