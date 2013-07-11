@@ -47,6 +47,7 @@ java_import 'com.game_machine.entity_system.generated.Disconnected'
 java_import 'com.game_machine.entity_system.generated.PlayerLogout'
 java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.PlayerRegister'
+java_import 'com.game_machine.entity_system.generated.RegisterPlayerObserver'
 
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)

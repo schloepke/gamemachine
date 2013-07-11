@@ -16,7 +16,9 @@ module GameMachine
       else
         unless @chat_actors.has_key?(message.player.id)
           create_child(message.player.id)
-          PlayerRegistry.register_observer(message.player.id,Actor::Ref.new(get_self))
+          PlayerRegistry.find.tell(
+            RegisterPlayerObserver.new.set_player_id(message.player.id)
+          )
         end
         forward_chat_request(message.player.id,message)
       end

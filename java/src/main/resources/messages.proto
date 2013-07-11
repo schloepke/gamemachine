@@ -2,6 +2,11 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message RegisterPlayerObserver {
+  required string playerId = 1;
+  required string event = 2;
+}
+
 message PlayerRegister {
 	required string playerId = 1;
 	required ClientConnection clientConnection = 2;
@@ -156,6 +161,7 @@ message Entity {
   	optional ChatRegister chatRegister = 15;
   	optional ChatChannels chatChannels = 16;
   	optional ErrorMessage errorMessage = 17;
+    optional RegisterPlayerObserver registerPlayerObserver = 18;
 }
 
 message ClientMessage {

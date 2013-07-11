@@ -117,6 +117,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public ErrorMessage errorMessage;
 
 
+
+    public RegisterPlayerObserver registerPlayerObserver;
+
+
     
 
 
@@ -129,6 +133,12 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
+
+
+		if (this.hasRegisterPlayerObserver()) {
+			names.add(this.registerPlayerObserver.getClass().getSimpleName());
+		}
+
 
 
 
@@ -541,6 +551,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public RegisterPlayerObserver getRegisterPlayerObserver() {
+		return registerPlayerObserver;
+	}
+	
+	public Entity setRegisterPlayerObserver(RegisterPlayerObserver registerPlayerObserver) {
+		this.registerPlayerObserver = registerPlayerObserver;
+		return this;
+	}
+	
+	public Boolean hasRegisterPlayerObserver()  {
+        return registerPlayerObserver == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -750,6 +777,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
                 	
 
 
+            	case 18:
+
+
+                	message.registerPlayerObserver = input.mergeObject(message.registerPlayerObserver, RegisterPlayerObserver.getSchema());
+                    break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -952,6 +988,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.registerPlayerObserver != null)
+    		output.writeObject(18, message.registerPlayerObserver, RegisterPlayerObserver.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -992,6 +1039,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 16: return "chatChannels";
 
         	case 17: return "errorMessage";
+
+        	case 18: return "registerPlayerObserver";
 
             default: return null;
         }
@@ -1040,6 +1089,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("chatChannels", 16);
 
     	__fieldMap.put("errorMessage", 17);
+
+    	__fieldMap.put("registerPlayerObserver", 18);
 
     }
    

@@ -4,39 +4,41 @@ module GameMachine
     class << self
 
       def initialize!(name='default', cluster=false)
-        akka.initialize!(name,cluster)
-        map_config(name,cluster)
-        config.handlers = [Handlers::Request,Handlers::Authentication, Handlers::Game]
-      end
-
-      def map_config(name,cluster)
         config.name = name
         config.cluster = cluster
-        server = Settings.servers.send(name)
+        akka.initialize!(config.name,config.cluster)
+        map_settings
+        config.handlers = default_handlers
+      end
+
+      def default_handlers
+        [
+          Handlers::Request,
+          Handlers::Authentication,
+          Handlers::Game
+        ]
+      end
+
+      def map_settings
+        config.game_handler = Settings.game_handler
+        config.login_username = Settings.login_username
+        config.authtoken = Settings.authtoken
+        config.http_host = Settings.http_host
+        config.http_port = Settings.http_port
+        config.data_store = Settings.data_store
+        config.write_behind_cache = Settings.write_behind_cache
+        config.seeds = Settings.seeds
+        config.servers = Settings.servers
+        map_server_settings
+      end
+
+      def map_server_settings
+        server = config.servers.send(config.name)
         config.http_enabled = server.http_enabled
         config.udp = server.udp
         config.udt = server.udt
         config.akka_host = server.akka.host
         config.akka_port = server.akka.port
-      end
-
-      def start_actor_system
-        akka.start
-      end
-
-      def stop_actor_system
-        akka.stop
-      end
-
-      def stop
-        akka.stop
-        DataStore.instance.shutdown
-      end
-
-      def start
-        akka.start
-        DataStore.instance
-        start_game_systems
       end
 
       def akka
@@ -56,13 +58,30 @@ module GameMachine
         GameMachine.logger.debug "#{system_class} registered"
       end
 
-      def load_user_systems
-        GameMachine.logger.debug "APP_ROOT = #{GameMachine.app_root}"
-        app_classes = Dir[File.join(GameMachine.app_root,'app','lib', '*.rb')]
-        app_classes.each {|app_class| require app_class}
+      def start_actor_system
+        akka.start
       end
 
-      def start_game_systems
+      def stop_actor_system
+        akka.stop
+      end
+
+      def stop
+        akka.stop
+        DataStore.instance.shutdown
+      end
+
+      def start
+        start_actor_system
+        DataStore.instance
+        start_endpoints
+        start_core_systems
+        start_handlers
+        start_game_systems
+        start_user_systems
+      end
+
+      def start_endpoints
         if config.udp.enabled
           Actor::Builder.new(Endpoints::Udp).start
         end
@@ -75,7 +94,21 @@ module GameMachine
           props = JavaLib::Props.new(Endpoints::Http::Auth)
           Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
         end
+      end
 
+      def start_user_systems
+        GameMachine.logger.debug "APP_ROOT = #{GameMachine.app_root}"
+        app_classes = Dir[File.join(GameMachine.app_root,'app','lib', '*.rb')]
+        app_classes.each {|app_class| require app_class}
+      end
+
+      def start_handlers
+        Actor::Builder.new(Handlers::Request).with_router(JavaLib::RoundRobinRouter,20).start
+        Actor::Builder.new(Handlers::Authentication).distributed(160).start
+        Actor::Builder.new(Handlers::Game).with_router(JavaLib::RoundRobinRouter,20).start
+      end
+
+      def start_core_systems
         Actor::Builder.new(PlayerRegistry).start
         Actor::Builder.new(ObjectDb).distributed(100).start
         Actor::Builder.new(MessageQueue).start
@@ -83,17 +116,13 @@ module GameMachine
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(100).start
+      end
 
-        Actor::Builder.new(Handlers::Request).with_router(JavaLib::RoundRobinRouter,20).start
-        Actor::Builder.new(Handlers::Authentication).distributed(160).start
-        Actor::Builder.new(Handlers::Game).with_router(JavaLib::RoundRobinRouter,20).start
-
+      def start_game_systems
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(ChatManager).start
-
-        load_user_systems
       end
 
     end

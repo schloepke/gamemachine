@@ -18,6 +18,9 @@ module GameMachine
       elsif message.is_a?(PlayerLogout)
         self.class.player_logout(message.player_id)
         GameMachine.logger.info "PlayerLogout #{message.player_id}"
+
+      elsif message.is_a?(RegisterPlayerObserver)
+        self.class.register_observer(message.playerId,sender)
       end
     end
 
