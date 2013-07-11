@@ -1,3 +1,4 @@
+require 'forwardable'
 module GameMachine
   module DataStores
     class Couchbase

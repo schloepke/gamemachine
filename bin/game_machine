@@ -1,3 +1,7 @@
 #!/usr/bin/env ruby
-require_relative '../config/application'
+begin
+  require 'game_machine'
+rescue LoadError
+  require_relative '../lib/game_machine'
+end
 

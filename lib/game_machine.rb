@@ -1,3 +1,5 @@
+require 'rubygems'
+
 require 'yaml'
 require 'rjack-logback'
 require 'java'
@@ -11,17 +13,14 @@ require 'benchmark'
 require 'descriptive_statistics'
 require "uri"
 require 'singleton'
-
+require 'slop'
 
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
 jars.each {|jar| require jar}
 
-require_relative 'game_machine/java_lib'
-
 java_import 'com.game_machine.core.net.client.UdtClient'
 java_import 'com.game_machine.core.net.client.UdtClientHandler'
-
 java_import 'com.game_machine.entity_system.generated.ObjectdbGet'
 java_import 'com.game_machine.entity_system.generated.ObjectdbUpdate'
 java_import 'com.game_machine.entity_system.generated.Entity'
@@ -50,8 +49,10 @@ java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.PlayerRegister'
 
 
-module GameMachine
+ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
+ENV['GAME_ENV'] ||= 'development'
 
+module GameMachine
   def self.env
     ENV.fetch('GAME_ENV')
   end
@@ -59,25 +60,11 @@ module GameMachine
   def self.app_root
     ENV.fetch('APP_ROOT')
   end
-
-  def self.configure_logging
-    @@logger = RJack::SLF4J[ 'game_machine' ]
-
-    RJack::Logback.configure do
-      console = RJack::Logback::ConsoleAppender.new do |a|
-
-      end
-      RJack::Logback.root.add_appender( console )
-      RJack::Logback.root.level = RJack::Logback::INFO
-    end
-  end
-
-  def self.logger
-    @@logger
-  end
 end
-GameMachine.configure_logging
 
+
+require_relative 'game_machine/java_lib'
+require_relative 'game_machine/logger'
 require_relative 'game_machine/settings'
 require_relative 'game_machine/actor/system'
 require_relative 'game_machine/actor/base'
@@ -112,6 +99,7 @@ require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
 require_relative 'game_machine/akka'
+require_relative 'game_machine/cli'
 
 require_relative 'game_machine/botnet/master'
 require_relative 'game_machine/botnet/player_bot'
@@ -119,4 +107,4 @@ require_relative 'game_machine/botnet/player_bot'
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-
+GameMachine::Cli.start

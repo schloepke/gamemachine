@@ -1,3 +1,6 @@
+
+require 'forwardable'
+
 module GameMachine
   class DataStore
     include Singleton
