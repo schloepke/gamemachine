@@ -16,6 +16,7 @@ require 'singleton'
 require 'slop'
 require 'aasm'
 require 'statemachine'
+require 'state_machine'
 
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
@@ -69,6 +70,7 @@ end
 require_relative 'game_machine/java_lib'
 require_relative 'game_machine/logger'
 require_relative 'game_machine/settings'
+require_relative 'game_machine/helpers/state_machine'
 require_relative 'game_machine/actor/system'
 require_relative 'game_machine/actor/base'
 require_relative 'game_machine/actor/factory'

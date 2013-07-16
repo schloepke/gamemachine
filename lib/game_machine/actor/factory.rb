@@ -11,6 +11,9 @@ module GameMachine
 
       def create
         actor = @klass.new
+        if actor.respond_to?(:initialize_states)
+          actor.initialize_states
+        end
         if actor.respond_to?(:post_init)
           actor.post_init(*@args)
         end
