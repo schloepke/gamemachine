@@ -6,39 +6,14 @@ module GameMachine
       def initialize!(name='default', cluster=false)
         config.name = name
         config.cluster = cluster
-        akka.initialize!(config.name,config.cluster)
         map_settings
+
         config.handlers = default_handlers
-      end
+        config.request_handler_routers = 20
+        config.game_handler_routers = 20
+        config.authentication_handler_ring_size = 160
 
-      def default_handlers
-        [
-          Handlers::Request,
-          Handlers::Authentication,
-          Handlers::Game
-        ]
-      end
-
-      def map_settings
-        config.game_handler = Settings.game_handler
-        config.login_username = Settings.login_username
-        config.authtoken = Settings.authtoken
-        config.http_host = Settings.http_host
-        config.http_port = Settings.http_port
-        config.data_store = Settings.data_store
-        config.write_behind_cache = Settings.write_behind_cache
-        config.seeds = Settings.seeds
-        config.servers = Settings.servers
-        map_server_settings
-      end
-
-      def map_server_settings
-        server = config.servers.send(config.name)
-        config.http_enabled = server.http_enabled
-        config.udp = server.udp
-        config.udt = server.udt
-        config.akka_host = server.akka.host
-        config.akka_port = server.akka.port
+        akka.initialize!(config.name,config.cluster)
       end
 
       def akka
@@ -67,7 +42,7 @@ module GameMachine
       end
 
       def stop
-        akka.stop
+        stop_actor_system
         DataStore.instance.shutdown
       end
 
@@ -103,9 +78,15 @@ module GameMachine
       end
 
       def start_handlers
-        Actor::Builder.new(Handlers::Request).with_router(JavaLib::RoundRobinRouter,20).start
-        Actor::Builder.new(Handlers::Authentication).distributed(160).start
-        Actor::Builder.new(Handlers::Game).with_router(JavaLib::RoundRobinRouter,20).start
+        Actor::Builder.new(Handlers::Request).with_router(
+          JavaLib::RoundRobinRouter,config.request_handler_routers
+        ).start
+        Actor::Builder.new(Handlers::Authentication).distributed(
+          config.authentication_handler_ring_size
+        ).start
+        Actor::Builder.new(Handlers::Game).with_router(
+          JavaLib::RoundRobinRouter,config.game_handler_routers
+        ).start
       end
 
       def start_core_systems
@@ -115,7 +96,7 @@ module GameMachine
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(100).start
+        Actor::Builder.new(WriteBehindCache).distributed(10).start
       end
 
       def start_game_systems
@@ -123,6 +104,38 @@ module GameMachine
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(ChatManager).start
+      end
+
+      private
+
+      def default_handlers
+        [
+          Handlers::Request,
+          Handlers::Authentication,
+          Handlers::Game
+        ]
+      end
+
+      def map_settings
+        config.game_handler = Settings.game_handler
+        config.login_username = Settings.login_username
+        config.authtoken = Settings.authtoken
+        config.http_host = Settings.http_host
+        config.http_port = Settings.http_port
+        config.data_store = Settings.data_store
+        config.write_behind_cache = Settings.write_behind_cache
+        config.seeds = Settings.seeds
+        config.servers = Settings.servers
+        map_server_settings
+      end
+
+      def map_server_settings
+        server = config.servers.send(config.name)
+        config.http_enabled = server.http_enabled
+        config.udp = server.udp
+        config.udt = server.udt
+        config.akka_host = server.akka.host
+        config.akka_port = server.akka.port
       end
 
     end

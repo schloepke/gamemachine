@@ -10,11 +10,13 @@ import io.netty.channel.udt.nio.NioUdtProvider;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 
+import java.nio.channels.spi.SelectorProvider;
 import java.util.concurrent.ThreadFactory;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.udt.nio.SelectorProviderUDT;
 import com.game_machine.core.net.server.UdtServer;
 
 public class UdtClient implements Runnable {
@@ -52,9 +54,11 @@ public class UdtClient implements Runnable {
     public void run() {
     	log.info("UdtClient run");
         // Configure the client.
+    	SelectorProviderUDT provider = (SelectorProviderUDT) NioUdtProvider.MESSAGE_PROVIDER;
+    	provider.setMaxSelectorSize(10000);
         final ThreadFactory connectFactory = new UtilThreadFactory("connect");
         connectGroup = new NioEventLoopGroup(1,
-                connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
+                connectFactory, provider);
         try {
             final Bootstrap boot = new Bootstrap();
             boot.group(connectGroup)

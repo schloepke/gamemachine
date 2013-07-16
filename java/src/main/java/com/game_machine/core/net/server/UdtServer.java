@@ -15,6 +15,7 @@ import java.util.concurrent.ThreadFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.barchart.udt.nio.SelectorProviderUDT;
 import com.game_machine.core.net.client.UtilThreadFactory;
 
 public class UdtServer implements Runnable {
@@ -44,8 +45,10 @@ public class UdtServer implements Runnable {
 		final DefaultEventExecutorGroup executor = new DefaultEventExecutorGroup(10);
 		final ThreadFactory acceptFactory = new UtilThreadFactory("accept-udt");
 		final ThreadFactory connectFactory = new UtilThreadFactory("connect-udt");
-		acceptGroup = new NioEventLoopGroup(1, acceptFactory, NioUdtProvider.MESSAGE_PROVIDER);
-		connectGroup = new NioEventLoopGroup(1, connectFactory, NioUdtProvider.MESSAGE_PROVIDER);
+		SelectorProviderUDT provider = (SelectorProviderUDT) NioUdtProvider.MESSAGE_PROVIDER;
+    	provider.setMaxSelectorSize(10000);
+		acceptGroup = new NioEventLoopGroup(1, acceptFactory, provider);
+		connectGroup = new NioEventLoopGroup(1, connectFactory, provider);
 		
 		// Configure the server.
 		try {

@@ -1,49 +1,32 @@
 module GameMachine
-  module Botnet
-    class Master < Actor::Base
+  module Bot
+    class Client < Actor::Base
 
       def self.start_udt_client(name,port)
         UdtClient.start(name,'localhost',port)
       end
 
-      def self.start(name,port,player_id)
-        Actor::Builder.new(self,player_id).with_name(name).start
+      def self.start(name,port)
+        Actor::Builder.new(self).with_name(name).start
         client = start_udt_client(name,port)
         master_ref = self.find(name)
         master_ref.tell(client)
         ctx = nil
         loop do
-         ctx = master_ref.ask('ctx',1000)
+         ctx = master_ref.ask('ctx',10)
          break if ctx
-         sleep 0.100
         end
-        master_ref.tell('start_player')
-      end
-
-      def send_message_loop
-        sleep 3
-        Thread.new do
-          loop do
-            begin
-              @player.tell('send_chat_message',get_self)
-              sleep 0.100
-            rescue Exception => e
-              puts e
-            end
-          end
-        end
+        master_ref.tell('start_players')
       end
 
       def post_init(*args)
-        @player_id = args.first
         @client = nil
         @ctx = nil
-        @player = nil
       end
 
       def start_player
         name = "player#{@player_id}"
-        child = Actor::Builder.new(PlayerBot,@client,@ctx,name,@player_id).with_parent(context).with_name(name).start
+        child = Actor::Builder.new(Bot::Chat,@client,@ctx,name,@player_id).with_parent(context).with_name(name).start
         @player = child
       end
 
@@ -54,9 +37,9 @@ module GameMachine
           @client = message
         elsif message == 'ctx'
           sender.tell(@ctx) if @ctx
-        elsif message == 'start_player'
-          start_player
-          send_message_loop
+        elsif message == 'start_players'
+          GameMachine.logger.info "#{@player_id} started"
+          #start_player
         else
           client_message = ClientMessage.parse_from(message.bytes)
           @player.tell(client_message,get_self)

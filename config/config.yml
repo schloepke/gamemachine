@@ -20,7 +20,7 @@ development:
     - seed02
   servers:
     default:
-      http_enabled: false
+      http_enabled: true
       udp:
         port: 8100
         host: localhost

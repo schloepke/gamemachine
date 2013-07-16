@@ -1,6 +1,6 @@
 module GameMachine
-  module Botnet
-    class PlayerBot < Actor::Base
+  module Bot
+    class Chat < Actor::Base
 
       CHAT_CHANNELS = ['region','global','help','group1']
 

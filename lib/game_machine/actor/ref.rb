@@ -44,7 +44,7 @@ module GameMachine
         end
         JavaLib::Await.result(future, duration)
       rescue Java::JavaUtilConcurrent::TimeoutException => e
-        GameMachine.logger.warn("TimeoutException caught in ask (timeout = #{timeout})")
+        GameMachine.logger.debug("TimeoutException caught in ask (timeout = #{timeout})")
         false
       end
 

@@ -14,6 +14,8 @@ require 'descriptive_statistics'
 require "uri"
 require 'singleton'
 require 'slop'
+require 'aasm'
+require 'statemachine'
 
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
@@ -102,8 +104,8 @@ require_relative 'game_machine/player_registry'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/cli'
 
-require_relative 'game_machine/botnet/master'
-require_relative 'game_machine/botnet/player_bot'
+require_relative 'game_machine/bot/client'
+require_relative 'game_machine/bot/chat'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
