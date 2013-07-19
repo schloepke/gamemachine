@@ -29,14 +29,12 @@ module GameMachine
           GameMachine.logger.debug "RequestHandlers::Authentication Disconnected #{message.player_id}"
           destroy_state(message.player_id)
         else
-          become(message.player.id)
-
-          if authenticated? || authenticate
-            Handlers::Game.find.tell(message)
+          load_state(message.player.id) do
+            if authenticated? || authenticate
+              Handlers::Game.find.tell(message)
+            end
+            message.player.authenticated = authenticated?
           end
-          message.player.authenticated = authenticated?
-
-          save_state(message.player.id)
         end
       end
     end

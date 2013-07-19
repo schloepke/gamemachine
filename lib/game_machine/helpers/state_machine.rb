@@ -1,9 +1,14 @@
 module GameMachine
   module Helpers
     module StateMachine
-      def become(id)
+
+      def load_state(id, &block)
         @actor_states[id] ||= @initial_state
         self.state = @actor_states[id]
+        if block_given?
+          yield
+          save_state(id)
+        end
       end
 
       def save_state(id)
@@ -17,7 +22,7 @@ module GameMachine
       def initialize_states
         @actor_states = {}
         initialize_state_machines
-        @initial_state = self.state
+        @initial_state = self.state.dup
       end
     end
   end

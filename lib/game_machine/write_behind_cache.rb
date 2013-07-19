@@ -2,6 +2,7 @@ module GameMachine
   class WriteBehindCache < Actor::Base
 
     attr_accessor :write_interval, :max_writes_per_second
+    attr_reader :cache, :queue
 
     def post_init(*args)
       @write_interval = Settings.write_behind_cache.write_interval
@@ -9,7 +10,8 @@ module GameMachine
       @store = DataStore.instance
       @cache = {}
       @updates = {}
-      @queued = []
+      @queue = []
+      @queue_map = {}
       @last_write = current_time - (120 * 1000)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
@@ -21,12 +23,14 @@ module GameMachine
       if message.is_a?(String)
         handle_scheduled_message(message)
       else
+        set_message(message)
         if new_message?(message)
           write(message)
         elsif eligible_for_write?(message)
           write(message)
+        else
+          enqueue(message.id)
         end
-        set_message(message)
       end
     end
 
@@ -41,6 +45,7 @@ module GameMachine
     end
 
     def eligible_for_write?(message)
+      return true if write_interval == -1
       (current_time - last_updated(message)) > write_interval
     end
 
@@ -53,14 +58,14 @@ module GameMachine
     end
 
     def queue_stats
-      if @queued.size > 10
-        GameMachine.logger.warn "Queued messages size = #{@queued.size}"
+      if @queue.size > 10
+        GameMachine.logger.warn "Queued messages size = #{@queue.size}"
       end
     end
 
     def check_queue
-      return if @queued.empty?
-      if message = get_message(@queued.shift)
+      return if @queue.empty?
+      if message = get_message(dequeue)
         write(message)
       end
     end
@@ -74,6 +79,7 @@ module GameMachine
     end
 
     def busy?(message)
+      return false if max_writes_per_second == -1
       (current_time - @last_write) < min_time_between_writes
     end
 
@@ -82,13 +88,25 @@ module GameMachine
     end
 
     def enqueue(message_id)
-      @queued << message_id
+      unless @queue_map.fetch(message_id,nil)
+        @queue << message_id
+        @queue_map[message_id] = true
+      end
+    end
+
+    def dequeue
+      if message_id = @queue.shift
+        @queue_map.delete(message_id)
+        message_id
+      else
+        nil
+      end
     end
 
     #  If there are items in queue, write one of those and put
     # the current message at the end of the queue
     def swap_if_queued_exists(message)
-      if queued_message = get_message(@queued.shift)
+      if queued_message = get_message(dequeue)
         enqueue(message)
         queued_message
       else

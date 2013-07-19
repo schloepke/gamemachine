@@ -8,7 +8,7 @@ module GameMachine
     end
 
     let(:data_store) do
-      double("DataStore", :put => true, :get => nil, :shutdown => true)
+      double("DataStore", :set => true, :get => nil, :shutdown => true)
     end
 
     subject do
@@ -50,6 +50,18 @@ module GameMachine
       end
 
       context "receives a protobuf message" do
+
+        it "new message should be written to cache" do
+          subject.on_receive(entity)
+          subject.cache.fetch(entity.id).should == entity
+        end
+
+        it "message not eligible for write should be enqueued" do
+          subject.on_receive(entity)
+          subject.on_receive(entity)
+          subject.queue.size.should == 1
+        end
+
         it "saves to store with entity id and entity" do
           data_store.should_receive(:set).with(entity.id,kind_of(java.lang.Object))
           subject.on_receive(entity)
@@ -70,10 +82,22 @@ module GameMachine
         end
 
         it "sequential writes that exceed max writes per second should be enqueued" do
+          subject.write_interval = -1
+          subject.max_writes_per_second = 1
+          data_store.should_receive(:set).exactly(1).times
+          subject.should_receive(:enqueue).exactly(2).times
+          3.times do |i|
+            subject.on_receive(entity.clone.set_id(i.to_s))
+          end
+        end
+
+        it "sequential writes of existing messages that exceed write_interval should be enqueued" do
+          subject.write_interval = 100000
+          subject.max_writes_per_second = -1
           data_store.should_receive(:set).exactly(1).times
           subject.should_receive(:enqueue).exactly(3).times
           4.times do |i|
-            subject.on_receive(entity.clone.set_id(i.to_s))
+            subject.on_receive(entity.set_id('11'))
           end
         end
       end
