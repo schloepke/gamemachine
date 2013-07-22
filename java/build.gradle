@@ -46,6 +46,11 @@ dependencies {
     compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
     compile(group: 'io.netty', name: 'netty-all', version:'4.0.0.CR9')
     compile 'org.apache.camel:camel-jetty:2.10.3'
+    compile 'org.dyn4j:dyn4j:3.1.4'
+    //compile 'org.jbox2d:jbox2d:2.2.1.1'
+    //compile files('third_party/jmonkey/*.jar')
+    compile fileTree(dir: 'third_party/libgdx', include: '*.jar')
+    compile fileTree(dir: 'third_party/jme', include: '*.jar')
     
     
   }

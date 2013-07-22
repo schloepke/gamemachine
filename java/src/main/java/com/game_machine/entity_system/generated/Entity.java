@@ -121,6 +121,14 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public RegisterPlayerObserver registerPlayerObserver;
 
 
+
+    public PlayerMove playerMove;
+
+
+
+    public PlayerAttack playerAttack;
+
+
     
 
 
@@ -133,6 +141,20 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
+
+
+		if (this.hasPlayerMove()) {
+			names.add(this.playerMove.getClass().getSimpleName());
+		}
+
+
+
+
+
+		if (this.hasPlayerAttack()) {
+			names.add(this.playerAttack.getClass().getSimpleName());
+		}
+
 
 
 		if (this.hasRegisterPlayerObserver()) {
@@ -568,6 +590,40 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public PlayerMove getPlayerMove() {
+		return playerMove;
+	}
+	
+	public Entity setPlayerMove(PlayerMove playerMove) {
+		this.playerMove = playerMove;
+		return this;
+	}
+	
+	public Boolean hasPlayerMove()  {
+        return playerMove == null ? false : true;
+    }
+
+
+
+    
+
+	public PlayerAttack getPlayerAttack() {
+		return playerAttack;
+	}
+	
+	public Entity setPlayerAttack(PlayerAttack playerAttack) {
+		this.playerAttack = playerAttack;
+		return this;
+	}
+	
+	public Boolean hasPlayerAttack()  {
+        return playerAttack == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -786,6 +842,24 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
                 	
 
 
+            	case 19:
+
+
+                	message.playerMove = input.mergeObject(message.playerMove, PlayerMove.getSchema());
+                    break;
+
+                	
+
+
+            	case 20:
+
+
+                	message.playerAttack = input.mergeObject(message.playerAttack, PlayerAttack.getSchema());
+                    break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -999,6 +1073,28 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.playerMove != null)
+    		output.writeObject(19, message.playerMove, PlayerMove.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.playerAttack != null)
+    		output.writeObject(20, message.playerAttack, PlayerAttack.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1041,6 +1137,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 17: return "errorMessage";
 
         	case 18: return "registerPlayerObserver";
+
+        	case 19: return "playerMove";
+
+        	case 20: return "playerAttack";
 
             default: return null;
         }
@@ -1091,6 +1191,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("errorMessage", 17);
 
     	__fieldMap.put("registerPlayerObserver", 18);
+
+    	__fieldMap.put("playerMove", 19);
+
+    	__fieldMap.put("playerAttack", 20);
 
     }
    

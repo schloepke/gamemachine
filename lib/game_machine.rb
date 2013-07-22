@@ -51,6 +51,9 @@ java_import 'com.game_machine.entity_system.generated.PlayerLogout'
 java_import 'com.game_machine.entity_system.generated.ErrorMessage'
 java_import 'com.game_machine.entity_system.generated.PlayerRegister'
 java_import 'com.game_machine.entity_system.generated.RegisterPlayerObserver'
+java_import 'com.game_machine.entity_system.generated.PlayerMove'
+java_import 'com.game_machine.entity_system.generated.PlayerAttack'
+java_import 'com.game_machine.entity_system.generated.Target'
 
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
@@ -67,6 +70,9 @@ module GameMachine
 end
 
 
+require_relative 'game_machine/gdx'
+require_relative 'game_machine/jme'
+require_relative 'game_machine/dyn4j'
 require_relative 'game_machine/java_lib'
 require_relative 'game_machine/logger'
 require_relative 'game_machine/settings'
@@ -104,6 +110,11 @@ require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
 require_relative 'game_machine/akka'
+require_relative 'game_machine/physics/world'
+require_relative 'game_machine/physics/body'
+require_relative 'game_machine/physics/world3d'
+require_relative 'game_machine/physics/jme_app'
+require_relative 'game_machine/physics/jme_body'
 require_relative 'game_machine/cli'
 
 require_relative 'game_machine/bot/client'

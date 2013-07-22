@@ -67,6 +67,7 @@ DEPENDENCIES
   aasm
   consistent-hashing
   descriptive_statistics
+  ffi
   guard-jruby-rspec
   guard-shell
   json

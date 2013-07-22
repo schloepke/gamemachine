@@ -97,6 +97,7 @@ module GameMachine
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(10).start
+        Actor::Builder.new(Physics::World).start
       end
 
       def start_game_systems

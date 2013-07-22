@@ -65,6 +65,14 @@ module GameMachine
         )
       end
 
+      def player_move(x,y)
+        current_entity.set_player_move(
+          PlayerMove.new.set_target(
+            Target.new.set_x(x).set_y(y)
+          )
+        )
+      end
+
       def client_connection(client_id,gateway)
         ClientConnection.new.set_id(client_id).set_gateway(gateway)
       end

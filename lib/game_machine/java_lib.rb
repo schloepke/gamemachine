@@ -24,5 +24,9 @@ module GameMachine
     include_package 'java.util'
     include_package 'com.couchbase.client'
     include_package 'io.netty.channel'
+    include_package 'com.overload.loc'
+    include_package 'com.overload.algorithms.pathfinding'
+    include_package 'com.jme3.bullet'
+    include_package 'com.jme3.bullet.collision.shapes'
   end
 end
