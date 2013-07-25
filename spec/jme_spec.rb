@@ -3,6 +3,7 @@ require 'spec_helper'
 module GameMachine
 
   describe "jmonkey engine" do
+    pending do
     it "works" do
       Jme::Natives.extractNativeLib("linux", "bulletjme64", true, false)
       app = Physics::JmeApp.new
@@ -13,6 +14,7 @@ module GameMachine
       app.add_geometry(body.geometry)
       sleep 2
       app.stop
+    end
     end
   end
 end

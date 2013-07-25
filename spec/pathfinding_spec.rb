@@ -30,6 +30,7 @@ module GameMachine
   end
   describe 'pathfinding' do
 
+    pending do
     it "works" do
       node1 = JavaLib::Node.new(0,0)
       node2 = JavaLib::Node.new(390,390)
@@ -43,6 +44,7 @@ module GameMachine
       end
       end
       puts "#{time} "
+    end
     end
   end
 end

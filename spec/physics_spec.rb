@@ -23,6 +23,7 @@ end
 module GameMachine
   describe "physics" do
 
+    pending do
     it "gdx" do
       s = Gdx::Vector3.new(0,0,0)
       e = Gdx::Vector3.new(3000,2000,900)
@@ -47,6 +48,7 @@ module GameMachine
         puts "#{body.x} #{body.y}"
         world.update(1)
       end
+    end
     end
   end
 end
