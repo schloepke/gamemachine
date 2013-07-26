@@ -1,10 +1,10 @@
 module GameMachine
-    class ChatManager < Actor::Base
+  class ChatManager < Actor::Base
 
 
-    aspect %w(ChatMessage Player ClientConnection)
-    aspect %w(JoinChat Player ClientConnection)
-    aspect %w(LeaveChat Player ClientConnection)
+    aspect %w(ChatMessage Player)
+    aspect %w(JoinChat Player)
+    aspect %w(LeaveChat Player)
 
     def post_init(*args)
       @chat_actors = {}

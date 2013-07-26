@@ -147,7 +147,7 @@ message TestObject {
 }
   
   
-message PlayersAroundMe {
+message Neighbors {
   repeated Player player = 1;
 }
 	
@@ -158,7 +158,7 @@ message GameCommand {
 
 message Entity {
 	optional Player player = 1;
-  	optional PlayersAroundMe playersAroundMe = 2;
+  	optional Neighbors neighbors = 2;
   	optional GameCommand gameCommand = 3;
   	optional ChatMessage chatMessage = 4;
   	optional ClientConnection clientConnection = 5;

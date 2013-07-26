@@ -21,6 +21,7 @@ module GameMachine
       def dispatch_entities(entities)
         entities.each do |entity|
           component_names = entity.component_names
+          GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?
           registered_classes.each do |klass|
             klass.aspects.each do |aspect|

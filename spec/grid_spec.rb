@@ -11,15 +11,18 @@ module GameMachine
       it "creates a grid point in correct cell" do
         subject.set(1,0,0)
         point = subject.points_in_cell(0).first
-        expect(point).to be_a(GameMachine::Physics::GridPoint)
-        expect(point.id).to eq(1)
+        expect(point[1]).to eq(0)
+        expect(point[2]).to eq(0)
       end
     end
 
     describe "#get" do
-      it "Returns the cell for the given id" do
+      it "Returns the cell,x,y values for the given id" do
         subject.set(1,0,0)
-        expect(subject.get(1)).to eq (0)
+        values = subject.get(1)
+        expect(values[0]).to eq(0)
+        expect(values[1]).to eq(0)
+        expect(values[2]).to eq(0)
       end
     end
 
@@ -41,8 +44,7 @@ module GameMachine
       it "returns all objects within given radius of cell" do
         subject.set(1,0,0)
         points = subject.neighbors(0,0,25)
-        grid_point = points.first
-        expect(grid_point.id).to eq(1)
+        expect(points.first[1]).to eq(0)
       end
 
       it "does not return cells out of range" do
@@ -51,11 +53,12 @@ module GameMachine
       end
 
       it "returns multiple points in the same cell" do
-        subject.set(1,0,0)
-        subject.set(2,0,0)
+        subject.set(1,3,0)
+        subject.set(2,4,0)
         points = subject.neighbors(0,0,25)
-        expect(points.first.id).to eq(1)
-        expect(points.last.id).to eq(2)
+        puts points.inspect
+        expect(points.first[1]).to eq(3)
+        expect(points.last[1]).to eq(4)
       end
     end
   end

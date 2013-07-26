@@ -54,7 +54,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public PlayersAroundMe playersAroundMe;
+    public Neighbors neighbors;
 
 
 
@@ -263,8 +263,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-		if (this.hasPlayersAroundMe()) {
-			names.add(this.playersAroundMe.getClass().getSimpleName());
+		if (this.hasNeighbors()) {
+			names.add(this.neighbors.getClass().getSimpleName());
 		}
 
 
@@ -303,17 +303,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public PlayersAroundMe getPlayersAroundMe() {
-		return playersAroundMe;
+	public Neighbors getNeighbors() {
+		return neighbors;
 	}
 	
-	public Entity setPlayersAroundMe(PlayersAroundMe playersAroundMe) {
-		this.playersAroundMe = playersAroundMe;
+	public Entity setNeighbors(Neighbors neighbors) {
+		this.neighbors = neighbors;
 		return this;
 	}
 	
-	public Boolean hasPlayersAroundMe()  {
-        return playersAroundMe == null ? false : true;
+	public Boolean hasNeighbors()  {
+        return neighbors == null ? false : true;
     }
 
 
@@ -692,7 +692,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 2:
 
 
-                	message.playersAroundMe = input.mergeObject(message.playersAroundMe, PlayersAroundMe.getSchema());
+                	message.neighbors = input.mergeObject(message.neighbors, Neighbors.getSchema());
                     break;
 
                 	
@@ -887,8 +887,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.playersAroundMe != null)
-    		output.writeObject(2, message.playersAroundMe, PlayersAroundMe.getSchema(), false);
+    	if(message.neighbors != null)
+    		output.writeObject(2, message.neighbors, Neighbors.getSchema(), false);
 
     	
 
@@ -1104,7 +1104,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 1: return "player";
 
-        	case 2: return "playersAroundMe";
+        	case 2: return "neighbors";
 
         	case 3: return "gameCommand";
 
@@ -1158,7 +1158,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("player", 1);
 
-    	__fieldMap.put("playersAroundMe", 2);
+    	__fieldMap.put("neighbors", 2);
 
     	__fieldMap.put("gameCommand", 3);
 
