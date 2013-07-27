@@ -129,6 +129,14 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public PlayerAttack playerAttack;
 
 
+
+    public GetNeighbors getNeighbors;
+
+
+
+    public TrackPlayer trackPlayer;
+
+
     
 
 
@@ -141,6 +149,18 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
+
+
+		if (this.hasGetNeighbors()) {
+			names.add(this.getNeighbors.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasTrackPlayer()) {
+			names.add(this.trackPlayer.getClass().getSimpleName());
+		}
+
 
 
 		if (this.hasPlayerMove()) {
@@ -624,6 +644,40 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public GetNeighbors getGetNeighbors() {
+		return getNeighbors;
+	}
+	
+	public Entity setGetNeighbors(GetNeighbors getNeighbors) {
+		this.getNeighbors = getNeighbors;
+		return this;
+	}
+	
+	public Boolean hasGetNeighbors()  {
+        return getNeighbors == null ? false : true;
+    }
+
+
+
+    
+
+	public TrackPlayer getTrackPlayer() {
+		return trackPlayer;
+	}
+	
+	public Entity setTrackPlayer(TrackPlayer trackPlayer) {
+		this.trackPlayer = trackPlayer;
+		return this;
+	}
+	
+	public Boolean hasTrackPlayer()  {
+        return trackPlayer == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -855,6 +909,24 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.playerAttack = input.mergeObject(message.playerAttack, PlayerAttack.getSchema());
+                    break;
+
+                	
+
+
+            	case 21:
+
+
+                	message.getNeighbors = input.mergeObject(message.getNeighbors, GetNeighbors.getSchema());
+                    break;
+
+                	
+
+
+            	case 22:
+
+
+                	message.trackPlayer = input.mergeObject(message.trackPlayer, TrackPlayer.getSchema());
                     break;
 
                 	
@@ -1095,6 +1167,28 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.getNeighbors != null)
+    		output.writeObject(21, message.getNeighbors, GetNeighbors.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.trackPlayer != null)
+    		output.writeObject(22, message.trackPlayer, TrackPlayer.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1141,6 +1235,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 19: return "playerMove";
 
         	case 20: return "playerAttack";
+
+        	case 21: return "getNeighbors";
+
+        	case 22: return "trackPlayer";
 
             default: return null;
         }
@@ -1195,6 +1293,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("playerMove", 19);
 
     	__fieldMap.put("playerAttack", 20);
+
+    	__fieldMap.put("getNeighbors", 21);
+
+    	__fieldMap.put("trackPlayer", 22);
 
     }
    

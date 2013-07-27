@@ -2,6 +2,14 @@ package com.game_machine.entity_system.generated;
 
 option optimize_for = SPEED;
 
+message GetNeighbors {
+	required bool value = 1;
+}
+
+message TrackPlayer {
+	required bool value = 1;
+}
+
 message PlayerMove {
 	required Target target = 1;
 }
@@ -177,6 +185,8 @@ message Entity {
     optional RegisterPlayerObserver registerPlayerObserver = 18;
     optional PlayerMove playerMove = 19;
     optional PlayerAttack playerAttack = 20;
+    optional GetNeighbors getNeighbors = 21;
+    optional TrackPlayer trackPlayer = 22;
 }
 
 message ClientMessage {

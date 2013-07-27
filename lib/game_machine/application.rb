@@ -53,7 +53,7 @@ module GameMachine
         start_core_systems
         start_handlers
         start_game_systems
-        start_user_systems
+        load_game
       end
 
       def start_endpoints
@@ -71,10 +71,10 @@ module GameMachine
         end
       end
 
-      def start_user_systems
-        GameMachine.logger.debug "APP_ROOT = #{GameMachine.app_root}"
-        app_classes = Dir[File.join(GameMachine.app_root,'app','lib', '*.rb')]
-        app_classes.each {|app_class| require app_class}
+      def load_game
+        boot = File.join(GameMachine.app_root,'boot.rb')
+        require boot
+        GameMachine.logger.info "Game Loaded"
       end
 
       def start_handlers
@@ -105,7 +105,7 @@ module GameMachine
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
-        Actor::Builder.new(ChatManager).start
+        Actor::Builder.new(GameSystems::ChatManager).start
       end
 
       private

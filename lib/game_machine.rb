@@ -54,6 +54,8 @@ java_import 'com.game_machine.entity_system.generated.RegisterPlayerObserver'
 java_import 'com.game_machine.entity_system.generated.PlayerMove'
 java_import 'com.game_machine.entity_system.generated.PlayerAttack'
 java_import 'com.game_machine.entity_system.generated.Target'
+java_import 'com.game_machine.entity_system.generated.TrackPlayer'
+java_import 'com.game_machine.entity_system.generated.GetNeighbors'
 
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
@@ -92,7 +94,7 @@ require_relative 'game_machine/game_systems/local_echo'
 require_relative 'game_machine/game_systems/remote_echo'
 require_relative 'game_machine/actor/builder'
 require_relative 'game_machine/message_queue'
-require_relative 'game_machine/chat_manager'
+require_relative 'game_machine/game_systems/chat_manager'
 require_relative 'game_machine/game_systems/chat'
 require_relative 'game_machine/game_systems/chat_topic'
 require_relative 'game_machine/object_db'

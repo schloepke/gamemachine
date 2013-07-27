@@ -1,5 +1,6 @@
 nbproject
 target/
+spec
 build
 .settings
 .classpath

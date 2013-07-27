@@ -1,30 +1,51 @@
-require 'slop'
+require 'trollop'
+require 'fileutils'
 module GameMachine
   class Cli
 
     def self.start
-      opts = Slop.parse(:help => true) do
-        banner 'Usage: datacube [options]'
-
-        on '--cluster',  'start in cluster mode'
-        on 'name=',  'Akka name'
-        on '--server',  'start in standalone server mode'
-        on '--stop',  'stop all nodes'
-
-        help
+      
+      opts = Trollop::options do
+        opt :new
+        opt :cluster
+        version "GameMachine 0.0.1"
+        banner <<-EOS
+      Usage:
+            new install path
+            cluster [name]
+EOS
       end
 
+      
+      if opts[:new]
+        dir = ARGV.shift
 
-      if opts.stop?
+        unless dir
+          Trollop::die :new, "new requires install path"
+        end
+        if File.directory?(dir)
+          Trollop::die :new, "install path already exists"
+        end
+
+        FileUtils.mkdir dir
+        config = File.join(File.dirname(__FILE__), '../../config')
+        boot = File.join(File.dirname(__FILE__), '../../boot.rb')
+        FileUtils.cp_r(config,dir)
+        FileUtils.cp(boot,dir)
+      end
+
+      if opts[:stop]
         GameMachine::Akka.instance.init!
         GameMachine::Akka.instance.kill_all
       end
 
 
-      if opts.server? || opts.cluster?
-        GameMachine::Application.initialize!(opts[:name],opts.cluster?)
+      if opts[:cluster]
+        name = ARGV.shift || 'default'
+        GameMachine::Application.initialize!(name,true)
         GameMachine::Application.start
       end
+
     end
   end
 end
