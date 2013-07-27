@@ -57,6 +57,24 @@ on to other game systems.  At any point in the process, messages can be sent
 back to the client.  
 
 
+## Extensible
+Systems based on message passing are by their nature much easier to integrate 
+with then monolithic applications.  In GameMachine you can plug any
+functionality you want into the system by just creating an actor that can send
+and receive messages to and from other actors in the system.  
+
+Jruby also makes it easy to integrate with other JVM languages, or to use C/C++
+libraries.  For example, it would be straight forward to take a custom physics
+engine written in C and load it into an actor, where you could pass messages
+back and forth between the physics engine and the rest of GameMachine.
+
+The main requirement for external libraries is that they not use global state.
+It's ok if they are not thread safe.  What you cannot have is multiple
+instances of some object that share state.  You must be able to instantiate one
+instance per actor.  The actor system will guarantee that the instance is only
+run in a single thread at a time.
+
+
 ## Distributed data store
 Game Machine has a unique distributed memory store that is designed
 specifically for games.  We trade eventual consistency for eventual durability,
@@ -90,6 +108,7 @@ call.  Blocking calls guarantee that the action was performed, although at a
 small cost.  The amount of time you block is usually just network time on the
 internal lan, as all updates are done in memory.
 
+
 ## UDT, Udp, and Http
 Reliable Udp is supported via UDT.  Udp is also provided, and http is used for things like user login's
 where you need the ssl security that http can provide out of the box.
@@ -100,6 +119,7 @@ In most cases udp is fine for multiplayer games as you rarely send so much data 
 present, Game Machine cannot handle udp messages that are split over muliple packets.
 
 There are no plans to support TCP at present.  It is an inferior protocol in almost every way for games.
+
 
 ## Distributed chat system
 We made use of Akka's built in distributed pub/sub for the chat system.  It is
@@ -128,6 +148,18 @@ some formats that were considered, however briefly:
 
 1. MsgPack - No message types, not a good fit
 2. Json - Too heavy, not a sparse format
+
+
+## Ruby for game logic on the client
+If the game client is java, you get easy access to ruby via jruby.  If the game
+client is in C/C++, there is mini ruby which is lightweight, fast, and easy to
+embed.
+
+The advantage of using ruby is that it's highly productive, you can reuse the
+same code on client and server, and you can make use of the great testing tools
+in the ruby ecosystem.  Having great testing frameworks for client side game
+logic is a huge plus.  Just try to find something like rspec for lua.
+
 
 ## Why Jruby?
 Originally I had planned on making Game Machine a framework that you could use
