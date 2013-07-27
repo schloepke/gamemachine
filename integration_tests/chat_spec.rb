@@ -4,8 +4,8 @@ module GameMachine
   describe "chat" do 
       
     before(:all) do
-      @client = TestClient.start('test1',8200)
-      @client2 = TestClient.start('test2',8202)
+      @client = Clients::TestClient.start('test1',8200)
+      @client2 = Clients::TestClient.start('test2',8202)
     end
 
     after(:all) do

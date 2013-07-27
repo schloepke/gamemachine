@@ -10,8 +10,8 @@ module GameMachine
         it "stress with small payload" do
           measure(10,10000) do
             Thread.current['bytes'] ||= client_message.to_byte_array
-            Thread.current['s'] ||= Client.connect_udt
-            result = Client.send_udt(Thread.current['s'],Thread.current['bytes'])
+            Thread.current['s'] ||= Clients::Client.connect_udt
+            result = Clients::Client.send_udt(Thread.current['s'],Thread.current['bytes'])
             ClientMessage.parse_from(result)
           end
         end
@@ -19,8 +19,8 @@ module GameMachine
         it "stress with large payload" do
           measure(10,10000) do
             Thread.current['bytes'] ||= client_message.to_byte_array
-            Thread.current['s'] ||= Client.connect_udt
-            result = Client.send_udt(Thread.current['s'],Thread.current['bytes'])
+            Thread.current['s'] ||= Clients::Client.connect_udt
+            result = Clients::Client.send_udt(Thread.current['s'],Thread.current['bytes'])
             ClientMessage.parse_from(result)
           end
         end

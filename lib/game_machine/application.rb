@@ -72,8 +72,8 @@ module GameMachine
       end
 
       def load_game
-        boot = File.join(GameMachine.app_root,'boot.rb')
-        require boot
+        boot = ENV['boot'] ? ENV['boot'] : 'boot.rb'
+        require File.join(GameMachine.app_root,boot)
         GameMachine.logger.info "Game Loaded"
       end
 

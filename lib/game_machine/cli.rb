@@ -6,13 +6,20 @@ module GameMachine
     def self.start
       
       opts = Trollop::options do
-        opt :new
-        opt :cluster
+        opt :new, "Create new game"
+        opt :server, "Run server"
+        opt :boot, "Boot file.  Defaults to boot.rb", :type => :string
+        opt :name, "Config name, defaults to 'default'", :type => :string
         version "GameMachine 0.0.1"
         banner <<-EOS
-      Usage:
-            new install path
-            cluster [name]
+Usage:
+
+* Create new game in /tmp/mygame
+  --new /tmp/mygame
+
+* Start server seed01 with boot file mygame.rb:
+  --server --name=seed01 --boot=mygame.rb
+
 EOS
       end
 
@@ -32,18 +39,21 @@ EOS
         boot = File.join(File.dirname(__FILE__), '../../boot.rb')
         FileUtils.cp_r(config,dir)
         FileUtils.cp(boot,dir)
+        exit 0
+      end
+
+      if opts[:boot]
+        ENV['boot'] = opts[:boot]
+      end
+
+      if opts[:server]
+        GameMachine::Application.initialize!(opts[:name] || 'default',true)
+        GameMachine::Application.start
       end
 
       if opts[:stop]
         GameMachine::Akka.instance.init!
         GameMachine::Akka.instance.kill_all
-      end
-
-
-      if opts[:cluster]
-        name = ARGV.shift || 'default'
-        GameMachine::Application.initialize!(name,true)
-        GameMachine::Application.start
       end
 
     end

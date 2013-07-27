@@ -4,11 +4,12 @@ module GameMachine
 
   describe "basic" do 
 
-    let(:client) {Client.new(:seed01)}
+    let(:client) {Clients::Client.new(:seed01)}
 
     context "test" do
 
       describe "sending messages to remote actors" do
+
         it "there and back again" do
           ref = GameSystems::LocalEcho.find_remote('seed01')
           ref.send_message('blah', :blocking => true, :timeout => 1000).should == 'blah'
@@ -24,15 +25,15 @@ module GameMachine
 
         it "udt should get response" do
           bytes = static_client_message.to_byte_array
-          Thread.current['s'] ||= Client.connect_udt
-          result = Client.send_udt(Thread.current['s'],bytes)
+          Thread.current['s'] ||= Clients::Client.connect_udt
+          result = Clients::Client.send_udt(Thread.current['s'],bytes)
           returned_message = ClientMessage.parse_from(result)
           returned_message.get_entity_list.first.id.should == static_entity.id
         end
 
         it "udp should get response" do
           bytes = static_client_message.to_byte_array
-          c = Client.new(:seed01)
+          c = Clients::Client.new(:seed01)
           c.send_message(bytes)
           message = c.receive_message
           returned_message = ClientMessage.parse_from(message.to_java_bytes)
@@ -40,7 +41,7 @@ module GameMachine
         end
 
         it "player should be able to login via http" do
-         response = Client.http_post('/auth',{:username => 'player', :password => 'pass'})
+         response = Clients::Client.http_post('/auth',{:username => 'player', :password => 'pass'})
          response = JSON.parse(response)
          response['authtoken'].should == Settings.authtoken
         end
@@ -51,12 +52,12 @@ module GameMachine
         end
 
         it "echo request" do
-          client = TestClient.start('test2',8200)
-          message = Helpers::GameMessage.new('player1')
+          client = Clients::TestClient.start('test2',8200)
+          message = Helpers::GameMessage.new('player123')
           message.echo_test('one')
           client.send_to_server(message.client_message)
-          expect(client.entity_with_component('EchoTest',0.200)).to be_true
-          logout = Helpers::GameMessage.new('player1')
+          expect(client.entity_with_component('EchoTest',0.900)).to be_true
+          logout = Helpers::GameMessage.new('player123')
           logout.player_logout
           client.send_to_server(logout.client_message)
         end

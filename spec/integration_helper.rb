@@ -1,7 +1,7 @@
 require 'rubygems'
 require 'net/http'
 require_relative '../lib/game_machine'
-require_relative '../lib/game_machine/test_client'
+require_relative '../lib/game_machine/clients/test_client'
 
 RSpec.configure do |config|
   config.before(:suite) do
@@ -11,7 +11,7 @@ RSpec.configure do |config|
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers
     GameMachine::Application.start_game_systems
-    GameMachine::Application.start_user_systems
+    GameMachine::Application.load_game
     puts "before suite"
   end
 

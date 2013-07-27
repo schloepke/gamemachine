@@ -44,7 +44,7 @@ dependencies {
     compile group: 'com.google.code.findbugs', name: 'jsr305', version:'2.0.1'
     compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
     compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
-    compile(group: 'io.netty', name: 'netty-all', version:'4.0.0.CR9')
+    compile(group: 'io.netty', name: 'netty-all', version:'4.0.4.Final')
     compile 'org.apache.camel:camel-jetty:2.10.3'
     compile 'org.dyn4j:dyn4j:3.1.4'
     //compile 'org.jbox2d:jbox2d:2.2.1.1'

@@ -1,6 +1,14 @@
 
 require 'integration_helper'
 
+class ObjectDbCallbacks
+  include GameMachine::ObjectDbProc
+
+    dbproc(:update) do |entity|
+      entity
+    end
+end
+
 module GameMachine
   describe ObjectDb do 
 
