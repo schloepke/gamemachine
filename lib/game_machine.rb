@@ -120,6 +120,7 @@ require_relative 'game_machine/physics/jme_app'
 require_relative 'game_machine/physics/jme_body'
 require_relative 'game_machine/cli'
 require_relative 'game_machine/clients/client'
+require_relative 'game_machine/clients/udt_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'

@@ -65,6 +65,24 @@ module GameMachine
         )
       end
 
+      def track_player
+        current_entity.set_track_player(
+          TrackPlayer.new.set_value(true)
+        )
+      end
+
+      def get_neighbors
+        current_entity.set_get_neighbors(
+          GetNeighbors.new.set_value(true)
+        )
+      end
+
+      def neighbors(players)
+        current_entity.set_neighbors(
+          Neighbors.new.set_player_list(players)
+        )
+      end
+
       def player_move(x,y)
         current_entity.set_player_move(
           PlayerMove.new.set_target(

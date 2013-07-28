@@ -20,8 +20,8 @@ module GameMachine
       let(:machine) {AuthenticationMachine.new(message)}
 
       subject do
-        props = JavaLib::Props.new(Authentication);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Authentication.name);
+        props = JavaLib::Props.new(Authentication)
+        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Authentication.name)
         ref.underlying_actor.initialize_states
         ref.underlying_actor
       end

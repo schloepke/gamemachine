@@ -23,7 +23,7 @@ RSpec.configure do |config|
 
   config.after(:suite) do
     puts "after suite"
-    GameMachine::Application.stop_actor_system
+    GameMachine::Application.stop
   end
 end
 

@@ -59,8 +59,7 @@ public class UdtServerHandler extends SimpleChannelInboundHandler<UdtMessage> {
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
 		UdtMessage message = new UdtMessage(buf);
 
-		ctx.channel().write(message);
-		ctx.channel().flush();
+		ctx.channel().writeAndFlush(message);
 		log.debug("UDT sendToClient " + new String(bytes) + " " + bytes.length);
 	}
 

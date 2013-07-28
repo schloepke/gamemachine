@@ -44,6 +44,7 @@ module GameMachine
       def stop
         stop_actor_system
         DataStore.instance.shutdown
+        JavaLib::UdtServer.stop
       end
 
       def start

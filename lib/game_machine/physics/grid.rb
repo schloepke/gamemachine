@@ -51,7 +51,7 @@ module GameMachine
 
       def remove(id)
         if values = @object_index.fetch(id,nil)
-          cell = values.first
+          cell = values[1]
           if @cells.has_key?(cell)
             @cells[cell].delete(id)
           end
@@ -61,7 +61,7 @@ module GameMachine
 
       def set(id,x,y)
         cell = hash(x,y)
-        values = [cell,x,y]
+        values = [id,cell,x,y]
         @object_index[id] = values
         @cells[cell] ||= {}
         @cells[cell][id] = values

@@ -17,12 +17,13 @@ module GameMachine
     end
 
     describe "#get" do
-      it "Returns the cell,x,y values for the given id" do
+      it "Returns the values for the given id" do
         subject.set(1,0,0)
         values = subject.get(1)
-        expect(values[0]).to eq(0)
+        expect(values[0]).to eq(1)
         expect(values[1]).to eq(0)
         expect(values[2]).to eq(0)
+        expect(values[3]).to eq(0)
       end
     end
 
@@ -57,8 +58,8 @@ module GameMachine
         subject.set(2,4,0)
         points = subject.neighbors(0,0,25)
         puts points.inspect
-        expect(points.first[1]).to eq(3)
-        expect(points.last[1]).to eq(4)
+        expect(points.first[2]).to eq(3)
+        expect(points.last[2]).to eq(4)
       end
     end
   end
