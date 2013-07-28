@@ -51,7 +51,7 @@ module GameMachine
         builder = Actor::Builder.new(GameSystems::Chat,player_id)
         child = builder.with_parent(context).with_name(name).start
         @chat_actors[player_id] = Actor::Ref.new(child,GameSystems::Chat.name)
-        GameMachine.logger.warn "Chat child for #{player_id} created"
+        GameMachine.logger.debug "Chat child for #{player_id} created"
       end
     end
   end

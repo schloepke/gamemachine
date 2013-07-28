@@ -151,6 +151,11 @@ some formats that were considered, however briefly:
 
 
 ## Ruby for game logic on the client
+Using ruby for client side game logic is an experiment that I'm hoping to try
+out.  Recently a version of ruby called mini ruby was released that provides a
+lighweight, fast, easy to embed ruby vm.  There are a lot of advantages to
+using ruby over more traditional game scripting languages like lua.
+
 If the game client is java, you get easy access to ruby via jruby.  If the game
 client is in C/C++, there is mini ruby which is lightweight, fast, and easy to
 embed.
@@ -158,7 +163,7 @@ embed.
 The advantage of using ruby is that it's highly productive, you can reuse the
 same code on client and server, and you can make use of the great testing tools
 in the ruby ecosystem.  Having great testing frameworks for client side game
-logic is a huge plus.  Just try to find something like rspec for lua.
+logic is also a huge plus.
 
 
 ## Why Jruby?

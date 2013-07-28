@@ -2,7 +2,11 @@ module GameMachine
   class ClusterMonitor < Actor::Base
 
     def self.cluster_members
-      @@cluster_members ||= java.util.concurrent.ConcurrentHashMap.new
+      if @cluster_members
+        @cluster_members
+      else
+        @cluster_members = java.util.concurrent.ConcurrentHashMap.new
+      end
     end
 
     def preStart

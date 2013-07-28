@@ -41,7 +41,7 @@ module GameMachine
       if publish.message.has_chat_message
         publish_message = publish.message.chat_message.message
       else
-        public_message = publish.message
+        publish_message = publish.message
       end
       message = Java::akka::contrib::pattern::DistributedPubSubMediator::Publish.new(publish.topic, publish_message)
       @mediator.tell(message, get_sender)

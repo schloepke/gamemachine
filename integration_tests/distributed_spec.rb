@@ -18,7 +18,7 @@ module GameMachine
     describe "stress test" do
       it "distributed stress" do
         e = entity.clone
-        measure(10,10000) do
+        measure(10,100000) do
           Thread.current['ref'] ||= GameSystems::LocalEcho.find_distributed(rand(100).to_s,'DistributedLocalEcho')
           returned_entity = Thread.current['ref'].send_message(e, :blocking => true, :timeout => 1000)
           if returned_entity 

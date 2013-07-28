@@ -1,13 +1,6 @@
 
 require 'integration_helper'
-
-class ObjectDbCallbacks
-  include GameMachine::ObjectDbProc
-
-    dbproc(:update) do |entity|
-      entity
-    end
-end
+require_relative '../spec/boot.rb'
 
 module GameMachine
   describe ObjectDb do 

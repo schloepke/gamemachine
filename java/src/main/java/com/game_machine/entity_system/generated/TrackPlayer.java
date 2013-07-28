@@ -53,6 +53,10 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
     public Boolean value;
 
 
+
+    public Boolean internal;
+
+
     
 
 
@@ -79,6 +83,23 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
 	
 	public Boolean hasValue()  {
         return value == null ? false : true;
+    }
+
+
+
+    
+
+	public Boolean getInternal() {
+		return internal;
+	}
+	
+	public TrackPlayer setInternal(Boolean internal) {
+		this.internal = internal;
+		return this;
+	}
+	
+	public Boolean hasInternal()  {
+        return internal == null ? false : true;
     }
 
 
@@ -148,6 +169,15 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
                 	
 
 
+            	case 2:
+
+
+                	message.internal = input.readBool();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -174,6 +204,17 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
 
 
     	
+
+    	
+
+
+    	if(message.internal != null)
+            output.writeBool(2, message.internal, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -182,6 +223,8 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
         {
 
         	case 1: return "value";
+
+        	case 2: return "internal";
 
             default: return null;
         }
@@ -198,6 +241,8 @@ public final class TrackPlayer  implements Externalizable, Message<TrackPlayer>,
     {
 
     	__fieldMap.put("value", 1);
+
+    	__fieldMap.put("internal", 2);
 
     }
    

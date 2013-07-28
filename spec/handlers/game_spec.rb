@@ -25,7 +25,7 @@ module GameMachine
 
         it "dispatches entities to correct system" do
           client_message = ClientMessage.new.add_entity(leave_chat)
-          ChatManager.stub(:find).and_return(actor_ref)
+          GameSystems::ChatManager.stub(:find).and_return(actor_ref)
           actor_ref.should_receive(:tell)
           Game.should_receive_message(client_message,'dispatch_test') do
             Game.find('dispatch_test').tell(client_message)

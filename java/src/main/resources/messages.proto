@@ -4,10 +4,12 @@ option optimize_for = SPEED;
 
 message GetNeighbors {
 	required bool value = 1;
+	optional uint32 search_radius = 2;
 }
 
 message TrackPlayer {
 	required bool value = 1;
+	optional bool internal = 2;
 }
 
 message PlayerMove {

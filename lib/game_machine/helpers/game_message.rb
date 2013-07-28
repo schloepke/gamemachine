@@ -71,10 +71,13 @@ module GameMachine
         )
       end
 
-      def get_neighbors
-        current_entity.set_get_neighbors(
-          GetNeighbors.new.set_value(true)
-        )
+      def get_neighbors(search_radius=nil)
+          component = GetNeighbors.new
+          component.set_value(true)
+          if search_radius
+            component.set_search_radius(search_radius)
+          end
+        current_entity.set_get_neighbors(component)
       end
 
       def neighbors(players)

@@ -18,7 +18,7 @@ public class EventStreamHandler extends UntypedActor {
 	public EventStreamHandler() {
 		this.getContext().system().eventStream()
 				.subscribe(this.getSelf(), DeadLetter.class);
-		
+		//new DistributedPubSubMediator.Publish("test","out");	
 //		if (this.getContext().system().name().equals("cluster")) {
 //			// Add subscription of cluster events
 //			Cluster.get(this.getContext().system()).subscribe(getSelf(),

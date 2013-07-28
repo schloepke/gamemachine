@@ -134,7 +134,7 @@ module GameMachine
     end
 
     def schedule_queue_run
-      duration = JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
+      duration = JavaLib::Duration.create(200, java.util.concurrent.TimeUnit::MILLISECONDS)
       @scheduler.schedule(duration, duration, get_self, "check_queue", @dispatcher, nil)
     end
 

@@ -53,6 +53,10 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
     public Boolean value;
 
 
+
+    public Integer search_radius;
+
+
     
 
 
@@ -79,6 +83,23 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 	
 	public Boolean hasValue()  {
         return value == null ? false : true;
+    }
+
+
+
+    
+
+	public Integer getSearch_radius() {
+		return search_radius;
+	}
+	
+	public GetNeighbors setSearch_radius(Integer search_radius) {
+		this.search_radius = search_radius;
+		return this;
+	}
+	
+	public Boolean hasSearch_radius()  {
+        return search_radius == null ? false : true;
     }
 
 
@@ -148,6 +169,15 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
                 	
 
 
+            	case 2:
+
+
+                	message.search_radius = input.readUInt32();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -174,6 +204,17 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
 
     	
+
+    	
+
+
+    	if(message.search_radius != null)
+            output.writeUInt32(2, message.search_radius, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -182,6 +223,8 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
         {
 
         	case 1: return "value";
+
+        	case 2: return "search_radius";
 
             default: return null;
         }
@@ -198,6 +241,8 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
     {
 
     	__fieldMap.put("value", 1);
+
+    	__fieldMap.put("search_radius", 2);
 
     }
    

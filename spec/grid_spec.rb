@@ -57,7 +57,6 @@ module GameMachine
         subject.set(1,3,0)
         subject.set(2,4,0)
         points = subject.neighbors(0,0,25)
-        puts points.inspect
         expect(points.first[2]).to eq(3)
         expect(points.last[2]).to eq(4)
       end

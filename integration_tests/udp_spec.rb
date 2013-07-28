@@ -8,7 +8,7 @@ module GameMachine
         it "should do" do
           clients = java.util.concurrent.ConcurrentHashMap.new
           puts 'starting udp client test'
-          measure(10,100000) do
+          measure(10,10000) do
             Thread.current['bytes'] ||= client_message.to_byte_array
             Thread.current['c'] ||= Clients::Client.new(:seed01)
             Thread.current['c'].send_message(Thread.current['bytes'])
