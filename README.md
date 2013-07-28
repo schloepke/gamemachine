@@ -35,7 +35,7 @@ small part of the system, and only reacts to messages it is sent.
 Currently, Game Machine is still under heavy development.  Most of the core systems are feature complete and there will be a release branch within the next month.  Here are the main items that need to get done before we get to an official release.
 
 1. Documentation
-2. Finish install system.  Similar to rails,  it installs an app skeleton to work from
+2. Finish install system.  (working as of 6/25)
 3. Game system for player location tracking (working as of 6/27)
 4. Simple combat system
 5. Round out a few unit tests
