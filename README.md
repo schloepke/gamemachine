@@ -36,7 +36,7 @@ Currently, Game Machine is still under heavy development.  Most of the core syst
 
 1. Documentation
 2. Finish install system.  Similar to rails,  it installs an app skeleton to work from
-3. Game system for player location tracking
+3. Game system for player location tracking (working as of 6/27)
 4. Simple combat system
 5. Round out a few unit tests
 6. Figure out a better way to do integration testing (currently in rspec)
