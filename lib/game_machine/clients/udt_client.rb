@@ -24,7 +24,7 @@ module GameMachine
       end
 
       def receive(timeout=0.100)
-        array = Java::byte[1024].new
+        array = Java::byte[4096].new
         res = @socket.receive(array)
         JavaLib::Arrays.copy_of_range(array,0,res)
       end

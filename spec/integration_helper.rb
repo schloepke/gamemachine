@@ -95,16 +95,18 @@ def large_client_message
   client_message
 end
 
-def measure(num_threads,loops, &blk)
+def measure(num_threads,loops, pre=nil, post=nil,&blk)
   threads = []
   num_threads.times do |thread_id|
     threads << Thread.new do
       results = []
+      pre.call if pre
       loops.times do |i|
         results << Benchmark.realtime do
-          yield
+          blk.call
         end
       end
+      post.call if post
       puts "Number = #{results.number} Average #{results.mean} Standard deviation #{results.standard_deviation}"
     end
   end

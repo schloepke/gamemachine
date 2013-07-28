@@ -156,14 +156,11 @@ out.  Recently a version of ruby called mini ruby was released that provides a
 lighweight, fast, easy to embed ruby vm.  There are a lot of advantages to
 using ruby over more traditional game scripting languages like lua.
 
-If the game client is java, you get easy access to ruby via jruby.  If the game
-client is in C/C++, there is mini ruby which is lightweight, fast, and easy to
-embed.
+If the game client is java, you get easy access to ruby via jruby.
 
 The advantage of using ruby is that it's highly productive, you can reuse the
 same code on client and server, and you can make use of the great testing tools
-in the ruby ecosystem.  Having great testing frameworks for client side game
-logic is also a huge plus.
+in the ruby ecosystem.  
 
 
 ## Why Jruby?
