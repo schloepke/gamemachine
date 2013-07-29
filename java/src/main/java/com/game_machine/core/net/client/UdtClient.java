@@ -21,6 +21,7 @@ import com.game_machine.core.net.server.UdtServer;
 
 public class UdtClient implements Runnable {
 
+	public static final ThreadFactory connectFactory = new UtilThreadFactory("connect");
     private final int port;
     private final String address;
     private UdtClientHandler handler;
@@ -41,8 +42,9 @@ public class UdtClient implements Runnable {
     public static UdtClient start(String name, String host, Integer port) {
     	log.info("UdtClient start");
 		UdtClient udtClient = new UdtClient(name, host, port);
-		udtClient.clientThread = new Thread(udtClient);
-		udtClient.clientThread.start();
+		udtClient.run();
+		//udtClient.clientThread = new Thread(udtClient);
+		//udtClient.clientThread.start();
 		return udtClient;
 	}
     
@@ -56,7 +58,7 @@ public class UdtClient implements Runnable {
         // Configure the client.
     	SelectorProviderUDT provider = (SelectorProviderUDT) NioUdtProvider.MESSAGE_PROVIDER;
     	provider.setMaxSelectorSize(10000);
-        final ThreadFactory connectFactory = new UtilThreadFactory("connect");
+        
         connectGroup = new NioEventLoopGroup(1,
                 connectFactory, provider);
         try {
@@ -74,12 +76,12 @@ public class UdtClient implements Runnable {
         
             final ChannelFuture f = boot.connect(address, port).sync();
             // Wait until the connection is closed.
-            f.channel().closeFuture().sync();
+            //f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
             // Shut down the event loop to terminate all threads.
-            connectGroup.shutdownGracefully();
+            //connectGroup.shutdownGracefully();
         }
     }
 

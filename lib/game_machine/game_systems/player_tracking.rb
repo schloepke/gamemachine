@@ -9,9 +9,6 @@ module GameMachine
         @grid = grid
         player_updates = Subscribe.new.set_topic('player_location_updates')
         MessageQueue.find.tell(player_updates,self)
-        10000.times do
-          @grid.set(rand(1000).to_s,rand(1000),rand(1000))
-        end
       end
 
       def on_receive(message)
@@ -30,9 +27,13 @@ module GameMachine
               publish_player_location_update(message.player)
             end
           end
+
           if message.get_neighbors
             send_neighbors(message.player,message.get_neighbors.search_radius)
+          else
+            unhandled(message)
           end
+
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
           GameMachine.logger.debug "PlayerTracking Subscribed"
         else

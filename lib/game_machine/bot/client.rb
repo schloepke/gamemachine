@@ -40,9 +40,13 @@ module GameMachine
         elsif message == 'start_players'
           GameMachine.logger.info "#{@player_id} started"
           #start_player
+          player_id = rand(10000).to_s
+          m = GameMachine::Helpers::GameMessage.new(player_id)
+          m.player_logout
+          @client.send_to_server(m.to_byte_array,@ctx)
         else
           client_message = ClientMessage.parse_from(message.bytes)
-          @player.tell(client_message,get_self)
+          #@player.tell(client_message,get_self)
         end
       end
     end

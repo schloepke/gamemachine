@@ -24,9 +24,12 @@ module GameMachine
           GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?
           registered_classes.each do |klass|
+            dispatched = false
             klass.aspects.each do |aspect|
+              next if dispatched
               if (aspect & component_names).size == aspect.size
                 klass.find.tell(entity)
+                dispatched = true
               end
             end
           end

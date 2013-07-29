@@ -3,7 +3,7 @@ module GameMachine
     module ClientMessageSender
       def send_to_player
         if self.player.nil? || self.player.id.nil?
-          raise "player/player_id not set on ClientMessage!"
+          GameMachine.logger.info "player/player_id not set on ClientMessage!"
         end
 
         player = self.player
@@ -11,7 +11,7 @@ module GameMachine
           self.set_client_connection(client_connection)
           Actor::Base.find(client_connection.gateway).tell(self)
         else
-          raise "Unable to get client_connection for player_id #{player.id}"
+          GameMachine.logger.info "Unable to get client_connection for player_id #{player.id}"
         end
       end
     end

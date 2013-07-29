@@ -6,7 +6,9 @@ module GameMachine
 
     describe "chat client bot" do
       it "starts client" do
-        GameMachine::Bot::Client.start('bot',8200)
+        200.times do |i|
+          GameMachine::Bot::Client.start("bot#{i}",8200)
+        end
         sleep 20000
       end
     end
