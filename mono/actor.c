@@ -10,46 +10,42 @@
 #define FALSE 0
 #endif
 
-int 
-main (int argc, char* argv[]) {
-	MonoDomain *domain;
-	const char *file;
-	int retval;
-	
-	if (argc < 2){
-		fprintf (stderr, "Please provide an assembly to load\n");
-		return 1;
-	}
-	file = argv [1];
-  file = "invoke.exe";
-	/*
-	 * mono_jit_init() creates a domain: each assembly is
-	 * loaded and run in a MonoDomain.
-	 */
-    fprintf (stderr, "FILE %s\n",file);
-    fprintf (stderr, "argc %u\n",argc - 1);
+void
+on_receive (MonoObject *obj, const char *bytes) {
+	MonoClass *klass;
+  MonoDomain *domain;
+	MonoMethod *onReceive = NULL, *m = NULL;
+  MonoArray *array;
+	void* iter;
+	void* args [2];
+fprintf (stderr, "on_receive message %s\n",bytes);
 
-	domain = mono_jit_init (file);
+	klass = mono_object_get_class (obj);
+	domain = mono_object_get_domain (obj);
 
-	create_object (domain, file);
+	iter = NULL;
+	while ((m = mono_class_get_methods (klass, &iter))) {
+		if (strcmp (mono_method_get_name (m), "onReceive") == 0) {
+			onReceive = m;
+		}
+  }
+	//mono_runtime_invoke (onReceive, obj, NULL, NULL);
 
-	retval = mono_environment_exitcode_get ();
-	
-	mono_jit_cleanup (domain);
-	return retval;
+  mono_thread_attach(domain);
+
+	array = mono_array_new (domain, mono_get_byte_class (), sizeof(bytes));
+  int s = sizeof(bytes);
+  int i;
+for(i = 0; i < s; i++)
+    mono_array_set(array,char,i,bytes[i]);
+
+  args[0] = array;
+	mono_runtime_invoke (onReceive, obj, args, NULL);
 }
 
-static void create_object(MonoDomain *domain, const char *file) {
-	MonoAssembly *assembly;
+MonoObject *create_object(MonoImage *image) {
 	MonoClass *klass;
 	MonoObject *obj;
-  MonoImage *image;
-
-	assembly = mono_domain_assembly_open (domain, file);
-	if (!assembly)
-		exit (2);
-
-	image = mono_assembly_get_image(assembly);
 
 	klass = mono_class_from_name (image, "GameMachine", "Actor");
 	if (!klass) {
@@ -57,6 +53,51 @@ static void create_object(MonoDomain *domain, const char *file) {
 		exit (1);
 	}
 
-	obj = mono_object_new (domain, klass);
+  mono_thread_attach(mono_domain_get());
+	obj = mono_object_new (mono_domain_get(), klass);
 	mono_runtime_object_init (obj);
+fprintf (stderr, "object created 1\n");
+  return obj;
 }
+
+int test_mono() {
+return 1;
+}
+
+MonoImage *load_assembly(const char *file) {
+	MonoAssembly *assembly;
+  MonoImage *image;
+	assembly = mono_domain_assembly_open (mono_domain_get(), file);
+	if (!assembly)
+		return NULL;
+	image = mono_assembly_get_image(assembly);
+  return image;
+}
+
+
+void load_mono(const char *file) {
+	mono_jit_init (file);
+fprintf (stderr, "load_mono 1\n");
+}
+
+void unload_mono() {
+	mono_environment_exitcode_get ();
+	mono_jit_cleanup (mono_domain_get());
+fprintf (stderr, "cleanup finished\n");
+}
+
+int 
+main (int argc, char* argv[]) {
+	const char *file;
+	int retval = 1;
+	
+	if (argc < 2){
+		fprintf (stderr, "Please provide an assembly to load\n");
+		return 1;
+	}
+	file = argv [1];
+	mono_jit_init (file);
+  load_mono(file);
+	return retval;
+}
+

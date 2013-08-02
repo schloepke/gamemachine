@@ -11,7 +11,8 @@ module GameMachine
       entity
     end
 
-    it "registers" do
+    it "sends protocol buffer to .net actor" do
+      MonoTest.init_mono
     end
 
     it "marshal" do

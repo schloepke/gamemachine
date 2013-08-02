@@ -124,8 +124,11 @@ require_relative 'game_machine/clients/udt_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'
+require_relative 'game_machine/mono_test'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
+
+GameMachine::MonoTest.init_mono
 
 GameMachine::Cli.start

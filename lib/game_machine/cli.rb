@@ -6,6 +6,7 @@ module GameMachine
     def self.start
       
       opts = Trollop::options do
+        opt :noop, "just exit"
         opt :new, "Create new game"
         opt :server, "Run server"
         opt :boot, "Boot file.  Defaults to boot.rb", :type => :string
@@ -23,6 +24,9 @@ Usage:
 EOS
       end
 
+      if  opts[:noop]
+        exit 0
+      end
       
       if opts[:new]
         dir = ARGV.shift
