@@ -11,7 +11,7 @@
 #endif
 
 void
-on_receive (MonoObject *obj, const char *bytes) {
+on_receive (MonoObject *obj, unsigned char *bytes, int length) {
 	MonoClass *klass;
   MonoDomain *domain;
 	MonoMethod *onReceive = NULL, *m = NULL;
@@ -22,6 +22,7 @@ fprintf (stderr, "on_receive message %s\n",bytes);
 
 	klass = mono_object_get_class (obj);
 	domain = mono_object_get_domain (obj);
+  mono_thread_attach(domain);
 
 	iter = NULL;
 	while ((m = mono_class_get_methods (klass, &iter))) {
@@ -31,12 +32,10 @@ fprintf (stderr, "on_receive message %s\n",bytes);
   }
 	//mono_runtime_invoke (onReceive, obj, NULL, NULL);
 
-  mono_thread_attach(domain);
 
-	array = mono_array_new (domain, mono_get_byte_class (), sizeof(bytes));
-  int s = sizeof(bytes);
+	array = mono_array_new (domain, mono_get_byte_class (), length);
   int i;
-for(i = 0; i < s; i++)
+for(i = 0; i < length; i++)
     mono_array_set(array,char,i,bytes[i]);
 
   args[0] = array;
@@ -44,6 +43,7 @@ for(i = 0; i < s; i++)
 }
 
 MonoObject *create_object(MonoImage *image) {
+  mono_thread_attach(mono_domain_get());
 	MonoClass *klass;
 	MonoObject *obj;
 
@@ -53,7 +53,6 @@ MonoObject *create_object(MonoImage *image) {
 		exit (1);
 	}
 
-  mono_thread_attach(mono_domain_get());
 	obj = mono_object_new (mono_domain_get(), klass);
 	mono_runtime_object_init (obj);
 fprintf (stderr, "object created 1\n");
@@ -65,6 +64,7 @@ return 1;
 }
 
 MonoImage *load_assembly(const char *file) {
+  mono_thread_attach(mono_domain_get());
 	MonoAssembly *assembly;
   MonoImage *image;
 	assembly = mono_domain_assembly_open (mono_domain_get(), file);

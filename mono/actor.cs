@@ -8,6 +8,7 @@ namespace GameMachine {
 
     int onReceive(byte[] array) {
       Console.Out.WriteLine("onReceive called");
+      Console.WriteLine(System.Text.Encoding.Default.GetString(array));
       return 1;
     }
 

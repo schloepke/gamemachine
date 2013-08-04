@@ -99,6 +99,7 @@ module GameMachine
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(10).start
         Actor::Builder.new(Physics::World).start
+        Actor::Builder.new(MonoTest).start
       end
 
       def start_game_systems
