@@ -98,7 +98,7 @@ module GameMachine
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(10).start
-        Actor::Builder.new(Physics::World).start
+        #Actor::Builder.new(Physics::World).start
         if Settings.mono_enabled
           Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
         end
