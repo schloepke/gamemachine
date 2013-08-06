@@ -118,17 +118,27 @@ require_relative 'game_machine/physics/body'
 require_relative 'game_machine/physics/world3d'
 require_relative 'game_machine/physics/jme_app'
 require_relative 'game_machine/physics/jme_body'
-require_relative 'game_machine/cli'
 require_relative 'game_machine/clients/client'
 require_relative 'game_machine/clients/udt_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'
-require_relative 'game_machine/mono_test'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-GameMachine::MonoLib.init_mono
+if GameMachine::Settings.mono_enabled
+  require_relative 'game_machine/mono_test'
+  GameMachine::MonoLib.init_mono
+end
 
-GameMachine::Cli.start
+if ENV['START_SERVER']
+  GameMachine::Application.initialize!(ENV['SERVER_NAME'] || 'default',true)
+  GameMachine::Application.start
+end
+
+if ENV['STOP_SERVER']
+  GameMachine::Akka.instance.init!
+  GameMachine::Akka.instance.kill_all
+end
+

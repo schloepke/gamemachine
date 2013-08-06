@@ -1,7 +1,69 @@
 #!/usr/bin/env ruby
+
+require 'rubygems'
+require 'trollop'
+require 'fileutils'
+
+opts = Trollop::options do
+  opt :noop, "just exit"
+  opt :new, "Create new game"
+  opt :server, "Run server"
+  opt :boot, "Boot file.  Defaults to boot.rb", :type => :string
+  opt :name, "Config name, defaults to 'default'", :type => :string
+  opt :config, "Config file, defaults to  config/config.yml", :type => :string
+  version "GameMachine 0.0.1"
+  banner <<-EOS
+Usage:
+
+* Create new game in /tmp/mygame
+  --new /tmp/mygame
+
+* Start server seed01 with boot file mygame.rb:
+  --server --name=seed01 --boot=mygame.rb
+
+EOS
+end
+
+if opts[:noop]
+  exit 0
+end
+
+if opts[:new]
+  dir = ARGV.shift
+
+  unless dir
+    Trollop::die :new, "new requires install path"
+  end
+  if File.directory?(dir)
+    Trollop::die :new, "install path already exists"
+  end
+
+  FileUtils.mkdir dir
+  config = File.join(File.dirname(__FILE__), '../../config')
+  boot = File.join(File.dirname(__FILE__), '../../boot.rb')
+  FileUtils.cp_r(config,dir)
+  FileUtils.cp(boot,dir)
+  exit 0
+end
+
+if opts[:config]
+  ENV['CONFIG_FILE'] = opts[:config]
+end
+
+if opts[:boot]
+  ENV['boot'] = opts[:boot]
+end
+
+if opts[:server]
+  ENV['START_SERVER'] = opts[:server].to_s
+  ENV['SERVER_NAME'] = opts[:name]
+end
+
+if opts[:stop]
+end
+
 begin
   require 'game_machine'
 rescue LoadError
   require_relative '../lib/game_machine'
 end
-
