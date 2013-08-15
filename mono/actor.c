@@ -42,6 +42,10 @@ for(i = 0; i < length; i++)
 	mono_runtime_invoke (onReceive, obj, args, NULL);
 }
 
+void attach_current_thread() {
+  mono_domain_get();
+  mono_thread_attach(mono_get_root_domain());
+}
 MonoObject *create_object(MonoImage *image) {
   mono_thread_attach(mono_domain_get());
 	MonoClass *klass;
@@ -59,7 +63,7 @@ fprintf (stderr, "object created 1\n");
   return obj;
 }
 
-int test_mono() {
+int test_mono(const char *file) {
 return 1;
 }
 
@@ -77,6 +81,7 @@ MonoImage *load_assembly(const char *file) {
 
 void load_mono(const char *file) {
 	mono_jit_init (file);
+  mono_thread_attach(mono_domain_get());
 fprintf (stderr, "load_mono 1\n");
 }
 

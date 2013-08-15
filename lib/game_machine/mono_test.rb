@@ -3,11 +3,12 @@ module Mono
   extend FFI::Library
   ffi_lib '/home/chris/game_machine/mono/libactor.so'
   attach_function :load_mono, [:string], :void
-  attach_function :test_mono, [], :int
+  attach_function :test_mono, [:string], :int
   attach_function :load_assembly, [:string], :pointer
   attach_function :create_object, [:pointer], :pointer
   attach_function :on_receive, [:pointer,:pointer,:int], :void
   attach_function :unload_mono, [], :void
+  attach_function :attach_current_thread, [], :void
 end
 
 module  GameMachine
@@ -17,11 +18,21 @@ module  GameMachine
       Mono.test_mono
     end
     def self.init_mono
+      #Mono.test_mono
+      #Mono.test_mono("/home/chris/game_machine/mono/actor.dll")
       Mono.load_mono("/home/chris/game_machine/mono/actor.dll")
-      #image = Mono.load_assembly("/home/chris/game_machine/mono/actor.dll")
-      #@obj = Mono.create_object(image)
+      @image = Mono.load_assembly("/home/chris/game_machine/mono/actor.dll")
       #Mono.unload_mono
     end
+
+    def self.image
+      @image
+    end
+
+    def self.obj
+      @obj
+    end
+
   end
 
   class MonoTest < Actor::Base
@@ -44,14 +55,15 @@ module  GameMachine
     end
 
     def post_init(*args)
-
+      Mono.attach_current_thread
+      @obj = Mono.create_object(MonoLib.image)
     end
 
     def on_receive(message)
-      puts 'MONO'
+      message = message.to_s
       mem_buf = FFI::MemoryPointer.new(:char, message.size)
       mem_buf.put_bytes(0, message)
-      Mono.on_receive(self.obj,mem_buf,message.size)
+      Mono.on_receive(@obj,mem_buf,message.size)
     end
   end
 end

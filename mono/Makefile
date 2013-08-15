@@ -2,6 +2,10 @@
 dll:
 	mcs -t:library actor.cs 
 
+exe:
+	mcs actor.cs
+	chmod 755 actor.exe
+
 all:
 	gcc -c -Wall -fpic actor.c `pkg-config --cflags --libs mono-2` -lm
 	gcc -shared -o libactor.so actor.o `pkg-config --cflags --libs mono-2` -lm

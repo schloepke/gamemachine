@@ -99,7 +99,7 @@ module GameMachine
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(10).start
         Actor::Builder.new(Physics::World).start
-        Actor::Builder.new(MonoTest).start
+        Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
       end
 
       def start_game_systems

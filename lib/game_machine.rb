@@ -129,6 +129,6 @@ require_relative 'game_machine/mono_test'
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-#GameMachine::MonoLib.init_mono
+GameMachine::MonoLib.init_mono
 
 GameMachine::Cli.start
