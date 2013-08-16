@@ -16,5 +16,4 @@ config/application.conf
 lib/bin
 java/bin
 java/build
-java/third_party
 *.so
