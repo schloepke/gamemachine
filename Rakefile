@@ -9,6 +9,16 @@ RSpec::Core::RakeTask.new
 
 task :default => :spec
 
+namespace :game do
+  task :demo do
+    cp 'lib/demo/boot.rb', 'boot.rb'
+  end
+  
+  task :none do
+    rm 'boot.rb'
+  end
+end
+
 namespace :java do
 
   task :clean do

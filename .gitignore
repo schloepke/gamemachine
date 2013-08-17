@@ -14,3 +14,4 @@ java/bin
 java/build
 java/lib
 *.so
+boot.rb
