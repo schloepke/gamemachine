@@ -1,6 +1,5 @@
 # A sample Gemfile
 source "https://rubygems.org"
-
 gem 'rjack-logback'
 gem 'rspec'
 gem 'rspec-mocks'

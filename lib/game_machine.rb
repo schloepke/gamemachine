@@ -72,9 +72,7 @@ module GameMachine
 end
 
 
-#require_relative 'game_machine/gdx'
-#require_relative 'game_machine/jme'
-#require_relative 'game_machine/dyn4j'
+require_relative 'game_machine/dyn4j'
 require_relative 'game_machine/java_lib'
 require_relative 'game_machine/logger'
 require_relative 'game_machine/settings'
@@ -113,11 +111,6 @@ require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/physics/grid'
-#require_relative 'game_machine/physics/world'
-#require_relative 'game_machine/physics/body'
-#require_relative 'game_machine/physics/world3d'
-#require_relative 'game_machine/physics/jme_app'
-#require_relative 'game_machine/physics/jme_body'
 require_relative 'game_machine/clients/client'
 require_relative 'game_machine/clients/udt_client'
 
