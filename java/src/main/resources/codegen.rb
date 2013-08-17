@@ -33,20 +33,33 @@ def write_components(proto)
   messages = proto.getMessages.reject {|message| message.getName == 'Components'}
   proto.getMessages.each do |message|
     klass = message.getName
-    puts "Message: #{message.getName}"
+    #puts "Message: #{message.getName}"
     out = ERB.new(File.read(template_file),nil,'-').result(binding)
     src_file = File.join(@user_dir,'src','main','java','com','game_machine','entity_system','generated',"#{message.getName}.java")
     File.open(src_file,'w') {|f| f.write out}
-    message.getFields.each do |field|
-      puts field.getJavaType
-      puts field.toString
-    end
+    #message.getFields.each do |field|
+    #  puts field.getJavaType
+    #  puts field.toString
+    #end
   end
 end
 
-protofile = "#{@user_dir}/src/main/resources/messages.proto"
+game_protofile = File.join(@user_dir,'../config/game_messages.proto')
+protofile = File.join(@user_dir,'/src/main/resources/messages.proto')
+
+if File.exists?(game_protofile)
+  game_messages = File.read(game_protofile)
+else
+  game_messages = ''
+end
+messages = File.read(protofile)
+
+combined_messages = messages.sub('//GAME_MESSAGES',game_messages)
+combined_messages_protofile = '/tmp/combined_messages.proto'
+File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}
+
 loader = CachingProtoLoader.new
-file = java.io.File.new(protofile)
+file = java.io.File.new(combined_messages_protofile)
 proto = ProtoUtil.parseProto(file)
 
 write_components(proto)

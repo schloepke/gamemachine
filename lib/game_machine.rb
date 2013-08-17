@@ -1,7 +1,20 @@
 
+ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
+ENV['GAME_ENV'] ||= 'development'
+
+module GameMachine
+  def self.env
+    ENV.fetch('GAME_ENV')
+  end
+
+  def self.app_root
+    ENV.fetch('APP_ROOT')
+  end
+end
+
 require 'java'
 
-jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
+jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
 jars.each {|jar| require jar}
 
 java_import 'com.game_machine.core.net.client.UdtClient'
@@ -39,19 +52,6 @@ java_import 'com.game_machine.entity_system.generated.Target'
 java_import 'com.game_machine.entity_system.generated.TrackPlayer'
 java_import 'com.game_machine.entity_system.generated.GetNeighbors'
 
-
-ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
-ENV['GAME_ENV'] ||= 'development'
-
-module GameMachine
-  def self.env
-    ENV.fetch('GAME_ENV')
-  end
-
-  def self.app_root
-    ENV.fetch('APP_ROOT')
-  end
-end
 
 
 require_relative 'game_machine/version'
