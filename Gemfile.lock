@@ -1,3 +1,26 @@
+PATH
+  remote: .
+  specs:
+    game_machine (0.0.1)
+      aasm
+      consistent-hashing
+      descriptive_statistics
+      ffi
+      guard-jruby-rspec
+      guard-shell
+      json
+      pry
+      rjack-logback
+      rspec
+      rspec-expectations
+      rspec-mocks
+      settingslogic
+      slop
+      spoon
+      state_machine
+      statemachine
+      trollop
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -36,6 +59,7 @@ GEM
       method_source (~> 0.8)
       slop (~> 3.4)
       spoon (~> 0.0)
+    rake (10.1.0)
     rb-fsevent (0.9.3)
     rb-inotify (0.9.1)
       ffi (>= 0.5.0)
@@ -65,21 +89,6 @@ PLATFORMS
   java
 
 DEPENDENCIES
-  aasm
-  consistent-hashing
-  descriptive_statistics
-  ffi
-  guard-jruby-rspec
-  guard-shell
-  json
-  pry
-  rjack-logback
+  game_machine!
+  rake
   rspec
-  rspec-expectations
-  rspec-mocks
-  settingslogic
-  slop
-  spoon
-  state_machine
-  statemachine
-  trollop

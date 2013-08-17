@@ -4,7 +4,7 @@ apply plugin: 'eclipse'
 apply plugin:'application'
 
 group = 'game_machine'
-  version = '0.0.1-SNAPSHOT'
+  version = '0.0.1'
   
 
 description = """"""
@@ -12,82 +12,77 @@ description = """"""
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-
-
 repositories {
-       
-     flatDir(dirs: 'third_party') 
-     mavenRepo url: "http://repo.typesafe.com/typesafe/releases/"
-     mavenRepo url: "http://files.couchbase.com/maven2/"
-     mavenRepo url: "http://repo.maven.apache.org/maven2"
+  flatDir(dirs: 'third_party') 
+  mavenRepo url: "http://repo.typesafe.com/typesafe/releases/"
+  mavenRepo url: "http://files.couchbase.com/maven2/"
+  mavenRepo url: "http://repo.maven.apache.org/maven2"
 }
-dependencies {
- 	compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
-    compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-remote_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-testkit_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-camel_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
-    compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
-    
-    compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
-    compile 'com.dyuproject.protostuff:protostuff:1.0.7'
-    compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
-    compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
-    compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
-    compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
-    
-    compile group: 'com.barchart.udt', name: 'barchart-udt-bundle', version:'2.3.0'
-    compile group: 'com.google.code.findbugs', name: 'jsr305', version:'2.0.1'
-    compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
-    compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
-    compile(group: 'io.netty', name: 'netty-all', version:'4.0.4.Final')
-    compile 'org.apache.camel:camel-jetty:2.10.3'
-    compile 'org.dyn4j:dyn4j:3.1.4'
-    //compile 'org.jbox2d:jbox2d:2.2.1.1'
-    //compile files('third_party/jmonkey/*.jar')
-    compile fileTree(dir: 'third_party/libgdx', include: '*.jar')
-    compile fileTree(dir: 'third_party/jme', include: '*.jar')
-    
-    
-  }
-  
-  task uberjar(type: Jar) {
-    from files(sourceSets.main.output.classesDir)
-    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 
+dependencies {
+  compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
+  compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+  compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-remote_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-testkit_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-camel_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
+  
+  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
+  
+  compile group: 'com.barchart.udt', name: 'barchart-udt-bundle', version:'2.3.0'
+  compile group: 'com.google.code.findbugs', name: 'jsr305', version:'2.0.1'
+  compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
+  compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
+  compile(group: 'io.netty', name: 'netty-all', version:'4.0.4.Final')
+  compile 'org.apache.camel:camel-jetty:2.10.3'
+  compile 'org.dyn4j:dyn4j:3.1.4'
+  //compile 'org.jbox2d:jbox2d:2.2.1.1'
+  //compile fileTree(dir: 'third_party/libgdx', include: '*.jar')
+  //compile fileTree(dir: 'third_party/jme', include: '*.jar')
+}
+  
+task uberjar(type: Jar) {
+  from files(sourceSets.main.output.classesDir)
+  from configurations.runtime.asFileTree.files.collect { zipTree(it) }
 }
 
 task codegen(type: Exec) {
 	File templateFile = file('src/main/resources/codegen.rb')
     commandLine 'jruby',templateFile
 }
+
 task protogen(type: Exec)  {
- 	File configFile = file('src/main/resources/protostuff.properties')
- 	File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
-    commandLine 'java','-jar',jar,configFile
+  File configFile = file('src/main/resources/protostuff.properties')
+  File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
+  commandLine 'java','-jar',jar,configFile
 }
 
-  test {
-  	useTestNG()
-	//outputs.upToDateWhen { false }
- 	testLogging.showStandardStreams = true
- 	dependsOn cleanTest
- 	testLogging { exceptionFormat "full" }
-  }
+test {
+  useTestNG()
+  //outputs.upToDateWhen { false }
+  testLogging.showStandardStreams = true
+  dependsOn cleanTest
+  testLogging { exceptionFormat "full" }
+}
   
-  task install_libs(type: Copy) {
-    into "$buildDir/../lib"
-    from configurations.runtime
-    from "$buildDir/libs"
+task install_libs(type: Copy) {
+  into "$buildDir/../lib"
+  from configurations.runtime
+  from "$buildDir/libs"
 }
 
 task install_libs_ruby(type: Copy) {
-    into "$buildDir/../lib"
-    from configurations.runtime
-    from "$buildDir/libs"
+  into "$buildDir/../lib"
+  from configurations.runtime
+  from "$buildDir/libs"
 }
 

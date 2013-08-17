@@ -72,6 +72,7 @@ module GameMachine
 end
 
 
+require_relative 'game_machine/version'
 require_relative 'game_machine/dyn4j'
 require_relative 'game_machine/java_lib'
 require_relative 'game_machine/logger'

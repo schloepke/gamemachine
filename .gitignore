@@ -1,7 +1,4 @@
 nbproject
-target/
-spec
-build
 .settings
 .classpath
 *.class
@@ -10,10 +7,10 @@ build
 .buildpath
 .idea
 .project
-config/application.conf
 *.swp
 .gradle
 lib/bin
 java/bin
 java/build
 *.so
+jars/
