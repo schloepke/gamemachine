@@ -47,6 +47,7 @@ if opts[:new]
   guardfile = File.join(File.dirname(__FILE__), '../Guardfile')
   rakefile = File.join(File.dirname(__FILE__), '../Rakefile')
   ruby_version = File.join(File.dirname(__FILE__), '../.ruby-version')
+  git_ignore = File.join(File.dirname(__FILE__), '../games/git_ignore')
   
   FileUtils.cp_r(java,dir)
   FileUtils.cp_r(lib,dir)
@@ -54,6 +55,7 @@ if opts[:new]
   FileUtils.cp(guardfile,dir)
   FileUtils.cp(rakefile,dir)
   FileUtils.cp(ruby_version,dir)
+  FileUtils.cp(git_ignore,File.join(dir,'.gitignore'))
   FileUtils.cp_r(config,dir)
   FileUtils.mkdir(File.join(dir,'spec'))
   FileUtils.cp(spec_helper,File.join(dir,'spec','spec_helper.rb'))
