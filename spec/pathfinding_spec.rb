@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'benchmark'
 
 module GameMachine
   class Grid

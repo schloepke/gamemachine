@@ -12,7 +12,9 @@ module GameMachine
     end
 
     it "sends protocol buffer to .net actor" do
-      MonoTest.init_mono
+      if GameMachine::Settings.mono_enabled
+        MonoTest.init_mono
+      end
     end
 
     it "marshal" do
@@ -23,10 +25,5 @@ module GameMachine
       new_entity = serializer.fromBinary(bytes,entity.get_class)
     end
     
-    it "deadletter" do
-      #ref = LocalEcho.find_distributed('blah')
-      #ref.send_message('testa')
-      #sleep 2
-    end
   end
 end

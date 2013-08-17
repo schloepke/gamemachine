@@ -1,14 +1,17 @@
 require 'ffi'
 module Mono
   extend FFI::Library
-  ffi_lib '/home/chris/game_machine/mono/libactor.so'
-  attach_function :load_mono, [:string], :void
-  attach_function :test_mono, [:string], :int
-  attach_function :load_assembly, [:string], :pointer
-  attach_function :create_object, [:pointer], :pointer
-  attach_function :on_receive, [:pointer,:pointer,:int], :void
-  attach_function :unload_mono, [], :void
-  attach_function :attach_current_thread, [], :void
+  sofile = File.join(File.dirname(__FILE__), '../../mono/libactor.so')
+  if File.exists?(sofile)
+    ffi_lib sofile
+    attach_function :load_mono, [:string], :void
+    attach_function :test_mono, [:string], :int
+    attach_function :load_assembly, [:string], :pointer
+    attach_function :create_object, [:pointer], :pointer
+    attach_function :on_receive, [:pointer,:pointer,:int], :void
+    attach_function :unload_mono, [], :void
+    attach_function :attach_current_thread, [], :void
+  end
 end
 
 module  GameMachine
