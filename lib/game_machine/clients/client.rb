@@ -1,3 +1,6 @@
+require 'socket'
+require "uri"
+
 module GameMachine
   module Clients
     class Client

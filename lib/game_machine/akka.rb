@@ -1,3 +1,4 @@
+require 'singleton'
 
 module GameMachine
   class Akka

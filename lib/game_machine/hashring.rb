@@ -1,3 +1,5 @@
+require 'consistent_hashing'
+
 module GameMachine
   class Hashring
 

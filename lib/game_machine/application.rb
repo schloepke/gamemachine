@@ -12,7 +12,6 @@ module GameMachine
         config.request_handler_routers = 20
         config.game_handler_routers = 20
         config.authentication_handler_ring_size = 160
-
         akka.initialize!(config.name,config.cluster)
       end
 
@@ -54,7 +53,7 @@ module GameMachine
         start_core_systems
         start_handlers
         start_game_systems
-        load_game
+        load_games
       end
 
       def start_endpoints
@@ -72,10 +71,30 @@ module GameMachine
         end
       end
 
-      def load_game
-        boot = ENV['boot'] ? ENV['boot'] : 'boot.rb'
-        require File.join(GameMachine.app_root,boot)
-        GameMachine.logger.info "Game Loaded"
+      def games_root
+        File.join(GameMachine.app_root,'games')
+      end
+
+      def game_dirs
+        Dir.glob "#{games_root}/*/"
+      end
+
+      def load_games
+        game_dirs.each do |dir|
+          game = dir.split('/').last
+
+          GameMachine.logger.debug "Game dir #{dir}"
+
+          bootfile = File.join(dir,'boot.rb')
+          if File.exists?(bootfile)
+            require bootfile
+            GameMachine.logger.info "Game #{game} loaded"
+          else
+            GameMachine.logger.info "Game #{game} not loaded (#{dir}/boot.rb not found)"
+          end
+        end
+
+        GameMachine.logger.info "Games loaded"
       end
 
       def start_handlers

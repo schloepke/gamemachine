@@ -1,3 +1,5 @@
+require 'state_machine'
+
 module GameMachine
   module Handlers
     class Authentication < Actor::Base

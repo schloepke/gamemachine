@@ -1,23 +1,5 @@
-require 'rubygems'
 
-require 'yaml'
-require 'rjack-logback'
 require 'java'
-require 'benchmark'
-require 'socket'
-require 'settingslogic'
-require 'spoon'
-require 'consistent_hashing'
-require 'json'
-require 'benchmark'
-require 'descriptive_statistics'
-require "uri"
-require 'singleton'
-require 'slop'
-require 'aasm'
-require 'statemachine'
-require 'state_machine'
-
 
 jars = Dir[File.join(File.dirname(__FILE__), '../java/lib', '*.jar')]
 jars.each {|jar| require jar}

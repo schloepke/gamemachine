@@ -39,9 +39,13 @@ if opts[:new]
   end
 
   FileUtils.mkdir dir
+  java = File.join(File.dirname(__FILE__), '../../java')
+  games = File.join(File.dirname(__FILE__), '../../games')
   config = File.join(File.dirname(__FILE__), '../../config')
   boot = File.join(File.dirname(__FILE__), '../../boot.rb')
   FileUtils.cp_r(config,dir)
+  FileUtils.cp_r(games,dir)
+  FileUtils.cp_r(java,dir)
   FileUtils.cp(boot,dir)
   exit 0
 end

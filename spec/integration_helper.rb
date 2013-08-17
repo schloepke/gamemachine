@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'net/http'
+require 'descriptive_statistics'
+require 'benchmark'
 require_relative '../lib/game_machine'
 require_relative '../lib/game_machine/clients/test_client'
 

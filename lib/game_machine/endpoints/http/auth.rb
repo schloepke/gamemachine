@@ -1,3 +1,5 @@
+require 'json'
+
 module GameMachine
   module Endpoints
     module Http

@@ -1,3 +1,5 @@
+require 'rjack-logback'
+
 module GameMachine
   module Logger
 

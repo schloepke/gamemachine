@@ -1,3 +1,5 @@
+require 'settingslogic'
+
 module GameMachine
   class Settings < Settingslogic
     source  File.expand_path(
