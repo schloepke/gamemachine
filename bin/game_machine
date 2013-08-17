@@ -78,6 +78,12 @@ end
 if opts[:stop]
 end
 
+java_dir = File.join(File.dirname(__FILE__), 'java')
+unless File.directory?(java)
+  puts "Please run game_machine from your game directory (create new game with --new)"
+  exit 0
+end
+
 begin
   require 'game_machine'
 rescue LoadError
