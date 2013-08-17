@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version     = GameMachine::VERSION
   gem.authors     = ["Chris Ochs"]
   gem.email       = ["chris@ochsnet.com"]
-  gem.homepage    = ""
+  gem.homepage    = "https://github.com/chrisochs/game_machine"
   gem.summary     = %q{Game Machine}
   gem.description = %q{game server}
 
@@ -18,25 +18,21 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
   
   gem.add_dependency 'rjack-logback'
-  gem.add_dependency 'rspec'
-  gem.add_dependency 'rspec-mocks'
-  gem.add_dependency 'rspec-expectations'
-  gem.add_dependency 'pry'
   gem.add_dependency 'settingslogic'
   gem.add_dependency 'slop'
-  gem.add_dependency 'spoon'
   gem.add_dependency 'consistent-hashing'
   gem.add_dependency  'json'
-  gem.add_dependency 'aasm'
-  gem.add_dependency 'descriptive_statistics'
-  gem.add_dependency 'guard-jruby-rspec'
   gem.add_dependency 'guard-shell'
-  gem.add_dependency 'statemachine'
   gem.add_dependency 'state_machine'
   gem.add_dependency 'ffi'
   gem.add_dependency 'trollop'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'rspec-mocks'
+  gem.add_development_dependency 'rspec-expectations'
+  gem.add_development_dependency 'pry'
+  gem.add_development_dependency 'guard-jruby-rspec'
+  gem.add_development_dependency 'descriptive_statistics'
   
 end
