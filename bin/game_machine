@@ -79,7 +79,7 @@ if opts[:stop]
 end
 
 java_dir = File.join(File.dirname(__FILE__), 'java')
-unless File.directory?(java)
+unless File.directory?(java_dir)
   puts "Please run game_machine from your game directory (create new game with --new)"
   exit 0
 end
