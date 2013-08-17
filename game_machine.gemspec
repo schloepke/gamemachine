@@ -16,13 +16,15 @@ Gem::Specification.new do |gem|
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features|integration_tests)/})
   gem.require_paths = ["lib"]
-  
+
   gem.add_dependency 'rjack-logback'
   gem.add_dependency 'settingslogic'
   gem.add_dependency 'slop'
   gem.add_dependency 'consistent-hashing'
   gem.add_dependency  'json'
   gem.add_dependency 'guard-shell'
+  gem.add_dependency 'guard-rake'
+  gem.add_dependency 'guard-process'
   gem.add_dependency 'state_machine'
   gem.add_dependency 'ffi'
   gem.add_dependency 'trollop'
