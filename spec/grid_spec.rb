@@ -18,12 +18,13 @@ module GameMachine
 
     describe "#get" do
       it "Returns the values for the given id" do
-        subject.set(1,0,0)
+        subject.set(1,0,0,3)
         values = subject.get(1)
         expect(values[0]).to eq(1)
         expect(values[1]).to eq(0)
         expect(values[2]).to eq(0)
         expect(values[3]).to eq(0)
+        expect(values[4]).to eq(3)
       end
     end
 

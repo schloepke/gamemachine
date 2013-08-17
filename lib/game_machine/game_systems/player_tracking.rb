@@ -71,17 +71,16 @@ module GameMachine
 
       def send_neighbors(player,search_radius)
         players = neighbors_from_grid(player,search_radius)
-        #unless players.empty?
-          response = Helpers::GameMessage.new(player.id)
-          response.neighbors(players)
-          response.send_to_player
-        #end
+        response = Helpers::GameMessage.new(player.id)
+        response.neighbors(players)
+        response.send_to_player
       end
 
       def player_from_neighbor(neighbor)
         Player.new.
           set_x(neighbor[2]).
           set_y(neighbor[3]).
+          set_z(neighbor[4]).
           set_id(neighbor[0].to_s)
       end
 

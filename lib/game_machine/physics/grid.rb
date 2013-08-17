@@ -59,9 +59,9 @@ module GameMachine
         end
       end
 
-      def set(id,x,y)
+      def set(id,x,y,z=0)
         cell = hash(x,y)
-        values = [id,cell,x,y]
+        values = [id,cell,x,y,z]
         @object_index[id] = values
         @cells[cell] ||= {}
         @cells[cell][id] = values

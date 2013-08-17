@@ -1,5 +1,9 @@
-require "bundler/gem_tasks"
 require 'rspec/core/rake_task'
+
+specfile = File.join(File.dirname(__FILE__), 'game_machine.gemspec')
+if File.exists?(specfile)
+  require "bundler/gem_tasks"
+end
 
 RSpec::Core::RakeTask.new
 
