@@ -71,30 +71,14 @@ module GameMachine
         end
       end
 
-      def games_root
-        File.join(GameMachine.app_root,'games')
-      end
-
-      def game_dirs
-        Dir.glob "#{games_root}/*/"
-      end
-
       def load_games
-        game_dirs.each do |dir|
-          game = dir.split('/').last
-
-          GameMachine.logger.debug "Game dir #{dir}"
-
-          bootfile = File.join(dir,'boot.rb')
-          if File.exists?(bootfile)
-            require bootfile
-            GameMachine.logger.info "Game #{game} loaded"
-          else
-            GameMachine.logger.info "Game #{game} not loaded (#{dir}/boot.rb not found)"
-          end
+        bootfile = File.join(GameMachine.app_root,'boot.rb')
+        if File.exists?(bootfile)
+          require bootfile
+          GameMachine.logger.info "Game #{game} loaded"
+        else
+          GameMachine.logger.info "Game #{game} not loaded (boot.rb not found)"
         end
-
-        GameMachine.logger.info "Games loaded"
       end
 
       def start_handlers
