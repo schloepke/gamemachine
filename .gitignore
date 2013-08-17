@@ -12,5 +12,5 @@ nbproject
 lib/bin
 java/bin
 java/build
+java/lib
 *.so
-jars/
