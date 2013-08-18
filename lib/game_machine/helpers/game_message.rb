@@ -65,9 +65,9 @@ module GameMachine
         )
       end
 
-      def track_player
-        current_entity.set_track_player(
-          TrackPlayer.new.set_value(true)
+      def track_entity
+        current_entity.set_track_entity(
+          TrackEntity.new.set_value(true)
         )
       end
 
@@ -82,7 +82,7 @@ module GameMachine
 
       def neighbors(players)
         current_entity.set_neighbors(
-          Neighbors.new.set_player_list(players)
+          Neighbors.new.set_entity_list(players)
         )
       end
 

@@ -65,6 +65,10 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     public String authtoken;
 
 
+
+    public Transform transform;
+
+
     
 
 
@@ -142,6 +146,23 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 	
 	public Boolean hasAuthtoken()  {
         return authtoken == null ? false : true;
+    }
+
+
+
+    
+
+	public Transform getTransform() {
+		return transform;
+	}
+	
+	public Player setTransform(Transform transform) {
+		this.transform = transform;
+		return this;
+	}
+	
+	public Boolean hasTransform()  {
+        return transform == null ? false : true;
     }
 
 
@@ -238,6 +259,15 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
                 	
 
 
+            	case 5:
+
+
+                	message.transform = input.mergeObject(message.transform, Transform.getSchema());
+                    break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -297,6 +327,17 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
     	
+
+    	
+
+
+    	if(message.transform != null)
+    		output.writeObject(5, message.transform, Transform.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -311,6 +352,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
         	case 3: return "authenticated";
 
         	case 4: return "authtoken";
+
+        	case 5: return "transform";
 
             default: return null;
         }
@@ -333,6 +376,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	__fieldMap.put("authenticated", 3);
 
     	__fieldMap.put("authtoken", 4);
+
+    	__fieldMap.put("transform", 5);
 
     }
    

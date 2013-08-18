@@ -22,11 +22,12 @@ end
 namespace :java do
 
   task :clean do
-    sh 'rm java/lib/*.jar'
+    sh 'rm -f java/lib/*.jar'
+    sh 'rm -f java/src/main/java/com/game_machine/entity_system/generated/*.java'
   end
 
-  task :build do
-    sh 'cd java && gradle codegen && gradle build && gradle install_libs'
+  task :build => [:clean] do
+    sh 'cd java && gradle clean && gradle codegen && gradle build && gradle install_libs'
   end
 end
 

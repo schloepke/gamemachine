@@ -2,7 +2,7 @@ require 'integration_helper'
 
   def get_neighbors_message(player_id)
     m = GameMachine::Helpers::GameMessage.new(player_id.to_s)
-    m.track_player
+    m.track_entity
     m.get_neighbors
     m.to_entity
     m.current_entity.player.set_x(rand(1000)).set_y(1000)

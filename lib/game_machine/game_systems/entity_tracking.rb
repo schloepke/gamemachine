@@ -2,8 +2,10 @@ module GameMachine
   module GameSystems
     class EntityTracking < Actor::Base
 
-      aspect %w(TrackEntity Transform)
+      aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
+
+      attr_reader :grid
 
       def post_init(grid=default_grid)
         @grid = grid
@@ -20,7 +22,8 @@ module GameMachine
 
         if message.is_a?(Entity)
           if message.track_entity
-            set_entity_location(message)
+            entity = entity_from_message(message)
+            set_entity_location(entity)
 
             # Don't republish messages from other actors
             unless message.track_entity.internal
@@ -35,13 +38,23 @@ module GameMachine
           end
 
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
-          GameMachine.logger.debug "PlayerTracking Subscribed"
+          GameMachine.logger.debug "EntityTracking Subscribed"
         else
           unhandled(message)
         end
       end
 
       private
+
+      def entity_from_message(message)
+        if message.has_player
+          message.player
+        elsif message.has_npc
+          message.npc
+        elsif message.has_transform
+          message
+        end
+      end
 
       def publish_entity_location_update(entity)
         publish_entity = entity.clone
@@ -64,37 +77,33 @@ module GameMachine
         if values = @grid.get(entity.id)
           @grid.remove(entity.id)
         end
-        x = entity.transform.vector3.x
-        y = entity.transform.vector3.y
-        @grid.set(entity.id,x,y)
+        @grid.set(entity)
       end
 
       def send_neighbors(message)
-        player = message.player
         search_radius = message.get_neighbors.search_radius
-        entities = neighbors_from_grid(message.transform,search_radius)
-        response = Helpers::GameMessage.new(message.player.id)
-        response.neighbors(entities)
-        response.send_to_player
+        x = message.get_neighbors.vector3.x
+        y = message.get_neighbors.vector3.y
+        entities = neighbors_from_grid(x,y,search_radius)
+
+        if message.has_player
+          player = message.player
+          response = Helpers::GameMessage.new(message.player.id)
+          response.neighbors(entities)
+          response.send_to_player
+        else
+          entity = Entity.new.set_neighbors(
+            Neighbors.new.set_entity_list(entities)
+          ).set_id('0')
+          sender.tell(entity,self)
+        end
       end
 
-      def player_from_neighbor(neighbor)
-        Player.new.
-          set_x(neighbor[2]).
-          set_y(neighbor[3]).
-          set_z(neighbor[4]).
-          set_id(neighbor[0].to_s)
-      end
-
-      def neighbors_from_grid(transform,search_radius)
+      def neighbors_from_grid(x,y,search_radius)
         if search_radius.nil?
           search_radius = default_search_radius
         end
-        x = transform.vector3.x
-        y = transform.vector3.y
-        @grid.neighbors(x,y,search_radius).map do |neighbor|
-          player_from_neighbor(neighbor)
-        end
+        @grid.neighbors(x,y,search_radius).map {|neighbor| neighbor[2]}
       end
 
     end

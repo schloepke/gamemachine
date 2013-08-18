@@ -54,6 +54,7 @@ java_import 'com.game_machine.entity_system.generated.PlayerAttack'
 java_import 'com.game_machine.entity_system.generated.Target'
 java_import 'com.game_machine.entity_system.generated.TrackEntity'
 java_import 'com.game_machine.entity_system.generated.GetNeighbors'
+java_import 'com.game_machine.entity_system.generated.Npc'
 
 
 

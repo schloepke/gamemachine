@@ -57,6 +57,10 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
     public Integer search_radius;
 
 
+
+    public Vector3 vector3;
+
+
     
 
 
@@ -100,6 +104,23 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 	
 	public Boolean hasSearch_radius()  {
         return search_radius == null ? false : true;
+    }
+
+
+
+    
+
+	public Vector3 getVector3() {
+		return vector3;
+	}
+	
+	public GetNeighbors setVector3(Vector3 vector3) {
+		this.vector3 = vector3;
+		return this;
+	}
+	
+	public Boolean hasVector3()  {
+        return vector3 == null ? false : true;
     }
 
 
@@ -178,6 +199,15 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
                 	
 
 
+            	case 3:
+
+
+                	message.vector3 = input.mergeObject(message.vector3, Vector3.getSchema());
+                    break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -215,6 +245,20 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
 
     	
+
+    	if(message.vector3 == null)
+            throw new UninitializedMessageException(message);
+
+    	
+
+
+    	if(message.vector3 != null)
+    		output.writeObject(3, message.vector3, Vector3.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -225,6 +269,8 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
         	case 1: return "value";
 
         	case 2: return "search_radius";
+
+        	case 3: return "vector3";
 
             default: return null;
         }
@@ -243,6 +289,8 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
     	__fieldMap.put("value", 1);
 
     	__fieldMap.put("search_radius", 2);
+
+    	__fieldMap.put("vector3", 3);
 
     }
    

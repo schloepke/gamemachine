@@ -145,6 +145,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public Npc npc;
 
 
+
+    public Vector3 vector3;
+
+
     
 
 
@@ -157,12 +161,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
-
-
-		if (this.hasGetNeighbors()) {
-			names.add(this.getNeighbors.getClass().getSimpleName());
-		}
-
 
 
 		if (this.hasTrackEntity()) {
@@ -289,6 +287,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+		if (this.hasVector3()) {
+			names.add(this.vector3.getClass().getSimpleName());
+		}
+
 
 
 
@@ -315,6 +317,12 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 		if (this.hasGameCommand()) {
 			names.add(this.gameCommand.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasGetNeighbors()) {
+			names.add(this.getNeighbors.getClass().getSimpleName());
 		}
 
 
@@ -736,6 +744,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public Vector3 getVector3() {
+		return vector3;
+	}
+	
+	public Entity setVector3(Vector3 vector3) {
+		this.vector3 = vector3;
+		return this;
+	}
+	
+	public Boolean hasVector3()  {
+        return vector3 == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1003,6 +1028,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.npc = input.mergeObject(message.npc, Npc.getSchema());
+                    break;
+
+                	
+
+
+            	case 25:
+
+
+                	message.vector3 = input.mergeObject(message.vector3, Vector3.getSchema());
                     break;
 
                 	
@@ -1287,6 +1321,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.vector3 != null)
+    		output.writeObject(25, message.vector3, Vector3.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1341,6 +1386,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 23: return "transform";
 
         	case 24: return "npc";
+
+        	case 25: return "vector3";
 
             default: return null;
         }
@@ -1403,6 +1450,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("transform", 23);
 
     	__fieldMap.put("npc", 24);
+
+    	__fieldMap.put("vector3", 25);
 
     }
    

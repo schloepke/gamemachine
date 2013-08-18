@@ -57,6 +57,10 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
     public String name;
 
 
+
+    public Transform transform;
+
+
     
 
 
@@ -100,6 +104,23 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 	
 	public Boolean hasName()  {
         return name == null ? false : true;
+    }
+
+
+
+    
+
+	public Transform getTransform() {
+		return transform;
+	}
+	
+	public Npc setTransform(Transform transform) {
+		this.transform = transform;
+		return this;
+	}
+	
+	public Boolean hasTransform()  {
+        return transform == null ? false : true;
     }
 
 
@@ -178,6 +199,15 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
                 	
 
 
+            	case 3:
+
+
+                	message.transform = input.mergeObject(message.transform, Transform.getSchema());
+                    break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -215,6 +245,17 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 
 
     	
+
+    	
+
+
+    	if(message.transform != null)
+    		output.writeObject(3, message.transform, Transform.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -225,6 +266,8 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
         	case 1: return "id";
 
         	case 2: return "name";
+
+        	case 3: return "transform";
 
             default: return null;
         }
@@ -243,6 +286,8 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
     	__fieldMap.put("id", 1);
 
     	__fieldMap.put("name", 2);
+
+    	__fieldMap.put("transform", 3);
 
     }
    
