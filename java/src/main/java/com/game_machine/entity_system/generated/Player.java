@@ -50,18 +50,6 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
 
-    public Integer x;
-
-
-
-    public Integer y;
-
-
-
-    public Integer z;
-
-
-
     public String id;
 
 
@@ -87,57 +75,6 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
 
-
-
-
-    
-
-	public Integer getX() {
-		return x;
-	}
-	
-	public Player setX(Integer x) {
-		this.x = x;
-		return this;
-	}
-	
-	public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-
-
-
-    
-
-	public Integer getY() {
-		return y;
-	}
-	
-	public Player setY(Integer y) {
-		this.y = y;
-		return this;
-	}
-	
-	public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-
-
-
-    
-
-	public Integer getZ() {
-		return z;
-	}
-	
-	public Player setZ(Integer z) {
-		this.z = z;
-		return this;
-	}
-	
-	public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
 
 
 
@@ -268,7 +205,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 1:
 
 
-                	message.x = input.readInt32();
+                	message.id = input.readString();
                 	break;
 
                 	
@@ -277,7 +214,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 2:
 
 
-                	message.y = input.readInt32();
+                	message.name = input.readString();
                 	break;
 
                 	
@@ -286,40 +223,13 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 3:
 
 
-                	message.z = input.readInt32();
-                	break;
-
-                	
-
-
-            	case 4:
-
-
-                	message.id = input.readString();
-                	break;
-
-                	
-
-
-            	case 5:
-
-
-                	message.name = input.readString();
-                	break;
-
-                	
-
-
-            	case 6:
-
-
                 	message.authenticated = input.readBool();
                 	break;
 
                 	
 
 
-            	case 7:
+            	case 4:
 
 
                 	message.authtoken = input.readString();
@@ -341,39 +251,6 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
     	
 
-    	
-
-
-    	if(message.x != null)
-            output.writeInt32(1, message.x, false);
-
-    	
-
-
-    	
-
-    	
-
-
-    	if(message.y != null)
-            output.writeInt32(2, message.y, false);
-
-    	
-
-
-    	
-
-    	
-
-
-    	if(message.z != null)
-            output.writeInt32(3, message.z, false);
-
-    	
-
-
-    	
-
     	if(message.id == null)
             throw new UninitializedMessageException(message);
 
@@ -381,7 +258,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
     	if(message.id != null)
-            output.writeString(4, message.id, false);
+            output.writeString(1, message.id, false);
 
     	
 
@@ -392,7 +269,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
     	if(message.name != null)
-            output.writeString(5, message.name, false);
+            output.writeString(2, message.name, false);
 
     	
 
@@ -403,7 +280,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
     	if(message.authenticated != null)
-            output.writeBool(6, message.authenticated, false);
+            output.writeBool(3, message.authenticated, false);
 
     	
 
@@ -414,7 +291,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
     	if(message.authtoken != null)
-            output.writeString(7, message.authtoken, false);
+            output.writeString(4, message.authtoken, false);
 
     	
 
@@ -427,19 +304,13 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
         switch(number)
         {
 
-        	case 1: return "x";
+        	case 1: return "id";
 
-        	case 2: return "y";
+        	case 2: return "name";
 
-        	case 3: return "z";
+        	case 3: return "authenticated";
 
-        	case 4: return "id";
-
-        	case 5: return "name";
-
-        	case 6: return "authenticated";
-
-        	case 7: return "authtoken";
+        	case 4: return "authtoken";
 
             default: return null;
         }
@@ -455,19 +326,13 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     static
     {
 
-    	__fieldMap.put("x", 1);
+    	__fieldMap.put("id", 1);
 
-    	__fieldMap.put("y", 2);
+    	__fieldMap.put("name", 2);
 
-    	__fieldMap.put("z", 3);
+    	__fieldMap.put("authenticated", 3);
 
-    	__fieldMap.put("id", 4);
-
-    	__fieldMap.put("name", 5);
-
-    	__fieldMap.put("authenticated", 6);
-
-    	__fieldMap.put("authtoken", 7);
+    	__fieldMap.put("authtoken", 4);
 
     }
    

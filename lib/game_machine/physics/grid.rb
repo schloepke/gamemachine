@@ -59,9 +59,11 @@ module GameMachine
         end
       end
 
-      def set(id,x,y,z=0)
-        cell = hash(x,y)
-        values = [id,cell,x,y,z]
+      def set(entity)
+        id = entity.id
+        vector3 = entity.transform.vector3
+        cell = hash(vector3.x,vector3.y)
+        values = [id,cell,entity]
         @object_index[id] = values
         @cells[cell] ||= {}
         @cells[cell][id] = values

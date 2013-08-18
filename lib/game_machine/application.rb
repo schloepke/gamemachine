@@ -75,9 +75,9 @@ module GameMachine
         bootfile = File.join(GameMachine.app_root,'boot.rb')
         if File.exists?(bootfile)
           require bootfile
-          GameMachine.logger.info "Game #{game} loaded"
+          GameMachine.logger.info "boot.rb loaded"
         else
-          GameMachine.logger.info "Game #{game} not loaded (boot.rb not found)"
+          GameMachine.logger.info "boot.rb not loaded (not found)"
         end
       end
 
@@ -107,7 +107,7 @@ module GameMachine
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::PlayerTracking).start
+        Actor::Builder.new(GameSystems::EntityTracking).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start

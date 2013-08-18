@@ -42,6 +42,10 @@ module GameMachine
       time = Benchmark.realtime do
       1.times do
         result = finder.find_path(node1,node2)
+        ar = result.map do |node|
+          [node.getX,node.getY]
+        end
+        #puts ar.inspect
       end
       end
       puts "#{time} "

@@ -18,6 +18,7 @@ RSpec.configure do |config|
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers
     GameMachine::Application.start_game_systems
+    GameMachine::Application.load_games
   end
 
   config.after(:each) do
@@ -31,5 +32,6 @@ end
 
 begin
   require_relative 'message_expectations'
+  require_relative '../lib/demo'
 rescue LoadError
 end

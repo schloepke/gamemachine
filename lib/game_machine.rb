@@ -17,6 +17,9 @@ require 'java'
 jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
 jars.each {|jar| require jar}
 
+java_import 'com.game_machine.entity_system.generated.Vector3'
+java_import 'com.game_machine.entity_system.generated.Quaternion'
+java_import 'com.game_machine.entity_system.generated.Transform'
 java_import 'com.game_machine.core.net.client.UdtClient'
 java_import 'com.game_machine.core.net.client.UdtClientHandler'
 java_import 'com.game_machine.entity_system.generated.ObjectdbGet'
@@ -49,7 +52,7 @@ java_import 'com.game_machine.entity_system.generated.RegisterPlayerObserver'
 java_import 'com.game_machine.entity_system.generated.PlayerMove'
 java_import 'com.game_machine.entity_system.generated.PlayerAttack'
 java_import 'com.game_machine.entity_system.generated.Target'
-java_import 'com.game_machine.entity_system.generated.TrackPlayer'
+java_import 'com.game_machine.entity_system.generated.TrackEntity'
 java_import 'com.game_machine.entity_system.generated.GetNeighbors'
 
 
@@ -69,7 +72,7 @@ require_relative 'game_machine/hashring'
 require_relative 'game_machine/application'
 require_relative 'game_machine/handlers/request'
 require_relative 'game_machine/handlers/game'
-require_relative 'game_machine/game_systems/player_tracking'
+require_relative 'game_machine/game_systems/entity_tracking'
 require_relative 'game_machine/game_systems/local_echo'
 require_relative 'game_machine/game_systems/remote_echo'
 require_relative 'game_machine/actor/builder'

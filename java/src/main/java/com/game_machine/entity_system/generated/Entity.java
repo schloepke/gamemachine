@@ -134,7 +134,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public TrackPlayer trackPlayer;
+    public TrackEntity trackEntity;
+
+
+
+    public Transform transform;
+
+
+
+    public Npc npc;
 
 
     
@@ -157,8 +165,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-		if (this.hasTrackPlayer()) {
-			names.add(this.trackPlayer.getClass().getSimpleName());
+		if (this.hasTrackEntity()) {
+			names.add(this.trackEntity.getClass().getSimpleName());
 		}
 
 
@@ -269,8 +277,24 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+		if (this.hasNpc()) {
+			names.add(this.npc.getClass().getSimpleName());
+		}
+
+
+
 		if (this.hasPlayer()) {
 			names.add(this.player.getClass().getSimpleName());
+		}
+
+
+
+
+
+
+
+		if (this.hasTransform()) {
+			names.add(this.transform.getClass().getSimpleName());
 		}
 
 
@@ -663,17 +687,51 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public TrackPlayer getTrackPlayer() {
-		return trackPlayer;
+	public TrackEntity getTrackEntity() {
+		return trackEntity;
 	}
 	
-	public Entity setTrackPlayer(TrackPlayer trackPlayer) {
-		this.trackPlayer = trackPlayer;
+	public Entity setTrackEntity(TrackEntity trackEntity) {
+		this.trackEntity = trackEntity;
 		return this;
 	}
 	
-	public Boolean hasTrackPlayer()  {
-        return trackPlayer == null ? false : true;
+	public Boolean hasTrackEntity()  {
+        return trackEntity == null ? false : true;
+    }
+
+
+
+    
+
+	public Transform getTransform() {
+		return transform;
+	}
+	
+	public Entity setTransform(Transform transform) {
+		this.transform = transform;
+		return this;
+	}
+	
+	public Boolean hasTransform()  {
+        return transform == null ? false : true;
+    }
+
+
+
+    
+
+	public Npc getNpc() {
+		return npc;
+	}
+	
+	public Entity setNpc(Npc npc) {
+		this.npc = npc;
+		return this;
+	}
+	
+	public Boolean hasNpc()  {
+        return npc == null ? false : true;
     }
 
 
@@ -926,7 +984,25 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 22:
 
 
-                	message.trackPlayer = input.mergeObject(message.trackPlayer, TrackPlayer.getSchema());
+                	message.trackEntity = input.mergeObject(message.trackEntity, TrackEntity.getSchema());
+                    break;
+
+                	
+
+
+            	case 23:
+
+
+                	message.transform = input.mergeObject(message.transform, Transform.getSchema());
+                    break;
+
+                	
+
+
+            	case 24:
+
+
+                	message.npc = input.mergeObject(message.npc, Npc.getSchema());
                     break;
 
                 	
@@ -1182,8 +1258,30 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.trackPlayer != null)
-    		output.writeObject(22, message.trackPlayer, TrackPlayer.getSchema(), false);
+    	if(message.trackEntity != null)
+    		output.writeObject(22, message.trackEntity, TrackEntity.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.transform != null)
+    		output.writeObject(23, message.transform, Transform.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.npc != null)
+    		output.writeObject(24, message.npc, Npc.getSchema(), false);
 
     	
 
@@ -1238,7 +1336,11 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 21: return "getNeighbors";
 
-        	case 22: return "trackPlayer";
+        	case 22: return "trackEntity";
+
+        	case 23: return "transform";
+
+        	case 24: return "npc";
 
             default: return null;
         }
@@ -1296,7 +1398,11 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("getNeighbors", 21);
 
-    	__fieldMap.put("trackPlayer", 22);
+    	__fieldMap.put("trackEntity", 22);
+
+    	__fieldMap.put("transform", 23);
+
+    	__fieldMap.put("npc", 24);
 
     }
    

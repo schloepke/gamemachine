@@ -10,7 +10,7 @@ message GetNeighbors {
   optional uint32 search_radius = 2;
 }
 
-message TrackPlayer {
+message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
 }
@@ -121,15 +121,35 @@ message PlayerLogin {
   required string password = 2;
 }
 
+message Npc {
+  required string id = 1;
+  optional string name = 2;
+}
 
 message Player {
+  required string id = 1;
+  optional string name = 2;
+  optional bool authenticated = 3;
+  optional string authtoken = 4;
+}
+
+
+message Vector3 {
   optional int32 x = 1;
   optional int32 y = 2;
   optional int32 z = 3;
-  required string id = 4;
-  optional string name = 5;
-  optional bool authenticated = 6;
-  optional string authtoken = 7;
+}
+
+message Quaternion {
+  optional int32 w = 1;
+  optional int32 x = 2;
+  optional int32 y = 3;
+  optional int32 z = 4;
+}
+
+message Transform {
+  optional Vector3 vector3 = 1;
+  optional Quaternion quaternion = 2;
 }
 
 message EchoTest {
@@ -161,7 +181,7 @@ message TestObject {
   
   
 message Neighbors {
-  repeated Player player = 1;
+  repeated Entity entity = 1;
 }
 	
 message GameCommand {
@@ -191,7 +211,9 @@ message Entity {
   optional PlayerMove playerMove = 19;
   optional PlayerAttack playerAttack = 20;
   optional GetNeighbors getNeighbors = 21;
-  optional TrackPlayer trackPlayer = 22;
+  optional TrackEntity trackEntity = 22;
+  optional Transform transform = 23;
+  optional Npc npc = 24;
 }
 
 message ClientMessage {
