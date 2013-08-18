@@ -80,9 +80,9 @@ module GameMachine
         current_entity.set_get_neighbors(component)
       end
 
-      def neighbors(players)
+      def neighbors(players,npcs)
         current_entity.set_neighbors(
-          Neighbors.new.set_entity_list(players)
+          Neighbors.new.set_player_list(players).set_npc_list(npcs)
         )
       end
 

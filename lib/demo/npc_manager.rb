@@ -1,5 +1,5 @@
 module Demo
-  class Npc < GameMachine::Actor::Base
+  class NpcManager < GameMachine::Actor::Base
     
     def post_init(*args)
       #node1 = JavaLib::Node.new(0,0)

@@ -23,6 +23,12 @@ module GameMachine
         if message.is_a?(Entity)
           if message.track_entity
             entity = entity_from_message(message)
+
+            if entity.nil?
+              unhandled(message)
+              return
+            end
+
             set_entity_location(entity)
 
             # Don't republish messages from other actors
@@ -51,8 +57,8 @@ module GameMachine
           message.player
         elsif message.has_npc
           message.npc
-        elsif message.has_transform
-          message
+        else
+          nil
         end
       end
 
@@ -84,16 +90,18 @@ module GameMachine
         search_radius = message.get_neighbors.search_radius
         x = message.get_neighbors.vector3.x
         y = message.get_neighbors.vector3.y
-        entities = neighbors_from_grid(x,y,search_radius)
+        neighbors = neighbors_from_grid(x,y,search_radius)
 
         if message.has_player
           player = message.player
           response = Helpers::GameMessage.new(message.player.id)
-          response.neighbors(entities)
+          response.neighbors(neighbors[:players],neighbors[:npcs])
           response.send_to_player
         else
           entity = Entity.new.set_neighbors(
-            Neighbors.new.set_entity_list(entities)
+            Neighbors.new.
+            set_player_list(neighbors[:players]).
+            set_npc_list(neighbors[:npcs])
           ).set_id('0')
           sender.tell(entity,self)
         end
@@ -103,7 +111,16 @@ module GameMachine
         if search_radius.nil?
           search_radius = default_search_radius
         end
-        @grid.neighbors(x,y,search_radius).map {|neighbor| neighbor[2]}
+
+        neighbors = {:players => [], :npcs => []}
+        @grid.neighbors(x,y,search_radius).each do |neighbor|
+          if neighbor[2].is_a?(Player)
+            neighbors[:players] << neighbor[2]
+          elsif neighbor[2].is_a?(Npc)
+            neighbors[:npcs] << neighbor[2]
+          end
+        end
+        neighbors
       end
 
     end

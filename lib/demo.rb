@@ -3,5 +3,5 @@ jars.each {|jar| require jar}
 
 require_relative 'demo/jme'
 require_relative 'demo/grid'
-require_relative 'demo/npc'
+require_relative 'demo/npc_manager'
 

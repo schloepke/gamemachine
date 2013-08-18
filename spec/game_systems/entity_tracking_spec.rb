@@ -16,10 +16,16 @@ module GameMachine
         TrackEntity.new.set_value(true)
       end
 
+      let(:vector3) do
+        Vector3.new.set_x(0).set_y(0).set_z(0)
+      end
+
       let(:transform) do
-        Transform.new.set_vector3(
-          Vector3.new.set_x(0).set_y(0).set_z(0)
-        )
+        Transform.new.set_vector3(vector3)
+      end
+
+      let(:get_neighbors) do
+        GetNeighbors.new.set_value(true).set_vector3(vector3)
       end
 
       let(:player) do
@@ -40,6 +46,10 @@ module GameMachine
         Entity.new.set_id('0').
           set_npc(npc).
           set_track_entity(track_entity)
+      end
+
+      let(:get_neighbors_entity) do
+        Entity.new.set_id('0').set_get_neighbors(get_neighbors)
       end
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
@@ -72,7 +82,19 @@ module GameMachine
 
       describe 'get neighbors' do
 
+        it "gets neighbors from grid" do
+          expect(subject.grid).to receive(:neighbors).and_return([[0,1,player]])
+          subject.on_receive(get_neighbors_entity)
+        end
+
+        it "sends neighbors to player" do
+          expect_any_instance_of(ClientMessage).to receive(:send_to_player)
+          get_neighbors_entity.set_player(player)
+          subject.on_receive(entity)
+          subject.on_receive(get_neighbors_entity)
+        end
       end
+
     end
   end
 end
