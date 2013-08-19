@@ -87,11 +87,22 @@ module GameMachine
           subject.on_receive(get_neighbors_entity)
         end
 
-        it "sends neighbors to player" do
-          expect_any_instance_of(ClientMessage).to receive(:send_to_player)
-          get_neighbors_entity.set_player(player)
-          subject.on_receive(entity)
-          subject.on_receive(get_neighbors_entity)
+        context "message has player" do
+          it "sends neighbors to player" do
+            expect_any_instance_of(ClientMessage).to receive(:send_to_player)
+            get_neighbors_entity.set_player(player)
+            subject.on_receive(entity)
+            subject.on_receive(get_neighbors_entity)
+          end
+        end
+
+        context "message does not have player" do
+          it "sends neighbors to sender" do
+            subject.stub(:sender).and_return(actor_ref)
+            expect(actor_ref).to receive(:tell).with(kind_of(Entity),subject)
+            subject.on_receive(entity)
+            subject.on_receive(get_neighbors_entity)
+          end
         end
       end
 

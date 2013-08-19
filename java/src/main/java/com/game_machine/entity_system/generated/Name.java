@@ -30,41 +30,33 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
+public final class Name  implements Externalizable, Message<Name>, Schema<Name>
 {
 
 
 
 
-    public static Schema<Npc> getSchema()
+    public static Schema<Name> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static Npc getDefaultInstance()
+    public static Name getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final Npc DEFAULT_INSTANCE = new Npc();
+    static final Name DEFAULT_INSTANCE = new Name();
 
 
 
-    public String id;
-
-
-
-    public Name name;
-
-
-
-    public Transform transform;
+    public String value;
 
 
     
 
 
-    public Npc()
+    public Name()
     {
         
     }
@@ -76,51 +68,17 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 
     
 
-	public String getId() {
-		return id;
+	public String getValue() {
+		return value;
 	}
 	
-	public Npc setId(String id) {
-		this.id = id;
+	public Name setValue(String value) {
+		this.value = value;
 		return this;
 	}
 	
-	public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-
-
-
-    
-
-	public Name getName() {
-		return name;
-	}
-	
-	public Npc setName(Name name) {
-		this.name = name;
-		return this;
-	}
-	
-	public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-
-
-
-    
-
-	public Transform getTransform() {
-		return transform;
-	}
-	
-	public Npc setTransform(Transform transform) {
-		this.transform = transform;
-		return this;
-	}
-	
-	public Boolean hasTransform()  {
-        return transform == null ? false : true;
+	public Boolean hasValue()  {
+        return value == null ? false : true;
     }
 
 
@@ -140,39 +98,39 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 
     // message method
 
-    public Schema<Npc> cachedSchema()
+    public Schema<Name> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public Npc newMessage()
+    public Name newMessage()
     {
-        return new Npc();
+        return new Name();
     }
 
-    public Class<Npc> typeClass()
+    public Class<Name> typeClass()
     {
-        return Npc.class;
+        return Name.class;
     }
 
     public String messageName()
     {
-        return Npc.class.getSimpleName();
+        return Name.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return Npc.class.getName();
+        return Name.class.getName();
     }
 
-    public boolean isInitialized(Npc message)
+    public boolean isInitialized(Name message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, Npc message) throws IOException
+    public void mergeFrom(Input input, Name message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -184,26 +142,8 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
             	case 1:
 
 
-                	message.id = input.readString();
+                	message.value = input.readString();
                 	break;
-
-                	
-
-
-            	case 2:
-
-
-                	message.name = input.mergeObject(message.name, Name.getSchema());
-                    break;
-
-                	
-
-
-            	case 3:
-
-
-                	message.transform = input.mergeObject(message.transform, Transform.getSchema());
-                    break;
 
                 	
 
@@ -216,41 +156,19 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
     }
 
 
-    public void writeTo(Output output, Npc message) throws IOException
+    public void writeTo(Output output, Name message) throws IOException
     {
 
     	
 
-    	if(message.id == null)
+    	if(message.value == null)
             throw new UninitializedMessageException(message);
 
     	
 
 
-    	if(message.id != null)
-            output.writeString(1, message.id, false);
-
-    	
-
-
-    	
-
-    	
-
-
-    	if(message.name != null)
-    		output.writeObject(2, message.name, Name.getSchema(), false);
-
-    	
-
-
-    	
-
-    	
-
-
-    	if(message.transform != null)
-    		output.writeObject(3, message.transform, Transform.getSchema(), false);
+    	if(message.value != null)
+            output.writeString(1, message.value, false);
 
     	
 
@@ -263,11 +181,7 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
         switch(number)
         {
 
-        	case 1: return "id";
-
-        	case 2: return "name";
-
-        	case 3: return "transform";
+        	case 1: return "value";
 
             default: return null;
         }
@@ -283,11 +197,7 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
     static
     {
 
-    	__fieldMap.put("id", 1);
-
-    	__fieldMap.put("name", 2);
-
-    	__fieldMap.put("transform", 3);
+    	__fieldMap.put("value", 1);
 
     }
    
@@ -297,7 +207,7 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = Npc.getSchema().getFieldName(i);
+		fieldName = Name.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -307,16 +217,16 @@ public final class Npc  implements Externalizable, Message<Npc>, Schema<Npc>
 	return fieldNames;
 }
 
-public static Npc parseFrom(byte[] bytes) {
-	Npc message = new Npc();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Npc.class));
+public static Name parseFrom(byte[] bytes) {
+	Name message = new Name();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Name.class));
 	return message;
 }
 
-public Npc clone() {
+public Name clone() {
 	byte[] bytes = this.toByteArray();
-	Npc npc = Npc.parseFrom(bytes);
-	return npc;
+	Name name = Name.parseFrom(bytes);
+	return name;
 }
 	
 public byte[] toByteArray() {
@@ -328,7 +238,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, Npc.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, Name.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -341,7 +251,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Npc.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Name.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();

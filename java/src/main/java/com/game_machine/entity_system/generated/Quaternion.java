@@ -50,19 +50,19 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
 
-    public Integer w;
+    public Float w;
 
 
 
-    public Integer x;
+    public Float x;
 
 
 
-    public Integer y;
+    public Float y;
 
 
 
-    public Integer z;
+    public Float z;
 
 
     
@@ -80,11 +80,11 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
     
 
-	public Integer getW() {
+	public Float getW() {
 		return w;
 	}
 	
-	public Quaternion setW(Integer w) {
+	public Quaternion setW(Float w) {
 		this.w = w;
 		return this;
 	}
@@ -97,11 +97,11 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
     
 
-	public Integer getX() {
+	public Float getX() {
 		return x;
 	}
 	
-	public Quaternion setX(Integer x) {
+	public Quaternion setX(Float x) {
 		this.x = x;
 		return this;
 	}
@@ -114,11 +114,11 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
     
 
-	public Integer getY() {
+	public Float getY() {
 		return y;
 	}
 	
-	public Quaternion setY(Integer y) {
+	public Quaternion setY(Float y) {
 		this.y = y;
 		return this;
 	}
@@ -131,11 +131,11 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
     
 
-	public Integer getZ() {
+	public Float getZ() {
 		return z;
 	}
 	
-	public Quaternion setZ(Integer z) {
+	public Quaternion setZ(Float z) {
 		this.z = z;
 		return this;
 	}
@@ -205,7 +205,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
             	case 1:
 
 
-                	message.w = input.readInt32();
+                	message.w = input.readFloat();
                 	break;
 
                 	
@@ -214,7 +214,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
             	case 2:
 
 
-                	message.x = input.readInt32();
+                	message.x = input.readFloat();
                 	break;
 
                 	
@@ -223,7 +223,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
             	case 3:
 
 
-                	message.y = input.readInt32();
+                	message.y = input.readFloat();
                 	break;
 
                 	
@@ -232,7 +232,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
             	case 4:
 
 
-                	message.z = input.readInt32();
+                	message.z = input.readFloat();
                 	break;
 
                 	
@@ -255,7 +255,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
     	if(message.w != null)
-            output.writeInt32(1, message.w, false);
+            output.writeFloat(1, message.w, false);
 
     	
 
@@ -266,7 +266,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
     	if(message.x != null)
-            output.writeInt32(2, message.x, false);
+            output.writeFloat(2, message.x, false);
 
     	
 
@@ -277,7 +277,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
     	if(message.y != null)
-            output.writeInt32(3, message.y, false);
+            output.writeFloat(3, message.y, false);
 
     	
 
@@ -288,7 +288,7 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
     	if(message.z != null)
-            output.writeInt32(4, message.z, false);
+            output.writeFloat(4, message.z, false);
 
     	
 

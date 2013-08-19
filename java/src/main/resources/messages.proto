@@ -117,10 +117,20 @@ message PlayerLogin {
   required string password = 2;
 }
 
+message Name {
+  required string value = 1;
+}
+
 message Npc {
   required string id = 1;
-  optional string name = 2;
+  optional Name name = 2;
   optional Transform transform = 3;
+}
+
+message CreateNpc {
+  required Npc npc = 1;
+  optional string ai = 2;
+  optional string npcType = 3;
 }
 
 message Player {
@@ -133,16 +143,16 @@ message Player {
 
 
 message Vector3 {
-  optional int32 x = 1;
-  optional int32 y = 2;
-  optional int32 z = 3;
+  optional float x = 1;
+  optional float y = 2;
+  optional float z = 3;
 }
 
 message Quaternion {
-  optional int32 w = 1;
-  optional int32 x = 2;
-  optional int32 y = 3;
-  optional int32 z = 4;
+  optional float w = 1;
+  optional float x = 2;
+  optional float y = 3;
+  optional float z = 4;
 }
 
 message Transform {
@@ -220,6 +230,7 @@ message Entity {
   optional Transform transform = 23;
   optional Npc npc = 24;
   optional Vector3 vector3 = 25;
+  optional CreateNpc createNpc = 26;
 }
 
 message ClientMessage {

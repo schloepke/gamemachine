@@ -9,7 +9,7 @@ module Demo
     puts "position=#{position}"
   end
 
-  describe Npc do
+  describe NpcManager do
       target_position = Jme::Vector3f.new(222,1.1,1000)
       position = Jme::Vector3f.new(0,0,0)
       start_time = 0

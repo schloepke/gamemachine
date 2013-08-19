@@ -50,15 +50,15 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
 
 
-    public Integer x;
+    public Float x;
 
 
 
-    public Integer y;
+    public Float y;
 
 
 
-    public Integer z;
+    public Float z;
 
 
     
@@ -76,11 +76,11 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
     
 
-	public Integer getX() {
+	public Float getX() {
 		return x;
 	}
 	
-	public Vector3 setX(Integer x) {
+	public Vector3 setX(Float x) {
 		this.x = x;
 		return this;
 	}
@@ -93,11 +93,11 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
     
 
-	public Integer getY() {
+	public Float getY() {
 		return y;
 	}
 	
-	public Vector3 setY(Integer y) {
+	public Vector3 setY(Float y) {
 		this.y = y;
 		return this;
 	}
@@ -110,11 +110,11 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
     
 
-	public Integer getZ() {
+	public Float getZ() {
 		return z;
 	}
 	
-	public Vector3 setZ(Integer z) {
+	public Vector3 setZ(Float z) {
 		this.z = z;
 		return this;
 	}
@@ -184,7 +184,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
             	case 1:
 
 
-                	message.x = input.readInt32();
+                	message.x = input.readFloat();
                 	break;
 
                 	
@@ -193,7 +193,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
             	case 2:
 
 
-                	message.y = input.readInt32();
+                	message.y = input.readFloat();
                 	break;
 
                 	
@@ -202,7 +202,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
             	case 3:
 
 
-                	message.z = input.readInt32();
+                	message.z = input.readFloat();
                 	break;
 
                 	
@@ -225,7 +225,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
 
     	if(message.x != null)
-            output.writeInt32(1, message.x, false);
+            output.writeFloat(1, message.x, false);
 
     	
 
@@ -236,7 +236,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
 
     	if(message.y != null)
-            output.writeInt32(2, message.y, false);
+            output.writeFloat(2, message.y, false);
 
     	
 
@@ -247,7 +247,7 @@ public final class Vector3  implements Externalizable, Message<Vector3>, Schema<
 
 
     	if(message.z != null)
-            output.writeInt32(3, message.z, false);
+            output.writeFloat(3, message.z, false);
 
     	
 

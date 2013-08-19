@@ -87,24 +87,36 @@ module GameMachine
       end
 
       def send_neighbors(message)
-        search_radius = message.get_neighbors.search_radius
-        x = message.get_neighbors.vector3.x
-        y = message.get_neighbors.vector3.y
-        neighbors = neighbors_from_grid(x,y,search_radius)
+        neighbors = neighbors_from_grid(
+          message.get_neighbors.vector3.x,
+          message.get_neighbors.vector3.y,
+          message.get_neighbors.search_radius
+        )
+        
+        if neighbors[:players].empty? && neighbors[:npcs].empty?
+          return
+        end
 
         if message.has_player
-          player = message.player
-          response = Helpers::GameMessage.new(message.player.id)
-          response.neighbors(neighbors[:players],neighbors[:npcs])
-          response.send_to_player
+          send_neighbors_to_player(neighbors,message.player)
         else
-          entity = Entity.new.set_neighbors(
-            Neighbors.new.
-            set_player_list(neighbors[:players]).
-            set_npc_list(neighbors[:npcs])
-          ).set_id('0')
-          sender.tell(entity,self)
+          send_neighbors_to_sender(neighbors,message)
         end
+      end
+
+      def send_neighbors_to_player(neighbors,player)
+        response = Helpers::GameMessage.new(player.id)
+        response.neighbors(neighbors[:players],neighbors[:npcs])
+        response.send_to_player
+      end
+
+      def send_neighbors_to_sender(neighbors,message)
+        entity = Entity.new.set_neighbors(
+          Neighbors.new.
+          set_player_list(neighbors[:players]).
+          set_npc_list(neighbors[:npcs])
+        ).set_id(message.id)
+        sender.tell(entity,self)
       end
 
       def neighbors_from_grid(x,y,search_radius)

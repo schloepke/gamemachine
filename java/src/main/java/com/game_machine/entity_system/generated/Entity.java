@@ -149,6 +149,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public Vector3 vector3;
 
 
+
+    public CreateNpc createNpc;
+
+
     
 
 
@@ -275,8 +279,16 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+
+
 		if (this.hasNpc()) {
 			names.add(this.npc.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasCreateNpc()) {
+			names.add(this.createNpc.getClass().getSimpleName());
 		}
 
 
@@ -761,6 +773,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public CreateNpc getCreateNpc() {
+		return createNpc;
+	}
+	
+	public Entity setCreateNpc(CreateNpc createNpc) {
+		this.createNpc = createNpc;
+		return this;
+	}
+	
+	public Boolean hasCreateNpc()  {
+        return createNpc == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1037,6 +1066,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.vector3 = input.mergeObject(message.vector3, Vector3.getSchema());
+                    break;
+
+                	
+
+
+            	case 26:
+
+
+                	message.createNpc = input.mergeObject(message.createNpc, CreateNpc.getSchema());
                     break;
 
                 	
@@ -1332,6 +1370,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.createNpc != null)
+    		output.writeObject(26, message.createNpc, CreateNpc.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1388,6 +1437,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 24: return "npc";
 
         	case 25: return "vector3";
+
+        	case 26: return "createNpc";
 
             default: return null;
         }
@@ -1452,6 +1503,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("npc", 24);
 
     	__fieldMap.put("vector3", 25);
+
+    	__fieldMap.put("createNpc", 26);
 
     }
    
