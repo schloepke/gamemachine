@@ -12,7 +12,9 @@ module Demo
 
       @target_position = Jme::Vector3f.new(10,10,0)
       @start_time = 0
-      @last_update = Time.now
+      @last_update = Time.now.to_f
+      @target_is_player = false
+      @update_count = 0
     end
 
     def update_npc_vector
@@ -34,8 +36,13 @@ module Demo
 
     def update_target(neighbors)
       if neighbors.player
-        target = neighbor.player.first
-        update_target_vector(target.transform.vector)
+        if target = neighbors.player.first
+          update_target_vector(target.transform.vector3)
+          @target_is_player = true
+          move
+          @start_time += 0.0001
+          update_npc_vector
+        end
       end
     end
 
@@ -43,27 +50,30 @@ module Demo
       if neighbors
         update_target(neighbors)
       else
-        @delta_time = Time.now - @last_update
-        move
-        @start_time += 0.0001
-        update_npc_vector
+        @delta_time = Time.now.to_f - @last_update.to_f
         get_neighbors
         track_entity
-        @last_update = Time.now
+        @last_update = Time.now.to_f
+        if @target_is_player
+          #GameMachine.logger.info("target=#{@target_position.x} #{@target_position.y} #{@target_position.z}")
+        end
       end
+      @update_count += 1
     end
 
     def move
       direction = @target_position.subtract(@position)
       direction.y = 0
       #puts "direction magnitude=#{direction.length}"
-      @position = @position.interpolate(@target_position,10 * @start_time)
+      @position = @position.interpolate(@target_position,1 * @delta_time)
       #puts "position=#{@position}"
     end
 
     def get_neighbors
         entity = Entity.new.set_id(@npc.id).set_get_neighbors(
-          GetNeighbors.new.set_value(true).set_vector3(@npc.transform.vector3)
+          GetNeighbors.new.
+          set_value(true).
+          set_vector3(@npc.transform.vector3)#.set_search_radius(25)
         )
         GameMachine::GameSystems::EntityTracking.find.tell(entity,@parent)
     end

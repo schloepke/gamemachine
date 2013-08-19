@@ -8,7 +8,7 @@ module Demo
     def post_init(*args)
       GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
       @npc_actors = {}
-      500.times do |i|
+      400.times do |i|
         create_npc(i)
       end
       #node1 = JavaLib::Node.new(0,0)
@@ -31,7 +31,7 @@ module Demo
 
       x = rand(max) + 1
       y = rand(max) + 1
-      z = 0
+      z = 0.10
       entity = Entity.new.set_id('0').set_create_npc(
         CreateNpc.new.set_npc(
           Npc.new.set_id(id.to_s).set_transform(

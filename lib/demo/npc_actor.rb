@@ -31,7 +31,7 @@ module Demo
             @update_running = true
           end
         elsif message.has_neighbors
-          if npc_behavior = @npc_behaviors.fetch(message.id)
+          if npc_behavior = @npc_behaviors.fetch(message.id,nil)
             npc_behavior.update(message.neighbors)
           else
             GameMachine.logger.error("NpcBehavior #{message.id} not found")
@@ -43,7 +43,7 @@ module Demo
 
 
     def schedule_update
-      duration = GameMachine::JavaLib::Duration.create(400, java.util.concurrent.TimeUnit::MILLISECONDS)
+      duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
       @scheduler.schedule(duration, duration, get_self, "update", @dispatcher, nil)
     end
   end
