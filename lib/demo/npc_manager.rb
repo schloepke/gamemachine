@@ -11,7 +11,7 @@ module Demo
       @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
-      1000.times do |i|
+      400.times do |i|
         create_npc(i)
       end
       #node1 = JavaLib::Node.new(0,0)
