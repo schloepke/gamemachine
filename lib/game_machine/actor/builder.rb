@@ -41,7 +41,7 @@ module GameMachine
         GameMachine.logger.debug "Game actor #{@name} starting"
         if @create_hashring
           hashring = create_hashring(@hashring_size)
-          hashring.buckets.each do |bucket_name|
+          hashring.buckets.map do |bucket_name|
             @actor_system.actor_of(@props, bucket_name)
           end
         else

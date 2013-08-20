@@ -6,7 +6,10 @@ module Demo
     aspect %w(CreateNpc)
 
     def post_init(*args)
-      GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
+      @scheduler = get_context.system.scheduler
+      @dispatcher = get_context.system.dispatcher
+      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
+      GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
       400.times do |i|
         create_npc(i)
@@ -16,10 +19,15 @@ module Demo
       #finder = JavaLib::Pathfinding.new(JavaLib::Pathfinding::Algorithm::ASTAR,Grid.new)
       #finder.set_eight(true)
       #result = finder.find_path(node1,node2)
+      schedule_update
     end
 
     def on_receive(message)
-      if message.has_create_npc
+      if message.is_a?(String)
+        if message == 'update'
+          @actor_refs.each {|actor_ref| actor_ref.tell('update',nil)}
+        end
+      elsif message.has_create_npc
         ref = Demo::NpcActor.find_distributed(message.create_npc.npc.id)
         ref.tell(message)
       end
@@ -43,5 +51,11 @@ module Demo
       )
       self.class.find.tell(entity)
     end
+
+    def schedule_update
+      duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
+      @scheduler.schedule(duration, duration, get_self, "update", @dispatcher, nil)
+    end
+
   end
 end
