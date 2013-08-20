@@ -51,7 +51,7 @@ module Demo
         update_target(neighbors)
       else
         @delta_time = Time.now.to_f - @last_update.to_f
-        if @update_count >= 2
+        if @update_count >= 0
           get_neighbors
           @update_count = 0
         end
@@ -68,14 +68,13 @@ module Demo
       direction = @target_position.subtract(@position)
       direction.y = 0
       #puts "direction magnitude=#{direction.length}"
-      @position = @position.interpolate(@target_position,1 * @delta_time)
+      @position = @position.interpolate(@target_position,0.5 * @delta_time)
       #puts "position=#{@position}"
     end
 
     def get_neighbors
         entity = Entity.new.set_id(@npc.id).set_get_neighbors(
           GetNeighbors.new.
-          set_value(true).
           set_vector3(@npc.transform.vector3)#.set_search_radius(25)
         )
         GameMachine::GameSystems::EntityTracking.find.tell(entity,@parent)

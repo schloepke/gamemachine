@@ -50,15 +50,19 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
 
 
-    public Boolean value;
-
-
-
     public Integer search_radius;
 
 
 
     public Vector3 vector3;
+
+
+
+    public String neighborType;
+
+
+
+    public String gridName;
 
 
     
@@ -71,23 +75,6 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
 
 
-
-
-
-    
-
-	public Boolean getValue() {
-		return value;
-	}
-	
-	public GetNeighbors setValue(Boolean value) {
-		this.value = value;
-		return this;
-	}
-	
-	public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
 
 
 
@@ -121,6 +108,40 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 	
 	public Boolean hasVector3()  {
         return vector3 == null ? false : true;
+    }
+
+
+
+    
+
+	public String getNeighborType() {
+		return neighborType;
+	}
+	
+	public GetNeighbors setNeighborType(String neighborType) {
+		this.neighborType = neighborType;
+		return this;
+	}
+	
+	public Boolean hasNeighborType()  {
+        return neighborType == null ? false : true;
+    }
+
+
+
+    
+
+	public String getGridName() {
+		return gridName;
+	}
+	
+	public GetNeighbors setGridName(String gridName) {
+		this.gridName = gridName;
+		return this;
+	}
+	
+	public Boolean hasGridName()  {
+        return gridName == null ? false : true;
     }
 
 
@@ -181,15 +202,6 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
                 case 0:
                     return;
 
-            	case 1:
-
-
-                	message.value = input.readBool();
-                	break;
-
-                	
-
-
             	case 2:
 
 
@@ -208,6 +220,24 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
                 	
 
 
+            	case 4:
+
+
+                	message.neighborType = input.readString();
+                	break;
+
+                	
+
+
+            	case 5:
+
+
+                	message.gridName = input.readString();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -218,20 +248,6 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
     public void writeTo(Output output, GetNeighbors message) throws IOException
     {
-
-    	
-
-    	if(message.value == null)
-            throw new UninitializedMessageException(message);
-
-    	
-
-
-    	if(message.value != null)
-            output.writeBool(1, message.value, false);
-
-    	
-
 
     	
 
@@ -259,6 +275,28 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
 
 
     	
+
+    	
+
+
+    	if(message.neighborType != null)
+            output.writeString(4, message.neighborType, false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.gridName != null)
+            output.writeString(5, message.gridName, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -266,11 +304,13 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
         switch(number)
         {
 
-        	case 1: return "value";
-
         	case 2: return "search_radius";
 
         	case 3: return "vector3";
+
+        	case 4: return "neighborType";
+
+        	case 5: return "gridName";
 
             default: return null;
         }
@@ -286,11 +326,13 @@ public final class GetNeighbors  implements Externalizable, Message<GetNeighbors
     static
     {
 
-    	__fieldMap.put("value", 1);
-
     	__fieldMap.put("search_radius", 2);
 
     	__fieldMap.put("vector3", 3);
+
+    	__fieldMap.put("neighborType", 4);
+
+    	__fieldMap.put("gridName", 5);
 
     }
    

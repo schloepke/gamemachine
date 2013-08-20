@@ -11,7 +11,7 @@ module Demo
       @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
-      400.times do |i|
+      500.times do |i|
         create_npc(i)
       end
       #node1 = JavaLib::Node.new(0,0)
@@ -53,7 +53,7 @@ module Demo
     end
 
     def schedule_update
-      duration = GameMachine::JavaLib::Duration.create(200, java.util.concurrent.TimeUnit::MILLISECONDS)
+      duration = GameMachine::JavaLib::Duration.create(150, java.util.concurrent.TimeUnit::MILLISECONDS)
       @scheduler.schedule(duration, duration, get_self, "update", @dispatcher, nil)
     end
 

@@ -199,9 +199,14 @@ message GameCommand {
 }
 
 message GetNeighbors {
-  required bool value = 1;
   optional uint32 search_radius = 2;
   required Vector3 vector3 = 3;
+  optional string neighborType = 4;
+  optional string gridName = 5;
+}
+
+message GetEntityLocations {
+  repeated string entityId = 1;
 }
 
 message Entity {
@@ -232,6 +237,7 @@ message Entity {
   optional Vector3 vector3 = 25;
   optional CreateNpc createNpc = 26;
   optional EntityList entityList = 27;
+  optional GetEntityLocations getEntityLocations = 28;
   
 }
 

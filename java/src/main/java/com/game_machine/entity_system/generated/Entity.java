@@ -157,6 +157,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public EntityList entityList;
 
 
+
+    public GetEntityLocations getEntityLocations;
+
+
     
 
 
@@ -339,6 +343,12 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 		if (this.hasGetNeighbors()) {
 			names.add(this.getNeighbors.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasGetEntityLocations()) {
+			names.add(this.getEntityLocations.getClass().getSimpleName());
 		}
 
 
@@ -817,6 +827,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public GetEntityLocations getGetEntityLocations() {
+		return getEntityLocations;
+	}
+	
+	public Entity setGetEntityLocations(GetEntityLocations getEntityLocations) {
+		this.getEntityLocations = getEntityLocations;
+		return this;
+	}
+	
+	public Boolean hasGetEntityLocations()  {
+        return getEntityLocations == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1111,6 +1138,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.entityList = input.mergeObject(message.entityList, EntityList.getSchema());
+                    break;
+
+                	
+
+
+            	case 28:
+
+
+                	message.getEntityLocations = input.mergeObject(message.getEntityLocations, GetEntityLocations.getSchema());
                     break;
 
                 	
@@ -1428,6 +1464,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.getEntityLocations != null)
+    		output.writeObject(28, message.getEntityLocations, GetEntityLocations.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1488,6 +1535,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 26: return "createNpc";
 
         	case 27: return "entityList";
+
+        	case 28: return "getEntityLocations";
 
             default: return null;
         }
@@ -1556,6 +1605,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("createNpc", 26);
 
     	__fieldMap.put("entityList", 27);
+
+    	__fieldMap.put("getEntityLocations", 28);
 
     }
    
