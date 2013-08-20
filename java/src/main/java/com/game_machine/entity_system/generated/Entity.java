@@ -153,6 +153,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public CreateNpc createNpc;
 
 
+
+    public EntityList entityList;
+
+
     
 
 
@@ -338,6 +342,12 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 		}
 
 
+
+
+
+		if (this.hasEntityList()) {
+			names.add(this.entityList.getClass().getSimpleName());
+		}
 
 
 
@@ -790,6 +800,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public EntityList getEntityList() {
+		return entityList;
+	}
+	
+	public Entity setEntityList(EntityList entityList) {
+		this.entityList = entityList;
+		return this;
+	}
+	
+	public Boolean hasEntityList()  {
+        return entityList == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1075,6 +1102,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.createNpc = input.mergeObject(message.createNpc, CreateNpc.getSchema());
+                    break;
+
+                	
+
+
+            	case 27:
+
+
+                	message.entityList = input.mergeObject(message.entityList, EntityList.getSchema());
                     break;
 
                 	
@@ -1381,6 +1417,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.entityList != null)
+    		output.writeObject(27, message.entityList, EntityList.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1439,6 +1486,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 25: return "vector3";
 
         	case 26: return "createNpc";
+
+        	case 27: return "entityList";
 
             default: return null;
         }
@@ -1505,6 +1554,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("vector3", 25);
 
     	__fieldMap.put("createNpc", 26);
+
+    	__fieldMap.put("entityList", 27);
 
     }
    

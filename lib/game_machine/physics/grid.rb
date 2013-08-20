@@ -33,12 +33,17 @@ module GameMachine
           cells << hash(x,y + bounds)
         end
 
-        cells.delete_if {|cell| cell < @min || cell > (@cell_count - 1)}
         cells.uniq!
-        cells.map do |cell|
-          points = points_in_cell(cell)
-          points.empty? ? nil : points
-        end.compact.flatten(1)
+        points = []
+        cells.each do |cell|
+          next if cell < @min || cell > (@cell_count - 1)
+          points_in_cell(cell).each do |point|
+            unless point.empty?
+              points << point[2]
+            end
+          end
+        end
+        points
       end
 
       def points_in_cell(cell)

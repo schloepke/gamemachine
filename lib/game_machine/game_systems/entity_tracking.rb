@@ -8,9 +8,18 @@ module GameMachine
       attr_reader :grid
 
       def post_init(grid=default_grid)
+        @scheduler = get_context.system.scheduler
+        @dispatcher = get_context.system.dispatcher
+        @entity_updates = []
         @grid = grid
         entity_updates = Subscribe.new.set_topic('entity_location_updates')
         MessageQueue.find.tell(entity_updates,self)
+        schedule_update
+      end
+
+      def schedule_update
+        duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
+        @scheduler.schedule(duration, duration, get_self, "send_entity_updates", @dispatcher, nil)
       end
 
       def on_receive(message)
@@ -31,9 +40,11 @@ module GameMachine
 
             set_entity_location(entity)
 
-            # Don't republish messages from other actors
-            unless message.track_entity.internal
-              publish_entity_location_update(message)
+            @entity_updates << message
+          elsif message.has_entity_list
+            message.entity_list.get_entity_list.each do |entity_message|
+              entity = entity_from_message(entity_message)
+              set_entity_location(entity)
             end
           end
 
@@ -45,6 +56,15 @@ module GameMachine
 
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
           GameMachine.logger.debug "EntityTracking Subscribed"
+        elsif message.is_a?(String)
+          if message == 'send_entity_updates'
+            unless @entity_updates.empty?
+              entity_list = EntityList.new.set_entity_list(@entity_updates)
+              entity = Entity.new.set_id('0').set_entity_list(entity_list)
+              @entity_updates = []
+              publish_entity_location_update(entity)
+            end
+          end
         else
           unhandled(message)
         end
@@ -63,11 +83,9 @@ module GameMachine
       end
 
       def publish_entity_location_update(entity)
-        publish_entity = entity.clone
-        publish_entity.track_entity.set_internal(true)
         publish = Publish.new.
           set_topic('entity_location_updates').
-          set_message(publish_entity)
+          set_message(entity)
         MessageQueue.find.tell(publish,self)
       end
 
@@ -126,10 +144,10 @@ module GameMachine
 
         neighbors = {:players => [], :npcs => []}
         @grid.neighbors(x,y,search_radius).each do |neighbor|
-          if neighbor[2].is_a?(Player)
-            neighbors[:players] << neighbor[2]
-          elsif neighbor[2].is_a?(Npc)
-            neighbors[:npcs] << neighbor[2]
+          if neighbor.is_a?(Player)
+            neighbors[:players] << neighbor
+          elsif neighbor.is_a?(Npc)
+            neighbors[:npcs] << neighbor
           end
         end
         neighbors

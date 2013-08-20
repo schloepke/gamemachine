@@ -51,7 +51,10 @@ module Demo
         update_target(neighbors)
       else
         @delta_time = Time.now.to_f - @last_update.to_f
-        get_neighbors
+        if @update_count >= 2
+          get_neighbors
+          @update_count = 0
+        end
         track_entity
         @last_update = Time.now.to_f
         if @target_is_player

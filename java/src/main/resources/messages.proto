@@ -231,6 +231,12 @@ message Entity {
   optional Npc npc = 24;
   optional Vector3 vector3 = 25;
   optional CreateNpc createNpc = 26;
+  optional EntityList entityList = 27;
+  
+}
+
+message EntityList {
+  repeated Entity entity = 1;
 }
 
 message ClientMessage {
