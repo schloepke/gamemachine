@@ -5,7 +5,6 @@ option optimize_for = SPEED;
 //GAME_MESSAGES
 
 
-
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
@@ -80,7 +79,7 @@ message ChatRegister {
 }
 
 message Subscribe {
-  required string topic = 1;
+  optional string topic = 1;
 }
 
 message Unsubscribe {
@@ -88,8 +87,9 @@ message Unsubscribe {
 }
 
 message Publish {
-  required string topic = 1;
+  optional string topic = 1;
   required Entity message = 2;
+  optional string path = 3;
 }
 	
 message ObjectdbGet {
@@ -238,6 +238,7 @@ message Entity {
   optional CreateNpc createNpc = 26;
   optional EntityList entityList = 27;
   optional GetEntityLocations getEntityLocations = 28;
+  optional bool  published = 29;
   
 }
 

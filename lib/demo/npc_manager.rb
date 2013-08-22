@@ -11,15 +11,17 @@ module Demo
       @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
-      500.times do |i|
-        create_npc(i)
+      300.times do |i|
+        create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
+      GameMachine.logger.info("Npc's created")
+
       #node1 = JavaLib::Node.new(0,0)
       #node2 = JavaLib::Node.new(390,390)
       #finder = JavaLib::Pathfinding.new(JavaLib::Pathfinding::Algorithm::ASTAR,Grid.new)
       #finder.set_eight(true)
       #result = finder.find_path(node1,node2)
-      schedule_update
+      #schedule_update
     end
 
     def on_receive(message)
@@ -42,7 +44,7 @@ module Demo
       z = 0.10
       entity = Entity.new.set_id('0').set_create_npc(
         CreateNpc.new.set_npc(
-          Npc.new.set_id(id.to_s).set_transform(
+          Npc.new.set_id(id).set_transform(
             Transform.new.set_vector3(
               Vector3.new.set_x(x).set_y(y).set_z(z)
             )
@@ -53,7 +55,7 @@ module Demo
     end
 
     def schedule_update
-      duration = GameMachine::JavaLib::Duration.create(150, java.util.concurrent.TimeUnit::MILLISECONDS)
+      duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
       @scheduler.schedule(duration, duration, get_self, "update", @dispatcher, nil)
     end
 

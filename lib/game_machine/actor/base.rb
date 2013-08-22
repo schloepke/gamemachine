@@ -58,6 +58,10 @@ module GameMachine
           Actor::Ref.new(distributed_path(id, name),name)
         end
 
+        def local_path(name)
+          "/user/#{name}"
+        end
+
         private
 
         def ensure_hashring(name)
@@ -81,9 +85,6 @@ module GameMachine
           "#{server}/user/#{bucket}"
         end
 
-        def local_path(name)
-          "/user/#{name}"
-        end
       end
 
       def onReceive(message)

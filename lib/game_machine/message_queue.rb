@@ -28,7 +28,11 @@ module GameMachine
     private
 
     def subscribe(message)
-      sub = Java::akka::contrib::pattern::DistributedPubSubMediator::Subscribe.new(message.topic, get_sender)
+      if message.topic
+        sub = Java::akka::contrib::pattern::DistributedPubSubMediator::Subscribe.new(message.topic, get_sender)
+      else
+        sub = Java::akka::contrib::pattern::DistributedPubSubMediator::Put.new(get_sender)
+      end
       @mediator.tell(sub, get_sender)
     end
 
@@ -43,7 +47,14 @@ module GameMachine
       else
         publish_message = publish.message
       end
-      message = Java::akka::contrib::pattern::DistributedPubSubMediator::Publish.new(publish.topic, publish_message)
+      if publish.topic
+        message = Java::akka::contrib::pattern::DistributedPubSubMediator::Publish.new(publish.topic, publish_message)
+      elsif publish.path
+        message = Java::akka::contrib::pattern::DistributedPubSubMediator::SendToAll.new(publish.path, publish_message,true)
+      else
+        GameMachine.logger.error("Publish missing topic or path")
+        return
+      end
       @mediator.tell(message, get_sender)
     end
 

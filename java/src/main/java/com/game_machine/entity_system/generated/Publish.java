@@ -57,6 +57,10 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
     public Entity message;
 
 
+
+    public String path;
+
+
     
 
 
@@ -100,6 +104,23 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
 	
 	public Boolean hasMessage()  {
         return message == null ? false : true;
+    }
+
+
+
+    
+
+	public String getPath() {
+		return path;
+	}
+	
+	public Publish setPath(String path) {
+		this.path = path;
+		return this;
+	}
+	
+	public Boolean hasPath()  {
+        return path == null ? false : true;
     }
 
 
@@ -178,6 +199,15 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
                 	
 
 
+            	case 3:
+
+
+                	message.path = input.readString();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -190,9 +220,6 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
     {
 
     	
-
-    	if(message.topic == null)
-            throw new UninitializedMessageException(message);
 
     	
 
@@ -218,6 +245,17 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
 
 
     	
+
+    	
+
+
+    	if(message.path != null)
+            output.writeString(3, message.path, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -228,6 +266,8 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
         	case 1: return "topic";
 
         	case 2: return "message";
+
+        	case 3: return "path";
 
             default: return null;
         }
@@ -246,6 +286,8 @@ public final class Publish  implements Externalizable, Message<Publish>, Schema<
     	__fieldMap.put("topic", 1);
 
     	__fieldMap.put("message", 2);
+
+    	__fieldMap.put("path", 3);
 
     }
    

@@ -10,11 +10,17 @@ module GameMachine
         @conv_factor = 1.0/@cell_size
         @width = @max / @cell_size
         @cell_count = @width * @width
-        @object_index = {}
-        @cells = {}
+        @object_index = java.util.concurrent.ConcurrentHashMap.new
+        @cells = java.util.concurrent.ConcurrentHashMap.new
+        @cells_cache = java.util.concurrent.ConcurrentHashMap.new
       end
 
-      def neighbors(x,y,radius)
+      def cells_within_radius(x,y,radius)
+        key = "#{x}#{y}#{radius}"
+        if cells = @cells_cache.get(key)
+          return cells
+        end
+
         offset = radius/@cell_size
         cells = [hash(x,y)]
 
@@ -33,34 +39,59 @@ module GameMachine
           cells << hash(x,y + bounds)
         end
 
-        cells.uniq!
-        points = []
-        cells.each do |cell|
-          next if cell < @min || cell > (@cell_count - 1)
+        cells.delete_if {|cell| cell < @min || cell > (@cell_count - 1)}
+        result = cells.uniq
+        unless @cells_cache.get(key)
+          @cells_cache.put(key,result)
+        end
+        result
+      end
+
+      def neighbors(x,y,radius,type)
+        if type == 'player'
+          type = Player
+        elsif type == 'npc'
+          type = Npc
+        else
+          type = :all
+        end
+        result = {:players => [], :npcs => []}
+
+        cells_within_radius(x,y,radius).each do |cell|
           points_in_cell(cell).each do |point|
             unless point.empty?
-              points << point[2]
+              point_class = point[2].class
+              next if type != :all && type != point_class
+              if point_class == Npc
+                result[:npcs] << point[2]
+              elsif point_class == Player
+                result[:players] << point[2]
+              end
             end
           end
         end
-        points
+        result
       end
 
       def points_in_cell(cell)
-        @cells.fetch(cell,{}).values
+        if points = @cells.get(cell)
+          return points.values
+        else
+          return []
+        end
       end
 
       def get(id)
-        @object_index.fetch(id,nil)
+        @object_index.get(id)
       end
 
       def remove(id)
-        if values = @object_index.fetch(id,nil)
+        if values = @object_index.get(id)
           cell = values[1]
-          if @cells.has_key?(cell)
-            @cells[cell].delete(id)
+          if point = @cells.get(cell)
+            point.remove(id)
           end
-          @object_index.delete(id)
+          @object_index.remove(id)
         end
       end
 
@@ -70,8 +101,10 @@ module GameMachine
         cell = hash(vector3.x,vector3.y)
         values = [id,cell,entity]
         @object_index[id] = values
-        @cells[cell] ||= {}
-        @cells[cell][id] = values
+        unless @cells.contains_key(cell)
+          @cells.put(cell,java.util.concurrent.ConcurrentHashMap.new)
+        end
+        @cells.get(cell).put(id,values)
       end
 
       def hash(x,y)

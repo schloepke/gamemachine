@@ -30,33 +30,33 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class Subscribe  implements Externalizable, Message<Subscribe>, Schema<Subscribe>
+public final class GetEntityLocations  implements Externalizable, Message<GetEntityLocations>, Schema<GetEntityLocations>
 {
 
 
 
 
-    public static Schema<Subscribe> getSchema()
+    public static Schema<GetEntityLocations> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static Subscribe getDefaultInstance()
+    public static GetEntityLocations getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final Subscribe DEFAULT_INSTANCE = new Subscribe();
+    static final GetEntityLocations DEFAULT_INSTANCE = new GetEntityLocations();
 
 
 
-    public String topic;
+    public List<String> entityId;
 
 
     
 
 
-    public Subscribe()
+    public GetEntityLocations()
     {
         
     }
@@ -68,18 +68,30 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
 
     
 
-	public String getTopic() {
-		return topic;
+	public List<String> getEntityIdList() {
+		return entityId;
 	}
-	
-	public Subscribe setTopic(String topic) {
-		this.topic = topic;
+
+	public GetEntityLocations setEntityIdList(List<String> entityId) {
+		this.entityId = entityId;
 		return this;
 	}
-	
-	public Boolean hasTopic()  {
-        return topic == null ? false : true;
+
+	public String getEntityId(int index)  {
+        return entityId == null ? null : entityId.get(index);
     }
+
+    public int getEntityIdCount()  {
+        return entityId == null ? 0 : entityId.size();
+    }
+
+    public GetEntityLocations addEntityId(String entityId)  {
+        if(this.entityId == null)
+            this.entityId = new ArrayList<String>();
+        this.entityId.add(entityId);
+        return this;
+    }
+    
 
 
 
@@ -98,39 +110,39 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
 
     // message method
 
-    public Schema<Subscribe> cachedSchema()
+    public Schema<GetEntityLocations> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public Subscribe newMessage()
+    public GetEntityLocations newMessage()
     {
-        return new Subscribe();
+        return new GetEntityLocations();
     }
 
-    public Class<Subscribe> typeClass()
+    public Class<GetEntityLocations> typeClass()
     {
-        return Subscribe.class;
+        return GetEntityLocations.class;
     }
 
     public String messageName()
     {
-        return Subscribe.class.getSimpleName();
+        return GetEntityLocations.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return Subscribe.class.getName();
+        return GetEntityLocations.class.getName();
     }
 
-    public boolean isInitialized(Subscribe message)
+    public boolean isInitialized(GetEntityLocations message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, Subscribe message) throws IOException
+    public void mergeFrom(Input input, GetEntityLocations message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -141,11 +153,12 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
 
             	case 1:
 
+            		if(message.entityId == null)
+                        message.entityId = new ArrayList<String>();
 
-                	message.topic = input.readString();
-                	break;
+                	message.entityId.add(input.readString());
 
-                	
+                    break;
 
 
             
@@ -156,18 +169,24 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
     }
 
 
-    public void writeTo(Output output, Subscribe message) throws IOException
+    public void writeTo(Output output, GetEntityLocations message) throws IOException
     {
 
     	
 
     	
 
+    	if(message.entityId != null)
+        {
+            for(String entityId : message.entityId)
+            {
+                if(entityId != null) {
 
-    	if(message.topic != null)
-            output.writeString(1, message.topic, false);
+            		output.writeString(1, entityId, true);
 
-    	
+    			}
+            }
+        }
 
 
     	
@@ -178,7 +197,7 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
         switch(number)
         {
 
-        	case 1: return "topic";
+        	case 1: return "entityId";
 
             default: return null;
         }
@@ -194,7 +213,7 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
     static
     {
 
-    	__fieldMap.put("topic", 1);
+    	__fieldMap.put("entityId", 1);
 
     }
    
@@ -204,7 +223,7 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = Subscribe.getSchema().getFieldName(i);
+		fieldName = GetEntityLocations.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -214,16 +233,16 @@ public final class Subscribe  implements Externalizable, Message<Subscribe>, Sch
 	return fieldNames;
 }
 
-public static Subscribe parseFrom(byte[] bytes) {
-	Subscribe message = new Subscribe();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Subscribe.class));
+public static GetEntityLocations parseFrom(byte[] bytes) {
+	GetEntityLocations message = new GetEntityLocations();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(GetEntityLocations.class));
 	return message;
 }
 
-public Subscribe clone() {
+public GetEntityLocations clone() {
 	byte[] bytes = this.toByteArray();
-	Subscribe subscribe = Subscribe.parseFrom(bytes);
-	return subscribe;
+	GetEntityLocations getEntityLocations = GetEntityLocations.parseFrom(bytes);
+	return getEntityLocations;
 }
 	
 public byte[] toByteArray() {
@@ -235,7 +254,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, Subscribe.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, GetEntityLocations.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -248,7 +267,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Subscribe.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(GetEntityLocations.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();
