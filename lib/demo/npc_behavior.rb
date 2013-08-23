@@ -39,8 +39,8 @@ module Demo
 
     def update_target(neighbors)
       @has_target = false
-      if neighbors.player
-        if target = neighbors.player.first
+      if neighbors[:players]
+        if target = neighbors[:players].first
           #puts "#{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
           set_target(target.transform.vector3)
           @has_target = true
@@ -50,11 +50,13 @@ module Demo
 
     def update(neighbors=nil)
       if neighbors
-        #update_target(neighbors)
+        update_target(neighbors)
       else
-        #move
+        move
         track_entity
         #entity_updates
+        neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
+        update_target(neighbors)
       end
     end
 
@@ -79,14 +81,18 @@ module Demo
     end
 
     def entity_updates
-      entity = Entity.new.set_id(@npc.id).set_npc(@npc).set_track_entity(
+      if @update_entity
+        @update_entity.set_npc(@npc).get_neighbors.set_vector3(@npc.transform.vector3)
+      end
+      @update_entity = Entity.new.set_id(@npc.id).set_npc(@npc).set_track_entity(
         TrackEntity.new.set_value(true)
       ).set_get_neighbors(
         GetNeighbors.new.
         set_vector3(@npc.transform.vector3).
         set_neighbor_type('player')#.set_search_radius(100)
       )
-      GameMachine::GameSystems::EntityTracking.find.tell(entity,@parent)
+      @actor_ref ||= GameMachine::GameSystems::EntityTracking.find
+      @actor_ref.tell(@update_entity,@parent)
     end
 
     def get_neighbors
@@ -99,10 +105,12 @@ module Demo
     end
 
     def track_entity
-      entity = Entity.new.set_id(@npc.id).set_npc(@npc).set_track_entity(
+      @track_entity ||= Entity.new.set_track_entity(
         TrackEntity.new.set_value(true)
-      )
-      GameMachine::GameSystems::EntityTracking.find.tell(entity)
+      ).set_id(@npc.id)
+      @track_entity.set_npc(@npc)
+      @actor_ref ||= GameMachine::GameSystems::EntityTracking.find
+      @actor_ref.tell(@track_entity)
     end
 
   end

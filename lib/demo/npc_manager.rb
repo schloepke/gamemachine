@@ -8,7 +8,7 @@ module Demo
     def post_init(*args)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
+      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(300).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
       1000.times do |i|
@@ -21,7 +21,8 @@ module Demo
       #finder = JavaLib::Pathfinding.new(JavaLib::Pathfinding::Algorithm::ASTAR,Grid.new)
       #finder.set_eight(true)
       #result = finder.find_path(node1,node2)
-      #schedule_update
+      @duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
+      schedule_update
     end
 
     def on_receive(message)
@@ -55,8 +56,7 @@ module Demo
     end
 
     def schedule_update
-      duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
-      @scheduler.schedule(duration, duration, get_self, "update", @dispatcher, nil)
+      @scheduler.schedule(@duration, @duration, get_self, "update", @dispatcher, nil)
     end
 
   end

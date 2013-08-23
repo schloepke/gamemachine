@@ -71,9 +71,6 @@ module GameMachine
         end
       end
 
-      def default_search_radius
-        Settings.world_grid_cell_size
-      end
 
       def default_grid
         Physics::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
@@ -85,7 +82,7 @@ module GameMachine
       end
 
       def send_neighbors(message)
-        neighbors = neighbors_from_grid(
+        neighbors = self.class.neighbors_from_grid(
           message.get_neighbors.vector3.x,
           message.get_neighbors.vector3.y,
           message.get_neighbors.search_radius,
@@ -118,12 +115,16 @@ module GameMachine
         sender.tell(entity,self)
       end
 
-      def neighbors_from_grid(x,y,search_radius,neighbor_type)
+      def self.default_search_radius
+        Settings.world_grid_cell_size
+      end
+
+      def self.neighbors_from_grid(x,y,search_radius,neighbor_type)
         if search_radius.nil?
           search_radius = default_search_radius
         end
 
-        @grid.neighbors(x,y,search_radius,neighbor_type)
+        GRID.neighbors(x,y,search_radius,neighbor_type)
       end
 
     end

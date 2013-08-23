@@ -9,7 +9,7 @@ module Demo
       @npc_behaviors = {}
       @npc_index = {}
       @neighbors_index = {}
-      schedule_update
+      #schedule_update
     end
 
     def on_receive(message)

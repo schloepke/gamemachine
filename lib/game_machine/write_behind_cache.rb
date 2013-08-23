@@ -15,8 +15,8 @@ module GameMachine
       @last_write = current_time - (120 * 1000)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      schedule_queue_run
-      schedule_queue_stats
+      #schedule_queue_run
+      #schedule_queue_stats
     end
 
     def on_receive(message)

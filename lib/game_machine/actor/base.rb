@@ -88,7 +88,7 @@ module GameMachine
       end
 
       def onReceive(message)
-        GameMachine.logger.debug("#{self.class.name} got #{message}")
+        #GameMachine.logger.debug("#{self.class.name} got #{message}")
         on_receive(message)
       end
 
