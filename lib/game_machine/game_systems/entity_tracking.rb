@@ -80,9 +80,7 @@ module GameMachine
       end
 
       def set_entity_location(entity)
-        if values = @grid.get(entity.id)
-          @grid.remove(entity.id)
-        end
+        @grid.remove(entity.id)
         @grid.set(entity)
       end
 

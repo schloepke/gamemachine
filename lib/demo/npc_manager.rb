@@ -11,7 +11,7 @@ module Demo
       @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(100).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
-      300.times do |i|
+      1000.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
       GameMachine.logger.info("Npc's created")

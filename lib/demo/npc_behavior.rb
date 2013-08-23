@@ -50,10 +50,11 @@ module Demo
 
     def update(neighbors=nil)
       if neighbors
-        update_target(neighbors)
+        #update_target(neighbors)
       else
-        move
-        entity_updates
+        #move
+        track_entity
+        #entity_updates
       end
     end
 
