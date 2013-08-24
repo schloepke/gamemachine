@@ -8,8 +8,8 @@ module GameMachine
 
     attr_reader :buckets
 
-    def self.create_actor_ring(name)
-      buckets = (0..RING_SIZE).map {|r| "#{name}#{r}"}
+    def self.create_actor_ring(name,ring_size=RING_SIZE)
+      buckets = (0..ring_size).map {|r| "#{name}#{r}"}
       new(buckets)
     end
 

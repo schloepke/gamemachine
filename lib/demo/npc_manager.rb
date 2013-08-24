@@ -8,10 +8,10 @@ module Demo
     def post_init(*args)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(300).start
+      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(900).start
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
-      1000.times do |i|
+      2000.times do |i|
         create_npc("npc_#{i}")
         #create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
