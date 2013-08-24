@@ -50,11 +50,11 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
 
 
 
-    public List<Npc> npc;
+    public List<Entity> npc;
 
 
 
-    public List<Player> player;
+    public List<Entity> player;
 
 
     
@@ -72,16 +72,16 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
 
     
 
-	public List<Npc> getNpcList() {
+	public List<Entity> getNpcList() {
 		return npc;
 	}
 
-	public Neighbors setNpcList(List<Npc> npc) {
+	public Neighbors setNpcList(List<Entity> npc) {
 		this.npc = npc;
 		return this;
 	}
 
-	public Npc getNpc(int index)  {
+	public Entity getNpc(int index)  {
         return npc == null ? null : npc.get(index);
     }
 
@@ -89,9 +89,9 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
         return npc == null ? 0 : npc.size();
     }
 
-    public Neighbors addNpc(Npc npc)  {
+    public Neighbors addNpc(Entity npc)  {
         if(this.npc == null)
-            this.npc = new ArrayList<Npc>();
+            this.npc = new ArrayList<Entity>();
         this.npc.add(npc);
         return this;
     }
@@ -101,16 +101,16 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
 
     
 
-	public List<Player> getPlayerList() {
+	public List<Entity> getPlayerList() {
 		return player;
 	}
 
-	public Neighbors setPlayerList(List<Player> player) {
+	public Neighbors setPlayerList(List<Entity> player) {
 		this.player = player;
 		return this;
 	}
 
-	public Player getPlayer(int index)  {
+	public Entity getPlayer(int index)  {
         return player == null ? null : player.get(index);
     }
 
@@ -118,9 +118,9 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
         return player == null ? 0 : player.size();
     }
 
-    public Neighbors addPlayer(Player player)  {
+    public Neighbors addPlayer(Entity player)  {
         if(this.player == null)
-            this.player = new ArrayList<Player>();
+            this.player = new ArrayList<Entity>();
         this.player.add(player);
         return this;
     }
@@ -187,9 +187,9 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
             	case 1:
 
             		if(message.npc == null)
-                        message.npc = new ArrayList<Npc>();
+                        message.npc = new ArrayList<Entity>();
 
-                    message.npc.add(input.mergeObject(null, Npc.getSchema()));
+                    message.npc.add(input.mergeObject(null, Entity.getSchema()));
 
                     break;
 
@@ -197,9 +197,9 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
             	case 2:
 
             		if(message.player == null)
-                        message.player = new ArrayList<Player>();
+                        message.player = new ArrayList<Entity>();
 
-                    message.player.add(input.mergeObject(null, Player.getSchema()));
+                    message.player.add(input.mergeObject(null, Entity.getSchema()));
 
                     break;
 
@@ -221,11 +221,11 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
 
     	if(message.npc != null)
         {
-            for(Npc npc : message.npc)
+            for(Entity npc : message.npc)
             {
                 if(npc != null) {
 
-    				output.writeObject(1, npc, Npc.getSchema(), true);
+    				output.writeObject(1, npc, Entity.getSchema(), true);
 
     			}
             }
@@ -238,11 +238,11 @@ public final class Neighbors  implements Externalizable, Message<Neighbors>, Sch
 
     	if(message.player != null)
         {
-            for(Player player : message.player)
+            for(Entity player : message.player)
             {
                 if(player != null) {
 
-    				output.writeObject(2, player, Player.getSchema(), true);
+    				output.writeObject(2, player, Entity.getSchema(), true);
 
     			}
             }

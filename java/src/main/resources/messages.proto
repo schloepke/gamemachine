@@ -189,8 +189,8 @@ message TestObject {
   
   
 message Neighbors {
-  repeated Npc npc = 1;
-  repeated Player player = 2;
+  repeated Entity npc = 1;
+  repeated Entity player = 2;
 }
 
 message GameCommand {
