@@ -78,11 +78,19 @@ module GameMachine
       end
 
       def send_neighbors(message)
+        type = message.get_neighbors.neighbor_type
+        if type == 'player'
+          type = Player
+        elsif type == 'npc'
+          type = Npc
+        else
+          type = :all
+        end
         neighbors = self.class.neighbors_from_grid(
           message.get_neighbors.vector3.x,
           message.get_neighbors.vector3.y,
           message.get_neighbors.search_radius,
-          message.get_neighbors.neighbor_type
+          type
         )
         
         if neighbors[:players].empty? && neighbors[:npcs].empty?

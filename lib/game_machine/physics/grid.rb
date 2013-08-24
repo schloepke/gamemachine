@@ -48,13 +48,6 @@ module GameMachine
       end
 
       def neighbors(x,y,radius,type)
-        if type == 'player'
-          type = Player
-        elsif type == 'npc'
-          type = Npc
-        else
-          type = :all
-        end
         result = {:players => [], :npcs => []}
 
         cells_within_radius(x,y,radius).each do |cell|
@@ -98,6 +91,12 @@ module GameMachine
       def set(entity)
         id = entity.id
         vector3 = entity.transform.vector3
+        if existing_values = @object_index.fetch(id,nil)
+          existing_vector3 = existing_values[2].transform.vector3
+          if entity.transform.vector3.x == existing_vector3.x && entity.transform.vector3.y == existing_vector3.y
+            return
+          end
+        end
         cell = hash(vector3.x,vector3.y)
         values = [id,cell,entity]
         @object_index[id] = values

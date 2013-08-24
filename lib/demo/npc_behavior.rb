@@ -71,7 +71,7 @@ module Demo
         end
         return
       end
-      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
+      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,Player)
         if player = neighbors[:players].first
           update_target(player)
         end
