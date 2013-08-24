@@ -12,7 +12,8 @@ module Demo
       GameMachine.logger.info("#{@actor_refs.size} npc actos started")
       @npc_actors = {}
       1000.times do |i|
-        create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
+        create_npc("npc_#{i}")
+        #create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
       GameMachine.logger.info("Npc's created")
 
@@ -42,12 +43,12 @@ module Demo
 
       x = rand(max) + 1
       y = rand(max) + 1
-      z = 0.10
+      z = 1.10
       entity = Entity.new.set_id('0').set_create_npc(
         CreateNpc.new.set_npc(
           Npc.new.set_id(id).set_transform(
             Transform.new.set_vector3(
-              Vector3.new.set_x(x).set_y(y).set_z(z)
+              Vector3.new.set_x(x.to_f).set_y(y.to_f).set_z(z.to_f)
             )
           )
         )

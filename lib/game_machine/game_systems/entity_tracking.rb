@@ -2,6 +2,7 @@ module GameMachine
   module GameSystems
     class EntityTracking < Actor::Base
 
+      DEFAULT_SEARCH_RADIUS = Settings.world_grid_cell_size
       GRID =  Physics::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
@@ -71,11 +72,6 @@ module GameMachine
         end
       end
 
-
-      def default_grid
-        Physics::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
-      end
-
       def set_entity_location(entity)
         @grid.remove(entity.id)
         @grid.set(entity)
@@ -115,13 +111,9 @@ module GameMachine
         sender.tell(entity,self)
       end
 
-      def self.default_search_radius
-        Settings.world_grid_cell_size
-      end
-
       def self.neighbors_from_grid(x,y,search_radius,neighbor_type)
         if search_radius.nil?
-          search_radius = default_search_radius
+          search_radius = DEFAULT_SEARCH_RADIUS
         end
 
         GRID.neighbors(x,y,search_radius,neighbor_type)

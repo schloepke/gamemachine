@@ -11,9 +11,21 @@ module Demo
       )
 
       @home_position = @position.clone
-      @target_position = Jme::Vector3f.new(10,10,0)
-      @has_target = false
+      @target_position = Jme::Vector3f.new
+      @target_position.zero
+      @player_position = Jme::Vector3f.new
+      @player_position.zero
       @last_update = Time.now.to_f
+      @agro_distance = 25.0
+      @speed = 1.0
+    end
+
+    def print_target_position
+      puts "#{@target_position.x} #{@target_position.y} #{@target_position.z}"
+    end
+
+    def print_position
+      puts "#{@position.x} #{@position.y} #{@position.z}"
     end
 
     def update_npc_vector
@@ -24,57 +36,58 @@ module Demo
     end
 
     def set_target_home
-      @target_position = @home_position
+      set_target(@home_position)
     end
 
     def set_target(new_vector)
       @target_position.set(new_vector.x,new_vector.y,new_vector.z)
     end
 
+    def set_player_position(new_vector)
+      @player_position.set(new_vector.x,new_vector.y,new_vector.z)
+    end
     def update_neighbors(neighbors)
       neighbors.npc.each do |npc|
         puts "#{npc.transform.vector3.x} #{npc.transform.vector3.y} #{npc.transform.vector3.z}"
       end
     end
 
-    def update_target(neighbors)
-      @has_target = false
-      if neighbors[:players]
-        if target = neighbors[:players].first
-          #puts "#{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
-          set_target(target.transform.vector3)
-          @has_target = true
-        end
-      end
+    def update_target(player)
+      #puts "#{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
+      #set_player_position(target.transform.vector3)
+      #distance_to_player = @position.distance(@player_position)
+      #puts "distance_to_target=#{distance_to_target} distance_to_home=#{distance_to_home}"
+      set_target(player.transform.vector3)
+      #print_target_position
+      @has_target = true
     end
 
     def update(neighbors=nil)
       if neighbors
-        update_target(neighbors)
-      else
-        move
-        track_entity
-        #entity_updates
-        neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
-        update_target(neighbors)
+        if players = neighbors.get_player_list
+          if target = players.first
+            update_target(target)
+          end
+        end
+        return
       end
+      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
+        if player = neighbors[:players].first
+          update_target(player)
+        end
+      end
+      move if @has_target
+      track_entity
+      #entity_updates
     end
 
     def move
-      if @has_target
-        target_position = @target_position
-      else
-        target_position = @home_position
-        if @position.equals(target_position)
-          return
-        end
-      end
       @delta_time = Time.now.to_f - @last_update.to_f
-      speed = 1.0
-      direction = target_position.subtract(@position)
+      speed = 0.8
+      #direction = @target_position.subtract(@position)
       #direction.y = 0
       #puts "direction magnitude=#{direction.length}"
-      @position = @position.interpolate(target_position,1.0 * @delta_time)
+      @position = @position.interpolate(@target_position,speed * @delta_time)
       update_npc_vector
       #puts "position=#{@position}"
       @last_update = Time.now.to_f
