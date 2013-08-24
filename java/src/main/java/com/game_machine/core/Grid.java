@@ -34,37 +34,39 @@ public class Grid {
 			cells.add(cell);
 		}
 	}
-	
+
 	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
-		String key = String.valueOf(x) + String.valueOf(y) + String.valueOf(radius);
+		String key = String.valueOf(x) + String.valueOf(y)
+				+ String.valueOf(radius);
 		Set<Integer> cells = cellsCache.get(key);
 		if (cells != null) {
 			return cells;
 		}
 		cells = new HashSet<Integer>();
-		
+
 		int offset = radius / this.cellSize;
-		cells.add(hash(x,y));
+		cells.add(hash(x, y));
 		int bounds;
-		for(int i=1; i<=offset; i++) {
+		for (int i = 1; i <= offset; i++) {
 			bounds = radius * i;
-			addIfWithinBounds(cells,hash(x - bounds,y - bounds));
-			addIfWithinBounds(cells,hash(x - bounds,y + bounds));
-			
-			addIfWithinBounds(cells,hash(x + bounds,y - bounds));
-			addIfWithinBounds(cells,hash(x + bounds,y + bounds));
-			
-			addIfWithinBounds(cells,hash(x - bounds,y));
-			addIfWithinBounds(cells,hash(x + bounds,y));
-			
-			addIfWithinBounds(cells,hash(x,y - bounds));
-			addIfWithinBounds(cells,hash(x,y + bounds));
+			addIfWithinBounds(cells, hash(x - bounds, y - bounds));
+			addIfWithinBounds(cells, hash(x - bounds, y + bounds));
+
+			addIfWithinBounds(cells, hash(x + bounds, y - bounds));
+			addIfWithinBounds(cells, hash(x + bounds, y + bounds));
+
+			addIfWithinBounds(cells, hash(x - bounds, y));
+			addIfWithinBounds(cells, hash(x + bounds, y));
+
+			addIfWithinBounds(cells, hash(x, y - bounds));
+			addIfWithinBounds(cells, hash(x, y + bounds));
 		}
 		cellsCache.put(key, cells);
 		return cells;
 	}
-  
-	public ArrayList<GridValue> neighbors(float x, float y, int radius, String entityType) {
+
+	public ArrayList<GridValue> neighbors(float x, float y, int radius,
+			String entityType) {
 		ArrayList<GridValue> result = new ArrayList<GridValue>();
 		Set<Integer> cells = cellsWithinRadius(x, y, radius);
 		for (int cell : cells) {
