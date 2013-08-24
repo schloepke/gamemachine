@@ -53,7 +53,7 @@ module Demo
     end
 
     def update_target(player)
-      #puts "#{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
+      #puts "#{@npc.id} #{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
       #set_player_position(target.transform.vector3)
       #distance_to_player = @position.distance(@player_position)
       #puts "distance_to_target=#{distance_to_target} distance_to_home=#{distance_to_home}"
@@ -71,10 +71,9 @@ module Demo
         end
         return
       end
-      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
-        if neighbors.size >= 1
-          update_target(neighbors.get(0).grid_value.entity)
-        end
+      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,500,'player')
+      if neighbors.size >= 1
+        update_target(neighbors.get(0).entity)
       end
       move if @has_target
       track_entity

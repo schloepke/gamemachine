@@ -61,7 +61,6 @@ module GameMachine
       end
 
       def send_neighbors(message)
-        puts 'send_neighbors'
         type = message.get_neighbors.neighbor_type
         search_results = self.class.neighbors_from_grid(
           message.get_neighbors.vector3.x,
@@ -70,10 +69,8 @@ module GameMachine
           type
         )
        
-        puts "search_result size=#{search_results.size}"
         neighbors = {:players => [], :npcs => []}
         search_results.each do |grid_value|
-          puts grid_value
           if grid_value.entityType == 'player'
             neighbors[:players] << grid_value.entity
           elsif grid_value.entityType == 'npc'

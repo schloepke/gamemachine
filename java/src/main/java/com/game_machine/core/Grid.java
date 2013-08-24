@@ -76,7 +76,7 @@ public class Grid {
 				for (GridValue point : points) {
 					if (entityType == null) {
 						result.add(point);
-					} else if (point.entityType == entityType) {
+					} else if (point.entityType.equals(entityType)) {
 						result.add(point);
 					}
 				}

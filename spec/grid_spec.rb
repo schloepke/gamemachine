@@ -63,6 +63,13 @@ module GameMachine
         expect(points.first.cell).to eq(0)
       end
 
+      it "returns entities of the correct type" do
+        subject.set(entity,'player')
+        points = subject.neighbors(0,0,50,'player')
+        expect(points.first.cell).to eq(0)
+
+      end
+
       it "does not return cells out of range" do
         subject.set(entity,nil)
         expect(subject.neighbors(50,50,25,nil)).to be_empty
