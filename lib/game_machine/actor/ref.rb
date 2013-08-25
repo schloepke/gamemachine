@@ -21,7 +21,7 @@ module GameMachine
       end
 
       def actor
-        @path_or_actor_ref.is_a?(JavaLib::ActorRef) ? @path_or_actor_ref : actor_selection
+        @actor ||= @path_or_actor_ref.is_a?(JavaLib::ActorRef) ? @path_or_actor_ref : actor_selection
       end
 
       def path
@@ -55,7 +55,7 @@ module GameMachine
       end
 
       def sender_for(sender)
-        sender.is_a?(Actor::Base) ? sender.get_self : sender
+        @sender_for ||= sender.is_a?(Actor::Base) ? sender.get_self : sender
       end
 
       def default_options

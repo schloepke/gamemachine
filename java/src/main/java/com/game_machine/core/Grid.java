@@ -17,8 +17,10 @@ public class Grid {
 	private float convFactor;
 	private int width;
 	private int cellCount;
+	private ConcurrentHashMap<String, Long> lastSearch = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
-	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells =
+			new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<String, Set<Integer>> cellsCache = new ConcurrentHashMap<String, Set<Integer>>();
 
 	public Grid(int max, int cellSize) {
@@ -65,28 +67,55 @@ public class Grid {
 		return cells;
 	}
 
+	private void addGridValue(ArrayList<GridValue> gridValues, GridValue gridValue, Long lastSearchTime) {
+		if (lastSearchTime == null) {
+			gridValues.add(gridValue);
+		} else if (lastSearchTime.compareTo(gridValue.createdAt) < 0) {
+			gridValues.add(gridValue);
+		}
+	}
+	
+	public ArrayList<GridValue> neighbors(float x, float y, int radius) {
+		return neighbors(x,y,radius,null,null);
+	}
+	
+	public ArrayList<GridValue> neighbors(float x, float y, int radius,	String entityType) {
+		return neighbors(x,y,radius,entityType,null);
+	}
+	
 	public ArrayList<GridValue> neighbors(float x, float y, int radius,
-			String entityType) {
-		Collection<GridValue> points;
+			String entityType, String callerId) {
+		
+		Long lastSearchTime = null;
+		if (callerId != null) {
+			lastSearchTime =  lastSearch.get(callerId);
+		}
+		
+		
+		Collection<GridValue> gridValues;
 		ArrayList<GridValue> result = new ArrayList<GridValue>();
 		Set<Integer> cells = cellsWithinRadius(x, y, radius);
 		for (int cell : cells) {
-			points = pointsInCell(cell);
-			if (points != null) {
-				for (GridValue point : points) {
+			gridValues = gridValuesInCell(cell);
+			if (gridValues != null) {
+				for (GridValue gridValue : gridValues) {
 					if (entityType == null) {
-						result.add(point);
-					} else if (point.entityType.equals(entityType)) {
-						result.add(point);
+						addGridValue(result,gridValue,lastSearchTime);
+					} else if (gridValue.entityType.equals(entityType)) {
+						addGridValue(result,gridValue,lastSearchTime);
 					}
 				}
 			}
 		}
-
+		
+		if (callerId != null) {
+			lastSearch.put(callerId, System.nanoTime());
+		}
+		
 		return result;
 	}
 
-	public Collection<GridValue> pointsInCell(int cell) {
+	public Collection<GridValue> gridValuesInCell(int cell) {
 		ConcurrentHashMap<String, GridValue> points = cells.get(cell);
 		if (points != null) {
 			return points.values();
@@ -111,26 +140,35 @@ public class Grid {
 		}
 	}
 
-	public void set(Entity entity, String entityType) {
-		String id = entity.id;
+	public Boolean set(Entity entity, String entityType) {
+		GridValue gridValue;
 		Vector3 vector3 = entity.transform.vector3;
-		GridValue existingValue = objectIndex.get(id);
+		GridValue existingValue = objectIndex.get(entity.id);
 		if (existingValue != null) {
 			Vector3 existingVector = existingValue.entity.transform.vector3;
-			if (entity.transform.vector3.x == existingVector.x
-					&& entity.transform.vector3.y == existingVector.y) {
-				return;
+			if (vector3.x == existingVector.x && vector3.y == existingVector.y) {
+				return false;
+			} else {
+				cells.get(existingValue.cell).remove(existingValue.id);
 			}
 		}
 
 		int cell = hash(vector3.x, vector3.y);
-		GridValue gridValue = new GridValue(id, cell, entity, entityType);
-		objectIndex.put(id, gridValue);
+		if (existingValue == null) {
+			gridValue = new GridValue(entity.id, cell, entity, entityType);
+		} else {
+			gridValue = existingValue;
+			gridValue.cell = cell;
+			gridValue.entity = entity;
+		}
+		
+		objectIndex.put(entity.id, gridValue);
 
 		if (!cells.containsKey(cell)) {
 			cells.put(cell, new ConcurrentHashMap<String, GridValue>());
 		}
-		cells.get(cell).put(id, gridValue);
+		cells.get(cell).put(entity.id, gridValue);
+		return true;
 	}
 
 	private int hash(float x, float y) {

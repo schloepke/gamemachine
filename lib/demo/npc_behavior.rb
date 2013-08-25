@@ -1,6 +1,7 @@
 module Demo
   class NpcBehavior
     
+
     def initialize(npc,parent)
       @npc = npc
       @parent = parent
@@ -71,7 +72,7 @@ module Demo
         end
         return
       end
-      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,500,'player')
+      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,100,'npc')
       if neighbors.size >= 1
         update_target(neighbors.get(0).entity)
       end
@@ -117,12 +118,19 @@ module Demo
     end
 
     def track_entity
-      @track_entity ||= Entity.new.set_track_entity(
-        TrackEntity.new.set_value(true)
-      ).set_id(@npc.id)
-      @track_entity.set_transform(@npc.transform)
-      @track_entity.set_entity_type('npc')
-      @actor_ref ||= GameMachine::GameSystems::EntityTracking.find
+      if @track_entity
+        @track_entity.transform.set_vector3(@npc.transform.vector3)
+      else
+        @track_entity = Entity.new.set_track_entity(
+          TrackEntity.new.set_value(true)
+        ).set_id(@npc.id)
+        @track_entity.set_entity_type('npc')
+        @track_entity.set_transform(@npc.transform)
+      end
+
+      unless @actor_ref
+        @actor_ref = GameMachine::GameSystems::EntityTracking.find.actor
+      end
       @actor_ref.tell(@track_entity)
     end
 

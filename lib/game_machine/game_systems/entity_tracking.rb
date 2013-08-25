@@ -56,7 +56,6 @@ module GameMachine
       end
 
       def set_entity_location(entity)
-        @grid.remove(entity.id)
         @grid.set(entity,entity.entity_type)
       end
 
@@ -66,7 +65,8 @@ module GameMachine
           message.get_neighbors.vector3.x,
           message.get_neighbors.vector3.y,
           message.get_neighbors.search_radius,
-          type
+          type,
+          message.id
         )
        
         neighbors = {:players => [], :npcs => []}

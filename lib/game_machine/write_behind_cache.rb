@@ -15,8 +15,8 @@ module GameMachine
       @last_write = current_time - (120 * 1000)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      #schedule_queue_run
-      #schedule_queue_stats
+      schedule_queue_run
+      schedule_queue_stats
     end
 
     def on_receive(message)
@@ -134,7 +134,7 @@ module GameMachine
     end
 
     def schedule_queue_run
-      duration = JavaLib::Duration.create(200, java.util.concurrent.TimeUnit::MILLISECONDS)
+      duration = JavaLib::Duration.create(500, java.util.concurrent.TimeUnit::MILLISECONDS)
       @scheduler.schedule(duration, duration, get_self, "check_queue", @dispatcher, nil)
     end
 

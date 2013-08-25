@@ -1,5 +1,5 @@
 require_relative 'npc_behavior'
-
+require 'benchmark'
 module Demo
   class NpcActor < GameMachine::Actor::Base
     
@@ -16,8 +16,13 @@ module Demo
 
       if message.is_a?(String)
         if message == 'update'
-          @npc_behaviors.each do |npc_id,behavior|
-            behavior.update
+          time = Benchmark.realtime do
+            @npc_behaviors.each do |npc_id,behavior|
+              behavior.update
+            end
+          end
+          if time > 0.010
+            puts "#{time}"
           end
         end
       elsif message.is_a?(Entity)

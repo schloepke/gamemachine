@@ -8,28 +8,33 @@ module Demo
     def post_init(*args)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(900).start
-      GameMachine.logger.info("#{@actor_refs.size} npc actos started")
+
+      actor_count = 500
+      group_size = 100
+      update_interval = 100 / (actor_count / group_size)
+      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(actor_count).start
+      @actor_ref_groups = @actor_refs.each_slice(group_size).to_a
+      @actor_ref_group_size = @actor_ref_groups.size
+      @current_group = 0
+      GameMachine.logger.info("#{@actor_refs.size} actors")
       @npc_actors = {}
-      2000.times do |i|
-        create_npc("npc_#{i}")
-        #create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
+      500.times do |i|
+        create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
       GameMachine.logger.info("Npc's created")
 
-      #node1 = JavaLib::Node.new(0,0)
-      #node2 = JavaLib::Node.new(390,390)
-      #finder = JavaLib::Pathfinding.new(JavaLib::Pathfinding::Algorithm::ASTAR,Grid.new)
-      #finder.set_eight(true)
-      #result = finder.find_path(node1,node2)
-      @duration = GameMachine::JavaLib::Duration.create(100, java.util.concurrent.TimeUnit::MILLISECONDS)
+      @duration = GameMachine::JavaLib::Duration.create(update_interval, java.util.concurrent.TimeUnit::MILLISECONDS)
       schedule_update
     end
 
     def on_receive(message)
       if message.is_a?(String)
         if message == 'update'
-          @actor_refs.each {|actor_ref| actor_ref.tell('update',nil)}
+          unless @actor_ref_groups[@current_group]
+            @current_group = 0
+          end
+          @actor_ref_groups[@current_group].each {|actor_ref| actor_ref.tell('update',nil)}
+          @current_group += 1
         end
       elsif message.has_create_npc
         ref = Demo::NpcActor.find_distributed(message.create_npc.npc.id)

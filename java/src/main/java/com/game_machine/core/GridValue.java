@@ -8,11 +8,13 @@ public class GridValue {
 	public int cell;
 	public Entity entity;
 	public String entityType;
+	public long createdAt;
 
 	public GridValue(String id, int cell, Entity entity, String entityType) {
 		this.id = id;
 		this.cell = cell;
 		this.entity = entity;
 		this.entityType = entityType;
+		this.createdAt = System.nanoTime();
 	}
 }
