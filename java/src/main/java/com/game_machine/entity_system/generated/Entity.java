@@ -165,6 +165,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public Boolean published;
 
 
+
+    public String entityType;
+
+
     
 
 
@@ -865,6 +869,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public String getEntityType() {
+		return entityType;
+	}
+	
+	public Entity setEntityType(String entityType) {
+		this.entityType = entityType;
+		return this;
+	}
+	
+	public Boolean hasEntityType()  {
+        return entityType == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1177,6 +1198,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.published = input.readBool();
+                	break;
+
+                	
+
+
+            	case 30:
+
+
+                	message.entityType = input.readString();
                 	break;
 
                 	
@@ -1516,6 +1546,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.entityType != null)
+            output.writeString(30, message.entityType, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1580,6 +1621,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 28: return "getEntityLocations";
 
         	case 29: return "published";
+
+        	case 30: return "entityType";
 
             default: return null;
         }
@@ -1652,6 +1695,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("getEntityLocations", 28);
 
     	__fieldMap.put("published", 29);
+
+    	__fieldMap.put("entityType", 30);
 
     }
    

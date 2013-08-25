@@ -3,7 +3,7 @@ module GameMachine
     class EntityTracking < Actor::Base
 
       DEFAULT_SEARCH_RADIUS = Settings.world_grid_cell_size
-      GRID =  Physics::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
+      GRID =  JavaLib::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
 
@@ -30,14 +30,7 @@ module GameMachine
           end
 
           if message.track_entity
-            entity = entity_from_message(message)
-
-            if entity.nil?
-              unhandled(message)
-              return
-            end
-
-            set_entity_location(entity)
+            set_entity_location(message)
 
             unless message.published
               publish_entity_location_update(message)
@@ -54,16 +47,6 @@ module GameMachine
 
       private
 
-      def entity_from_message(message)
-        if message.has_player
-          message.player
-        elsif message.has_npc
-          message.npc
-        else
-          nil
-        end
-      end
-
       def publish_entity_location_update(entity)
         entity.set_published(true)
         GameMachine::ClusterMonitor.remote_members.keys.each do |address|
@@ -74,7 +57,7 @@ module GameMachine
 
       def set_entity_location(entity)
         @grid.remove(entity.id)
-        @grid.set(entity)
+        @grid.set(entity,entity.entity_type)
       end
 
       def send_neighbors(message)
@@ -86,13 +69,22 @@ module GameMachine
         else
           type = :all
         end
-        neighbors = self.class.neighbors_from_grid(
+        search_results = self.class.neighbors_from_grid(
           message.get_neighbors.vector3.x,
           message.get_neighbors.vector3.y,
           message.get_neighbors.search_radius,
           type
         )
-        
+       
+        neighbors = {:players => [], :npcs => []}
+        search_results.each do |grid_value|
+          if grid_value.entity_type == 'player'
+            neighbors[:players] << grid_value.entity
+          elsif grid_value.entity_type == 'npc'
+            neighbors[:npcs] << grid_value.entity
+          end
+        end
+ 
         if neighbors[:players].empty? && neighbors[:npcs].empty?
           return
         end

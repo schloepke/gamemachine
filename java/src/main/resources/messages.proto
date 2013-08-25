@@ -239,6 +239,7 @@ message Entity {
   optional EntityList entityList = 27;
   optional GetEntityLocations getEntityLocations = 28;
   optional bool  published = 29;
+  optional string entityType = 30;
   
 }
 

@@ -71,9 +71,9 @@ module Demo
         end
         return
       end
-      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,Player)
-        if player = neighbors[:players].first
-          update_target(player)
+      if neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player')
+        if neighbors.size >= 1
+          update_target(neighbors.get(0).grid_value.entity)
         end
       end
       move if @has_target
@@ -121,7 +121,8 @@ module Demo
       @track_entity ||= Entity.new.set_track_entity(
         TrackEntity.new.set_value(true)
       ).set_id(@npc.id)
-      @track_entity.set_npc(@npc)
+      @track_entity.set_transform(@npc.transform)
+      @track_entity.set_entity_type('npc')
       @actor_ref ||= GameMachine::GameSystems::EntityTracking.find
       @actor_ref.tell(@track_entity)
     end

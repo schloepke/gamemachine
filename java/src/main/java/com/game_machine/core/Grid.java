@@ -67,10 +67,11 @@ public class Grid {
 
 	public ArrayList<GridValue> neighbors(float x, float y, int radius,
 			String entityType) {
+		Collection<GridValue> points;
 		ArrayList<GridValue> result = new ArrayList<GridValue>();
 		Set<Integer> cells = cellsWithinRadius(x, y, radius);
 		for (int cell : cells) {
-			Collection<GridValue> points = pointsInCell(cell);
+			points = pointsInCell(cell);
 			if (points != null) {
 				for (GridValue point : points) {
 					if (entityType == null) {
@@ -102,7 +103,10 @@ public class Grid {
 		GridValue indexValue = objectIndex.get(id);
 		if (indexValue != null) {
 			int cell = indexValue.cell;
-			cells.get(cell).remove(id);
+			ConcurrentHashMap<String, GridValue> cellValue = cells.get(cell);
+			if (cellValue != null) {
+				cellValue.remove(id);
+			}
 			objectIndex.remove(id);
 		}
 	}
