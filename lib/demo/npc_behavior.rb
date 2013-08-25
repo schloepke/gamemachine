@@ -17,7 +17,6 @@ module Demo
       @player_position = Jme::Vector3f.new
       @player_position.zero
       @last_update = Time.now.to_f
-      @agro_distance = 25.0
       @speed = 1.0
     end
 
@@ -54,12 +53,7 @@ module Demo
     end
 
     def update_target(player)
-      #puts "#{@npc.id} #{target.transform.vector3.x} #{target.transform.vector3.y} #{target.transform.vector3.z}"
-      #set_player_position(target.transform.vector3)
-      #distance_to_player = @position.distance(@player_position)
-      #puts "distance_to_target=#{distance_to_target} distance_to_home=#{distance_to_home}"
       set_target(player.transform.vector3)
-      #print_target_position
       @has_target = true
     end
 
@@ -72,7 +66,7 @@ module Demo
         end
         return
       end
-      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,100,'npc')
+      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,100,'player',nil)
       if neighbors.size >= 1
         update_target(neighbors.get(0).entity)
       end
@@ -83,12 +77,8 @@ module Demo
     def move
       @delta_time = Time.now.to_f - @last_update.to_f
       speed = 0.8
-      #direction = @target_position.subtract(@position)
-      #direction.y = 0
-      #puts "direction magnitude=#{direction.length}"
       @position = @position.interpolate(@target_position,speed * @delta_time)
       update_npc_vector
-      #puts "position=#{@position}"
       @last_update = Time.now.to_f
     end
 

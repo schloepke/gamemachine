@@ -104,12 +104,12 @@ module GameMachine
         sender.tell(entity,self)
       end
 
-      def self.neighbors_from_grid(x,y,search_radius,neighbor_type)
+      def self.neighbors_from_grid(x,y,search_radius,neighbor_type,caller_id)
         if search_radius.nil?
           search_radius = DEFAULT_SEARCH_RADIUS
         end
 
-        GRID.neighbors(x,y,search_radius,neighbor_type)
+        GRID.neighbors(x,y,search_radius,neighbor_type,caller_id)
       end
 
     end

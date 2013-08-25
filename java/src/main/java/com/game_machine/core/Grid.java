@@ -68,6 +68,7 @@ public class Grid {
 	}
 
 	private void addGridValue(ArrayList<GridValue> gridValues, GridValue gridValue, Long lastSearchTime) {
+      lastSearchTime = null;
 		if (lastSearchTime == null) {
 			gridValues.add(gridValue);
 		} else if (lastSearchTime.compareTo(gridValue.createdAt) < 0) {
@@ -88,7 +89,7 @@ public class Grid {
 		
 		Long lastSearchTime = null;
 		if (callerId != null) {
-			lastSearchTime =  lastSearch.get(callerId);
+			//lastSearchTime =  lastSearch.get(callerId);
 		}
 		
 		
@@ -109,7 +110,7 @@ public class Grid {
 		}
 		
 		if (callerId != null) {
-			lastSearch.put(callerId, System.nanoTime());
+			//lastSearch.put(callerId, System.nanoTime());
 		}
 		
 		return result;
