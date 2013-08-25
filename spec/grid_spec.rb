@@ -3,6 +3,7 @@ require 'matrix'
 module GameMachine
   describe JavaLib::Grid do
 
+    
     subject do
       JavaLib::Grid.new(100,25)
     end
@@ -21,100 +22,82 @@ module GameMachine
 
     describe "#set" do
       it "returns true when value is set" do
-        expect(subject.set(entity,nil)).to be_true
+        expect(subject.set('blah',0,0,0,'player')).to be_true
       end
 
       it "creates a grid point in correct cell" do
-        entity.transform.vector3.set_x(0).set_y(0)
-        subject.set(entity,nil)
-        point = subject.grid_values_in_cell(0).first.entity
-        expect(point.transform.vector3.x).to eq(0)
-        expect(point.transform.vector3.y).to eq(0)
+        subject.set('blah',0,0,0,'player')
+        point = subject.grid_values_in_cell(0).first
+        expect(point.x).to eq(0)
+        expect(point.y).to eq(0)
       end
     end
 
     describe "#get" do
       it "Returns the values for the given id" do
-        entity.transform.vector3.set_x(0).set_y(0).set_z(3)
-        subject.set(entity,nil)
-        grid_value = subject.get('0')
+        subject.set('blah',0,0,3,'player')
+        grid_value = subject.get('blah')
 
-        expect(grid_value.id).to eq('0')
+        expect(grid_value.id).to eq('blah')
         expect(grid_value.cell).to eq(0)
-        expect(grid_value.entity.transform.vector3.x).to eq(0)
-        expect(grid_value.entity.transform.vector3.y).to eq(0)
-        expect(grid_value.entity.transform.vector3.z).to eq(3)
+        expect(grid_value.x).to eq(0)
+        expect(grid_value.y).to eq(0)
+        expect(grid_value.z).to eq(3)
       end
     end
 
     describe "#remove" do
       it "Removes the cell entry" do
-        subject.set(entity,nil)
-        subject.remove('0')
+        subject.set('blah',0,0,3,'player')
+        subject.remove('blah')
         points = subject.grid_values_in_cell(0)
         expect(points).to be_empty
+      end
+    end
+
+    describe "#cells_within_radius" do
+      it "returns the correct cells" do
+        puts subject.test(0)
+        grid = Physics::Grid.new(100,25)
+        puts grid.cells_within_radius(0,0,25).sort.inspect
+        puts subject.cells_within_radius(27,27,25).to_a.inspect
       end
     end
 
     describe "#neighbors" do
 
       it "returns empty array when no neighbors found" do
-        expect(subject.neighbors(0,0,25,nil)).to be_empty
+        expect(subject.neighbors(0,0,25,nil,nil)).to be_empty
       end
 
       it "returns all objects within given radius of cell" do
-        subject.set(entity,nil)
-        points = subject.neighbors(0,0,25,nil)
+        subject.set('blah',0,0,0,'player')
+        points = subject.neighbors(0,0,25,nil,nil)
         expect(points.first.cell).to eq(0)
       end
 
       it "returns entities of the correct type" do
-        subject.set(entity,'player')
-        points = subject.neighbors(0,0,50,'player')
+        subject.set('blah',0,0,0,'player')
+        points = subject.neighbors(0,0,50,'player',nil)
         expect(points.first.cell).to eq(0)
 
       end
 
       it "does not return cells out of range" do
-        subject.set(entity,nil)
-        expect(subject.neighbors(50,50,25,nil)).to be_empty
+        subject.set('blah',0,0,0,'player')
+        expect(subject.neighbors(50,50,25,nil,nil)).to be_empty
       end
 
       it "returns multiple points in the same cell" do
-        t1 = entity.clone.set_id('0')
-        t2 = entity.clone.set_id('1')
-        t1.transform.vector3.set_x(3).set_y(0)
-        t2.transform.vector3.set_x(4).set_y(0)
-        subject.set(t1,nil)
-        subject.set(t2,nil)
-        points = subject.neighbors(0,0,25,nil).to_a
-        expect(points.last.entity.transform.vector3.x).to eq(3)
-        expect(points.first.entity.transform.vector3.x).to eq(4)
+        subject.set('blah',3,3,0,'player')
+        subject.set('blah2',4,4,0,'player')
+        points = subject.neighbors(0,0,25,nil,nil).to_a
+        expect(points.last.x).to eq(3)
+        expect(points.first.x).to eq(4)
       end
 
       context "caller id is passed" do
-        it "does not return unchanged values" do
-          subject.set(entity,nil)
-          points = subject.neighbors(0,0,25,nil,'me')
-          expect(points.first.cell).to eq(0)
 
-          points = subject.neighbors(0,0,25,nil,'me')
-          expect(points).to be_empty
-        end
-
-        it "does return value if changed since last search" do
-          subject.set(entity,nil)
-          points = subject.neighbors(0,0,25,nil,'me')
-          expect(points.first.cell).to eq(0)
-
-          update_entity = Entity.new.set_id('0').
-            set_transform(
-              Transform.new.set_vector3(Vector3.new.set_x(1).set_y(1).set_z(0))
-          )
-          subject.set(update_entity,nil)
-          points = subject.neighbors(0,0,25,nil,'me')
-          expect(points.first.cell).to eq(0)
-        end
       end
     end
   end

@@ -107,7 +107,7 @@ module GameMachine
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,20).start
+        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,80).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start

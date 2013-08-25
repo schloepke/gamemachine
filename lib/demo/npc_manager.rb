@@ -9,16 +9,11 @@ module Demo
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
 
-      actor_count = 500
-      group_size = 100
-      update_interval = 100 / (actor_count / group_size)
-      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(actor_count).start
-      @actor_ref_groups = @actor_refs.each_slice(group_size).to_a
-      @actor_ref_group_size = @actor_ref_groups.size
-      @current_group = 0
+      update_interval = 100
+      @actor_refs = GameMachine::Actor::Builder.new(Demo::NpcActor).distributed(200).start
       GameMachine.logger.info("#{@actor_refs.size} actors")
       @npc_actors = {}
-      500.times do |i|
+      1000.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
       GameMachine.logger.info("Npc's created")
@@ -30,11 +25,7 @@ module Demo
     def on_receive(message)
       if message.is_a?(String)
         if message == 'update'
-          unless @actor_ref_groups[@current_group]
-            @current_group = 0
-          end
-          @actor_ref_groups[@current_group].each {|actor_ref| actor_ref.tell('update',nil)}
-          @current_group += 1
+          @actor_refs.each {|actor_ref| actor_ref.tell('update',nil)}
         end
       elsif message.has_create_npc
         ref = Demo::NpcActor.find_distributed(message.create_npc.npc.id)

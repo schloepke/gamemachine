@@ -56,7 +56,20 @@ module GameMachine
       end
 
       def set_entity_location(entity)
-        @grid.set(entity,entity.entity_type)
+        if entity.entity_type == 'player'
+          #puts "#{entity.id} #{entity.transform.vector3.x} #{entity.transform.vector3.y} #{entity.transform.vector3.z}"
+        end
+        vector = entity.transform.vector3
+        @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
+      end
+
+      def location_entity(grid_value)
+        Entity.new.set_id(grid_value.id).
+          set_transform(
+          Transform.new.set_vector3(
+          Vector3.new.set_x(grid_value.x).set_y(grid_value.y).set_z(grid_value.z)
+          )
+        )
       end
 
       def send_neighbors(message)
@@ -66,15 +79,15 @@ module GameMachine
           message.get_neighbors.vector3.y,
           message.get_neighbors.search_radius,
           type,
-          message.id
+          nil
         )
        
         neighbors = {:players => [], :npcs => []}
         search_results.each do |grid_value|
           if grid_value.entityType == 'player'
-            neighbors[:players] << grid_value.entity
+            neighbors[:players] << location_entity(grid_value)
           elsif grid_value.entityType == 'npc'
-            neighbors[:npcs] << grid_value.entity
+            neighbors[:npcs] << location_entity(grid_value)
           end
         end
  

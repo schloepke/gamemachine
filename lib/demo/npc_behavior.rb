@@ -5,17 +5,15 @@ module Demo
     def initialize(npc,parent)
       @npc = npc
       @parent = parent
-      @position = Jme::Vector3f.new(
+      @position = GameMachine::Vector.new(
         npc.transform.vector3.x.to_f,
         npc.transform.vector3.y.to_f,
         npc.transform.vector3.z.to_f
       )
 
       @home_position = @position.clone
-      @target_position = Jme::Vector3f.new
-      @target_position.zero
-      @player_position = Jme::Vector3f.new
-      @player_position.zero
+      @target_position = GameMachine::Vector.new
+      @player_position = GameMachine::Vector.new
       @last_update = Time.now.to_f
       @speed = 1.0
     end
@@ -53,22 +51,20 @@ module Demo
     end
 
     def update_target(player)
-      set_target(player.transform.vector3)
+      #puts "#{player.x} #{player.y} #{player.z}"
+      set_target(player)
       @has_target = true
+      #puts "target=#{@target_position.inspect}"
     end
 
     def update(neighbors=nil)
-      if neighbors
-        if players = neighbors.get_player_list
-          if target = players.first
-            update_target(target)
-          end
-        end
-        return
+      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,'player',nil)
+      if neighbors.size > 1
+        puts "too many neighbors #{neighbors.size}"
       end
-      neighbors = GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,100,'player',nil)
       if neighbors.size >= 1
-        update_target(neighbors.get(0).entity)
+        @found = true
+        update_target(neighbors.get(0))
       end
       move if @has_target
       track_entity
@@ -77,9 +73,10 @@ module Demo
     def move
       @delta_time = Time.now.to_f - @last_update.to_f
       speed = 0.8
-      @position = @position.interpolate(@target_position,speed * @delta_time)
+      @position.interpolate(@target_position,speed * @delta_time)
       update_npc_vector
       @last_update = Time.now.to_f
+      #puts "target=#{@target_position.inspect}"
     end
 
     def entity_updates
@@ -108,7 +105,8 @@ module Demo
 
     def track_entity
       if @track_entity
-        @track_entity.transform.set_vector3(@npc.transform.vector3)
+        @track_entity.transform.vector3.set_x(@position.x).
+          set_y(@position.y).set_z(@position.z)
       else
         @track_entity = Entity.new.set_track_entity(
           TrackEntity.new.set_value(true)

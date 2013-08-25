@@ -11,23 +11,22 @@ import com.game_machine.entity_system.generated.Vector3;
 
 public class Grid {
 
-	private int max = 0;
-	private int min = 0;
+	private float max;
+	private float min = 0f;
 	private int cellSize = 0;
 	private float convFactor;
 	private int width;
 	private int cellCount;
 	private ConcurrentHashMap<String, Long> lastSearch = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
-	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells =
-			new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<String, Set<Integer>> cellsCache = new ConcurrentHashMap<String, Set<Integer>>();
 
 	public Grid(int max, int cellSize) {
 		this.max = max;
 		this.cellSize = cellSize;
 		this.convFactor = 1.0f / this.cellSize;
-		this.width = this.max / this.cellSize;
+		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
 	}
 
@@ -37,9 +36,23 @@ public class Grid {
 		}
 	}
 
+	public Set<Integer> test(int base) {
+		Set<Integer> cells;
+		cells = new HashSet<Integer>();
+		int offset = 1;
+		int next_bucket;
+		int radius = 100;
+		for (int i = base - offset; i < base + offset; i++) {
+			for (int j = base - offset; j < base + offset; j++) {
+				next_bucket = i * 4 + j;
+				cells.add(next_bucket);
+			}
+		}
+		return cells;
+	}
+
 	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
-		String key = String.valueOf(x) + String.valueOf(y)
-				+ String.valueOf(radius);
+		String key = String.valueOf(Math.round(x)) + String.valueOf(Math.round(y)) + String.valueOf(radius);
 		Set<Integer> cells = cellsCache.get(key);
 		if (cells != null) {
 			return cells;
@@ -50,7 +63,7 @@ public class Grid {
 		cells.add(hash(x, y));
 		int bounds;
 		for (int i = 1; i <= offset; i++) {
-			bounds = radius * i;
+			bounds = this.cellSize * i;
 			addIfWithinBounds(cells, hash(x - bounds, y - bounds));
 			addIfWithinBounds(cells, hash(x - bounds, y + bounds));
 
@@ -67,32 +80,7 @@ public class Grid {
 		return cells;
 	}
 
-	private void addGridValue(ArrayList<GridValue> gridValues, GridValue gridValue, Long lastSearchTime) {
-      lastSearchTime = null;
-		if (lastSearchTime == null) {
-			gridValues.add(gridValue);
-		} else if (lastSearchTime.compareTo(gridValue.createdAt) < 0) {
-			gridValues.add(gridValue);
-		}
-	}
-	
-	public ArrayList<GridValue> neighbors(float x, float y, int radius) {
-		return neighbors(x,y,radius,null,null);
-	}
-	
-	public ArrayList<GridValue> neighbors(float x, float y, int radius,	String entityType) {
-		return neighbors(x,y,radius,entityType,null);
-	}
-	
-	public ArrayList<GridValue> neighbors(float x, float y, int radius,
-			String entityType, String callerId) {
-		
-		Long lastSearchTime = null;
-		if (callerId != null) {
-			//lastSearchTime =  lastSearch.get(callerId);
-		}
-		
-		
+	public ArrayList<GridValue> neighbors(float x, float y, int radius, String entityType, String callerId) {
 		Collection<GridValue> gridValues;
 		ArrayList<GridValue> result = new ArrayList<GridValue>();
 		Set<Integer> cells = cellsWithinRadius(x, y, radius);
@@ -101,18 +89,13 @@ public class Grid {
 			if (gridValues != null) {
 				for (GridValue gridValue : gridValues) {
 					if (entityType == null) {
-						addGridValue(result,gridValue,lastSearchTime);
+						result.add(gridValue);
 					} else if (gridValue.entityType.equals(entityType)) {
-						addGridValue(result,gridValue,lastSearchTime);
+						result.add(gridValue);
 					}
 				}
 			}
 		}
-		
-		if (callerId != null) {
-			//lastSearch.put(callerId, System.nanoTime());
-		}
-		
 		return result;
 	}
 
@@ -141,39 +124,38 @@ public class Grid {
 		}
 	}
 
-	public Boolean set(Entity entity, String entityType) {
-		GridValue gridValue;
-		Vector3 vector3 = entity.transform.vector3;
-		GridValue existingValue = objectIndex.get(entity.id);
-		if (existingValue != null) {
-			Vector3 existingVector = existingValue.entity.transform.vector3;
-			if (vector3.x == existingVector.x && vector3.y == existingVector.y) {
+	public Boolean set(String id, float x, float y, float z, String entityType) {
+		GridValue oldValue = objectIndex.get(id);
+
+		if (oldValue != null) {
+			if (oldValue.x == x && oldValue.y == y) {
 				return false;
-			} else {
-				cells.get(existingValue.cell).remove(existingValue.id);
 			}
 		}
 
-		int cell = hash(vector3.x, vector3.y);
-		if (existingValue == null) {
-			gridValue = new GridValue(entity.id, cell, entity, entityType);
-		} else {
-			gridValue = existingValue;
-			gridValue.cell = cell;
-			gridValue.entity = entity;
-		}
-		
-		objectIndex.put(entity.id, gridValue);
-
+		int cell = hash(x, y);
 		if (!cells.containsKey(cell)) {
 			cells.put(cell, new ConcurrentHashMap<String, GridValue>());
 		}
-		cells.get(cell).put(entity.id, gridValue);
+
+		GridValue gridValue;
+		gridValue = new GridValue(id, cell, x, y, z, entityType);
+
+		if (oldValue != null && oldValue.cell != cell) {
+			cells.get(oldValue.cell).remove(id);
+		}
+		cells.get(cell).put(id, gridValue);
+
+		objectIndex.put(id, gridValue);
+
 		return true;
 	}
 
-	private int hash(float x, float y) {
-		return Math.round((x * this.convFactor))
-				+ Math.round((y * this.convFactor)) * this.width;
+	public int hash2(float x, float y) {
+		return (int) (Math.floor(x / this.cellSize) + Math.floor(y / this.cellSize) * width);
+	}
+
+	public int hash(float x, float y) {
+		return (int) ((x * this.convFactor)) + (int) ((y * this.convFactor)) * this.width;
 	}
 }
