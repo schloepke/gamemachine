@@ -78,7 +78,6 @@ module Demo
       end
       move if @has_target
       track_entity
-      #entity_updates
     end
 
     def move

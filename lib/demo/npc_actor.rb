@@ -16,13 +16,8 @@ module Demo
 
       if message.is_a?(String)
         if message == 'update'
-          time = Benchmark.realtime do
-            @npc_behaviors.each do |npc_id,behavior|
-              behavior.update
-            end
-          end
-          if time > 0.010
-            puts "#{time}"
+          @npc_behaviors.each do |npc_id,behavior|
+            behavior.update
           end
         end
       elsif message.is_a?(Entity)
