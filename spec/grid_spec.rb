@@ -57,10 +57,7 @@ module GameMachine
 
     describe "#cells_within_radius" do
       it "returns the correct cells" do
-        puts subject.test(0)
-        grid = Physics::Grid.new(100,25)
-        puts grid.cells_within_radius(0,0,25).sort.inspect
-        puts subject.cells_within_radius(27,27,25).to_a.inspect
+        subject.cellsWithinRadius(0,0,50)
       end
     end
 

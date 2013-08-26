@@ -26,8 +26,12 @@ namespace :java do
     sh 'rm -f java/src/main/java/com/game_machine/entity_system/generated/*.java'
   end
 
-  task :build => [:clean] do
+  task :all => [:clean] do
     sh 'cd java && gradle clean && gradle codegen && gradle build && gradle install_libs'
+  end
+
+  task :build do
+    sh 'cd java && gradle build && gradle install_libs'
   end
 end
 

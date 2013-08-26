@@ -1,5 +1,6 @@
 package com.game_machine.core;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -20,7 +21,7 @@ public class Grid {
 	private ConcurrentHashMap<String, Long> lastSearch = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
-	private ConcurrentHashMap<String, Set<Integer>> cellsCache = new ConcurrentHashMap<String, Set<Integer>>();
+	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
 	public Grid(int max, int cellSize) {
 		this.max = max;
@@ -36,22 +37,35 @@ public class Grid {
 		}
 	}
 
-	public Set<Integer> test(int base) {
-		Set<Integer> cells;
+	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
+		int cellHash = hash(x,y);
+		int key = cellHash + radius;
+		Set<Integer> cells = cellsCache.get(key);
+		if (cells != null) {
+			return cells;
+		}
 		cells = new HashSet<Integer>();
-		int offset = 1;
-		int next_bucket;
-		int radius = 100;
-		for (int i = base - offset; i < base + offset; i++) {
-			for (int j = base - offset; j < base + offset; j++) {
-				next_bucket = i * 4 + j;
-				cells.add(next_bucket);
+
+		int offset = radius;
+		
+		int startX = (int) (x - offset);
+		int startY = (int) (y - offset);
+		int endX = (int) (x + offset);
+		int endY = (int) (y + offset);
+
+		for (int rowNum = startX; rowNum <= endX; rowNum+=this.cellSize) {
+			for (int colNum = startY; colNum <= endY; colNum+=this.cellSize) {
+				if (rowNum >= 0 && colNum >= 0) {
+					cells.add(hash(rowNum,colNum));
+					//System.out.println(String.valueOf(rowNum) + "," + String.valueOf(colNum));
+				}
 			}
 		}
+		cellsCache.put(key, cells);
 		return cells;
 	}
 
-	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
+	/*public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
 		String key = String.valueOf(Math.round(x)) + String.valueOf(Math.round(y)) + String.valueOf(radius);
 		Set<Integer> cells = cellsCache.get(key);
 		if (cells != null) {
@@ -78,7 +92,7 @@ public class Grid {
 		}
 		cellsCache.put(key, cells);
 		return cells;
-	}
+	}*/
 
 	public ArrayList<GridValue> neighbors(float x, float y, int radius, String entityType, String callerId) {
 		Collection<GridValue> gridValues;
