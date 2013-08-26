@@ -65,6 +65,22 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
     public Float z;
 
 
+
+    public Integer wi;
+
+
+
+    public Integer xi;
+
+
+
+    public Integer yi;
+
+
+
+    public Integer zi;
+
+
     
 
 
@@ -142,6 +158,74 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 	
 	public Boolean hasZ()  {
         return z == null ? false : true;
+    }
+
+
+
+    
+
+	public Integer getWi() {
+		return wi;
+	}
+	
+	public Quaternion setWi(Integer wi) {
+		this.wi = wi;
+		return this;
+	}
+	
+	public Boolean hasWi()  {
+        return wi == null ? false : true;
+    }
+
+
+
+    
+
+	public Integer getXi() {
+		return xi;
+	}
+	
+	public Quaternion setXi(Integer xi) {
+		this.xi = xi;
+		return this;
+	}
+	
+	public Boolean hasXi()  {
+        return xi == null ? false : true;
+    }
+
+
+
+    
+
+	public Integer getYi() {
+		return yi;
+	}
+	
+	public Quaternion setYi(Integer yi) {
+		this.yi = yi;
+		return this;
+	}
+	
+	public Boolean hasYi()  {
+        return yi == null ? false : true;
+    }
+
+
+
+    
+
+	public Integer getZi() {
+		return zi;
+	}
+	
+	public Quaternion setZi(Integer zi) {
+		this.zi = zi;
+		return this;
+	}
+	
+	public Boolean hasZi()  {
+        return zi == null ? false : true;
     }
 
 
@@ -238,6 +322,42 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
                 	
 
 
+            	case 5:
+
+
+                	message.wi = input.readInt32();
+                	break;
+
+                	
+
+
+            	case 6:
+
+
+                	message.xi = input.readInt32();
+                	break;
+
+                	
+
+
+            	case 7:
+
+
+                	message.yi = input.readInt32();
+                	break;
+
+                	
+
+
+            	case 8:
+
+
+                	message.zi = input.readInt32();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -294,6 +414,50 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
 
 
     	
+
+    	
+
+
+    	if(message.wi != null)
+            output.writeInt32(5, message.wi, false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.xi != null)
+            output.writeInt32(6, message.xi, false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.yi != null)
+            output.writeInt32(7, message.yi, false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.zi != null)
+            output.writeInt32(8, message.zi, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -308,6 +472,14 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
         	case 3: return "y";
 
         	case 4: return "z";
+
+        	case 5: return "wi";
+
+        	case 6: return "xi";
+
+        	case 7: return "yi";
+
+        	case 8: return "zi";
 
             default: return null;
         }
@@ -330,6 +502,14 @@ public final class Quaternion  implements Externalizable, Message<Quaternion>, S
     	__fieldMap.put("y", 3);
 
     	__fieldMap.put("z", 4);
+
+    	__fieldMap.put("wi", 5);
+
+    	__fieldMap.put("xi", 6);
+
+    	__fieldMap.put("yi", 7);
+
+    	__fieldMap.put("zi", 8);
 
     }
    

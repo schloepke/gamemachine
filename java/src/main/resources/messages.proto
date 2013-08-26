@@ -146,6 +146,9 @@ message Vector3 {
   optional float x = 1;
   optional float y = 2;
   optional float z = 3;
+  optional int32 xi = 4;
+  optional int32 yi = 5;
+  optional int32 zi = 6;
 }
 
 message Quaternion {
@@ -153,6 +156,10 @@ message Quaternion {
   optional float x = 2;
   optional float y = 3;
   optional float z = 4;
+  optional int32 wi = 5;
+  optional int32 xi = 6;
+  optional int32 yi = 7;
+  optional int32 zi = 8;
 }
 
 message Transform {

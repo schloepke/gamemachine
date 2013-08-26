@@ -64,7 +64,7 @@ module GameMachine
         Entity.new.set_id(grid_value.id).
           set_transform(
           Transform.new.set_vector3(
-          Vector3.new.set_x(grid_value.x.round).set_y(grid_value.y.round).set_z(grid_value.z.round(2))
+          Vector3.new.set_xi(grid_value.x.to_i).set_yi(grid_value.y.to_i)
           )
         )
       end

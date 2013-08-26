@@ -5,7 +5,7 @@ development:
   <<: *defaults
   game_handler: GameMachine::Handlers::Request
   world_grid_size: 2000
-  world_grid_cell_size: 25
+  world_grid_cell_size: 50
   data_store: memory
   couchbase_servers: 
     - http://127.0.0.1:8091/pools

@@ -1,24 +1,18 @@
 package com.game_machine.core;
 
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.game_machine.entity_system.generated.Entity;
-import com.game_machine.entity_system.generated.Vector3;
-
 public class Grid {
 
 	private float max;
-	private float min = 0f;
 	private int cellSize = 0;
 	private float convFactor;
 	private int width;
 	private int cellCount;
-	private ConcurrentHashMap<String, Long> lastSearch = new ConcurrentHashMap<String, Long>();
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
@@ -31,12 +25,6 @@ public class Grid {
 		this.cellCount = this.width * this.width;
 	}
 
-	public void addIfWithinBounds(Set<Integer> cells, int cell) {
-		if (cell >= this.min && cell <= (this.cellCount - 1)) {
-			cells.add(cell);
-		}
-	}
-
 	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
 		int cellHash = hash(x,y);
 		int key = cellHash + radius;
@@ -46,7 +34,7 @@ public class Grid {
 		}
 		cells = new HashSet<Integer>();
 
-		int offset = radius;
+		int offset = this.cellSize;
 		
 		int startX = (int) (x - offset);
 		int startY = (int) (y - offset);
@@ -57,42 +45,12 @@ public class Grid {
 			for (int colNum = startY; colNum <= endY; colNum+=this.cellSize) {
 				if (rowNum >= 0 && colNum >= 0) {
 					cells.add(hash(rowNum,colNum));
-					//System.out.println(String.valueOf(rowNum) + "," + String.valueOf(colNum));
 				}
 			}
 		}
 		cellsCache.put(key, cells);
 		return cells;
 	}
-
-	/*public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
-		String key = String.valueOf(Math.round(x)) + String.valueOf(Math.round(y)) + String.valueOf(radius);
-		Set<Integer> cells = cellsCache.get(key);
-		if (cells != null) {
-			return cells;
-		}
-		cells = new HashSet<Integer>();
-
-		int offset = radius / this.cellSize;
-		cells.add(hash(x, y));
-		int bounds;
-		for (int i = 1; i <= offset; i++) {
-			bounds = this.cellSize * i;
-			addIfWithinBounds(cells, hash(x - bounds, y - bounds));
-			addIfWithinBounds(cells, hash(x - bounds, y + bounds));
-
-			addIfWithinBounds(cells, hash(x + bounds, y - bounds));
-			addIfWithinBounds(cells, hash(x + bounds, y + bounds));
-
-			addIfWithinBounds(cells, hash(x - bounds, y));
-			addIfWithinBounds(cells, hash(x + bounds, y));
-
-			addIfWithinBounds(cells, hash(x, y - bounds));
-			addIfWithinBounds(cells, hash(x, y + bounds));
-		}
-		cellsCache.put(key, cells);
-		return cells;
-	}*/
 
 	public ArrayList<GridValue> neighbors(float x, float y, int radius, String entityType, String callerId) {
 		Collection<GridValue> gridValues;
