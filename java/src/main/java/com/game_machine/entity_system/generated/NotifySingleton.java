@@ -30,33 +30,33 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class PlayerMove  implements Externalizable, Message<PlayerMove>, Schema<PlayerMove>
+public final class NotifySingleton  implements Externalizable, Message<NotifySingleton>, Schema<NotifySingleton>
 {
 
 
 
 
-    public static Schema<PlayerMove> getSchema()
+    public static Schema<NotifySingleton> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static PlayerMove getDefaultInstance()
+    public static NotifySingleton getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final PlayerMove DEFAULT_INSTANCE = new PlayerMove();
+    static final NotifySingleton DEFAULT_INSTANCE = new NotifySingleton();
 
 
 
-    public Target target;
+    public String npcId;
 
 
     
 
 
-    public PlayerMove()
+    public NotifySingleton()
     {
         
     }
@@ -68,17 +68,17 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
 
     
 
-	public Target getTarget() {
-		return target;
+	public String getNpcId() {
+		return npcId;
 	}
 	
-	public PlayerMove setTarget(Target target) {
-		this.target = target;
+	public NotifySingleton setNpcId(String npcId) {
+		this.npcId = npcId;
 		return this;
 	}
 	
-	public Boolean hasTarget()  {
-        return target == null ? false : true;
+	public Boolean hasNpcId()  {
+        return npcId == null ? false : true;
     }
 
 
@@ -98,39 +98,39 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
 
     // message method
 
-    public Schema<PlayerMove> cachedSchema()
+    public Schema<NotifySingleton> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public PlayerMove newMessage()
+    public NotifySingleton newMessage()
     {
-        return new PlayerMove();
+        return new NotifySingleton();
     }
 
-    public Class<PlayerMove> typeClass()
+    public Class<NotifySingleton> typeClass()
     {
-        return PlayerMove.class;
+        return NotifySingleton.class;
     }
 
     public String messageName()
     {
-        return PlayerMove.class.getSimpleName();
+        return NotifySingleton.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return PlayerMove.class.getName();
+        return NotifySingleton.class.getName();
     }
 
-    public boolean isInitialized(PlayerMove message)
+    public boolean isInitialized(NotifySingleton message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, PlayerMove message) throws IOException
+    public void mergeFrom(Input input, NotifySingleton message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -142,8 +142,8 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
             	case 1:
 
 
-                	message.target = input.mergeObject(message.target, Target.getSchema());
-                    break;
+                	message.npcId = input.readString();
+                	break;
 
                 	
 
@@ -156,19 +156,19 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
     }
 
 
-    public void writeTo(Output output, PlayerMove message) throws IOException
+    public void writeTo(Output output, NotifySingleton message) throws IOException
     {
 
     	
 
-    	if(message.target == null)
+    	if(message.npcId == null)
             throw new UninitializedMessageException(message);
 
     	
 
 
-    	if(message.target != null)
-    		output.writeObject(1, message.target, Target.getSchema(), false);
+    	if(message.npcId != null)
+            output.writeString(1, message.npcId, false);
 
     	
 
@@ -181,7 +181,7 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
         switch(number)
         {
 
-        	case 1: return "target";
+        	case 1: return "npcId";
 
             default: return null;
         }
@@ -197,7 +197,7 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
     static
     {
 
-    	__fieldMap.put("target", 1);
+    	__fieldMap.put("npcId", 1);
 
     }
    
@@ -207,7 +207,7 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = PlayerMove.getSchema().getFieldName(i);
+		fieldName = NotifySingleton.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -217,16 +217,16 @@ public final class PlayerMove  implements Externalizable, Message<PlayerMove>, S
 	return fieldNames;
 }
 
-public static PlayerMove parseFrom(byte[] bytes) {
-	PlayerMove message = new PlayerMove();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(PlayerMove.class));
+public static NotifySingleton parseFrom(byte[] bytes) {
+	NotifySingleton message = new NotifySingleton();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(NotifySingleton.class));
 	return message;
 }
 
-public PlayerMove clone() {
+public NotifySingleton clone() {
 	byte[] bytes = this.toByteArray();
-	PlayerMove playerMove = PlayerMove.parseFrom(bytes);
-	return playerMove;
+	NotifySingleton notifySingleton = NotifySingleton.parseFrom(bytes);
+	return notifySingleton;
 }
 	
 public byte[] toByteArray() {
@@ -238,7 +238,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, PlayerMove.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, NotifySingleton.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -251,7 +251,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(PlayerMove.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(NotifySingleton.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();

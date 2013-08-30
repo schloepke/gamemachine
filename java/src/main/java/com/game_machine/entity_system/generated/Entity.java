@@ -301,10 +301,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-		if (this.hasNotifySingleton()) {
-			names.add(this.notifyNpc.getClass().getSimpleName());
-		}
-
 
 
 
@@ -848,16 +844,16 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public NotifySingleton getNotifySingleton() {
+	public NotifySingleton getNotifyNpc() {
 		return notifyNpc;
 	}
 	
-	public Entity setNotifySingleton(NotifySingleton notifyNpc) {
+	public Entity setNotifyNpc(NotifySingleton notifyNpc) {
 		this.notifyNpc = notifyNpc;
 		return this;
 	}
 	
-	public Boolean hasNotifySingleton()  {
+	public Boolean hasNotifyNpc()  {
         return notifyNpc == null ? false : true;
     }
 
