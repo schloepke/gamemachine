@@ -56,16 +56,14 @@ module GameMachine
       end
 
       def set_entity_location(entity)
-        vector = entity.transform.vector3
+        vector = entity.vector3
+        #puts "#{entity.id},#{vector.x},#{vector.y},#{vector.z},#{entity.entity_type}"
         @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
       end
 
       def location_entity(grid_value)
-        Entity.new.set_id(grid_value.id).
-          set_transform(
-          Transform.new.set_vector3(
+        Entity.new.set_id(grid_value.id).set_vector3(
           Vector3.new.set_xi(grid_value.x.to_i).set_yi(grid_value.y.to_i)
-          )
         )
       end
 

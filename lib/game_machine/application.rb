@@ -112,6 +112,7 @@ module GameMachine
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::ChatManager).start
+        Actor::Builder.new(GameSystems::SingletonManager).start
       end
 
       private

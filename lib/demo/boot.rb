@@ -1,3 +1,3 @@
 require_relative 'lib/demo'
 
-GameMachine::Actor::Builder.new(Demo::NpcManager).start
+Demo::Game.new.start

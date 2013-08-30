@@ -1,0 +1,95 @@
+require 'spec_helper'
+
+module GameMachine
+  module GameSystems
+    describe SingletonRouter do
+
+      subject do
+        props = JavaLib::Props.new(SingletonRouter);
+        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'npc_router_test');
+        ref.underlying_actor.post_init
+        ref.underlying_actor
+      end
+
+      let(:create_singleton) do
+        Entity.new.set_create_singleton(
+          CreateSingleton.new.set_npc_id('npc1').
+          set_controller('GameMachine::GameSystems::SingletonController')
+        ).set_id('entity')
+      end
+
+
+      let(:notify_singleton) do
+        Entity.new.set_notify_singleton(
+          NotifySingleton.new.set_npc_id('npc1')
+        ).set_id('entity')
+      end
+
+      let(:destroy_singleton) do
+        Entity.new.set_destroy_singleton(
+          DestroySingleton.new.set_npc_id('npc1')
+        ).set_id('entity')
+      end
+
+
+      describe "#on_receive" do
+
+        context "receives a CreateSingleton message" do
+          it "creates an npc controller" do
+            expect(SingletonController).to receive(:new).with(create_singleton,anything)
+            subject.on_receive(create_singleton)
+          end
+        end
+
+        context "receives a CreateSingleton message with nonexistant controller class" do
+          let(:create_bad_npc) do
+            Entity.new.set_create_singleton(
+              CreateSingleton.new.set_npc_id('npc1').
+              set_controller('BadController')
+            ).set_id('entity')
+          end
+
+          it "logs an error" do
+            expect(GameMachine.logger).to receive(:error).
+              with("CreateSingleton error: NameError uninitialized constant BadController")
+            subject.on_receive(create_bad_npc)
+          end
+        end
+
+        context "receives a NotifySingleton message" do
+          it "calls on_receive on the npc controller with message" do
+            subject.on_receive(create_singleton)
+            expect_any_instance_of(SingletonController).to receive(:on_receive).with(notify_singleton)
+            subject.on_receive(notify_singleton)
+          end
+        end
+
+        context "receives a NotifySingleton message after being destroyed" do
+          it "logs an error message" do
+            subject.on_receive(create_singleton)
+            subject.on_receive(destroy_singleton)
+            expect(GameMachine.logger).to receive(:error).
+              with("Npc Controller for npc1 not found")
+            subject.on_receive(notify_singleton)
+          end
+        end
+
+        context "receives a DestroySingleton message" do
+          it "calls destroy on the npc controller with message" do
+            subject.on_receive(create_singleton)
+            expect_any_instance_of(SingletonController).to receive(:destroy).with(destroy_singleton)
+            subject.on_receive(destroy_singleton)
+          end
+        end
+
+        context "receives an update message" do
+          it "calls update on the npc controller" do
+            subject.on_receive(create_singleton)
+            expect_any_instance_of(SingletonController).to receive(:update)
+            subject.on_receive('update')
+          end
+        end
+      end
+    end
+  end
+end

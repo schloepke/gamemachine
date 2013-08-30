@@ -5,23 +5,31 @@ option optimize_for = SPEED;
 //GAME_MESSAGES
 
 
+message Health {
+  required string health = 1;
+}
+
+message CombatAbility {
+  required int32 id = 1;
+  required string name = 2;
+  required int32 damage = 3;
+  optional int32 hitChance = 4;
+  required int32 range = 5;
+}
+
+message Attack {
+  required string attackerId = 1;
+  required  int32 attackerType = 2;
+  repeated string npcId = 3;
+  repeated string playerId = 4;
+  required int32 combatAbilityId = 5;
+}
+  
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
 }
 
-message PlayerMove {
-	required Target target = 1;
-}
-message Target {
-  required uint64 x = 1;
-  required uint64 y = 2;
-}
-
-message PlayerAttack {
-  required Target target = 1;
-  required string ability = 2;
-}
 
 message RegisterPlayerObserver {
   required string playerId = 1;
@@ -121,16 +129,21 @@ message Name {
   required string value = 1;
 }
 
-message Npc {
-  required string id = 1;
-  optional Name name = 2;
-  optional Transform transform = 3;
+message IsNpc {
+  required bool enabled = 1;
 }
 
-message CreateNpc {
-  required Npc npc = 1;
-  optional string ai = 2;
-  optional string npcType = 3;
+message DestroySingleton {
+  required string npcId = 1;
+}
+
+message NotifySingleton {
+  required string npcId = 1;
+}
+
+message CreateSingleton {
+  required string npcId = 1;
+  required string controller = 2;
 }
 
 message Player {
@@ -200,11 +213,6 @@ message Neighbors {
   repeated Entity player = 2;
 }
 
-message GameCommand {
-  required string name = 1;
-  optional TestObject testObject = 3;
-}
-
 message GetNeighbors {
   optional uint32 search_radius = 2;
   required Vector3 vector3 = 3;
@@ -219,7 +227,7 @@ message GetEntityLocations {
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
-  optional GameCommand gameCommand = 3;
+  optional Health health = 3;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;
   optional EchoTest echoTest = 6;
@@ -235,18 +243,18 @@ message Entity {
   optional ChatChannels chatChannels = 16;
   optional ErrorMessage errorMessage = 17;
   optional RegisterPlayerObserver registerPlayerObserver = 18;
-  optional PlayerMove playerMove = 19;
-  optional PlayerAttack playerAttack = 20;
   optional GetNeighbors getNeighbors = 21;
   optional TrackEntity trackEntity = 22;
   optional Transform transform = 23;
-  optional Npc npc = 24;
+  optional IsNpc isNpc = 24;
   optional Vector3 vector3 = 25;
-  optional CreateNpc createNpc = 26;
+  optional CreateSingleton createNpc = 26;
   optional EntityList entityList = 27;
   optional GetEntityLocations getEntityLocations = 28;
   optional bool  published = 29;
   optional string entityType = 30;
+  optional NotifySingleton notifyNpc = 31;
+  optional DestroySingleton destroyNpc = 32;
   
 }
 

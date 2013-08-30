@@ -58,7 +58,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public GameCommand gameCommand;
+    public Health health;
 
 
 
@@ -122,14 +122,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public PlayerMove playerMove;
-
-
-
-    public PlayerAttack playerAttack;
-
-
-
     public GetNeighbors getNeighbors;
 
 
@@ -142,7 +134,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public Npc npc;
+    public IsNpc isNpc;
 
 
 
@@ -150,7 +142,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public CreateNpc createNpc;
+    public CreateSingleton createNpc;
 
 
 
@@ -169,6 +161,14 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public String entityType;
 
 
+
+    public NotifySingleton notifyNpc;
+
+
+
+    public DestroySingleton destroyNpc;
+
+
     
 
 
@@ -183,22 +183,18 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 		ArrayList<String> names = new ArrayList<String>();
 
 
+		if (this.hasHealth()) {
+			names.add(this.health.getClass().getSimpleName());
+		}
+
+
+
+
+
+
+
 		if (this.hasTrackEntity()) {
 			names.add(this.trackEntity.getClass().getSimpleName());
-		}
-
-
-
-		if (this.hasPlayerMove()) {
-			names.add(this.playerMove.getClass().getSimpleName());
-		}
-
-
-
-
-
-		if (this.hasPlayerAttack()) {
-			names.add(this.playerAttack.getClass().getSimpleName());
 		}
 
 
@@ -297,15 +293,19 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-		if (this.hasNpc()) {
-			names.add(this.npc.getClass().getSimpleName());
+		if (this.hasIsNpc()) {
+			names.add(this.isNpc.getClass().getSimpleName());
 		}
 
 
 
-		if (this.hasCreateNpc()) {
-			names.add(this.createNpc.getClass().getSimpleName());
+
+
+		if (this.hasNotifySingleton()) {
+			names.add(this.notifyNpc.getClass().getSimpleName());
 		}
+
+
 
 
 
@@ -339,12 +339,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 		if (this.hasNeighbors()) {
 			names.add(this.neighbors.getClass().getSimpleName());
-		}
-
-
-
-		if (this.hasGameCommand()) {
-			names.add(this.gameCommand.getClass().getSimpleName());
 		}
 
 
@@ -412,17 +406,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public GameCommand getGameCommand() {
-		return gameCommand;
+	public Health getHealth() {
+		return health;
 	}
 	
-	public Entity setGameCommand(GameCommand gameCommand) {
-		this.gameCommand = gameCommand;
+	public Entity setHealth(Health health) {
+		this.health = health;
 		return this;
 	}
 	
-	public Boolean hasGameCommand()  {
-        return gameCommand == null ? false : true;
+	public Boolean hasHealth()  {
+        return health == null ? false : true;
     }
 
 
@@ -684,40 +678,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public PlayerMove getPlayerMove() {
-		return playerMove;
-	}
-	
-	public Entity setPlayerMove(PlayerMove playerMove) {
-		this.playerMove = playerMove;
-		return this;
-	}
-	
-	public Boolean hasPlayerMove()  {
-        return playerMove == null ? false : true;
-    }
-
-
-
-    
-
-	public PlayerAttack getPlayerAttack() {
-		return playerAttack;
-	}
-	
-	public Entity setPlayerAttack(PlayerAttack playerAttack) {
-		this.playerAttack = playerAttack;
-		return this;
-	}
-	
-	public Boolean hasPlayerAttack()  {
-        return playerAttack == null ? false : true;
-    }
-
-
-
-    
-
 	public GetNeighbors getGetNeighbors() {
 		return getNeighbors;
 	}
@@ -769,17 +729,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public Npc getNpc() {
-		return npc;
+	public IsNpc getIsNpc() {
+		return isNpc;
 	}
 	
-	public Entity setNpc(Npc npc) {
-		this.npc = npc;
+	public Entity setIsNpc(IsNpc isNpc) {
+		this.isNpc = isNpc;
 		return this;
 	}
 	
-	public Boolean hasNpc()  {
-        return npc == null ? false : true;
+	public Boolean hasIsNpc()  {
+        return isNpc == null ? false : true;
     }
 
 
@@ -803,11 +763,11 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public CreateNpc getCreateNpc() {
+	public CreateSingleton getCreateNpc() {
 		return createNpc;
 	}
 	
-	public Entity setCreateNpc(CreateNpc createNpc) {
+	public Entity setCreateNpc(CreateSingleton createNpc) {
 		this.createNpc = createNpc;
 		return this;
 	}
@@ -882,6 +842,40 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 	
 	public Boolean hasEntityType()  {
         return entityType == null ? false : true;
+    }
+
+
+
+    
+
+	public NotifySingleton getNotifySingleton() {
+		return notifyNpc;
+	}
+	
+	public Entity setNotifySingleton(NotifySingleton notifyNpc) {
+		this.notifyNpc = notifyNpc;
+		return this;
+	}
+	
+	public Boolean hasNotifySingleton()  {
+        return notifyNpc == null ? false : true;
+    }
+
+
+
+    
+
+	public DestroySingleton getDestroyNpc() {
+		return destroyNpc;
+	}
+	
+	public Entity setDestroyNpc(DestroySingleton destroyNpc) {
+		this.destroyNpc = destroyNpc;
+		return this;
+	}
+	
+	public Boolean hasDestroyNpc()  {
+        return destroyNpc == null ? false : true;
     }
 
 
@@ -963,7 +957,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 3:
 
 
-                	message.gameCommand = input.mergeObject(message.gameCommand, GameCommand.getSchema());
+                	message.health = input.mergeObject(message.health, Health.getSchema());
                     break;
 
                 	
@@ -1104,24 +1098,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
                 	
 
 
-            	case 19:
-
-
-                	message.playerMove = input.mergeObject(message.playerMove, PlayerMove.getSchema());
-                    break;
-
-                	
-
-
-            	case 20:
-
-
-                	message.playerAttack = input.mergeObject(message.playerAttack, PlayerAttack.getSchema());
-                    break;
-
-                	
-
-
             	case 21:
 
 
@@ -1152,7 +1128,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 24:
 
 
-                	message.npc = input.mergeObject(message.npc, Npc.getSchema());
+                	message.isNpc = input.mergeObject(message.isNpc, IsNpc.getSchema());
                     break;
 
                 	
@@ -1170,7 +1146,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 26:
 
 
-                	message.createNpc = input.mergeObject(message.createNpc, CreateNpc.getSchema());
+                	message.createNpc = input.mergeObject(message.createNpc, CreateSingleton.getSchema());
                     break;
 
                 	
@@ -1208,6 +1184,24 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
                 	message.entityType = input.readString();
                 	break;
+
+                	
+
+
+            	case 31:
+
+
+                	message.notifyNpc = input.mergeObject(message.notifyNpc, NotifySingleton.getSchema());
+                    break;
+
+                	
+
+
+            	case 32:
+
+
+                	message.destroyNpc = input.mergeObject(message.destroyNpc, DestroySingleton.getSchema());
+                    break;
 
                 	
 
@@ -1250,8 +1244,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.gameCommand != null)
-    		output.writeObject(3, message.gameCommand, GameCommand.getSchema(), false);
+    	if(message.health != null)
+    		output.writeObject(3, message.health, Health.getSchema(), false);
 
     	
 
@@ -1429,28 +1423,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.playerMove != null)
-    		output.writeObject(19, message.playerMove, PlayerMove.getSchema(), false);
-
-    	
-
-
-    	
-
-    	
-
-
-    	if(message.playerAttack != null)
-    		output.writeObject(20, message.playerAttack, PlayerAttack.getSchema(), false);
-
-    	
-
-
-    	
-
-    	
-
-
     	if(message.getNeighbors != null)
     		output.writeObject(21, message.getNeighbors, GetNeighbors.getSchema(), false);
 
@@ -1484,8 +1456,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.npc != null)
-    		output.writeObject(24, message.npc, Npc.getSchema(), false);
+    	if(message.isNpc != null)
+    		output.writeObject(24, message.isNpc, IsNpc.getSchema(), false);
 
     	
 
@@ -1507,7 +1479,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	if(message.createNpc != null)
-    		output.writeObject(26, message.createNpc, CreateNpc.getSchema(), false);
+    		output.writeObject(26, message.createNpc, CreateSingleton.getSchema(), false);
 
     	
 
@@ -1557,6 +1529,28 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.notifyNpc != null)
+    		output.writeObject(31, message.notifyNpc, NotifySingleton.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.destroyNpc != null)
+    		output.writeObject(32, message.destroyNpc, DestroySingleton.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1568,7 +1562,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 2: return "neighbors";
 
-        	case 3: return "gameCommand";
+        	case 3: return "health";
 
         	case 4: return "chatMessage";
 
@@ -1600,17 +1594,13 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 18: return "registerPlayerObserver";
 
-        	case 19: return "playerMove";
-
-        	case 20: return "playerAttack";
-
         	case 21: return "getNeighbors";
 
         	case 22: return "trackEntity";
 
         	case 23: return "transform";
 
-        	case 24: return "npc";
+        	case 24: return "isNpc";
 
         	case 25: return "vector3";
 
@@ -1623,6 +1613,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 29: return "published";
 
         	case 30: return "entityType";
+
+        	case 31: return "notifyNpc";
+
+        	case 32: return "destroyNpc";
 
             default: return null;
         }
@@ -1642,7 +1636,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("neighbors", 2);
 
-    	__fieldMap.put("gameCommand", 3);
+    	__fieldMap.put("health", 3);
 
     	__fieldMap.put("chatMessage", 4);
 
@@ -1674,17 +1668,13 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("registerPlayerObserver", 18);
 
-    	__fieldMap.put("playerMove", 19);
-
-    	__fieldMap.put("playerAttack", 20);
-
     	__fieldMap.put("getNeighbors", 21);
 
     	__fieldMap.put("trackEntity", 22);
 
     	__fieldMap.put("transform", 23);
 
-    	__fieldMap.put("npc", 24);
+    	__fieldMap.put("isNpc", 24);
 
     	__fieldMap.put("vector3", 25);
 
@@ -1697,6 +1687,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("published", 29);
 
     	__fieldMap.put("entityType", 30);
+
+    	__fieldMap.put("notifyNpc", 31);
+
+    	__fieldMap.put("destroyNpc", 32);
 
     }
    

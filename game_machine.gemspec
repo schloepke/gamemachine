@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'state_machine'
   gem.add_dependency 'ffi'
   gem.add_dependency 'trollop'
+  gem.add_dependency 'active_support'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
