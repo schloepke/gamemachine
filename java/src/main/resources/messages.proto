@@ -248,13 +248,13 @@ message Entity {
   optional Transform transform = 23;
   optional IsNpc isNpc = 24;
   optional Vector3 vector3 = 25;
-  optional CreateSingleton createNpc = 26;
+  optional CreateSingleton createSingleton = 26;
   optional EntityList entityList = 27;
   optional GetEntityLocations getEntityLocations = 28;
   optional bool  published = 29;
   optional string entityType = 30;
-  optional NotifySingleton notifyNpc = 31;
-  optional DestroySingleton destroyNpc = 32;
+  optional NotifySingleton notifySingleton = 31;
+  optional DestroySingleton destroySingleton = 32;
   
 }
 

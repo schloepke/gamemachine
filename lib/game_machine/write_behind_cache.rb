@@ -1,12 +1,15 @@
 module GameMachine
   class WriteBehindCache < Actor::Base
 
+    MAX_WRITES_PER_SECOND = Settings.write_behind_cache.max_writes_per_second
+    WRITE_INTERVAL = Settings.write_behind_cache.write_interval
+
     attr_accessor :write_interval, :max_writes_per_second
     attr_reader :cache, :queue
 
     def post_init(*args)
-      @write_interval = Settings.write_behind_cache.write_interval
-      @max_writes_per_second = Settings.write_behind_cache.max_writes_per_second
+      @write_interval = WRITE_INTERVAL
+      @max_writes_per_second = MAX_WRITES_PER_SECOND
       @store = DataStore.instance
       @cache = {}
       @updates = {}
@@ -15,8 +18,10 @@ module GameMachine
       @last_write = current_time - (120 * 1000)
       @scheduler = get_context.system.scheduler
       @dispatcher = get_context.system.dispatcher
-      schedule_queue_run
-      schedule_queue_stats
+      unless @write_interval == -1 && @max_writes_per_second == -1
+        schedule_queue_run
+        schedule_queue_stats
+      end
     end
 
     def on_receive(message)

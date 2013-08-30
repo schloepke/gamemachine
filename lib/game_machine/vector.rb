@@ -1,12 +1,16 @@
 module GameMachine
   class Vector
 
-    attr :x, :y, :z
+    attr_accessor :x, :y, :z
 
     def initialize(x=0.0,y=0.0,z=0.0)
       @x = x
       @y = y
       @z = z
+    end
+
+    def zero?
+      @x == 0 && @y == 0 && z == 0
     end
 
     def zero

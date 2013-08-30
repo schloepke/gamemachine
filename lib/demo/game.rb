@@ -17,7 +17,7 @@ module Demo
       entity = Entity.new
       entity.set_id(id)
       entity.set_create_singleton(
-        CreateSingleton.new.set_npc_id(id).set_controller(Demo::ZombieController.name)
+        CreateSingleton.new.set_id(id).set_controller(Demo::ZombieController.name)
       )
       entity.set_is_npc(IsNpc.new.set_enabled(true))
       entity.set_vector3(Vector3.new.set_x(x.to_f).set_y(y.to_f).set_z(z.to_f))

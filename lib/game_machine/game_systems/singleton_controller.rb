@@ -2,8 +2,10 @@ module GameMachine
   module GameSystems
     class SingletonController
 
-      def initialize(npc,parent)
-        @npc = npc
+      attr_reader :parent
+      attr_accessor :position, :entity
+      def initialize(entity,parent)
+        @entity = entity
         @parent = parent
         @position = Vector.new
         start
@@ -26,25 +28,25 @@ module GameMachine
       end
 
       def neighbors(type='player')
-        GameMachine::GameSystems::EntityTracking.neighbors_from_grid(@position.x,@position.y,nil,type,nil)
+        GameMachine::GameSystems::EntityTracking.neighbors_from_grid(position.x,position.y,nil,type,nil)
       end
 
-      def track
+      def track(entity_type='npc')
         if @track_entity
-          @track_entity.vector3.set_x(@position.x).
-            set_y(@position.y)
+          @track_entity.vector3.set_x(position.x).
+            set_y(position.y)
         else
           @track_entity = Entity.new.set_track_entity(
             TrackEntity.new.set_value(true)
-          ).set_id(@npc.id)
-          @track_entity.set_entity_type('npc')
+          ).set_id(entity.id)
+          @track_entity.set_entity_type(entity_type)
           @track_entity.set_vector3(
-            Vector3.new.set_x(@position.x).set_y(@position.y)
+            Vector3.new.set_x(position.x).set_y(position.y)
           )
         end
 
         unless @actor_ref
-          @actor_ref = GameMachine::GameSystems::EntityTracking.find.actor
+          @actor_ref = EntityTracking.find.actor
         end
         @actor_ref.tell(@track_entity)
       end

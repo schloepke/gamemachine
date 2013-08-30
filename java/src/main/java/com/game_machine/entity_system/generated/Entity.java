@@ -142,7 +142,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public CreateSingleton createNpc;
+    public CreateSingleton createSingleton;
 
 
 
@@ -162,11 +162,11 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public NotifySingleton notifyNpc;
+    public NotifySingleton notifySingleton;
 
 
 
-    public DestroySingleton destroyNpc;
+    public DestroySingleton destroySingleton;
 
 
     
@@ -299,9 +299,21 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+		if (this.hasDestroySingleton()) {
+			names.add(this.destroySingleton.getClass().getSimpleName());
+		}
 
 
 
+		if (this.hasNotifySingleton()) {
+			names.add(this.notifySingleton.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasCreateSingleton()) {
+			names.add(this.createSingleton.getClass().getSimpleName());
+		}
 
 
 
@@ -759,17 +771,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public CreateSingleton getCreateNpc() {
-		return createNpc;
+	public CreateSingleton getCreateSingleton() {
+		return createSingleton;
 	}
 	
-	public Entity setCreateNpc(CreateSingleton createNpc) {
-		this.createNpc = createNpc;
+	public Entity setCreateSingleton(CreateSingleton createSingleton) {
+		this.createSingleton = createSingleton;
 		return this;
 	}
 	
-	public Boolean hasCreateNpc()  {
-        return createNpc == null ? false : true;
+	public Boolean hasCreateSingleton()  {
+        return createSingleton == null ? false : true;
     }
 
 
@@ -844,34 +856,34 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public NotifySingleton getNotifyNpc() {
-		return notifyNpc;
+	public NotifySingleton getNotifySingleton() {
+		return notifySingleton;
 	}
 	
-	public Entity setNotifyNpc(NotifySingleton notifyNpc) {
-		this.notifyNpc = notifyNpc;
+	public Entity setNotifySingleton(NotifySingleton notifySingleton) {
+		this.notifySingleton = notifySingleton;
 		return this;
 	}
 	
-	public Boolean hasNotifyNpc()  {
-        return notifyNpc == null ? false : true;
+	public Boolean hasNotifySingleton()  {
+        return notifySingleton == null ? false : true;
     }
 
 
 
     
 
-	public DestroySingleton getDestroyNpc() {
-		return destroyNpc;
+	public DestroySingleton getDestroySingleton() {
+		return destroySingleton;
 	}
 	
-	public Entity setDestroyNpc(DestroySingleton destroyNpc) {
-		this.destroyNpc = destroyNpc;
+	public Entity setDestroySingleton(DestroySingleton destroySingleton) {
+		this.destroySingleton = destroySingleton;
 		return this;
 	}
 	
-	public Boolean hasDestroyNpc()  {
-        return destroyNpc == null ? false : true;
+	public Boolean hasDestroySingleton()  {
+        return destroySingleton == null ? false : true;
     }
 
 
@@ -1142,7 +1154,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 26:
 
 
-                	message.createNpc = input.mergeObject(message.createNpc, CreateSingleton.getSchema());
+                	message.createSingleton = input.mergeObject(message.createSingleton, CreateSingleton.getSchema());
                     break;
 
                 	
@@ -1187,7 +1199,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 31:
 
 
-                	message.notifyNpc = input.mergeObject(message.notifyNpc, NotifySingleton.getSchema());
+                	message.notifySingleton = input.mergeObject(message.notifySingleton, NotifySingleton.getSchema());
                     break;
 
                 	
@@ -1196,7 +1208,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
             	case 32:
 
 
-                	message.destroyNpc = input.mergeObject(message.destroyNpc, DestroySingleton.getSchema());
+                	message.destroySingleton = input.mergeObject(message.destroySingleton, DestroySingleton.getSchema());
                     break;
 
                 	
@@ -1474,8 +1486,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.createNpc != null)
-    		output.writeObject(26, message.createNpc, CreateSingleton.getSchema(), false);
+    	if(message.createSingleton != null)
+    		output.writeObject(26, message.createSingleton, CreateSingleton.getSchema(), false);
 
     	
 
@@ -1529,8 +1541,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.notifyNpc != null)
-    		output.writeObject(31, message.notifyNpc, NotifySingleton.getSchema(), false);
+    	if(message.notifySingleton != null)
+    		output.writeObject(31, message.notifySingleton, NotifySingleton.getSchema(), false);
 
     	
 
@@ -1540,8 +1552,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.destroyNpc != null)
-    		output.writeObject(32, message.destroyNpc, DestroySingleton.getSchema(), false);
+    	if(message.destroySingleton != null)
+    		output.writeObject(32, message.destroySingleton, DestroySingleton.getSchema(), false);
 
     	
 
@@ -1600,7 +1612,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 25: return "vector3";
 
-        	case 26: return "createNpc";
+        	case 26: return "createSingleton";
 
         	case 27: return "entityList";
 
@@ -1610,9 +1622,9 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 30: return "entityType";
 
-        	case 31: return "notifyNpc";
+        	case 31: return "notifySingleton";
 
-        	case 32: return "destroyNpc";
+        	case 32: return "destroySingleton";
 
             default: return null;
         }
@@ -1674,7 +1686,7 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("vector3", 25);
 
-    	__fieldMap.put("createNpc", 26);
+    	__fieldMap.put("createSingleton", 26);
 
     	__fieldMap.put("entityList", 27);
 
@@ -1684,9 +1696,9 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("entityType", 30);
 
-    	__fieldMap.put("notifyNpc", 31);
+    	__fieldMap.put("notifySingleton", 31);
 
-    	__fieldMap.put("destroyNpc", 32);
+    	__fieldMap.put("destroySingleton", 32);
 
     }
    

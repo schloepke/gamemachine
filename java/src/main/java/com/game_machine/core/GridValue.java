@@ -20,6 +20,6 @@ public class GridValue {
 		this.y = y;
 		this.z = z;
 		this.entityType = entityType;
-		this.createdAt = System.nanoTime();
+		//this.createdAt = System.nanoTime();
 	}
 }

@@ -100,16 +100,16 @@ module GameMachine
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(10).start
+        Actor::Builder.new(WriteBehindCache).distributed(40).start
         if Settings.mono_enabled
           Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
         end
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,80).start
+        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,40).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,10).start
-        Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(160).start
+        Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(10).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::SingletonManager).start
