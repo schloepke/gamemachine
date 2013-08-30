@@ -12,20 +12,20 @@ module GameMachine
 
       let(:create_singleton) do
         Entity.new.set_create_singleton(
-          CreateSingleton.new.set_npc_id('npc1').
+          CreateSingleton.new.set_id('npc1').
           set_controller('GameMachine::GameSystems::SingletonController')
         ).set_id('entity')
       end
 
       let(:notify_singleton) do
         Entity.new.set_notify_singleton(
-          NotifySingleton.new.set_npc_id('npc1')
+          NotifySingleton.new.set_id('npc1')
         ).set_id('entity')
       end
 
       let(:destroy_singleton) do
         Entity.new.set_destroy_singleton(
-          DestroySingleton.new.set_npc_id('npc1')
+          DestroySingleton.new.set_id('npc1')
         ).set_id('entity')
       end
 

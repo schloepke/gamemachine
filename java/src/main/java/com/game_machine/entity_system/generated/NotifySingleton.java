@@ -50,7 +50,7 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
 
 
 
-    public String npcId;
+    public String id;
 
 
     
@@ -68,17 +68,17 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
 
     
 
-	public String getNpcId() {
-		return npcId;
+	public String getId() {
+		return id;
 	}
 	
-	public NotifySingleton setNpcId(String npcId) {
-		this.npcId = npcId;
+	public NotifySingleton setId(String id) {
+		this.id = id;
 		return this;
 	}
 	
-	public Boolean hasNpcId()  {
-        return npcId == null ? false : true;
+	public Boolean hasId()  {
+        return id == null ? false : true;
     }
 
 
@@ -142,7 +142,7 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
             	case 1:
 
 
-                	message.npcId = input.readString();
+                	message.id = input.readString();
                 	break;
 
                 	
@@ -161,14 +161,14 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
 
     	
 
-    	if(message.npcId == null)
+    	if(message.id == null)
             throw new UninitializedMessageException(message);
 
     	
 
 
-    	if(message.npcId != null)
-            output.writeString(1, message.npcId, false);
+    	if(message.id != null)
+            output.writeString(1, message.id, false);
 
     	
 
@@ -181,7 +181,7 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
         switch(number)
         {
 
-        	case 1: return "npcId";
+        	case 1: return "id";
 
             default: return null;
         }
@@ -197,7 +197,7 @@ public final class NotifySingleton  implements Externalizable, Message<NotifySin
     static
     {
 
-    	__fieldMap.put("npcId", 1);
+    	__fieldMap.put("id", 1);
 
     }
    

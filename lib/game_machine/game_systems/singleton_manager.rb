@@ -24,13 +24,13 @@ module GameMachine
             @actor_refs.each {|actor_ref| actor_ref.tell('update',nil)}
           end
         elsif message.has_notify_singleton
-          ref = SingletonRouter.find_distributed(message.notify_singleton.npc_id)
+          ref = SingletonRouter.find_distributed(message.notify_singleton.id)
           ref.tell(message)
         elsif message.has_create_singleton
-          ref = SingletonRouter.find_distributed(message.create_singleton.npc_id)
+          ref = SingletonRouter.find_distributed(message.create_singleton.id)
           ref.tell(message)
         elsif message.has_destroy_singleton
-          ref = SingletonRouter.find_distributed(message.destroy_singleton.npc_id)
+          ref = SingletonRouter.find_distributed(message.destroy_singleton.id)
           ref.tell(message)
         else
           unhandled(message)

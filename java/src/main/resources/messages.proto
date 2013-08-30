@@ -134,15 +134,15 @@ message IsNpc {
 }
 
 message DestroySingleton {
-  required string npcId = 1;
+  required string id = 1;
 }
 
 message NotifySingleton {
-  required string npcId = 1;
+  required string id = 1;
 }
 
 message CreateSingleton {
-  required string npcId = 1;
+  required string id = 1;
   required string controller = 2;
 }
 
