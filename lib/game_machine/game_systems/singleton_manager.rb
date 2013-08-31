@@ -1,7 +1,7 @@
 module GameMachine
   module GameSystems
     
-    class SingletonManager < GameMachine::Actor::Base
+    class SingletonManager < Actor::Base
       
       aspect %w(CreateSingleton)
       aspect %w(NotifySingleton)
