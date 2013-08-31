@@ -41,7 +41,7 @@ module GameMachine
       def on_receive(message)
         if message.is_a?(String)
           if message == 'update'
-            send_in_slices
+            send_at_once
           end
         elsif message.has_notify_singleton
           ref = SingletonRouter.find_distributed(message.notify_singleton.id)

@@ -28,7 +28,7 @@ module GameMachine
       end
 
       def neighbors(type='player')
-        GameMachine::GameSystems::EntityTracking.neighbors_from_grid(position.x,position.y,nil,type,nil)
+        GameMachine::GameSystems::EntityTracking.neighbors_from_grid(position.x,position.y,type)
       end
 
       def track(entity_type='npc')

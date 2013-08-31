@@ -2,7 +2,6 @@ module GameMachine
   module GameSystems
     class EntityTracking < Actor::Base
 
-      DEFAULT_SEARCH_RADIUS = Settings.world_grid_cell_size
       GRID =  JavaLib::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
@@ -72,9 +71,7 @@ module GameMachine
         search_results = self.class.neighbors_from_grid(
           message.get_neighbors.vector3.x,
           message.get_neighbors.vector3.y,
-          message.get_neighbors.search_radius,
-          type,
-          nil
+          type
         )
        
         neighbors = {:players => [], :npcs => []}
@@ -112,12 +109,9 @@ module GameMachine
         sender.tell(entity,self)
       end
 
-      def self.neighbors_from_grid(x,y,search_radius,neighbor_type,caller_id)
-        if search_radius.nil?
-          search_radius = DEFAULT_SEARCH_RADIUS
-        end
+      def self.neighbors_from_grid(x,y,neighbor_type)
 
-        GRID.neighbors(x,y,search_radius,neighbor_type,caller_id)
+        GRID.neighbors(x,y,neighbor_type)
       end
 
     end

@@ -13,9 +13,14 @@ public class Grid {
 	private float convFactor;
 	private int width;
 	private int cellCount;
+	private long lastNeighborCall;
+	private long lastNeighborDelta;
+	
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
+	private ConcurrentHashMap<Integer, ArrayList<GridValue>> neighborsCache = new ConcurrentHashMap<Integer, ArrayList<GridValue>>();
+	
 
 	public Grid(int max, int cellSize) {
 		this.max = max;
@@ -23,11 +28,16 @@ public class Grid {
 		this.convFactor = 1.0f / this.cellSize;
 		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
+		lastNeighborCall = System.currentTimeMillis();
 	}
 
-	public Set<Integer> cellsWithinRadius(float x, float y, int radius) {
-		int cellHash = hash(x,y);
-		int key = cellHash + radius;
+	public Set<Integer> cellsWithinRadius(float x, float y) {
+		int cellHash = hash(x, y);
+		return cellsWithinRadius(cellHash,x,y);
+	}
+	
+	public Set<Integer> cellsWithinRadius(int cellHash, float x, float y) {
+		int key = cellHash;
 		Set<Integer> cells = cellsCache.get(key);
 		if (cells != null) {
 			return cells;
@@ -35,16 +45,16 @@ public class Grid {
 		cells = new HashSet<Integer>();
 
 		int offset = this.cellSize;
-		
+
 		int startX = (int) (x - offset);
 		int startY = (int) (y - offset);
 		int endX = (int) (x + offset);
 		int endY = (int) (y + offset);
 
-		for (int rowNum = startX; rowNum <= endX; rowNum+=this.cellSize) {
-			for (int colNum = startY; colNum <= endY; colNum+=this.cellSize) {
+		for (int rowNum = startX; rowNum <= endX; rowNum += this.cellSize) {
+			for (int colNum = startY; colNum <= endY; colNum += this.cellSize) {
 				if (rowNum >= 0 && colNum >= 0) {
-					cells.add(hash(rowNum,colNum));
+					cells.add(hash(rowNum, colNum));
 				}
 			}
 		}
@@ -52,10 +62,25 @@ public class Grid {
 		return cells;
 	}
 
-	public ArrayList<GridValue> neighbors(float x, float y, int radius, String entityType, String callerId) {
+	public ArrayList<GridValue> neighbors(float x, float y, String entityType) {
+		int myCell = hash(x, y);
+		return neighbors(myCell,x,y,entityType);
+	}
+	
+	public ArrayList<GridValue> neighbors(int myCell, float x, float y, String entityType) {
+		ArrayList<GridValue> result;
+
+		lastNeighborDelta = System.currentTimeMillis() - lastNeighborCall;
+		if (lastNeighborDelta <= 20) {
+			result = neighborsCache.get(myCell);
+			if (result != null) {
+				return result;
+			}
+		}
+
 		Collection<GridValue> gridValues;
-		ArrayList<GridValue> result = new ArrayList<GridValue>();
-		Set<Integer> cells = cellsWithinRadius(x, y, radius);
+		result = new ArrayList<GridValue>();
+		Set<Integer> cells = cellsWithinRadius(myCell,x,y);
 		for (int cell : cells) {
 			gridValues = gridValuesInCell(cell);
 			if (gridValues != null) {
@@ -68,13 +93,15 @@ public class Grid {
 				}
 			}
 		}
+		neighborsCache.put(myCell, result);
+		lastNeighborCall = System.currentTimeMillis();
 		return result;
 	}
 
 	public Collection<GridValue> gridValuesInCell(int cell) {
-		ConcurrentHashMap<String, GridValue> points = cells.get(cell);
-		if (points != null) {
-			return points.values();
+		ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(cell);
+		if (cellGridValues != null) {
+			return cellGridValues.values();
 		} else {
 			return null;
 		}
@@ -88,9 +115,9 @@ public class Grid {
 		GridValue indexValue = objectIndex.get(id);
 		if (indexValue != null) {
 			int cell = indexValue.cell;
-			ConcurrentHashMap<String, GridValue> cellValue = cells.get(cell);
-			if (cellValue != null) {
-				cellValue.remove(id);
+			ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(cell);
+			if (cellGridValues != null) {
+				cellGridValues.remove(id);
 			}
 			objectIndex.remove(id);
 		}
@@ -124,10 +151,13 @@ public class Grid {
 	}
 
 	public int hash2(float x, float y) {
-		return (int) (Math.floor(x / this.cellSize) + Math.floor(y / this.cellSize) * width);
+		return (int) (Math.floor(x / this.cellSize) + Math.floor(y
+				/ this.cellSize)
+				* width);
 	}
 
 	public int hash(float x, float y) {
-		return (int) ((x * this.convFactor)) + (int) ((y * this.convFactor)) * this.width;
+		return (int) ((x * this.convFactor)) + (int) ((y * this.convFactor))
+				* this.width;
 	}
 }
