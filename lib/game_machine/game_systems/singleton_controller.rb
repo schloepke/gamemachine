@@ -29,23 +29,7 @@ module GameMachine
       end
 
       def track(entity_type='npc')
-        if @track_entity
-          @track_entity.vector3.set_x(position.x).
-            set_y(position.y)
-        else
-          @track_entity = Entity.new.set_track_entity(
-            TrackEntity.new.set_value(true)
-          ).set_id(entity.id)
-          @track_entity.set_entity_type(entity_type)
-          @track_entity.set_vector3(
-            Vector3.new.set_x(position.x).set_y(position.y)
-          )
-        end
-
-        unless @actor_ref
-          @actor_ref = EntityTracking.find.actor
-        end
-        @actor_ref.tell(@track_entity)
+        GameMachine::GameSystems::EntityTracking::GRID.set(entity.id,position.x,position.y,position.z,entity_type)
       end
 
     end

@@ -56,7 +56,7 @@ development:
       udp:
         port: 8101
         host: localhost
-        enabled: true
+        enabled: false
       udt:
         port: 8201
         host: localhost

@@ -25,7 +25,7 @@ module Demo
 
     def save
       if @update_count >= 100
-        #GameMachine::ObjectDb.put(entity)
+        GameMachine::ObjectDb.put(entity)
         @update_count = 0
       end
     end

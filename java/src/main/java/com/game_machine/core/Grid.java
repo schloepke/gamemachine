@@ -14,6 +14,7 @@ public class Grid {
 	private int width;
 	private int cellCount;
 	
+	private ConcurrentHashMap<String, GridValue> deltaIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
@@ -109,6 +110,21 @@ public class Grid {
 		}
 	}
 
+	public void updateFromDelta(GridValue[] gridValues) {
+		for (GridValue gridValue : gridValues) {
+			if (gridValue != null) {
+				objectIndex.put(gridValue.id, gridValue);
+			}
+		}
+	}
+	
+	public GridValue[] currentDelta() {
+		GridValue[] a = new GridValue[deltaIndex.size()];
+		deltaIndex.values().toArray(a);
+		deltaIndex.clear();
+		return a;
+	}
+	
 	public GridValue get(String id) {
 		return objectIndex.get(id);
 	}
@@ -124,7 +140,7 @@ public class Grid {
 			objectIndex.remove(id);
 		}
 	}
-
+	
 	public Boolean set(String id, float x, float y, float z, String entityType) {
 		GridValue oldValue = objectIndex.get(id);
 
@@ -148,6 +164,7 @@ public class Grid {
 		cells.get(cell).put(id, gridValue);
 
 		objectIndex.put(id, gridValue);
+		deltaIndex.put(id, gridValue);
 
 		return true;
 	}

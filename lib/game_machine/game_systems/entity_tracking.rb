@@ -8,9 +8,8 @@ module GameMachine
 
       attr_reader :grid
 
+
       def post_init
-        @scheduler = get_context.system.scheduler
-        @dispatcher = get_context.system.dispatcher
         @entity_updates = []
         @grid = GRID
         @paths = {}
@@ -30,29 +29,13 @@ module GameMachine
 
           if message.track_entity
             set_entity_location(message)
-
-            unless message.published
-              publish_entity_location_update(message)
-            end
           end
-
-
-        elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
-          GameMachine.logger.debug "EntityTracking Subscribed"
         else
           unhandled(message)
         end
       end
 
       private
-
-      def publish_entity_location_update(entity)
-        entity.set_published(true)
-        GameMachine::ClusterMonitor.remote_members.keys.each do |address|
-          @paths[address] ||= "#{address}#{self.class.local_path(self.class.name)}"
-          Actor::Ref.new(@paths[address],self.class.name).tell(entity)
-        end
-      end
 
       def set_entity_location(entity)
         vector = entity.vector3

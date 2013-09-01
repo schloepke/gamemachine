@@ -1,9 +1,14 @@
 package com.game_machine.core;
 
-import com.game_machine.entity_system.generated.Entity;
+import java.io.Serializable;
 
-public class GridValue {
 
+public class GridValue implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -2653791674585495109L;
 	public final String id;
 	public final int cell;
 	public final float x;
