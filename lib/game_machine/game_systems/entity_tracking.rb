@@ -110,7 +110,6 @@ module GameMachine
       end
 
       def self.neighbors_from_grid(x,y,neighbor_type)
-
         GRID.neighbors(x,y,neighbor_type)
       end
 

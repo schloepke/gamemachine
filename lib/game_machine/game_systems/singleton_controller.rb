@@ -1,12 +1,10 @@
 module GameMachine
   module GameSystems
-    class SingletonController
+    class SingletonController < Actor::Base
 
-      attr_reader :parent
       attr_accessor :position, :entity
-      def initialize(entity,parent)
-        @entity = entity
-        @parent = parent
+      def post_init(*args)
+        @entity = args.first
         @position = Vector.new
         start
       end
@@ -16,7 +14,6 @@ module GameMachine
       end
 
       def on_receive(message)
-
       end
 
       def update

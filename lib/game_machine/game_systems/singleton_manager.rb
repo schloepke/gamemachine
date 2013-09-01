@@ -18,9 +18,9 @@ module GameMachine
       end
 
       def create_singleton_routers(router_count)
-        GameMachine::Actor::Builder.new(SingletonRouter).distributed(
-          router_count
-        ).start
+          GameMachine::Actor::Builder.new(SingletonRouter).distributed(
+           router_count
+          ).start
       end
 
       def send_in_slices
@@ -44,13 +44,13 @@ module GameMachine
             send_at_once
           end
         elsif message.has_notify_singleton
-          ref = SingletonRouter.find_distributed(message.notify_singleton.id)
+          ref = SingletonRouter.find_distributed_local(message.notify_singleton.id)
           ref.tell(message)
         elsif message.has_create_singleton
-          ref = SingletonRouter.find_distributed(message.create_singleton.id)
+          ref = SingletonRouter.find_distributed_local(message.create_singleton.id)
           ref.tell(message)
         elsif message.has_destroy_singleton
-          ref = SingletonRouter.find_distributed(message.destroy_singleton.id)
+          ref = SingletonRouter.find_distributed_local(message.destroy_singleton.id)
           ref.tell(message)
         else
           unhandled(message)

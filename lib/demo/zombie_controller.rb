@@ -10,8 +10,9 @@ module Demo
     end
 
     def update
-      if neighbors('player').size >= 1
-        grid_value = neighbors.get(0)
+      players = neighbors('player')
+      if players.size >= 1
+        grid_value = players.get(0)
         @target_position.set(grid_value.x,grid_value.y,grid_value.z)
         @has_target = true
       end
@@ -40,7 +41,7 @@ module Demo
     end
 
     def on_receive(message)
-
+      update
     end
 
   end

@@ -13,13 +13,12 @@ public class Grid {
 	private float convFactor;
 	private int width;
 	private int cellCount;
-	private long lastNeighborCall;
-	private long lastNeighborDelta;
 	
 	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
-	private ConcurrentHashMap<Integer, ArrayList<GridValue>> neighborsCache = new ConcurrentHashMap<Integer, ArrayList<GridValue>>();
+	private ConcurrentHashMap<String, ArrayList<GridValue>> neighborsCache = new ConcurrentHashMap<String, ArrayList<GridValue>>();
+	private ConcurrentHashMap<String, Long> lastNeighborsCall = new ConcurrentHashMap<String, Long>();
 	
 
 	public Grid(int max, int cellSize) {
@@ -28,7 +27,6 @@ public class Grid {
 		this.convFactor = 1.0f / this.cellSize;
 		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
-		lastNeighborCall = System.currentTimeMillis();
 	}
 
 	public Set<Integer> cellsWithinRadius(float x, float y) {
@@ -69,14 +67,18 @@ public class Grid {
 	
 	public ArrayList<GridValue> neighbors(int myCell, float x, float y, String entityType) {
 		ArrayList<GridValue> result;
-
-		lastNeighborDelta = System.currentTimeMillis() - lastNeighborCall;
-		if (lastNeighborDelta <= 20) {
-			result = neighborsCache.get(myCell);
-			if (result != null) {
-				return result;
+		/*String neighborsKey = String.valueOf(myCell) + entityType;
+		Long lastNeighborCall = lastNeighborsCall.get(neighborsKey);
+		
+		if (lastNeighborCall != null) {
+			long lastNeighborDelta = System.currentTimeMillis() - lastNeighborCall;
+			if (lastNeighborDelta <= 20) {
+				result = neighborsCache.get(neighborsKey);
+				if (result != null) {
+					return result;
+				}
 			}
-		}
+		}*/
 
 		Collection<GridValue> gridValues;
 		result = new ArrayList<GridValue>();
@@ -93,8 +95,8 @@ public class Grid {
 				}
 			}
 		}
-		neighborsCache.put(myCell, result);
-		lastNeighborCall = System.currentTimeMillis();
+		/*neighborsCache.put(neighborsKey, result);
+		lastNeighborsCall.put(neighborsKey, System.currentTimeMillis());*/
 		return result;
 	}
 
