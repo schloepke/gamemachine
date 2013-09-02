@@ -13,6 +13,12 @@ module GameMachine
       connect
     end
 
+    def set_store(store_name)
+      @store = nil
+      @store_name = store_name
+      connect
+    end
+
     private
 
     def connect
@@ -22,6 +28,11 @@ module GameMachine
 
     def connect_couchbase
       @store = DataStores::Couchbase.new
+      @store.connect
+    end
+
+    def connect_mapdb
+      @store = DataStores::Mapdb.new
       @store.connect
     end
 

@@ -150,10 +150,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
-    public GetEntityLocations getEntityLocations;
-
-
-
     public Boolean published;
 
 
@@ -167,6 +163,26 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     public DestroySingleton destroySingleton;
+
+
+
+    public Effect effect;
+
+
+
+    public EffectList effectList;
+
+
+
+    public Attack attack;
+
+
+
+    public CombatAbility combatAbility;
+
+
+
+    public PlayerAuthenticated playerAuthenticated;
 
 
     
@@ -189,7 +205,27 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+		if (this.hasEffect()) {
+			names.add(this.effect.getClass().getSimpleName());
+		}
 
+
+
+		if (this.hasEffectList()) {
+			names.add(this.effectList.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasCombatAbility()) {
+			names.add(this.combatAbility.getClass().getSimpleName());
+		}
+
+
+
+		if (this.hasAttack()) {
+			names.add(this.attack.getClass().getSimpleName());
+		}
 
 
 
@@ -208,6 +244,12 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+
+
+
+		if (this.hasPlayerAuthenticated()) {
+			names.add(this.playerAuthenticated.getClass().getSimpleName());
+		}
 
 
 
@@ -353,12 +395,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 		if (this.hasGetNeighbors()) {
 			names.add(this.getNeighbors.getClass().getSimpleName());
-		}
-
-
-
-		if (this.hasGetEntityLocations()) {
-			names.add(this.getEntityLocations.getClass().getSimpleName());
 		}
 
 
@@ -805,23 +841,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     
 
-	public GetEntityLocations getGetEntityLocations() {
-		return getEntityLocations;
-	}
-	
-	public Entity setGetEntityLocations(GetEntityLocations getEntityLocations) {
-		this.getEntityLocations = getEntityLocations;
-		return this;
-	}
-	
-	public Boolean hasGetEntityLocations()  {
-        return getEntityLocations == null ? false : true;
-    }
-
-
-
-    
-
 	public Boolean getPublished() {
 		return published;
 	}
@@ -884,6 +903,91 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 	
 	public Boolean hasDestroySingleton()  {
         return destroySingleton == null ? false : true;
+    }
+
+
+
+    
+
+	public Effect getEffect() {
+		return effect;
+	}
+	
+	public Entity setEffect(Effect effect) {
+		this.effect = effect;
+		return this;
+	}
+	
+	public Boolean hasEffect()  {
+        return effect == null ? false : true;
+    }
+
+
+
+    
+
+	public EffectList getEffectList() {
+		return effectList;
+	}
+	
+	public Entity setEffectList(EffectList effectList) {
+		this.effectList = effectList;
+		return this;
+	}
+	
+	public Boolean hasEffectList()  {
+        return effectList == null ? false : true;
+    }
+
+
+
+    
+
+	public Attack getAttack() {
+		return attack;
+	}
+	
+	public Entity setAttack(Attack attack) {
+		this.attack = attack;
+		return this;
+	}
+	
+	public Boolean hasAttack()  {
+        return attack == null ? false : true;
+    }
+
+
+
+    
+
+	public CombatAbility getCombatAbility() {
+		return combatAbility;
+	}
+	
+	public Entity setCombatAbility(CombatAbility combatAbility) {
+		this.combatAbility = combatAbility;
+		return this;
+	}
+	
+	public Boolean hasCombatAbility()  {
+        return combatAbility == null ? false : true;
+    }
+
+
+
+    
+
+	public PlayerAuthenticated getPlayerAuthenticated() {
+		return playerAuthenticated;
+	}
+	
+	public Entity setPlayerAuthenticated(PlayerAuthenticated playerAuthenticated) {
+		this.playerAuthenticated = playerAuthenticated;
+		return this;
+	}
+	
+	public Boolean hasPlayerAuthenticated()  {
+        return playerAuthenticated == null ? false : true;
     }
 
 
@@ -1169,15 +1273,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
                 	
 
 
-            	case 28:
-
-
-                	message.getEntityLocations = input.mergeObject(message.getEntityLocations, GetEntityLocations.getSchema());
-                    break;
-
-                	
-
-
             	case 29:
 
 
@@ -1209,6 +1304,51 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.destroySingleton = input.mergeObject(message.destroySingleton, DestroySingleton.getSchema());
+                    break;
+
+                	
+
+
+            	case 33:
+
+
+                	message.effect = input.mergeObject(message.effect, Effect.getSchema());
+                    break;
+
+                	
+
+
+            	case 34:
+
+
+                	message.effectList = input.mergeObject(message.effectList, EffectList.getSchema());
+                    break;
+
+                	
+
+
+            	case 35:
+
+
+                	message.attack = input.mergeObject(message.attack, Attack.getSchema());
+                    break;
+
+                	
+
+
+            	case 36:
+
+
+                	message.combatAbility = input.mergeObject(message.combatAbility, CombatAbility.getSchema());
+                    break;
+
+                	
+
+
+            	case 37:
+
+
+                	message.playerAuthenticated = input.mergeObject(message.playerAuthenticated, PlayerAuthenticated.getSchema());
                     break;
 
                 	
@@ -1508,17 +1648,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	
 
 
-    	if(message.getEntityLocations != null)
-    		output.writeObject(28, message.getEntityLocations, GetEntityLocations.getSchema(), false);
-
-    	
-
-
-    	
-
-    	
-
-
     	if(message.published != null)
             output.writeBool(29, message.published, false);
 
@@ -1554,6 +1683,61 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	if(message.destroySingleton != null)
     		output.writeObject(32, message.destroySingleton, DestroySingleton.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.effect != null)
+    		output.writeObject(33, message.effect, Effect.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.effectList != null)
+    		output.writeObject(34, message.effectList, EffectList.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.attack != null)
+    		output.writeObject(35, message.attack, Attack.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.combatAbility != null)
+    		output.writeObject(36, message.combatAbility, CombatAbility.getSchema(), false);
+
+    	
+
+
+    	
+
+    	
+
+
+    	if(message.playerAuthenticated != null)
+    		output.writeObject(37, message.playerAuthenticated, PlayerAuthenticated.getSchema(), false);
 
     	
 
@@ -1616,8 +1800,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
         	case 27: return "entityList";
 
-        	case 28: return "getEntityLocations";
-
         	case 29: return "published";
 
         	case 30: return "entityType";
@@ -1625,6 +1807,16 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 31: return "notifySingleton";
 
         	case 32: return "destroySingleton";
+
+        	case 33: return "effect";
+
+        	case 34: return "effectList";
+
+        	case 35: return "attack";
+
+        	case 36: return "combatAbility";
+
+        	case 37: return "playerAuthenticated";
 
             default: return null;
         }
@@ -1690,8 +1882,6 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
     	__fieldMap.put("entityList", 27);
 
-    	__fieldMap.put("getEntityLocations", 28);
-
     	__fieldMap.put("published", 29);
 
     	__fieldMap.put("entityType", 30);
@@ -1699,6 +1889,16 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("notifySingleton", 31);
 
     	__fieldMap.put("destroySingleton", 32);
+
+    	__fieldMap.put("effect", 33);
+
+    	__fieldMap.put("effectList", 34);
+
+    	__fieldMap.put("attack", 35);
+
+    	__fieldMap.put("combatAbility", 36);
+
+    	__fieldMap.put("playerAuthenticated", 37);
 
     }
    

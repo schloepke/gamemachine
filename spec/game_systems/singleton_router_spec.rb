@@ -31,12 +31,13 @@ module GameMachine
         ).set_id('entity')
       end
 
+      let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
       describe "#on_receive" do
 
         context "receives a CreateSingleton message" do
-          it "creates an singleton controller" do
-            expect(SingletonController).to receive(:new).with(create_singleton,anything)
+          it "creates an singleton controller actor" do
+            expect(subject).to receive(:create_child_controller).with(create_singleton)
             subject.on_receive(create_singleton)
           end
         end
@@ -69,7 +70,7 @@ module GameMachine
             subject.on_receive(create_singleton)
             subject.on_receive(destroy_singleton)
             expect(GameMachine.logger).to receive(:error).
-              with("Npc Controller for singleton1 not found")
+              with("Singleton Controller for singleton1 not found")
             subject.on_receive(notify_singleton)
           end
         end
@@ -77,7 +78,8 @@ module GameMachine
         context "receives a DestroySingleton message" do
           it "calls destroy on the singleton controller with message" do
             subject.on_receive(create_singleton)
-            expect_any_instance_of(SingletonController).to receive(:destroy).with(destroy_singleton)
+            expect(subject).to receive(:destroy_child_controller).
+              with(destroy_singleton)
             subject.on_receive(destroy_singleton)
           end
         end
@@ -85,7 +87,8 @@ module GameMachine
         context "receives an update message" do
           it "calls update on the singleton controller" do
             subject.on_receive(create_singleton)
-            expect_any_instance_of(SingletonController).to receive(:update)
+            expect_any_instance_of(SingletonController).to receive(:on_receive).
+              with('update')
             subject.on_receive('update')
           end
         end

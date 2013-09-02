@@ -50,19 +50,11 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
 
 
 
-    public String attackerId;
+    public String attacker;
 
 
 
-    public Integer attackerType;
-
-
-
-    public List<String> npcId;
-
-
-
-    public List<String> playerId;
+    public String target;
 
 
 
@@ -84,93 +76,35 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
 
     
 
-	public String getAttackerId() {
-		return attackerId;
+	public String getAttacker() {
+		return attacker;
 	}
 	
-	public Attack setAttackerId(String attackerId) {
-		this.attackerId = attackerId;
+	public Attack setAttacker(String attacker) {
+		this.attacker = attacker;
 		return this;
 	}
 	
-	public Boolean hasAttackerId()  {
-        return attackerId == null ? false : true;
+	public Boolean hasAttacker()  {
+        return attacker == null ? false : true;
     }
 
 
 
     
 
-	public Integer getAttackerType() {
-		return attackerType;
+	public String getTarget() {
+		return target;
 	}
 	
-	public Attack setAttackerType(Integer attackerType) {
-		this.attackerType = attackerType;
+	public Attack setTarget(String target) {
+		this.target = target;
 		return this;
 	}
 	
-	public Boolean hasAttackerType()  {
-        return attackerType == null ? false : true;
+	public Boolean hasTarget()  {
+        return target == null ? false : true;
     }
-
-
-
-    
-
-	public List<String> getNpcIdList() {
-		return npcId;
-	}
-
-	public Attack setNpcIdList(List<String> npcId) {
-		this.npcId = npcId;
-		return this;
-	}
-
-	public String getNpcId(int index)  {
-        return npcId == null ? null : npcId.get(index);
-    }
-
-    public int getNpcIdCount()  {
-        return npcId == null ? 0 : npcId.size();
-    }
-
-    public Attack addNpcId(String npcId)  {
-        if(this.npcId == null)
-            this.npcId = new ArrayList<String>();
-        this.npcId.add(npcId);
-        return this;
-    }
-    
-
-
-
-    
-
-	public List<String> getPlayerIdList() {
-		return playerId;
-	}
-
-	public Attack setPlayerIdList(List<String> playerId) {
-		this.playerId = playerId;
-		return this;
-	}
-
-	public String getPlayerId(int index)  {
-        return playerId == null ? null : playerId.get(index);
-    }
-
-    public int getPlayerIdCount()  {
-        return playerId == null ? 0 : playerId.size();
-    }
-
-    public Attack addPlayerId(String playerId)  {
-        if(this.playerId == null)
-            this.playerId = new ArrayList<String>();
-        this.playerId.add(playerId);
-        return this;
-    }
-    
 
 
 
@@ -250,7 +184,7 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
             	case 1:
 
 
-                	message.attackerId = input.readString();
+                	message.attacker = input.readString();
                 	break;
 
                 	
@@ -259,33 +193,13 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
             	case 2:
 
 
-                	message.attackerType = input.readInt32();
+                	message.target = input.readString();
                 	break;
 
                 	
 
 
             	case 3:
-
-            		if(message.npcId == null)
-                        message.npcId = new ArrayList<String>();
-
-                	message.npcId.add(input.readString());
-
-                    break;
-
-
-            	case 4:
-
-            		if(message.playerId == null)
-                        message.playerId = new ArrayList<String>();
-
-                	message.playerId.add(input.readString());
-
-                    break;
-
-
-            	case 5:
 
 
                 	message.combatAbilityId = input.readInt32();
@@ -307,64 +221,30 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
 
     	
 
-    	if(message.attackerId == null)
+    	if(message.attacker == null)
             throw new UninitializedMessageException(message);
 
     	
 
 
-    	if(message.attackerId != null)
-            output.writeString(1, message.attackerId, false);
+    	if(message.attacker != null)
+            output.writeString(1, message.attacker, false);
 
     	
 
 
     	
 
-    	if(message.attackerType == null)
+    	if(message.target == null)
             throw new UninitializedMessageException(message);
 
     	
 
 
-    	if(message.attackerType != null)
-            output.writeInt32(2, message.attackerType, false);
+    	if(message.target != null)
+            output.writeString(2, message.target, false);
 
     	
-
-
-    	
-
-    	
-
-    	if(message.npcId != null)
-        {
-            for(String npcId : message.npcId)
-            {
-                if(npcId != null) {
-
-            		output.writeString(3, npcId, true);
-
-    			}
-            }
-        }
-
-
-    	
-
-    	
-
-    	if(message.playerId != null)
-        {
-            for(String playerId : message.playerId)
-            {
-                if(playerId != null) {
-
-            		output.writeString(4, playerId, true);
-
-    			}
-            }
-        }
 
 
     	
@@ -376,7 +256,7 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
 
 
     	if(message.combatAbilityId != null)
-            output.writeInt32(5, message.combatAbilityId, false);
+            output.writeInt32(3, message.combatAbilityId, false);
 
     	
 
@@ -389,15 +269,11 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
         switch(number)
         {
 
-        	case 1: return "attackerId";
+        	case 1: return "attacker";
 
-        	case 2: return "attackerType";
+        	case 2: return "target";
 
-        	case 3: return "npcId";
-
-        	case 4: return "playerId";
-
-        	case 5: return "combatAbilityId";
+        	case 3: return "combatAbilityId";
 
             default: return null;
         }
@@ -413,15 +289,11 @@ public final class Attack  implements Externalizable, Message<Attack>, Schema<At
     static
     {
 
-    	__fieldMap.put("attackerId", 1);
+    	__fieldMap.put("attacker", 1);
 
-    	__fieldMap.put("attackerType", 2);
+    	__fieldMap.put("target", 2);
 
-    	__fieldMap.put("npcId", 3);
-
-    	__fieldMap.put("playerId", 4);
-
-    	__fieldMap.put("combatAbilityId", 5);
+    	__fieldMap.put("combatAbilityId", 3);
 
     }
    

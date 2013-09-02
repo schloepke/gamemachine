@@ -13,17 +13,13 @@ module GameMachine
         @entity_updates = []
         @grid = GRID
         @paths = {}
+        @width = GRID.get_width
+        @cell_count = GRID.get_cell_count
       end
 
       def on_receive(message)
-
-        # Ignore our own publishes
-        if get_sender == get_self
-          return
-        end
-
         if message.is_a?(Entity)
-          if message.get_neighbors && !message.published
+          if message.get_neighbors
             send_neighbors(message)
           end
 
@@ -44,6 +40,8 @@ module GameMachine
       end
 
       def location_entity(grid_value)
+        #x = grid_value.x - ((grid_value.x / @width) * @width)
+        #y = grid_value.y - ((grid_value.y / @width) * @width)
         Entity.new.set_id(grid_value.id).set_vector3(
           Vector3.new.set_xi(grid_value.x.to_i).set_yi(grid_value.y.to_i)
         )
@@ -51,11 +49,9 @@ module GameMachine
 
       def send_neighbors(message)
         type = message.get_neighbors.neighbor_type
-        search_results = self.class.neighbors_from_grid(
-          message.get_neighbors.vector3.x,
-          message.get_neighbors.vector3.y,
-          type
-        )
+        x = message.get_neighbors.vector3.x
+        y = message.get_neighbors.vector3.y
+        search_results = self.class.neighbors_from_grid(x,y,type)
        
         neighbors = {:players => [], :npcs => []}
         search_results.each do |grid_value|
@@ -73,7 +69,9 @@ module GameMachine
         if message.has_player
           send_neighbors_to_player(neighbors,message.player)
         else
-          send_neighbors_to_sender(neighbors,message)
+          neighbors.each_slice(100) do |slice|
+            send_neighbors_to_sender(slice,message)
+          end
         end
       end
 

@@ -10,6 +10,14 @@ module GameMachine
         alias_method :apply, :new
         alias_method :create, :new
 
+        def set_player_controller
+          @player_controller = self
+        end
+
+        def player_controller
+          @player_controller
+        end
+
         def aspects
           @aspects ||= []
         end

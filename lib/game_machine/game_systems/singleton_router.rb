@@ -8,6 +8,15 @@ module GameMachine
         @singleton_controllers = {}
       end
 
+      def destroy_child_controller(message)
+        id = message.destroy_singleton.id
+        if controller = @singleton_controllers.fetch(id,nil)
+          controller.tell(JavaLib::PoisonPill.get_instance,get_self)
+          @singleton_controllers.delete(id)
+        else
+          GameMachine.logger.error("Singleton Controller for #{id} not found")
+        end
+      end
 
       def create_child_controller(message)
         id = message.create_singleton.id
@@ -36,12 +45,7 @@ module GameMachine
           elsif message.has_create_singleton
             create_child_controller(message)
           elsif message.has_destroy_singleton
-            if singleton_controller = @singleton_controllers.fetch(message.destroy_singleton.id,nil)
-              singleton_controller.destroy(message)
-              @singleton_controllers.delete(message.destroy_singleton.id)
-            else
-              GameMachine.logger.error("Singleton Controller for #{message.destroy_singleton.id} not found")
-            end
+            destroy_child_controller(message)
           end
         end
       end

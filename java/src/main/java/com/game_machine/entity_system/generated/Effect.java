@@ -30,23 +30,23 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class Player  implements Externalizable, Message<Player>, Schema<Player>
+public final class Effect  implements Externalizable, Message<Effect>, Schema<Effect>
 {
 
 
 
 
-    public static Schema<Player> getSchema()
+    public static Schema<Effect> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static Player getDefaultInstance()
+    public static Effect getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final Player DEFAULT_INSTANCE = new Player();
+    static final Effect DEFAULT_INSTANCE = new Effect();
 
 
 
@@ -54,29 +54,33 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
 
 
+    public Integer length;
+
+
+
     public String name;
 
 
 
-    public Boolean authenticated;
+    public Integer healthDiff;
 
 
 
-    public String authtoken;
+    public Integer damageDiff;
 
 
 
-    public Transform transform;
+    public Integer timePeriod;
 
 
 
-    public Health health;
+    public String type;
 
 
     
 
 
-    public Player()
+    public Effect()
     {
         
     }
@@ -92,7 +96,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 		return id;
 	}
 	
-	public Player setId(String id) {
+	public Effect setId(String id) {
 		this.id = id;
 		return this;
 	}
@@ -105,11 +109,28 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
     
 
+	public Integer getLength() {
+		return length;
+	}
+	
+	public Effect setLength(Integer length) {
+		this.length = length;
+		return this;
+	}
+	
+	public Boolean hasLength()  {
+        return length == null ? false : true;
+    }
+
+
+
+    
+
 	public String getName() {
 		return name;
 	}
 	
-	public Player setName(String name) {
+	public Effect setName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -122,68 +143,68 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
     
 
-	public Boolean getAuthenticated() {
-		return authenticated;
+	public Integer getHealthDiff() {
+		return healthDiff;
 	}
 	
-	public Player setAuthenticated(Boolean authenticated) {
-		this.authenticated = authenticated;
+	public Effect setHealthDiff(Integer healthDiff) {
+		this.healthDiff = healthDiff;
 		return this;
 	}
 	
-	public Boolean hasAuthenticated()  {
-        return authenticated == null ? false : true;
+	public Boolean hasHealthDiff()  {
+        return healthDiff == null ? false : true;
     }
 
 
 
     
 
-	public String getAuthtoken() {
-		return authtoken;
+	public Integer getDamageDiff() {
+		return damageDiff;
 	}
 	
-	public Player setAuthtoken(String authtoken) {
-		this.authtoken = authtoken;
+	public Effect setDamageDiff(Integer damageDiff) {
+		this.damageDiff = damageDiff;
 		return this;
 	}
 	
-	public Boolean hasAuthtoken()  {
-        return authtoken == null ? false : true;
+	public Boolean hasDamageDiff()  {
+        return damageDiff == null ? false : true;
     }
 
 
 
     
 
-	public Transform getTransform() {
-		return transform;
+	public Integer getTimePeriod() {
+		return timePeriod;
 	}
 	
-	public Player setTransform(Transform transform) {
-		this.transform = transform;
+	public Effect setTimePeriod(Integer timePeriod) {
+		this.timePeriod = timePeriod;
 		return this;
 	}
 	
-	public Boolean hasTransform()  {
-        return transform == null ? false : true;
+	public Boolean hasTimePeriod()  {
+        return timePeriod == null ? false : true;
     }
 
 
 
     
 
-	public Health getHealth() {
-		return health;
+	public String getType() {
+		return type;
 	}
 	
-	public Player setHealth(Health health) {
-		this.health = health;
+	public Effect setType(String type) {
+		this.type = type;
 		return this;
 	}
 	
-	public Boolean hasHealth()  {
-        return health == null ? false : true;
+	public Boolean hasType()  {
+        return type == null ? false : true;
     }
 
 
@@ -203,39 +224,39 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
     // message method
 
-    public Schema<Player> cachedSchema()
+    public Schema<Effect> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public Player newMessage()
+    public Effect newMessage()
     {
-        return new Player();
+        return new Effect();
     }
 
-    public Class<Player> typeClass()
+    public Class<Effect> typeClass()
     {
-        return Player.class;
+        return Effect.class;
     }
 
     public String messageName()
     {
-        return Player.class.getSimpleName();
+        return Effect.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return Player.class.getName();
+        return Effect.class.getName();
     }
 
-    public boolean isInitialized(Player message)
+    public boolean isInitialized(Effect message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, Player message) throws IOException
+    public void mergeFrom(Input input, Effect message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -256,7 +277,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 2:
 
 
-                	message.name = input.readString();
+                	message.length = input.readInt32();
                 	break;
 
                 	
@@ -265,7 +286,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 3:
 
 
-                	message.authenticated = input.readBool();
+                	message.name = input.readString();
                 	break;
 
                 	
@@ -274,7 +295,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 4:
 
 
-                	message.authtoken = input.readString();
+                	message.healthDiff = input.readInt32();
                 	break;
 
                 	
@@ -283,8 +304,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 5:
 
 
-                	message.transform = input.mergeObject(message.transform, Transform.getSchema());
-                    break;
+                	message.damageDiff = input.readInt32();
+                	break;
 
                 	
 
@@ -292,8 +313,17 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
             	case 6:
 
 
-                	message.health = input.mergeObject(message.health, Health.getSchema());
-                    break;
+                	message.timePeriod = input.readInt32();
+                	break;
+
+                	
+
+
+            	case 7:
+
+
+                	message.type = input.readString();
+                	break;
 
                 	
 
@@ -306,7 +336,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     }
 
 
-    public void writeTo(Output output, Player message) throws IOException
+    public void writeTo(Output output, Effect message) throws IOException
     {
 
     	
@@ -328,8 +358,19 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	
 
 
+    	if(message.length != null)
+            output.writeInt32(2, message.length, false);
+
+    	
+
+
+    	
+
+    	
+
+
     	if(message.name != null)
-            output.writeString(2, message.name, false);
+            output.writeString(3, message.name, false);
 
     	
 
@@ -339,8 +380,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	
 
 
-    	if(message.authenticated != null)
-            output.writeBool(3, message.authenticated, false);
+    	if(message.healthDiff != null)
+            output.writeInt32(4, message.healthDiff, false);
 
     	
 
@@ -350,8 +391,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	
 
 
-    	if(message.authtoken != null)
-            output.writeString(4, message.authtoken, false);
+    	if(message.damageDiff != null)
+            output.writeInt32(5, message.damageDiff, false);
 
     	
 
@@ -361,8 +402,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	
 
 
-    	if(message.transform != null)
-    		output.writeObject(5, message.transform, Transform.getSchema(), false);
+    	if(message.timePeriod != null)
+            output.writeInt32(6, message.timePeriod, false);
 
     	
 
@@ -372,8 +413,8 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
     	
 
 
-    	if(message.health != null)
-    		output.writeObject(6, message.health, Health.getSchema(), false);
+    	if(message.type != null)
+            output.writeString(7, message.type, false);
 
     	
 
@@ -388,15 +429,17 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
         	case 1: return "id";
 
-        	case 2: return "name";
+        	case 2: return "length";
 
-        	case 3: return "authenticated";
+        	case 3: return "name";
 
-        	case 4: return "authtoken";
+        	case 4: return "healthDiff";
 
-        	case 5: return "transform";
+        	case 5: return "damageDiff";
 
-        	case 6: return "health";
+        	case 6: return "timePeriod";
+
+        	case 7: return "type";
 
             default: return null;
         }
@@ -414,15 +457,17 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 
     	__fieldMap.put("id", 1);
 
-    	__fieldMap.put("name", 2);
+    	__fieldMap.put("length", 2);
 
-    	__fieldMap.put("authenticated", 3);
+    	__fieldMap.put("name", 3);
 
-    	__fieldMap.put("authtoken", 4);
+    	__fieldMap.put("healthDiff", 4);
 
-    	__fieldMap.put("transform", 5);
+    	__fieldMap.put("damageDiff", 5);
 
-    	__fieldMap.put("health", 6);
+    	__fieldMap.put("timePeriod", 6);
+
+    	__fieldMap.put("type", 7);
 
     }
    
@@ -432,7 +477,7 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = Player.getSchema().getFieldName(i);
+		fieldName = Effect.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -442,16 +487,16 @@ public final class Player  implements Externalizable, Message<Player>, Schema<Pl
 	return fieldNames;
 }
 
-public static Player parseFrom(byte[] bytes) {
-	Player message = new Player();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Player.class));
+public static Effect parseFrom(byte[] bytes) {
+	Effect message = new Effect();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Effect.class));
 	return message;
 }
 
-public Player clone() {
+public Effect clone() {
 	byte[] bytes = this.toByteArray();
-	Player player = Player.parseFrom(bytes);
-	return player;
+	Effect effect = Effect.parseFrom(bytes);
+	return effect;
 }
 	
 public byte[] toByteArray() {
@@ -463,7 +508,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, Player.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, Effect.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -476,7 +521,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Player.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Effect.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();

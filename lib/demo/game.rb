@@ -3,18 +3,24 @@ module Demo
   class Game
 
     def start
-      2000.times do |i|
-        create_singleton("#{GameMachine::Application.config.akka_port}_#{i}")
+      load_game_data
+      GameMachine::Actor::Builder.new(CombatController).with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
+      GameMachine::Actor::Builder.new(PlayerController).with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
+      1000.times do |i|
+        create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
     end
 
-    def create_singleton(id)
+    def create_npc(id)
       max = GameMachine::Settings.world_grid_size - 10
 
       x = rand(max) + 1
       y = rand(max) + 1
       z = 1.10
       entity = Entity.new
+      entity.set_health(
+        Health.new.set_health(100)
+      )
       entity.set_id(id)
       entity.set_create_singleton(
         CreateSingleton.new.set_id(id).set_controller(Demo::ZombieController.name)
@@ -25,5 +31,10 @@ module Demo
       GameMachine::GameSystems::SingletonManager.find.tell(entity)
     end
 
+    def load_game_data
+      GameMachine::GameSystems::GameData.load_from(
+        File.join(GameMachine.app_root,'lib/demo/game_data.yml')
+      )
+    end
   end
 end

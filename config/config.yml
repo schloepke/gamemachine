@@ -107,8 +107,8 @@ test:
     max_writes_per_second: 10
   mono_enabled: false
   singleton_manager:
-    router_count: 2
-    update_interval: 1000
+    router_count: 10
+    update_interval: 1000000
   seeds:
     - default
   servers:

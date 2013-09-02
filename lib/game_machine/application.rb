@@ -113,7 +113,9 @@ module GameMachine
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::SingletonManager).start
+        Actor::Builder.new(GameSystems::PlayerManager).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GridReplicator).start
+        Actor::Builder.new(GameSystems::EntityLoader).start
       end
 
       private

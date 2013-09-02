@@ -6,7 +6,21 @@ option optimize_for = SPEED;
 
 
 message Health {
-  required string health = 1;
+  required int32 health = 1;
+}
+
+message Effect {
+  required string id = 1;
+  optional int32 length = 2;
+  optional string name = 3;
+  optional int32 healthDiff = 4;
+  optional int32 damageDiff = 5;
+  optional int32 timePeriod = 6;
+  optional string type = 7;
+}
+
+message EffectList {
+  repeated Effect effect = 1;
 }
 
 message CombatAbility {
@@ -15,14 +29,13 @@ message CombatAbility {
   required int32 damage = 3;
   optional int32 hitChance = 4;
   required int32 range = 5;
+  required string type = 6;
 }
 
 message Attack {
-  required string attackerId = 1;
-  required  int32 attackerType = 2;
-  repeated string npcId = 3;
-  repeated string playerId = 4;
-  required int32 combatAbilityId = 5;
+  required string attacker = 1;
+  required string target = 2;
+  required int32 combatAbilityId = 3;
 }
   
 message TrackEntity {
@@ -48,6 +61,10 @@ message Disconnected {
 }
 
 message PlayerLogout {
+  required string playerId = 1;
+}
+
+message PlayerAuthenticated {
   required string playerId = 1;
 }
 
@@ -152,6 +169,7 @@ message Player {
   optional bool authenticated = 3;
   optional string authtoken = 4;
   optional Transform transform = 5;
+  optional Health health = 6;
 }
 
 
@@ -220,9 +238,6 @@ message GetNeighbors {
   optional string gridName = 5;
 }
 
-message GetEntityLocations {
-  repeated string entityId = 1;
-}
 
 message Entity {
   optional Player player = 1;
@@ -250,11 +265,15 @@ message Entity {
   optional Vector3 vector3 = 25;
   optional CreateSingleton createSingleton = 26;
   optional EntityList entityList = 27;
-  optional GetEntityLocations getEntityLocations = 28;
   optional bool  published = 29;
   optional string entityType = 30;
   optional NotifySingleton notifySingleton = 31;
   optional DestroySingleton destroySingleton = 32;
+  optional Effect effect = 33;
+  optional EffectList effectList = 34;
+  optional Attack attack = 35;
+  optional CombatAbility combatAbility = 36;
+  optional PlayerAuthenticated playerAuthenticated = 37;
   
 }
 

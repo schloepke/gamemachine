@@ -69,6 +69,10 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
     public Integer range;
 
 
+
+    public String type;
+
+
     
 
 
@@ -163,6 +167,23 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
 	
 	public Boolean hasRange()  {
         return range == null ? false : true;
+    }
+
+
+
+    
+
+	public String getType() {
+		return type;
+	}
+	
+	public CombatAbility setType(String type) {
+		this.type = type;
+		return this;
+	}
+	
+	public Boolean hasType()  {
+        return type == null ? false : true;
     }
 
 
@@ -268,6 +289,15 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
                 	
 
 
+            	case 6:
+
+
+                	message.type = input.readString();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -347,6 +377,20 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
 
 
     	
+
+    	if(message.type == null)
+            throw new UninitializedMessageException(message);
+
+    	
+
+
+    	if(message.type != null)
+            output.writeString(6, message.type, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -363,6 +407,8 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
         	case 4: return "hitChance";
 
         	case 5: return "range";
+
+        	case 6: return "type";
 
             default: return null;
         }
@@ -387,6 +433,8 @@ public final class CombatAbility  implements Externalizable, Message<CombatAbili
     	__fieldMap.put("hitChance", 4);
 
     	__fieldMap.put("range", 5);
+
+    	__fieldMap.put("type", 6);
 
     }
    

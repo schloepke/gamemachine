@@ -30,6 +30,13 @@ public class Grid {
 		this.cellCount = this.width * this.width;
 	}
 
+	public int getWidth() {
+		return this.width;
+	}
+	
+	public int getCellCount() {
+		return this.cellCount;
+	}
 	public Set<Integer> cellsWithinRadius(float x, float y) {
 		int cellHash = hash(x, y);
 		return cellsWithinRadius(cellHash,x,y);

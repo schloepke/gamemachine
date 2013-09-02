@@ -30,33 +30,33 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class Health  implements Externalizable, Message<Health>, Schema<Health>
+public final class EffectList  implements Externalizable, Message<EffectList>, Schema<EffectList>
 {
 
 
 
 
-    public static Schema<Health> getSchema()
+    public static Schema<EffectList> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static Health getDefaultInstance()
+    public static EffectList getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final Health DEFAULT_INSTANCE = new Health();
+    static final EffectList DEFAULT_INSTANCE = new EffectList();
 
 
 
-    public Integer health;
+    public List<Effect> effect;
 
 
     
 
 
-    public Health()
+    public EffectList()
     {
         
     }
@@ -68,18 +68,30 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
 
     
 
-	public Integer getHealth() {
-		return health;
+	public List<Effect> getEffectList() {
+		return effect;
 	}
-	
-	public Health setHealth(Integer health) {
-		this.health = health;
+
+	public EffectList setEffectList(List<Effect> effect) {
+		this.effect = effect;
 		return this;
 	}
-	
-	public Boolean hasHealth()  {
-        return health == null ? false : true;
+
+	public Effect getEffect(int index)  {
+        return effect == null ? null : effect.get(index);
     }
+
+    public int getEffectCount()  {
+        return effect == null ? 0 : effect.size();
+    }
+
+    public EffectList addEffect(Effect effect)  {
+        if(this.effect == null)
+            this.effect = new ArrayList<Effect>();
+        this.effect.add(effect);
+        return this;
+    }
+    
 
 
 
@@ -98,39 +110,39 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
 
     // message method
 
-    public Schema<Health> cachedSchema()
+    public Schema<EffectList> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public Health newMessage()
+    public EffectList newMessage()
     {
-        return new Health();
+        return new EffectList();
     }
 
-    public Class<Health> typeClass()
+    public Class<EffectList> typeClass()
     {
-        return Health.class;
+        return EffectList.class;
     }
 
     public String messageName()
     {
-        return Health.class.getSimpleName();
+        return EffectList.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return Health.class.getName();
+        return EffectList.class.getName();
     }
 
-    public boolean isInitialized(Health message)
+    public boolean isInitialized(EffectList message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, Health message) throws IOException
+    public void mergeFrom(Input input, EffectList message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -141,11 +153,12 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
 
             	case 1:
 
+            		if(message.effect == null)
+                        message.effect = new ArrayList<Effect>();
 
-                	message.health = input.readInt32();
-                	break;
+                    message.effect.add(input.mergeObject(null, Effect.getSchema()));
 
-                	
+                    break;
 
 
             
@@ -156,21 +169,24 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
     }
 
 
-    public void writeTo(Output output, Health message) throws IOException
+    public void writeTo(Output output, EffectList message) throws IOException
     {
 
     	
 
-    	if(message.health == null)
-            throw new UninitializedMessageException(message);
-
     	
 
+    	if(message.effect != null)
+        {
+            for(Effect effect : message.effect)
+            {
+                if(effect != null) {
 
-    	if(message.health != null)
-            output.writeInt32(1, message.health, false);
+    				output.writeObject(1, effect, Effect.getSchema(), true);
 
-    	
+    			}
+            }
+        }
 
 
     	
@@ -181,7 +197,7 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
         switch(number)
         {
 
-        	case 1: return "health";
+        	case 1: return "effect";
 
             default: return null;
         }
@@ -197,7 +213,7 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
     static
     {
 
-    	__fieldMap.put("health", 1);
+    	__fieldMap.put("effect", 1);
 
     }
    
@@ -207,7 +223,7 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = Health.getSchema().getFieldName(i);
+		fieldName = EffectList.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -217,16 +233,16 @@ public final class Health  implements Externalizable, Message<Health>, Schema<He
 	return fieldNames;
 }
 
-public static Health parseFrom(byte[] bytes) {
-	Health message = new Health();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(Health.class));
+public static EffectList parseFrom(byte[] bytes) {
+	EffectList message = new EffectList();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(EffectList.class));
 	return message;
 }
 
-public Health clone() {
+public EffectList clone() {
 	byte[] bytes = this.toByteArray();
-	Health health = Health.parseFrom(bytes);
-	return health;
+	EffectList effectList = EffectList.parseFrom(bytes);
+	return effectList;
 }
 	
 public byte[] toByteArray() {
@@ -238,7 +254,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, Health.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, EffectList.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -251,7 +267,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(Health.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(EffectList.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();

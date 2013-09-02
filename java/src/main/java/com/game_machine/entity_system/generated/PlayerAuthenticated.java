@@ -30,33 +30,33 @@ import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
-public final class GetEntityLocations  implements Externalizable, Message<GetEntityLocations>, Schema<GetEntityLocations>
+public final class PlayerAuthenticated  implements Externalizable, Message<PlayerAuthenticated>, Schema<PlayerAuthenticated>
 {
 
 
 
 
-    public static Schema<GetEntityLocations> getSchema()
+    public static Schema<PlayerAuthenticated> getSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
-    public static GetEntityLocations getDefaultInstance()
+    public static PlayerAuthenticated getDefaultInstance()
     {
         return DEFAULT_INSTANCE;
     }
 
-    static final GetEntityLocations DEFAULT_INSTANCE = new GetEntityLocations();
+    static final PlayerAuthenticated DEFAULT_INSTANCE = new PlayerAuthenticated();
 
 
 
-    public List<String> entityId;
+    public String playerId;
 
 
     
 
 
-    public GetEntityLocations()
+    public PlayerAuthenticated()
     {
         
     }
@@ -68,30 +68,18 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
 
     
 
-	public List<String> getEntityIdList() {
-		return entityId;
+	public String getPlayerId() {
+		return playerId;
 	}
-
-	public GetEntityLocations setEntityIdList(List<String> entityId) {
-		this.entityId = entityId;
+	
+	public PlayerAuthenticated setPlayerId(String playerId) {
+		this.playerId = playerId;
 		return this;
 	}
-
-	public String getEntityId(int index)  {
-        return entityId == null ? null : entityId.get(index);
+	
+	public Boolean hasPlayerId()  {
+        return playerId == null ? false : true;
     }
-
-    public int getEntityIdCount()  {
-        return entityId == null ? 0 : entityId.size();
-    }
-
-    public GetEntityLocations addEntityId(String entityId)  {
-        if(this.entityId == null)
-            this.entityId = new ArrayList<String>();
-        this.entityId.add(entityId);
-        return this;
-    }
-    
 
 
 
@@ -110,39 +98,39 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
 
     // message method
 
-    public Schema<GetEntityLocations> cachedSchema()
+    public Schema<PlayerAuthenticated> cachedSchema()
     {
         return DEFAULT_INSTANCE;
     }
 
     // schema methods
 
-    public GetEntityLocations newMessage()
+    public PlayerAuthenticated newMessage()
     {
-        return new GetEntityLocations();
+        return new PlayerAuthenticated();
     }
 
-    public Class<GetEntityLocations> typeClass()
+    public Class<PlayerAuthenticated> typeClass()
     {
-        return GetEntityLocations.class;
+        return PlayerAuthenticated.class;
     }
 
     public String messageName()
     {
-        return GetEntityLocations.class.getSimpleName();
+        return PlayerAuthenticated.class.getSimpleName();
     }
 
     public String messageFullName()
     {
-        return GetEntityLocations.class.getName();
+        return PlayerAuthenticated.class.getName();
     }
 
-    public boolean isInitialized(GetEntityLocations message)
+    public boolean isInitialized(PlayerAuthenticated message)
     {
         return true;
     }
 
-    public void mergeFrom(Input input, GetEntityLocations message) throws IOException
+    public void mergeFrom(Input input, PlayerAuthenticated message) throws IOException
     {
         for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
         {
@@ -153,12 +141,11 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
 
             	case 1:
 
-            		if(message.entityId == null)
-                        message.entityId = new ArrayList<String>();
 
-                	message.entityId.add(input.readString());
+                	message.playerId = input.readString();
+                	break;
 
-                    break;
+                	
 
 
             
@@ -169,24 +156,21 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
     }
 
 
-    public void writeTo(Output output, GetEntityLocations message) throws IOException
+    public void writeTo(Output output, PlayerAuthenticated message) throws IOException
     {
 
     	
 
+    	if(message.playerId == null)
+            throw new UninitializedMessageException(message);
+
     	
 
-    	if(message.entityId != null)
-        {
-            for(String entityId : message.entityId)
-            {
-                if(entityId != null) {
 
-            		output.writeString(1, entityId, true);
+    	if(message.playerId != null)
+            output.writeString(1, message.playerId, false);
 
-    			}
-            }
-        }
+    	
 
 
     	
@@ -197,7 +181,7 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
         switch(number)
         {
 
-        	case 1: return "entityId";
+        	case 1: return "playerId";
 
             default: return null;
         }
@@ -213,7 +197,7 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
     static
     {
 
-    	__fieldMap.put("entityId", 1);
+    	__fieldMap.put("playerId", 1);
 
     }
    
@@ -223,7 +207,7 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
 	Integer i = 1;
 	
     while(true) { 
-		fieldName = GetEntityLocations.getSchema().getFieldName(i);
+		fieldName = PlayerAuthenticated.getSchema().getFieldName(i);
 		if (fieldName == null) {
 			break;
 		}
@@ -233,16 +217,16 @@ public final class GetEntityLocations  implements Externalizable, Message<GetEnt
 	return fieldNames;
 }
 
-public static GetEntityLocations parseFrom(byte[] bytes) {
-	GetEntityLocations message = new GetEntityLocations();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(GetEntityLocations.class));
+public static PlayerAuthenticated parseFrom(byte[] bytes) {
+	PlayerAuthenticated message = new PlayerAuthenticated();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(PlayerAuthenticated.class));
 	return message;
 }
 
-public GetEntityLocations clone() {
+public PlayerAuthenticated clone() {
 	byte[] bytes = this.toByteArray();
-	GetEntityLocations getEntityLocations = GetEntityLocations.parseFrom(bytes);
-	return getEntityLocations;
+	PlayerAuthenticated playerAuthenticated = PlayerAuthenticated.parseFrom(bytes);
+	return playerAuthenticated;
 }
 	
 public byte[] toByteArray() {
@@ -254,7 +238,7 @@ public byte[] toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
-		JsonIOUtil.writeTo(out, this, GetEntityLocations.getSchema(), numeric);
+		JsonIOUtil.writeTo(out, this, PlayerAuthenticated.getSchema(), numeric);
 	} catch (IOException e) {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
@@ -267,7 +251,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(GetEntityLocations.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(PlayerAuthenticated.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		e.printStackTrace();
