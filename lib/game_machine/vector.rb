@@ -9,6 +9,10 @@ module GameMachine
       @z = z
     end
 
+    def==(v)
+      @x == v.x && @y = v.y && @z = v.z
+    end
+
     def zero?
       @x == 0 && @y == 0 && z == 0
     end
@@ -25,10 +29,23 @@ module GameMachine
       @z = new_z
     end
 
-    def interpolate(vector,change_amount)
+    def distance_squared(v)
+      dx = @x - v.x
+      dy = @y - v.y
+      dz = @z - v.z
+      (dx * dx + dy * dy + dz * dz);
+    end
+
+    def distance(v)
+      Math.sqrt(distance_squared(v))
+    end
+
+    def interpolate(vector,change_amount,use_z=false)
       @x=(1-change_amount)*@x + change_amount*vector.x
       @y=(1-change_amount)*@y + change_amount*vector.y
-      @z=(1-change_amount)*@z + change_amount*vector.z
+      if use_z
+        @z=(1-change_amount)*@z + change_amount*vector.z
+      end
     end
 
     def inspect

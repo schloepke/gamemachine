@@ -60,6 +60,7 @@ java_import 'com.game_machine.entity_system.generated.CombatAbility'
 java_import 'com.game_machine.entity_system.generated.Effect'
 java_import 'com.game_machine.entity_system.generated.EffectList'
 java_import 'com.game_machine.entity_system.generated.Health'
+java_import 'com.game_machine.entity_system.generated.PlayerAuthenticated'
 
 
 

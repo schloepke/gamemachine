@@ -185,6 +185,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public PlayerAuthenticated playerAuthenticated;
 
 
+
+    public PlayerLogout playerLogout;
+
+
     
 
 
@@ -244,6 +248,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+
+		if (this.hasPlayerLogout()) {
+			names.add(this.playerLogout.getClass().getSimpleName());
+		}
 
 
 
@@ -992,6 +1000,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public PlayerLogout getPlayerLogout() {
+		return playerLogout;
+	}
+	
+	public Entity setPlayerLogout(PlayerLogout playerLogout) {
+		this.playerLogout = playerLogout;
+		return this;
+	}
+	
+	public Boolean hasPlayerLogout()  {
+        return playerLogout == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1349,6 +1374,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
                 	message.playerAuthenticated = input.mergeObject(message.playerAuthenticated, PlayerAuthenticated.getSchema());
+                    break;
+
+                	
+
+
+            	case 38:
+
+
+                	message.playerLogout = input.mergeObject(message.playerLogout, PlayerLogout.getSchema());
                     break;
 
                 	
@@ -1743,6 +1777,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.playerLogout != null)
+    		output.writeObject(38, message.playerLogout, PlayerLogout.getSchema(), false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1817,6 +1862,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 36: return "combatAbility";
 
         	case 37: return "playerAuthenticated";
+
+        	case 38: return "playerLogout";
 
             default: return null;
         }
@@ -1899,6 +1946,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("combatAbility", 36);
 
     	__fieldMap.put("playerAuthenticated", 37);
+
+    	__fieldMap.put("playerLogout", 38);
 
     }
    

@@ -10,7 +10,11 @@ module GameMachine
             disconnected(message)
           elsif message.has_player
             update_entities(message)
+          if Authentication::AUTHENTICATED_USERS.has_key?(message.player.id)
+            game_handler.tell(message)
+          else
             authenticate_player(message)
+          end
           else
             unhandled(message)
           end
@@ -21,8 +25,14 @@ module GameMachine
 
       private
 
+      def game_handler
+        @game_handler ||= Handlers::Game.find
+      end
+
       def logged_out(message)
         PlayerRegistry.find.tell(message.player_logout)
+        GameSystems::EntityTracking::GRID.remove(message.player.id)
+        Authentication.unregister_player(message.player.id)
       end
 
       def disconnected(message)

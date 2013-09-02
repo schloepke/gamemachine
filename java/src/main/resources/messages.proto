@@ -274,6 +274,7 @@ message Entity {
   optional Attack attack = 35;
   optional CombatAbility combatAbility = 36;
   optional PlayerAuthenticated playerAuthenticated = 37;
+  optional PlayerLogout playerLogout = 38;
   
 }
 

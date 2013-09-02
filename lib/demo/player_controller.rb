@@ -4,7 +4,13 @@ module Demo
     set_player_controller
 
     def post_init(*args)
+      entity = args.first
+      @player = entity.player
       @base_health = 1000
+      init_player
+    end
+
+    def init_player
     end
 
     def set_player_health(player)
@@ -16,16 +22,13 @@ module Demo
     def on_receive(message)
       if message.has_player_authenticated
         if entity = GameMachine::ObjectDb.get(message.player.id)
-          unless entity.player.has_health
-            set_player_health(entity.player)
-            GameMachine::ObjectDb.put(entity)
-          end
+          set_player_health(entity.player)
         else
-          set_player_health(message.player)
           entity = Entity.new.set_id(message.player.id).
-            set_player(message.player)
-          GameMachine::ObjectDb.put(entity)
+            set_player(message.player.clone)
+          set_player_health(entity.player)
         end
+        GameMachine::ObjectDb.put(entity)
       end
     end
   end

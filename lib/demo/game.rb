@@ -4,9 +4,9 @@ module Demo
 
     def start
       load_game_data
-      GameMachine::Actor::Builder.new(CombatController).with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
-      GameMachine::Actor::Builder.new(PlayerController).with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
-      1000.times do |i|
+      GameMachine::Actor::Builder.new(CombatController).
+        with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
+      4000.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
     end
