@@ -189,6 +189,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     public PlayerLogout playerLogout;
 
 
+
+    public Boolean sendToPlayer;
+
+
     
 
 
@@ -1017,6 +1021,23 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
 
+    
+
+	public Boolean getSendToPlayer() {
+		return sendToPlayer;
+	}
+	
+	public Entity setSendToPlayer(Boolean sendToPlayer) {
+		this.sendToPlayer = sendToPlayer;
+		return this;
+	}
+	
+	public Boolean hasSendToPlayer()  {
+        return sendToPlayer == null ? false : true;
+    }
+
+
+
   
     // java serialization
 
@@ -1384,6 +1405,15 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
                 	message.playerLogout = input.mergeObject(message.playerLogout, PlayerLogout.getSchema());
                     break;
+
+                	
+
+
+            	case 39:
+
+
+                	message.sendToPlayer = input.readBool();
+                	break;
 
                 	
 
@@ -1788,6 +1818,17 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 
 
     	
+
+    	
+
+
+    	if(message.sendToPlayer != null)
+            output.writeBool(39, message.sendToPlayer, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -1864,6 +1905,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
         	case 37: return "playerAuthenticated";
 
         	case 38: return "playerLogout";
+
+        	case 39: return "sendToPlayer";
 
             default: return null;
         }
@@ -1948,6 +1991,8 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
     	__fieldMap.put("playerAuthenticated", 37);
 
     	__fieldMap.put("playerLogout", 38);
+
+    	__fieldMap.put("sendToPlayer", 39);
 
     }
    

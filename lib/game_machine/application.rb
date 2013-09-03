@@ -94,16 +94,19 @@ module GameMachine
       end
 
       def start_core_systems
+        Actor::Builder.new(ClusterMonitor).start
+        Actor::Builder.new(PlayerGateway).start
         Actor::Builder.new(PlayerRegistry).start
         Actor::Builder.new(ObjectDb).distributed(100).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start
-        Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(200).start
         if Settings.mono_enabled
           Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
         end
+        Actor::Builder.new(GridReplicator).start
+        Actor::Builder.new(GameSystems::EntityLoader).start
       end
 
       def start_game_systems
@@ -114,8 +117,6 @@ module GameMachine
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::SingletonManager).start
         Actor::Builder.new(GameSystems::PlayerManager).with_router(JavaLib::RoundRobinRouter,10).start
-        Actor::Builder.new(GridReplicator).start
-        Actor::Builder.new(GameSystems::EntityLoader).start
       end
 
       private

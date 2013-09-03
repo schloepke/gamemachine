@@ -10,11 +10,11 @@ module GameMachine
             disconnected(message)
           elsif message.has_player
             update_entities(message)
-          if Authentication::AUTHENTICATED_USERS.has_key?(message.player.id)
-            game_handler.tell(message)
-          else
-            authenticate_player(message)
-          end
+            if Authentication.authenticated?(message.player.id)
+              game_handler.tell(message)
+            else
+              authenticate_player(message)
+            end
           else
             unhandled(message)
           end

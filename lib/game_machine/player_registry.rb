@@ -8,6 +8,7 @@ module GameMachine
           observer_ref = Actor::Base.find(message.observer)
           self.class.register_observer(message.player_id,observer_ref)
         end
+        PlayerGateway.find.tell(message,get_self)
         get_sender.tell(true,nil)
         GameMachine.logger.info "PlayerRegister #{message.player_id}"
 

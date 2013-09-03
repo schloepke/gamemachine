@@ -134,6 +134,7 @@ message ObjectdbUpdate {
 message ClientConnection {
   required string id = 1;
   optional string gateway = 2;
+  optional string server = 3;
 }
 
 
@@ -275,6 +276,7 @@ message Entity {
   optional CombatAbility combatAbility = 36;
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
+  optional bool sendToPlayer = 39;
   
 }
 

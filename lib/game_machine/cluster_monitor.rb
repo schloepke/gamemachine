@@ -17,36 +17,74 @@ module GameMachine
       end
     end
     
+    def self.add_cluster_member(address,member)
+      cluster_members[address] = member
+    end
+
+    def self.remove_cluster_member(address)
+      cluster_members.delete(address)
+    end
+
+    def self.remove_remote_member(address)
+      remote_members.delete(address)
+    end
+
+    def self.add_remote_member(address,member)
+      remote_members[address] = member
+    end
+
     def preStart
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
         Akka.instance.init_cluster!(@cluster.self_address.to_string)
         @cluster.subscribe(getSelf, JavaLib::ClusterEvent::ClusterDomainEvent.java_class)
       end
+      @observers = []
+    end
+
+    def notify_observers
+      puts "Notifying #{@observers.size} observers"
+      @observers.each {|observer| observer.tell('cluster_update',get_self)}
     end
 
     def on_receive(message)
-      if message.is_a?(JavaLib::ClusterEvent::SeenChanged)
-      elsif message.is_a?(JavaLib::ClusterEvent::MemberRemoved)
-        Akka.instance.hashring.remove_bucket(message.member.address.to_string)
-        self.class.cluster_members.delete(message.member.address.to_string)
-        self.class.remote_members.delete(message.member.address.to_string)
-      elsif message.is_a?(JavaLib::ClusterEvent::MemberUp)
-        self.class.cluster_members[message.member.address.to_string] = message.member
-        Akka.instance.hashring.add_bucket(message.member.address.to_string)
+      if message.is_a?(String) && message == 'register_observer'
+        @observers << sender
+      elsif message.is_a?(JavaLib::ClusterEvent::SeenChanged)
 
-        unless message.member.address.to_string == @cluster.self_address.to_string
-          self.class.remote_members[message.member.address.to_string] = message.member
+      elsif message.is_a?(JavaLib::ClusterEvent::MemberRemoved)
+        address = message.member.address.to_string
+        Akka.instance.hashring.remove_bucket(address)
+        self.class.remove_cluster_member(address)
+        self.class.remove_remote_member(address)
+
+        notify_observers
+
+      elsif message.is_a?(JavaLib::ClusterEvent::MemberUp)
+        address = message.member.address.to_string
+        self.class.add_cluster_member(address,message.member)
+        Akka.instance.hashring.add_bucket(address)
+
+        unless address == @cluster.self_address.to_string
+          self.class.add_remote_member(address,message.member)
         end
+
+        notify_observers
+
       elsif message.is_a?(JavaLib::ClusterEvent::ClusterMetricsChanged)
+
       elsif message.is_a?(JavaLib::ClusterEvent::CurrentClusterState)
         message.get_members.each do |member|
-          self.class.cluster_members[member.address.to_string] = member
-          Akka.instance.hashring.add_bucket(member.address.to_string)
-          unless member.address.to_string == @cluster.self_address.to_string
-            self.class.remote_members[member.address.to_string] = member
+          address = member.address.to_string
+          self.class.add_cluster_member(address,member)
+          Akka.instance.hashring.add_bucket(address)
+          unless address == @cluster.self_address.to_string
+            self.class.add_remote_member(address,member)
           end
         end
+
+        notify_observers
+
       else
         #GameMachine.logger.info("Unrecognized message #{message}")
       end

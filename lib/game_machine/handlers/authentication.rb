@@ -15,6 +15,10 @@ module GameMachine
         after_transition :unauthenticated => :authenticated, :do => :register_player
       end
 
+      def self.authenticated?(player_id)
+        AUTHENTICATED_USERS.has_key?(player_id)
+      end
+
       def notify_player_controller(player)
         entity = Entity.new.set_id(player.id)
         entity.set_player_authenticated(

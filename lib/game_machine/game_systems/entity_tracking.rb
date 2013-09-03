@@ -76,9 +76,15 @@ module GameMachine
       end
 
       def send_neighbors_to_player(neighbors,player)
-        response = Helpers::GameMessage.new(player.id)
-        response.neighbors(neighbors[:players],neighbors[:npcs])
-        response.send_to_player
+        entity = Entity.new.set_neighbors(
+          Neighbors.new.
+          set_player_list(neighbors[:players]).
+          set_npc_list(neighbors[:npcs])
+        )
+        entity.set_id(player.id)
+        entity.set_player(player)
+        entity.set_send_to_player(true)
+        PlayerGateway.find.tell(entity)
       end
 
       def send_neighbors_to_sender(neighbors,message)

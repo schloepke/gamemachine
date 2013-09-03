@@ -57,6 +57,10 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
     public String gateway;
 
 
+
+    public String server;
+
+
     
 
 
@@ -100,6 +104,23 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
 	
 	public Boolean hasGateway()  {
         return gateway == null ? false : true;
+    }
+
+
+
+    
+
+	public String getServer() {
+		return server;
+	}
+	
+	public ClientConnection setServer(String server) {
+		this.server = server;
+		return this;
+	}
+	
+	public Boolean hasServer()  {
+        return server == null ? false : true;
     }
 
 
@@ -178,6 +199,15 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
                 	
 
 
+            	case 3:
+
+
+                	message.server = input.readString();
+                	break;
+
+                	
+
+
             
                 default:
                     input.handleUnknownField(number, this);
@@ -215,6 +245,17 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
 
 
     	
+
+    	
+
+
+    	if(message.server != null)
+            output.writeString(3, message.server, false);
+
+    	
+
+
+    	
     }
 
     public String getFieldName(int number)
@@ -225,6 +266,8 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
         	case 1: return "id";
 
         	case 2: return "gateway";
+
+        	case 3: return "server";
 
             default: return null;
         }
@@ -243,6 +286,8 @@ public final class ClientConnection  implements Externalizable, Message<ClientCo
     	__fieldMap.put("id", 1);
 
     	__fieldMap.put("gateway", 2);
+
+    	__fieldMap.put("server", 3);
 
     }
    

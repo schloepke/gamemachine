@@ -56,7 +56,8 @@ module GameMachine
 
       def create_client_message(data,client_id)
         ClientMessage.parse_from(data).set_client_connection(
-          ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+          ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
+          set_server(Application.config.name)
         )
       end
 
