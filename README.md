@@ -27,18 +27,27 @@ code using higher level abstractions.
 
 #Installation
 
+Ubuntu 12 or 13
+
 1. Clone the repo
 2. Install jruby
+3. Install gradle 1.6 (1.5 has bugs that can make the build fail)
 3. bundle install
+4. rake java:all
 4. rake game:demo
-5. Run with jruby -J-Xmx1024m bin/game_machine --name=seed01 --server
+5. Start server with jruby -J-Xmx1024m bin/game_machine --name=seed01 --server
 
 This will give you a server running the demo game.
 
-The demo game spawns 2000 npc's in the world and logs you in as a player.
-Npc's within range will appear and chase you, attacking you and doing damage.
-The unity client should be up shortly.  I'm trying to get a version that isn't
-quite so large (source is almost 60mb).
+The demo game spawns 2000 npc's in the world.
+Npc's within range will appear and chase you. Npc's will attack you and do
+damage, but this is not yet reflected in the client.
+
+Get the [Unity3d demo client](https://github.com/chrisochs/gm_unity_client).
+In the client go into GameClient.cs and on line 74 change the ip to your
+server's ip.  Now you can run the client and run around the world.  I can
+usually get up to 200 npc's following me before the rendering drops the
+framerate to around 2-5.
 
 To run a 2 server cluster just  run the same command but pass it seed02 as the
 name.
