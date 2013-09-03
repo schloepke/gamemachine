@@ -48,6 +48,9 @@ Npc's within range will appear and chase you. Npc's will attack you and do
 damage, but this is not yet reflected in the client.
 
 Get the [Unity3d demo client](https://github.com/chrisochs/gm_unity_client).
+You  need to have unity installed until I get a build out that lets you enter
+the ip of the server.
+
 In the client go into GameClient.cs and on line 74 change the ip to your
 server's ip.  Now you can run the client and run around the world.  I can
 usually get up to 200 npc's following me before the rendering drops the
