@@ -89,8 +89,10 @@ unless File.directory?(java_dir)
   exit 0
 end
 
+if opts[:server]
 begin
   require 'game_machine'
 rescue LoadError
   require_relative '../lib/game_machine'
+end
 end

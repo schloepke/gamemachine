@@ -54,15 +54,23 @@ module GameMachine
         start_handlers
         start_game_systems
         load_games
+        GameMachine.stdout("Game Machine start successful")
       end
 
       def start_endpoints
         if config.udp.enabled
           Actor::Builder.new(Endpoints::Udp).start
+          GameMachine.stdout(
+            "UDP starting on #{config.udp.host}:#{config.udp.port}"
+          )
         end
+
         if config.udt.enabled
           Actor::Builder.new(Endpoints::Udt).start
           JavaLib::UdtServer.start(config.udt.host,config.udt.port)
+          GameMachine.stdout(
+            "UDT starting on #{config.udt.host}:#{config.udt.port}"
+          )
         end
         
         if config.http_enabled
@@ -76,8 +84,10 @@ module GameMachine
         if File.exists?(bootfile)
           require bootfile
           GameMachine.logger.info "boot.rb loaded"
+          GameMachine.stdout "boot.rb loaded"
         else
           GameMachine.logger.info "boot.rb not loaded (not found)"
+          GameMachine.stdout "boot.rb not loaded (not found)"
         end
       end
 

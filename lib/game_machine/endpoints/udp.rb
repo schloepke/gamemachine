@@ -1,6 +1,8 @@
 module GameMachine
   module Endpoints
     class Udp < Actor::Base
+      GAME_HANDLER = Settings.game_handler
+
       def post_init(*args)
         @clients = {}
         @socket = nil
@@ -47,7 +49,7 @@ module GameMachine
         client_message = create_client_message(
           message.data.to_array,message.sender.to_s
         )
-        Actor::Base.find(Settings.game_handler).send_message(
+        Actor::Base.find(GAME_HANDLER).send_message(
           client_message, :sender => get_self
         )
       rescue Exception => e
