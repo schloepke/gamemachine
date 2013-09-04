@@ -55,7 +55,8 @@ end
 messages = File.read(protofile)
 
 combined_messages = messages.sub('//GAME_MESSAGES',game_messages)
-combined_messages_protofile = '/tmp/combined_messages.proto'
+combined_messages_protofile = File.join(@user_dir,'combined_messages.proto')
+
 File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}
 
 loader = CachingProtoLoader.new
