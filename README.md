@@ -54,10 +54,14 @@ the ip of the server.
 In the client go into GameClient.cs and on line 74 change the ip to your
 server's ip.  Now you can run the client and run around the world.  I can
 usually get up to 200 npc's following me before the rendering drops the
-framerate to around 2-5.
+framerate to around 2-5.  Note that the demo does no smoothing of npc movement
+client side.  This is to accurately show the amount of lag and how well the
+server keeps up even with large numbers of objects.
+
 
 To run a 2 server cluster just  run the same command but pass it seed02 as the
-name.
+name. Running a 2 server cluster will result in the world having 4000 npc's,
+with the processing evenly distributed across both servers.
 
 #Performance
 

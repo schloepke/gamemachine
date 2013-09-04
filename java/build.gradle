@@ -50,7 +50,10 @@ dependencies {
   //compile fileTree(dir: 'third_party/libgdx', include: '*.jar')
   //compile fileTree(dir: 'third_party/jme', include: '*.jar')
 }
-  
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '1.7'
+}
 task uberjar(type: Jar) {
   from files(sourceSets.main.output.classesDir)
   from configurations.runtime.asFileTree.files.collect { zipTree(it) }

@@ -20,18 +20,19 @@ namespace :game do
 end
 
 namespace :java do
+  gradlew = File.join(File.dirname(__FILE__), 'java','gradlew')
 
   task :clean do
-    sh 'rm -f java/lib/*.jar'
-    sh 'rm -f java/src/main/java/com/game_machine/entity_system/generated/*.java'
+    FileUtils.rm_f 'java/lib/*.jar'
+    FileUtils.rm_f 'java/src/main/java/com/game_machine/entity_system/generated/*.java'
   end
 
   task :all => [:clean] do
-    sh 'cd java && gradle clean && gradle codegen && gradle build && gradle install_libs'
+    system "cd java && #{gradlew} clean && #{gradlew} codegen && #{gradlew} build && #{gradlew} install_libs"
   end
 
   task :build do
-    sh 'cd java && gradle build && gradle install_libs'
+    system "cd java && #{gradlew} build && #{gradlew} install_libs"
   end
 end
 
