@@ -43,7 +43,6 @@ module GameMachine
     end
 
     def notify_observers
-      puts "Notifying #{@observers.size} observers"
       @observers.each {|observer| observer.tell('cluster_update',get_self)}
     end
 
