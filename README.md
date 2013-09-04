@@ -27,17 +27,10 @@ code using higher level abstractions.
 
 #Installation
 
-Simpler installation coming soon!
-Tested on Ubuntu 12 or 13. 
-
-Should run on windows, although completely untested. If there is anything linux
-specific that you run into let me know and I'll fix it.
-
 1. Clone the repo
-2. Install latest stable jruby 
-3. Install gradle 1.6 (1.5 has bugs that can make the build fail)
+2. Install jruby.
 3. bundle install
-4. rake java:all (builds protobuf messages and java source)
+4. rake java:all
 4. rake game:demo (installs boot.rb for demo game)
 5. Start server with jruby -J-Xmx1024m bin/game_machine --name=seed01 --server
 
