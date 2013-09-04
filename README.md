@@ -27,12 +27,30 @@ code using higher level abstractions.
 
 #Installation
 
-1. Clone the repo
-2. Install jruby.
-3. bundle install
-4. rake java:all
-4. rake game:demo (installs boot.rb for demo game)
-5. Start server with jruby -J-Xmx1024m bin/game_machine --name=seed01 --server
+Install the gem
+```ruby
+gem install game_machine
+```
+
+Create a new game
+```ruby
+game_machine --new /tmp/mygame
+```
+
+Compile the java libraries and protocol buffer messages
+```ruby
+rake java:all
+```
+
+Set the game to boot into the demo
+```ruby
+rake game:demo
+```
+
+Start the server
+```ruby
+game_machine --name=seed01 --server
+```
 
 This will give you a server running the demo game.
 
