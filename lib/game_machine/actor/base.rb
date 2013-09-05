@@ -4,12 +4,20 @@ module GameMachine
     class DuplicateHashringError < StandardError;end
     class MissingHashringError < StandardError;end
 
+    # @abstract All game actors inherit fromm this class
     class Base < JavaLib::UntypedActor
 
       class << self
         alias_method :apply, :new
         alias_method :create, :new
 
+        # Sets the system wide player controller class.
+        # When a player logs in, a player controller with this class
+        # will be created. The system notifies the player controller when
+        # various player lifecycle events happen.
+        #
+        # This should only be called on subclasses, never on the Actor base
+        # class
         def set_player_controller
           @@player_controller = self
         end
@@ -22,6 +30,12 @@ module GameMachine
           @aspects ||= []
         end
         
+        # Sets the message types that this actor knows about. Can be called
+        # multiple times.  If passed an array of more then one message type,
+        # both message types will need to be present on an entity before the
+        # system will route the entity to the actor.
+        #
+        # messages will be routed to actors based on the aspects it has
         def aspect(new_aspects)
           aspects << new_aspects
           unless Application.registered.include?(self)
@@ -48,19 +62,30 @@ module GameMachine
           hashrings[name] = hashring
         end
 
+        # Find a local actor by name
+        # @return [Actor::Ref]
         def find(name=self.name)
           Actor::Ref.new(local_path(name),name)
         end
 
+        # Find a remote actor by name
+        # @return [Actor::Ref]
         def find_remote(server,name=self.name)
           Actor::Ref.new(remote_path(server,name),name)
         end
 
+        # Returns a local actor ref from the distributed ring of actors based
+        # on a consistent hashing of the id.
+        # @return [Actor::Ref]
         def find_distributed_local(id,name=self.name)
           ensure_hashring(name)
           Actor::Ref.new(local_distributed_path(id, name),name)
         end
 
+        # Returns an actor ref from the distributed ring of actors based
+        # on a consistent hashing of the id. The actor returned can be from
+        # any server in the cluster
+        # @return [Actor::Ref]
         def find_distributed(id,name=self.name)
           ensure_hashring(name)
           Actor::Ref.new(distributed_path(id, name),name)

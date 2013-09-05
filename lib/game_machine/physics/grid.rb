@@ -1,8 +1,14 @@
 module GameMachine
   module Physics
 
+    # @note Thread safe 2d grid that tracks entity locations and  provides
+    #   neighbor queries.  The grid stores 3d coordinates, but only calculates
+    #   neighbors based on 2d.  
+    # This class is thread safe.  You can create as many instances as you want.
     class Grid
 
+      # max is the width of the grid, cell size should reflect the area
+      #   that you want neighbor queries to use.
       def initialize(max,cell_size)
         @max = max
         @min = 0
@@ -15,6 +21,7 @@ module GameMachine
         @cells_cache = java.util.concurrent.ConcurrentHashMap.new
       end
 
+      # Returns the cells that are in range.
       def cells_within_radius(x,y,radius)
         key = "#{x}#{y}#{radius}"
         if cells = @cells_cache.get(key)
@@ -47,6 +54,7 @@ module GameMachine
         result
       end
 
+      # Returns entities that are within range
       def neighbors(x,y,radius,type)
         result = {:players => [], :npcs => []}
 
@@ -88,6 +96,8 @@ module GameMachine
         end
       end
 
+      # Set the location of an entity. Expects an entity with a transform
+      #   and vector3 component.
       def set(entity)
         id = entity.id
         vector3 = entity.transform.vector3
@@ -106,6 +116,7 @@ module GameMachine
         @cells.get(cell).put(id,values)
       end
 
+      # Hashes an x,y pair to it's cell
       def hash(x,y)
         (x*@conv_factor).to_i + (y*@conv_factor).to_i * @width
       end

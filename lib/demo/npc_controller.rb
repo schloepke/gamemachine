@@ -1,5 +1,5 @@
 module Demo
-  class ZombieController < GameMachine::GameSystems::SingletonController
+  class NpcController < GameMachine::GameSystems::SingletonController
 
     # Start is our initializer, called at start and restart
     def start

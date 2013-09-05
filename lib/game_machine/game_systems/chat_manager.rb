@@ -1,5 +1,16 @@
 module GameMachine
   module GameSystems
+
+    # @note All chat system requests go through the ChatManager
+    #   Chat can be topic based or private player to player messages
+    #   Topics are automatically created by the first player to send a join
+    #   request to a topic that does not already exist.  
+    #   Chat topic channels are distributed across the cluster, and guaranteed
+    #   to be delivered.
+    #
+    # @aspects ChatMessage Player
+    # @aspects JoinChat Player
+    # @aspects LeaveChat Player
     class ChatManager < Actor::Base
 
 

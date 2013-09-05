@@ -1,6 +1,31 @@
 module GameMachine
   module GameSystems
     
+    # @note Manages the lifecycle of singleton controllers  
+    #   - Sends a string message of 'update' to all singleton controllers
+    #     at the update interval specifed in Settings::singleton_manager.update_count  
+    #
+    #   - Singleton controllers are distributed over the cluster using
+    #     a distributed router.  
+    #   
+    #   - To create a singleton controller send an Entity to the singleton manager 
+    #     with a CreateSingleton component.  You can attach any additional  
+    #     components you wish.  The entity will be passed to the start  method
+    #     of the singleton controller.  
+    #
+    # @aspects CreateSingleton
+    # @aspects DestroySingleton
+    # @aspects NotifySingleton
+    #
+    # @example Tells the manager to create a singleton controller
+    #   entity = Entity.new
+    #   entity.set_id('npc1')
+    #   entity.set_create_singleton(
+    #     CreateSingleton.new.set_id('npc1').set_controller(Demo::NpcController.name)
+    #   )
+    #   entity.set_is_npc(IsNpc.new.set_enabled(true))
+    #   entity.set_vector3(Vector3.new.set_x(0.0).set_y(0.0).set_z(0.0))
+    #   GameMachine::GameSystems::SingletonManager.find.tell(entity)
     class SingletonManager < Actor::Base
       
       aspect %w(CreateSingleton)

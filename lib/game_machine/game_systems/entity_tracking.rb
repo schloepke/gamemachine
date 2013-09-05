@@ -1,5 +1,12 @@
 module GameMachine
   module GameSystems
+
+    # @note Handles player location tracking and neighbor requests.
+    #   The client must explicitly send a TrackEntit component to the server
+    #   to be tracked, it doesn't happen automatically.
+    #
+    # @aspects TrackEntity
+    # @aspects GetNeighbors
     class EntityTracking < Actor::Base
 
       GRID =  JavaLib::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)

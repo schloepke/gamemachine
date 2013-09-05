@@ -6,6 +6,8 @@ module GameMachine
     end
 
     module ClassMethods
+      # Defines a stored  procedure that can be called later and run on the
+      #   actor that contains the entity you want to update.
       def dbproc(name,&blk)
         ObjectDb.dbprocs[name] = blk
       end
