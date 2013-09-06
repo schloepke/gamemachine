@@ -1,4 +1,4 @@
-package entity_system;
+package game_machine.messages;
 
 option optimize_for = SPEED;
 
