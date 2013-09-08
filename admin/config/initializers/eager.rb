@@ -1,1 +1,2 @@
-Dir["#{Rails.root}/lib/entity_system/*.rb"].each {|file| load file}
+
+Dir["#{Rails.root}/lib/**/*.rb"].each {|file| load file}
