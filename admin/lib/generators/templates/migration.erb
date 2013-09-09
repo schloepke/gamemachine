@@ -1,0 +1,15 @@
+class Create<%=@class_name%> < ActiveRecord::Migration
+  def change
+    create_table :<%=@join_model_name%> do |t|
+      t.integer :<%=@name%>_id
+      t.integer :entity_id
+    end
+
+    create_table :<%=@name_plural%> do |t|
+      <%- @fields.each do |field| %>
+      t.<%=field.value_type%>   :<%=field.name.downcase%>
+      <%- end %>
+      t.timestamps
+    end
+  end
+end

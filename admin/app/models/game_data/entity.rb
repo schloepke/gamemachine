@@ -1,25 +1,23 @@
 module GameData
   class Entity < ActiveRecord::Base
-    # Generated associations block
-    has_many :entity_players
-    has_many :players, :through => :entity_players
+    #combat_ability
     has_many :entity_combat_abilities
     has_many :combat_abilities, :through => :entity_combat_abilities
+#associations_end
 
-    # Generated rails admin block
     rails_admin do
       navigation_label 'Game Data'
-      weight -1
-      configure :entity_players do
-        visible(false)
-      end
+      weight 0
+      #combat_ability
       configure :entity_combat_abilities do
         visible(false)
       end
       configure :combat_abilities do
       end
-      configure :players do
-      end
+#rails_admin_end
     end
+
+    #accepts_nested_attributes_for :players, :allow_destroy => true
+
   end
 end

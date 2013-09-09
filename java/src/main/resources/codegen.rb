@@ -1,6 +1,7 @@
 require 'java'
 require 'pathname'
 require 'erb'
+require 'fileutils'
 require 'protostuff-compiler-1.0.7-jarjar.jar'
 
 java_import java.lang.System
@@ -44,7 +45,7 @@ def write_components(proto)
   end
 end
 
-game_protofile = File.join(@user_dir,'../config/game_messages.proto')
+game_protofile = File.join(@user_dir,'../../admin/db/messages.proto')
 protofile = File.join(@user_dir,'/src/main/resources/messages.proto')
 
 if File.exists?(game_protofile)
@@ -64,4 +65,5 @@ file = java.io.File.new(combined_messages_protofile)
 proto = ProtoUtil.parseProto(file)
 
 write_components(proto)
+FileUtils.rm(combined_messages_protofile)
 

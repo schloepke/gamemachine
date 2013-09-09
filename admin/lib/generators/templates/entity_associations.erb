@@ -1,0 +1,3 @@
+    #<%=@name%>
+    has_many :<%=@join_model_name%>
+    has_many :<%=@name.pluralize%>, :through => :<%=@join_model_name%>

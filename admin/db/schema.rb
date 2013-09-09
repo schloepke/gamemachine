@@ -11,14 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130908061004) do
+ActiveRecord::Schema.define(version: 20130909083714) do
 
   create_table "combat_abilities", force: true do |t|
+    t.string   "name"
+    t.integer  "damage"
+    t.integer  "hit_chance"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "component_fields", force: true do |t|
     t.string  "name"
-    t.integer "damage"
-    t.integer "hit_chance"
-    t.integer "range"
-    t.string  "ability_type"
+    t.string  "value_type"
+    t.integer "component_id"
+  end
+
+  create_table "components", force: true do |t|
+    t.string "name"
   end
 
   create_table "entities", force: true do |t|
@@ -27,8 +37,8 @@ ActiveRecord::Schema.define(version: 20130908061004) do
   end
 
   create_table "entity_combat_abilities", force: true do |t|
-    t.integer "entity_id"
     t.integer "combat_ability_id"
+    t.integer "entity_id"
   end
 
   create_table "entity_components", force: true do |t|
@@ -38,35 +48,15 @@ ActiveRecord::Schema.define(version: 20130908061004) do
     t.boolean "locked"
   end
 
-  create_table "entity_players", force: true do |t|
-    t.integer "player_id"
-    t.integer "entity_id"
-    t.boolean "locked"
-  end
-
-  create_table "is_npcs", force: true do |t|
-    t.boolean "enabled"
-  end
-
-  create_table "players", force: true do |t|
-    t.string   "name"
-    t.boolean  "authenticated"
-    t.string   "authtoken"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "protobuf_fields", force: true do |t|
-    t.string  "name"
     t.string  "field_type"
     t.string  "value_type"
-    t.string  "model_field"
+    t.string  "name"
     t.integer "protobuf_message_id"
   end
 
   create_table "protobuf_messages", force: true do |t|
     t.string "name"
-    t.string "model_name"
   end
 
   create_table "rails_admin_histories", force: true do |t|
@@ -81,6 +71,20 @@ ActiveRecord::Schema.define(version: 20130908061004) do
   end
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
+
+  create_table "settings", force: true do |t|
+    t.boolean "mono_enabled",                      default: false
+    t.string  "environment"
+    t.string  "game_handler"
+    t.string  "data_store"
+    t.string  "couchbase_servers"
+    t.integer "cache_write_interval"
+    t.integer "cache_writes_per_second"
+    t.integer "world_grid_size"
+    t.integer "world_grid_cell_size"
+    t.integer "singleton_manager_router_count"
+    t.integer "singleton_manager_update_interval"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "", null: false
