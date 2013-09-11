@@ -122,3 +122,5 @@ Server.create(
   :akka_host => 'localhost',
   :akka_port => 2551
 )
+
+GameUser.create(:user => 'test_user', :pass => 'test_pass')

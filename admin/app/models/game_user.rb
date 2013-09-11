@@ -1,6 +1,6 @@
 class GameUser < ActiveRecord::Base
-  validates_presence_of :username
-  validates_presence_of :password
+  validates_presence_of :user
+  validates_presence_of :pass
 
   rails_admin do
     navigation_label 'Configuration'

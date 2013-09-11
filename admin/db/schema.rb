@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 20130911070008) do
   end
 
   create_table "game_users", force: true do |t|
-    t.string   "username"
-    t.string   "password"
+    t.string   "user"
+    t.string   "pass"
     t.string   "roles"
     t.datetime "created_at"
     t.datetime "updated_at"
