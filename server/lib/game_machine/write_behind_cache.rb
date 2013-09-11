@@ -1,8 +1,8 @@
 module GameMachine
   class WriteBehindCache < Actor::Base
 
-    MAX_WRITES_PER_SECOND = Settings.write_behind_cache.max_writes_per_second
-    WRITE_INTERVAL = Settings.write_behind_cache.write_interval
+    MAX_WRITES_PER_SECOND = Settings.cache_writes_per_second
+    WRITE_INTERVAL = Settings.cache_write_interval
 
     attr_accessor :write_interval, :max_writes_per_second
     attr_reader :cache, :queue

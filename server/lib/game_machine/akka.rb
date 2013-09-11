@@ -7,7 +7,7 @@ module GameMachine
     attr_reader :name, :cluster, :hashring, :address
 
     def self.address_for(server)
-      "akka.tcp://#{Akka.instance.config_name}@#{Settings.servers.send(server).akka.host}:#{Settings.servers.send(server).akka.port}"
+      "akka.tcp://#{Akka.instance.config_name}@#{Settings.servers.send(server).akka_host}:#{Settings.servers.send(server).akka_port}"
     end
 
     def initialize!(name, cluster)
@@ -60,8 +60,8 @@ module GameMachine
 
     def set_seeds(config)
       seeds = Settings.seeds.map do |seed| 
-        seed_host = Settings.servers.send(seed).akka.host
-        seed_port = Settings.servers.send(seed).akka.port
+        seed_host = Settings.servers.send(seed).akka_host
+        seed_port = Settings.servers.send(seed).akka_port
         "\"akka.tcp://cluster@#{seed_host}:#{seed_port}\""
       end
       config.sub!('SEEDS',seeds.join(','))
@@ -87,15 +87,15 @@ module GameMachine
     end
 
     def akka_host
-      Application.config.akka_host
+      Application.config.server.akka_host
     end
 
     def akka_port
-      Application.config.akka_port
+      Application.config.server.akka_port
     end
 
     def start_camel_extension
-      if Application.config.http_enabled
+      if Application.config.server.http_enabled
         camel = JavaLib::CamelExtension.get(Akka.instance.actor_system)
         camel_context = camel.context
       end

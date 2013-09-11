@@ -1,0 +1,1 @@
+require_relative 'test_objectdb_callbacks'

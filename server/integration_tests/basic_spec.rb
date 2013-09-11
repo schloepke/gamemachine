@@ -43,7 +43,7 @@ module GameMachine
         it "player should be able to login via http" do
          response = Clients::Client.http_post('/auth',{:username => 'player', :password => 'pass'})
          response = JSON.parse(response)
-         response['authtoken'].should == Settings.authtoken
+         response['authtoken'].should == 'authorized'
         end
 
         it "write behind cache writes to couchbase" do

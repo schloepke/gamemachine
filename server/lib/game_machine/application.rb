@@ -58,22 +58,22 @@ module GameMachine
       end
 
       def start_endpoints
-        if config.udp.enabled
+        if config.server.udp_enabled
           Actor::Builder.new(Endpoints::Udp).start
           GameMachine.stdout(
-            "UDP starting on #{config.udp.host}:#{config.udp.port}"
+            "UDP starting on #{config.server.udp_host}:#{config.server.udp_port}"
           )
         end
 
-        if config.udt.enabled
+        if config.server.udt_enabled
           Actor::Builder.new(Endpoints::Udt).start
-          JavaLib::UdtServer.start(config.udt.host,config.udt.port)
+          JavaLib::UdtServer.start(config.server.udt_host,config.server.udt_port)
           GameMachine.stdout(
-            "UDT starting on #{config.udt.host}:#{config.udt.port}"
+            "UDT starting on #{config.server.udt_host}:#{config.server.udt_port}"
           )
         end
         
-        if config.http_enabled
+        if config.server.http_enabled
           props = JavaLib::Props.new(Endpoints::Http::Auth)
           Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
         end
@@ -141,24 +141,13 @@ module GameMachine
 
       def map_settings
         config.game_handler = Settings.game_handler
-        config.login_username = Settings.login_username
-        config.authtoken = Settings.authtoken
-        config.http_host = Settings.http_host
-        config.http_port = Settings.http_port
+        config.login_username = 'player'
+        config.authtoken = 'authorized'
         config.data_store = Settings.data_store
-        config.write_behind_cache = Settings.write_behind_cache
         config.seeds = Settings.seeds
         config.servers = Settings.servers
-        map_server_settings
-      end
-
-      def map_server_settings
         server = config.servers.send(config.name)
-        config.http_enabled = server.http_enabled
-        config.udp = server.udp
-        config.udt = server.udt
-        config.akka_host = server.akka.host
-        config.akka_port = server.akka.port
+        config.server = server
       end
 
     end

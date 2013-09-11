@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130909083714) do
+ActiveRecord::Schema.define(version: 20130911051954) do
 
   create_table "combat_abilities", force: true do |t|
     t.string   "name"
@@ -72,6 +72,22 @@ ActiveRecord::Schema.define(version: 20130909083714) do
 
   add_index "rails_admin_histories", ["item", "table", "month", "year"], name: "index_rails_admin_histories", using: :btree
 
+  create_table "servers", force: true do |t|
+    t.string  "environment"
+    t.string  "name"
+    t.boolean "http_enabled"
+    t.string  "http_host"
+    t.integer "http_port"
+    t.boolean "udp_enabled"
+    t.string  "udp_host"
+    t.integer "udp_port"
+    t.boolean "udt_enabled"
+    t.string  "udt_host"
+    t.integer "udt_port"
+    t.string  "akka_host"
+    t.integer "akka_port"
+  end
+
   create_table "settings", force: true do |t|
     t.boolean "mono_enabled",                      default: false
     t.string  "environment"
@@ -84,6 +100,7 @@ ActiveRecord::Schema.define(version: 20130909083714) do
     t.integer "world_grid_cell_size"
     t.integer "singleton_manager_router_count"
     t.integer "singleton_manager_update_interval"
+    t.string  "seeds"
   end
 
   create_table "users", force: true do |t|

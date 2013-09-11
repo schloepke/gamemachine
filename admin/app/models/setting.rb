@@ -1,6 +1,8 @@
 class Setting < ActiveRecord::Base
 
   validates_presence_of :environment
+  validates_uniqueness_of :environment
+  validates_presence_of :seeds
   validates_presence_of :game_handler
   validates_presence_of :data_store
   validates_presence_of :cache_write_interval
@@ -16,10 +18,10 @@ class Setting < ActiveRecord::Base
   end
 
   def environment_enum
-    ['Development','Production']
+    ['development','production','test']
   end
 
   def data_store_enum
-    ['Couchbase','Mapdb','Memory']
+    ['couchbase','mapdb','memory']
   end
 end

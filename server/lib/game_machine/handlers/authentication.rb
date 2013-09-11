@@ -3,7 +3,7 @@ require 'state_machine'
 module GameMachine
   module Handlers
     class Authentication < Actor::Base
-      AUTHTOKEN = Settings.authtoken
+      AUTHTOKEN = 'authorized'
       AUTHENTICATED_USERS = java.util.concurrent.ConcurrentHashMap.new
       include Helpers::StateMachine
 
@@ -44,7 +44,7 @@ module GameMachine
       end
 
       def valid_authtoken?
-        @message.player.authtoken == Settings.authtoken
+        @message.player.authtoken == 'authorized'
       end
 
       def send_to_game_handler(message)

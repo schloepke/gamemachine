@@ -33,12 +33,12 @@ module GameMachine
       aspect %w(DestroySingleton)
 
       def post_init(*args)
-        router_count = Settings.singleton_manager.router_count
+        router_count = Settings.singleton_manager_router_count
         @actor_refs = create_singleton_routers(router_count)
 
         @slice_size = router_count / 10
         @slices = @actor_refs.each_slice(@slice_size).to_a
-        update_interval = Settings.singleton_manager.update_interval
+        update_interval = Settings.singleton_manager_update_interval
         schedule_update(update_interval)
       end
 

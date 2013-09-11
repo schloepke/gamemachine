@@ -10,13 +10,13 @@ module GameMachine
         end
 
         def getEndpointUri
-          return "jetty:http://#{Settings.http_host}:#{Settings.http_port}/auth?traceEnabled=false"
+          return "jetty:http://#{Application.config.server.http_host}:#{Application.config.server.http_port}/auth?traceEnabled=false"
         end
 
         def onReceive(message)
           params = message_to_params(message)
           if auth = login(params['username'],params['password'])
-            server = "#{Settings.http_host}:#{Settings.http_port}"
+            server = "#{Application.config.server.http_host}:#{Application.config.server.http_port}"
             response = {:server => server, :authtoken => auth}
           else
             response = {:error => 'bad login'}
@@ -28,18 +28,18 @@ module GameMachine
 
         def login(user,pass)
           if user == username && pass == password
-            Settings.authtoken
+            'authorized'
           else
             false
           end
         end
 
         def username
-          Settings.login_username
+          'player'
         end
 
         def password
-          Settings.login_password
+          'pass'
         end
 
         def message_to_params(message)

@@ -1,130 +1,127 @@
 ---
-defaults: &defaults
-
 development:
-  <<: *defaults
+  id: 1
+  mono_enabled: false
+  environment: development
   game_handler: GameMachine::Handlers::Request
+  data_store: memory
+  couchbase_servers: http://217.0.0.1:8091/pools
+  cache_write_interval: -1
+  cache_writes_per_second: -1
   world_grid_size: 2000
-  world_grid_cell_size: 50
-  data_store: memory
-  couchbase_servers: 
-    - http://127.0.0.1:8091/pools
-  write_behind_cache:
-    write_interval: -1
-    max_writes_per_second: -1
-  login_username: 'player'
-  login_password: 'pass'
-  authtoken: 'authorized'
-  http_host: localhost
-  http_port: 8080
-  mono_enabled: false
-  singleton_manager:
-    router_count: 200
-    update_interval: 100
-  seeds:
-    - seed01
-    - seed02
-  servers:
-    default:
-      http_enabled: true
-      udp:
-        port: 8100
-        host: localhost
-        enabled: true
-      udt:
-        port: 8200
-        host: localhost
-        enabled: true
-      akka:
-        host: localhost
-        port: 2551
-    seed01:
-      http_enabled: true
-      udp:
-        port: 8100
-        host: 0.0.0.0
-        enabled: true
-      udt:
-        port: 8200
-        host: localhost
-        enabled: true
-      akka:
-        host: localhost
-        port: 2552
-    seed02:
-      http_enabled: false
-      udp:
-        port: 8101
-        host: localhost
-        enabled: false
-      udt:
-        port: 8201
-        host: localhost
-        enabled: false
-      akka:
-        host: localhost
-        port: 2553
-    member01:
-      http_enabled: false
-      udp:
-        port: 8102
-        host: localhost
-        enabled: true
-      udt:
-        port: 8202
-        host: localhost
-        enabled: true
-      akka:
-        host: localhost
-        port: 0
-    member02:
-      http_enabled: false
-      udp:
-        port: 8103
-        host: localhost
-        enabled: true
-      udt:
-        port: 8203
-        host: localhost
-        enabled: true
-      akka:
-        host: localhost
-        port: 0
-
-test:
-  <<: *defaults
-  game_handler: GameMachine::Handlers::Request
-  world_grid_size: 10000
   world_grid_cell_size: 25
-  login_username: 'player'
-  login_password: 'pass'
-  authtoken: 'authorized'
-  http_host: localhost
-  http_port: 8080
-  data_store: memory
-  write_behind_cache:
-    write_interval: 10000
-    max_writes_per_second: 10
-  mono_enabled: false
-  singleton_manager:
-    router_count: 10
-    update_interval: 1000000
+  singleton_manager_router_count: 200
+  singleton_manager_update_interval: 100
   seeds:
-    - default
+  - seed01
+  - seed02
   servers:
     default:
+      id: 1
+      environment: development
+      name: default
+      http_enabled: true
+      http_host: localhost
+      http_port: 8080
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8100
+      udt_enabled: true
+      udt_host: localhost
+      udt_port: 8200
+      akka_host: localhost
+      akka_port: 2551
+    seed01:
+      id: 2
+      environment: development
+      name: seed01
+      http_enabled: true
+      http_host: localhost
+      http_port: 8080
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8100
+      udt_enabled: true
+      udt_host: localhost
+      udt_port: 8200
+      akka_host: localhost
+      akka_port: 2552
+    seed02:
+      id: 3
+      environment: development
+      name: seed02
       http_enabled: false
-      udp:
-        port: 8100
-        host: localhost
-        enabled: true
-      udt:
-        port: 8200
-        host: localhost
-        enabled: false
-      akka:
-        host: localhost
-        port: 2551
-
+      http_host: localhost
+      http_port: 8080
+      udp_enabled: false
+      udp_host: 0.0.0.0
+      udp_port: 8101
+      udt_enabled: false
+      udt_host: localhost
+      udt_port: 8201
+      akka_host: localhost
+      akka_port: 2553
+    member01:
+      id: 4
+      environment: development
+      name: member01
+      http_enabled: false
+      http_host: localhost
+      http_port: 8080
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8102
+      udt_enabled: false
+      udt_host: localhost
+      udt_port: 8202
+      akka_host: localhost
+      akka_port: 0
 production:
-  <<: *defaults
+  id: 2
+  mono_enabled: false
+  environment: production
+  game_handler: GameMachine::Handlers::Request
+  data_store: couchbase
+  couchbase_servers: http://217.0.0.1:8091/pools
+  cache_write_interval: 10
+  cache_writes_per_second: 100
+  world_grid_size: 2000
+  world_grid_cell_size: 25
+  singleton_manager_router_count: 200
+  singleton_manager_update_interval: 100
+  seeds:
+  - seed01
+  - seed02
+  servers: {}
+test:
+  id: 3
+  mono_enabled: false
+  environment: test
+  game_handler: GameMachine::Handlers::Request
+  data_store: memory
+  couchbase_servers: http://217.0.0.1:8091/pools
+  cache_write_interval: -1
+  cache_writes_per_second: -1
+  world_grid_size: 2000
+  world_grid_cell_size: 25
+  singleton_manager_router_count: 200
+  singleton_manager_update_interval: 100
+  seeds:
+  - seed01
+  - seed02
+  servers:
+    default:
+      id: 5
+      environment: test
+      name: default
+      http_enabled: true
+      http_host: localhost
+      http_port: 8080
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8100
+      udt_enabled: true
+      udt_host: localhost
+      udt_port: 8200
+      akka_host: localhost
+      akka_port: 2551

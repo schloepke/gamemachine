@@ -6,8 +6,8 @@ module GameMachine
     class Client
 
       def initialize(server)
-        @host = Settings.servers.send(server).udp.host
-        @port = Settings.servers.send(server).udp.port
+        @host = Settings.servers.send(server).udp_host
+        @port = Settings.servers.send(server).udp_port
         @socket = UDPSocket.new
         @socket.connect(@host,@port)
       end
@@ -27,7 +27,7 @@ module GameMachine
       end
 
       def self.connect_udt
-        address = JavaLib::InetSocketAddress.new(Settings.servers.seed01.udt.host, Settings.servers.seed01.udt.port)
+        address = JavaLib::InetSocketAddress.new(Settings.servers.seed01.udt_host, Settings.servers.seed01.udt_port)
         s = JavaLib::SocketUDT.new(JavaLib::TypeUDT::DATAGRAM)
         s.setBlocking(true)
         s.connect(address)
