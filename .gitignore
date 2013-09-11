@@ -15,3 +15,4 @@ server/java/build
 server/java/lib
 *.so
 server/boot.rb
+server/tmp
