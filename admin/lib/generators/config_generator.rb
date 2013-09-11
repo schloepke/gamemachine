@@ -29,6 +29,10 @@ class ConfigGenerator
       File.open(file,'w') {|f| f.write(yaml)}
     end
 
+    def publish
+      write_config(generate)
+    end
+
     def generate
       config_hash = {}
       environments.each do |env|
@@ -39,7 +43,7 @@ class ConfigGenerator
           Server.where(:environment => env)
         )
       end
-      write_config(config_hash.to_yaml)
+      config_hash.to_yaml
     end
 
   end

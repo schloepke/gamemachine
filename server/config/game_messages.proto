@@ -1,1 +1,9 @@
-// Game specific protobuf message definitions
+message Testmessage22 {
+  required  int32  blah = 1;
+  required  ErrorMessage  blah2 = 2;
+}
+
+message Testmessage2 {
+  required  Health  health = 1;
+}
+

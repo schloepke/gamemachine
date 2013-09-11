@@ -1,5 +1,4 @@
 message <%=@class_name%> {
-<%- @fields.each_with_index do |field,i| %>
-  <%=field.protobuf_field_type%> <%=field.protobuf_value_type%> <%=field.protobuf_field_name%> = <%=i + 1%>;
-<%- end %>
-}
+<%- @fields.each_with_index do |field,i| %>  <%=field.field_type%>  <%=field.value_type%>  <%=field.name%> = <%=i + 1%>;
+<%- end %>}
+

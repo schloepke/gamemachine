@@ -207,6 +207,10 @@ public final class Entity  implements Externalizable, Message<Entity>, Schema<En
 		ArrayList<String> names = new ArrayList<String>();
 
 
+
+
+
+
 		if (this.hasHealth()) {
 			names.add(this.health.getClass().getSimpleName());
 		}

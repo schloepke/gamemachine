@@ -45,7 +45,7 @@ def write_components(proto)
   end
 end
 
-game_protofile = File.join(@user_dir,'../../admin/db/messages.proto')
+game_protofile = File.join(@user_dir,'../config/game_messages.proto')
 protofile = File.join(@user_dir,'/src/main/resources/messages.proto')
 
 if File.exists?(game_protofile)
