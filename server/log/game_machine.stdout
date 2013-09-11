@@ -1,0 +1,61 @@
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+[]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+[""]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+["", "", ""]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+["", ""]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+["", ""]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+[]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+[]
+UDP starting on localhost:8100
+UDT starting on localhost:8200
+boot.rb loaded
+Game Machine start successful
+[]
+[]
+{:new=>false, :boot=>nil, :name=>"seed01  ", :config=>nil, :version=>false, :help=>false, :name_given=>true}
+{:new=>false, :boot=>nil, :name=>"seed01  ", :config=>nil, :version=>false, :help=>false, :name_given=>true}

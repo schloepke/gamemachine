@@ -1,0 +1,40 @@
+Settingslogic::MissingSetting: Missing setting 'seed01  ' in 'servers' section in /home/chris/game_machine/config/config.yml
+          missing_key at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:189
+       method_missing at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:117
+             __send__ at org/jruby/RubyBasicObject.java:1703
+                 send at org/jruby/RubyKernel.java:2209
+  map_server_settings at /home/chris/game_machine/lib/game_machine/application.rb:156
+         map_settings at /home/chris/game_machine/lib/game_machine/application.rb:152
+          initialize! at /home/chris/game_machine/lib/game_machine/application.rb:9
+                start at /home/chris/game_machine/lib/game_machine/runner.rb:13
+               (root) at bin/game_machine:45
+Settingslogic::MissingSetting: Missing setting 'seed01  ' in 'servers' section in /home/chris/game_machine/config/config.yml
+          missing_key at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:189
+       method_missing at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:117
+             __send__ at org/jruby/RubyBasicObject.java:1703
+                 send at org/jruby/RubyKernel.java:2209
+  map_server_settings at /home/chris/game_machine/lib/game_machine/application.rb:156
+         map_settings at /home/chris/game_machine/lib/game_machine/application.rb:152
+          initialize! at /home/chris/game_machine/lib/game_machine/application.rb:9
+                start at /home/chris/game_machine/lib/game_machine/runner.rb:13
+               (root) at bin/game_machine:45
+Settingslogic::MissingSetting: Missing setting 'seed01  ' in 'servers' section in /home/chris/game_machine/config/config.yml
+          missing_key at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:189
+       method_missing at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:117
+             __send__ at org/jruby/RubyBasicObject.java:1703
+                 send at org/jruby/RubyKernel.java:2209
+  map_server_settings at /home/chris/game_machine/lib/game_machine/application.rb:156
+         map_settings at /home/chris/game_machine/lib/game_machine/application.rb:152
+          initialize! at /home/chris/game_machine/lib/game_machine/application.rb:9
+                start at /home/chris/game_machine/lib/game_machine/runner.rb:13
+               (root) at bin/game_machine:45
+Settingslogic::MissingSetting: Missing setting 'seed01  ' in 'servers' section in /home/chris/game_machine/config/config.yml
+          missing_key at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:189
+       method_missing at /home/chris/.rvm/gems/jruby-1.7.4/gems/settingslogic-2.0.9/lib/settingslogic.rb:117
+             __send__ at org/jruby/RubyBasicObject.java:1703
+                 send at org/jruby/RubyKernel.java:2209
+  map_server_settings at /home/chris/game_machine/lib/game_machine/application.rb:156
+         map_settings at /home/chris/game_machine/lib/game_machine/application.rb:152
+          initialize! at /home/chris/game_machine/lib/game_machine/application.rb:9
+                start at /home/chris/game_machine/lib/game_machine/runner.rb:13
+               (root) at bin/game_machine:45
