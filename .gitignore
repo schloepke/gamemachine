@@ -9,9 +9,9 @@ nbproject
 .project
 *.swp
 .gradle
-lib/bin
-java/bin
-java/build
-java/lib
+server/lib/bin
+server/java/bin
+server/java/build
+server/java/lib
 *.so
-boot.rb
+server/boot.rb
