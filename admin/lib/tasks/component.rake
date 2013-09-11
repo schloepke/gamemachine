@@ -2,7 +2,7 @@
 GAME_MACHINE_ROOT = File.expand_path(File.join(Rails.root,'../'))
 
 def set_dirs
-  @java_dir = File.join(GAME_MACHINE_ROOT, 'java')
+  @java_dir = File.join(GAME_MACHINE_ROOT, 'server','java')
   @gradlew = File.join(@java_dir,'gradlew')
   @java_libs = File.join(@java_dir,'lib','*.jar')
   @java_sources = File.join(@java_dir,'src','main','java','com','game_machine','entity_system','generated','*.java')

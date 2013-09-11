@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130911051954) do
+ActiveRecord::Schema.define(version: 20130911070008) do
 
   create_table "combat_abilities", force: true do |t|
     t.string   "name"
@@ -46,6 +46,14 @@ ActiveRecord::Schema.define(version: 20130911051954) do
     t.integer "entity_id"
     t.string  "component_type"
     t.boolean "locked"
+  end
+
+  create_table "game_users", force: true do |t|
+    t.string   "username"
+    t.string   "password"
+    t.string   "roles"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "protobuf_fields", force: true do |t|
