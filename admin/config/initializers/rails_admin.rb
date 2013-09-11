@@ -7,7 +7,7 @@ RailsAdmin.config do |config|
   ################  Global configuration  ################
 
   # Set the admin name here (optional second array element will appear in red). For example:
-  config.main_app_name = ['Admin', 'Admin']
+  config.main_app_name = ['Game Machine', 'Admin']
   # or for a more dynamic name:
   # config.main_app_name = Proc.new { |controller| [Rails.application.engine_name.titleize, controller.params['action'].titleize] }
 
@@ -49,9 +49,11 @@ RailsAdmin.config do |config|
 
   # Now you probably need to tour the wiki a bit: https://github.com/sferik/rails_admin/wiki
   # Anyway, here is how RailsAdmin saw your application's models when you ran the initializer:
-config.actions do
+  config.actions do
     # root actions
-    dashboard                     # mandatory
+    dashboard do
+      statistics false
+    end
     # collection actions 
     index                         # mandatory
     export
@@ -62,9 +64,15 @@ config.actions do
     edit
     new
     delete do
-      except 'Setting'
+      except ['Setting','Component']
     end
     history_show
     show_in_app
   end
+
+  config.navigation_static_label = "Manage"
+  config.navigation_static_links = {
+    'Server' => '/admin/server'
+  }
+
 end

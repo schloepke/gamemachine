@@ -7,7 +7,7 @@ module GameData
 
     rails_admin do
       navigation_label 'Game Data'
-      weight 0
+      weight 10
       #combat_ability
       configure :entity_combat_abilities do
         visible(false)

@@ -103,7 +103,7 @@ require_relative 'game_machine/data_store'
 require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/cluster_monitor'
 require_relative 'game_machine/scheduler'
-require_relative 'game_machine/daemon'
+require_relative 'game_machine/runner'
 require_relative 'game_machine/endpoints/udt'
 require_relative 'game_machine/endpoints/udp'
 require_relative 'game_machine/endpoints/http/auth'
@@ -121,18 +121,9 @@ require_relative 'game_machine/bot/chat'
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
+
 if GameMachine::Settings.mono_enabled
   require_relative 'game_machine/mono_test'
   GameMachine::MonoLib.init_mono
-end
-
-if ENV['START_SERVER']
-  GameMachine::Application.initialize!(ENV['SERVER_NAME'] || 'default',true)
-  GameMachine::Application.start
-end
-
-if ENV['STOP_SERVER']
-  GameMachine::Akka.instance.init!
-  GameMachine::Akka.instance.kill_all
 end
 
