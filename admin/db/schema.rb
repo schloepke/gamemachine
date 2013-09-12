@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130911070008) do
+ActiveRecord::Schema.define(version: 20130912064542) do
 
   create_table "combat_abilities", force: true do |t|
     t.string   "name"
@@ -94,6 +94,7 @@ ActiveRecord::Schema.define(version: 20130911070008) do
     t.integer "udt_port"
     t.string  "akka_host"
     t.integer "akka_port"
+    t.string  "status"
   end
 
   create_table "settings", force: true do |t|

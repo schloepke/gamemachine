@@ -1,5 +1,6 @@
 export DEBIAN_FRONTEND=noninteractive
-if [ -d "/home/vagrant/.packages_installed"]
+
+if [ -f "/home/vagrant/.packages_installed" ]
 then
   echo "packages already installed"
 else
@@ -37,3 +38,5 @@ else
   rm master.zip
   #git clone https://github.com/chrisochs/game_machine
 fi
+
+echo "Game Machine install successful!"

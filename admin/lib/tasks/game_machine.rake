@@ -21,7 +21,7 @@ namespace :game_machine do
   namespace :config do
     desc 'pubish game config'
     task :publish => :environment do
-      ConfigGenerator.publish
+      Export::GameConfig.publish
     end
   end
 

@@ -9,10 +9,15 @@ nbproject
 .project
 *.swp
 .gradle
+*.so
+.vagrant
+server/boot.rb
+server/tmp
+server/config/config.yml
+server/config/game_data.yml
 server/lib/bin
 server/java/bin
 server/java/build
 server/java/lib
-*.so
-server/boot.rb
+server/log
 server/tmp

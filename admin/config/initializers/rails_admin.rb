@@ -68,6 +68,8 @@ RailsAdmin.config do |config|
     end
     history_show
     show_in_app
+
+    start_server
   end
 
   config.navigation_static_label = "Manage"
