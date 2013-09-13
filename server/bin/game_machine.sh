@@ -1,5 +1,8 @@
 #!/bin/bash
 
+unset GEM_HOME
+unset BUNDLE_GEMFILE
+unset GEM_PATH
 CWD=$(pwd)
 APP_NAME=game_machine
 
@@ -17,7 +20,8 @@ if [ -e "$PID_FILE" ]; then
   exit 1
 else
   echo "Starting $APP_NAME with args $ARGV."
-  sh -c "( ( nohup jruby bin/game_machine \"$ARGV\" 2>> \"$ERR_FILE\" >> \"$OUT_FILE\" < /dev/null) & echo \$! > \"$PID_FILE\")"
+  nohup jruby bin/game_machine "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  echo $! > "$PID_FILE"
   exit $?
 fi
 }
@@ -26,7 +30,7 @@ stop_daemon() {
 if [ -e "$PID_FILE" ]; then
   echo "Stopping $APP_NAME."
   PID=`cat $PID_FILE`
-  while [ 1 ]; do
+  for i in {1..10} ; do
     kill -TERM $PID 2> /dev/null
     sleep 1
     [ `ps $PID 2> /dev/null | grep $PID | wc -l` -eq 0 ] && break
@@ -44,6 +48,9 @@ check_status() {
     if [ `ps $PID 2> /dev/null | grep $PID | wc -l` -eq 1 ]; then
       echo "$APP_NAME is running"
       return 0
+    else
+      echo "$APP_NAME not running/stale pidfile"
+      return 3
     fi
   fi
 

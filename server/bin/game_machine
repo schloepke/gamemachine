@@ -27,6 +27,9 @@ Usage:
 
 EOS
 end
+opts[:name].strip!
+opts[:boot].strip!
+opts[:config].strip!
 
 if opts[:new]
   GameMachine::Runner.new_app(ARGV.shift)

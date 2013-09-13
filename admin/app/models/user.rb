@@ -5,6 +5,6 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   rails_admin do
       navigation_label 'System'
-      weight 15
+      weight 1000
   end
 end

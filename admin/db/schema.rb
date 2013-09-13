@@ -94,7 +94,8 @@ ActiveRecord::Schema.define(version: 20130912064542) do
     t.integer "udt_port"
     t.string  "akka_host"
     t.integer "akka_port"
-    t.string  "status"
+    t.integer "status",       default: 0
+    t.integer "pid"
   end
 
   create_table "settings", force: true do |t|

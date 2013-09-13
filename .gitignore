@@ -21,3 +21,4 @@ server/java/build
 server/java/lib
 server/log
 server/tmp
+jruby-1.7.4
