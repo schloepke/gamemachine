@@ -1,24 +1,32 @@
-class ComponentGenerator
-  
+require_relative 'generator_base'
+class ComponentGenerator < GeneratorBase
 
-  def self.generate_all
+  def self.create_all
     Component.all.each do |component|
-      new(component).generate
+      ComponentGenerator.new(component).create
     end
   end
 
-  def initialize(component)
-    @name = component.name.downcase
-    @component_model_filename = "#{@name}.rb"
-    @name_plural = @name.pluralize
-    @class_name = @name.classify
-    @join_model_name = "entity_#{@name.pluralize}"
-    @join_model_filename = "entity_#{@name}.rb"
-    @fields = component.component_fields
+  def self.destroy_all
+    Component.all.each do |component|
+      ComponentGenerator.new(component).destroy
+    end
   end
 
+  def destroy
+    FileUtils.rm_f(component_file)
+    FileUtils.rm_f(component_config_file)
+    FileUtils.rm_f(join_model_file)
+    FileUtils.rm_f(join_model_config_file)
+    destroy_entity_config
+    destroy_entity_associations
+  end
 
-  def generate
+  def update
+
+  end
+
+  def create
     if File.exists?(component_file)
       puts "#{@name} exists"
       return
@@ -26,38 +34,25 @@ class ComponentGenerator
     @entity_associations_out = eval_template(:entity_associations)
     @entity_admin_block_out = eval_template(:entity_admin_block)
     @join_model_out = eval_template(:component_join_model)
+    @join_model_config_out = eval_template(:component_join_model_config)
     @component_out = eval_template(:component)
-    @migration_out = eval_template(:migration)
-    #@protobuf_out = eval_template(:protobuf_message)
-    update_entity
+    @component_config_out = eval_template(:component_config)
+    create_entity_associations
+    create_entity_config
     write_join_model
+    write_join_model_config
     write_component
-    write_migration
-    #write_proto_message
+    write_component_config
   end
 
   private
 
-  def eval_template(template)
-    filename = File.join(template_dir,"#{template}.erb")
-    ERB.new(File.read(filename),nil,'-').result(binding)
+  def component_config_file
+    File.join(rails_admin_config_dir,@component_model_config_filename)
   end
 
-  def template_dir
-    File.join(Rails.root,'lib','generators','templates')
-  end
-
-  def model_dir
-    File.join(Rails.root,'app','models','game_data')
-  end
-
-  def proto_file
-    File.join(Rails.root,'db','messages.proto')
-  end
-
-  def migration_file
-     ts = Time.now.to_s.split(" ")[0..1].join(" ").gsub!(/\D/, "")
-    File.join( Rails.root, 'db', 'migrate',"#{ts}_create_#{@name}.rb")
+  def join_model_config_file
+    File.join(rails_admin_config_dir,@join_model_config_filename)
   end
 
   def component_file
@@ -68,14 +63,6 @@ class ComponentGenerator
     File.join(model_dir,@join_model_filename)
   end
 
-  def write_proto_message
-    File.open(proto_file,'w') {|f| f.write(@protobuf_out)}
-  end
-
-  def write_migration
-    File.open(migration_file,'w') {|f| f.write(@migration_out)}
-  end
-
   def write_component
     File.open(component_file,'w') {|f| f.write(@component_out)}
   end
@@ -84,10 +71,43 @@ class ComponentGenerator
     File.open(join_model_file,'w') {|f| f.write(@join_model_out)}
   end
 
-  def update_entity
-    file = File.join(model_dir,'entity.rb')
+  def write_join_model_config
+    File.open(join_model_config_file,'w') {|f| f.write(@join_model_config_out)}
+  end
+
+  def write_component_config
+    File.open(component_config_file,'w') {|f| f.write(@component_config_out)}
+  end
+
+  def entity_config_content
+    file = File.join(rails_admin_config_dir,'entity_config.rb')
+    File.read(file)
+  end
+
+  def destroy_entity_config
+    file = File.join(rails_admin_config_dir,'entity_config.rb')
+    content = File.read(file)
+    content.sub!(/##{@name}_start(.*)##{@name}_end/m,'')
+    File.open(file,'w') {|f| f.write(content)}
+  end
+
+  def create_entity_config
+    file = File.join(rails_admin_config_dir,'entity_config.rb')
     content = File.read(file)
     content.sub!('#rails_admin_end',"#{@entity_admin_block_out}#rails_admin_end")
+    File.open(file,'w') {|f| f.write(content)}
+  end
+
+  def destroy_entity_associations
+    file = File.join(model_dir,'entity.rb')
+    content = File.read(file)
+    content.sub!(/##{@name}_start(.*)##{@name}_end/m,'')
+    File.open(file,'w') {|f| f.write(content)}
+  end
+
+  def create_entity_associations
+    file = File.join(model_dir,'entity.rb')
+    content = File.read(file)
     content.sub!('#associations_end',"#{@entity_associations_out}#associations_end")
     File.open(file,'w') {|f| f.write(content)}
   end

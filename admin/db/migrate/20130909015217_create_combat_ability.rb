@@ -5,6 +5,7 @@ class CreateCombatAbility < ActiveRecord::Migration
       t.integer :entity_id
     end
 
+    #combat_ability_fields:name:damage:hit_chance
     create_table :combat_abilities do |t|
 
       t.string   :name

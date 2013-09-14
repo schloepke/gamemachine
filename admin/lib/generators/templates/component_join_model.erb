@@ -2,9 +2,6 @@ module GameData
   class Entity<%=@class_name%> < ActiveRecord::Base
     belongs_to :<%=@name%>
     belongs_to :entity
-    rails_admin do
-      visible(false)
-    end
   end
 end
 

@@ -64,7 +64,7 @@ RailsAdmin.config do |config|
     edit
     new
     delete do
-      except ['Setting','Component']
+      except ['Setting']
     end
     history_show
     show_in_app

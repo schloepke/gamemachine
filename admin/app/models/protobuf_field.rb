@@ -5,6 +5,7 @@ class ProtobufField < ActiveRecord::Base
   validates_presence_of :value_type
   validates_presence_of :field_type
 
+
   def field_type_enum
     ['optional','required','repeated']
   end

@@ -2,18 +2,6 @@ module GameData
   class <%=@class_name%> < ActiveRecord::Base
     has_many :<%=@join_model_name%>
     has_many :entities, :through => :<%=@join_model_name%>
-
-    rails_admin do
-      configure :<%=@join_model_name%> do
-        visible(false)
-      end
-      configure :entities do
-        visible(false)
-      end
-
-      navigation_label 'Components'
-      parent Entity
-    end
   end
 end
 

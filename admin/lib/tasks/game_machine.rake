@@ -13,7 +13,8 @@ namespace :game_machine do
   namespace :components do
     desc 'generate models for new components'
     task :generate => :environment do
-      ComponentGenerator.generate_all
+      ComponentGenerator.create_all
+      MigrationGenerator.create_all
       Rake::Task['db:migrate'].invoke
     end
   end
