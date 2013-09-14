@@ -126,7 +126,11 @@
               %td.other.left= link_to "...", @other_left_link, :class => 'pjax'
             - properties.map{ |property| property.bind(:object, object) }.each do |property|
               - value = property.pretty_value
-              = render :partial => 'list_field', :locals => { :property => property, :value => value }
+              %td{:class => "#{property.css_class} #{property.type_css_class}", :title => strip_tags(value.to_s)}
+                - if property.partial === true
+                  = render :partial => "/rails_admin/#{@abstract_model.param_key}/#{property.name}", :locals => { :object => object, :property => property, :value => value }
+                - else
+                  = value
             - if @other_right_link ||= other_right && index_path(params.merge(:set => (params[:set].to_i + 1)))
               %td.other.right= link_to "...", @other_right_link, :class => 'pjax'
             %td.last.links

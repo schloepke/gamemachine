@@ -1,12 +1,5 @@
 class ProtobufMessage < ActiveRecord::Base
   has_many :protobuf_fields, :dependent => :destroy
-  rails_admin do
-    navigation_label 'Game Data'
-    weight 9
-
-    configure :protobuf_fields do
-    end
-  end
 
   validates_uniqueness_of :name
   accepts_nested_attributes_for :protobuf_fields, :allow_destroy => true

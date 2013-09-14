@@ -4,13 +4,24 @@ class Server < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :environment
   validates_uniqueness_of :name, :scope => [:environment]
- 
+  validate :one_server_enabled
+
   STATUS_MESSAGE = {
     0 => 'Stopped',
     1 => 'Starting',
     2 => 'Running',
     3 => 'Unknown/Error'
   }
+
+  def self.already_enabled?
+    where(:enabled => true).size >= 1
+  end
+
+  def one_server_enabled
+    if enabled && self.class.already_enabled?
+      errors.add(:enabled, "Cannot be set on more then one server")
+    end
+  end
 
   def environment_enum
     ['development','production','test']
@@ -38,12 +49,12 @@ class Server < ActiveRecord::Base
 
   def update_status
     out = `cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh status`
-    if out.match(/is not running/)
+    if out.match(/stale pidfile/)
+      new_status = 3
+    elsif out.match(/is not running/)
       new_status = 0
     elsif out.match(/is running/)
       new_status = 2
-    elsif out.match(/stale pidfile/)
-      new_status = 3
     end
     update_attribute(:status,new_status)
   end

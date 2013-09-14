@@ -6,6 +6,7 @@ RailsAdmin.config do |config|
     weight 5
 
     edit do
+      field :enabled
       field :environment
       field :name
       field :http_enabled
@@ -24,16 +25,9 @@ RailsAdmin.config do |config|
     list do
       field :environment
       field :name
+      field :enabled
       field :status do
-        pretty_value do
-          server = bindings[:object]
-          server.update_status
-          if server.running? or server.error?
-            %{<span>#{server.status_message}</span>(<a href="/admin/server/#{server.id}/stop">Stop</a>)}.html_safe
-          elsif server.stopped?
-            %{<span>#{server.status_message}</span>(<a href="/admin/server/#{server.id}/start">Start</a>)}.html_safe
-          end
-        end
+        partial true
       end
     end
   end

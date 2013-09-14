@@ -5,13 +5,6 @@ class ProtobufField < ActiveRecord::Base
   validates_presence_of :value_type
   validates_presence_of :field_type
 
-  rails_admin do
-    visible(false)
-    configure :protobuf_message do
-      visible(false)
-    end
-  end
-
   def field_type_enum
     ['optional','required','repeated']
   end

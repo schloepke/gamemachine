@@ -12,11 +12,6 @@ class Setting < ActiveRecord::Base
   validates_presence_of :singleton_manager_router_count
   validates_presence_of :singleton_manager_update_interval
 
-  rails_admin do
-      navigation_label 'Configuration'
-      weight 5
-  end
-
   def environment_enum
     ['development','production','test']
   end

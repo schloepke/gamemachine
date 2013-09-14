@@ -49,7 +49,7 @@ check_status() {
       echo "$APP_NAME is running"
       return 0
     else
-      echo "$APP_NAME not running/stale pidfile"
+      echo "$APP_NAME is not running (stale pidfile)"
       return 3
     fi
   fi

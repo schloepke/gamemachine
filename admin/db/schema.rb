@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 20130912064542) do
     t.string  "akka_host"
     t.integer "akka_port"
     t.integer "status",       default: 0
-    t.integer "pid"
+    t.boolean "enabled",      default: false
   end
 
   create_table "settings", force: true do |t|
