@@ -21,4 +21,5 @@ class Util
       model.name.sub('GameData::','')
     end
   end
+
 end

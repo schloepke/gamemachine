@@ -10,13 +10,10 @@ end
 
 namespace :game_machine do
 
-  namespace :components do
-    desc 'generate models for new components'
-    task :generate => :environment do
-      ComponentGenerator.create_all
-      MigrationGenerator.create_all
-      Rake::Task['db:migrate'].invoke
-    end
+  desc 'migrate pending components'
+  task :migrate => :environment do
+    MigrationGenerator.move_pending_to_migrate
+    Rake::Task['db:migrate'].invoke
   end
 
   namespace :config do
@@ -39,6 +36,10 @@ namespace :game_machine do
     end
   end
 
+  desc 'publish data changes to server'
+  task :publish => ['data:publish','protobuf:publish','config:publish'] do
+  end
+
   namespace :server do
     desc 'update server with latest admin data (components,proto messages, config)'
     task :update => [:clean, 'data:publish','protobuf:publish','config:publish'] do
@@ -47,8 +48,9 @@ namespace :game_machine do
 
     task :clean do
       set_dirs
-      FileUtils.rm_f @java_libs
-      FileUtils.rm_f @java_sources
+      puts "removing #{@java_sources}"
+      FileUtils.rm_r Dir.glob(@java_libs)
+      FileUtils.rm_r Dir.glob(@java_sources)
     end
 
     task :build do

@@ -31,6 +31,8 @@ development:
       udt_port: 8200
       akka_host: localhost
       akka_port: 2551
+      status: 0
+      enabled: false
     seed01:
       id: 2
       environment: development
@@ -46,6 +48,8 @@ development:
       udt_port: 8200
       akka_host: localhost
       akka_port: 2552
+      status: 0
+      enabled: true
     seed02:
       id: 3
       environment: development
@@ -61,6 +65,8 @@ development:
       udt_port: 8201
       akka_host: localhost
       akka_port: 2553
+      status: 0
+      enabled: false
     member01:
       id: 4
       environment: development
@@ -76,6 +82,8 @@ development:
       udt_port: 8202
       akka_host: localhost
       akka_port: 0
+      status: 0
+      enabled: false
 production:
   id: 2
   mono_enabled: false
@@ -125,3 +133,5 @@ test:
       udt_port: 8200
       akka_host: localhost
       akka_port: 2551
+      status: 0
+      enabled: false

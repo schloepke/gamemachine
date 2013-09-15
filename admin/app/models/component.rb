@@ -1,5 +1,5 @@
 class Component < ActiveRecord::Base
-  has_many :component_fields, :dependent => :destroy
+  has_many :component_fields
 
   validates_uniqueness_of :name
   accepts_nested_attributes_for :component_fields, :allow_destroy => true
@@ -17,6 +17,7 @@ class Component < ActiveRecord::Base
   def track_destroy
     ComponentGenerator.new(self).destroy
     MigrationGenerator.new(self).destroy
+    component_fields.each {|cf| cf.destroy}
   end
 
   def downcase_name

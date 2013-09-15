@@ -4,20 +4,48 @@ class MigrationGenerator < GeneratorBase
 
   attr_reader :name, :fields, :class_name
 
-  def self.create_all
-    Component.all.each do |component|
-      MigrationGenerator.new(component).create
+  class << self
+    def create_all
+      Component.all.each do |component|
+        MigrationGenerator.new(component).create
+      end
     end
-  end
 
-  def self.destroy_all
-    Component.all.each do |component|
-      MigrationGenerator.new(component).destroy
+    def destroy_all
+      Component.all.each do |component|
+        MigrationGenerator.new(component).destroy
+      end
     end
+
+    def move_pending_to_migrate
+      Dir[File.join(pending_migration_dir,'*.rb')].each do |pending_migration|
+        FileUtils.mv(pending_migration,migration_dir)
+      end
+    end
+
+    def migration_dir
+      File.join( Rails.root, 'db', 'migrate')
+    end
+
+    def pending_migration_dir
+      dir = File.join( Rails.root, 'db', 'pending_migrations')
+      FileUtils.mkdir_p(dir)
+      dir
+    end
+
+    def migrations
+      Dir[File.join(migration_dir,"*.rb")]
+    end
+
+    def pending_migrations
+      Dir[File.join(pending_migration_dir,"*.rb")]
+    end
+
   end
 
   def destroy
-    if has_create_migration?
+    return false if has_migration?(:drop)
+    if has_migration?(:create)
       action = 'destroy'
       @migration_name = "#{action}_#{@name}"
       @migration_class_name = "#{@name.camelize}"
@@ -27,7 +55,8 @@ class MigrationGenerator < GeneratorBase
   end
 
   def change(action,field)
-    if has_create_migration?
+    return false if has_migration?(:drop)
+    if has_migration?(:create)
       @field = field
       action = action.to_s
       @migration_name = "#{action}_#{@name}_#{@field.name}"
@@ -38,36 +67,21 @@ class MigrationGenerator < GeneratorBase
   end
 
   def create
-    return false if has_create_migration?
+    return false if has_migration?(:create)
     @action = 'create'
     @migration_name = "#{@action}_#{@name}"
     write_migration(eval_template(:migration))
   end
 
-  def move_pending_to_migrate
-    Dir[File.join(pending_migrations_dir,'*.rb')].each do |pending_migration|
-      FileUtils.mv(pending_migration,migration_dir)
+  def has_migration?(type=:create,include_pending=true)
+    if include_pending
+      files = self.class.migrations + self.class.pending_migrations
+    else
+      files = self.class.migrations
     end
-  end
-
-  def migration_dir
-    File.join( Rails.root, 'db', 'migrate')
-  end
-
-  def pending_migration_dir
-    dir = File.join( Rails.root, 'db', 'pending_migrations')
-    FileUtils.mkdir_p(dir)
-    dir
-  end
-
-  def migrations
-    Dir[File.join(migration_dir,"*.rb")]
-  end
-
-  def has_create_migration?
-    migrations.each do |file|
+    files.each do |file|
       IO.readlines(file).each do |line|
-        if line.match(/create_table :#{@name_plural}/)
+        if line.match(/#{type}_table :#{@name_plural}/)
           return true
         end
       end
@@ -82,10 +96,11 @@ class MigrationGenerator < GeneratorBase
   end
 
   def migration_ts
+    sleep 1
     Time.now.to_s.split(" ")[0..1].join(" ").gsub!(/\D/, "")
   end
 
   def migration_file
-    File.join(pending_migration_dir,"#{migration_ts}_#{@migration_name}.rb")
+    File.join(self.class.pending_migration_dir,"#{migration_ts}_#{@migration_name}.rb")
   end
 end
