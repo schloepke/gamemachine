@@ -15,6 +15,7 @@ server/boot.rb
 server/tmp
 server/config/config.yml
 server/config/game_data.yml
+server/config/game_messages.proto
 server/lib/bin
 server/java/bin
 server/java/build

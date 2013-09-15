@@ -5,17 +5,17 @@ class ProtobufMessage < ActiveRecord::Base
   accepts_nested_attributes_for :protobuf_fields, :allow_destroy => true
 
   def self.game_messages
-    @messages = []
+    messages = []
     java_dir = File.join(GAME_MACHINE_ROOT, 'java')
     protofile = File.join(java_dir,'src','main','resources','messages.proto')
 
     IO.readlines(protofile).each do |line|
       if md = line.match(/message\s+([a-zA-Z0-9]{1,128})\s+{\s+$/)
         message_name = md[1].strip
-        @messages << message_name
+        messages << message_name
       end
     end
-    @messages
+    (ProtobufField.all.map {|f| f.value_type} + messages.sort).uniq
   end
 
 end

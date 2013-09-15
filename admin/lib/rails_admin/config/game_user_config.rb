@@ -1,6 +1,6 @@
 RailsAdmin.config do |config|
   config.model 'GameUser' do
-    navigation_label 'Configuration'
-    weight 5
+    navigation_label 'Game Data'
+    weight 9
   end
 end

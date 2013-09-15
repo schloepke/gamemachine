@@ -15,10 +15,14 @@ module GameMachine
 
     def configure_logging
       RJack::Logback.configure do
-        console = RJack::Logback::ConsoleAppender.new do |a|
+        unless ENV['GAME_ENV'] == 'test'
+          console = RJack::Logback::ConsoleAppender.new do |a|
+          end
         end
+
         file = RJack::Logback::FileAppender.new(logfile) do |a|
         end
+
         RJack::Logback.root.add_appender( file )
         RJack::Logback.root.level = RJack::Logback::INFO
       end

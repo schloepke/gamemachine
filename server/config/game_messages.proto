@@ -29,3 +29,7 @@ message Attack {
   optional  int32  combatAbilityId = 3;
 }
 
+message IsPlayer {
+  optional  bool  enabled = 1;
+}
+

@@ -1,7 +1,7 @@
 RailsAdmin.config do |config|
   config.model 'ProtobufMessage' do
-    navigation_label 'Game Data'
-    weight 9
+    navigation_label 'Configuration'
+    weight 5
 
     configure :protobuf_fields do
     end

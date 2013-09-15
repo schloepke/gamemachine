@@ -1,7 +1,7 @@
 RailsAdmin.config do |config|
   config.model 'Component' do
-    navigation_label 'Game Data'
-    weight 8
+    navigation_label 'Configuration'
+    weight 5
 
     label 'Component Definition'
     label_plural 'Component Definitions'

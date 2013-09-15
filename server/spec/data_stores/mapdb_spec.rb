@@ -3,6 +3,11 @@ module GameMachine
   module DataStores
     describe Mapdb do
 
+      after(:each) do
+        DataStore.instance.shutdown
+        DataStore.instance.set_store('memory')
+      end
+
       subject do
         instance = DataStore.instance
         instance.set_store('mapdb')

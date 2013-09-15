@@ -19,7 +19,8 @@ module Export
       {
         :game_users => game_users_to_hash,
         :entities => entities_to_hash,
-        :components => components_to_hash
+        :components => components_to_hash,
+        :assets => assets_hash
       }
     end
 
@@ -32,6 +33,17 @@ module Export
       end
     end
 
+    def assets_hash
+      Asset.all.map do |asset|
+        {
+          :name => asset.name,
+          :id => asset.id,
+          :version => asset.version,
+          :url => asset.asset.url
+        }
+      end
+    end
+
     def game_users_to_hash
       GameUser.all.map {|gu| filtered_attributes(gu.attributes)}
     end
@@ -41,8 +53,11 @@ module Export
         ::GameData::Entity.all.each do |entity|
           attributes = filtered_attributes(entity.attributes)
           self.class.entity_components.each do |rel|
-            attributes[rel] = entity.send(rel).map do |e|
+            components = entity.send(rel).map do |e|
               filtered_attributes(e.attributes)
+            end
+            unless components.empty?
+              attributes[rel] = components
             end
           end
           entities << attributes
