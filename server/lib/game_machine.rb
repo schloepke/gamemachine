@@ -117,6 +117,7 @@ require_relative 'game_machine/akka'
 require_relative 'game_machine/clients/client'
 require_relative 'game_machine/clients/udt_client'
 require_relative 'game_machine/clients/tcp_client'
+require_relative 'game_machine/clients/udp_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'

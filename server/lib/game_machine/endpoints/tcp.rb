@@ -1,7 +1,6 @@
 module GameMachine
   module Endpoints
     class Tcp < Actor::Base
-      GAME_HANDLER = Settings.game_handler
 
       def post_init(*args)
         @clients = {}
@@ -38,7 +37,6 @@ module GameMachine
           unhandled(message)
         end
       end
-
 
     end
   end

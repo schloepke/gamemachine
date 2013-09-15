@@ -9,7 +9,7 @@ rescue LoadError
 end
 module GameMachine
 
-  describe 'tcp client' do 
+  describe 'udt client' do 
 
     let(:player) do
       Player.new.set_id('player').set_name('player').
@@ -33,7 +33,7 @@ module GameMachine
       String.from_java_bytes(client_message.to_byte_array)
     end
 
-    let(:client) {Clients::TcpClient.new(:seed01)}
+    let(:client) {Clients::UdpClient.new(:seed01)}
 
 
     describe "sending and receiving messages" do

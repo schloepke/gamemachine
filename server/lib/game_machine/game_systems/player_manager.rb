@@ -18,11 +18,12 @@ module GameMachine
       end
 
       def create_player_controller(message)
-        id = message.player.id
-        controller_class = Actor::Base.player_controller
-        builder = Actor::Builder.new(controller_class,message)
-        child = builder.with_parent(context).with_name(id).start
-        PLAYER_CONTROLLERS[id] = child
+        if controller_class = Actor::Base.player_controller
+          id = message.player.id
+          builder = Actor::Builder.new(controller_class,message)
+          child = builder.with_parent(context).with_name(id).start
+          PLAYER_CONTROLLERS[id] = child
+        end
       rescue Exception => e
         GameMachine.logger.error("Create Player Controller error: #{e.class} #{e.message}")
       end
