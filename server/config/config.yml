@@ -50,6 +50,9 @@ development:
       akka_port: 2552
       status: 0
       enabled: true
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
     seed02:
       id: 3
       environment: development
@@ -84,6 +87,9 @@ development:
       akka_port: 0
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
 production:
   id: 2
   mono_enabled: false
@@ -135,6 +141,9 @@ test:
       akka_port: 2551
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
     seed01:
       id: 6
       environment: test
@@ -152,6 +161,9 @@ test:
       akka_port: 2552
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
     seed02:
       id: 7
       environment: test

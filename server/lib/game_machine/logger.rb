@@ -6,7 +6,9 @@ module GameMachine
     LOGGER = RJack::SLF4J[ 'game_machine' ]
 
     def stdout(message)
-      print "#{message}\n"
+      unless ENV['GAME_ENV'] == 'test'
+        print "#{message}\n"
+      end
     end
 
     def logfile
@@ -15,9 +17,7 @@ module GameMachine
 
     def configure_logging
       RJack::Logback.configure do
-        unless ENV['GAME_ENV'] == 'test'
-          console = RJack::Logback::ConsoleAppender.new do |a|
-          end
+        console = RJack::Logback::ConsoleAppender.new do |a|
         end
 
         file = RJack::Logback::FileAppender.new(logfile) do |a|

@@ -58,6 +58,13 @@ module GameMachine
       end
 
       def start_endpoints
+        if config.server.tcp_enabled
+          Actor::Builder.new(Endpoints::Tcp).start
+          GameMachine.stdout(
+            "Tcp starting on #{config.server.tcp_host}:#{config.server.tcp_port}"
+          )
+        end
+
         if config.server.udp_enabled
           Actor::Builder.new(Endpoints::Udp).start
           GameMachine.stdout(
