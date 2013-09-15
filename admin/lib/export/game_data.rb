@@ -16,7 +16,11 @@ module Export
     end
 
     def to_hash
-      {:entities => entities_to_hash, :components => components_to_hash}
+      {
+        :game_users => game_users_to_hash,
+        :entities => entities_to_hash,
+        :components => components_to_hash
+      }
     end
 
     private
@@ -26,6 +30,10 @@ module Export
         attribute == 'created_at' ||
           attribute == 'updated_at'
       end
+    end
+
+    def game_users_to_hash
+      GameUser.all.map {|gu| filtered_attributes(gu.attributes)}
     end
 
     def entities_to_hash

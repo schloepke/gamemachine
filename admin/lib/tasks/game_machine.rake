@@ -26,6 +26,7 @@ namespace :game_machine do
   namespace :data do
     desc 'pubish game data'
     task :publish => :environment do
+      Export::GameData.new.publish
     end
   end
 

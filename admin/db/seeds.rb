@@ -124,3 +124,45 @@ Server.create(
 )
 
 GameUser.create(:user => 'test_user', :pass => 'test_pass')
+
+def add_proto_message(name)
+  message = ProtobufMessage.new(:name => name)
+  message.save ? message : false
+end
+
+def add_proto_field(message,name,value_type,field_type)
+  message.protobuf_fields << ProtobufField.new(
+    :name => name, :value_type => value_type, :field_type => field_type
+  )
+end
+
+if message = add_proto_message('Health')
+  add_proto_field(message,'health','int32','required')
+end
+
+if message = add_proto_message('Effect')
+  add_proto_field(message,'length','int32','optional')
+  add_proto_field(message,'name','string','optional')
+  add_proto_field(message,'healthDiff','int32','optional')
+  add_proto_field(message,'damageDiff','int32','optional')
+  add_proto_field(message,'timePeriod','int32','optional')
+  add_proto_field(message,'type','string','optional')
+end
+
+if message = add_proto_message('EffectList')
+  add_proto_field(message,'effect','Effect','repeated')
+end
+
+if message = add_proto_message('CombatAbility')
+  add_proto_field(message,'name','string','required')
+  add_proto_field(message,'damage','int32','required')
+  add_proto_field(message,'hitChance','int32','optional')
+  add_proto_field(message,'range','int32','required')
+  add_proto_field(message,'type','string','optional')
+end
+
+if message = add_proto_message('Attack')
+  add_proto_field(message,'attacker','string','required')
+  add_proto_field(message,'target','string','required')
+  add_proto_field(message,'combatAbilityId','int32','optional')
+end

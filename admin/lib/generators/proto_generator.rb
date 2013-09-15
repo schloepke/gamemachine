@@ -27,9 +27,7 @@ class ProtoGenerator
   end
 
   def initialize(message)
-    @name = message.name.downcase
-    @name_plural = @name.pluralize
-    @class_name = @name.classify
+    @name = message.name
     @fields = message.protobuf_fields
   end
 

@@ -70,11 +70,4 @@ RailsAdmin.config do |config|
     show_in_app
   end
 
-  config.navigation_static_label = "Manage"
-  config.navigation_static_links = {
-    'Restart Admin' => '/system/restart',
-    'Publish data changes' => '/system/publish',
-    'Recompile Server' => '/system/recompile'
-  }
-
 end

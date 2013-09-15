@@ -3,40 +3,6 @@ package com.game_machine.entity_system.generated;
 option optimize_for = SPEED;
 
 //GAME_MESSAGES
-
-
-message Health {
-  required int32 health = 1;
-}
-
-message Effect {
-  required string id = 1;
-  optional int32 length = 2;
-  optional string name = 3;
-  optional int32 healthDiff = 4;
-  optional int32 damageDiff = 5;
-  optional int32 timePeriod = 6;
-  optional string type = 7;
-}
-
-message EffectList {
-  repeated Effect effect = 1;
-}
-
-message CombatAbility {
-  required int32 id = 1;
-  required string name = 2;
-  required int32 damage = 3;
-  optional int32 hitChance = 4;
-  required int32 range = 5;
-  required string type = 6;
-}
-
-message Attack {
-  required string attacker = 1;
-  required string target = 2;
-  required int32 combatAbilityId = 3;
-}
   
 message TrackEntity {
   required bool value = 1;

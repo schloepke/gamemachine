@@ -21,7 +21,15 @@
 
 en:
   admin:
+    home:
+      name: Home
     actions:
-      start_server:
-        menu: Start server
+      dashboard:
+        title: "Welcome to Game Machine!"
+        menu: "Dashboard"
+        breadcrumb: "Dashboard"
+      index:
+        title: "%{model_label_plural}"
+        menu: "List"
+        breadcrumb: "%{model_label_plural}"
   hello: "Hello world"

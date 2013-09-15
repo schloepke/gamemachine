@@ -1,12 +1,38 @@
 class SystemController < ApplicationController
 
-  def restart
-    system("cd #{Rails.root};bin/rails.sh restart &")
+  def restart_game_server
+    if server = Server.find_running
+      server.restart
+      flash[:notice] = 'Game server restarting'
+    end
+    redirect_to '/admin'
+  end
+
+  def stop_game_server
+    if server = Server.find_running
+      server.stop
+      flash[:notice] = 'Game server stopping'
+    end
+
+    redirect_to '/admin'
+  end
+
+  def start_game_server
+    if server = Server.find_enabled
+      server.start
+      flash[:notice] = 'Game server starting'
+    end
     redirect_to '/admin'
   end
 
   def publish
-    system("cd #{Rails.root};bin/rails.sh publish_game_data")
+    Export::GameConfig.publish
+    Export::GameData.new.publish
+    ProtoGenerator.publish
+    if server = Server.find_running
+      server.restart
+    end
+    flash[:notice] = 'Game data published'
     redirect_to '/admin'
   end
 

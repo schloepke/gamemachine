@@ -13,6 +13,14 @@ class Server < ActiveRecord::Base
     3 => 'Unknown/Error'
   }
 
+  def self.find_running
+    where(:status => 2).first
+  end
+
+  def self.find_enabled
+    where(:enabled => true).first
+  end
+
   def self.already_enabled?
     where(:enabled => true).size >= 1
   end
@@ -66,6 +74,11 @@ class Server < ActiveRecord::Base
 
   def stop
     system("cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh stop")
+    update_status
+  end
+
+  def restart
+    system("cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh restart --name=#{self.name}")
     update_status
   end
 end

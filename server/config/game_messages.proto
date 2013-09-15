@@ -1,0 +1,31 @@
+message Health {
+  required  int32  health = 1;
+}
+
+message Effect {
+  optional  int32  length = 1;
+  optional  string  name = 2;
+  optional  int32  healthDiff = 3;
+  optional  int32  damageDiff = 4;
+  optional  int32  timePeriod = 5;
+  optional  string  type = 6;
+}
+
+message EffectList {
+  repeated  Effect  effect = 1;
+}
+
+message CombatAbility {
+  required  string  name = 1;
+  required  int32  damage = 2;
+  optional  int32  hitChance = 3;
+  required  int32  range = 4;
+  optional  string  type = 5;
+}
+
+message Attack {
+  required  string  attacker = 1;
+  required  string  target = 2;
+  optional  int32  combatAbilityId = 3;
+}
+
