@@ -48,7 +48,6 @@ namespace :game_machine do
 
     task :clean do
       set_dirs
-      puts "removing #{@java_sources}"
       FileUtils.rm_r Dir.glob(@java_libs)
       FileUtils.rm_r Dir.glob(@java_sources)
     end
