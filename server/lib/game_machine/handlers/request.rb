@@ -5,12 +5,14 @@ module GameMachine
       def on_receive(message)
         if message.is_a?(ClientMessage)
           if message.has_player_logout
-            logged_out(message)
+            if Authentication.authenticated?(message.player_logout)
+              logged_out(message)
+            end
           elsif message.has_client_disconnect
             disconnected(message)
           elsif message.has_player
             update_entities(message)
-            if Authentication.authenticated?(message.player.id)
+            if Authentication.authenticated?(message.player)
               game_handler.tell(message)
             else
               authenticate_player(message)

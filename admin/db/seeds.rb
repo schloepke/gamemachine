@@ -35,6 +35,7 @@ Setting.create(
   :singleton_manager_update_interval => 100,
   :mono_enabled => false,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
+  :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"
 )
 Setting.create(
@@ -49,6 +50,7 @@ Setting.create(
   :singleton_manager_update_interval => 100,
   :mono_enabled => false,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
+  :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"
 )
 Setting.create(
@@ -63,6 +65,7 @@ Setting.create(
   :singleton_manager_update_interval => 100,
   :mono_enabled => false,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
+  :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"
 )
 
@@ -79,6 +82,9 @@ Server.create(
   :udt_enabled => true,
   :udt_host => 'localhost',
   :udt_port => 8200,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2551
 )
@@ -94,6 +100,9 @@ Server.create(
   :udt_enabled => true,
   :udt_host => 'localhost',
   :udt_port => 8200,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2552
 )
@@ -109,6 +118,9 @@ Server.create(
   :udt_enabled => false,
   :udt_host => 'localhost',
   :udt_port => 8201,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2553
 )
@@ -124,6 +136,9 @@ Server.create(
   :udt_enabled => false,
   :udt_host => 'localhost',
   :udt_port => 8202,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 0
 )
@@ -141,6 +156,9 @@ Server.create(
   :udt_enabled => true,
   :udt_host => 'localhost',
   :udt_port => 8200,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2551
 )
@@ -157,6 +175,9 @@ Server.create(
   :udt_enabled => true,
   :udt_host => 'localhost',
   :udt_port => 8200,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2552
 )
@@ -172,10 +193,14 @@ Server.create(
   :udt_enabled => true,
   :udt_host => 'localhost',
   :udt_port => 8201,
+  :tcp_host => '0.0.0.0',
+  :tcp_port => 8700,
+  :tcp_enabled => true,
   :akka_host => 'localhost',
   :akka_port => 2553
 )
 GameUser.create(:user => 'test_user', :pass => 'test_pass')
+GameUser.create(:user => 'player', :pass => 'pass', :auth_token => 'authorized')
 
 # Components
 Component.transaction do

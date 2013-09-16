@@ -11,12 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130915090708) do
+ActiveRecord::Schema.define(version: 20130916014849) do
 
   create_table "assets", force: true do |t|
     t.string  "asset"
     t.string  "name"
     t.integer "version", default: 0
+  end
+
+  create_table "attacks", force: true do |t|
+    t.string   "attacker"
+    t.string   "target"
+    t.integer  "combat_ability_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "combat_abilities", force: true do |t|
+    t.string   "name"
+    t.integer  "damage"
+    t.integer  "hit_chance"
+    t.integer  "range"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   create_table "component_fields", force: true do |t|
@@ -29,9 +47,30 @@ ActiveRecord::Schema.define(version: 20130915090708) do
     t.string "name"
   end
 
+  create_table "effects", force: true do |t|
+    t.integer  "length"
+    t.string   "name"
+    t.integer  "health_diff"
+    t.integer  "damage_diff"
+    t.integer  "time_period"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "entities", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "entity_attacks", force: true do |t|
+    t.integer "attack_id"
+    t.integer "entity_id"
+  end
+
+  create_table "entity_combat_abilities", force: true do |t|
+    t.integer "combat_ability_id"
+    t.integer "entity_id"
   end
 
   create_table "entity_components", force: true do |t|
@@ -41,12 +80,18 @@ ActiveRecord::Schema.define(version: 20130915090708) do
     t.boolean "locked"
   end
 
+  create_table "entity_effects", force: true do |t|
+    t.integer "effect_id"
+    t.integer "entity_id"
+  end
+
   create_table "game_users", force: true do |t|
     t.string   "user"
     t.string   "pass"
     t.string   "roles"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "auth_token"
   end
 
   create_table "protobuf_fields", force: true do |t|
@@ -89,6 +134,9 @@ ActiveRecord::Schema.define(version: 20130915090708) do
     t.integer "akka_port"
     t.integer "status",       default: 0
     t.boolean "enabled",      default: false
+    t.boolean "tcp_enabled",  default: false
+    t.string  "tcp_host"
+    t.integer "tcp_port"
   end
 
   create_table "settings", force: true do |t|
@@ -104,6 +152,7 @@ ActiveRecord::Schema.define(version: 20130915090708) do
     t.integer "singleton_manager_router_count"
     t.integer "singleton_manager_update_interval"
     t.string  "seeds"
+    t.string  "auth_handler"
   end
 
   create_table "users", force: true do |t|

@@ -15,6 +15,14 @@ module GameMachine
         akka.initialize!(config.name,config.cluster)
       end
 
+      def auth_handler
+        AuthHandlers::Base.instance
+      end
+
+      def data_store
+        DataStore.instance
+      end
+
       def akka
         Akka.instance
       end
@@ -47,7 +55,9 @@ module GameMachine
       end
 
       def start
+        load_game_data
         start_actor_system
+        AuthHandlers::Base.instance
         DataStore.instance
         start_endpoints
         start_core_systems
@@ -55,6 +65,12 @@ module GameMachine
         start_game_systems
         load_games
         GameMachine.stdout("Game Machine start successful")
+      end
+
+      def load_game_data
+        GameMachine::GameData.load_from(
+          File.join(GameMachine.app_root,'config/game_data.yml')
+        )
       end
 
       def start_endpoints

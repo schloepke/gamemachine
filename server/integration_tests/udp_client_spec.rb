@@ -33,6 +33,14 @@ module GameMachine
       String.from_java_bytes(client_message.to_byte_array)
     end
 
+    let(:logout_message) do
+      String.from_java_bytes(
+        client_message.set_player_logout(
+          PlayerLogout.new.set_player_id('player')
+        ).to_byte_array
+      )
+    end
+
     let(:client) {Clients::UdpClient.new(:seed01)}
 
 
@@ -44,6 +52,7 @@ module GameMachine
           client_message = ClientMessage.parse_from(bytes)
           #puts client_message.client_connection.id
           #puts client_message.client_connection.gateway
+          client.send_message(logout_message)
         end
         end
       end

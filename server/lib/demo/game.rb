@@ -32,7 +32,7 @@ module Demo
     end
 
     def load_game_data
-      GameMachine::GameSystems::GameData.load_from(
+      GameMachine::GameData.load_from(
         File.join(GameMachine.app_root,'lib/demo/game_data.yml')
       )
     end

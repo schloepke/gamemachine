@@ -15,8 +15,11 @@ module GameMachine
         after_transition :unauthenticated => :authenticated, :do => :register_player
       end
 
-      def self.authenticated?(player_id)
-        AUTHENTICATED_USERS.has_key?(player_id)
+      def self.authenticated?(player)
+        if authtoken = AUTHENTICATED_USERS.fetch(player.id)
+          return player.authtoken == authtoken
+        end
+        false
       end
 
       def notify_player_controller(player)
@@ -34,7 +37,9 @@ module GameMachine
       end
 
       def register_player
-        AUTHENTICATED_USERS[@message.player.id] = true
+        AUTHENTICATED_USERS[@message.player.id] =
+          authtoken_for_player(@message.player)
+
         player_register = PlayerRegister.new.
           set_client_connection(@message.client_connection).
           set_player_id(@message.player.id).
@@ -43,8 +48,12 @@ module GameMachine
         notify_player_controller(@message.player)
       end
 
+      def authtoken_for_player(player)
+        Application.auth_handler.authtoken_for(player.id)
+      end
+
       def valid_authtoken?
-        @message.player.authtoken == 'authorized'
+        @message.player.authtoken == authtoken_for_player(@message.player)
       end
 
       def send_to_game_handler(message)

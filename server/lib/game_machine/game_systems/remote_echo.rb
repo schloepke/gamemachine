@@ -5,9 +5,8 @@ module GameMachine
       aspect %w(EchoTest)
 
       def on_receive(message)
-        response = Helpers::GameMessage.new(message.player.id)
-        response.client_message.add_entity(message)
-        response.send_to_player
+        message.set_send_to_player(true)
+        PlayerGateway.find.tell(message)
       end
     end
   end

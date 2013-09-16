@@ -15,6 +15,7 @@ development:
   seeds:
   - seed01
   - seed02
+  auth_handler: GameMachine::AuthHandlers::Basic
   servers:
     default:
       id: 1
@@ -33,6 +34,9 @@ development:
       akka_port: 2551
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
     seed01:
       id: 2
       environment: development
@@ -49,7 +53,7 @@ development:
       akka_host: localhost
       akka_port: 2552
       status: 0
-      enabled: true
+      enabled: false
       tcp_enabled: true
       tcp_host: 0.0.0.0
       tcp_port: 8700
@@ -70,6 +74,9 @@ development:
       akka_port: 2553
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
     member01:
       id: 4
       environment: development
@@ -106,6 +113,7 @@ production:
   seeds:
   - seed01
   - seed02
+  auth_handler: GameMachine::AuthHandlers::Basic
   servers: {}
 test:
   id: 3
@@ -123,6 +131,7 @@ test:
   seeds:
   - seed01
   - seed02
+  auth_handler: GameMachine::AuthHandlers::Basic
   servers:
     default:
       id: 5
@@ -181,3 +190,6 @@ test:
       akka_port: 2553
       status: 0
       enabled: false
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700

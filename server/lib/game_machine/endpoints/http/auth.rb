@@ -27,19 +27,7 @@ module GameMachine
         private
 
         def login(user,pass)
-          if user == username && pass == password
-            'authorized'
-          else
-            false
-          end
-        end
-
-        def username
-          'player'
-        end
-
-        def password
-          'pass'
+          Application.auth_handler.authorize(user,pass)
         end
 
         def message_to_params(message)
