@@ -73,13 +73,6 @@ ActiveRecord::Schema.define(version: 20130916014849) do
     t.integer "entity_id"
   end
 
-  create_table "entity_components", force: true do |t|
-    t.integer "component_id"
-    t.integer "entity_id"
-    t.string  "component_type"
-    t.boolean "locked"
-  end
-
   create_table "entity_effects", force: true do |t|
     t.integer "effect_id"
     t.integer "entity_id"

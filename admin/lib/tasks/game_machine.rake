@@ -10,12 +10,6 @@ end
 
 namespace :game_machine do
 
-  desc 'migrate pending components'
-  task :migrate => :environment do
-    MigrationGenerator.move_pending_to_migrate
-    Rake::Task['db:migrate'].invoke
-  end
-
   namespace :config do
     desc 'pubish game config'
     task :publish => :environment do

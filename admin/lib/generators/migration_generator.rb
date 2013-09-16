@@ -17,20 +17,12 @@ class MigrationGenerator < GeneratorBase
       end
     end
 
-    def move_pending_to_migrate
-      Dir[File.join(pending_migration_dir,'*.rb')].each do |pending_migration|
-        FileUtils.mv(pending_migration,migration_dir)
-      end
-    end
-
     def migration_dir
       File.join( Rails.root, 'db', 'migrate')
     end
 
-    def pending_migration_dir
-      dir = File.join( Rails.root, 'db', 'pending_migrations')
-      FileUtils.mkdir_p(dir)
-      dir
+    def generated_migration_dir
+      gen_migrations_path
     end
 
     def migrations
@@ -38,7 +30,7 @@ class MigrationGenerator < GeneratorBase
     end
 
     def pending_migrations
-      Dir[File.join(pending_migration_dir,"*.rb")]
+      Dir[File.join(generated_migration_dir,"*.rb")]
     end
 
   end
@@ -101,6 +93,6 @@ class MigrationGenerator < GeneratorBase
   end
 
   def migration_file
-    File.join(self.class.pending_migration_dir,"#{migration_ts}_#{@migration_name}.rb")
+    File.join(self.class.generated_migration_dir,"#{migration_ts}_#{@migration_name}.rb")
   end
 end

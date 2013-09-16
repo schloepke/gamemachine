@@ -11,6 +11,7 @@ nbproject
 .gradle
 *.so
 .vagrant
+admin/generated
 server/boot.rb
 server/tmp
 server/config/config.yml

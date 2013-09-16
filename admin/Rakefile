@@ -2,32 +2,4 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require_relative 'lib/model_generator'
 Admin::Application.load_tasks
-
-
-namespace :protobufs do
-  desc "clear out existing protocl buffer definitions"
-  task :clear do
-    FileList['lib/game_machine/*.pb.rb'].each {|f| rm f}
-  end
-
-  desc "compile protocol buffers"
-  task :compile => :clear do |t|
-      outdir = File.join(File.dirname(__FILE__), 'lib','game_machine')
-      outfile = File.join(outdir,'messages.pb.rb')
-
-      protodir = File.join(File.dirname(__FILE__), '../java','src','main','resources')
-      protofile = File.join(protodir,'messages.proto')
-      rails_protofile = File.join(File.dirname(__FILE__),'messages.proto')
-
-      proto_def = File.read(protofile)
-      proto_def.sub!('com.game_machine.entity_system.generated','game_machine.messages')
-      File.open(rails_protofile,'w') {|f| f.write(proto_def)}
-      system "protoc messages.proto --ruby_out #{outdir}"
-      require outfile
-      EntitySystem::ModelGenerator.new(outfile).generate
-
-  end
-
-end

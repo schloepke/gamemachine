@@ -19,7 +19,6 @@ class ComponentGenerator < GeneratorBase
     FileUtils.rm_f(join_model_file)
     FileUtils.rm_f(join_model_config_file)
     destroy_entity_config
-    destroy_entity_associations
   end
 
   def update
@@ -31,13 +30,11 @@ class ComponentGenerator < GeneratorBase
       puts "#{@name} exists"
       return
     end
-    @entity_associations_out = eval_template(:entity_associations)
     @entity_admin_block_out = eval_template(:entity_admin_block)
     @join_model_out = eval_template(:component_join_model)
     @join_model_config_out = eval_template(:component_join_model_config)
     @component_out = eval_template(:component)
     @component_config_out = eval_template(:component_config)
-    create_entity_associations
     create_entity_config
     write_join_model
     write_join_model_config
@@ -48,19 +45,19 @@ class ComponentGenerator < GeneratorBase
   private
 
   def component_config_file
-    File.join(rails_admin_config_dir,@component_model_config_filename)
+    File.join(rails_admin_generated_config_dir,@component_model_config_filename)
   end
 
   def join_model_config_file
-    File.join(rails_admin_config_dir,@join_model_config_filename)
+    File.join(rails_admin_generated_config_dir,@join_model_config_filename)
   end
 
   def component_file
-    File.join(model_dir,@component_model_filename)
+    File.join(generated_model_dir,@component_model_filename)
   end
 
   def join_model_file
-    File.join(model_dir,@join_model_filename)
+    File.join(generated_model_dir,@join_model_filename)
   end
 
   def write_component
@@ -85,30 +82,19 @@ class ComponentGenerator < GeneratorBase
   end
 
   def destroy_entity_config
-    file = File.join(rails_admin_config_dir,'entity_config.rb')
+    self.class.ensure_entity_config
+    file = File.join(rails_admin_generated_config_dir,'entity_config.rb')
     content = File.read(file)
     content.sub!(/##{@name}_start(.*)##{@name}_end/m,'')
     File.open(file,'w') {|f| f.write(content)}
   end
 
   def create_entity_config
-    file = File.join(rails_admin_config_dir,'entity_config.rb')
+    self.class.ensure_entity_config
+    file = File.join(rails_admin_generated_config_dir,'entity_config.rb')
     content = File.read(file)
     content.sub!('#rails_admin_end',"#{@entity_admin_block_out}#rails_admin_end")
     File.open(file,'w') {|f| f.write(content)}
   end
 
-  def destroy_entity_associations
-    file = File.join(model_dir,'entity.rb')
-    content = File.read(file)
-    content.sub!(/##{@name}_start(.*)##{@name}_end/m,'')
-    File.open(file,'w') {|f| f.write(content)}
-  end
-
-  def create_entity_associations
-    file = File.join(model_dir,'entity.rb')
-    content = File.read(file)
-    content.sub!('#associations_end',"#{@entity_associations_out}#associations_end")
-    File.open(file,'w') {|f| f.write(content)}
-  end
 end

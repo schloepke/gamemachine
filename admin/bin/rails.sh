@@ -1,5 +1,6 @@
 #!/bin/bash
-
+SCRIPT_PATH=`dirname "$0"`; SCRIPT_PATH=`eval "cd \"$SCRIPT_PATH\" && pwd"`
+cd $SCRIPT_PATH/../
 unset GEM_HOME
 unset BUNDLE_GEMFILE
 unset GEM_PATH
@@ -7,7 +8,7 @@ CWD=$(pwd)
 APP_NAME=rails
 
 
-PID_PATH=$CWD/tmp/pids
+PID_PATH=$SCRIPT_PATH/../tmp/pids
 PID_FILE=$PID_PATH/server.pid
 mkdir -p $PID_PATH
 ARGV="$2 $3 $4"
@@ -21,7 +22,7 @@ update_game_server() {
 }
 
 migrate_db() {
-  rake game_machine:migrate
+  rake db:migrate
 }
 
 start_daemon() {
