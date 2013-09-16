@@ -36,6 +36,12 @@ class SystemController < ApplicationController
     redirect_to '/admin'
   end
 
+  def restart
+    FileUtils.touch '/tmp/restart.txt'
+    flash[:notice] = 'Admin restarting'
+    redirect_to '/admin'
+  end
+
   def recompile
     system("cd #{Rails.root};bin/rails.sh update_game_server")
     redirect_to '/admin'

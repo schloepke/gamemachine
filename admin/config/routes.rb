@@ -10,4 +10,5 @@ Admin::Application.routes.draw do
   get '/system/stop_game_server', to: 'system#stop_game_server'
   get '/system/publish', to: 'system#publish'
   get '/system/recompile', to: 'system#recompile'
+  get '/system/restart', to: 'system#restart'
 end

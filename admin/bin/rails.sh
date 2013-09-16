@@ -1,5 +1,6 @@
 #!/bin/bash
 SCRIPT_PATH=`dirname "$0"`; SCRIPT_PATH=`eval "cd \"$SCRIPT_PATH\" && pwd"`
+sleep 4
 cd $SCRIPT_PATH/../
 unset GEM_HOME
 unset BUNDLE_GEMFILE

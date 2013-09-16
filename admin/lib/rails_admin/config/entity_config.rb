@@ -5,3 +5,4 @@ RailsAdmin.config do |config|
 #rails_admin_end
   end
 end
+

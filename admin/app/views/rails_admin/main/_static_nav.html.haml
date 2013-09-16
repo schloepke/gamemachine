@@ -1,6 +1,7 @@
 %div{:style => 'height:10px'}
 %li.nav-header
   Manage
+  = content_tag(:li, link_to('Restart Admin', '/system/restart'))
   - if Server.find_running
     = content_tag(:li, link_to('Restart Game Server', '/system/restart_game_server'))
     = content_tag(:li, link_to('Stop Game Server', '/system/stop_game_server'))
