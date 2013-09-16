@@ -19,24 +19,6 @@ ActiveRecord::Schema.define(version: 20130916014849) do
     t.integer "version", default: 0
   end
 
-  create_table "attacks", force: true do |t|
-    t.string   "attacker"
-    t.string   "target"
-    t.integer  "combat_ability_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "combat_abilities", force: true do |t|
-    t.string   "name"
-    t.integer  "damage"
-    t.integer  "hit_chance"
-    t.integer  "range"
-    t.string   "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "component_fields", force: true do |t|
     t.string  "name"
     t.string  "value_type"
@@ -47,35 +29,9 @@ ActiveRecord::Schema.define(version: 20130916014849) do
     t.string "name"
   end
 
-  create_table "effects", force: true do |t|
-    t.integer  "length"
-    t.string   "name"
-    t.integer  "health_diff"
-    t.integer  "damage_diff"
-    t.integer  "time_period"
-    t.string   "type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "entities", force: true do |t|
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "entity_attacks", force: true do |t|
-    t.integer "attack_id"
-    t.integer "entity_id"
-  end
-
-  create_table "entity_combat_abilities", force: true do |t|
-    t.integer "combat_ability_id"
-    t.integer "entity_id"
-  end
-
-  create_table "entity_effects", force: true do |t|
-    t.integer "effect_id"
-    t.integer "entity_id"
   end
 
   create_table "game_users", force: true do |t|
