@@ -16,7 +16,7 @@ module GameMachine
       end
 
       def self.authenticated?(player)
-        if authtoken = AUTHENTICATED_USERS.fetch(player.id)
+        if authtoken = AUTHENTICATED_USERS.fetch(player.id,nil)
           return player.authtoken == authtoken
         end
         false
