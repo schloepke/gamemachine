@@ -1,0 +1,21 @@
+= javascript_include_tag :jquery
+%h2
+  = SystemStatus.status.status_text
+%h4
+  - unless SystemStatus.status.ok?
+    (Admin will reload once required action is taken)
+:javascript
+  function isAlive() {
+    $.get("/system/test", function(data) {
+      if (data == 'Ok') {
+        //$('#reload').text('Server reloaded' + data);
+        window.location = "/admin";
+      } else {
+        setTimeout(isAlive, 500);
+      }
+    })
+    //.done(function() { alert("second success"); })
+    .fail(function() { setTimeout(isAlive, 500); })
+    //.always(function() { alert("finished"); });
+  }
+  isAlive();

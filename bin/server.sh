@@ -1,39 +1,31 @@
 #!/bin/bash
+
 SCRIPT_PATH=`dirname "$0"`; SCRIPT_PATH=`eval "cd \"$SCRIPT_PATH\" && pwd"`
-sleep 4
-cd $SCRIPT_PATH/../
+SERVER_HOME=$SCRIPT_PATH/../server
+cd $SERVER_HOME
+
 unset GEM_HOME
 unset BUNDLE_GEMFILE
 unset GEM_PATH
 CWD=$(pwd)
-APP_NAME=rails
+APP_NAME=game_machine
 
+ERR_FILE=$SERVER_HOME/log/game_machine.stderr
+OUT_FILE=$SERVER_HOME/log/game_machine.stdout
 
-PID_PATH=$SCRIPT_PATH/../tmp/pids
-PID_FILE=$PID_PATH/server.pid
+PID_PATH=$SERVER_HOME/tmp
+PID_FILE=$PID_PATH/game_machine.pid
 mkdir -p $PID_PATH
 ARGV="$2 $3 $4"
 
-publish_game_data() {
-  rake game_machine:publish
-}
-
-update_game_server() {
-  rake game_machine:server:update
-}
-
-migrate_db() {
-  rake db:migrate
-}
-
 start_daemon() {
-migrate_db
 if [ -e "$PID_FILE" ]; then
   echo "PID file already exists."
   exit 1
 else
   echo "Starting $APP_NAME with args $ARGV."
-  jruby bin/rails server -e local &
+  nohup jruby bin/game_machine "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  echo $! > "$PID_FILE"
   exit $?
 fi
 }
@@ -86,17 +78,8 @@ case $1 in
     sleep 1
     start_daemon
   ;;
-  migrate_db)
-    migrate_db
-  ;;
-  publish_game_data)
-    publish_game_data
-  ;;
-  update_game_server)
-    update_game_server
-  ;;
   *)
-    echo "usage: $0 start|stop|restart|status|migrate_db|publish_game_data|update_game_server"
+    echo "usage: $0 start|stop|restart|status"
     exit 1
   ;;
 esac

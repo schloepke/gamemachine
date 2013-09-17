@@ -56,7 +56,7 @@ class Server < ActiveRecord::Base
   end
 
   def update_status
-    out = `cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh status`
+    out = `cd #{Rails.root}/../;sh bin/server.sh status`
     if out.match(/stale pidfile/)
       new_status = 3
     elsif out.match(/is not running/)
@@ -68,17 +68,17 @@ class Server < ActiveRecord::Base
   end
 
   def start
-    system("cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh start --name=#{self.name}")
+    system("cd #{Rails.root}/../;sh bin/server.sh start --name=#{self.name}")
     update_status
   end
 
   def stop
-    system("cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh stop")
+    system("cd #{Rails.root}/../;sh bin/server.sh stop")
     update_status
   end
 
   def restart
-    system("cd #{::GAME_MACHINE_ROOT};sh bin/game_machine.sh restart --name=#{self.name}")
+    system("cd #{Rails.root};sh bin/server.sh restart --name=#{self.name}")
     update_status
   end
 end

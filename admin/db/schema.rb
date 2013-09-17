@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130916020444) do
+ActiveRecord::Schema.define(version: 20130917025345) do
 
   create_table "assets", force: true do |t|
     t.string  "asset"
@@ -102,6 +102,12 @@ ActiveRecord::Schema.define(version: 20130916020444) do
     t.integer "singleton_manager_update_interval"
     t.string  "seeds"
     t.string  "auth_handler"
+  end
+
+  create_table "system_statuses", force: true do |t|
+    t.integer "status",       default: 0
+    t.string  "resolve_with"
+    t.string  "reason"
   end
 
   create_table "users", force: true do |t|

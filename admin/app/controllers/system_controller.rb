@@ -1,5 +1,7 @@
 class SystemController < ApplicationController
 
+  skip_before_filter :check_system_status, :only => [:action_required, :clear_status, :test]
+
   def restart_game_server
     if server = Server.find_running
       server.restart
@@ -38,12 +40,23 @@ class SystemController < ApplicationController
 
   def restart
     FileUtils.touch '/tmp/restart.txt'
-    flash[:notice] = 'Admin restarting'
-    redirect_to '/admin'
+  end
+
+  def test
+    render :text => SystemStatus.status.status_text
   end
 
   def recompile
-    system("cd #{Rails.root};bin/rails.sh update_game_server")
+    system("cd #{Rails.root}/../;bin/admin.sh update_game_server")
+    redirect_to '/admin'
+  end
+
+  def action_required
+    render :layout => false
+  end
+
+  def clear_status
+    SystemStatus.status.ok!
     redirect_to '/admin'
   end
 end

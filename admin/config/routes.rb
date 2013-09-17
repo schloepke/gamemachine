@@ -11,4 +11,7 @@ Admin::Application.routes.draw do
   get '/system/publish', to: 'system#publish'
   get '/system/recompile', to: 'system#recompile'
   get '/system/restart', to: 'system#restart'
+  get '/system/test', to: 'system#test'
+  get '/system/action_required', to: 'system#action_required'
+  get '/system/clear_status', to: 'system#clear_status'
 end

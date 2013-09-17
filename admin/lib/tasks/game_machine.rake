@@ -10,6 +10,11 @@ end
 
 namespace :game_machine do
 
+  desc 'migrate database'
+  task :migrate => [:environment,'db:migrate'] do
+    SystemStatus.status.ok!
+  end
+
   namespace :config do
     desc 'pubish game config'
     task :publish => :environment do

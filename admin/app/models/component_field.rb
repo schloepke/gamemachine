@@ -9,10 +9,12 @@ class ComponentField < ActiveRecord::Base
 
   def track_create
     MigrationGenerator.new(component).change(:add,self)
+    SystemStatus.status.admin_restart!
   end
 
   def track_destroy
     MigrationGenerator.new(component).change(:remove,self)
+    SystemStatus.status.admin_restart!
   end
 
   def value_type_enum

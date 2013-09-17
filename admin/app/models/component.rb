@@ -12,12 +12,14 @@ class Component < ActiveRecord::Base
   def track_create
     ComponentGenerator.new(self).create
     MigrationGenerator.new(self).create
+    SystemStatus.status.admin_restart!
   end
 
   def track_destroy
     ComponentGenerator.new(self).destroy
     MigrationGenerator.new(self).destroy
     component_fields.each {|cf| cf.destroy}
+    SystemStatus.status.admin_restart!
   end
 
   def downcase_name

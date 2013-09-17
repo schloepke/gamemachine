@@ -90,6 +90,7 @@ Server.create(
 )
 Server.create(
   :environment => 'development',
+  :enabled => true,
   :name => 'seed01',
   :http_enabled => true,
   :http_host => 'localhost',
