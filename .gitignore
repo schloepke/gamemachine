@@ -9,7 +9,6 @@ nbproject
 .project
 *.swp
 .gradle
-*.so
 .vagrant
 admin/generated
 server/boot.rb
