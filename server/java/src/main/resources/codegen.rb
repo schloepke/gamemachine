@@ -56,7 +56,7 @@ end
 messages = File.read(protofile)
 
 combined_messages = messages.sub('//GAME_MESSAGES',game_messages)
-combined_messages_protofile = File.join(@user_dir,'combined_messages.proto')
+combined_messages_protofile = File.join(@user_dir,'../config/combined_messages.proto')
 
 File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}
 
@@ -65,5 +65,5 @@ file = java.io.File.new(combined_messages_protofile)
 proto = ProtoUtil.parseProto(file)
 
 write_components(proto)
-FileUtils.rm(combined_messages_protofile)
+#FileUtils.rm(combined_messages_protofile)
 

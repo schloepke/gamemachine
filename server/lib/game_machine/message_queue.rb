@@ -43,7 +43,7 @@ module GameMachine
 
     def publish(publish)
       if publish.message.has_chat_message
-        publish_message = publish.message.chat_message.message
+        publish_message = publish.message #publish.message.chat_message.message
       else
         publish_message = publish.message
       end

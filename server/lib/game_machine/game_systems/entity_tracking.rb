@@ -50,7 +50,10 @@ module GameMachine
         #x = grid_value.x - ((grid_value.x / @width) * @width)
         #y = grid_value.y - ((grid_value.y / @width) * @width)
         Entity.new.set_id(grid_value.id).set_vector3(
-          Vector3.new.set_xi(grid_value.x.to_i).set_yi(grid_value.y.to_i)
+          Vector3.new.
+          set_xi(grid_value.x.to_i).
+          set_yi(grid_value.y.to_i).
+          set_zi(grid_value.z.to_i)
         )
       end
 

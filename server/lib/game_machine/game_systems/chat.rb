@@ -70,14 +70,14 @@ module GameMachine
       end
 
       def send_private_message(chat_message)
-        if @players.has_key?(chat_message.chat_channel.name)
-          client_connection = @players.fetch(chat_message.chat_channel.name)
-          client_message = ClientMessage.new
-          entity = Entity.new.set_id('0').set_chat_message(chat_message)
-          client_message.add_entity(entity)
-          client_message.set_client_connection(client_connection)
-          client_message.send_to_client
-        end
+        GameMachine.logger.info "Sending private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
+        entity = Entity.new
+        player = Player.new.set_id(chat_message.chat_channel.name)
+        entity.set_id(player.id)
+        entity.set_player(player)
+        entity.set_chat_message(chat_message)
+        entity.set_send_to_player(true)
+        PlayerGateway.find.tell(entity)
       end
 
       def send_group_message(chat_message)

@@ -7,8 +7,8 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(String)
-          receive_chat_message(message)
+        if message.is_a?(Entity) && message.has_chat_message
+          receive_chat_message(message.chat_message)
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
         else
           unhandled(message)
@@ -17,11 +17,15 @@ module GameMachine
 
       private
 
-      def receive_chat_message(text)
-        GameMachine.logger.debug "Sending chat message #{text} to #{@player_id}"
-        message = GameMachine::Helpers::GameMessage.new(@player_id)
-        message.chat_message('group',text,@player_id)
-        message.send_to_player
+      def receive_chat_message(chat_message)
+        GameMachine.logger.info "Sending chat message #{chat_message.message} to #{@player_id}"
+        entity = Entity.new
+        player = Player.new.set_id(@player_id)
+        entity.set_id(player.id)
+        entity.set_player(player)
+        entity.set_chat_message(chat_message)
+        entity.set_send_to_player(true)
+        PlayerGateway.find.tell(entity)
       end
 
     end

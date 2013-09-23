@@ -59,6 +59,9 @@ module GameMachine
           else
             self.class.find_remote(client_connection.server).tell(message)
           end
+        else
+          GameMachine.logger.info "playerinfo not found for #{message.player.id}"
+          unhandled(message)
         end
       end
     end
