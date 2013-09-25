@@ -102,7 +102,7 @@ float *findPath(float startx, float starty, float startz,
   static const int MAX_POLYS = 256;
   dtPolyRef polys[MAX_POLYS];
   float straight[MAX_POLYS*3];
-  int nstraight = 0;
+  int straightPathCount = 0;
   const float polyPickExt[3] = {20,40,20};
   int includeFlags = 0x3;
   int excludeFlags = 0x0;
@@ -139,10 +139,10 @@ float *findPath(float startx, float starty, float startz,
   if (res == DT_SUCCESS) {
 
     fprintf (stderr, "path found \n");
-    query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &nstraight, MAX_POLYS);
+    query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
 
-    fprintf (stderr, "straight paths found %d\n", nstraight);
-    for (int i = 0; i < nstraight; ++i) {
+    fprintf (stderr, "straight paths found %d\n", straightPathCount);
+    for (int i = 0; i < straightPathCount; ++i) {
       const float* v = &straight[i*3];
       fprintf (stderr, "%f.%f.%f\n", v[0], v[1], v[2]);
     }

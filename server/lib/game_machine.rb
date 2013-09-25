@@ -123,6 +123,7 @@ require_relative 'game_machine/clients/udp_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'
+require_relative 'game_machine/detour/path'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
