@@ -1,5 +1,6 @@
 module GameMachine
   module JavaLib
+    include_package 'pathfinder'
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
     include_package 'akka.io'
