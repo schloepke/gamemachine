@@ -8,6 +8,7 @@ nbproject
 .idea
 .project
 *.swp
+*.bin
 .gradle
 .vagrant
 admin/generated

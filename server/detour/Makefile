@@ -4,6 +4,7 @@ bin:
 lib:
 	g++ -c -Wall -fpic pathfind.c -L. -lDetour
 	g++ -shared -o libpathfind.so pathfind.o -L. -lDetour
+
 clean:
 	rm -f pathfind
 	rm -f pathfind.o
