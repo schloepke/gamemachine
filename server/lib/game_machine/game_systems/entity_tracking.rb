@@ -42,25 +42,22 @@ module GameMachine
 
       def set_entity_location(entity)
         vector = entity.vector3
-        #puts "#{entity.id},#{vector.x},#{vector.y},#{vector.z},#{entity.entity_type}"
-        @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
+        @grid.set(entity.id,vector.x,vector.z,vector.y,entity.entity_type)
       end
 
       def location_entity(grid_value)
-        #x = grid_value.x - ((grid_value.x / @width) * @width)
-        #y = grid_value.y - ((grid_value.y / @width) * @width)
         Entity.new.set_id(grid_value.id).set_vector3(
           Vector3.new.
           set_xi(grid_value.x.to_i).
-          set_yi(grid_value.y.to_i).
-          set_zi(grid_value.z.to_i)
+          set_yi(grid_value.z.to_i).
+          set_zi(grid_value.y.to_i)
         )
       end
 
       def send_neighbors(message)
         type = message.get_neighbors.neighbor_type
         x = message.get_neighbors.vector3.x
-        y = message.get_neighbors.vector3.y
+        y = message.get_neighbors.vector3.z
         search_results = self.class.neighbors_from_grid(x,y,type)
        
         neighbors = {:players => [], :npcs => []}

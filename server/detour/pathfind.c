@@ -111,7 +111,7 @@ dtNavMeshQuery* getQuery(int map) {
 
   dtNavMesh* navMesh = meshes[map];
   dtNavMeshQuery* query = dtAllocNavMeshQuery();
-  query->init(navMesh, 2048);
+  query->init(navMesh, 4096);
   return query;
 }
 
@@ -132,8 +132,8 @@ int findPath(int map, float startx, float starty, float startz,
   int npolys = 0;
   dtQueryFilter filter;
 
-  //filter.setIncludeFlags((unsigned short)includeFlags);
-  //filter.setExcludeFlags((unsigned short)excludeFlags);
+  filter.setIncludeFlags((unsigned short)includeFlags);
+  filter.setExcludeFlags((unsigned short)excludeFlags);
 
   dtPolyRef startRef, endRef;
 
@@ -170,19 +170,21 @@ int findPath(int map, float startx, float starty, float startz,
   query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
   
   memcpy(result, straight, sizeof(float)*3*straightPathCount);
+  dtFreeNavMeshQuery(query);
+
   return straightPathCount;
 }
 
 int main (int argc, char* argv[]) {
   float newPath[256*3];
-  const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
+  const char *file = "/home2/chris/game_machine/server/detour/all_tiles_navmesh.bin";
 
   int loadRes = loadNavMesh(1,file);
   fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
 
   if (loadRes == 1) {
     for (int i = 0; i < 1; ++i) {
-      int res = findPath(1, 10.0, 0.0, 10.0, 109.0, 0.0, 109.0, newPath);
+      int res = findPath(1, 10.0, 0.0, 10.0, 10.0, 0.0, 109.0, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {
         const float* v = &newPath[i*3];

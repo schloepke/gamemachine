@@ -3,6 +3,11 @@ module Demo
 
     # Start is our initializer, called at start and restart
     def start
+      if @navmesh = GameMachine::Navigation::DetourNavmesh.find(1)
+        @pathfinder = GameMachine::Navigation::DetourPath.new(@navmesh)
+      else
+        raise "Navmesh not set!"
+      end
       position.set(entity.vector3.x, entity.vector3.y, entity.vector3.z)
       @target_position = GameMachine::Vector.new
       @last_move = Time.now.to_f
@@ -12,6 +17,19 @@ module Demo
         GameMachine::ObjectDb.put(entity)
       end
       track
+    end
+
+    def find_path
+      #path = @pathfinder.find_path(position.x,position.z,position.y,@target_position.x,@target_position.z,@target_position.y)
+      path = @pathfinder.find_path(position.x,position.y,position.z,@target_position.x,@target_position.y, @target_position.z)
+      if @pathfinder.error
+        return nil
+      else
+        target_path = path.last
+        puts path.inspect
+        #puts "#{position.x},#{position.z},#{position.y} to #{@target_position.x},#{@target_position.z},#{@target_position.y} via #{target_path.inspect}"
+        return GameMachine::Vector.new(target_path[0],target_path[1],target_path[2])
+      end
     end
 
     def update
@@ -24,6 +42,10 @@ module Demo
         grid_value = players.get(0)
         @target_id = grid_value.id
         @target_position.set(grid_value.x,grid_value.y,grid_value.z)
+        if path = find_path
+          @target_position.set(path.x,path.y,path.z)
+        else
+        end
         @has_target = true
       else
         @has_target = false

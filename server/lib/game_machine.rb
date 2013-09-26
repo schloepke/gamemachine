@@ -123,7 +123,9 @@ require_relative 'game_machine/clients/udp_client'
 
 require_relative 'game_machine/bot/client'
 require_relative 'game_machine/bot/chat'
-require_relative 'game_machine/detour/path'
+require_relative 'game_machine/navigation/detour'
+require_relative 'game_machine/navigation/detour_navmesh'
+require_relative 'game_machine/navigation/detour_path'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
