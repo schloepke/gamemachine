@@ -20,7 +20,7 @@
 #define DETOURNAVMESHBUILDER_H
 
 #include "DetourAlloc.h"
-
+extern "C" {
 /// Represents the source data used to build an navigation mesh tile.
 /// @ingroup detour
 struct dtNavMeshCreateParams
@@ -121,7 +121,7 @@ bool dtNavMeshHeaderSwapEndian(unsigned char* data, const int dataSize);
 ///  @param[in,out]	data		The tile data array.
 ///  @param[in]		dataSize	The size of the data array.
 bool dtNavMeshDataSwapEndian(unsigned char* data, const int dataSize);
-
+}
 #endif // DETOURNAVMESHBUILDER_H
 
 // This section contains detailed documentation for members that don't have

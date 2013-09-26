@@ -22,6 +22,7 @@
 #include "DetourAlloc.h"
 #include "DetourStatus.h"
 
+extern "C" {
 // Note: If you want to use 64-bit refs, change the types of both dtPolyRef & dtTileRef.
 // It is also recommended that you change dtHashRef() to a proper 64-bit hash.
 
@@ -590,7 +591,7 @@ dtNavMesh* dtAllocNavMesh();
 ///  @param[in]	navmesh		A navigation mesh allocated using #dtAllocNavMesh
 ///  @ingroup detour
 void dtFreeNavMesh(dtNavMesh* navmesh);
-
+}
 #endif // DETOURNAVMESH_H
 
 ///////////////////////////////////////////////////////////////////////////

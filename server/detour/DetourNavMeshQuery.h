@@ -22,7 +22,7 @@
 #include "DetourNavMesh.h"
 #include "DetourStatus.h"
 
-
+extern "C" {
 // Define DT_VIRTUAL_QUERYFILTER if you wish to derive a custom filter from dtQueryFilter.
 // On certain platforms indirect or virtual function call is expensive. The default
 // setting is to use non-virtual functions, the actual implementations of the functions
@@ -484,5 +484,6 @@ dtNavMeshQuery* dtAllocNavMeshQuery();
 ///  @param[in]		query		A query object allocated using #dtAllocNavMeshQuery
 /// @ingroup detour
 void dtFreeNavMeshQuery(dtNavMeshQuery* query);
+}
 
 #endif // DETOURNAVMESHQUERY_H

@@ -1,9 +1,11 @@
 bin:
-	g++ -Wall -o recast -fpic recast.c -L. -lDetour
+	g++ -Wall -o pathfind -fpic pathfind.c -L. -lDetour
 
 lib:
-	g++ -c -Wall -fpic recast.c -L. -lDetour
-	g++ -shared -o libpath.so recast.o
+	g++ -c -Wall -fpic pathfind.c -L. -lDetour
+	g++ -shared -o libpathfind.so pathfind.o -L. -lDetour
 clean:
-	rm -f recast
+	rm -f pathfind
+	rm -f pathfind.o
+	rm -f libpathfind.so
 

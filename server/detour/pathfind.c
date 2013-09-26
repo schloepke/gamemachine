@@ -1,16 +1,29 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #define _USE_MATH_DEFINES
 #include <math.h>
-#include <stdio.h>
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourNavMeshQuery.h"
+
 #define VERTEX_SIZE       3
 #define INVALID_POLYREF   0
+
+extern "C" { 
+  int findPath(int map,float startx, float starty, float startz, float endx, float endy, float endz, float* path);
+  int loadNavMesh(int idx, const char *file);
+}
+
+static const int P_FAILURE = -1;
+static const int P_NO_START_POLY = -2;
+static const int P_NO_END_POLY = -3;
+static const int P_PATH_NOT_FOUND = -4;
 static const int NAVMESHSET_MAGIC = 'M'<<24 | 'S'<<16 | 'E'<<8 | 'T'; //'MSET';
 static const int NAVMESHSET_VERSION = 1;
+
+static dtNavMesh* meshes[1024];
 
 struct NavMeshSetHeader
 {
@@ -80,21 +93,31 @@ dtNavMesh* loadAll(const char* path)
 	return mesh;
 }
 
-dtNavMesh* loadNavMesh() {
+
+int loadNavMesh(int map, const char *file) {
+  if (meshes[map] != 0) {
+    return 0;
+  }
   dtNavMesh* navMesh;
-  navMesh = loadAll("test2.bin");
-  return navMesh;
+  navMesh = loadAll(file);
+  meshes[map] = navMesh;
+  return 1;
 }
 
-dtNavMeshQuery* getQuery() {
-  dtNavMesh* navMesh = loadNavMesh();
+dtNavMeshQuery* getQuery(int map) {
+  if (meshes[map] == 0) {
+    return 0;
+  }
+
+  dtNavMesh* navMesh = meshes[map];
   dtNavMeshQuery* query = dtAllocNavMeshQuery();
   query->init(navMesh, 2048);
   return query;
 }
 
-float *findPath(float startx, float starty, float startz,
-    float endx, float endy, float endz) {
+
+int findPath(int map, float startx, float starty, float startz,
+    float endx, float endy, float endz, float* result) {
 
   float spos[3] = {startx,starty,startz};
   float epos[3] = {endx,endy,endz};
@@ -116,53 +139,57 @@ float *findPath(float startx, float starty, float startz,
 
   dtStatus res;
 
-  dtNavMeshQuery* query = getQuery();
+  dtNavMeshQuery* query = getQuery(map);
+  if (query == 0) {
+    return P_FAILURE;
+  }
 
   res = query->findNearestPoly(spos, polyPickExt, &filter, &startRef, 0);
   if (res == DT_SUCCESS) {
     if (startRef == 0) {
-      fprintf (stderr, "start poly not found \n");
-    } else {
-      fprintf (stderr, "start poly found \n");
+      return P_NO_START_POLY;
     }
+  } else {
+    return P_NO_START_POLY;
   }
+
   res = query->findNearestPoly(epos, polyPickExt, &filter, &endRef, 0);
   if (res == DT_SUCCESS) {
-    if (startRef == 0) {
-      fprintf (stderr, "end poly not found \n");
-    } else {
-      fprintf (stderr, "end poly found \n");
+    if (endRef == 0) {
+      return P_NO_END_POLY;
     }
+  } else {
+    return P_NO_END_POLY;
   }
 
   res = query->findPath(startRef, endRef, spos, epos, &filter, polys, &npolys, MAX_POLYS);
-  if (res == DT_SUCCESS) {
-
-    fprintf (stderr, "path found \n");
-    query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
-
-    fprintf (stderr, "straight paths found %d\n", straightPathCount);
-    for (int i = 0; i < straightPathCount; ++i) {
-      const float* v = &straight[i*3];
-      fprintf (stderr, "%f.%f.%f\n", v[0], v[1], v[2]);
-    }
-
-  } else {
-    fprintf (stderr, "path not found \n");
+  if (res != DT_SUCCESS) {
+    return P_PATH_NOT_FOUND;
   }
 
-  fprintf (stderr, "npolys %d\n", npolys);
-  return straight;
+  query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
+  
+  memcpy(result, straight, sizeof(float)*3*straightPathCount);
+  return straightPathCount;
 }
 
 int main (int argc, char* argv[]) {
+  float newPath[256*3];
+  const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
 
-findPath(10.0,0,10.0,109.0,0,109.0);
+  int loadRes = loadNavMesh(1,file);
+  fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
 
-
-
-
-
+  if (loadRes == 1) {
+    for (int i = 0; i < 1; ++i) {
+      int res = findPath(1, 10.0, 0.0, 10.0, 109.0, 0.0, 109.0, newPath);
+      fprintf (stderr, "findPath returned %d\n", res);
+      for (int i = 0; i < res; ++i) {
+        const float* v = &newPath[i*3];
+        fprintf (stderr, "%f.%f.%f\n", v[0], v[1], v[2]);
+      }
+    }
+  }
   return 1;
 }
 
