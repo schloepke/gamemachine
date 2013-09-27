@@ -11,11 +11,6 @@
 #define VERTEX_SIZE       3
 #define INVALID_POLYREF   0
 
-extern "C" { 
-  int findPath(int map,float startx, float starty, float startz, float endx, float endy, float endz, float* path);
-  int loadNavMesh(int idx, const char *file);
-}
-
 static const int P_FAILURE = -1;
 static const int P_NO_START_POLY = -2;
 static const int P_NO_END_POLY = -3;
@@ -24,6 +19,7 @@ static const int NAVMESHSET_MAGIC = 'M'<<24 | 'S'<<16 | 'E'<<8 | 'T'; //'MSET';
 static const int NAVMESHSET_VERSION = 1;
 
 static dtNavMesh* meshes[1024];
+static const int MAX_POLYS = 256;
 
 struct NavMeshSetHeader
 {
@@ -93,8 +89,7 @@ dtNavMesh* loadAll(const char* path)
 	return mesh;
 }
 
-
-int loadNavMesh(int map, const char *file) {
+extern "C" int loadNavMesh(int map, const char *file) {
   if (meshes[map] != 0) {
     return 0;
   }
@@ -104,29 +99,31 @@ int loadNavMesh(int map, const char *file) {
   return 1;
 }
 
-dtNavMeshQuery* getQuery(int map) {
+extern "C" dtNavMeshQuery* getQuery(int map) {
   if (meshes[map] == 0) {
     return 0;
   }
 
-  dtNavMesh* navMesh = meshes[map];
+  //dtNavMesh* navMesh = meshes[map];
   dtNavMeshQuery* query = dtAllocNavMeshQuery();
-  query->init(navMesh, 4096);
+  query->init(meshes[map], 4096);
   return query;
 }
 
+extern "C" void freeQuery(dtNavMeshQuery* query) {
+  delete query;
+}
 
-int findPath(int map, float startx, float starty, float startz,
+extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float startz,
     float endx, float endy, float endz, float* result) {
 
   float spos[3] = {startx,starty,startz};
   float epos[3] = {endx,endy,endz};
 
-  static const int MAX_POLYS = 256;
   dtPolyRef polys[MAX_POLYS];
   float straight[MAX_POLYS*3];
   int straightPathCount = 0;
-  const float polyPickExt[3] = {20,40,20};
+  float polyPickExt[3] = {20,40,20};
   int includeFlags = 0x3;
   int excludeFlags = 0x0;
   int npolys = 0;
@@ -139,7 +136,6 @@ int findPath(int map, float startx, float starty, float startz,
 
   dtStatus res;
 
-  dtNavMeshQuery* query = getQuery(map);
   if (query == 0) {
     return P_FAILURE;
   }
@@ -170,21 +166,33 @@ int findPath(int map, float startx, float starty, float startz,
   query->findStraightPath(spos, epos, polys, npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
   
   memcpy(result, straight, sizeof(float)*3*straightPathCount);
-  dtFreeNavMeshQuery(query);
 
   return straightPathCount;
 }
 
+extern "C" float* getPathPtr() {
+  float *path;
+  path = new float[MAX_POLYS*3];
+  return path;
+}
+
+extern "C" void freePath(float* path) {
+  delete [] path;
+}
+
 int main (int argc, char* argv[]) {
-  float newPath[256*3];
-  const char *file = "/home2/chris/game_machine/server/detour/all_tiles_navmesh.bin";
+  float *newPath;
+  newPath = getPathPtr();
+
+  const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
 
   int loadRes = loadNavMesh(1,file);
   fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
+  dtNavMeshQuery* query = getQuery(1);
 
   if (loadRes == 1) {
     for (int i = 0; i < 1; ++i) {
-      int res = findPath(1, 10.0, 0.0, 10.0, 10.0, 0.0, 109.0, newPath);
+      int res = findPath(query, 10.0, 0.0, 10.0, 109.0, 0.0, 109.0, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {
         const float* v = &newPath[i*3];
@@ -192,6 +200,8 @@ int main (int argc, char* argv[]) {
       }
     }
   }
+  freeQuery(query);
+  freePath(newPath);
   return 1;
 }
 

@@ -40,12 +40,10 @@ module GameMachine
       Math.sqrt(distance_squared(v))
     end
 
-    def interpolate(vector,change_amount,use_z=false)
+    def interpolate(vector,change_amount)
       @x=(1-change_amount)*@x + change_amount*vector.x
       @y=(1-change_amount)*@y + change_amount*vector.y
-      if use_z
-        @z=(1-change_amount)*@z + change_amount*vector.z
-      end
+      @z=(1-change_amount)*@z + change_amount*vector.z
     end
 
     def inspect

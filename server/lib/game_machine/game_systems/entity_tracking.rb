@@ -57,8 +57,8 @@ module GameMachine
       def send_neighbors(message)
         type = message.get_neighbors.neighbor_type
         x = message.get_neighbors.vector3.x
-        y = message.get_neighbors.vector3.z
-        search_results = self.class.neighbors_from_grid(x,y,type)
+        z = message.get_neighbors.vector3.z
+        search_results = self.class.neighbors_from_grid(x,z,type)
        
         neighbors = {:players => [], :npcs => []}
         search_results.each do |grid_value|
@@ -103,8 +103,8 @@ module GameMachine
         sender.tell(entity,self)
       end
 
-      def self.neighbors_from_grid(x,y,neighbor_type)
-        GRID.neighbors(x,y,neighbor_type)
+      def self.neighbors_from_grid(x,z,neighbor_type)
+        GRID.neighbors(x,z,neighbor_type)
       end
 
     end

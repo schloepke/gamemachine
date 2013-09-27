@@ -8,6 +8,7 @@ module GameMachine
 
       let(:path_found) do
         [
+          [10.0, 0.0, 10.0],
           [105.5999984741211, 0.20000000298023224, 105.60000610351562],
           [109.0, 0.0, 109.0]
         ]
@@ -25,6 +26,23 @@ module GameMachine
         path = pathfinder.find_path(10.0,0,10.0,109.0,0,109.0)
         expect(pathfinder.error).to be_nil
         expect(path).to eq(path_found)
+      end
+
+      it "does not leak memory" do
+        navmesh = DetourNavmesh.create(3,meshfile)
+        navmesh.load_mesh!
+        threads = []
+        4.times do
+          threads << Thread.new do
+            pathfinder = DetourPath.new(navmesh)
+            100.times do
+              path = pathfinder.find_path(10.0,0,10.0,109.0,0,109.0)
+              expect(pathfinder.error).to be_nil
+              expect(path).to eq(path_found)
+            end
+          end
+        end
+        threads.map(&:join)
       end
     end
   end

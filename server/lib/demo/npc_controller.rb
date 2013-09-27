@@ -10,9 +10,10 @@ module Demo
       end
       position.set(entity.vector3.x, entity.vector3.y, entity.vector3.z)
       @target_position = GameMachine::Vector.new
+      @move_to = GameMachine::Vector.new
       @last_move = Time.now.to_f
       @last_combat_update = Time.now.to_f
-      @speed = 0.8
+      @speed = 0.5
       unless saved_entity = GameMachine::ObjectDb.get(entity.id)
         GameMachine::ObjectDb.put(entity)
       end
@@ -20,20 +21,34 @@ module Demo
     end
 
     def find_path
-      #path = @pathfinder.find_path(position.x,position.z,position.y,@target_position.x,@target_position.z,@target_position.y)
+      puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z}"
       path = @pathfinder.find_path(position.x,position.y,position.z,@target_position.x,@target_position.y, @target_position.z)
       if @pathfinder.error
+        puts @pathfinder.error
         return nil
       else
-        target_path = path.last
         puts path.inspect
-        #puts "#{position.x},#{position.z},#{position.y} to #{@target_position.x},#{@target_position.z},#{@target_position.y} via #{target_path.inspect}"
-        return GameMachine::Vector.new(target_path[0],target_path[1],target_path[2])
+        target_path = nil
+        if path.size == 1
+          target_path = path.first
+        else
+          path.each do |pos|
+            vec = GameMachine::Vector.new(pos[0],pos[1],pos[2])
+            if position.distance(vec) >= 1
+              target_path = pos
+              break
+            end
+          end
+        end
+        return nil unless target_path
+        #puts path.inspect
+        #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z} via #{target_path.inspect}"
+        @move_to.set(target_path[0],target_path[1],target_path[2])
       end
     end
 
     def update
-
+      @move_to.zero
       # Get all nearby players
       players = neighbors('player')
 
@@ -41,10 +56,9 @@ module Demo
       if players.size >= 1
         grid_value = players.get(0)
         @target_id = grid_value.id
-        @target_position.set(grid_value.x,grid_value.y,grid_value.z)
-        if path = find_path
-          @target_position.set(path.x,path.y,path.z)
-        else
+        @target_position.set(grid_value.x,grid_value.z,grid_value.y)
+        unless find_path
+          #@move_to = @target_position.clone
         end
         @has_target = true
       else
@@ -55,9 +69,10 @@ module Demo
       # track updates the grid with our location. Only needs to be called
       # if we move.
       if @has_target
-        move
+        move unless @move_to.zero?
         track
-        attack
+        #puts position.distance(@target_position)
+        #attack
       end
     end
 
@@ -93,7 +108,7 @@ module Demo
       end
 
       # Simple interpolation towards the target
-      position.interpolate(@target_position,@speed * @delta_time)
+      position.interpolate(@move_to,@speed * @delta_time)
       @last_move = Time.now.to_f
     end
 

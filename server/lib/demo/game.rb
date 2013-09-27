@@ -15,8 +15,8 @@ module Demo
       max = GameMachine::Settings.world_grid_size - 10
 
       x = rand(max) + 1
-      y = rand(max) + 1
-      z = 1.10
+      y = 1.10
+      z = rand(max) + 1
       entity = Entity.new
       entity.set_health(
         Health.new.set_health(100)

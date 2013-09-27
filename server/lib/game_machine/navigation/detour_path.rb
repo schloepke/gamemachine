@@ -7,17 +7,25 @@ module GameMachine
         @navmesh = navmesh
         @path_max = 256*3
         @error = nil
-      end
 
-      def find_path(start_x,start_y,start_z,end_x,end_y,end_z)
-        @error = nil
         unless navmesh.loaded?
           raise "Navmesh #{navmesh.id} not loaded"
         end
 
-        ptr = FFI::MemoryPointer.new(:pointer,@path_max)
+        @query_ptr = Detour.getQuery(navmesh.id)
+      end
+
+      def destroy_query
+        Detour.freeQuery(@query_ptr)
+      end
+
+      def find_path(start_x,start_y,start_z,end_x,end_y,end_z)
+        @error = nil
+
+        #ptr = FFI::MemoryPointer.new(:pointer,@path_max)
+        ptr = Detour.getPathPtr()
         paths_found = Detour.findPath(
-          navmesh.id,start_x,start_y,start_z,end_x,end_y,end_z,ptr
+          @query_ptr,start_x,start_y,start_z,end_x,end_y,end_z,ptr
         )
 
         if paths_found <= 0
@@ -26,6 +34,7 @@ module GameMachine
         end
         fptr = ptr.read_pointer()
         path = fptr.null? ? [] : ptr.get_array_of_float(0,paths_found*3)
+        Detour.freePath(ptr)
         path = path.each_slice(3).to_a
         if path.size > 1
           #path.shift
