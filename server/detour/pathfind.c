@@ -9,6 +9,7 @@
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourNavMeshQuery.h"
+#include "pathfind.h"
 
 #define VERTEX_SIZE       3
 #define INVALID_POLYREF   0
@@ -36,113 +37,6 @@ struct NavMeshTileHeader
 	dtTileRef tileRef;
 	int dataSize;
 };
-
-// Returns a random number [0..1)
-static float frand()
-{
-//	return ((float)(rand() & 0xffff)/(float)0xffff);
-	return (float)rand()/(float)RAND_MAX;
-}
-
-inline bool inRange(const float* v1, const float* v2, const float r, const float h)
-{
-	const float dx = v2[0] - v1[0];
-	const float dy = v2[1] - v1[1];
-	const float dz = v2[2] - v1[2];
-	return (dx*dx + dz*dz) < r*r && fabsf(dy) < h;
-}
-
-static bool getSteerTarget(dtNavMeshQuery* navQuery, const float* startPos, const float* endPos,
-						   const float minTargetDist,
-						   const dtPolyRef* path, const int pathSize,
-						   float* steerPos, unsigned char& steerPosFlag, dtPolyRef& steerPosRef,
-						   float* outPoints = 0, int* outPointCount = 0)							 
-{
-	// Find steer target.
-	static const int MAX_STEER_POINTS = 3;
-	float steerPath[MAX_STEER_POINTS*3];
-	unsigned char steerPathFlags[MAX_STEER_POINTS];
-	dtPolyRef steerPathPolys[MAX_STEER_POINTS];
-	int nsteerPath = 0;
-	navQuery->findStraightPath(startPos, endPos, path, pathSize,
-							   steerPath, steerPathFlags, steerPathPolys, &nsteerPath, MAX_STEER_POINTS);
-	if (!nsteerPath)
-		return false;
-
-	if (outPoints && outPointCount)
-	{
-		*outPointCount = nsteerPath;
-		for (int i = 0; i < nsteerPath; ++i)
-			dtVcopy(&outPoints[i*3], &steerPath[i*3]);
-	}
-
-
-	// Find vertex far enough to steer to.
-	int ns = 0;
-	while (ns < nsteerPath)
-	{
-		// Stop at Off-Mesh link or when point is further than slop away.
-		if ((steerPathFlags[ns] & DT_STRAIGHTPATH_OFFMESH_CONNECTION) ||
-			!inRange(&steerPath[ns*3], startPos, minTargetDist, 1000.0f))
-			break;
-		ns++;
-	}
-	// Failed to find good point to steer to.
-	if (ns >= nsteerPath)
-		return false;
-
-	dtVcopy(steerPos, &steerPath[ns*3]);
-	steerPos[1] = startPos[1];
-	steerPosFlag = steerPathFlags[ns];
-	steerPosRef = steerPathPolys[ns];
-
-	return true;
-}
-
-static int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath,
-						 const dtPolyRef* visited, const int nvisited)
-{
-	int furthestPath = -1;
-	int furthestVisited = -1;
-
-	// Find furthest common polygon.
-	for (int i = npath-1; i >= 0; --i)
-	{
-		bool found = false;
-		for (int j = nvisited-1; j >= 0; --j)
-		{
-			if (path[i] == visited[j])
-			{
-				furthestPath = i;
-				furthestVisited = j;
-				found = true;
-			}
-		}
-		if (found)
-			break;
-	}
-
-	// If no intersection found just return current path. 
-	if (furthestPath == -1 || furthestVisited == -1)
-		return npath;
-
-	// Concatenate paths.	
-
-	// Adjust beginning of the buffer to include the visited.
-	const int req = nvisited - furthestVisited;
-	const int orig = rcMin(furthestPath+1, npath);
-	int size = rcMax(0, npath-orig);
-	if (req+size > maxPath)
-		size = maxPath-req;
-	if (size)
-		memmove(path+req, path+orig, size*sizeof(dtPolyRef));
-
-	// Store visited
-	for (int i = 0; i < req; ++i)
-		path[i] = visited[(nvisited-1)-i];				
-
-	return req+size;
-}
 
 dtNavMesh* loadAll(const char* path)
 {
@@ -220,23 +114,34 @@ extern "C" dtNavMeshQuery* getQuery(int map) {
 }
 
 extern "C" void freeQuery(dtNavMeshQuery* query) {
-  delete query;
+  dtFreeNavMeshQuery(query);
 }
 
 extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float startz,
-    float endx, float endy, float endz, float* result) {
+    float endx, float endy, float endz, float* resultPath) {
 
   float m_spos[3] = {startx,starty,startz};
   float m_epos[3] = {endx,endy,endz};
 
+  static const int MAX_STEER_POINTS = 10;
+  static const int MAX_SMOOTH = 2048;
+  static const float STEP_SIZE = 0.5f;
+  static const float SLOP = 0.01f;
+
   dtPolyRef m_polys[MAX_POLYS];
+
+  dtQueryFilter m_filter;
   float straight[MAX_POLYS*3];
   int straightPathCount = 0;
   float polyPickExt[3] = {20,40,20};
   int includeFlags = 0x3;
   int excludeFlags = 0x0;
   int m_npolys = 0;
-  dtQueryFilter m_filter;
+
+  float m_steerPoints[MAX_STEER_POINTS*3];
+  int m_steerPointCount;
+  float m_smoothPath[MAX_SMOOTH*3];
+  int m_nsmoothPath = 0;
 
   m_filter.setIncludeFlags((unsigned short)includeFlags);
   m_filter.setExcludeFlags((unsigned short)excludeFlags);
@@ -272,14 +177,6 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
     return P_PATH_NOT_FOUND;
   }
 
-  static const int MAX_STEER_POINTS = 10;
-  float m_steerPoints[MAX_STEER_POINTS*3];
-  int m_steerPointCount;
-  static const int MAX_SMOOTH = 2048;
-  float m_smoothPath[MAX_SMOOTH*3];
-  int m_nsmoothPath = 0;
-    static const float STEP_SIZE = 0.5f;
-    static const float SLOP = 0.01f;
 
   if (m_polys) {
     dtPolyRef polys[MAX_POLYS];
@@ -290,11 +187,11 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
     query->closestPointOnPoly(m_startRef, m_spos, iterPos);
     query->closestPointOnPoly(polys[npolys-1], m_epos, targetPos);
 
-
     m_nsmoothPath = 0;
     
     dtVcopy(&m_smoothPath[m_nsmoothPath*3], iterPos);
     m_nsmoothPath++;
+
     while (npolys && m_nsmoothPath < MAX_SMOOTH) {
       // Find location to steer towards.
       float steerPos[3];
@@ -348,31 +245,30 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
         dtVcopy(&m_smoothPath[m_nsmoothPath*3], iterPos);
         m_nsmoothPath++;
       }
-
-
     }
 
+    memcpy(resultPath, m_smoothPath, sizeof(float)*3*m_nsmoothPath);
+    return m_nsmoothPath;
   }
 
 
-
-
-
-  query->findStraightPath(m_spos, m_epos, m_polys, m_npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
-  
-  memcpy(result, straight, sizeof(float)*3*straightPathCount);
-
-  return straightPathCount;
+  //query->findStraightPath(m_spos, m_epos, m_polys, m_npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
+  //memcpy(resultPath, straight, sizeof(float)*3*straightPathCount);
+  //return straightPathCount;
 }
 
 extern "C" float* getPathPtr() {
   float *path;
-  path = new float[MAX_POLYS*3];
+  path = new float[2048*3];
   return path;
 }
 
 extern "C" void freePath(float* path) {
   delete [] path;
+}
+
+extern "C" void testStruct() {
+
 }
 
 int main (int argc, char* argv[]) {
@@ -390,13 +286,18 @@ int main (int argc, char* argv[]) {
       int res = findPath(query, 10.0, 0.0, 10.0, 109.0, 0.0, 109.0, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {
+        //fprintf (stderr, "%d\n", i);
         const float* v = &newPath[i*3];
         fprintf (stderr, "%f.%f.%f\n", v[0], v[1], v[2]);
       }
     }
   }
-  freeQuery(query);
+
+  fprintf (stderr, "endLoop\n");
   freePath(newPath);
+  fprintf (stderr, "freePath\n");
+  freeQuery(query);
+  fprintf (stderr, "freeQuery\n");
   return 1;
 }
 

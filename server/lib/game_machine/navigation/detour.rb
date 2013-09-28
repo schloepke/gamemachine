@@ -15,28 +15,15 @@ module GameMachine
         attach_function :getPathPtr, [], :pointer
       end
 
-      class Path
-        def self.find_path
-          load_res = Detour.loadNavMesh(1,"/home2/chris/game_machine/server/detour/test2.bin")
-          unless load_res == 1
-            puts "navmesh failed to load"
-            return
-          end
-          time = Benchmark.realtime do
-            10.times do
-              ptr = FFI::MemoryPointer.new(:pointer,256*3)
-              len = Detour.findPath(1,10.0,0,10.0,109.0,0,109.0,ptr)
-              if len <= 0
-                puts "error #{len}"
-                return
-              end
-              fptr = ptr.read_pointer()
-              path = fptr.null? ? [] : ptr.get_array_of_float(0,len*3)
-              #puts path.inspect
-            end
-          end
-          puts "query time #{time}"
-        end
+      class PathParams < FFI:Struct
+        layout  :query,     :pointer
+                :path,      :pointer
+                :start_x,   :float
+                :start_y,   :float
+                :start_z,   :float
+                :end_x,   :float
+                :end_y,   :float
+                :end_z,   :float
       end
     end
   end

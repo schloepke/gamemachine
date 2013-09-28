@@ -116,3 +116,14 @@ static int fixupCorridor(dtPolyRef* path, const int npath, const int maxPath,
 
 	return req+size;
 }
+
+struct pathParams {
+  float start_x;
+  float start_y;
+  float start_z;
+  float end_x;
+  float end_y;
+  float end_z;
+  dtNavMeshQuery* query;
+  float* resultPath;
+};
