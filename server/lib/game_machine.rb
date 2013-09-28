@@ -126,6 +126,7 @@ require_relative 'game_machine/bot/chat'
 require_relative 'game_machine/navigation/detour'
 require_relative 'game_machine/navigation/detour_navmesh'
 require_relative 'game_machine/navigation/detour_path'
+require_relative 'game_machine/navigation/path'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS

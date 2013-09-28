@@ -11,9 +11,11 @@ module Demo
       position.set(entity.vector3.x, entity.vector3.y, entity.vector3.z)
       @target_position = GameMachine::Vector.new
       @move_to = GameMachine::Vector.new
+      @last_target_position = GameMachine::Vector.new
       @last_move = Time.now.to_f
       @last_combat_update = Time.now.to_f
-      @speed = 0.5
+      @speed = 0.3
+      @path = GameMachine::Navigation::Path.new([],position)
       unless saved_entity = GameMachine::ObjectDb.get(entity.id)
         GameMachine::ObjectDb.put(entity)
       end
@@ -21,34 +23,30 @@ module Demo
     end
 
     def find_path
-      puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z}"
-      path = @pathfinder.find_path(position.x,position.y,position.z,@target_position.x,@target_position.y, @target_position.z)
-      if @pathfinder.error
-        puts @pathfinder.error
-        return nil
-      else
-        puts path.inspect
-        target_path = nil
-        if path.size == 1
-          target_path = path.first
-        else
-          path.each do |pos|
-            vec = GameMachine::Vector.new(pos[0],pos[1],pos[2])
-            if position.distance(vec) >= 1
-              target_path = pos
-              break
-            end
-          end
+      #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z}"
+      @path.current_location = position
+      next_point = @path.next_point
+      if next_point.nil? || @target_position.distance(@last_target_position) > 1
+        @last_target_position = @target_position.clone
+        detour_path = @pathfinder.find_path(position.x,position.y,position.z,@target_position.x,@target_position.y, @target_position.z)
+        puts detour_path.inspect
+        if @pathfinder.error
+          puts @pathfinder.error
+          return
         end
-        return nil unless target_path
-        #puts path.inspect
-        #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z} via #{target_path.inspect}"
-        @move_to.set(target_path[0],target_path[1],target_path[2])
+        @path.set_path(detour_path)
+        next_point = @path.next_point
+        #puts next_point.inspect
       end
+
+      if next_point.nil?
+        return
+      end
+      #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z} via #{target_path.inspect}"
+      @move_to = next_point
     end
 
     def update
-      @move_to.zero
       # Get all nearby players
       players = neighbors('player')
 
@@ -57,9 +55,7 @@ module Demo
         grid_value = players.get(0)
         @target_id = grid_value.id
         @target_position.set(grid_value.x,grid_value.z,grid_value.y)
-        unless find_path
-          #@move_to = @target_position.clone
-        end
+        find_path
         @has_target = true
       else
         @has_target = false

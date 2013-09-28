@@ -32,14 +32,11 @@ module GameMachine
           @error = paths_found
           return []
         end
+
         fptr = ptr.read_pointer()
         path = fptr.null? ? [] : ptr.get_array_of_float(0,paths_found*3)
         Detour.freePath(ptr)
-        path = path.each_slice(3).to_a
-        if path.size > 1
-          #path.shift
-        end
-        path
+        path.each_slice(3).map {|i| Vector.new(i[0],i[1],i[2])}.to_a
       end
     end
   end

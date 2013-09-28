@@ -3,6 +3,10 @@ module GameMachine
 
     attr_accessor :x, :y, :z
 
+    def self.from_array(ar)
+      new(ar[0],ar[1],ar[2])
+    end
+
     def initialize(x=0.0,y=0.0,z=0.0)
       @x = x
       @y = y
