@@ -11,32 +11,9 @@
 #include "DetourNavMeshQuery.h"
 #include "pathfind.h"
 
-#define VERTEX_SIZE       3
-#define INVALID_POLYREF   0
-
-static const int P_FAILURE = -1;
-static const int P_NO_START_POLY = -2;
-static const int P_NO_END_POLY = -3;
-static const int P_PATH_NOT_FOUND = -4;
-static const int NAVMESHSET_MAGIC = 'M'<<24 | 'S'<<16 | 'E'<<8 | 'T'; //'MSET';
-static const int NAVMESHSET_VERSION = 1;
-
 static dtNavMesh* meshes[1024];
 static const int MAX_POLYS = 256;
 
-struct NavMeshSetHeader
-{
-	int magic;
-	int version;
-	int numTiles;
-	dtNavMeshParams params;
-};
-
-struct NavMeshTileHeader
-{
-	dtTileRef tileRef;
-	int dataSize;
-};
 
 dtNavMesh* loadAll(const char* path)
 {
@@ -107,7 +84,6 @@ extern "C" dtNavMeshQuery* getQuery(int map) {
     return 0;
   }
 
-  //dtNavMesh* navMesh = meshes[map];
   dtNavMeshQuery* query = dtAllocNavMeshQuery();
   query->init(meshes[map], 4096);
   return query;
@@ -118,14 +94,15 @@ extern "C" void freeQuery(dtNavMeshQuery* query) {
 }
 
 extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float startz,
-    float endx, float endy, float endz, float* resultPath) {
+    float endx, float endy, float endz, int max_paths, float step_size,
+    int find_straight_path, float* resultPath) {
 
   float m_spos[3] = {startx,starty,startz};
   float m_epos[3] = {endx,endy,endz};
 
   static const int MAX_STEER_POINTS = 10;
-  static const int MAX_SMOOTH = 2048;
-  static const float STEP_SIZE = 0.5f;
+  static const int MAX_SMOOTH = max_paths;
+  static const float STEP_SIZE = step_size;
   static const float SLOP = 0.01f;
 
   dtPolyRef m_polys[MAX_POLYS];
@@ -143,8 +120,8 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
   float m_smoothPath[MAX_SMOOTH*3];
   int m_nsmoothPath = 0;
 
-  m_filter.setIncludeFlags((unsigned short)includeFlags);
-  m_filter.setExcludeFlags((unsigned short)excludeFlags);
+  m_filter.setIncludeFlags(SAMPLE_POLYFLAGS_ALL ^ SAMPLE_POLYFLAGS_DISABLED);
+  m_filter.setExcludeFlags(0);
 
   dtPolyRef m_startRef, m_endRef;
 
@@ -178,7 +155,7 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
   }
 
 
-  if (m_polys) {
+  if (find_straight_path == 0) {
     dtPolyRef polys[MAX_POLYS];
     memcpy(polys, m_polys, sizeof(dtPolyRef)*m_npolys); 
     int npolys = m_npolys;
@@ -252,14 +229,14 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
   }
 
 
-  //query->findStraightPath(m_spos, m_epos, m_polys, m_npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
-  //memcpy(resultPath, straight, sizeof(float)*3*straightPathCount);
-  //return straightPathCount;
+  query->findStraightPath(m_spos, m_epos, m_polys, m_npolys, straight, 0, 0, &straightPathCount, MAX_POLYS);
+  memcpy(resultPath, straight, sizeof(float)*3*straightPathCount);
+  return straightPathCount;
 }
 
-extern "C" float* getPathPtr() {
+extern "C" float* getPathPtr(int max_paths) {
   float *path;
-  path = new float[2048*3];
+  path = new float[max_paths*3];
   return path;
 }
 
@@ -272,10 +249,15 @@ extern "C" void testStruct() {
 }
 
 int main (int argc, char* argv[]) {
-  float *newPath;
-  newPath = getPathPtr();
 
-  const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
+  int find_straight_path = 1;
+  int max_paths = 10;
+  float step_size = 0.5f;
+  float *newPath;
+  newPath = getPathPtr(max_paths);
+
+  const char *file = "/home2/chris/game_machine/server/detour/all_tiles_navmesh.bin";
+  //const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
 
   int loadRes = loadNavMesh(1,file);
   fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
@@ -283,7 +265,8 @@ int main (int argc, char* argv[]) {
 
   if (loadRes == 1) {
     for (int i = 0; i < 1; ++i) {
-      int res = findPath(query, 10.0, 0.0, 10.0, 109.0, 0.0, 109.0, newPath);
+      int res = findPath(query, 520.0, 0.2, 521.0, 510.0, 0.2, 532.0,
+          max_paths, step_size, find_straight_path, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {
         //fprintf (stderr, "%d\n", i);

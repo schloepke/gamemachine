@@ -30,8 +30,8 @@ module GameMachine
 
       # Call this to track a game object. Expects an entity with a TrackEntity
       # component attached
-      def track(entity_type='npc')
-        GameMachine::GameSystems::EntityTracking::GRID.set(entity.id,position.x,position.z,position.y,entity_type)
+      def track(loc=position,entity_type='npc')
+        GameMachine::GameSystems::EntityTracking::GRID.set(entity.id,loc.x,loc.z,loc.y,entity_type)
       end
 
     end

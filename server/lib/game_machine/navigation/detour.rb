@@ -7,24 +7,14 @@ module GameMachine
       sofile = File.join(File.dirname(__FILE__), '../../../detour/libpathfind.so')
       if File.exists?(sofile)
         ffi_lib sofile
-        attach_function :findPath, [:pointer,:float,:float,:float,:float,:float,:float, :pointer], :int
+        attach_function :findPath, [:pointer,:float,:float,:float,:float,:float,:float, :int, :float, :int, :pointer], :int
         attach_function :loadNavMesh, [:int, :string], :int
         attach_function :freePath, [:pointer], :void
         attach_function :freeQuery, [:pointer], :void
         attach_function :getQuery, [:int], :pointer
-        attach_function :getPathPtr, [], :pointer
+        attach_function :getPathPtr, [:int], :pointer
       end
 
-      class PathParams < FFI:Struct
-        layout  :query,     :pointer
-                :path,      :pointer
-                :start_x,   :float
-                :start_y,   :float
-                :start_z,   :float
-                :end_x,   :float
-                :end_y,   :float
-                :end_z,   :float
-      end
     end
   end
 end
