@@ -15,66 +15,12 @@ static dtNavMesh* meshes[1024];
 static const int MAX_POLYS = 256;
 
 
-dtNavMesh* loadAll(const char* path)
-{
-	FILE* fp = fopen(path, "rb");
-	if (!fp) return 0;
-
-	// Read header.
-	NavMeshSetHeader header;
-	fread(&header, sizeof(NavMeshSetHeader), 1, fp);
-	if (header.magic != NAVMESHSET_MAGIC)
-	{
-		fclose(fp);
-		return 0;
-	}
-	if (header.version != NAVMESHSET_VERSION)
-	{
-		fclose(fp);
-		return 0;
-	}
-
-	dtNavMesh* mesh = dtAllocNavMesh();
-	if (!mesh)
-	{
-		fclose(fp);
-		return 0;
-	}
-	dtStatus status = mesh->init(&header.params);
-	if (dtStatusFailed(status))
-	{
-		fclose(fp);
-		return 0;
-	}
-
-	// Read tiles.
-	for (int i = 0; i < header.numTiles; ++i)
-	{
-		NavMeshTileHeader tileHeader;
-		fread(&tileHeader, sizeof(tileHeader), 1, fp);
-		if (!tileHeader.tileRef || !tileHeader.dataSize)
-			break;
-
-		unsigned char* data = (unsigned char*)dtAlloc(tileHeader.dataSize, DT_ALLOC_PERM);
-		if (!data) break;
-		memset(data, 0, tileHeader.dataSize);
-		fread(data, tileHeader.dataSize, 1, fp);
-
-   //fprintf (stderr, "Adding tile %s\n", data);
-		mesh->addTile(data, tileHeader.dataSize, DT_TILE_FREE_DATA, tileHeader.tileRef, 0);
-	}
-
-	fclose(fp);
-
-	return mesh;
-}
-
 extern "C" int loadNavMesh(int map, const char *file) {
   if (meshes[map] != 0) {
     return 0;
   }
   dtNavMesh* navMesh;
-  navMesh = loadAll(file);
+  navMesh = load_navmesh(file);
   meshes[map] = navMesh;
   return 1;
 }
@@ -97,6 +43,10 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
     float endx, float endy, float endz, int max_paths, float step_size,
     int find_straight_path, float* resultPath) {
 
+  if (query == NULL) {
+    return P_FAILURE;
+  }
+
   float m_spos[3] = {startx,starty,startz};
   float m_epos[3] = {endx,endy,endz};
 
@@ -110,9 +60,7 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
   dtQueryFilter m_filter;
   float straight[MAX_POLYS*3];
   int straightPathCount = 0;
-  float polyPickExt[3] = {20,40,20};
-  int includeFlags = 0x3;
-  int excludeFlags = 0x0;
+  float polyPickExt[3] = {40,40,40};
   int m_npolys = 0;
 
   float m_steerPoints[MAX_STEER_POINTS*3];
@@ -251,21 +199,24 @@ extern "C" void testStruct() {
 int main (int argc, char* argv[]) {
 
   int find_straight_path = 1;
-  int max_paths = 10;
+  int max_paths = 100;
   float step_size = 0.5f;
   float *newPath;
   newPath = getPathPtr(max_paths);
 
-  const char *file = "/home2/chris/game_machine/server/detour/all_tiles_navmesh.bin";
-  //const char *file = "/home2/chris/game_machine/server/detour/test2.bin";
+  //const char *file = "/home2/chris/game_machine/server/detour/meshes/terrain.bin";
+  const char *file = "/home2/chris/game_machine/server/detour/test.bin";
+
 
   int loadRes = loadNavMesh(1,file);
   fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
   dtNavMeshQuery* query = getQuery(1);
-
+  
   if (loadRes == 1) {
     for (int i = 0; i < 1; ++i) {
-      int res = findPath(query, 520.0, 0.2, 521.0, 510.0, 0.2, 532.0,
+      //int res = findPath(query, 501.0, 0.2, 526.0, 528.0, 0.2, 509.0,
+      //int res = findPath(query, 526.0, 0.2, 501.0, 509.0, 0.2, 528.0,
+      int res = findPath(query, 500.0, 0.2, 526.0, 528.0, 0.2, 511.0,
           max_paths, step_size, find_straight_path, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {

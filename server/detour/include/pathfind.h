@@ -8,6 +8,7 @@
 #include "DetourNavMeshBuilder.h"
 #include "DetourCommon.h"
 #include "DetourNavMeshQuery.h"
+#include "mesh_loader.h"
 
 
 #define VERTEX_SIZE       3
@@ -17,8 +18,6 @@ static const int P_FAILURE = -1;
 static const int P_NO_START_POLY = -2;
 static const int P_NO_END_POLY = -3;
 static const int P_PATH_NOT_FOUND = -4;
-static const int NAVMESHSET_MAGIC = 'M'<<24 | 'S'<<16 | 'E'<<8 | 'T'; //'MSET';
-static const int NAVMESHSET_VERSION = 1;
 
 enum SamplePolyFlags
 {
@@ -30,19 +29,6 @@ enum SamplePolyFlags
 	SAMPLE_POLYFLAGS_ALL		= 0xffff	// All abilities.
 };
 
-struct NavMeshSetHeader
-{
-	int magic;
-	int version;
-	int numTiles;
-	dtNavMeshParams params;
-};
-
-struct NavMeshTileHeader
-{
-	dtTileRef tileRef;
-	int dataSize;
-};
 
 // Returns a random number [0..1)
 static float frand()
