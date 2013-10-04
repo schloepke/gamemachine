@@ -22,15 +22,13 @@ module GameMachine
 
       # Detour coords:
       # z = unity x, x = unity z
-      def find_path( start_x, start_y, start_z, end_x, end_y, end_z,
-                    max_paths=@max_paths, step_size=@step_size)
+      def find_path( start_x, start_y, start_z, end_x, end_y, end_z)
 
         @error = nil
 
         ptr = Detour.getPathPtr(max_paths)
         paths_found = Detour.findPath(
-          @query_ptr,start_z,start_y,start_x,
-          end_z,end_y,end_x, max_paths, step_size, 0, ptr
+          @query_ptr,start_z,start_y,start_x, end_z,end_y,end_x, 0, ptr
         )
 
         if paths_found <= 0

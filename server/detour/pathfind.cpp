@@ -13,6 +13,10 @@
 
 static dtNavMesh* meshes[1024];
 static const int MAX_POLYS = 256;
+static const int MAX_STEER_POINTS = 10;
+static const int MAX_SMOOTH = 256;
+static const float STEP_SIZE = 1.0f;
+static const float SLOP = 0.01f;
 
 
 extern "C" int loadNavMesh(int map, const char *file) {
@@ -39,9 +43,10 @@ extern "C" void freeQuery(dtNavMeshQuery* query) {
   dtFreeNavMeshQuery(query);
 }
 
-extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float startz,
-    float endx, float endy, float endz, int max_paths, float step_size,
-    int find_straight_path, float* resultPath) {
+
+extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty,
+    float startz, float endx, float endy, float endz, int find_straight_path,
+    float* resultPath) {
 
   if (query == NULL) {
     return P_FAILURE;
@@ -50,10 +55,6 @@ extern "C" int findPath(dtNavMeshQuery* query, float startx, float starty, float
   float m_spos[3] = {startx,starty,startz};
   float m_epos[3] = {endx,endy,endz};
 
-  static const int MAX_STEER_POINTS = 10;
-  static const int MAX_SMOOTH = max_paths;
-  static const float STEP_SIZE = step_size;
-  static const float SLOP = 0.01f;
 
   dtPolyRef m_polys[MAX_POLYS];
 
@@ -192,20 +193,14 @@ extern "C" void freePath(float* path) {
   delete [] path;
 }
 
-extern "C" void testStruct() {
-
-}
-
 int main (int argc, char* argv[]) {
 
   int find_straight_path = 1;
-  int max_paths = 100;
-  float step_size = 0.5f;
   float *newPath;
-  newPath = getPathPtr(max_paths);
+  newPath = getPathPtr(MAX_SMOOTH);
 
   //const char *file = "/home2/chris/game_machine/server/detour/meshes/terrain.bin";
-  const char *file = "/home2/chris/game_machine/server/detour/test.bin";
+  const char *file = "/home2/chris/game_machine/server/detour/meshes/test.bin";
 
 
   int loadRes = loadNavMesh(1,file);
@@ -217,7 +212,7 @@ int main (int argc, char* argv[]) {
       //int res = findPath(query, 501.0, 0.2, 526.0, 528.0, 0.2, 509.0,
       //int res = findPath(query, 526.0, 0.2, 501.0, 509.0, 0.2, 528.0,
       int res = findPath(query, 500.0, 0.2, 526.0, 528.0, 0.2, 511.0,
-          max_paths, step_size, find_straight_path, newPath);
+          find_straight_path, newPath);
       fprintf (stderr, "findPath returned %d\n", res);
       for (int i = 0; i < res; ++i) {
         //fprintf (stderr, "%d\n", i);
