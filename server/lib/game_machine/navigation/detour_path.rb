@@ -2,17 +2,15 @@ module GameMachine
   module Navigation
     class DetourPath
 
-      attr_reader :navmesh, :error
+      attr_reader :navmesh, :error, :max_paths
       def initialize(navmesh)
         @navmesh = navmesh
         @max_paths = 256
-        @step_size = 1.0
         @error = nil
 
         unless navmesh.loaded?
           raise "Navmesh #{navmesh.id} not loaded"
         end
-
         @query_ptr = Detour.getQuery(navmesh.id)
       end
 
@@ -22,13 +20,14 @@ module GameMachine
 
       # Detour coords:
       # z = unity x, x = unity z
-      def find_path( start_x, start_y, start_z, end_x, end_y, end_z)
+      def find_path( start_x, start_y, start_z, end_x, end_y, end_z,straight_path)
 
         @error = nil
 
         ptr = Detour.getPathPtr(max_paths)
         paths_found = Detour.findPath(
-          @query_ptr,start_z,start_y,start_x, end_z,end_y,end_x, 0, ptr
+          @query_ptr,start_z,start_y,
+          start_x, end_z,end_y,end_x, straight_path, ptr
         )
 
         if paths_found <= 0

@@ -1,3 +1,5 @@
+
+using UnityEngine;
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -5,62 +7,52 @@ using System.Text;
 
 namespace pathfinder
 {
-    public class Pathfinder
-    {
-        static void Main(string[] args)
-        {
-            string filename = "test.bin";
-            int res;
-            float[,] resultPath = new float[100,3];
-            res = loadNavMesh(1,filename);
-            Console.Out.WriteLine(res);
-            res = FindSmoothPath(1, 1, 500.0f, 0.2f, 526.0f, 528.0f, 0.2f, 511.0f, resultPath);
-            Console.Out.WriteLine(res);
-            for (int i = 0; i < res; i++)
-            {
-           
-                Console.WriteLine(string.Format("{0} {1} {2}", resultPath[i,0], resultPath[i,1], resultPath[i,2]));
-            }
-        }
-
-        public static int FindStraightPath(
-            int queryId,
-            int map,
-            float startx,
-            float starty,
-            float startz,
-            float endx,
-            float endy,
-            float endz,
-            float[,] resultPath
-            )
-        {
-            return findPath(queryId, map, startx, starty, startz, endx, endy, endz, 1, resultPath);
-        }
-
-        public static int FindSmoothPath(
-            int queryId,
-            int map,
-            float startx,
-            float starty,
-            float startz,
-            float endx,
-            float endy,
-            float endz,
-            float[,] resultPath
-            )
-        {
-            return findPath(queryId, map, startx, starty, startz, endx, endy, endz, 0, resultPath);
-        }
+	public class Pathfinder
+	{
+		public static int maxPaths = 256;
+		private IntPtr query;
+		private bool hasQuery = false;
 
 
-        [DllImport("pathfind")]
-        public static extern int loadNavMesh(int map, string filename);
+		public Pathfinder (int navmeshId, string navmeshPath)
+		{
+			int navmeshLoadRes = loadNavMesh (navmeshId, navmeshPath);
+			if (navmeshLoadRes == 1 || navmeshLoadRes == 0) {
+				query = getQuery (navmeshId);
+				hasQuery = true;
+			} else {
+				Debug.Log (string.Format ("loadNavMesh returned {0}",navmeshLoadRes));
+			}
+		}
 
-        [DllImport("pathfind")]
-        public static extern int findPath(
-            int queryId,
-            int map,
+		public Vector3[] FindPath (Vector3 start, Vector3 end, bool straight = false)
+		{
+			if (hasQuery == false) {
+				return null;
+			}
+			int straightPath = straight ? 1 : 0;
+			float[,] resultPath = new float[Pathfinder.maxPaths, 3];
+			int numPaths = findPath (query, start.z, start.y, start.x, end.z, end.y, end.x, straightPath, resultPath);
+			
+			Vector3[] paths = new Vector3[numPaths];
+			for (int i = 0; i < numPaths; i++) {
+				paths [i] = new Vector3 (resultPath [i, 2], resultPath [i, 1], resultPath [i, 0]);
+			}
+			return paths;
+		}
+
+		[DllImport("detour_path")]
+		public static extern IntPtr getQuery (int map);
+
+		[DllImport("detour_path")]
+		public static extern void freeQuery (IntPtr query);
+
+		[DllImport("detour_path")]
+		public static extern int loadNavMesh (int map, string filename);
+
+		[DllImport("detour_path")]
+		public static extern int findPath (
+            IntPtr query,
             float startx,
             float starty,
             float startz,
@@ -70,5 +62,5 @@ namespace pathfinder
             int find_straight_path,
             [In, Out]  float[,] resultPath
             );
-    }
+	}
 }

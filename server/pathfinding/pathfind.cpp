@@ -1,30 +1,4 @@
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include "Recast.h"
-#include "DetourCommon.h"
-#include "DetourNavMesh.h"
-#include "DetourNavMeshBuilder.h"
-#include "DetourNavMeshQuery.h"
 #include "pathfind.h"
-
-#if _MSC_VER    // TRUE for Microsoft compiler.
-#define EXPORT_API __declspec(dllexport) // Required for VC++
-#else
-#define EXPORT_API // Otherwise don't define.
-#endif
-
-static dtNavMesh* meshes[1024];
-static dtNavMeshQuery* queries[4096];
-static const int MAX_POLYS = 256;
-static const int MAX_STEER_POINTS = 10;
-static const int MAX_SMOOTH = 256;
-static const float STEP_SIZE = 0.5f;
-static const float SLOP = 0.01f;
-
 
 extern "C" EXPORT_API int loadNavMesh(int map, const char *file) {
   if (meshes[map] != 0) {
@@ -36,39 +10,27 @@ extern "C" EXPORT_API int loadNavMesh(int map, const char *file) {
   return 1;
 }
 
-extern "C" EXPORT_API dtNavMeshQuery* getQuery(int queryId, int map) {
+extern "C" EXPORT_API dtNavMeshQuery* getQuery(int map) {
   if (meshes[map] == 0) {
+    fprintf (stderr, "Unable to load navmesh\n");
     return 0;
   }
 
-  dtNavMeshQuery* query;
-  if (queries[queryId] == 0) {
-    query = dtAllocNavMeshQuery();
-    queries[queryId] = query;
-    query->init(meshes[map], 4096);
-  } else {
-    query = queries[queryId];
-  }
+  dtNavMeshQuery* query = dtAllocNavMeshQuery();
+  query->init(meshes[map], 4096);
   return query;
 }
 
-extern "C" EXPORT_API void freeQuery(int queryId) {
-  dtNavMeshQuery* query;
-  if (queries[queryId] != 0) {
-    query = queries[queryId];
-    queries[queryId] = 0;
-    dtFreeNavMeshQuery(query);
-  }
+extern "C" void EXPORT_API freeQuery(dtNavMeshQuery* query) {
+  dtFreeNavMeshQuery(query);
 }
 
-
-extern "C" EXPORT_API int findPath(int queryId, int map, float startx, float starty,
+extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float starty,
     float startz, float endx, float endy, float endz, int find_straight_path,
     float* resultPath) {
 
-  dtNavMeshQuery* query = getQuery(queryId,map);
   if (query == NULL) {
-    return P_FAILURE;
+    return P_QUERY_NOT_FOUND;
   }
 
   float m_spos[3] = {startx,starty,startz};
@@ -94,10 +56,6 @@ extern "C" EXPORT_API int findPath(int queryId, int map, float startx, float sta
   dtPolyRef m_startRef, m_endRef;
 
   dtStatus res;
-
-  if (query == 0) {
-    return P_FAILURE;
-  }
 
   res = query->findNearestPoly(m_spos, polyPickExt, &m_filter, &m_startRef, 0);
   if (res == DT_SUCCESS) {
@@ -178,6 +136,7 @@ extern "C" EXPORT_API int findPath(int queryId, int map, float startx, float sta
 
       if (endOfPath && inRange(iterPos, steerPos, SLOP, 1.0f)) {
         // Reached end of path.
+        fprintf (stderr, "End of path reached\n");
         dtVcopy(iterPos, targetPos);
         if (m_nsmoothPath < MAX_SMOOTH) {
           dtVcopy(&m_smoothPath[m_nsmoothPath*3], iterPos);
@@ -202,47 +161,14 @@ extern "C" EXPORT_API int findPath(int queryId, int map, float startx, float sta
   return straightPathCount;
 }
 
-extern "C" float* getPathPtr(int max_paths) {
+extern "C" EXPORT_API float* getPathPtr(int max_paths) {
   float *path;
   path = new float[max_paths*3];
   return path;
 }
 
-extern "C" void freePath(float* path) {
+extern "C" EXPORT_API void freePath(float* path) {
   delete [] path;
 }
 
-int main (int argc, char* argv[]) {
-
-  int find_straight_path = 1;
-  float *newPath;
-  newPath = getPathPtr(MAX_SMOOTH);
-
-  //const char *file = "/home2/chris/game_machine/server/detour/meshes/terrain.bin";
-  const char *file = "/home2/chris/game_machine/server/pathfind/meshes/all_tiles_navmesh.bin";
-
-
-  int loadRes = loadNavMesh(1,file);
-  fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
-  
-  if (loadRes == 1) {
-    for (int i = 0; i < 1; ++i) {
-      int res = findPath(1,1, 563.0, 0.2, 504.0, 509.0, 0.2, 528.0,
-          find_straight_path, newPath);
-      fprintf (stderr, "findPath returned %d\n", res);
-      for (int i = 0; i < res; ++i) {
-        //fprintf (stderr, "%d\n", i);
-        const float* v = &newPath[i*3];
-        fprintf (stderr, "%f.%f.%f\n", v[0], v[1], v[2]);
-      }
-    }
-  }
-
-  fprintf (stderr, "endLoop\n");
-  freePath(newPath);
-  fprintf (stderr, "freePath\n");
-  freeQuery(1);
-  fprintf (stderr, "freeQuery\n");
-  return 1;
-}
 

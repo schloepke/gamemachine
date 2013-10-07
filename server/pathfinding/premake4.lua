@@ -54,6 +54,8 @@ solution "pathfinding"
 		"recastnavigation/Detour/Source/*.cpp" 
 	}
 	targetdir (todir .. "/lib")
+  configuration "not windows"
+    postbuildcommands { "cp lib/libDetour.a ../bin" }
 
 project "detour_path"
 	language "C++"
@@ -78,6 +80,8 @@ project "detour_path"
 	links { 
 		"Detour"
 	}
+  configuration "not windows"
+    postbuildcommands { "cp lib/libdetour_path.so ../bin" }
 
 project "pathfind_test"
 	language "C++"
@@ -97,5 +101,9 @@ project "pathfind_test"
 	}
 	targetdir (todir .. "/bin")
 	links { 
-		"Detour"
+		"Detour",
+    "detour_path"
 	}
+  configuration "not windows"
+    postbuildcommands { "cp bin/pathfind_test ../bin" }
+

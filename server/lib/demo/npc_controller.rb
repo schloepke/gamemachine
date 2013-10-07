@@ -14,7 +14,7 @@ module Demo
       @last_target_position = GameMachine::Vector.new
       @last_move = Time.now.to_f
       @last_combat_update = Time.now.to_f
-      @speed = 0.8
+      @speed = 0.9
       @path = GameMachine::Navigation::Path.new([],position)
       unless saved_entity = GameMachine::ObjectDb.get(entity.id)
         GameMachine::ObjectDb.put(entity)
@@ -26,11 +26,11 @@ module Demo
       #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z}"
       @path.current_location = position
       next_point = @path.next_point
-      if next_point.nil? #|| @target_position.distance(@last_target_position) > 1
+      if next_point.nil? || @target_position.distance(@last_target_position) > 1
         @last_target_position = @target_position.clone
         detour_path = @pathfinder.find_path(
           position.x,position.y,position.z,
-          @target_position.x,@target_position.y, @target_position.z, 10,0.5 
+          @target_position.x,@target_position.y, @target_position.z, 1
         )
         if @pathfinder.error
           puts @pathfinder.error
@@ -38,7 +38,7 @@ module Demo
         end
         @path.set_path(detour_path)
         next_point = @path.next_point
-        puts next_point.inspect
+        #puts "TARGET #{@target_position.inspect} PATH #{detour_path.inspect}"
       end
 
       if next_point.nil?
@@ -46,6 +46,7 @@ module Demo
       end
       #puts "#{position.x},#{position.y},#{position.z} to #{@target_position.x},#{@target_position.y},#{@target_position.z} via #{target_path.inspect}"
       @move_to = next_point
+      #puts @move_to.inspect
     end
 
     def update
@@ -69,7 +70,7 @@ module Demo
       if @has_target
         if @move_to.zero?
         else
-          track(@move_to)
+          track(position)
           move
         end
         #puts position.distance(@target_position)

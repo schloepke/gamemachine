@@ -23,7 +23,7 @@ server/java/build
 server/java/lib
 server/log
 server/tmp
-server/pahthfinding/build
+server/pathfinding/build
 jruby-1.7.4
 data
 server/java/src/main/java/com/game_machine/entity_system/generated/*.java

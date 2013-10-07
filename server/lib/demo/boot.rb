@@ -1,6 +1,10 @@
 require_relative 'lib/demo'
 
-meshfile = "/home2/chris/game_machine/server/detour/all_tiles_navmesh.bin"
-navmesh = GameMachine::Navigation::DetourNavmesh.create(1,meshfile)
-navmesh.load_mesh!
+meshfile = File.join(GameMachine.app_root,'../data','meshes',"mesh1.bin")
+if File.exists?(meshfile)
+  navmesh = GameMachine::Navigation::DetourNavmesh.create(1,meshfile)
+  navmesh.load_mesh!
+else
+  raise "Meshfile #{meshfile} does not exist"
+end
 Demo::Game.new.start
