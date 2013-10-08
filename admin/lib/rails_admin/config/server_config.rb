@@ -12,6 +12,9 @@ RailsAdmin.config do |config|
       field :http_enabled
       field :http_host
       field :http_port
+      field :tcp_enabled
+      field :tcp_host
+      field :tcp_port
       field :udp_enabled
       field :udp_host
       field :udp_port

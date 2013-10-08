@@ -23,6 +23,10 @@ module GameMachine
       end
 
 
+      def find_grid_value_by_id(id)
+        GameMachine::GameSystems::EntityTracking::GRID.get(id)
+      end
+
       # Returns a list of nearby tracked game objects
       def neighbors(type='player')
         GameMachine::GameSystems::EntityTracking.neighbors_from_grid(position.x,position.z,type)

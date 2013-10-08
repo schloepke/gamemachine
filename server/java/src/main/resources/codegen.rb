@@ -46,16 +46,20 @@ def write_components(proto)
 end
 
 game_protofile = File.join(@user_dir,'../config/game_messages.proto')
+game_entity_messages_file = File.join(@user_dir,'../config/game_entity_messages.proto')
 protofile = File.join(@user_dir,'/src/main/resources/messages.proto')
 
 if File.exists?(game_protofile)
   game_messages = File.read(game_protofile)
+  game_entity_messages = File.read(game_entity_messages_file)
 else
   game_messages = ''
+  game_entity_messages = ''
 end
 messages = File.read(protofile)
 
 combined_messages = messages.sub('//GAME_MESSAGES',game_messages)
+combined_messages = combined_messages.sub('//GAME_ENTITY_MESSAGES',game_entity_messages)
 combined_messages_protofile = File.join(@user_dir,'../config/combined_messages.proto')
 
 File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}

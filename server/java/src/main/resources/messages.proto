@@ -137,7 +137,6 @@ message Player {
   optional bool authenticated = 3;
   optional string authtoken = 4;
   optional Transform transform = 5;
-  optional Health health = 6;
 }
 
 
@@ -210,7 +209,6 @@ message GetNeighbors {
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
-  optional Health health = 3;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;
   optional EchoTest echoTest = 6;
@@ -237,14 +235,10 @@ message Entity {
   optional string entityType = 30;
   optional NotifySingleton notifySingleton = 31;
   optional DestroySingleton destroySingleton = 32;
-  optional Effect effect = 33;
-  optional EffectList effectList = 34;
-  optional Attack attack = 35;
-  optional CombatAbility combatAbility = 36;
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
-  
+  //GAME_ENTITY_MESSAGES
 }
 
 message EntityList {

@@ -14,9 +14,9 @@ module Demo
     end
 
     def set_player_health(player)
-      player.set_health(
-        Health.new.set_health(@base_health)
-      )
+      #player.set_health(
+      #  Health.new.set_health(@base_health)
+      #)
     end
 
     def on_receive(message)

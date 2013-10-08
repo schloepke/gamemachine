@@ -1,23 +1,52 @@
 module Demo
   class NpcController < GameMachine::GameSystems::SingletonController
+    include GameMachine::Helpers::StateMachine
+
+    state_machine :state, :initial => :inactive do
+      event :activate do
+        transition :inactive => :idle
+      end
+
+      event :attack do
+        transition [:idle, :going_home] => :attacking
+      end
+
+      event :go_home do
+        transition :attacking => :going_home
+      end
+
+      event :reached_home do
+        transition :going_home => :idle
+      end
+
+      after_transition :on => :going_home, :do => :set_target_home
+      after_transition :on => :idle, :do => :clear_target
+    end
 
     # Start is our initializer, called at start and restart
+    attr_accessor :target_position, :target_id
     def start
+      @target_id = nil
+      @target_position = GameMachine::Vector.new
+
       if @navmesh = GameMachine::Navigation::DetourNavmesh.find(1)
         @pathfinder = GameMachine::Navigation::DetourPath.new(@navmesh)
       else
         raise "Navmesh not set!"
       end
       position.set(entity.vector3.x, entity.vector3.y, entity.vector3.z)
-      @target_position = GameMachine::Vector.new
+      @home_position = position.clone
       @move_to = GameMachine::Vector.new
       @last_target_position = GameMachine::Vector.new
       @last_move = Time.now.to_f
       @last_combat_update = Time.now.to_f
-      @speed = 0.9
+      @speed = 0.8
       @path = GameMachine::Navigation::Path.new([],position)
       unless saved_entity = GameMachine::ObjectDb.get(entity.id)
         GameMachine::ObjectDb.put(entity)
+      end
+      load_state(entity.id) do
+        activate
       end
       track
     end
@@ -49,36 +78,90 @@ module Demo
       #puts @move_to.inspect
     end
 
-    def update
-      # Get all nearby players
-      players = neighbors('player')
-
-      # Pick the first one as our target
-      if players.size >= 1
-        grid_value = players.get(0)
-        @target_id = grid_value.id
-        @target_position.set(grid_value.x,grid_value.z,grid_value.y)
-        find_path
-        @has_target = true
+    def acquire_target
+      grid_value = nil
+      if has_player_target?
+        grid_value = find_grid_value_by_id(target_id)
       else
-        @has_target = false
+        players = neighbors('player')
+        if players.size >= 1
+          grid_value = players.get(0)
+        end
       end
 
-      # If we have a target we follow and attack if within range.
-      # track updates the grid with our location. Only needs to be called
-      # if we move.
-      if @has_target
-        if @move_to.zero?
-        else
-          track(position)
-          move
-        end
-        #puts position.distance(@target_position)
-        #attack
+      if grid_value
+        set_target(grid_value.id,grid_value)
+      else
+        clear_target
+        false
       end
     end
 
-    def attack
+    def clear_target
+      @has_target = false
+      target_position = nil
+      target_id = nil
+    end
+
+    def set_target_home
+      set_target(:home,home)
+    end
+
+    def set_target(id,vector)
+      target_id = id
+      target_position.set(vector.x,vector.z,vector.y)
+      @has_target = true
+    end
+
+    def has_target?
+      @has_target
+    end
+
+    def has_player_target?
+      has_target? && target_id && target_id != :home
+    end
+
+    def update
+      load_state(entity.id)
+
+      if going_home?
+        distance_home = position.distance(target_position)
+        if distance_home < 0.5
+          reached_home!
+        else
+          move_towards_target
+        end
+      elsif idle? or attacking?
+
+        acquire_target
+        if has_player_target?
+          if idle?
+            attack!
+          end
+        else
+          if attacking?
+            go_home!
+          end
+        end
+
+        if has_target?
+          move_towards_target
+          #attack
+        end
+      end
+
+      save_state(entity.id)
+    end
+
+    def move_towards_target
+      find_path
+      unless @move_to.zero?
+        move
+        track(position)
+      end
+    end
+
+    def attack_player
 
       # Eligible to attack every 2 seconds
       combat_delta_time = Time.now.to_f - @last_combat_update.to_f

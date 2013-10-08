@@ -5,7 +5,7 @@ development:
   environment: development
   game_handler: GameMachine::Handlers::Request
   data_store: memory
-  couchbase_servers: http://217.0.0.1:8091/pools
+  couchbase_servers: http://127.0.0.1:8091/pools
   cache_write_interval: -1
   cache_writes_per_second: -1
   world_grid_size: 1000
