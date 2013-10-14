@@ -107,6 +107,19 @@ module GameMachine
         GRID.neighbors(x,z,neighbor_type)
       end
 
+      def self.neighbors_to_entity(x,z,neighbor_type)
+        grid_values = neighbors_from_grid(x,z,neighbor_type)
+        entity = Entity.new.set_neighbors(Neighbors.new).set_id('0')
+        neighbors = entity.neighbors
+        grid_values.each do |grid_value|
+          if grid_value.entityType == 'player'
+            neighbors.add_player(location_entity(grid_value))
+          elsif grid_value.entityType == 'npc'
+            neighbors.add_npc(location_entity(grid_value))
+          end
+        end
+        entity
+      end
     end
   end
 end

@@ -266,6 +266,39 @@ namespace com.game_machine.entity_system.generated
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Rpc")]
+  public partial class Rpc : global::ProtoBuf.IExtensible
+  {
+    public Rpc() {}
+    
+    private string _method;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"method", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string method
+    {
+      get { return _method; }
+      set { _method = value; }
+    }
+    private readonly global::System.Collections.Generic.List<string> _arguments = new global::System.Collections.Generic.List<string>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"arguments", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<string> arguments
+    {
+      get { return _arguments; }
+    }
+  
+
+    private bool _returnValue = default(bool);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"returnValue", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool returnValue
+    {
+      get { return _returnValue; }
+      set { _returnValue = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"MessageEnvelope")]
   public partial class MessageEnvelope : global::ProtoBuf.IExtensible
   {
@@ -1635,8 +1668,17 @@ namespace com.game_machine.entity_system.generated
       set { _sendToPlayer = value; }
     }
 
+    private com.game_machine.entity_system.generated.Rpc _rpc = null;
+    [global::ProtoBuf.ProtoMember(40, IsRequired = false, Name=@"rpc", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public com.game_machine.entity_system.generated.Rpc rpc
+    {
+      get { return _rpc; }
+      set { _rpc = value; }
+    }
+
     private com.game_machine.entity_system.generated.Health _health = null;
-    [global::ProtoBuf.ProtoMember(40, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(101, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.Health health
     {
@@ -1645,7 +1687,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.Effect _effect = null;
-    [global::ProtoBuf.ProtoMember(41, IsRequired = false, Name=@"effect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(102, IsRequired = false, Name=@"effect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.Effect effect
     {
@@ -1654,7 +1696,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.EffectList _effectList = null;
-    [global::ProtoBuf.ProtoMember(42, IsRequired = false, Name=@"effectList", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(103, IsRequired = false, Name=@"effectList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.EffectList effectList
     {
@@ -1663,7 +1705,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.CombatAbility _combatAbility = null;
-    [global::ProtoBuf.ProtoMember(43, IsRequired = false, Name=@"combatAbility", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(104, IsRequired = false, Name=@"combatAbility", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.CombatAbility combatAbility
     {
@@ -1672,7 +1714,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.Attack _attack = null;
-    [global::ProtoBuf.ProtoMember(44, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(105, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.Attack attack
     {
@@ -1681,7 +1723,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.IsPlayer _isPlayer = null;
-    [global::ProtoBuf.ProtoMember(45, IsRequired = false, Name=@"isPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(106, IsRequired = false, Name=@"isPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.IsPlayer isPlayer
     {
@@ -1690,7 +1732,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.SetTarget _setTarget = null;
-    [global::ProtoBuf.ProtoMember(46, IsRequired = false, Name=@"setTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(107, IsRequired = false, Name=@"setTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.SetTarget setTarget
     {
@@ -1699,7 +1741,7 @@ namespace com.game_machine.entity_system.generated
     }
 
     private com.game_machine.entity_system.generated.UnsetTarget _unsetTarget = null;
-    [global::ProtoBuf.ProtoMember(47, IsRequired = false, Name=@"unsetTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(108, IsRequired = false, Name=@"unsetTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public com.game_machine.entity_system.generated.UnsetTarget unsetTarget
     {

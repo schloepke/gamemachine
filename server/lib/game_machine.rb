@@ -62,7 +62,7 @@ java_import 'com.game_machine.entity_system.generated.EffectList'
 java_import 'com.game_machine.entity_system.generated.Health'
 java_import 'com.game_machine.entity_system.generated.PlayerAuthenticated'
 java_import 'com.game_machine.entity_system.generated.MessageEnvelope'
-
+java_import 'com.game_machine.entity_system.generated.Rpc'
 
 
 require_relative 'game_machine/version'
@@ -75,6 +75,7 @@ require_relative 'game_machine/actor/system'
 require_relative 'game_machine/actor/base'
 require_relative 'game_machine/actor/factory'
 require_relative 'game_machine/actor/ref'
+require_relative 'game_machine/actor/mono_actor'
 require_relative 'game_machine/handlers/authentication'
 require_relative 'game_machine/hashring'
 require_relative 'game_machine/application'
@@ -135,7 +136,6 @@ java.util.concurrent.TimeUnit::SECONDS
 
 
 if GameMachine::Settings.mono_enabled
-  require_relative 'game_machine/mono_test'
-  GameMachine::MonoLib.init_mono
+  require_relative 'game_machine/mono'
 end
 

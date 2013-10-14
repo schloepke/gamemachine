@@ -7,17 +7,24 @@ using System.Text;
 using System.IO;
 using Entity = com.game_machine.entity_system.generated.Entity;
 using MessageEnvelope = com.game_machine.entity_system.generated.MessageEnvelope;
+using Rpc = com.game_machine.entity_system.generated.Rpc;
+using Neighbors = com.game_machine.entity_system.generated.Neighbors;
 
 namespace GameMachine
 {
-	class Actor
+	public abstract class Actor
 	{
+		private int udpPort = 4000;
+		private string udpHost = "127.0.0.1";
 		private UdpClient udpClient;
+		private IPEndPoint remote;
 				
-		Actor ()
+		public Actor ()
 		{
+			remote = new IPEndPoint (IPAddress.Parse (udpHost), udpPort);
 			udpClient = new UdpClient ();
-			udpClient.Connect ("localhost", 4000);
+			udpClient.Connect (remote);
+			udpClient.Client.ReceiveTimeout = 20; 
 		}
 		
 		void Tell (string server, string name, string id, string type, Entity entity)
@@ -38,43 +45,69 @@ namespace GameMachine
 			} else if (type == "l") {
 				messageEnvelope.type = "l";
 			} else {
-				throw new System.ArgumentException("type is null or invalid", type);
+				throw new System.ArgumentException ("type is null or invalid", type);
 			}
 			
-			MemoryStream stream = new MemoryStream ();
-			Serializer.Serialize (stream, entity);
-			byte[] bytes = stream.ToArray ();
+			byte[] bytes = EntityToByteArray(entity);
 			udpClient.Send (bytes, bytes.Length);
 		}
 		
-		void Tell (string name, Entity entity)
+		public void Tell (string name, Entity entity)
 		{
 			Tell (null, name, null, "l", entity);
 		}
 		
-		void TellRemote (string server, string name, Entity entity)
+		public void TellRemote (string server, string name, Entity entity)
 		{
 			Tell (server, name, null, "r", entity);
 		}
 		
-		void TellDistributedLocal (string id, string name, Entity entity)
+		public void TellDistributedLocal (string id, string name, Entity entity)
 		{
 			Tell (null, name, id, "dl", entity);
 		}
 		
-		void TellDistributed (string id, string name, Entity entity)
+		public void TellDistributed (string id, string name, Entity entity)
 		{
 			Tell (null, name, id, "d", entity);
 		}
 		
-		void OnReceive (byte[] bytes)
+		public Neighbors GetNeighbors (float x, float z, string entityType="player")
 		{
-			//Console.Out.WriteLine("onReceive called");
+			try {
+				Entity entity = new Entity ();
+				entity.id = "0";
+				entity.rpc = new Rpc ();
+				entity.rpc.method = "neighbors";
+				entity.rpc.arguments.Add (x.ToString ("N4"));
+				entity.rpc.arguments.Add (z.ToString ("N4"));
+				entity.rpc.arguments.Add (entityType);
+				entity.rpc.returnValue = true;
+				byte[] bytes = EntityToByteArray(entity);
+				udpClient.Send (bytes, bytes.Length);
+				bytes = udpClient.Receive (ref remote);
+				entity = ByteArrayToEntity (bytes);
+				return entity.neighbors;
+			} catch (Exception ex) {
+				Console.WriteLine (ex.Message);
+				return null;
+			}
+		}
+		
+		public Entity ByteArrayToEntity(byte[] bytes) {
 			MemoryStream stream = new MemoryStream (bytes);
 			Entity entity = Serializer.Deserialize<Entity> (stream);
-			Tell ("GameMachine::GameSystems::LocalEcho", entity);
-			//Console.WriteLine(System.Text.Encoding.Default.GetString(bytes));
+			return entity;
 		}
-
+		
+		public byte[] EntityToByteArray (Entity entity)
+		{
+			MemoryStream stream = new MemoryStream ();
+			Serializer.Serialize (stream, entity);
+			return stream.ToArray ();
+		}
+		
+		public abstract void OnReceive (byte[] bytes);
+		
 	}
 }

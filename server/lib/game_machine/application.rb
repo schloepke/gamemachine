@@ -137,10 +137,6 @@ module GameMachine
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(200).start
-        if Settings.mono_enabled
-          Actor::Builder.new(MonoTest).start#.with_router(JavaLib::RoundRobinRouter,10).start
-          #Actor::Builder.new(MonoTest).with_dispatcher('default-pinned-dispatcher').start#.with_router(JavaLib::RoundRobinRouter,10).start
-        end
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start
       end

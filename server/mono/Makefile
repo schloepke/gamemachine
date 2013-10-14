@@ -1,6 +1,7 @@
 
 dll:
 	mcs -unsafe+ -lib:/home2/chris/game_machine/server/mono -pkg:dotnet -r:protobuf-net.dll -t:library -out:actor.dll messages.cs actor.cs 
+	mcs -unsafe+ -lib:/home2/chris/game_machine/server/mono -pkg:dotnet -r:actor.dll -r:protobuf-net.dll -t:library -out:test_actor.dll test_actor.cs 
 
 all:
 	gcc -c -Wall -fpic actor.c `pkg-config --cflags glib-2.0 --libs mono-2` -lm

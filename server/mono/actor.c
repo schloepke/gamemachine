@@ -18,6 +18,7 @@ int on_receive (guint32 handle, unsigned char *bytes, int length) {
   MonoDomain *domain;
   MonoMethod *OnReceive = NULL, *m = NULL;
   MonoArray *array;
+  MonoObject *exception;
   void* iter;
   void* args [2];
 
@@ -27,11 +28,13 @@ int on_receive (guint32 handle, unsigned char *bytes, int length) {
   klass = mono_object_get_class (obj);
 
   iter = NULL ;
-  while ((m = mono_class_get_methods (klass, &iter))) {
-    if (strcmp (mono_method_get_name (m), "OnReceive") == 0) {
-      OnReceive = m;
-    }
-  }
+  OnReceive = mono_class_get_method_from_name(klass,"OnReceive",1);
+
+  //while ((m = mono_class_get_methods (klass, &iter))) {
+  //  if (strcmp (mono_method_get_name (m), "OnReceive") == 0) {
+  //    OnReceive = m;
+  //  }
+  //}
   if (OnReceive == 0) {
     return 0;
   }
@@ -43,8 +46,13 @@ int on_receive (guint32 handle, unsigned char *bytes, int length) {
       mono_array_set(array,unsigned char,i,bytes[i]);
 
   args[0] = array;
-  mono_runtime_invoke (OnReceive, obj, args, NULL);
-  return 1;
+  exception = NULL;
+  mono_runtime_invoke (OnReceive, obj, args, &exception);
+  if (exception) {
+    return 0;
+  } else {
+    return 1;
+  }
 }
 
 void attach_current_thread() {
@@ -56,15 +64,15 @@ void destroy_object(guint32 handle) {
   mono_gchandle_free(handle);
 }
 
-guint32 create_object(MonoImage *image) {
+guint32 create_object(MonoImage *image, const char *name_space, const char *name) {
   mono_thread_attach(mono_domain_get());
   MonoClass *klass;
   MonoObject *obj;
 
-  klass = mono_class_from_name (image, "GameMachine", "Actor");
+  klass = mono_class_from_name (image, name_space, name);
   if (!klass) {
-    fprintf (stderr, "Can't find Actor in assembly %s\n", mono_image_get_filename (image));
-    exit (1);
+    fprintf (stderr, "Can't find %s %s in assembly %s\n", name_space, name, mono_image_get_filename (image));
+    return 0;
   }
 
   //fprintf (stderr, "loaded class %s\n", mono_class_get_name (klass));

@@ -3,7 +3,13 @@ package com.game_machine.entity_system.generated;
 option optimize_for = SPEED;
 
 //GAME_MESSAGES
- 
+
+message Rpc {
+  required string method = 1;
+  repeated string arguments = 2;
+  optional bool returnValue = 3;
+}
+
 message MessageEnvelope {
   required string name = 1;
   optional string server = 2;
@@ -246,6 +252,7 @@ message Entity {
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
+  optional Rpc rpc = 40;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -3,7 +3,7 @@ class ProtoGenerator
   class << self
 
     def current_version
-      39
+      100
     end
 
     def clear_messages
