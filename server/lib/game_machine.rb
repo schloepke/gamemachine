@@ -61,6 +61,7 @@ java_import 'com.game_machine.entity_system.generated.Effect'
 java_import 'com.game_machine.entity_system.generated.EffectList'
 java_import 'com.game_machine.entity_system.generated.Health'
 java_import 'com.game_machine.entity_system.generated.PlayerAuthenticated'
+java_import 'com.game_machine.entity_system.generated.MessageEnvelope'
 
 
 
@@ -109,6 +110,7 @@ require_relative 'game_machine/runner'
 require_relative 'game_machine/endpoints/tcp_handler'
 require_relative 'game_machine/endpoints/udt'
 require_relative 'game_machine/endpoints/udp'
+require_relative 'game_machine/endpoints/actor_udp'
 require_relative 'game_machine/endpoints/tcp'
 require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'

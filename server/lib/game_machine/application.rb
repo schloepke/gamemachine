@@ -74,6 +74,8 @@ module GameMachine
       end
 
       def start_endpoints
+        Actor::Builder.new(Endpoints::ActorUdp).start
+
         if config.server.tcp_enabled
           Actor::Builder.new(Endpoints::Tcp).start
           GameMachine.stdout(
@@ -136,7 +138,8 @@ module GameMachine
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(200).start
         if Settings.mono_enabled
-          Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
+          Actor::Builder.new(MonoTest).start#.with_router(JavaLib::RoundRobinRouter,10).start
+          #Actor::Builder.new(MonoTest).with_dispatcher('default-pinned-dispatcher').start#.with_router(JavaLib::RoundRobinRouter,10).start
         end
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start

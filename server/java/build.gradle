@@ -30,6 +30,7 @@ dependencies {
   compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-zeromq_$scala_version", version:"$akka_version"
   
   compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
   compile 'com.dyuproject.protostuff:protostuff:1.0.7'

@@ -1,5 +1,11 @@
 module GameMachine
+
+  module ZeromqLib
+    include_package 'akka.zeromq'
+  end
+
   module JavaLib
+    include_package 'akka.serialization'
     include_package 'pathfinder'
     include_package 'com.typesafe.config'
     include_package 'akka.actor'

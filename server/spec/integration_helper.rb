@@ -7,6 +7,9 @@ require_relative '../lib/game_machine/clients/test_client'
 
 RSpec.configure do |config|
   config.before(:suite) do
+    GameMachine::Application.initialize!('default',true)
+    GameMachine::Application.load_game_data
+    GameMachine::AuthHandlers::Base.instance
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers

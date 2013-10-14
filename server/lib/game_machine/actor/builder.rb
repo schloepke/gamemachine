@@ -34,6 +34,11 @@ module GameMachine
         self
       end
 
+      def with_dispatcher(name)
+        @props = @props.with_dispatcher(name)
+        self
+      end
+
       # Run the actor under a router
       # @param router_class [Class] num_router [Integer]
       # @return self

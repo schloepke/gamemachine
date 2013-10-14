@@ -3,7 +3,14 @@ package com.game_machine.entity_system.generated;
 option optimize_for = SPEED;
 
 //GAME_MESSAGES
-  
+ 
+message MessageEnvelope {
+  required string name = 1;
+  optional string server = 2;
+  optional string id = 3;
+  required string type = 4;
+}
+
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
@@ -209,6 +216,7 @@ message GetNeighbors {
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
+  optional MessageEnvelope messageEnvelope = 3;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;
   optional EchoTest echoTest = 6;

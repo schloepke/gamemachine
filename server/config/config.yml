@@ -1,7 +1,7 @@
 ---
 development:
   id: 1
-  mono_enabled: false
+  mono_enabled: true
   environment: development
   game_handler: GameMachine::Handlers::Request
   data_store: memory
@@ -117,7 +117,7 @@ production:
   servers: {}
 test:
   id: 3
-  mono_enabled: false
+  mono_enabled: true
   environment: test
   game_handler: GameMachine::Handlers::Request
   data_store: memory

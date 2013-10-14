@@ -1,3 +1,4 @@
+require 'state_machine'
 module Demo
   class NpcController < GameMachine::GameSystems::SingletonController
     include GameMachine::Helpers::StateMachine
@@ -131,7 +132,10 @@ module Demo
         else
           move_towards_target
         end
-      elsif idle? or attacking?
+        return
+      end
+
+      if idle? or attacking?
 
         acquire_target
         if has_player_target?

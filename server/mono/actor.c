@@ -1,44 +1,50 @@
+
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <glib.h>
 #include <mono/jit/jit.h>
 #include <mono/metadata/object.h>
 #include <mono/metadata/environment.h>
 #include <mono/metadata/assembly.h>
 #include <mono/metadata/debug-helpers.h>
-#include <string.h>
-#include <stdlib.h>
-
 #ifndef FALSE
 #define FALSE 0
 #endif
 
-void on_receive (MonoObject *obj, unsigned char *bytes, int length) {
+
+int on_receive (guint32 handle, unsigned char *bytes, int length) {
   MonoClass *klass;
   MonoDomain *domain;
-  MonoMethod *onReceive = NULL, *m = NULL;
+  MonoMethod *OnReceive = NULL, *m = NULL;
   MonoArray *array;
   void* iter;
   void* args [2];
-  fprintf (stderr, "on_receive message %s\n",bytes);
 
-  klass = mono_object_get_class (obj);
-  domain = mono_object_get_domain (obj);
+  MonoObject* obj = mono_gchandle_get_target (handle);
+  domain = mono_domain_get();
   mono_thread_attach(domain);
+  klass = mono_object_get_class (obj);
 
-  iter = NULL;
+  iter = NULL ;
   while ((m = mono_class_get_methods (klass, &iter))) {
-    if (strcmp (mono_method_get_name (m), "onReceive") == 0) {
-      onReceive = m;
+    if (strcmp (mono_method_get_name (m), "OnReceive") == 0) {
+      OnReceive = m;
     }
   }
-  //mono_runtime_invoke (onReceive, obj, NULL, NULL);
+  if (OnReceive == 0) {
+    return 0;
+  }
 
 
   array = mono_array_new (domain, mono_get_byte_class (), length);
   int i;
   for(i = 0; i < length; i++)
-      mono_array_set(array,char,i,bytes[i]);
+      mono_array_set(array,unsigned char,i,bytes[i]);
 
   args[0] = array;
-  mono_runtime_invoke (onReceive, obj, args, NULL);
+  mono_runtime_invoke (OnReceive, obj, args, NULL);
+  return 1;
 }
 
 void attach_current_thread() {
@@ -46,7 +52,11 @@ void attach_current_thread() {
   mono_thread_attach(mono_get_root_domain());
 }
 
-MonoObject *create_object(MonoImage *image) {
+void destroy_object(guint32 handle) {
+  mono_gchandle_free(handle);
+}
+
+guint32 create_object(MonoImage *image) {
   mono_thread_attach(mono_domain_get());
   MonoClass *klass;
   MonoObject *obj;
@@ -57,15 +67,13 @@ MonoObject *create_object(MonoImage *image) {
     exit (1);
   }
 
+  //fprintf (stderr, "loaded class %s\n", mono_class_get_name (klass));
   obj = mono_object_new (mono_domain_get(), klass);
   mono_runtime_object_init (obj);
-  fprintf (stderr, "object created 1\n");
-  return obj;
+  guint32 handle = mono_gchandle_new (obj, TRUE);
+  return handle;
 }
 
-int test_mono(const char *file) {
-  return 1;
-}
 
 MonoImage *load_assembly(const char *file) {
   mono_thread_attach(mono_domain_get());
@@ -90,6 +98,10 @@ void unload_mono() {
   mono_environment_exitcode_get ();
   mono_jit_cleanup (mono_domain_get());
   fprintf (stderr, "cleanup finished\n");
+}
+
+void send_message(unsigned char *message) {
+  fprintf (stderr, "send_message called\n");
 }
 
 int main (int argc, char* argv[]) {
