@@ -32,7 +32,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Effect() {}
     
-
     private int _length = default(int);
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"length", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -41,7 +40,6 @@ namespace com.game_machine.entity_system.generated
       get { return _length; }
       set { _length = value; }
     }
-
     private string _name = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -50,7 +48,6 @@ namespace com.game_machine.entity_system.generated
       get { return _name; }
       set { _name = value; }
     }
-
     private int _healthDiff = default(int);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"healthDiff", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -59,7 +56,6 @@ namespace com.game_machine.entity_system.generated
       get { return _healthDiff; }
       set { _healthDiff = value; }
     }
-
     private int _damageDiff = default(int);
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"damageDiff", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -68,7 +64,6 @@ namespace com.game_machine.entity_system.generated
       get { return _damageDiff; }
       set { _damageDiff = value; }
     }
-
     private int _timePeriod = default(int);
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"timePeriod", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -77,7 +72,6 @@ namespace com.game_machine.entity_system.generated
       get { return _timePeriod; }
       set { _timePeriod = value; }
     }
-
     private string _type = "";
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -127,7 +121,6 @@ namespace com.game_machine.entity_system.generated
       get { return _damage; }
       set { _damage = value; }
     }
-
     private int _hitChance = default(int);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"hitChance", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -143,7 +136,6 @@ namespace com.game_machine.entity_system.generated
       get { return _range; }
       set { _range = value; }
     }
-
     private string _type = "";
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -176,7 +168,6 @@ namespace com.game_machine.entity_system.generated
       get { return _target; }
       set { _target = value; }
     }
-
     private int _combatAbilityId = default(int);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"combatAbilityId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -195,7 +186,6 @@ namespace com.game_machine.entity_system.generated
   {
     public IsPlayer() {}
     
-
     private bool _enabled = default(bool);
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"enabled", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -221,7 +211,6 @@ namespace com.game_machine.entity_system.generated
       get { return _targetId; }
       set { _targetId = value; }
     }
-
     private string _state = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -285,7 +274,6 @@ namespace com.game_machine.entity_system.generated
       get { return _arguments; }
     }
   
-
     private bool _returnValue = default(bool);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"returnValue", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -311,7 +299,6 @@ namespace com.game_machine.entity_system.generated
       get { return _name; }
       set { _name = value; }
     }
-
     private string _server = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"server", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -320,7 +307,6 @@ namespace com.game_machine.entity_system.generated
       get { return _server; }
       set { _server = value; }
     }
-
     private string _id = "";
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -353,7 +339,6 @@ namespace com.game_machine.entity_system.generated
       get { return _value; }
       set { _value = value; }
     }
-
     private bool _internal = default(bool);
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"internal", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -410,7 +395,6 @@ namespace com.game_machine.entity_system.generated
       get { return _clientConnection; }
       set { _clientConnection = value; }
     }
-
     private string _observer = "";
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"observer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -460,7 +444,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerId; }
       set { _playerId = value; }
     }
-
     private string _authtoken = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -626,7 +609,6 @@ namespace com.game_machine.entity_system.generated
       get { return _type; }
       set { _type = value; }
     }
-
     private string _senderId = "";
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"senderId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -655,7 +637,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Subscribe() {}
     
-
     private string _topic = "";
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"topic", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -691,7 +672,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Publish() {}
     
-
     private string _topic = "";
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"topic", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -707,7 +687,6 @@ namespace com.game_machine.entity_system.generated
       get { return _message; }
       set { _message = value; }
     }
-
     private string _path = "";
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"path", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -798,7 +777,6 @@ namespace com.game_machine.entity_system.generated
       get { return _id; }
       set { _id = value; }
     }
-
     private string _gateway = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"gateway", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -807,7 +785,6 @@ namespace com.game_machine.entity_system.generated
       get { return _gateway; }
       set { _gateway = value; }
     }
-
     private string _server = "";
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"server", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -949,7 +926,6 @@ namespace com.game_machine.entity_system.generated
       get { return _id; }
       set { _id = value; }
     }
-
     private string _name = "";
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -958,7 +934,6 @@ namespace com.game_machine.entity_system.generated
       get { return _name; }
       set { _name = value; }
     }
-
     private bool _authenticated = default(bool);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"authenticated", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -967,7 +942,6 @@ namespace com.game_machine.entity_system.generated
       get { return _authenticated; }
       set { _authenticated = value; }
     }
-
     private string _authtoken = "";
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -976,7 +950,6 @@ namespace com.game_machine.entity_system.generated
       get { return _authtoken; }
       set { _authtoken = value; }
     }
-
     private com.game_machine.entity_system.generated.Transform _transform = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"transform", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -995,7 +968,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Vector3() {}
     
-
     private float _x = default(float);
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1004,7 +976,6 @@ namespace com.game_machine.entity_system.generated
       get { return _x; }
       set { _x = value; }
     }
-
     private float _y = default(float);
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1013,7 +984,6 @@ namespace com.game_machine.entity_system.generated
       get { return _y; }
       set { _y = value; }
     }
-
     private float _z = default(float);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1022,7 +992,6 @@ namespace com.game_machine.entity_system.generated
       get { return _z; }
       set { _z = value; }
     }
-
     private int _xi = default(int);
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"xi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1031,7 +1000,6 @@ namespace com.game_machine.entity_system.generated
       get { return _xi; }
       set { _xi = value; }
     }
-
     private int _yi = default(int);
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"yi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1040,7 +1008,6 @@ namespace com.game_machine.entity_system.generated
       get { return _yi; }
       set { _yi = value; }
     }
-
     private int _zi = default(int);
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"zi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1059,7 +1026,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Quaternion() {}
     
-
     private float _w = default(float);
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"w", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1068,7 +1034,6 @@ namespace com.game_machine.entity_system.generated
       get { return _w; }
       set { _w = value; }
     }
-
     private float _x = default(float);
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1077,7 +1042,6 @@ namespace com.game_machine.entity_system.generated
       get { return _x; }
       set { _x = value; }
     }
-
     private float _y = default(float);
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1086,7 +1050,6 @@ namespace com.game_machine.entity_system.generated
       get { return _y; }
       set { _y = value; }
     }
-
     private float _z = default(float);
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1095,7 +1058,6 @@ namespace com.game_machine.entity_system.generated
       get { return _z; }
       set { _z = value; }
     }
-
     private int _wi = default(int);
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"wi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1104,7 +1066,6 @@ namespace com.game_machine.entity_system.generated
       get { return _wi; }
       set { _wi = value; }
     }
-
     private int _xi = default(int);
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"xi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1113,7 +1074,6 @@ namespace com.game_machine.entity_system.generated
       get { return _xi; }
       set { _xi = value; }
     }
-
     private int _yi = default(int);
     [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"yi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1122,7 +1082,6 @@ namespace com.game_machine.entity_system.generated
       get { return _yi; }
       set { _yi = value; }
     }
-
     private int _zi = default(int);
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"zi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -1141,7 +1100,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Transform() {}
     
-
     private com.game_machine.entity_system.generated.Vector3 _vector3 = null;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1150,7 +1108,6 @@ namespace com.game_machine.entity_system.generated
       get { return _vector3; }
       set { _vector3 = value; }
     }
-
     private com.game_machine.entity_system.generated.Quaternion _quaternion = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"quaternion", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1186,7 +1143,6 @@ namespace com.game_machine.entity_system.generated
   {
     public TestObject() {}
     
-
     private string _optionalString = "";
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"optionalString", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -1209,7 +1165,6 @@ namespace com.game_machine.entity_system.generated
       get { return _numbers; }
     }
   
-
     private byte[] _bstring = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"bstring", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1218,7 +1173,6 @@ namespace com.game_machine.entity_system.generated
       get { return _bstring; }
       set { _bstring = value; }
     }
-
     private bool _bvalue = default(bool);
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"bvalue", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -1227,7 +1181,6 @@ namespace com.game_machine.entity_system.generated
       get { return _bvalue; }
       set { _bvalue = value; }
     }
-
     private double _dvalue = default(double);
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"dvalue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(double))]
@@ -1236,7 +1189,6 @@ namespace com.game_machine.entity_system.generated
       get { return _dvalue; }
       set { _dvalue = value; }
     }
-
     private float _fvalue = default(float);
     [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"fvalue", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
     [global::System.ComponentModel.DefaultValue(default(float))]
@@ -1245,7 +1197,6 @@ namespace com.game_machine.entity_system.generated
       get { return _fvalue; }
       set { _fvalue = value; }
     }
-
     private long _numbers64 = default(long);
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"numbers64", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(long))]
@@ -1261,7 +1212,6 @@ namespace com.game_machine.entity_system.generated
       get { return _player; }
     }
   
-
     private com.game_machine.entity_system.generated.TestObject.Corpus _corpus = com.game_machine.entity_system.generated.TestObject.Corpus.UNIVERSAL;
     [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"corpus", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(com.game_machine.entity_system.generated.TestObject.Corpus.UNIVERSAL)]
@@ -1337,7 +1287,6 @@ namespace com.game_machine.entity_system.generated
   {
     public GetNeighbors() {}
     
-
     private uint _search_radius = default(uint);
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"search_radius", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(uint))]
@@ -1353,7 +1302,6 @@ namespace com.game_machine.entity_system.generated
       get { return _vector3; }
       set { _vector3 = value; }
     }
-
     private string _neighborType = "";
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"neighborType", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -1362,7 +1310,6 @@ namespace com.game_machine.entity_system.generated
       get { return _neighborType; }
       set { _neighborType = value; }
     }
-
     private string _gridName = "";
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -1381,7 +1328,6 @@ namespace com.game_machine.entity_system.generated
   {
     public Entity() {}
     
-
     private com.game_machine.entity_system.generated.Player _player = null;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1390,7 +1336,6 @@ namespace com.game_machine.entity_system.generated
       get { return _player; }
       set { _player = value; }
     }
-
     private com.game_machine.entity_system.generated.Neighbors _neighbors = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"neighbors", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1399,7 +1344,6 @@ namespace com.game_machine.entity_system.generated
       get { return _neighbors; }
       set { _neighbors = value; }
     }
-
     private com.game_machine.entity_system.generated.MessageEnvelope _messageEnvelope = null;
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"messageEnvelope", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1408,7 +1352,6 @@ namespace com.game_machine.entity_system.generated
       get { return _messageEnvelope; }
       set { _messageEnvelope = value; }
     }
-
     private com.game_machine.entity_system.generated.ChatMessage _chatMessage = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"chatMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1417,7 +1360,6 @@ namespace com.game_machine.entity_system.generated
       get { return _chatMessage; }
       set { _chatMessage = value; }
     }
-
     private com.game_machine.entity_system.generated.ClientConnection _clientConnection = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"clientConnection", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1426,7 +1368,6 @@ namespace com.game_machine.entity_system.generated
       get { return _clientConnection; }
       set { _clientConnection = value; }
     }
-
     private com.game_machine.entity_system.generated.EchoTest _echoTest = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"echoTest", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1442,7 +1383,6 @@ namespace com.game_machine.entity_system.generated
       get { return _id; }
       set { _id = value; }
     }
-
     private com.game_machine.entity_system.generated.PlayerLogin _playerLogin = null;
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"playerLogin", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1451,7 +1391,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerLogin; }
       set { _playerLogin = value; }
     }
-
     private com.game_machine.entity_system.generated.Subscribe _subscribe = null;
     [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"subscribe", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1460,7 +1399,6 @@ namespace com.game_machine.entity_system.generated
       get { return _subscribe; }
       set { _subscribe = value; }
     }
-
     private com.game_machine.entity_system.generated.Publish _publish = null;
     [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"publish", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1469,7 +1407,6 @@ namespace com.game_machine.entity_system.generated
       get { return _publish; }
       set { _publish = value; }
     }
-
     private com.game_machine.entity_system.generated.ChatChannel _chatChannel = null;
     [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1478,7 +1415,6 @@ namespace com.game_machine.entity_system.generated
       get { return _chatChannel; }
       set { _chatChannel = value; }
     }
-
     private com.game_machine.entity_system.generated.JoinChat _joinChat = null;
     [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"joinChat", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1487,7 +1423,6 @@ namespace com.game_machine.entity_system.generated
       get { return _joinChat; }
       set { _joinChat = value; }
     }
-
     private com.game_machine.entity_system.generated.LeaveChat _leaveChat = null;
     [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"leaveChat", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1496,7 +1431,6 @@ namespace com.game_machine.entity_system.generated
       get { return _leaveChat; }
       set { _leaveChat = value; }
     }
-
     private com.game_machine.entity_system.generated.Unsubscribe _unsubscribe = null;
     [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"unsubscribe", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1505,7 +1439,6 @@ namespace com.game_machine.entity_system.generated
       get { return _unsubscribe; }
       set { _unsubscribe = value; }
     }
-
     private com.game_machine.entity_system.generated.ChatRegister _chatRegister = null;
     [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"chatRegister", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1514,7 +1447,6 @@ namespace com.game_machine.entity_system.generated
       get { return _chatRegister; }
       set { _chatRegister = value; }
     }
-
     private com.game_machine.entity_system.generated.ChatChannels _chatChannels = null;
     [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"chatChannels", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1523,7 +1455,6 @@ namespace com.game_machine.entity_system.generated
       get { return _chatChannels; }
       set { _chatChannels = value; }
     }
-
     private com.game_machine.entity_system.generated.ErrorMessage _errorMessage = null;
     [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"errorMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1532,7 +1463,6 @@ namespace com.game_machine.entity_system.generated
       get { return _errorMessage; }
       set { _errorMessage = value; }
     }
-
     private com.game_machine.entity_system.generated.RegisterPlayerObserver _registerPlayerObserver = null;
     [global::ProtoBuf.ProtoMember(18, IsRequired = false, Name=@"registerPlayerObserver", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1541,7 +1471,6 @@ namespace com.game_machine.entity_system.generated
       get { return _registerPlayerObserver; }
       set { _registerPlayerObserver = value; }
     }
-
     private com.game_machine.entity_system.generated.GetNeighbors _getNeighbors = null;
     [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"getNeighbors", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1550,7 +1479,6 @@ namespace com.game_machine.entity_system.generated
       get { return _getNeighbors; }
       set { _getNeighbors = value; }
     }
-
     private com.game_machine.entity_system.generated.TrackEntity _trackEntity = null;
     [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"trackEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1559,7 +1487,6 @@ namespace com.game_machine.entity_system.generated
       get { return _trackEntity; }
       set { _trackEntity = value; }
     }
-
     private com.game_machine.entity_system.generated.Transform _transform = null;
     [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"transform", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1568,7 +1495,6 @@ namespace com.game_machine.entity_system.generated
       get { return _transform; }
       set { _transform = value; }
     }
-
     private com.game_machine.entity_system.generated.IsNpc _isNpc = null;
     [global::ProtoBuf.ProtoMember(24, IsRequired = false, Name=@"isNpc", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1577,7 +1503,6 @@ namespace com.game_machine.entity_system.generated
       get { return _isNpc; }
       set { _isNpc = value; }
     }
-
     private com.game_machine.entity_system.generated.Vector3 _vector3 = null;
     [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1586,7 +1511,6 @@ namespace com.game_machine.entity_system.generated
       get { return _vector3; }
       set { _vector3 = value; }
     }
-
     private com.game_machine.entity_system.generated.CreateSingleton _createSingleton = null;
     [global::ProtoBuf.ProtoMember(26, IsRequired = false, Name=@"createSingleton", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1595,7 +1519,6 @@ namespace com.game_machine.entity_system.generated
       get { return _createSingleton; }
       set { _createSingleton = value; }
     }
-
     private com.game_machine.entity_system.generated.EntityList _entityList = null;
     [global::ProtoBuf.ProtoMember(27, IsRequired = false, Name=@"entityList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1604,7 +1527,6 @@ namespace com.game_machine.entity_system.generated
       get { return _entityList; }
       set { _entityList = value; }
     }
-
     private bool _published = default(bool);
     [global::ProtoBuf.ProtoMember(29, IsRequired = false, Name=@"published", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -1613,7 +1535,6 @@ namespace com.game_machine.entity_system.generated
       get { return _published; }
       set { _published = value; }
     }
-
     private string _entityType = "";
     [global::ProtoBuf.ProtoMember(30, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -1622,7 +1543,6 @@ namespace com.game_machine.entity_system.generated
       get { return _entityType; }
       set { _entityType = value; }
     }
-
     private com.game_machine.entity_system.generated.NotifySingleton _notifySingleton = null;
     [global::ProtoBuf.ProtoMember(31, IsRequired = false, Name=@"notifySingleton", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1631,7 +1551,6 @@ namespace com.game_machine.entity_system.generated
       get { return _notifySingleton; }
       set { _notifySingleton = value; }
     }
-
     private com.game_machine.entity_system.generated.DestroySingleton _destroySingleton = null;
     [global::ProtoBuf.ProtoMember(32, IsRequired = false, Name=@"destroySingleton", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1640,7 +1559,6 @@ namespace com.game_machine.entity_system.generated
       get { return _destroySingleton; }
       set { _destroySingleton = value; }
     }
-
     private com.game_machine.entity_system.generated.PlayerAuthenticated _playerAuthenticated = null;
     [global::ProtoBuf.ProtoMember(37, IsRequired = false, Name=@"playerAuthenticated", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1649,7 +1567,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerAuthenticated; }
       set { _playerAuthenticated = value; }
     }
-
     private com.game_machine.entity_system.generated.PlayerLogout _playerLogout = null;
     [global::ProtoBuf.ProtoMember(38, IsRequired = false, Name=@"playerLogout", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1658,7 +1575,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerLogout; }
       set { _playerLogout = value; }
     }
-
     private bool _sendToPlayer = default(bool);
     [global::ProtoBuf.ProtoMember(39, IsRequired = false, Name=@"sendToPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
@@ -1667,7 +1583,6 @@ namespace com.game_machine.entity_system.generated
       get { return _sendToPlayer; }
       set { _sendToPlayer = value; }
     }
-
     private com.game_machine.entity_system.generated.Rpc _rpc = null;
     [global::ProtoBuf.ProtoMember(40, IsRequired = false, Name=@"rpc", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1676,7 +1591,6 @@ namespace com.game_machine.entity_system.generated
       get { return _rpc; }
       set { _rpc = value; }
     }
-
     private com.game_machine.entity_system.generated.Health _health = null;
     [global::ProtoBuf.ProtoMember(101, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1685,7 +1599,6 @@ namespace com.game_machine.entity_system.generated
       get { return _health; }
       set { _health = value; }
     }
-
     private com.game_machine.entity_system.generated.Effect _effect = null;
     [global::ProtoBuf.ProtoMember(102, IsRequired = false, Name=@"effect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1694,7 +1607,6 @@ namespace com.game_machine.entity_system.generated
       get { return _effect; }
       set { _effect = value; }
     }
-
     private com.game_machine.entity_system.generated.EffectList _effectList = null;
     [global::ProtoBuf.ProtoMember(103, IsRequired = false, Name=@"effectList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1703,7 +1615,6 @@ namespace com.game_machine.entity_system.generated
       get { return _effectList; }
       set { _effectList = value; }
     }
-
     private com.game_machine.entity_system.generated.CombatAbility _combatAbility = null;
     [global::ProtoBuf.ProtoMember(104, IsRequired = false, Name=@"combatAbility", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1712,7 +1623,6 @@ namespace com.game_machine.entity_system.generated
       get { return _combatAbility; }
       set { _combatAbility = value; }
     }
-
     private com.game_machine.entity_system.generated.Attack _attack = null;
     [global::ProtoBuf.ProtoMember(105, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1721,7 +1631,6 @@ namespace com.game_machine.entity_system.generated
       get { return _attack; }
       set { _attack = value; }
     }
-
     private com.game_machine.entity_system.generated.IsPlayer _isPlayer = null;
     [global::ProtoBuf.ProtoMember(106, IsRequired = false, Name=@"isPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1730,7 +1639,6 @@ namespace com.game_machine.entity_system.generated
       get { return _isPlayer; }
       set { _isPlayer = value; }
     }
-
     private com.game_machine.entity_system.generated.SetTarget _setTarget = null;
     [global::ProtoBuf.ProtoMember(107, IsRequired = false, Name=@"setTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1739,7 +1647,6 @@ namespace com.game_machine.entity_system.generated
       get { return _setTarget; }
       set { _setTarget = value; }
     }
-
     private com.game_machine.entity_system.generated.UnsetTarget _unsetTarget = null;
     [global::ProtoBuf.ProtoMember(108, IsRequired = false, Name=@"unsetTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1782,7 +1689,6 @@ namespace com.game_machine.entity_system.generated
       get { return _entity; }
     }
   
-
     private com.game_machine.entity_system.generated.Player _player = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1791,7 +1697,6 @@ namespace com.game_machine.entity_system.generated
       get { return _player; }
       set { _player = value; }
     }
-
     private com.game_machine.entity_system.generated.PlayerLogin _playerLogin = null;
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"playerLogin", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1800,7 +1705,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerLogin; }
       set { _playerLogin = value; }
     }
-
     private com.game_machine.entity_system.generated.ClientConnection _clientConnection = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"clientConnection", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1809,7 +1713,6 @@ namespace com.game_machine.entity_system.generated
       get { return _clientConnection; }
       set { _clientConnection = value; }
     }
-
     private com.game_machine.entity_system.generated.ClientDisconnect _clientDisconnect = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"clientDisconnect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1818,7 +1721,6 @@ namespace com.game_machine.entity_system.generated
       get { return _clientDisconnect; }
       set { _clientDisconnect = value; }
     }
-
     private com.game_machine.entity_system.generated.PlayerLogout _playerLogout = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"playerLogout", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -1827,7 +1729,6 @@ namespace com.game_machine.entity_system.generated
       get { return _playerLogout; }
       set { _playerLogout = value; }
     }
-
     private com.game_machine.entity_system.generated.ErrorMessage _errorMessage = null;
     [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"errorMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]

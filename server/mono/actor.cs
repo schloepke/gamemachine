@@ -4,27 +4,67 @@ using System;
 using  ProtoBuf;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using Entity = com.game_machine.entity_system.generated.Entity;
 using MessageEnvelope = com.game_machine.entity_system.generated.MessageEnvelope;
 using Rpc = com.game_machine.entity_system.generated.Rpc;
 using Neighbors = com.game_machine.entity_system.generated.Neighbors;
+using GameMachine;
 
 namespace GameMachine
 {
-	public abstract class Actor
+	public abstract class Actor : IActor
 	{
 		private int udpPort = 4000;
 		private string udpHost = "127.0.0.1";
 		private UdpClient udpClient;
 		private IPEndPoint remote;
+		private static Mutex mut = new Mutex();
+		public static Dictionary<int,IActor> actors = new Dictionary<int,IActor> ();
+		//public static List<Actor> actors = new List<Actor> ();
 				
 		public Actor ()
 		{
 			remote = new IPEndPoint (IPAddress.Parse (udpHost), udpPort);
-			udpClient = new UdpClient ();
-			udpClient.Connect (remote);
-			udpClient.Client.ReceiveTimeout = 20; 
+			//udpClient = new UdpClient ();
+			//udpClient.Connect (remote);
+			//udpClient.Client.ReceiveTimeout = 20;
+			//mut.WaitOne();
+			//Actor.actors.Add(this);
+			//mut.ReleaseMutex();
+			Console.WriteLine ("Actor.new");
+		}
+		
+		public static void ReceiveMessage(int id, string name_space, string klass, byte[] bytes) {
+			Console.WriteLine ("ReceiveMessage " + klass);
+			IActor actor;
+			string typeName = name_space+"."+klass;
+			Console.WriteLine (typeName);
+			Type type = Type.GetType(typeName);
+			if (type == null) {
+				Console.WriteLine (typeName+" is null");
+				return;
+			}
+			Console.WriteLine ("TYPE "+type.ToString());
+			actor = Activator.CreateInstance(type) as IActor;
+			if (actor == null) {
+				Console.WriteLine ("Unable to create actor instance");
+				return;
+			}
+			
+			Console.WriteLine ("Instance Created");
+			return;
+			if (Actor.actors.TryGetValue(id, out actor)) {
+				actor.OnReceive (bytes);
+			} else {
+				actor = (IActor)Activator.CreateInstance(type);
+				mut.WaitOne();
+				Actor.actors.Add(id,actor);
+				mut.ReleaseMutex();
+				actor.OnReceive (bytes);
+			}
 		}
 		
 		void Tell (string server, string name, string id, string type, Entity entity)
@@ -95,16 +135,19 @@ namespace GameMachine
 		}
 		
 		public Entity ByteArrayToEntity(byte[] bytes) {
+			Entity entity;
 			MemoryStream stream = new MemoryStream (bytes);
-			Entity entity = Serializer.Deserialize<Entity> (stream);
+			entity = Serializer.Deserialize<Entity> (stream);
 			return entity;
 		}
 		
 		public byte[] EntityToByteArray (Entity entity)
 		{
+			byte[] data;
 			MemoryStream stream = new MemoryStream ();
 			Serializer.Serialize (stream, entity);
-			return stream.ToArray ();
+			data = stream.ToArray();
+			return data;
 		}
 		
 		public abstract void OnReceive (byte[] bytes);
