@@ -37,5 +37,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'guard-jruby-rspec'
   gem.add_development_dependency 'descriptive_statistics'
+  gem.add_development_dependency 'faraday'
+
   
 end

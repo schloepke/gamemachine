@@ -1,6 +1,6 @@
 namespace GameMachine
 {
 	public interface IActor {
-		void OnReceive (byte[] bytes);
+		void OnReceive (object message);
 	}
 }

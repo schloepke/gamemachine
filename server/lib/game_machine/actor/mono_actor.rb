@@ -1,3 +1,4 @@
+require 'base64'
 module GameMachine
   module Actor
     class MonoActor < Base
@@ -31,23 +32,21 @@ module GameMachine
         if @image.nil?
           create_mono_object
         end
-        #if @mono_object.nil?
-        #  create_mono_object(@path,@namespace,@klass)
-        #end
         current_thread_id = JRuby.reference(Thread.current).native_thread.id
         if @thread_id != current_thread_id
           #raise "Invalid thread id #{current_thread_id} != #{@thread_id}"
         end
-        if @mono_object == 0
-          puts "mono object not found"
-          return
-        end
-        #Mono.attach_current_thread
+        Mono.attach_current_thread
         bytes = message.to_byte_array
+        byte_string = bytes.to_s
+        encoded_bytes = Base64.encode64(byte_string)
+        encoded_bytes_size = encoded_bytes.size
         #mem_buf = FFI::MemoryPointer.new(:uchar, message.size)
         #mem_buf.put_bytes(0, message.to_s)
         #res = Mono.on_receive(@mono_object,mem_buf,message.size)
-        res = Mono.on_receive2(@image,@namespace,@klass,current_thread_id, bytes.to_s, :bytes.size)
+        actor_id = "#{self.class.name}-#{current_thread_id}"
+        #puts "ENCODED #{encoded_bytes} = #{encoded_bytes_size}"
+        res = Mono.on_receive2(@image,@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
         #res = Mono.on_receive(@mono_object,bytes.to_s,bytes.size)
         if res == 0
           raise "Mono managed code threw exception, restarting actor"

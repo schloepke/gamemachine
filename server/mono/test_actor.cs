@@ -24,18 +24,16 @@ namespace GameMachine
 			
 		
 		
-		public override void OnReceive (byte[] bytes)
+		public override void OnReceive (object message)
 		{
 			//throw new System.ArgumentException("test exception please ignore", "");
 			try {
-				Console.WriteLine ("OnReceive");
-				if (bytes.Length == 0) {
-				Console.WriteLine (bytes.Length);
-				}
+				//Console.WriteLine ("OnReceive");
+				
 				Entity testEntity = new Entity();
 				testEntity.id = "1";
-				byte[] data = EntityToByteArray(testEntity);
-				testEntity = ByteArrayToEntity(data);
+				byte[] data = Actor.EntityToByteArray(testEntity);
+				testEntity = Actor.ByteArrayToEntity(data);
 				//mut.WaitOne();
 				//Entity entity = ByteArrayToEntity (bytes);
 				//mut.ReleaseMutex();

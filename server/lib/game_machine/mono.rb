@@ -10,7 +10,7 @@ module Mono
     #attach_function :create_object, [:pointer, :string, :string], :uint32
     attach_function :destroy_object, [:uint32], :void
     attach_function :on_receive, [:pointer,:string,:int], :int
-    attach_function :on_receive2, [:pointer, :string, :string, :int,:string,:int], :int
+    attach_function :on_receive2, [:pointer, :string, :string, :string,:pointer,:int], :int
     #attach_function :on_receive, [:uint32,:string,:int], :int
     attach_function :unload_mono, [], :void
     attach_function :attach_current_thread, [], :void

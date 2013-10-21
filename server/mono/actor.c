@@ -12,14 +12,13 @@
 #define FALSE 0
 #endif
 
-int on_receive2 (MonoImage *image, const char *name_space, const char *name, int actor_id, const unsigned char *bytes, int length) {
+int on_receive2 (MonoImage *image, const char *name_space, const char *name, const char *actor_id, const char *bytes, int length) {
   MonoClass *klass;
   MonoDomain *domain;
   MonoMethod *OnReceive = NULL;
   MonoArray *array;
   MonoObject *exception = NULL;
-  MonoString *name_space_str;
-  MonoString  *klass_str;
+  MonoString *name_space_str, *klass_str, *actor_id_str;
   void* args [4];
   const char *actor_klass = "Actor";
   domain = mono_domain_get();
@@ -35,17 +34,22 @@ int on_receive2 (MonoImage *image, const char *name_space, const char *name, int
     return 0;
   }
 
+  /*
   array = mono_array_new (domain, mono_get_byte_class (), length);
   int i;
   for(i = 0; i < length; i++)
-      mono_array_set(array,unsigned char,i,bytes[i]);
+      mono_array_set(array,char,i,bytes[i]);
+*/
 
+  MonoString *bytes2 = mono_string_new(domain,bytes);
   name_space_str = mono_string_new(domain,name_space);
   klass_str = mono_string_new(domain,name);
-  args[0] = &actor_id;
+  actor_id_str = mono_string_new(domain,actor_id);
+  args[0] = actor_id_str;
   args[1] = name_space_str;
   args[2] = klass_str;
-  args[3] = array;
+  args[3] = bytes2;
+  //args[3] = array;
 
   mono_runtime_invoke (OnReceive, NULL, args, &exception);
   if (exception) {
