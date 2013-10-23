@@ -15,25 +15,24 @@ namespace GameMachine
 	public class TestActor : GameMachine.Actor
 	{
 	
-		private static Mutex mut = new Mutex();
+		private static Mutex mut = new Mutex ();
 		//public static Dictionary<int,TestActor> actors = new Dictionary<int,TestActor> ();
 		
 		public TestActor ()
 		{
 		}
-			
-		
 		
 		public override void OnReceive (object message)
 		{
 			//throw new System.ArgumentException("test exception please ignore", "");
 			try {
 				//Console.WriteLine ("OnReceive");
-				
-				Entity testEntity = new Entity();
+				Entity entity = message as Entity;
+				RpcAsync (entity);
+				Entity testEntity = new Entity ();
 				testEntity.id = "1";
-				byte[] data = Actor.EntityToByteArray(testEntity);
-				testEntity = Actor.ByteArrayToEntity(data);
+				byte[] data = Actor.EntityToByteArray (testEntity);
+				testEntity = Actor.ByteArrayToEntity (data);
 				//mut.WaitOne();
 				//Entity entity = ByteArrayToEntity (bytes);
 				//mut.ReleaseMutex();
@@ -41,7 +40,7 @@ namespace GameMachine
 				//Tell ("GameMachine::GameSystems::LocalEcho", entity);
 				//Neighbors neighbors = GetNeighbors (1.0f, 1.0f);
 			} catch (Exception ex) {
-				Console.WriteLine (ex.Message);
+				Console.WriteLine (ex);
 			}
 			//foreach (Entity npc in neighbors.npc) {
 			//}

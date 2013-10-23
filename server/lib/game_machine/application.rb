@@ -101,6 +101,8 @@ module GameMachine
         if config.server.http_enabled
           props = JavaLib::Props.new(Endpoints::Http::Auth)
           Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
+          props = JavaLib::Props.new(Endpoints::Http::Rpc)
+          Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
         end
       end
 

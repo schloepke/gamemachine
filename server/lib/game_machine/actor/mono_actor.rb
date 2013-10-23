@@ -7,6 +7,7 @@ module GameMachine
         @path = args[0]
         @namespace = args[1]
         @klass = args[2]
+        @domain = args[3]
       end
 
       def create_mono_object
@@ -14,8 +15,8 @@ module GameMachine
         if @path.nil? or @namespace.nil? or @klass.nil?
           raise "Missing post_init args"
         end
-        Mono.attach_current_thread
-        @image = MonoUtil.load_assembly(@path)
+        Mono.attach_current_thread(@domain)
+        @image = Mono.load_assembly(@domain,@path)
         #@mono_object = Mono.create_object(image,namespace,klass)
         #if @mono_object == 0
         #  raise "Mono.create_object failed"
@@ -28,7 +29,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        Mono.attach_current_thread
+        Mono.attach_current_thread(@domain)
         if @image.nil?
           create_mono_object
         end
@@ -36,7 +37,7 @@ module GameMachine
         if @thread_id != current_thread_id
           #raise "Invalid thread id #{current_thread_id} != #{@thread_id}"
         end
-        Mono.attach_current_thread
+        Mono.attach_current_thread(@domain)
         bytes = message.to_byte_array
         byte_string = bytes.to_s
         encoded_bytes = Base64.encode64(byte_string)
@@ -46,7 +47,7 @@ module GameMachine
         #res = Mono.on_receive(@mono_object,mem_buf,message.size)
         actor_id = "#{self.class.name}-#{current_thread_id}"
         #puts "ENCODED #{encoded_bytes} = #{encoded_bytes_size}"
-        res = Mono.on_receive2(@image,@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
+        res = Mono.on_receive2(@domain,@image,@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
         #res = Mono.on_receive(@mono_object,bytes.to_s,bytes.size)
         if res == 0
           raise "Mono managed code threw exception, restarting actor"

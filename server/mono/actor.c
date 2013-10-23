@@ -12,16 +12,14 @@
 #define FALSE 0
 #endif
 
-int on_receive2 (MonoImage *image, const char *name_space, const char *name, const char *actor_id, const char *bytes, int length) {
+int on_receive2 (MonoDomain *domain, MonoImage *image, const char *name_space, const char *name, const char *actor_id, const char *bytes, int length) {
   MonoClass *klass;
-  MonoDomain *domain;
   MonoMethod *OnReceive = NULL;
-  MonoArray *array;
   MonoObject *exception = NULL;
   MonoString *name_space_str, *klass_str, *actor_id_str;
   void* args [4];
   const char *actor_klass = "Actor";
-  domain = mono_domain_get();
+  //mono_domain_set(domain,0);
   klass = mono_class_from_name (image, name_space, actor_klass);
   if (!klass) {
     fprintf (stderr, "Can't find %s %s in assembly %s\n", name_space, actor_klass, mono_image_get_filename (image));
@@ -34,13 +32,6 @@ int on_receive2 (MonoImage *image, const char *name_space, const char *name, con
     return 0;
   }
 
-  /*
-  array = mono_array_new (domain, mono_get_byte_class (), length);
-  int i;
-  for(i = 0; i < length; i++)
-      mono_array_set(array,char,i,bytes[i]);
-*/
-
   MonoString *bytes2 = mono_string_new(domain,bytes);
   name_space_str = mono_string_new(domain,name_space);
   klass_str = mono_string_new(domain,name);
@@ -49,7 +40,6 @@ int on_receive2 (MonoImage *image, const char *name_space, const char *name, con
   args[1] = name_space_str;
   args[2] = klass_str;
   args[3] = bytes2;
-  //args[3] = array;
 
   mono_runtime_invoke (OnReceive, NULL, args, &exception);
   if (exception) {
@@ -137,8 +127,8 @@ int on_receive (MonoObject *obj, const unsigned char *bytes, int length) {
   }
 }
 
-void attach_current_thread() {
-  mono_thread_attach(mono_get_root_domain());
+void attach_current_thread(MonoDomain *domain) {
+  mono_thread_attach(domain);
 }
 
 void destroy_object(guint32 handle) {
@@ -146,7 +136,6 @@ void destroy_object(guint32 handle) {
 }
 
 MonoObject* create_object(MonoImage *image, const char *name_space, const char *name) {
-  //mono_thread_attach(mono_domain_get());
   MonoClass *klass;
   MonoObject *obj;
 
@@ -181,11 +170,10 @@ guint32 icreate_object(MonoImage *image, const char *name_space, const char *nam
 }
 
 
-MonoImage *load_assembly(const char *file) {
-  //mono_thread_attach(mono_domain_get());
+MonoImage *load_assembly(MonoDomain *domain, const char *file) {
   MonoAssembly *assembly;
   MonoImage *image;
-  assembly = mono_domain_assembly_open (mono_domain_get(), file);
+  assembly = mono_domain_assembly_open (domain, file);
   if (!assembly)
     return NULL;
 
@@ -193,11 +181,17 @@ MonoImage *load_assembly(const char *file) {
   return image;
 }
 
+MonoDomain *create_domain(char *config) {
+  MonoDomain *domain = mono_domain_create_appdomain("gamemachine",config);
+  mono_domain_set(domain,0);
+  return domain;
+}
 
 void load_mono(const char *file) {
   setenv ("MONO_DEBUG", "explicit-null-checks",1);
+  mono_set_dirs ("/home2/chris/mono_local/lib", "/home2/chris/mono_local/etc");
+  mono_config_parse (NULL);
   mono_jit_init (file);
-  //mono_thread_attach(mono_domain_get());
   fprintf (stderr, "load_mono 1\n");
 }
 

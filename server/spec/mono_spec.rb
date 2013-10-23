@@ -98,26 +98,41 @@ module GameMachine
     end
 
     it "can send message to ruby" do
+      props = JavaLib::Props.new(Endpoints::Http::Rpc)
+      Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
       Actor::Builder.new(Endpoints::ActorUdp).start
       path = "/home2/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
+      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
       #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).start
-      Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
+      Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
       sleep 1
       1.times do
       100000.times do
         entity = Entity.new.set_id('test')
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
-        MonoTest.find.tell(entity)
         MonoTest.find.ask(entity,10)
       end
       end
       sleep 2
+    end
+
+require 'socket'
+require "uri"
+require 'net/http'
+
+    xit "stress test mono http" do
+      puts 'starting'
+      threads = []
+      10.times do
+        threads << Thread.new do
+        uri = URI.parse("http://192.168.1.6:8888/actor/message")
+          1000.times do
+            response = Net::HTTP.post_form(uri, {:name => "TESTING"})
+            puts response.body
+          end
+        end
+      end
+      threads.map(&:join)
     end
   end
 end
