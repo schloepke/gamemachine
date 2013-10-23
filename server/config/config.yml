@@ -1,14 +1,14 @@
 ---
 development:
   id: 1
-  mono_enabled: true
+  mono_enabled: false
   environment: development
   game_handler: GameMachine::Handlers::Request
   data_store: memory
-  couchbase_servers: http://127.0.0.1:8091/pools
+  couchbase_servers: http://217.0.0.1:8091/pools
   cache_write_interval: -1
   cache_writes_per_second: -1
-  world_grid_size: 1000
+  world_grid_size: 2000
   world_grid_cell_size: 25
   singleton_manager_router_count: 200
   singleton_manager_update_interval: 100
@@ -53,7 +53,7 @@ development:
       akka_host: localhost
       akka_port: 2552
       status: 0
-      enabled: true
+      enabled: false
       tcp_enabled: true
       tcp_host: 0.0.0.0
       tcp_port: 8700
@@ -117,7 +117,7 @@ production:
   servers: {}
 test:
   id: 3
-  mono_enabled: true
+  mono_enabled: false
   environment: test
   game_handler: GameMachine::Handlers::Request
   data_store: memory

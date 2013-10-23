@@ -101,9 +101,9 @@ module GameMachine
       props = JavaLib::Props.new(Endpoints::Http::Rpc)
       Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
       Actor::Builder.new(Endpoints::ActorUdp).start
-      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
-      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
+      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
       #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).start
       Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
       sleep 1

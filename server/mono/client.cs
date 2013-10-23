@@ -11,7 +11,8 @@ public class Client
 	
 	public static void Main (string[] args)
 	{
-		 for (int i = 1; i <= 500000; i++)
+			System.Net.ServicePointManager.SetTcpKeepAlive(true,90000,90000);
+		 for (int i = 1; i <= 50000; i++)
         {
             Test ();
         }
@@ -27,7 +28,7 @@ public class Client
                 new KeyValuePair<string, string> ("test", "login")
             });
 			//content.Headers.Add("Keep-Alive", "true");
-			var response = client.GetAsync ("http://127.0.0.1/doc/index.html");
+			var response = client.GetAsync ("http://127.0.0.1/index.html");
 			//var response = client.PostAsync ("http://127.0.0.1/doc/index.html", content);
 			if (response.Result.IsSuccessStatusCode) {
 				// by calling .Result you are performing a synchronous call
@@ -36,7 +37,7 @@ public class Client
 				// by calling .Result you are synchronously reading the result
 				string responseString = responseContent.ReadAsStringAsync ().Result;
 
-				Console.WriteLine (responseString);
+				Console.Out.WriteLine (responseString);
 			}
 		}
 			

@@ -33,14 +33,3 @@ message IsPlayer {
   optional  bool  enabled = 1;
 }
 
-message SetTarget {
-  required  string  targetId = 1;
-  optional  string  state = 2;
-  required  string  id = 3;
-}
-
-message UnsetTarget {
-  required  string  id = 1;
-  required  string  targetId = 2;
-}
-
