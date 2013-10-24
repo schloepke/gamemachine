@@ -10,10 +10,9 @@ public class ResourceModule : NancyModule
 {
     public ResourceModule() : base("/actor")
     {
-        // would capture routes to /products/list sent as a GET request
-        Post["/message"] = parameters => {
-			Console.WriteLine (this.Request.Body);
-            return "The list of products";
+        Post["/message", true] = async (x, ct) => {
+			//Console.WriteLine (this.Request);
+            return "OK";
         };
     }
 }

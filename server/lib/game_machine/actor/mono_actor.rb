@@ -3,6 +3,40 @@ module GameMachine
   module Actor
     class MonoActor < Base
 
+      def self.call_mono(message,image,domain,namespace,klass)
+        thread_id = JRuby.reference(Thread.current).native_thread.id
+        Mono.attach_current_thread(domain)
+        bytes = message.to_byte_array
+        byte_string = bytes.to_s
+        encoded_bytes = Base64.encode64(byte_string)
+        encoded_bytes_size = encoded_bytes.size
+        actor_id = thread_id.to_s
+        if actor_id == '' or actor_id.nil?
+          puts "actor_id invalid #{actor_id}"
+          return
+        end
+
+        if encoded_bytes_size != 1363
+          puts "ERROR #{encoded_bytes_size}"
+        end
+        ns_mem_buf = FFI::MemoryPointer.new(:string, namespace.size)
+        ns_mem_buf.put_string(0, namespace)
+        klass_mem_buf = FFI::MemoryPointer.new(:string, klass.size)
+        klass_mem_buf.put_string(0, klass)
+        bytes_mem_buf = FFI::MemoryPointer.new(:string, encoded_bytes_size)
+        bytes_mem_buf.put_string(0, encoded_bytes)
+        mem_buf = FFI::MemoryPointer.new(:string, actor_id.size)
+        mem_buf.put_string(0, actor_id)
+
+        #puts "ENCODED #{encoded_bytes} = #{encoded_bytes_size}"
+        #res = Mono.ftest(@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
+        res = Mono.on_receive2(domain,image,ns_mem_buf,klass_mem_buf,mem_buf, bytes_mem_buf, encoded_bytes_size)
+        #res = Mono.on_receive(@mono_object,bytes.to_s,bytes.size)
+        if res == 0
+          raise "Mono managed code threw exception, restarting actor"
+        end
+      end
+
       def post_init(*args)
         @path = args[0]
         @namespace = args[1]
@@ -29,30 +63,11 @@ module GameMachine
       end
 
       def on_receive(message)
-        Mono.attach_current_thread(@domain)
         if @image.nil?
           create_mono_object
         end
-        current_thread_id = JRuby.reference(Thread.current).native_thread.id
-        if @thread_id != current_thread_id
-          #raise "Invalid thread id #{current_thread_id} != #{@thread_id}"
-        end
-        Mono.attach_current_thread(@domain)
-        bytes = message.to_byte_array
-        byte_string = bytes.to_s
-        encoded_bytes = Base64.encode64(byte_string)
-        encoded_bytes_size = encoded_bytes.size
-        #mem_buf = FFI::MemoryPointer.new(:uchar, message.size)
-        #mem_buf.put_bytes(0, message.to_s)
-        #res = Mono.on_receive(@mono_object,mem_buf,message.size)
-        actor_id = "#{self.class.name}-#{current_thread_id}"
-        #puts "ENCODED #{encoded_bytes} = #{encoded_bytes_size}"
-        res = Mono.on_receive2(@domain,@image,@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
-        #res = Mono.on_receive(@mono_object,bytes.to_s,bytes.size)
-        if res == 0
-          raise "Mono managed code threw exception, restarting actor"
-        end
 
+        self.class.call_mono(message,@image,@domain,@namespace,@klass)
         sender.tell(message,self)
       end
 

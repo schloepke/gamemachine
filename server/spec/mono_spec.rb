@@ -1,12 +1,18 @@
 require 'spec_helper'
 require_relative 'mono_test'
 require "base64"
+require 'socket'
+require "uri"
+require 'net/http'
 java_import 'java.util.concurrent.ThreadPoolExecutor'
 java_import 'java.util.concurrent.TimeUnit'
 java_import 'java.util.concurrent.LinkedBlockingQueue'
 java_import 'java.util.concurrent.FutureTask'
 java_import 'java.util.concurrent.Callable'
 
+CHARS = [*('a'..'z'),*('0'..'9')].flatten
+STR = Array.new(100) {|i| CHARS.sample}.join
+STR2 = Array.new(1000) {|i| CHARS.sample}.join
 
 class TaskRunner
   include Callable
@@ -34,18 +40,6 @@ end
 
 module GameMachine
   describe 'mono' do
-
-    xit "tests mono http server" do
-      threads = []
-      8.times do
-        threads << Thread.new do
-          1000.times do
-            response = Faraday.get 'http://localhost/'
-          end
-        end
-      end
-      threads.map(&:join)
-    end
 
     xit "runs in java thread pool" do
       path = "/home2/chris/game_machine/server/mono/test_actor.dll"
@@ -75,64 +69,75 @@ module GameMachine
       executor.shutdown
     end
 
-    xit "stress test" do
+    it "jruby thread pool" do
       path = "/home2/chris/game_machine/server/mono/test_actor.dll"
-      namespace = "GameMachine"
-      klass = "TestActor"
       Mono.load_mono(path)
+      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
+      namespace = 'GameMachine'
+      klass = 'TestActor'
+      Mono.attach_current_thread(domain)
+      Mono.set_callback(1,Mono::Callback)
 
       threads = []
-      8.times do
+      10.times do
         threads << Thread.new do
-          Mono.attach_current_thread
-          image = MonoUtil.load_assembly(path)
-          current_thread_id = JRuby.reference(Thread.current).native_thread.id
-            entity = Entity.new.set_id('0')
-            message = entity.to_byte_array
-          1000000.times do
-            Mono.on_receive2(image,namespace,klass,current_thread_id.to_s,message.to_s,message.size)
+          Mono.attach_current_thread(domain)
+          image = Mono.load_assembly(domain,path)
+          message = Entity.new.set_id(STR2)
+          100000.times do
+            GameMachine::Actor::MonoActor.call_mono(message,image,domain,namespace,klass)
           end
         end
       end
       threads.map(&:join)
     end
 
-    it "can send message to ruby" do
+    xit "can send message to ruby" do
       props = JavaLib::Props.new(Endpoints::Http::Rpc)
       Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
       Actor::Builder.new(Endpoints::ActorUdp).start
-      path = "/home/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
-      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
+      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
       #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).start
       Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
+      Mono.set_callback(1,Mono::Callback)
       sleep 1
-      1.times do
-      100000.times do
-        entity = Entity.new.set_id('test')
-        MonoTest.find.ask(entity,10)
+      threads = []
+      10.times do
+        threads << Thread.new do
+          100000.times do
+            entity = Entity.new.set_id(STR2)
+            MonoTest.find.ask(entity,10)
+          end
+        end
       end
-      end
-      sleep 2
+      threads.map(&:join)
     end
 
-require 'socket'
-require "uri"
-require 'net/http'
 
     xit "stress test mono http" do
       puts 'starting'
       threads = []
       10.times do
         threads << Thread.new do
-        uri = URI.parse("http://192.168.1.6:8888/actor/message")
-          1000.times do
-            response = Net::HTTP.post_form(uri, {:name => "TESTING"})
-            puts response.body
+        Net::HTTP.start("192.168.1.6",8888) do |http|
+          10000.times do
+            #http.get("/actor/message")
+            puts http.post("/actor/message","name=test")
           end
+        end
         end
       end
       threads.map(&:join)
+    end
+
+    xit "function callback" do
+      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      namespace = "GameMachine"
+      klass = "TestActor"
+      Mono.load_mono(path)
+      Mono.do_work(1,Mono::Callback)
     end
   end
 end

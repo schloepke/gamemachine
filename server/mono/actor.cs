@@ -51,9 +51,13 @@ namespace GameMachine
 			//ServicePointManager.Expect100Continue = false;
 		}
 		
-		public static void ReceiveMessage (string id, string name_space, string klass, string str)
+		public static void ReceiveMessage (string id, string name_space, string klass, string str, int strlen)
 		{
 			try {
+				if (str.Length != strlen) {
+					Console.WriteLine (str.Length+" != "+strlen);
+				}
+				//Console.WriteLine (str);
 				byte[] bytes = Convert.FromBase64String (str);
 				//byte[] bytes = System.Text.Encoding.ASCII.GetBytes (str);
 				//byte[] bytes = new byte[str.Length * sizeof(char)];
@@ -80,9 +84,12 @@ namespace GameMachine
 					}
 				}
 			} catch (Exception ex) {
-				Console.WriteLine (ex.Message);
+				Console.WriteLine (ex);
 			}
 		}
+		
+		[DllImport("actor")]
+		public static extern void callJava(string message, int len, StringBuilder result);
 		
 		public async void RpcAsync (Entity message)
 		{

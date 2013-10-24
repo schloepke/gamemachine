@@ -12,12 +12,45 @@
 #define FALSE 0
 #endif
 
-int on_receive2 (MonoDomain *domain, MonoImage *image, const char *name_space, const char *name, const char *actor_id, const char *bytes, int length) {
+void (*callback)(char* message, int len,char* data);
+static void *callbacks[1024];
+
+void callJava(char* message, int len, char* result) {
+  (*callback)(message,len,result);
+}
+
+void set_callback(int cb_id, void *cb) {
+  callback = cb;
+  callbacks[cb_id] = cb;
+ //void (*ptr_func)();
+ //ptr_func = callback;
+ //callbacks[cb_id] = ptr_func;
+ //ptr_func();
+}
+int ftest (const char *name_space, const char *name, const char *actor_id, const char *bytes, int length) {
+  fprintf (stderr, "actor id %s\n",actor_id);
+  return 1;
+}
+
+
+int on_receive2 (MonoDomain *domain, MonoImage *image, char *name_space, char *name, char *actor_id, char *bytes, int length) {
+
+
+  int bytelen = strlen(bytes);
+  if (bytelen != length) {
+    fprintf (stderr, "bytelen %d %s\n",bytelen,bytes);
+  }
+
+  MonoString *name_space_str, *klass_str, *actor_id_str, *bytes2;
+
+  bytes2 = mono_string_new(domain,bytes);
+  name_space_str = mono_string_new(domain,name_space);
+  klass_str = mono_string_new(domain,name);
+  actor_id_str = mono_string_new(domain,(const char *)actor_id);
+
   MonoClass *klass;
   MonoMethod *OnReceive = NULL;
   MonoObject *exception = NULL;
-  MonoString *name_space_str, *klass_str, *actor_id_str;
-  void* args [4];
   const char *actor_klass = "Actor";
   //mono_domain_set(domain,0);
   klass = mono_class_from_name (image, name_space, actor_klass);
@@ -25,21 +58,19 @@ int on_receive2 (MonoDomain *domain, MonoImage *image, const char *name_space, c
     fprintf (stderr, "Can't find %s %s in assembly %s\n", name_space, actor_klass, mono_image_get_filename (image));
     return 0;
   }
-  OnReceive = mono_class_get_method_from_name(klass,"ReceiveMessage",4);
+  OnReceive = mono_class_get_method_from_name(klass,"ReceiveMessage",5);
 
   if (OnReceive == 0) {
       fprintf (stderr, "NULL mono method\n");
     return 0;
   }
 
-  MonoString *bytes2 = mono_string_new(domain,bytes);
-  name_space_str = mono_string_new(domain,name_space);
-  klass_str = mono_string_new(domain,name);
-  actor_id_str = mono_string_new(domain,actor_id);
+  void* args [5];
   args[0] = actor_id_str;
   args[1] = name_space_str;
   args[2] = klass_str;
   args[3] = bytes2;
+  args[4] = &length;
 
   mono_runtime_invoke (OnReceive, NULL, args, &exception);
   if (exception) {
@@ -204,6 +235,7 @@ void unload_mono() {
 void send_message(unsigned char *message) {
   fprintf (stderr, "send_message called\n");
 }
+
 
 int main (int argc, char* argv[]) {
   const char *file;

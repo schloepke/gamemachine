@@ -2,6 +2,7 @@ using System;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Runtime.InteropServices;
 using  ProtoBuf;
 using System.Collections.Generic;
 using Entity = com.game_machine.entity_system.generated.Entity;
@@ -26,9 +27,12 @@ namespace GameMachine
 		{
 			//throw new System.ArgumentException("test exception please ignore", "");
 			try {
+				
 				//Console.WriteLine ("OnReceive");
-				Entity entity = message as Entity;
-				RpcAsync (entity);
+				//Entity entity = message as Entity;
+				StringBuilder sb = new StringBuilder (256);
+				callJava ("TEST MESSAGE",sb.Capacity, sb);
+				//Console.WriteLine ("callJava result " + sb.ToString().Length);
 				Entity testEntity = new Entity ();
 				testEntity.id = "1";
 				byte[] data = Actor.EntityToByteArray (testEntity);
