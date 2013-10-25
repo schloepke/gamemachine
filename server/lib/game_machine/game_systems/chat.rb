@@ -33,7 +33,7 @@ module GameMachine
             MessageLib::ChatChannel.new.set_name(name)
           )
         end
-        gm.player.send_message(channels,@player_id)
+        commands.player.send_message(channels,@player_id)
       end
 
       def message_queue

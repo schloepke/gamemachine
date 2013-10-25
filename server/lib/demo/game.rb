@@ -21,7 +21,7 @@ module Demo
       y = 1.10
       entity = MessageLib::Entity.new
       entity.set_health(
-        Health.new.set_health(100)
+        MessageLib::Health.new.set_health(100)
       )
       entity.set_id(id)
       entity.set_create_singleton(
