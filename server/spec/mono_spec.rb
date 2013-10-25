@@ -42,7 +42,7 @@ module GameMachine
   describe 'mono' do
 
     xit "runs in java thread pool" do
-      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home/chris/game_machine/server/mono/test_actor.dll"
       namespace = "GameMachine"
       klass = "TestActor"
       Mono.load_mono(path)
@@ -70,9 +70,9 @@ module GameMachine
     end
 
     it "jruby thread pool" do
-      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
-      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
+      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
       namespace = 'GameMachine'
       klass = 'TestActor'
       Mono.attach_current_thread(domain)
@@ -96,9 +96,9 @@ module GameMachine
       props = JavaLib::Props.new(Endpoints::Http::Rpc)
       Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
       Actor::Builder.new(Endpoints::ActorUdp).start
-      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
-      domain = Mono.create_domain('/home2/chris/game_machine/server/mono/app.config')
+      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
       #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).start
       Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
       Mono.set_callback(1,Mono::Callback)
@@ -133,7 +133,7 @@ module GameMachine
     end
 
     xit "function callback" do
-      path = "/home2/chris/game_machine/server/mono/test_actor.dll"
+      path = "/home/chris/game_machine/server/mono/test_actor.dll"
       namespace = "GameMachine"
       klass = "TestActor"
       Mono.load_mono(path)

@@ -220,7 +220,7 @@ MonoDomain *create_domain(char *config) {
 
 void load_mono(const char *file) {
   setenv ("MONO_DEBUG", "explicit-null-checks",1);
-  mono_set_dirs ("/home2/chris/mono_local/lib", "/home2/chris/mono_local/etc");
+  mono_set_dirs ("/home/chris/mono_local/lib", "/home/chris/mono_local/etc");
   mono_config_parse (NULL);
   mono_jit_init (file);
   fprintf (stderr, "load_mono 1\n");

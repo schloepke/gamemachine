@@ -37,17 +37,6 @@ message IsPlayer {
   optional  bool  enabled = 1;
 }
 
-message SetTarget {
-  required  string  targetId = 1;
-  optional  string  state = 2;
-  required  string  id = 3;
-}
-
-message UnsetTarget {
-  required  string  id = 1;
-  required  string  targetId = 2;
-}
-
 
 
 message Rpc {
@@ -305,8 +294,6 @@ optional EffectList effectList = 103;
 optional CombatAbility combatAbility = 104;
 optional Attack attack = 105;
 optional IsPlayer isPlayer = 106;
-optional SetTarget setTarget = 107;
-optional UnsetTarget unsetTarget = 108;
 
 }
 

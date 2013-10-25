@@ -4,5 +4,3 @@ optional EffectList effectList = 103;
 optional CombatAbility combatAbility = 104;
 optional Attack attack = 105;
 optional IsPlayer isPlayer = 106;
-optional SetTarget setTarget = 107;
-optional UnsetTarget unsetTarget = 108;

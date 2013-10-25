@@ -53,7 +53,7 @@ development:
       akka_host: localhost
       akka_port: 2552
       status: 0
-      enabled: false
+      enabled: true
       tcp_enabled: true
       tcp_host: 0.0.0.0
       tcp_port: 8700
@@ -99,7 +99,7 @@ development:
       tcp_port: 8700
 production:
   id: 2
-  mono_enabled: false
+  mono_enabled: true
   environment: production
   game_handler: GameMachine::Handlers::Request
   data_store: couchbase
