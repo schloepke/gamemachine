@@ -16,9 +16,6 @@ module GameMachine
           return
         end
 
-        if encoded_bytes_size != 1363
-          puts "ERROR #{encoded_bytes_size}"
-        end
         ns_mem_buf = FFI::MemoryPointer.new(:string, namespace.size)
         ns_mem_buf.put_string(0, namespace)
         klass_mem_buf = FFI::MemoryPointer.new(:string, klass.size)

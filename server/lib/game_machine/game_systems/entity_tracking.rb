@@ -75,10 +75,6 @@ module GameMachine
 
         if message.has_player
           send_neighbors_to_player(neighbors,message.player)
-        else
-          neighbors.each_slice(100) do |slice|
-            send_neighbors_to_sender(slice,message)
-          end
         end
       end
 
@@ -92,15 +88,6 @@ module GameMachine
         entity.set_player(player)
         entity.set_send_to_player(true)
         PlayerGateway.find.tell(entity)
-      end
-
-      def send_neighbors_to_sender(neighbors,message)
-        entity = Entity.new.set_neighbors(
-          Neighbors.new.
-          set_player_list(neighbors[:players]).
-          set_npc_list(neighbors[:npcs])
-        ).set_id(message.id)
-        sender.tell(entity,self)
       end
 
       def self.neighbors_from_grid(x,z,neighbor_type)

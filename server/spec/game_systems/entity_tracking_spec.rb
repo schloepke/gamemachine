@@ -20,32 +20,20 @@ module GameMachine
         Vector3.new.set_x(0).set_y(0).set_z(0)
       end
 
-      let(:transform) do
-        Transform.new.set_vector3(vector3)
-      end
-
       let(:get_neighbors) do
-        GetNeighbors.new.set_value(true).set_vector3(vector3)
+        GetNeighbors.new.set_neighbor_type('player').set_vector3(vector3)
       end
 
       let(:player) do
-        Player.new.set_id('1').set_transform(transform)
-      end
-
-      let(:npc) do
-        Npc.new.set_id('1').set_transform(transform)
+        Player.new.set_id('1')
       end
 
       let(:entity) do
         Entity.new.set_id('0').
           set_player(player).
-          set_track_entity(track_entity)
-      end
-
-      let(:npc_entity) do
-        Entity.new.set_id('0').
-          set_npc(npc).
-          set_track_entity(track_entity)
+          set_track_entity(track_entity).
+          set_entity_type('player').
+          set_vector3(vector3)
       end
 
       let(:get_neighbors_entity) do
@@ -57,52 +45,18 @@ module GameMachine
       describe 'tracking location' do
 
         it "should call grid.set with player" do
-          expect(subject.grid).to receive(:set).with(entity.player)
-          subject.on_receive(entity)
-        end
-
-        it "should call grid.set with npc" do
-          expect(subject.grid).to receive(:set).with(npc_entity.npc)
-          subject.on_receive(npc_entity)
-        end
-
-        it "publishes the update to the message queue" do
-          MessageQueue.stub(:find).and_return(actor_ref)
-          expect(actor_ref).to receive(:tell).with(kind_of(Publish),subject)
-          subject.on_receive(entity)
-        end
-
-        it "does not publish when message is from other entity trackers" do
-          expect(subject).to_not receive(:publish_entity_location_update)
-          entity.track_entity.set_internal(true)
+          expect(subject.grid).to receive(:set).with('0',0.0,0.0,0.0,'player')
           subject.on_receive(entity)
         end
 
       end
 
       describe 'get neighbors' do
-
-        it "gets neighbors from grid" do
-          expect(subject.grid).to receive(:neighbors).and_return([[0,1,player]])
+        it "sends neighbors to player" do
+          expect(subject).to receive(:send_neighbors_to_player)
+          get_neighbors_entity.set_player(player)
+          subject.on_receive(entity)
           subject.on_receive(get_neighbors_entity)
-        end
-
-        context "message has player" do
-          it "sends neighbors to player" do
-            expect_any_instance_of(ClientMessage).to receive(:send_to_player)
-            get_neighbors_entity.set_player(player)
-            subject.on_receive(entity)
-            subject.on_receive(get_neighbors_entity)
-          end
-        end
-
-        context "message does not have player" do
-          it "sends neighbors to sender" do
-            subject.stub(:sender).and_return(actor_ref)
-            expect(actor_ref).to receive(:tell).with(kind_of(Entity),subject)
-            subject.on_receive(entity)
-            subject.on_receive(get_neighbors_entity)
-          end
         end
       end
 

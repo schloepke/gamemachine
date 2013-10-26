@@ -17,8 +17,6 @@ module GameMachine
           set_client_connection(client_connection)
       end
 
-      let(:machine) {AuthenticationMachine.new(message)}
-
       subject do
         props = JavaLib::Props.new(Authentication)
         ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Authentication.name)
@@ -26,10 +24,9 @@ module GameMachine
         ref.underlying_actor
       end
 
-
       describe "authenticating a player" do
-
         before(:each) do
+          Application.auth_handler.load_users
           Handlers::Game.stub(:find).and_return(handler)
           PlayerRegistry.stub(:find).and_return(actor_ref)
         end

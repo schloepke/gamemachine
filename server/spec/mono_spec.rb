@@ -69,7 +69,7 @@ module GameMachine
       executor.shutdown
     end
 
-    it "jruby thread pool" do
+    xit "jruby thread pool" do
       path = "/home/chris/game_machine/server/mono/test_actor.dll"
       Mono.load_mono(path)
       domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
@@ -79,12 +79,12 @@ module GameMachine
       Mono.set_callback(1,Mono::Callback)
 
       threads = []
-      10.times do
+      5.times do
         threads << Thread.new do
           Mono.attach_current_thread(domain)
           image = Mono.load_assembly(domain,path)
           message = Entity.new.set_id(STR2)
-          100000.times do
+          1000000.times do
             GameMachine::Actor::MonoActor.call_mono(message,image,domain,namespace,klass)
           end
         end
@@ -104,10 +104,11 @@ module GameMachine
       Mono.set_callback(1,Mono::Callback)
       sleep 1
       threads = []
-      10.times do
+      5.times do
+        sleep 1
         threads << Thread.new do
           100000.times do
-            entity = Entity.new.set_id(STR2)
+            entity = Entity.new.set_id(STR)
             MonoTest.find.ask(entity,10)
           end
         end

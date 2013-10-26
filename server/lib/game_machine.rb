@@ -116,6 +116,7 @@ require_relative 'game_machine/endpoints/tcp'
 require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/endpoints/http/rpc'
 require_relative 'game_machine/protobuf_extensions/client_message_sender'
+require_relative 'game_machine/protobuf_extensions/entity_helper'
 require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
 require_relative 'game_machine/grid_replicator'
@@ -131,6 +132,8 @@ require_relative 'game_machine/navigation/detour'
 require_relative 'game_machine/navigation/detour_navmesh'
 require_relative 'game_machine/navigation/detour_path'
 require_relative 'game_machine/navigation/path'
+
+require_relative 'game_machine/commands/all'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS

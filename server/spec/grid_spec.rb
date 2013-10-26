@@ -8,18 +8,6 @@ module GameMachine
       JavaLib::Grid.new(100,25)
     end
 
-    let(:transform) do
-      transform = Transform.new
-      transform.set_vector3(
-        Vector3.new.set_x(0).set_y(0).set_z(0)
-      )
-      transform
-    end
-
-    let(:entity) do
-      Entity.new.set_id('0').set_transform(transform)
-    end
-
     describe "#set" do
       it "returns true when value is set" do
         expect(subject.set('blah',0,0,0,'player')).to be_true
@@ -75,7 +63,7 @@ module GameMachine
 
       it "returns entities of the correct type" do
         subject.set('blah',0,0,0,'player')
-        points = subject.neighbors(0,0,50,'player')
+        points = subject.neighbors(0,0,25,'player')
         expect(points.first.cell).to eq(0)
 
       end
