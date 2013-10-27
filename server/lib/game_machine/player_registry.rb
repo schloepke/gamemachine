@@ -2,7 +2,7 @@ module GameMachine
   class PlayerRegistry < Actor::Base
 
     def on_receive(message)
-      if message.is_a?(PlayerRegister)
+      if message.is_a?(MessageLib::PlayerRegister)
         self.class.register_player(message.player_id,message.client_connection)
         if message.observer
           observer_ref = Actor::Base.find(message.observer)
@@ -10,17 +10,17 @@ module GameMachine
         end
         PlayerGateway.find.tell(message,get_self)
         get_sender.tell(true,nil)
-        GameMachine.logger.info "PlayerRegister #{message.player_id}"
+        GameMachine.logger.info "MessageLib::PlayerRegister #{message.player_id}"
 
-      elsif message.is_a?(ClientDisconnect)
+      elsif message.is_a?(MessageLib::ClientDisconnect)
         player_id = self.class.client_disconnect(message.client_connection)
         GameMachine.logger.info "ClientDisconnect #{player_id}"
 
-      elsif message.is_a?(PlayerLogout)
+      elsif message.is_a?(MessageLib::PlayerLogout)
         self.class.player_logout(message.player_id)
-        GameMachine.logger.info "PlayerLogout #{message.player_id}"
+        GameMachine.logger.info "MessageLib::PlayerLogout #{message.player_id}"
 
-      elsif message.is_a?(RegisterPlayerObserver)
+      elsif message.is_a?(MessageLib::RegisterPlayerObserver)
         self.class.register_observer(message.playerId,sender)
       end
     end
@@ -43,7 +43,7 @@ module GameMachine
       def notify_observers(player_id,client_id)
         if actor_refs = observers.fetch(player_id,nil)
           actor_refs.each do |actor_ref|
-            message = Disconnected.new.
+            message = MessageLib::Disconnected.new.
               set_client_id(client_id).
               set_player_id(player_id)
             actor_ref.tell(message)

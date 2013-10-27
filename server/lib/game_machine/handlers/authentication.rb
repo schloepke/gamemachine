@@ -23,9 +23,9 @@ module GameMachine
       end
 
       def notify_player_controller(player)
-        entity = Entity.new.set_id(player.id)
+        entity = MessageLib::Entity.new.set_id(player.id)
         entity.set_player_authenticated(
-          PlayerAuthenticated.new.set_player_id(
+          MessageLib::PlayerAuthenticated.new.set_player_id(
             player.id
           )
         ).set_player(player)
@@ -40,7 +40,7 @@ module GameMachine
         AUTHENTICATED_USERS[@message.player.id] =
           authtoken_for_player(@message.player)
 
-        player_register = PlayerRegister.new.
+        player_register = MessageLib::PlayerRegister.new.
           set_client_connection(@message.client_connection).
           set_player_id(@message.player.id).
           set_observer(get_self.path.name)
@@ -62,7 +62,7 @@ module GameMachine
 
       def on_receive(message)
         @message = message
-        if message.is_a?(Disconnected)
+        if message.is_a?(MessageLib::Disconnected)
           GameMachine.logger.debug "RequestHandlers::Authentication Disconnected #{message.player_id}"
           destroy_state(message.player_id)
         else

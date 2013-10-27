@@ -21,7 +21,7 @@ module GameMachine
     end
 
     let(:entity) do
-      Entity.new.set_id('1').set_echo_test(echo_test)
+      MessageLib::Entity.new.set_id('1').set_echo_test(echo_test)
     end
 
     let(:client_message) do

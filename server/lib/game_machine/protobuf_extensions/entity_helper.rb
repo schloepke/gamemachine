@@ -8,4 +8,4 @@ module GameMachine
   end
 end
 
-Entity.send(:include, GameMachine::ProtobufExtensions::EntityHelper)
+GameMachine::MessageLib::Entity.send(:include, GameMachine::ProtobufExtensions::EntityHelper)

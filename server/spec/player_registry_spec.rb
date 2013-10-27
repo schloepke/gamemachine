@@ -7,14 +7,14 @@ module GameMachine
     let(:player_id) {'player'}
     let(:actor_ref) {double('Actor::Ref')}
 
-    let(:player_logout) {PlayerLogout.new.set_player_id(player_id)}
+    let(:player_logout) {MessageLib::PlayerLogout.new.set_player_id(player_id)}
 
     let(:client_connection) do
-      ClientConnection.new.set_id(client_id).set_gateway('gateway')
+      MessageLib::ClientConnection.new.set_id(client_id).set_gateway('gateway')
     end
 
     let(:client_disconnect) do
-      ClientDisconnect.new.set_client_connection(
+      MessageLib::ClientDisconnect.new.set_client_connection(
         client_connection
       )
     end
@@ -23,7 +23,7 @@ module GameMachine
 
     let(:player_register) do
       client_message.set_client_connection(client_connection)
-      PlayerRegister.new.
+      MessageLib::PlayerRegister.new.
         set_client_connection(client_message.client_connection).
         set_player_id(client_message.player.id).
         set_observer('/blah')
@@ -160,7 +160,7 @@ module GameMachine
       end
 
       it "sends Disconnected message to each observer" do
-        expect(actor_ref).to receive(:tell).with kind_of(Disconnected)
+        expect(actor_ref).to receive(:tell).with kind_of(MessageLib::Disconnected)
         subject.notify_observers(player_id,client_id)
       end
 

@@ -3,7 +3,7 @@ module GameMachine
   module Navigation
     describe DetourPath do
       let(:meshfile) do
-        "/home2/chris/game_machine/server/detour/test2.bin"
+        "/home/chris/game_machine/server/detour/test2.bin"
       end
 
       it "create and load navmesh" do

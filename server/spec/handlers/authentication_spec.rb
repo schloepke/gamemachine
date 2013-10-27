@@ -7,13 +7,13 @@ module GameMachine
 
       let(:handler) {double('Handler', :tell => true)}
       let(:actor_ref) {double('ActorRef', :ask => true)}
-      let(:player) {Player.new.set_id('player').set_authtoken('authorized')}
+      let(:player) {MessageLib::Player.new.set_id('player').set_authtoken('authorized')}
       let(:client_connection) do
-        ClientConnection.new.set_id(player.id).set_gateway('blah')
+        MessageLib::ClientConnection.new.set_id(player.id).set_gateway('blah')
       end
 
       let(:message) do
-        ClientMessage.new.set_player(player).
+        MessageLib::ClientMessage.new.set_player(player).
           set_client_connection(client_connection)
       end
 

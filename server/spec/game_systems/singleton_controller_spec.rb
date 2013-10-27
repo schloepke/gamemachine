@@ -5,7 +5,7 @@ module GameMachine
     describe SingletonController do
 
       let(:entity) do
-        Entity.new.set_id('entity')
+        MessageLib::Entity.new.set_id('entity')
       end
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}

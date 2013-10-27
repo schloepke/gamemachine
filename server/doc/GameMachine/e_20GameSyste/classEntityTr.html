@@ -4,7 +4,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>
-  Class: GameMachine::e GameSyste::classEntityTr
+  Class: GameMachine::e GameSyste::classMessageLib::EntityTr
   
     &mdash; Documentation by YARD 0.8.7
   
@@ -34,7 +34,7 @@
     <a href="../../_index.html">Index (c)</a> &raquo;
     <span class='title'><span class='object_link'><a href="../../GameMachine.html" title="GameMachine (module)">GameMachine</a></span></span> &raquo; <span class='title'><span class='object_link'><a href="../e_20GameSyste.html" title="GameMachine::e GameSyste (module)">e GameSyste</a></span></span>
      &raquo; 
-    <span class="title">classEntityTr</span>
+    <span class="title">classMessageLib::EntityTr</span>
   
 
   <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
@@ -63,7 +63,7 @@
 
     <iframe id="search_frame"></iframe>
 
-    <div id="content"><h1>Class: GameMachine::e GameSyste::classEntityTr
+    <div id="content"><h1>Class: GameMachine::e GameSyste::classMessageLib::EntityTr
   
   
   
@@ -80,7 +80,7 @@
           
             <li class="next">ing &lt; Actor</li>
           
-            <li class="next">GameMachine::e GameSyste::classEntityTr</li>
+            <li class="next">GameMachine::e GameSyste::classMessageLib::EntityTr</li>
           
         </ul>
         <a href="#" class="inheritanceTree">show all</a>
@@ -217,7 +217,7 @@ idth
       end
 
       def on_receive(message)
-        if message.is_a?(Entity)
+        if message.is_a?(MessageLib::Entity)
 if message.get_neighbors
   send_neighbors(message)
 end

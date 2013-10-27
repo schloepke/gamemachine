@@ -22,14 +22,14 @@ module GameMachine
       entity = @entities.fetch(entity_id,nil)
       if entity.nil?
         if bytes = @store.get(entity_id)
-          entity = Entity.parse_from(bytes)
+          entity = MessageLib::Entity.parse_from(bytes)
         end
       end
       entity
     end
 
     def on_receive(message)
-      if message.is_a?(ObjectdbUpdate)
+      if message.is_a?(MessageLib::ObjectdbUpdate)
         procname = message.get_update_method.to_sym
         if entity = get_entity(message.get_entity_id)
           returned_entity = self.class.dbprocs[procname].call(entity)
@@ -38,10 +38,10 @@ module GameMachine
         else
           sender.tell(false)
         end
-      elsif message.is_a?(ObjectdbPut)
+      elsif message.is_a?(MessageLib::ObjectdbPut)
         set_entity(message.get_entity)
         sender.tell(true)
-      elsif message.is_a?(ObjectdbGet)
+      elsif message.is_a?(MessageLib::ObjectdbGet)
         sender.tell(get_entity(message.get_entity_id) || false)
       else
         unhandled(message)

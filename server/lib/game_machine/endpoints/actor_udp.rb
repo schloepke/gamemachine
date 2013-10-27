@@ -14,7 +14,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(Entity)
+        if message.is_a?(MessageLib::Entity)
           handle_outgoing(message)
         elsif message.kind_of?(JavaLib::Udp::Bound)
           @socket = getSender
@@ -40,7 +40,7 @@ module GameMachine
       end
 
       def handle_incoming(message)
-        entity = Entity.parse_from(message.data.to_array)
+        entity = MessageLib::Entity.parse_from(message.data.to_array)
         if entity.has_message_envelope
           send_tell(entity)
         elsif entity.has_rpc

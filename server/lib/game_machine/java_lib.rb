@@ -1,5 +1,9 @@
 module GameMachine
 
+  module MessageLib
+    include_package 'com.game_machine.entity_system.generated'
+  end
+
   module ZeromqLib
     include_package 'akka.zeromq'
   end

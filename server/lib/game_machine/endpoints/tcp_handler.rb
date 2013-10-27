@@ -15,7 +15,7 @@ module GameMachine
           get_context.stop(get_self)
         elsif message.kind_of?(JavaLib::Tcp::Received)
           handle_incoming(message)
-        elsif message.is_a?(ClientMessage)
+        elsif message.is_a?(MessageLib::ClientMessage)
           handle_outgoing(message)
         elsif message.kind_of?(JavaLib::Tcp::Connected)
           @con_ref = get_sender
@@ -28,9 +28,9 @@ module GameMachine
       private
 
       def client_disconnect_message(client_id)
-        ClientMessage.new.set_client_disconnect(
-          ClientDisconnect.new.set_client_connection(
-            ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+        MessageLib::ClientMessage.new.set_client_disconnect(
+          MessageLib::ClientDisconnect.new.set_client_connection(
+            MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
           )
         )
       end
@@ -53,8 +53,8 @@ module GameMachine
       end
 
       def create_client_message(data,client_id)
-        ClientMessage.parse_from(data).set_client_connection(
-          ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
+        MessageLib::ClientMessage.parse_from(data).set_client_connection(
+          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
           set_server(Application.config.name)
         )
       end

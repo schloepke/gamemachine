@@ -17,7 +17,7 @@ module Demo
     end
 
     def self.send_to_player(player)
-        update_entity = Entity.new
+        update_entity = MessageLib::Entity.new
         update_entity.set_id(player.id)
         update_entity.set_player(player)
         update_entity.set_send_to_player(true)

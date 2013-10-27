@@ -4,7 +4,7 @@ module GameMachine
   describe WriteBehindCache do
  
     let(:entity) do
-      Entity.new.set_id('1')
+      MessageLib::Entity.new.set_id('1')
     end
 
     let(:data_store) do

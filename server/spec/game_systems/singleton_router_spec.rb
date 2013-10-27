@@ -12,22 +12,22 @@ module GameMachine
       end
 
       let(:create_singleton) do
-        Entity.new.set_create_singleton(
-          CreateSingleton.new.set_id('singleton1').
+        MessageLib::Entity.new.set_create_singleton(
+          MessageLib::CreateSingleton.new.set_id('singleton1').
           set_controller('GameMachine::GameSystems::SingletonController')
         ).set_id('entity')
       end
 
 
       let(:notify_singleton) do
-        Entity.new.set_notify_singleton(
-          NotifySingleton.new.set_id('singleton1')
+        MessageLib::Entity.new.set_notify_singleton(
+          MessageLib::NotifySingleton.new.set_id('singleton1')
         ).set_id('entity')
       end
 
       let(:destroy_singleton) do
-        Entity.new.set_destroy_singleton(
-          DestroySingleton.new.set_id('singleton1')
+        MessageLib::Entity.new.set_destroy_singleton(
+          MessageLib::DestroySingleton.new.set_id('singleton1')
         ).set_id('entity')
       end
 
@@ -44,8 +44,8 @@ module GameMachine
 
         context "receives a CreateSingleton message with nonexistant controller class" do
           let(:create_bad_singleton) do
-            Entity.new.set_create_singleton(
-              CreateSingleton.new.set_id('singleton1').
+            MessageLib::Entity.new.set_create_singleton(
+              MessageLib::CreateSingleton.new.set_id('singleton1').
               set_controller('BadController')
             ).set_id('entity')
           end

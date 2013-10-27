@@ -6,7 +6,7 @@ module GameMachine
 
       def on_receive(message)
         message.set_send_to_player(true)
-        PlayerGateway.find.tell(message)
+        MessageLib::PlayerGateway.find.tell(message)
       end
     end
   end

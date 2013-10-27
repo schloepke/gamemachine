@@ -436,7 +436,7 @@ _USERS.has_key?(player_id)
       end
 
       def notify_player_controller(player)
-        entity = Entity.new.set_id(player.id)
+        entity = MessageLib::Entity.new.set_id(player.id)
         entity.set_player_authenticated(
 PlayerAuthenticated.new.set_player_id(
   player.id

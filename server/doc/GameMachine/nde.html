@@ -478,7 +478,7 @@ def get_entity(entity_id)</pre>
 y = @entities.fetch(entity_id,nil)
       if entity.nil?
 if bytes = @store.get(entity_id)
-  entity = Entity.parse_from(bytes)
+  entity = MessageLib::Entity.parse_from(bytes)
 end
       end
       entity

@@ -3,7 +3,7 @@ module GameMachine
     class Request < Actor::Base
 
       def on_receive(message)
-        if message.is_a?(ClientMessage)
+        if message.is_a?(MessageLib::ClientMessage)
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
               logged_out(message)

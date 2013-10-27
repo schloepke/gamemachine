@@ -28,7 +28,7 @@ module GameMachine
       let(:actor_builder) {mock('Actor::Builder', :with_parent => actor_builder, :start => true)}
 
       let(:disconnected) do
-        Disconnected.new.set_client_id(client_id).set_player_id(player_id)
+        MessageLib::Disconnected.new.set_client_id(client_id).set_player_id(player_id)
       end
 
       describe "managing chat messages" do

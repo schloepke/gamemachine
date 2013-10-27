@@ -48,7 +48,7 @@ module GameMachine
       Mono.load_mono(path)
       Mono.attach_current_thread
       image = MonoUtil.load_assembly(path)
-      entity = Entity.new.set_id('test')
+      entity = MessageLib::Entity.new.set_id('test')
       message = entity.to_byte_array
       puts message.to_s.encoding
       str = String.from_java_bytes(message)
@@ -83,7 +83,7 @@ module GameMachine
         threads << Thread.new do
           Mono.attach_current_thread(domain)
           image = Mono.load_assembly(domain,path)
-          message = Entity.new.set_id(STR2)
+          message = MessageLib::Entity.new.set_id(STR2)
           1000000.times do
             GameMachine::Actor::MonoActor.call_mono(message,image,domain,namespace,klass)
           end
@@ -108,7 +108,7 @@ module GameMachine
         sleep 1
         threads << Thread.new do
           100000.times do
-            entity = Entity.new.set_id(STR)
+            entity = MessageLib::Entity.new.set_id(STR)
             MonoTest.find.ask(entity,10)
           end
         end

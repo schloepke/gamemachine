@@ -15,13 +15,13 @@ module GameMachine
       end
 
       let(:entity) do
-        Entity.new.set_id('one')
+        MessageLib::Entity.new.set_id('one')
       end
 
       describe "get_and_set" do
         it "get should return the value that was set" do
           subject.set('test',entity.to_byte_array)
-          entity = Entity.parse_from(subject.get('test'))
+          entity = MessageLib::Entity.parse_from(subject.get('test'))
           expect(entity.id).to eq('one')
         end
       end

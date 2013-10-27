@@ -17,7 +17,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(ClientMessage)
+        if message.is_a?(MessageLib::ClientMessage)
           if handler_ref = @clients.fetch(message.client_connection.id,nil)
             handler_ref.tell(message)
           else

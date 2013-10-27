@@ -12,11 +12,11 @@ module GameMachine
         unhandled(message)
         return
       end
-      if message.is_a?(Publish)
+      if message.is_a?(MessageLib::Publish)
         publish(message)
-      elsif message.is_a?(Subscribe)
+      elsif message.is_a?(MessageLib::Subscribe)
         subscribe(message)
-      elsif message.is_a?(Unsubscribe)
+      elsif message.is_a?(MessageLib::Unsubscribe)
         unsubscribe(message)
       elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
         GameMachine.logger.debug "Subscribed"

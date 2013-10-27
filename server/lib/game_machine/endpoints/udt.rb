@@ -24,7 +24,7 @@ module GameMachine
           end
 
           Actor::Base.find(Settings.game_handler).send_message(client_message, :sender => get_self)
-        elsif message.is_a?(ClientMessage)
+        elsif message.is_a?(MessageLib::ClientMessage)
           if @clients[message.client_connection.id]
             JavaLib::UdtServer.get_udt_server.send_to_client(
               message.to_byte_array,
@@ -41,16 +41,16 @@ module GameMachine
       private
 
       def client_disconnect_message(client_id)
-        ClientMessage.new.set_client_disconnect(
-          ClientDisconnect.new.set_client_connection(
-            ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+        MessageLib::ClientMessage.new.set_client_disconnect(
+          MessageLib::ClientDisconnect.new.set_client_connection(
+            MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
           )
         )
       end
 
       def create_client_message(data,client_id)
-        ClientMessage.parse_from(data).set_client_connection(
-          ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+        MessageLib::ClientMessage.parse_from(data).set_client_connection(
+          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
         )
       end
 

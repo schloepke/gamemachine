@@ -6,7 +6,7 @@ module GameMachine
     describe DatastoreCommands do
 
       let(:entity) do
-        entity = Entity.new
+        entity = MessageLib::Entity.new
         entity.set_id('1')
         entity
       end
@@ -31,7 +31,7 @@ module GameMachine
           sleep 0.100
             
           result = subject.call_dbproc(:test1, entity.get_id,true)
-          result.should be_kind_of(Entity)
+          result.should be_kind_of(MessageLib::Entity)
           result.get_id.should == entity.get_id
         end
 

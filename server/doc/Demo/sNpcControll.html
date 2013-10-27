@@ -301,7 +301,7 @@ location. Only needs to be called
       # and hand it off to the combat controller.
       distance_to_target = position.distance(@target_position)
       if distance_to_target &lt;= 3
-        attack_entity = Entity.new
+        attack_entity = MessageLib::Entity.new
         attack_entity.set_id(entity.id)
         attack_entity.set_attack(
 Attack.new.set_attacker(enti</pre>

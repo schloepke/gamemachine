@@ -20,7 +20,7 @@ module GameMachine
       def on_receive(message)
         if message.kind_of?(JavaLib::Udp::Bound)
           @socket = getSender
-        elsif message.is_a?(ClientMessage)
+        elsif message.is_a?(MessageLib::ClientMessage)
           handle_outgoing(message)
         elsif message.kind_of?(JavaLib::Udp::Received)
           handle_incoming(message)
@@ -57,8 +57,8 @@ module GameMachine
       end
 
       def create_client_message(data,client_id)
-        ClientMessage.parse_from(data).set_client_connection(
-          ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
+        MessageLib::ClientMessage.parse_from(data).set_client_connection(
+          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
           set_server(Application.config.name)
         )
       end

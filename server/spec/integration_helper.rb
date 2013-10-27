@@ -35,21 +35,21 @@ STR = Array.new(100) {|i| CHARS.sample}.join
 STR2 = Array.new(1000) {|i| CHARS.sample}.join
 
 def player
-  player = Player.new
+  player = MessageLib::Player.new
   player.set_id(rand(5000).to_s)
   player.set_name(STR.to_java_string)
   player.set_authtoken('authorized')
 end
 
 def large_player
-  player = Player.new
+  player = MessageLib::Player.new
   player.set_id(rand(5000).to_s)
   player.set_name(STR2.to_java_string)
   player.set_authtoken('authorized')
 end
 
 def static_entity
-  entity = Entity.new
+  entity = MessageLib::Entity.new
   entity.set_id('1')
   entity.player = player
   echo_test = EchoTest.new.set_message('testing')
@@ -58,7 +58,7 @@ def static_entity
 end
 
 def entity
-  entity = Entity.new
+  entity = MessageLib::Entity.new
   entity.set_id(rand(5000).to_s)
   entity.player = player
   echo_test = EchoTest.new.set_message('testing')
@@ -67,7 +67,7 @@ def entity
 end
 
 def large_entity
-  entity = Entity.new
+  entity = MessageLib::Entity.new
   entity.set_id(rand(5000).to_s)
   entity.set_player(large_player)
   echo_test = EchoTest.new.set_message('testing')

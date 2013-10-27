@@ -175,10 +175,10 @@ module Demo
       # and hand it off to the combat controller.
       distance_to_target = position.distance(@target_position)
       if distance_to_target <= 3
-        attack_entity = Entity.new
+        attack_entity = MessageLib::Entity.new
         attack_entity.set_id(entity.id)
         attack_entity.set_attack(
-          Attack.new.set_attacker(entity.id).
+          MessageLib::Attack.new.set_attacker(entity.id).
             set_target(@target_id).
             set_combat_ability_id(1)
         )

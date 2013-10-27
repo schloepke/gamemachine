@@ -47,13 +47,13 @@ module GameMachine
 
       def error_message(code,message)
         client_message.set_error_message(
-          ErrorMessage.new.set_code(code).set_message(message)
+          MessageLib::ErrorMessage.new.set_code(code).set_message(message)
         )
       end
 
       def client_disconnect(client_id,gateway)
         client_message.set_client_disconnect(
-          ClientDisconnect.new.set_client_connection(
+          MessageLib::ClientDisconnect.new.set_client_connection(
             client_connection(client_id,gateway)
           )
         )
@@ -61,18 +61,18 @@ module GameMachine
 
       def player_logout
         client_message.set_player_logout(
-          PlayerLogout.new.set_player_id(@player_id)
+          MessageLib::PlayerLogout.new.set_player_id(@player_id)
         )
       end
 
       def track_entity
         current_entity.set_track_entity(
-          TrackEntity.new.set_value(true)
+          MessageLib::TrackEntity.new.set_value(true)
         )
       end
 
       def get_neighbors(search_radius=nil)
-          component = GetNeighbors.new
+          component = MessageLib::GetNeighbors.new
           component.set_value(true)
           if search_radius
             component.set_search_radius(search_radius)
@@ -82,24 +82,24 @@ module GameMachine
 
       def neighbors(players,npcs)
         current_entity.set_neighbors(
-          Neighbors.new.set_player_list(players).set_npc_list(npcs)
+          MessageLib::Neighbors.new.set_player_list(players).set_npc_list(npcs)
         )
       end
 
       def player_move(x,y)
         current_entity.set_player_move(
-          PlayerMove.new.set_target(
-            Target.new.set_x(x).set_y(y)
+          MessageLib::PlayerMove.new.set_target(
+            MessageLib::Target.new.set_x(x).set_y(y)
           )
         )
       end
 
       def client_connection(client_id,gateway)
-        ClientConnection.new.set_id(client_id).set_gateway(gateway)
+        MessageLib::ClientConnection.new.set_id(client_id).set_gateway(gateway)
       end
 
       def chat_channels(names)
-        channels = ChatChannels.new
+        channels = MessageLib::ChatChannels.new
         names.each do |name|
           channels.add_chat_channel(chat_channel(name))
         end
@@ -107,11 +107,11 @@ module GameMachine
       end
 
       def chat_channel(topic)
-        ChatChannel.new.set_name(topic)
+        MessageLib::ChatChannel.new.set_name(topic)
       end
 
       def chat_message(type,message_text,topic)
-        message = ChatMessage.new
+        message = MessageLib::ChatMessage.new
         message.set_chat_channel(
           chat_channel(topic)
         )
@@ -122,33 +122,33 @@ module GameMachine
 
       def join_chat(topic)
         current_entity.set_join_chat(
-          JoinChat.new.add_chat_channel(chat_channel(topic))
+          MessageLib::JoinChat.new.add_chat_channel(chat_channel(topic))
         )
       end
 
       def leave_chat(topic)
         current_entity.set_leave_chat(
-          LeaveChat.new.add_chat_channel(chat_channel(topic))
+          MessageLib::LeaveChat.new.add_chat_channel(chat_channel(topic))
         )
       end
 
       def echo_test(value)
-        current_entity.set_echo_test(EchoTest.new.set_message(value))
+        current_entity.set_echo_test(MessageLib::EchoTest.new.set_message(value))
       end
 
       private
 
       def create_client_message(player_id)
-        client_message = ClientMessage.new
+        client_message = MessageLib::ClientMessage.new
         client_message.set_player(player(player_id))
       end
 
       def add_entity(id)
-        client_message.add_entity(Entity.new.set_id(id))
+        client_message.add_entity(MessageLib::Entity.new.set_id(id))
       end
 
       def player(player_id)
-        player = Player.new.
+        player = MessageLib::Player.new.
           set_id(player_id).
           set_name(player_id).
           set_authtoken('authorized')

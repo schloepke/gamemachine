@@ -3,7 +3,7 @@ module GameMachine
     class Game < Actor::Base 
 
       def on_receive(message)
-        if message.is_a?(ClientMessage)
+        if message.is_a?(MessageLib::ClientMessage)
           if message.get_entity_list
             dispatch_entities(message.get_entity_list)
           end

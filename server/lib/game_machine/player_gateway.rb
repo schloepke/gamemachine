@@ -9,7 +9,7 @@ module GameMachine
 
 
     def player(player_id)
-      Player.new.
+      MessageLib::Player.new.
         set_id(player_id).
         set_name(player_id)
     end
@@ -26,7 +26,7 @@ module GameMachine
         client_connection = player_info[:client_connection]
         player_id = player_info[:player_id]
 
-        player_register = PlayerRegister.new.
+        player_register = MessageLib::PlayerRegister.new.
           set_player_id(player_id).
           set_client_connection(client_connection)
         replicate(player_register)

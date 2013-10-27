@@ -66,7 +66,7 @@ module GameMachine
             Chat.find.tell(join_request)
           end
           Chat.should_receive_message(leave_request) do
-            actor_ref.should_receive(:tell).with(kind_of(Unsubscribe),anything())
+            actor_ref.should_receive(:tell).with(kind_of(MessageLib::Unsubscribe),anything())
             Chat.find.tell(leave_request)
           end
         end

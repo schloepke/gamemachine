@@ -4,26 +4,26 @@ module GameMachine
   module Handlers
     describe Request do
 
-      let(:player) {Player.new.set_id('1')}
+      let(:player) {MessageLib::Player.new.set_id('1')}
       let(:client_id) {'client1'}
-      let(:client_connection) {ClientConnection.new}
+      let(:client_connection) {MessageLib::ClientConnection.new}
 
       let(:entity) do
-       Entity.new.set_id('1')
+       MessageLib::Entity.new.set_id('1')
       end
 
       let(:client_disconnect) do
-        ClientDisconnect.new.set_client_connection(
-          ClientConnection.new.set_id(client_id).set_gateway('blah')
+        MessageLib::ClientDisconnect.new.set_client_connection(
+          MessageLib::ClientConnection.new.set_id(client_id).set_gateway('blah')
         )
       end
 
       let(:player_logout) do
-        PlayerLogout.new.set_player_id(player.id)
+        MessageLib::PlayerLogout.new.set_player_id(player.id)
       end
 
       let(:client_message) do
-        ClientMessage.new.
+        MessageLib::ClientMessage.new.
           set_client_connection(client_connection).
           set_player(player).
           add_entity(entity)
@@ -38,7 +38,7 @@ module GameMachine
           Actor::Builder.new(Request).with_name('test_request_handler').start
         end
 
-        it "logs out player if PlayerLogout present" do
+        it "logs out player if MessageLib::PlayerLogout present" do
           message = client_message
           message.set_player_logout(player_logout)
           expect(PlayerRegistry).to receive(:player_logout).with(

@@ -372,7 +372,7 @@ ler.tell(message,get_self)
       end
 
       def on_receive(message)
-        if message.is_a?(Entity)
+        if message.is_a?(MessageLib::Entity)
           if message.has_player_logout
 destro</pre>
     </td>

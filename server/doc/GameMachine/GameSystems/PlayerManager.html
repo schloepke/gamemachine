@@ -377,7 +377,7 @@
       <pre class="code"><span class="info file"># File 'lib/game_machine/game_systems/player_manager.rb', line 38</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_on_receive'>on_receive</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Entity</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>MessageLib::Entity</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_has_player_logout'>has_player_logout</span>
       <span class='id identifier rubyid_destroy_player_controller'>destroy_player_controller</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
     <span class='kw'>elsif</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_has_player_authenticated'>has_player_authenticated</span>

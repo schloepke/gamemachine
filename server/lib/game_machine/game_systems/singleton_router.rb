@@ -35,7 +35,7 @@ module GameMachine
               controller.tell(message,get_self)
             end
           end
-        elsif message.is_a?(Entity)
+        elsif message.is_a?(MessageLib::Entity)
           if message.has_notify_singleton
             if singleton_controller = @singleton_controllers.fetch(message.notify_singleton.id,nil)
               singleton_controller.tell(message,get_self)

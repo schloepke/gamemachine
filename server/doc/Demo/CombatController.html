@@ -276,7 +276,7 @@
       <pre class="code"><span class="info file"># File 'lib/demo/combat_controller.rb', line 19</span>
 
 <span class='kw'>def</span> <span class='kw'>self</span><span class='period'>.</span><span class='id identifier rubyid_send_to_player'>send_to_player</span><span class='lparen'>(</span><span class='id identifier rubyid_player'>player</span><span class='rparen'>)</span>
-    <span class='id identifier rubyid_update_entity'>update_entity</span> <span class='op'>=</span> <span class='const'>Entity</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
+    <span class='id identifier rubyid_update_entity'>update_entity</span> <span class='op'>=</span> <span class='const'>MessageLib::Entity</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span>
     <span class='id identifier rubyid_update_entity'>update_entity</span><span class='period'>.</span><span class='id identifier rubyid_set_id'>set_id</span><span class='lparen'>(</span><span class='id identifier rubyid_player'>player</span><span class='period'>.</span><span class='id identifier rubyid_id'>id</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_update_entity'>update_entity</span><span class='period'>.</span><span class='id identifier rubyid_set_player'>set_player</span><span class='lparen'>(</span><span class='id identifier rubyid_player'>player</span><span class='rparen'>)</span>
     <span class='id identifier rubyid_update_entity'>update_entity</span><span class='period'>.</span><span class='id identifier rubyid_set_send_to_player'>set_send_to_player</span><span class='lparen'>(</span><span class='kw'>true</span><span class='rparen'>)</span>

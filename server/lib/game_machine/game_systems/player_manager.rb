@@ -37,7 +37,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(Entity)
+        if message.is_a?(MessageLib::Entity)
           if message.has_player_logout
             destroy_player_controller(message)
           elsif message.has_player_authenticated

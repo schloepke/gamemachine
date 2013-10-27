@@ -19,7 +19,7 @@ module GameMachine
           params = message_to_params(message)
           if params['data']
             encoded_message = Base64.decode64(params['data'])
-            Entity.parse_from(encoded_message)
+            MessageLib::Entity.parse_from(encoded_message)
           end
           getSender.tell("OK",get_self)
         end

@@ -1,5 +1,5 @@
 module Demo
-  class PlayerController < GameMachine::Actor::Base
+  class MessageLib::PlayerController < GameMachine::Actor::Base
 
     set_player_controller
 
@@ -24,7 +24,7 @@ module Demo
         if entity = GameMachine::ObjectDb.get(message.player.id)
           set_player_health(entity.player)
         else
-          entity = Entity.new.set_id(message.player.id).
+          entity = MessageLib::Entity.new.set_id(message.player.id).
             set_player(message.player.clone)
           set_player_health(entity.player)
         end

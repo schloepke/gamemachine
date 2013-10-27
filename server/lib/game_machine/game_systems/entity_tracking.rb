@@ -25,7 +25,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(Entity)
+        if message.is_a?(MessageLib::Entity)
           if message.get_neighbors
             send_neighbors(message)
           end
@@ -46,8 +46,8 @@ module GameMachine
       end
 
       def location_entity(grid_value)
-        Entity.new.set_id(grid_value.id).set_vector3(
-          Vector3.new.
+        MessageLib::Entity.new.set_id(grid_value.id).set_vector3(
+          MessageLib::Vector3.new.
           set_xi(grid_value.x.to_i).
           set_yi(grid_value.z.to_i).
           set_zi(grid_value.y.to_i)
@@ -79,8 +79,8 @@ module GameMachine
       end
 
       def send_neighbors_to_player(neighbors,player)
-        entity = Entity.new.set_neighbors(
-          Neighbors.new.
+        entity = MessageLib::Entity.new.set_neighbors(
+          MessageLib::Neighbors.new.
           set_player_list(neighbors[:players]).
           set_npc_list(neighbors[:npcs])
         )
@@ -96,7 +96,7 @@ module GameMachine
 
       def self.neighbors_to_entity(x,z,neighbor_type)
         grid_values = neighbors_from_grid(x,z,neighbor_type)
-        entity = Entity.new.set_neighbors(Neighbors.new).set_id('0')
+        entity = MessageLib::Entity.new.set_neighbors(MessageLib::Neighbors.new).set_id('0')
         neighbors = entity.neighbors
         grid_values.each do |grid_value|
           if grid_value.entityType == 'player'

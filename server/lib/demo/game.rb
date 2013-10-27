@@ -19,7 +19,7 @@ module Demo
       x = rand(max) + 1
       z = rand(max) + 1
       y = 1.10
-      entity = Entity.new
+      entity = MessageLib::Entity.new
       entity.set_health(
         Health.new.set_health(100)
       )

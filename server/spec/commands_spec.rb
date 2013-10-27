@@ -34,13 +34,13 @@ module GameMachine
         end
 
         it "sends component to player wrapped in entity" do
-          expect(actor_ref).to receive(:tell).with(kind_of(Entity))
-          subject.gm.player.send_message(Attack.new,'1')
+          expect(actor_ref).to receive(:tell).with(kind_of(MessageLib::Entity))
+          subject.gm.player.send_message(MessageLib::Attack.new,'1')
         end
 
         it "sends entity to player" do
-          expect(actor_ref).to receive(:tell).with(kind_of(Entity))
-          subject.gm.player.send_message(Entity.new.set_id('1'),'1')
+          expect(actor_ref).to receive(:tell).with(kind_of(MessageLib::Entity))
+          subject.gm.player.send_message(MessageLib::Entity.new.set_id('1'),'1')
         end
 
         it "raises exception with invalid message" do

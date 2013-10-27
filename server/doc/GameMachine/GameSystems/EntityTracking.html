@@ -131,7 +131,7 @@ doesn&#39;t happen automatically.</p>
       
         
         <div class='inline'>
-<p>TrackEntity</p>
+<p>TrackMessageLib::Entity</p>
 </div>
       
     </li>
@@ -357,7 +357,7 @@ doesn&#39;t happen automatically.</p>
       <pre class="code"><span class="info file"># File 'lib/game_machine/game_systems/entity_tracking.rb', line 27</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_on_receive'>on_receive</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
-  <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>Entity</span><span class='rparen'>)</span>
+  <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_is_a?'>is_a?</span><span class='lparen'>(</span><span class='const'>MessageLib::Entity</span><span class='rparen'>)</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_message'>message</span><span class='period'>.</span><span class='id identifier rubyid_get_neighbors'>get_neighbors</span>
       <span class='id identifier rubyid_send_neighbors'>send_neighbors</span><span class='lparen'>(</span><span class='id identifier rubyid_message'>message</span><span class='rparen'>)</span>
     <span class='kw'>end</span>
