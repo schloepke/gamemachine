@@ -40,3 +40,8 @@ the box.
 #Documentation
 
 Documentation and SDK's for Java, Ruby, and C# will be coming soon.
+
+#What's new
+
+C# actors via embedding mono is the main big feature that was added.  We are
+currentl working on the end user api and a Unity3D SDK.
