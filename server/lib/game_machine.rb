@@ -133,7 +133,12 @@ require_relative 'game_machine/navigation/detour_navmesh'
 require_relative 'game_machine/navigation/detour_path'
 require_relative 'game_machine/navigation/path'
 
-require_relative 'game_machine/commands/all'
+require_relative 'game_machine/commands/message_helper'
+require_relative 'game_machine/commands/chat_commands'
+require_relative 'game_machine/commands/player_commands'
+require_relative 'game_machine/commands/grid_commands'
+require_relative 'game_machine/commands/base'
+require_relative 'game_machine/commands'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
