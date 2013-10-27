@@ -134,6 +134,7 @@ require_relative 'game_machine/navigation/detour_path'
 require_relative 'game_machine/navigation/path'
 
 require_relative 'game_machine/commands/message_helper'
+require_relative 'game_machine/commands/datastore_commands'
 require_relative 'game_machine/commands/chat_commands'
 require_relative 'game_machine/commands/player_commands'
 require_relative 'game_machine/commands/grid_commands'
