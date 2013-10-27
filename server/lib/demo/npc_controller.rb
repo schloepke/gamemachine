@@ -2,6 +2,7 @@ require 'state_machine'
 module Demo
   class NpcController < GameMachine::GameSystems::SingletonController
     include GameMachine::Helpers::StateMachine
+    include GameMachine::Commands
 
     state_machine :state, :initial => :inactive do
       event :activate do
@@ -43,8 +44,8 @@ module Demo
       @last_combat_update = Time.now.to_f
       @speed = 0.8
       @path = GameMachine::Navigation::Path.new([],position)
-      unless saved_entity = GameMachine::ObjectDb.get(entity.id)
-        GameMachine::ObjectDb.put(entity)
+      unless saved_entity = commands.datastore.get(entity.id)
+        commands.datastore.put(entity)
       end
       load_state(entity.id) do
         activate

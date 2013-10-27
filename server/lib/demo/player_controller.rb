@@ -1,5 +1,6 @@
 module Demo
-  class MessageLib::PlayerController < GameMachine::Actor::Base
+  class PlayerController < GameMachine::Actor::Base
+    include GameMachine::Commands
 
     set_player_controller
 
@@ -21,14 +22,14 @@ module Demo
 
     def on_receive(message)
       if message.has_player_authenticated
-        if entity = GameMachine::ObjectDb.get(message.player.id)
+        if entity = commands.datastore.get(message.player.id)
           set_player_health(entity.player)
         else
           entity = MessageLib::Entity.new.set_id(message.player.id).
             set_player(message.player.clone)
           set_player_health(entity.player)
         end
-        GameMachine::ObjectDb.put(entity)
+        commands.datastore.put(entity)
       end
     end
   end
