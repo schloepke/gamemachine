@@ -1,6 +1,7 @@
 module GameMachine
   module GameSystems
     class Chat < Actor::Base
+      include GameMachine::Commands
 
       def post_init(*args)
         @player_id = args.first
@@ -26,9 +27,13 @@ module GameMachine
       private
 
       def send_player_update
-        message = Helpers::GameMessage.new(@player_id)
-        message.chat_channels(@subscriptions)
-        message.send_to_player
+        channels = ChatChannels.new
+        @subscriptions.each do |name|
+          channels.add_chat_channel(
+            ChatChannel.new.set_name(name)
+          )
+        end
+        gm.player.send_message(channels,@player_id)
       end
 
       def message_queue

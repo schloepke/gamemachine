@@ -65,6 +65,7 @@ java_import 'com.game_machine.entity_system.generated.MessageEnvelope'
 java_import 'com.game_machine.entity_system.generated.Rpc'
 
 
+require_relative 'game_machine/commands'
 require_relative 'game_machine/version'
 require_relative 'game_machine/vector'
 require_relative 'game_machine/java_lib'
@@ -115,7 +116,6 @@ require_relative 'game_machine/endpoints/actor_udp'
 require_relative 'game_machine/endpoints/tcp'
 require_relative 'game_machine/endpoints/http/auth'
 require_relative 'game_machine/endpoints/http/rpc'
-require_relative 'game_machine/protobuf_extensions/client_message_sender'
 require_relative 'game_machine/protobuf_extensions/entity_helper'
 require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/player_registry'
@@ -133,13 +133,6 @@ require_relative 'game_machine/navigation/detour_navmesh'
 require_relative 'game_machine/navigation/detour_path'
 require_relative 'game_machine/navigation/path'
 
-require_relative 'game_machine/commands/message_helper'
-require_relative 'game_machine/commands/datastore_commands'
-require_relative 'game_machine/commands/chat_commands'
-require_relative 'game_machine/commands/player_commands'
-require_relative 'game_machine/commands/grid_commands'
-require_relative 'game_machine/commands/base'
-require_relative 'game_machine/commands'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
