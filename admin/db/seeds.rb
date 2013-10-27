@@ -33,7 +33,7 @@ Setting.create(
   :world_grid_cell_size => 25,
   :singleton_manager_router_count => 200,
   :singleton_manager_update_interval => 100,
-  :mono_enabled => false,
+  :mono_enabled => true,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
   :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"
@@ -48,7 +48,7 @@ Setting.create(
   :world_grid_cell_size => 25,
   :singleton_manager_router_count => 200,
   :singleton_manager_update_interval => 100,
-  :mono_enabled => false,
+  :mono_enabled => true,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
   :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"
@@ -63,7 +63,7 @@ Setting.create(
   :world_grid_cell_size => 25,
   :singleton_manager_router_count => 200,
   :singleton_manager_update_interval => 100,
-  :mono_enabled => false,
+  :mono_enabled => true,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
   :auth_handler => 'GameMachine::AuthHandlers::Basic',
   :seeds => "seed01,seed02"

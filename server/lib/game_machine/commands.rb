@@ -8,8 +8,8 @@ require_relative 'commands/base'
 module GameMachine
   module Commands
 
-    def gm
-      @gm ||= Base.new
+    def commands
+      @commands ||= Base.new
     end
 
   end
