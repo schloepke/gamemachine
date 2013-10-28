@@ -64,9 +64,7 @@ module GameMachine
         start_core_systems
         start_handlers
         start_game_systems
-        unless GameMachine.env == 'test'
-          load_games
-        end
+        load_games
         GameMachine.stdout("Game Machine start successful")
       end
 
@@ -115,6 +113,7 @@ module GameMachine
       end
 
       def load_games
+        return if GameMachine.env == 'test'
         game_dirs.each do |game_dir|
           bootfile = File.join(game_dir,'boot.rb')
           puts bootfile

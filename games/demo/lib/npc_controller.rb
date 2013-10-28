@@ -31,8 +31,8 @@ module Demo
       @target_id = nil
       @target_position = GameMachine::Vector.new
 
-      if @navmesh = GameMachine::Navigation::DetourNavmesh.find(1)
-        @pathfinder = GameMachine::Navigation::DetourPath.new(@navmesh)
+      if @navmesh = commands.navigation.navmesh(1)
+        @pathfinder = commands.navigation.query_ref(@navmesh)
       else
         raise "Navmesh not set!"
       end

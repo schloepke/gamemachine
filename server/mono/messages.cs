@@ -199,62 +199,6 @@ namespace com.game_machine.entity_system.generated
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"SetTarget")]
-  public partial class SetTarget : global::ProtoBuf.IExtensible
-  {
-    public SetTarget() {}
-    
-    private string _targetId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"targetId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string targetId
-    {
-      get { return _targetId; }
-      set { _targetId = value; }
-    }
-    private string _state = "";
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string state
-    {
-      get { return _state; }
-      set { _state = value; }
-    }
-    private string _id;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnsetTarget")]
-  public partial class UnsetTarget : global::ProtoBuf.IExtensible
-  {
-    public UnsetTarget() {}
-    
-    private string _id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _targetId;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"targetId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string targetId
-    {
-      get { return _targetId; }
-      set { _targetId = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Rpc")]
   public partial class Rpc : global::ProtoBuf.IExtensible
   {
@@ -1638,22 +1582,6 @@ namespace com.game_machine.entity_system.generated
     {
       get { return _isPlayer; }
       set { _isPlayer = value; }
-    }
-    private com.game_machine.entity_system.generated.SetTarget _setTarget = null;
-    [global::ProtoBuf.ProtoMember(107, IsRequired = false, Name=@"setTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public com.game_machine.entity_system.generated.SetTarget setTarget
-    {
-      get { return _setTarget; }
-      set { _setTarget = value; }
-    }
-    private com.game_machine.entity_system.generated.UnsetTarget _unsetTarget = null;
-    [global::ProtoBuf.ProtoMember(108, IsRequired = false, Name=@"unsetTarget", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public com.game_machine.entity_system.generated.UnsetTarget unsetTarget
-    {
-      get { return _unsetTarget; }
-      set { _unsetTarget = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

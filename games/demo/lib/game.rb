@@ -4,6 +4,7 @@ require_relative 'player_controller'
 
 module Demo
   class Game
+    include GameMachine::Commands
 
     attr_reader :game_root
     def initialize(game_root)
@@ -11,12 +12,18 @@ module Demo
     end
 
     def start
+      load_navmesh
       load_game_data
       GameMachine::Actor::Builder.new(CombatController).
         with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
       500.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
+    end
+
+    def load_navmesh\
+      meshfile = File.join(game_root,'data','meshes',"mesh1.bin")
+      commands.navigation.load_navmesh(1,meshfile)
     end
 
     def create_npc(id)
