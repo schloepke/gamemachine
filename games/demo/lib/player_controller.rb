@@ -25,7 +25,7 @@ module Demo
         if entity = commands.datastore.get(message.player.id)
           set_player_health(entity.player)
         else
-          entity = MessageLib::Entity.new.set_id(message.player.id).
+          entity = GameMachine::MessageLib::Entity.new.set_id(message.player.id).
             set_player(message.player.clone)
           set_player_health(entity.player)
         end

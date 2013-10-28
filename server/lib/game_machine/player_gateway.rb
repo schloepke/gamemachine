@@ -50,7 +50,7 @@ module GameMachine
         if player_info = @players.fetch(message.player.id,nil)
           client_connection = player_info[:client_connection]
           if Application.config.name == client_connection.server
-            client_message = ClientMessage.new
+            client_message = MessageLib::ClientMessage.new
             client_message.set_player(player(message.player.id))
             client_message.set_client_connection(client_connection)
             message.set_send_to_player(false)

@@ -10,7 +10,7 @@ module GameMachine
         end
         PlayerGateway.find.tell(message,get_self)
         get_sender.tell(true,nil)
-        GameMachine.logger.info "MessageLib::PlayerRegister #{message.player_id}"
+        GameMachine.logger.info "PlayerRegister #{message.player_id}"
 
       elsif message.is_a?(MessageLib::ClientDisconnect)
         player_id = self.class.client_disconnect(message.client_connection)
@@ -18,7 +18,7 @@ module GameMachine
 
       elsif message.is_a?(MessageLib::PlayerLogout)
         self.class.player_logout(message.player_id)
-        GameMachine.logger.info "MessageLib::PlayerLogout #{message.player_id}"
+        GameMachine.logger.info "PlayerLogout #{message.player_id}"
 
       elsif message.is_a?(MessageLib::RegisterPlayerObserver)
         self.class.register_observer(message.playerId,sender)

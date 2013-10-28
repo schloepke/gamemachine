@@ -1,3 +1,4 @@
+require 'pathname'
 module GameMachine
   class Application
 
@@ -63,7 +64,9 @@ module GameMachine
         start_core_systems
         start_handlers
         start_game_systems
-        load_games
+        unless GameMachine.env == 'test'
+          load_games
+        end
         GameMachine.stdout("Game Machine start successful")
       end
 
@@ -106,16 +109,28 @@ module GameMachine
         end
       end
 
+      def game_dirs
+        games_root = File.join(GameMachine.app_root,'../games')
+        Pathname.glob("#{games_root}/*/")
+      end
+
       def load_games
-        bootfile = File.join(GameMachine.app_root,'boot.rb')
-        if File.exists?(bootfile)
-          require bootfile
-          GameMachine.logger.info "boot.rb loaded"
-          GameMachine.stdout "boot.rb loaded"
-        else
-          GameMachine.logger.info "boot.rb not loaded (not found)"
-          GameMachine.stdout "boot.rb not loaded (not found)"
+        game_dirs.each do |game_dir|
+          bootfile = File.join(game_dir,'boot.rb')
+          puts bootfile
+          if File.exists?(bootfile)
+            load_game(bootfile)
+            GameMachine.logger.info "#{bootfile} loaded"
+            GameMachine.stdout "#{bootfile} loaded"
+          else
+            GameMachine.logger.info "#{bootfile} not found"
+            GameMachine.stdout "#{bootfile} not found"
+          end
         end
+      end
+
+      def load_game(bootfile)
+        require bootfile
       end
 
       def start_handlers

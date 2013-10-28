@@ -27,13 +27,10 @@ module GameMachine
         GameMachine::GameSystems::EntityTracking::GRID.get(id)
       end
 
-      # Returns a list of nearby tracked game objects
       def neighbors(type='player')
         GameMachine::GameSystems::EntityTracking.neighbors_from_grid(position.x,position.z,type)
       end
 
-      # Call this to track a game object. Expects an entity with a TrackEntity
-      # component attached
       def track(loc=position,entity_type='npc')
         GameMachine::GameSystems::EntityTracking::GRID.set(entity.id,loc.x,loc.z,loc.y,entity_type)
       end

@@ -1,6 +1,14 @@
 require_relative 'npc_controller'
+require_relative 'combat_controller'
+require_relative 'player_controller'
+
 module Demo
   class Game
+
+    attr_reader :game_root
+    def initialize(game_root)
+      @game_root = game_root
+    end
 
     def start
       load_game_data
@@ -19,23 +27,23 @@ module Demo
       x = rand(max) + 1
       z = rand(max) + 1
       y = 1.10
-      entity = MessageLib::Entity.new
+      entity = GameMachine::MessageLib::Entity.new
       entity.set_health(
-        MessageLib::Health.new.set_health(100)
+        GameMachine::MessageLib::Health.new.set_health(100)
       )
       entity.set_id(id)
       entity.set_create_singleton(
-        CreateSingleton.new.set_id(id).set_controller(Demo::NpcController.name)
+        GameMachine::MessageLib::CreateSingleton.new.set_id(id).set_controller(Demo::NpcController.name)
       )
-      entity.set_is_npc(IsNpc.new.set_enabled(true))
-      entity.set_vector3(Vector3.new.set_x(x.to_f).set_y(y.to_f).set_z(z.to_f))
+      entity.set_is_npc(GameMachine::MessageLib::IsNpc.new.set_enabled(true))
+      entity.set_vector3(GameMachine::MessageLib::Vector3.new.set_x(x.to_f).set_y(y.to_f).set_z(z.to_f))
 
       GameMachine::GameSystems::SingletonManager.find.tell(entity)
     end
 
     def load_game_data
       GameMachine::GameData.load_from(
-        File.join(GameMachine.app_root,'lib/demo/game_data.yml')
+        File.join(game_root,'/data/game_data.yml')
       )
     end
   end
