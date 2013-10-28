@@ -22,7 +22,7 @@ module GameMachine
         # class
         def set_player_controller
           @@player_controller = self
-          GameMachine.logger.info("MessageLib::Player controller set to #{self.name}")
+          GameMachine.logger.info("Player controller set to #{self.name}")
         end
 
         def player_controller
