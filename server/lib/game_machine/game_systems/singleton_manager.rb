@@ -1,7 +1,12 @@
 module GameMachine
   module GameSystems
     
-    # @note Manages the lifecycle of singleton controllers  
+    # TODO: register with cluster monitor so we can restart singletons if the 
+    # node they are on goes down.
+
+    # Updates should be optional, they aren't always wanted.
+
+e   # @note Manages the lifecycle of singleton controllers  
     #   - Sends a string message of 'update' to all singleton controllers
     #     at the update interval specifed in Settings::singleton_manager.update_count  
     #
