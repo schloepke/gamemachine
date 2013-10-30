@@ -3,6 +3,9 @@ module GameMachine
     class Udp < Actor::Base
       GAME_HANDLER = Settings.game_handler
 
+      # TODO lookup inactive clients, and send a client_disconnected
+      # message to the request handler.  Currently clients that do not
+      # send a logout get left in the world
       def post_init(*args)
         @clients = {}
         @socket = nil

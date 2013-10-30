@@ -11,7 +11,7 @@ module GameMachine
       subject{NavigationCommands.new}
 
       before(:each) do
-        Navigation::DetourPath.stub(:new).and_return(query_ref)
+        Navigation::DetourPath.stub(:query_ref).and_return(query_ref)
         Navigation::DetourNavmesh.stub(:create).and_return(navmesh)
         Navigation::DetourNavmesh.stub(:find).and_return(navmesh)
       end
@@ -43,7 +43,7 @@ module GameMachine
 
       describe "#query_ref" do
         it "returns a navmesh query reference" do
-          expect(subject.query_ref(navmesh)).to eql(query_ref)
+          expect(subject.query_ref(1)).to eql(query_ref)
         end
       end
     end

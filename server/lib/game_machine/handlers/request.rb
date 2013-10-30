@@ -6,10 +6,10 @@ module GameMachine
         if message.is_a?(MessageLib::ClientMessage)
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
-              logged_out(message)
+              PlayerManager.find.tell(message,get_self)
             end
           elsif message.has_client_disconnect
-            disconnected(message)
+            PlayerManager.find.tell(message,get_self)
           elsif message.has_player
             update_entities(message)
             if Authentication.authenticated?(message.player)
@@ -29,16 +29,6 @@ module GameMachine
 
       def game_handler
         @game_handler ||= Handlers::Game.find
-      end
-
-      def logged_out(message)
-        PlayerRegistry.find.tell(message.player_logout)
-        GameSystems::EntityTracking::GRID.remove(message.player.id)
-        Authentication.unregister_player(message.player.id)
-      end
-
-      def disconnected(message)
-        PlayerRegistry.find.tell(message.client_disconnect)
       end
 
       def update_entities(message)

@@ -7,8 +7,7 @@ module GameMachine
       def post_init
       end
 
-      def destroy_player_controller(message)
-        id = message.player.id
+      def destroy_player_controller(id)
         if controller = PLAYER_CONTROLLERS.fetch(id,nil)
           controller.tell(JavaLib::PoisonPill.get_instance,get_self)
           PLAYER_CONTROLLERS.delete(id)
@@ -39,7 +38,19 @@ module GameMachine
       def on_receive(message)
         if message.is_a?(MessageLib::Entity)
           if message.has_player_logout
-            destroy_player_controller(message)
+            PlayerRegistry.find.tell(message.player_logout)
+            GameSystems::EntityTracking::GRID.remove(message.player.id)
+            Authentication.unregister_player(message.player.id)
+            destroy_player_controller(message.player.id)
+            return
+          elsif message.has_client_disconnect
+            PlayerRegistry.find.tell(message.client_disconnect)
+            if player_id = PlayerRegistry.player_id_for(message.client_connection.id)
+              GameSystems::EntityTracking::GRID.remove(player_id)
+              Authentication.unregister_player(player_id)
+              destroy_player_controller(player_id)
+            end
+            return
           elsif message.has_player_authenticated
             create_player_controller(message)
           end

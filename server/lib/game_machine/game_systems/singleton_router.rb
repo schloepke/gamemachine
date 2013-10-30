@@ -8,26 +8,6 @@ module GameMachine
         @singleton_controllers = {}
       end
 
-      def destroy_child_controller(message)
-        id = message.destroy_singleton.id
-        if controller = @singleton_controllers.fetch(id,nil)
-          controller.tell(JavaLib::PoisonPill.get_instance,get_self)
-          @singleton_controllers.delete(id)
-        else
-          GameMachine.logger.error("Singleton Controller for #{id} not found")
-        end
-      end
-
-      def create_child_controller(message)
-        id = message.create_singleton.id
-        controller_class = message.create_singleton.controller.constantize
-        builder = Actor::Builder.new(controller_class,message)
-        child = builder.with_parent(context).with_name(id).start
-        @singleton_controllers[id] = child
-      rescue Exception => e
-        GameMachine.logger.error("CreateSingleton error: #{e.class} #{e.message}")
-      end
-
       def on_receive(message)
         if message.is_a?(String)
           if message == 'update'
@@ -48,6 +28,26 @@ module GameMachine
             destroy_child_controller(message)
           end
         end
+      end
+
+      def destroy_child_controller(message)
+        id = message.destroy_singleton.id
+        if controller = @singleton_controllers.fetch(id,nil)
+          controller.tell(JavaLib::PoisonPill.get_instance,get_self)
+          @singleton_controllers.delete(id)
+        else
+          GameMachine.logger.error("Singleton Controller for #{id} not found")
+        end
+      end
+
+      def create_child_controller(message)
+        id = message.create_singleton.id
+        controller_class = message.create_singleton.controller.constantize
+        builder = Actor::Builder.new(controller_class,message)
+        child = builder.with_parent(context).with_name(id).start
+        @singleton_controllers[id] = child
+      rescue Exception => e
+        GameMachine.logger.error("CreateSingleton error: #{e.class} #{e.message}")
       end
 
     end

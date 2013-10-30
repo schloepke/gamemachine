@@ -12,6 +12,7 @@ module GameMachine
     end
 
     describe "#commands" do
+
       it "should be present on any instance that includes Commands module" do
         expect(subject.commands).to be_a(Commands::Base)
       end

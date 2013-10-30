@@ -62,6 +62,7 @@ module GameMachine
         end
       end
 
+      # TODO destroy topic handler when leaving channel
       def leave_channels(chat_channels)
         chat_channels.each do |channel|
           if topic_handler = topic_handler_for(channel.name)

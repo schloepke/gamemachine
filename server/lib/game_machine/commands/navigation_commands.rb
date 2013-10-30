@@ -16,8 +16,8 @@ module GameMachine
         GameMachine::Navigation::DetourNavmesh.find(1)
       end
 
-      def query_ref(navmesh)
-        GameMachine::Navigation::DetourPath.new(navmesh)
+      def query_ref(navmesh_id)
+        GameMachine::Navigation::DetourPath.query_ref(navmesh_id)
       end
     end
   end

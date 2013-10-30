@@ -25,6 +25,9 @@ module GameMachine
       def initialize(id,meshfile)
         @id = id
         @meshfile = meshfile
+        unless File.exists?(meshfile)
+          raise "Navigation mesh file does not exist (#{meshfile})"
+        end
         @loaded = false
       end
 

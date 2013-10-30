@@ -31,11 +31,7 @@ module Demo
       @target_id = nil
       @target_position = GameMachine::Vector.new
 
-      if @navmesh = commands.navigation.navmesh(1)
-        @pathfinder = commands.navigation.query_ref(@navmesh)
-      else
-        raise "Navmesh not set!"
-      end
+      @pathfinder = commands.navigation.query_ref(1)
       position.set(entity.vector3.x, entity.vector3.y, entity.vector3.z)
       @home_position = position.clone
       @move_to = GameMachine::Vector.new

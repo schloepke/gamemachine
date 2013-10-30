@@ -2,6 +2,14 @@ module GameMachine
   module Navigation
     class DetourPath
 
+      def self.query_ref(navmesh_id)
+        if navmesh = DetourNavmesh.find(navmesh_id)
+          Thread.current[navmesh_id.to_s.to_sym] ||= new(navmesh)
+        else
+          raise "Navmesh with id #{navmesh_id} not found"
+        end
+      end
+
       attr_reader :navmesh, :error, :max_paths
       def initialize(navmesh)
         @navmesh = navmesh
