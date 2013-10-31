@@ -3,6 +3,10 @@ module GameMachine
     class TcpHandler < Actor::Base
       GAME_HANDLER = Settings.game_handler
 
+      # TODO buffer incoming messages until we know we have a complete message
+      #  protocol should be message length + semi colon + message.  This
+      # allows for space efficient encoding of the size, and we know up front
+      # what the size is.
       def post_init(*args)
         @con_ref = nil
         @client_id = nil

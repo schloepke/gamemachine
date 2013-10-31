@@ -44,16 +44,33 @@ module GameMachine
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
-      describe "joining and leaving channels" do
-        before(:each) do
-          Actor::Builder.new(GameSystems::Chat,player_id).start
-          MessageQueue.stub(:find).and_return(actor_ref)
-          PlayerRegistry.register_player(
-            game_message.client_message.player.id,
-            game_message.client_connection(client_id,gateway)
-          )
+      before(:each) do
+        Actor::Builder.new(GameSystems::Chat,player_id).start
+        MessageQueue.stub(:find).and_return(actor_ref)
+        PlayerRegistry.register_player(
+          game_message.client_message.player.id,
+          game_message.client_connection(client_id,gateway)
+        )
+      end
+
+      describe "#subscribers_for_topic" do
+        it "subcriber id list is empty when no subscribers" do
+          subscribers = Chat.subscribers_for_topic(topic)
+          expect(subscribers.get_subscriber_id_count).to eql(0)
         end
 
+        it "subscriber id list contains player ids for subscribed players" do
+          Chat.should_receive_message(join_request) do
+            Chat.find.tell(join_request)
+          end
+          subscribers = Chat.subscribers_for_topic(topic)
+          expect(subscribers.get_subscriber_id_count).to eql(1)
+          expect(subscribers.get_subscriber_id_list.first).to eql(player_id)
+        end
+
+      end
+
+      describe "joining and leaving channels" do
         it "processes the entity as a leave channel request" do
           Chat.any_instance.should_receive(:leave_channels)
           Chat.should_receive_message(leave_request) do

@@ -21,6 +21,10 @@ module GameMachine
         GameSystems::Chat.find.tell(leave_message(topic))
       end
 
+      def subscribers(topic)
+        GameMachine::GameSystems::Chat.subscribers_for_topic(topic)
+      end
+
       private
 
       def join_message(topic)

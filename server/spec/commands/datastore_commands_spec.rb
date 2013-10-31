@@ -14,8 +14,13 @@ module GameMachine
       subject{DatastoreCommands.new}
 
       before(:each) do
-        subject.define_dbproc(:test1) do |entity|
-          entity
+        subject.define_dbproc(:test1) do |current_entity,update_entity|
+          expect(update_entity).to eql(entity)
+          current_entity
+        end
+        subject.define_dbproc(:test2) do |current_entity,update_entity|
+          current_entity.set_entity_type('dunno')
+          current_entity
         end
       end
 
@@ -26,24 +31,33 @@ module GameMachine
       end
 
       describe "#dbproc" do
-        it "call with entity id, returns entity" do
+        it "call with entity id and update entity, returns entity" do
           subject.put(entity)
           sleep 0.100
             
-          result = subject.call_dbproc(:test1, entity.get_id,true)
+          result = subject.call_dbproc(:test1, entity.get_id,entity,true)
           result.should be_kind_of(MessageLib::Entity)
           result.get_id.should == entity.get_id
+        end
+
+        it "returns updated entity" do
+          subject.put(entity)
+          sleep 0.100
+            
+          result = subject.call_dbproc(:test2, entity.get_id,entity,true)
+          result.get_entity_type.should == 'dunno'
         end
 
         it "returns true when called with blocking=false" do
           subject.put(entity)
           sleep 0.100
             
-          subject.call_dbproc(:test1, entity.get_id,false).should be_true
+          subject.call_dbproc(:test1, entity.get_id,entity,false).should be_true
         end
 
-        it "returns false if called with an entity id that does not exist" do
-          subject.call_dbproc(:test1, 'blah',true).should be_false
+        it "if called with an entity id that does not exist, it creates it" do
+          returned_entity = subject.call_dbproc(:test1, 'blah',entity,true)
+          expect(returned_entity.id).to eql('blah')
         end
       end
 

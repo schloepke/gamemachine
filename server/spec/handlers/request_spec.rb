@@ -34,27 +34,25 @@ module GameMachine
       describe "#on_receive" do
 
         before(:each) do
+          GameMachine::GameSystems::PlayerManager.stub(:find).and_return(actor_ref)
           Handlers::Authentication.stub(:find_distributed_local).and_return(actor_ref)
           Actor::Builder.new(Request).with_name('test_request_handler').start
         end
 
-        it "logs out player if MessageLib::PlayerLogout present" do
+        it "notifies player manager when logout message sent" do
+          Handlers::Authentication.stub(:authenticated?).and_return(true)
           message = client_message
           message.set_player_logout(player_logout)
-          expect(PlayerRegistry).to receive(:player_logout).with(
-            message.player_logout.player_id
-          )
+          expect(actor_ref).to receive(:tell).with(message)
           Request.should_receive_message(message,'test_request_handler') do
             Request.find('test_request_handler').tell(message)
           end
         end
 
-        it "disconnects client if ClientDisconnect present" do
+        it "notifies player manager on client disconnect" do
           message = client_message
           message.set_client_disconnect(client_disconnect)
-          expect(PlayerRegistry).to receive(:client_disconnect).with(
-            message.client_disconnect.client_connection
-          )
+          expect(actor_ref).to receive(:tell).with(message)
           Request.should_receive_message(message,'test_request_handler') do
             Request.find('test_request_handler').tell(message)
           end

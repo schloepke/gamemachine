@@ -118,6 +118,10 @@ message ChatMessage {
 message ChatRegister {
 }
 
+message Subscribers {
+  repeated string subscriberId = 1;
+}
+
 message Subscribe {
   optional string topic = 1;
 }
@@ -141,9 +145,10 @@ message ObjectdbPut {
 }
 
 message ObjectdbUpdate {
-  required string entityId = 1;
-  required string updateClass = 2;
+  required string currentEntityId = 1;
+  optional string updateClass = 2;
   required string updateMethod = 3;
+  required Entity updateEntity = 4;
 }
 
 message ClientConnection {
@@ -288,6 +293,7 @@ message Entity {
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
   optional Rpc rpc = 40;
+  optional Subscribers subscribers = 41;
   optional Health health = 101;
 optional Effect effect = 102;
 optional EffectList effectList = 103;

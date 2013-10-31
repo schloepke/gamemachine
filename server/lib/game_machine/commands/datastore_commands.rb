@@ -6,9 +6,12 @@ module GameMachine
         ObjectDb.dbprocs[name] = blk
       end
 
-      def call_dbproc(name,entity_id,blocking=true)
-        ref = ObjectDb.find_distributed(entity_id)
-        message = MessageLib::ObjectdbUpdate.new.set_entity_id(entity_id).set_update_class('deprecated').set_update_method(name)
+      def call_dbproc(name,current_entity_id,update_entity,blocking=true)
+        ref = ObjectDb.find_distributed(current_entity_id)
+        message = MessageLib::ObjectdbUpdate.new.
+          set_current_entity_id(current_entity_id).
+          set_update_method(name).
+          set_update_entity(update_entity)
         if blocking
           ref.ask(message, 100)
         else

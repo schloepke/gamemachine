@@ -1,6 +1,7 @@
 module GameMachine
   module GameSystems
     class ChatTopic < Actor::Base
+      include Commands
 
       def post_init(*args)
         @player_id = args.first
@@ -19,13 +20,7 @@ module GameMachine
 
       def receive_chat_message(chat_message)
         GameMachine.logger.info "Sending chat message #{chat_message.message} to #{@player_id}"
-        entity = MessageLib::Entity.new
-        player = MessageLib::Player.new.set_id(@player_id)
-        entity.set_id(player.id)
-        entity.set_player(player)
-        entity.set_chat_message(chat_message)
-        entity.set_send_to_player(true)
-        PlayerGateway.find.tell(entity)
+        commands.player.send_message(chat_message,@player_id)
       end
 
     end

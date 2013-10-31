@@ -129,8 +129,7 @@ test:
   singleton_manager_router_count: 200
   singleton_manager_update_interval: 100
   seeds:
-  - seed01
-  - seed02
+  - default
   auth_handler: GameMachine::AuthHandlers::Basic
   servers:
     default:

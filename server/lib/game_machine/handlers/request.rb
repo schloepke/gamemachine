@@ -6,10 +6,10 @@ module GameMachine
         if message.is_a?(MessageLib::ClientMessage)
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
-              PlayerManager.find.tell(message,get_self)
+              GameMachine::GameSystems::PlayerManager.find.tell(message)
             end
           elsif message.has_client_disconnect
-            PlayerManager.find.tell(message,get_self)
+            GameMachine::GameSystems::PlayerManager.find.tell(message)
           elsif message.has_player
             update_entities(message)
             if Authentication.authenticated?(message.player)

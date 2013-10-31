@@ -31,13 +31,16 @@ module GameMachine
     def on_receive(message)
       if message.is_a?(MessageLib::ObjectdbUpdate)
         procname = message.get_update_method.to_sym
-        if entity = get_entity(message.get_entity_id)
-          returned_entity = self.class.dbprocs[procname].call(entity)
-          set_entity(returned_entity)
-          sender.tell(returned_entity || false)
-        else
-          sender.tell(false)
+        current_entity_id = message.get_current_entity_id
+        update_entity = message.get_update_entity
+        unless current_entity = get_entity(current_entity_id)
+          current_entity = MessageLib::Entity.new.set_id(current_entity_id)
         end
+        returned_entity = self.class.dbprocs[procname].call(
+          current_entity,update_entity
+        )
+        set_entity(returned_entity)
+        sender.tell(returned_entity || false)
       elsif message.is_a?(MessageLib::ObjectdbPut)
         set_entity(message.get_entity)
         sender.tell(true)

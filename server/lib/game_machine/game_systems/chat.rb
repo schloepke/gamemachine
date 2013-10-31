@@ -3,10 +3,40 @@ module GameMachine
     class Chat < Actor::Base
       include GameMachine::Commands
 
+      def self.subscribers_for_topic(topic)
+        datastore = GameMachine::Commands::DatastoreCommands.new
+        if entity = datastore.get("chat_topic_#{topic}")
+          entity.subscribers || MessageLib::Subscribers.new
+        else
+          MessageLib::Subscribers.new
+        end
+      end
+
+      def define_update_procs
+        commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
+          if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
+            subscriber_id_list.remove(update_entity.id)
+          end
+          current_entity
+        end
+
+        commands.datastore.define_dbproc(:chat_add_subscriber) do |current_entity,update_entity|
+          unless current_entity.has_subscribers
+            current_entity.set_subscribers(MessageLib::Subscribers.new)
+          end
+          if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
+            subscriber_id_list.remove(update_entity.id)
+          end
+          current_entity.subscribers.add_subscriber_id(update_entity.id)
+          current_entity
+        end
+      end
+
       def post_init(*args)
         @player_id = args.first
         @topic_handlers = {}
         @subscriptions = []
+        define_update_procs
       end
 
       def on_receive(entity)
@@ -52,6 +82,18 @@ module GameMachine
         @topic_handlers[topic] = actor_ref
       end
 
+      def remove_subscriber(subscriber_id,topic)
+        stored_entity_id = "chat_topic_#{topic}"
+        entity = MessageLib::Entity.new.set_id(subscriber_id)
+        commands.datastore.call_dbproc(:chat_remove_subscriber,stored_entity_id,entity)
+      end
+
+      def add_subscriber(subscriber_id,topic)
+        stored_entity_id = "chat_topic_#{topic}"
+        entity = MessageLib::Entity.new.set_id(subscriber_id)
+        commands.datastore.call_dbproc(:chat_add_subscriber,stored_entity_id,entity)
+      end
+
       def join_channels(chat_channels)
         chat_channels.each do |channel|
           next if @topic_handlers[channel.name]
@@ -59,6 +101,7 @@ module GameMachine
           message = MessageLib::Subscribe.new.set_topic(channel.name)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
           @subscriptions << channel.name
+          add_subscriber(@player_id,channel.name)
         end
       end
 
@@ -69,8 +112,9 @@ module GameMachine
             message = MessageLib::Unsubscribe.new.set_topic(channel.name)
             message_queue.tell(message,topic_handler_for(channel.name).actor)
             @subscriptions.delete_if {|sub| sub == channel.name}
+            remove_subscriber(@player_id,channel.name)
           else
-            GameMachine.logger.info "leave_channel: no topic handler found for #{topic}"
+            GameMachine.logger.info "leave_channel: no topic handler found for #{channel.name}"
           end
         end
       end
