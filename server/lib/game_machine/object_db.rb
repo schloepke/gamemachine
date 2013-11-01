@@ -8,20 +8,31 @@ module GameMachine
       end
     end
 
+    attr_accessor :entities, :store
     def post_init(*args)
       @entities = {}
       @store = DataStore.instance
     end
 
+    def delete_entity(entity_id)
+      entities.delete(entity_id)
+      @store.delete(entity_id)
+    end
+
+    def delete_all
+      entities = {}
+      store.delete_all
+    end
+
     def set_entity(entity)
-      @entities[entity.id] = entity
+      entities[entity.id] = entity
       WriteBehindCache.find_distributed(entity.id).tell(entity)
     end
 
     def get_entity(entity_id)
-      entity = @entities.fetch(entity_id,nil)
+      entity = entities.fetch(entity_id,nil)
       if entity.nil?
-        if bytes = @store.get(entity_id)
+        if bytes = store.get(entity_id)
           entity = MessageLib::Entity.parse_from(bytes)
         end
       end
@@ -46,6 +57,8 @@ module GameMachine
         sender.tell(true)
       elsif message.is_a?(MessageLib::ObjectdbGet)
         sender.tell(get_entity(message.get_entity_id) || false)
+      elsif message.is_a?(MessageLib::ObjectdbDel)
+        delete_entity(message.get_entity_id)
       else
         unhandled(message)
       end

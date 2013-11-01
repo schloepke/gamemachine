@@ -66,7 +66,7 @@ Setting.create(
   :mono_enabled => true,
   :couchbase_servers => 'http://217.0.0.1:8091/pools',
   :auth_handler => 'GameMachine::AuthHandlers::Basic',
-  :seeds => "seed01,seed02"
+  :seeds => "default"
 )
 
 #development servers

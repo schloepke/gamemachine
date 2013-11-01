@@ -6,7 +6,7 @@ module GameMachine
     include Singleton
     extend Forwardable
 
-    def_delegators :@store, :get, :set, :shutdown
+    def_delegators :@store, :get, :set, :delete, :delete_all, :shutdown
 
     def initialize
       @store_name = Settings.data_store

@@ -9,6 +9,10 @@ module GameMachine
         entity(id).set_player(MessageLib::Player.new.set_id(player_id))
       end
 
+      def set_player(entity,player_id)
+        entity.set_player(MessageLib::Player.new.set_id(player_id))
+      end
+
       def is_component?(obj)
         obj.respond_to?(:message_name)
       end

@@ -2,7 +2,6 @@ require 'spec_helper'
 
 module GameMachine
   module GameSystems
-    
     describe Chat do
 
       let(:player_id) {'player1'}
@@ -10,6 +9,10 @@ module GameMachine
       let(:chat_text) {'test text'}
       let(:client_id) {'player1_id'}
       let(:gateway) {'blah'}
+
+      let(:commands) do
+        Commands::Base.new
+      end
 
       let(:game_message) do
         Helpers::GameMessage.new(player_id)
@@ -44,6 +47,13 @@ module GameMachine
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
+      subject do
+        props = JavaLib::Props.new(GameSystems::Chat);
+        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'chat_test');
+        ref.underlying_actor.post_init(player_id)
+        ref.underlying_actor
+      end
+
       before(:each) do
         Actor::Builder.new(GameSystems::Chat,player_id).start
         MessageQueue.stub(:find).and_return(actor_ref)
@@ -51,23 +61,30 @@ module GameMachine
           game_message.client_message.player.id,
           game_message.client_connection(client_id,gateway)
         )
+        commands.datastore.delete("chat_topic_#{topic}")
       end
 
       describe "#subscribers_for_topic" do
-        it "subcriber id list is empty when no subscribers" do
+        it "subscriber id count is zero when no subscribers" do
           subscribers = Chat.subscribers_for_topic(topic)
           expect(subscribers.get_subscriber_id_count).to eql(0)
         end
+      end
 
-        it "subscriber id list contains player ids for subscribed players" do
-          Chat.should_receive_message(join_request) do
-            Chat.find.tell(join_request)
-          end
+      describe "subscribers list updates" do
+        it "joining a channel adds player to subscriber list" do
+          subject.on_receive(join_request)
           subscribers = Chat.subscribers_for_topic(topic)
           expect(subscribers.get_subscriber_id_count).to eql(1)
           expect(subscribers.get_subscriber_id_list.first).to eql(player_id)
         end
 
+        it "leaving a channel removes player as subscriber" do
+          subject.on_receive(join_request)
+          subject.on_receive(leave_request)
+          subscribers = Chat.subscribers_for_topic(topic)
+          expect(subscribers.get_subscriber_id_count).to eql(0)
+        end
       end
 
       describe "joining and leaving channels" do

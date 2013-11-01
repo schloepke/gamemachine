@@ -34,6 +34,5 @@ end
 
 begin
   require_relative 'message_expectations'
-  #require_relative '../lib/demo'
 rescue LoadError
 end

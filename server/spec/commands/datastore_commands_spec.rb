@@ -11,6 +11,12 @@ module GameMachine
         entity
       end
 
+      let(:entity2) do
+        entity = MessageLib::Entity.new
+        entity.set_id('2')
+        entity
+      end
+
       subject{DatastoreCommands.new}
 
       before(:each) do
@@ -70,6 +76,14 @@ module GameMachine
           subject.put(entity)
           sleep 0.100
           subject.get('1').should == entity
+        end
+      end
+
+      describe "#delete" do
+        it "removes the entity from the data store" do
+          subject.put(entity)
+          subject.delete(entity.id)
+          subject.get('1').should be_false
         end
       end
     end

@@ -6,6 +6,9 @@ module GameMachine
       def send_message(message,player_id)
         if is_entity?(message)
           entity = message
+          unless entity.has_player
+            set_player(entity,player_id)
+          end
         else
           entity = entity_with_player(player_id,player_id)
           if is_component?(message)

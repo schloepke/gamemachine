@@ -24,9 +24,6 @@ module GameMachine
           unless current_entity.has_subscribers
             current_entity.set_subscribers(MessageLib::Subscribers.new)
           end
-          if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
-            subscriber_id_list.remove(update_entity.id)
-          end
           current_entity.subscribers.add_subscriber_id(update_entity.id)
           current_entity
         end
@@ -60,7 +57,8 @@ module GameMachine
         channels = MessageLib::ChatChannels.new
         @subscriptions.each do |name|
           channels.add_chat_channel(
-            MessageLib::ChatChannel.new.set_name(name)
+            MessageLib::ChatChannel.new.set_name(name).
+            set_subscribers(self.class.subscribers_for_topic(name))
           )
         end
         commands.player.send_message(channels,@player_id)

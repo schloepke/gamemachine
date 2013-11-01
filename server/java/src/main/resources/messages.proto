@@ -63,6 +63,7 @@ message ChatChannels {
 
 message ChatChannel {
   required string name = 1;
+  optional Subscribers subscribers = 2;
 }
 
 message JoinChat {
@@ -100,7 +101,11 @@ message Publish {
   required Entity message = 2;
   optional string path = 3;
 }
-	
+
+message ObjectdbDel {
+  required string entityId = 1;
+}
+
 message ObjectdbGet {
   required string entityId = 1;
 }
