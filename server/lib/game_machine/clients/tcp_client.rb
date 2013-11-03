@@ -5,9 +5,9 @@ module GameMachine
   module Clients
     class TcpClient
 
-      def initialize(server)
-        @host = Settings.servers.send(server).tcp_host
-        @port = Settings.servers.send(server).tcp_port
+      def initialize(host,port)
+        @host = host
+        @port = port
         @socket = TCPSocket.open(@host,@port)
       end
 

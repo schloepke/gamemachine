@@ -8,6 +8,10 @@ module GameMachine
     include_package 'akka.zeromq'
   end
 
+  module ProtoLib
+    include_package 'com.dyuproject.protostuff'
+  end
+
   module JavaLib
     include_package 'akka.serialization'
     include_package 'pathfinder'
@@ -33,6 +37,7 @@ module GameMachine
     include_package 'scala.concurrent'
     include_package 'java.io.Serializable'
     include_package 'java.util'
+    include_package 'java.io'
     include_package 'com.couchbase.client'
     include_package 'io.netty.channel'
     include_package 'com.overload.loc'

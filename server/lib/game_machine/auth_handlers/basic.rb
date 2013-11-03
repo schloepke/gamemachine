@@ -4,12 +4,21 @@ module GameMachine
     class Basic
 
       def initialize
+        reset
         load_users
       end
 
-      def load_users
+      def reset
         @users = {}
         @sessions = {}
+      end
+
+      def add_user(username,authtoken)
+        @sessions[username] = authtoken
+      end
+
+      def load_users
+        reset
         GameData.data.fetch(:game_users,[]).each do |user|
           @users[user['user']] = user['pass']
           if user['auth_token']

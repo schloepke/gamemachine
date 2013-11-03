@@ -2,6 +2,7 @@ require 'rubygems'
 require 'net/http'
 require 'descriptive_statistics'
 require 'benchmark'
+ENV['GAME_ENV'] = 'test'
 require_relative '../lib/game_machine'
 require_relative '../lib/game_machine/clients/test_client'
 
@@ -15,6 +16,7 @@ RSpec.configure do |config|
     GameMachine::Application.start_handlers
     GameMachine::Application.start_game_systems
     GameMachine::Application.load_games
+    GameMachine::Application.start_endpoints
     puts "before suite"
   end
 

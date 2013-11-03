@@ -8,8 +8,10 @@ module GameMachine
       # allows for space efficient encoding of the size, and we know up front
       # what the size is.
       def post_init(*args)
+        @name = args.first
         @con_ref = nil
         @client_id = nil
+        @message_buffer = MessageBuffer.new
       end
 
       def on_receive(message)
@@ -34,7 +36,7 @@ module GameMachine
       def client_disconnect_message(client_id)
         MessageLib::ClientMessage.new.set_client_disconnect(
           MessageLib::ClientDisconnect.new.set_client_connection(
-            MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name)
+            MessageLib::ClientConnection.new.set_id(client_id).set_gateway(@name)
           )
         )
       end
@@ -48,17 +50,20 @@ module GameMachine
       end
 
       def handle_incoming(message)
-        client_message = create_client_message(
-          message.data.to_array,@client_id
-        )
-        Actor::Base.find(GAME_HANDLER).tell(client_message,get_self)
+        @message_buffer.add_bytes(message.data.to_array)
+        @message_buffer.messages.each do |message_bytes|
+          client_message = create_client_message(
+            message_bytes,@client_id
+          )
+          Actor::Base.find(GAME_HANDLER).tell(client_message,get_self)
+        end
       rescue Exception => e
-        GameMachine.logger.error "#{self.class.name} #{e.to_s}"
+        GameMachine.logger.error "TcpHandler.handle_incoming: #{@name} #{e.to_s}"
       end
 
       def create_client_message(data,client_id)
         MessageLib::ClientMessage.parse_from(data).set_client_connection(
-          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
+          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(@name).
           set_server(Application.config.name)
         )
       end

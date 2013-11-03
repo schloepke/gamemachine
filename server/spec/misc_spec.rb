@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'jruby/core_ext'
 module GameMachine
   describe "misc" do 
     let(:entity) do 
@@ -12,10 +11,20 @@ module GameMachine
       entity
     end
 
-    it "calls java" do
-      cls = GameMachine::Commands::Proxy.become_java! false
-      puts GameMachine::Commands::Proxy.java_class
-      GameMachine::Commands::Proxy.call_java
+    it "protobuf delimited" do
+      message = MessageLib::ClientMessage.new.add_entity(
+        MessageLib::Entity.new.set_id('asjfl;asjflkasjdfljaslf')
+      )
+      prefixed_bytes = message.to_prefixed_byte_array 
+      bytes = message.to_byte_array
+      puts prefixed_bytes.size
+      puts bytes.size
+      stream = JavaLib::ByteArrayInputStream.new(prefixed_bytes)
+      puts "stream byte count #{stream.available}"
+      ProtoLib::CodedInput.readRawVarint32(stream, 1)
+      puts "stream byte count #{stream.available}"
+      bytes = Java::byte[stream.available].new
+      stream.read(bytes,0,stream.available)
     end
 
     it "marshal" do

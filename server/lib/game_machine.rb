@@ -23,6 +23,7 @@ java_import 'com.game_machine.core.net.client.UdtClientHandler'
 require_relative 'game_machine/java_lib'
 
 require_relative 'game_machine/version'
+require_relative 'game_machine/message_buffer'
 require_relative 'game_machine/vector'
 require_relative 'game_machine/logger'
 require_relative 'game_machine/settings'

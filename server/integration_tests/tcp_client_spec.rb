@@ -1,4 +1,4 @@
-
+require 'integration_helper'
 ENV['GAME_ENV'] = 'test'
 require 'rubygems'
 
@@ -7,45 +7,64 @@ begin
 rescue LoadError
   require_relative '../lib/game_machine'
 end
+
+def echo_test
+  GameMachine::MessageLib::EchoTest.new.set_message('testing')
+end
+
+def entity
+  GameMachine::MessageLib::Entity.new.set_id('1').set_echo_test(echo_test)
+end
+
+def message_for(client_message)
+  String.from_java_bytes(client_message.to_prefixed_byte_array)
+end
+
+def player_for(id)
+  GameMachine::MessageLib::Player.new.set_id(id).set_name(id).
+    set_authtoken('authorized')
+end
+
+def client_message_for(player)
+  GameMachine::MessageLib::ClientMessage.new.add_entity(entity).
+    set_player(player)
+end
+
 module GameMachine
 
   describe 'tcp client' do 
 
-    let(:player) do
-      Player.new.set_id('player').set_name('player').
-        set_authtoken('authorized')
-    end
-
-    let(:echo_test) do
-      EchoTest.new.set_message('testing')
-    end
-
-    let(:entity) do
-      MessageLib::Entity.new.set_id('1').set_echo_test(echo_test)
-    end
-
-    let(:client_message) do
-      ClientMessage.new.add_entity(entity).
-        set_player(player)
-    end
-
-    let(:message) do
-      String.from_java_bytes(client_message.to_byte_array)
-    end
-
-    let(:client) {Clients::TcpClient.new(:seed01)}
-
 
     describe "sending and receiving messages" do
       it "should receive reply" do
-        1.times do
-        client.send_message(message)
-        if bytes = client.receive_message.to_java_bytes
-          client_message = ClientMessage.parse_from(bytes)
-          #puts client_message.client_connection.id
-          #puts client_message.client_connection.gateway
+        threads = []
+        1.times do |i|
+          threads << Thread.new do
+            player = player_for("player_#{i}")
+            Application.auth_handler.add_user(player.id,player.authtoken)
+            message = message_for(client_message_for(player))
+            client = Clients::TcpClient.new('localhost',8700)
+            results = []
+            count = 0
+            100000.times do
+              #sleep 0.100
+              results << Benchmark.realtime do
+                client.send_message(message)
+                if bytes = client.receive_message.to_java_bytes
+                  #client_message = MessageLib::ClientMessage.parse_from(bytes)
+                end
+              end
+              count += 1
+              if count > 1000
+                puts "Number = #{results.number} Average #{results.mean} Standard deviation #{results.standard_deviation}"
+                count = 0
+                results = []
+              end
+            end
+            puts "Number = #{results.number} Average #{results.mean} Standard deviation #{results.standard_deviation}"
+          end
         end
-        end
+        threads.map(&:join)
       end
     end
   end

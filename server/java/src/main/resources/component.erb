@@ -13,6 +13,7 @@ import com.dyuproject.protostuff.GraphIOUtil;
 import com.dyuproject.protostuff.Input;
 import com.dyuproject.protostuff.Message;
 import com.dyuproject.protostuff.Output;
+import com.dyuproject.protostuff.ProtobufOutput;
 
 import java.io.ByteArrayOutputStream;
 import com.dyuproject.protostuff.JsonIOUtil;
@@ -352,7 +353,32 @@ public byte[] toJson() {
 	}
 	return out.toByteArray();
 }
-		
+
+public byte[] toPrefixedByteArray() {
+	LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+  Schema<<%=klass%>> schema = RuntimeSchema.getSchema(<%=klass%>.class);
+    
+	final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    final ProtobufOutput output = new ProtobufOutput(buffer);
+    try
+    {
+    	schema.writeTo(output, this);
+        final int size = output.getSize();
+        ProtobufOutput.writeRawVarInt32Bytes(out, size);
+        final int msgSize = LinkedBuffer.writeTo(out, buffer);
+        assert size == msgSize;
+        
+        buffer.clear();
+        return out.toByteArray();
+    }
+    catch (IOException e)
+    {
+        throw new RuntimeException("Serializing to a byte array threw an IOException " + 
+                "(should never happen).", e);
+    }
+ 
+}
+
 public byte[] toProtobuf() {
 	LinkedBuffer buffer = LinkedBuffer.allocate(8024);
 	byte[] bytes = null;
