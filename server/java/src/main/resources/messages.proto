@@ -264,6 +264,7 @@ message Entity {
   optional bool sendToPlayer = 39;
   optional Rpc rpc = 40;
   optional Subscribers subscribers = 41;
+  optional bool save = 42;
   //GAME_ENTITY_MESSAGES
 }
 

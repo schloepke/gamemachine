@@ -31,7 +31,7 @@ module GameMachine
     end
 
     def config_name
-      @cluster ? 'cluster' : 'system'
+      @cluster ? 'cluster' : 'standalone'
     end
 
     def akka_config
@@ -75,7 +75,7 @@ module GameMachine
     end
 
     def akka_server_config
-      config = load_akka_config('akka')
+      config = load_akka_config('standalone')
       config = set_address(config)
     end
 

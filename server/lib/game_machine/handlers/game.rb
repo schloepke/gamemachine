@@ -1,6 +1,7 @@
 module GameMachine
   module Handlers
     class Game < Actor::Base 
+      include Commands
 
       def on_receive(message)
         if message.is_a?(MessageLib::ClientMessage)
@@ -14,16 +15,16 @@ module GameMachine
 
       private
 
-      def registered_classes
-        Application.registered
-      end
-
       def dispatch_entities(entities)
         entities.each do |entity|
+          if entity.save
+            entity.set_save(false)
+            commands.datastore.put(entity)
+          end
           component_names = entity.component_names
           GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?
-          registered_classes.each do |klass|
+          Application.registered.each do |klass|
             dispatched = false
             klass.aspects.each do |aspect|
               next if dispatched

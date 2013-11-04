@@ -4,6 +4,12 @@ module GameMachine
     include_package 'com.game_machine.entity_system.generated'
   end
 
+  module RedisLib
+    include_package 'redis.clients.jedis'
+    include_package 'redis.clients.jedis.exceptions'
+    include_package 'redis.clients.util'
+  end
+
   module ZeromqLib
     include_package 'akka.zeromq'
   end

@@ -1,5 +1,8 @@
-
 require 'forwardable'
+require_relative 'data_stores/memory'
+require_relative 'data_stores/couchbase'
+require_relative 'data_stores/mapdb'
+require_relative 'data_stores/redis'
 
 module GameMachine
   class DataStore
@@ -33,6 +36,11 @@ module GameMachine
 
     def connect_mapdb
       @store = DataStores::Mapdb.new
+      @store.connect
+    end
+
+    def connect_redis
+      @store = DataStores::Redis.new
       @store.connect
     end
 

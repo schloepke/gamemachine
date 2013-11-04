@@ -16,7 +16,7 @@ module Demo
       load_game_data
       GameMachine::Actor::Builder.new(CombatController).
         with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
-      500.times do |i|
+      50.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
     end

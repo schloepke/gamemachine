@@ -4,9 +4,9 @@ SCRIPT_PATH=`dirname "$0"`; SCRIPT_PATH=`eval "cd \"$SCRIPT_PATH\" && pwd"`
 SERVER_HOME=$SCRIPT_PATH/../server
 cd $SERVER_HOME
 
-unset GEM_HOME
-unset BUNDLE_GEMFILE
-unset GEM_PATH
+#unset GEM_HOME
+#unset BUNDLE_GEMFILE
+#unset GEM_PATH
 CWD=$(pwd)
 APP_NAME=game_machine
 

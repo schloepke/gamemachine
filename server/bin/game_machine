@@ -11,39 +11,22 @@ rescue LoadError
 end
 
 opts = Trollop::options do
-  opt :new, "Create new game"
-  opt :boot, "Boot file.  Defaults to boot.rb", :type => :string
+  opt :cluster, "run in cluster mode", :type => :string
   opt :name, "Config name, defaults to 'default'", :type => :string
   opt :config, "Config file, defaults to  config/config.yml", :type => :string
   version "GameMachine 0.0.1"
   banner <<-EOS
 Usage:
-
-* Create new game in /tmp/mygame
-  --new /tmp/mygame
-
-* Start server seed01 with boot file mygame.rb:
-  --name=seed01 --boot=mygame.rb
-
 EOS
 end
 opts[:name].strip! if opts[:name]
-opts[:boot].strip! if opts[:boot]
 opts[:config].strip! if opts[:config]
-
-if opts[:new]
-  GameMachine::Runner.new_app(ARGV.shift)
-  exit 0
-end
+opts[:cluster].strip! if opts[:cluster]
 
 if opts[:config]
   ENV['CONFIG_FILE'] = opts[:config]
 end
 
-if opts[:boot]
-  ENV['boot'] = opts[:boot]
-end
-
 name = opts[:name] || 'default'
-GameMachine::Runner.start(name)
+GameMachine::Runner.start(name,opts[:cluster] || false)
 
