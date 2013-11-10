@@ -24,7 +24,7 @@ module GameMachine
 
 
       def find_grid_value_by_id(id)
-        GameMachine::GameSystems::EntityTracking::GRID.get(id)
+        GameMachine::GameSystems::EntityTracking.grid.get(id)
       end
 
       def neighbors(type='player')
@@ -32,7 +32,7 @@ module GameMachine
       end
 
       def track(loc=position,entity_type='npc')
-        GameMachine::GameSystems::EntityTracking::GRID.set(entity.id,loc.x,loc.z,loc.y,entity_type)
+        GameMachine::GameSystems::EntityTracking.grid.set(entity.id,loc.x,loc.z,loc.y,entity_type)
       end
 
     end

@@ -12,13 +12,13 @@
   .col-lg-12
     = form_for(@app_server, html: {class: 'form-horizontal' }) do |f|
       - if @section == :networking
-        = render :partial => 'networking'
+        = render :partial => 'networking', :locals => {:f => f}
       - elsif @section == :persistence
-        = render :partial => 'persistence'
+        = render :partial => 'persistence', :locals => {:f => f}
       - elsif @section == :world
-        = render :partial => 'world'
+        = render :partial => 'world', :locals => {:f => f}
       - elsif @section == :misc
-        = render :partial => 'misc'
+        = render :partial => 'misc', :locals => {:f => f}
       .form-group
         .col-lg-offset-1.col-lg-9
           = f.submit 'Update', :class => 'btn btn-primary btn-block'

@@ -47,7 +47,7 @@ ActiveRecord::Schema.define(version: 20131110041550) do
     t.datetime "updated_at"
   end
 
-  add_index "app_servers", ["name", "user_id"], name: "index_app_servers_on_name_and_user_id", unique: true, using: :btree
+  add_index "app_servers", ["name", "environment"], name: "index_app_servers_on_name_and_environment", unique: true, using: :btree
 
   create_table "clusters", force: true do |t|
     t.string  "name"
@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 20131110041550) do
   end
 
   create_table "users", force: true do |t|
+    t.string   "name"
+    t.boolean  "is_active"
     t.string   "email",                  default: "", null: false
     t.string   "encrypted_password",     default: "", null: false
     t.string   "reset_password_token"

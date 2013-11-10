@@ -41,7 +41,7 @@ module GameMachine
     def start
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
-      JavaLib::GameMachineLoader.new.run(actor_system,Settings.game_handler)
+      JavaLib::GameMachineLoader.new.run(actor_system,Application.config.game_handler)
       start_camel_extension
     end
 
@@ -59,7 +59,7 @@ module GameMachine
     end
 
     def set_seeds(config)
-      seeds = Settings.seeds.map do |seed| 
+      seeds = Application.config.seeds.map do |seed| 
         seed_host = Settings.servers.send(seed).akka_host
         seed_port = Settings.servers.send(seed).akka_port
         "\"akka.tcp://cluster@#{seed_host}:#{seed_port}\""
@@ -87,15 +87,15 @@ module GameMachine
     end
 
     def akka_host
-      Application.config.server.akka_host
+      Application.config.akka_host
     end
 
     def akka_port
-      Application.config.server.akka_port
+      Application.config.akka_port
     end
 
     def start_camel_extension
-      if Application.config.server.http_enabled
+      if Application.config.http_enabled
         camel = JavaLib::CamelExtension.get(Akka.instance.actor_system)
         camel_context = camel.context
       end

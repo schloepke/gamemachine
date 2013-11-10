@@ -62,7 +62,7 @@ module GameMachine
           y = arguments.get(2).to_i
           z = arguments.get(3).to_i
           entity_type = arguments.get(4)
-          GameMachine::GameSystems::EntityTracking::GRID.set(
+          GameMachine::GameSystems::EntityTracking.grid.set(
             id,x,z,y,entity_type
           )
         elsif method == 'neighbors'

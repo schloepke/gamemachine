@@ -8,14 +8,14 @@ module GameMachine
 
     def on_receive(message)
       if message.is_a?(String)
-        delta = GameMachine::GameSystems::EntityTracking::GRID.current_delta
+        delta = GameMachine::GameSystems::EntityTracking.grid.current_delta
         return if delta.length == 0
         GameMachine::ClusterMonitor.remote_members.keys.each do |address|
           @paths[address] ||= "#{address}#{self.class.local_path(self.class.name)}"
           Actor::Ref.new(@paths[address],self.class.name).tell(delta)
         end
       else
-        GameMachine::GameSystems::EntityTracking::GRID.update_from_delta(message)
+        GameMachine::GameSystems::EntityTracking.grid.update_from_delta(message)
       end
       
     end

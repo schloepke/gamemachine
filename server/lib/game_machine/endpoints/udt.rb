@@ -23,7 +23,8 @@ module GameMachine
             client_message = create_client_message(message.bytes,client_id)
           end
 
-          Actor::Base.find(Settings.game_handler).send_message(client_message, :sender => get_self)
+          Actor::Base.find(Application.config.game_handler).
+            send_message(client_message, :sender => get_self)
         elsif message.is_a?(MessageLib::ClientMessage)
           if @clients[message.client_connection.id]
             JavaLib::UdtServer.get_udt_server.send_to_client(

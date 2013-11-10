@@ -7,13 +7,21 @@ module GameMachine
       def initialize!(name='default', cluster=false)
         config.name = name
         config.cluster = cluster
-        map_settings
+        config.login_username = 'player'
+        config.authtoken = 'authorized'
+
+        Settings.servers.send(config.name).each do |key,value|
+          config.send("#{key}=",value)
+        end
 
         config.handlers = default_handlers
         config.request_handler_routers = 20
         config.game_handler_routers = 20
         config.authentication_handler_ring_size = 160
         akka.initialize!(config.name,config.cluster)
+        if config.mono_enabled
+          require_relative 'mono'
+        end
       end
 
       def auth_handler
@@ -77,29 +85,29 @@ module GameMachine
       def start_endpoints
         Actor::Builder.new(Endpoints::ActorUdp).start
 
-        if config.server.tcp_enabled
+        if config.tcp_enabled
           Actor::Builder.new(Endpoints::Tcp).start
           GameMachine.stdout(
-            "Tcp starting on #{config.server.tcp_host}:#{config.server.tcp_port}"
+            "Tcp starting on #{config.tcp_host}:#{config.tcp_port}"
           )
         end
 
-        if config.server.udp_enabled
+        if config.udp_enabled
           Actor::Builder.new(Endpoints::Udp).start
           GameMachine.stdout(
-            "UDP starting on #{config.server.udp_host}:#{config.server.udp_port}"
+            "UDP starting on #{config.udp_host}:#{config.udp_port}"
           )
         end
 
-        if config.server.udt_enabled
+        if config.udt_enabled
           Actor::Builder.new(Endpoints::Udt).start
-          JavaLib::UdtServer.start(config.server.udt_host,config.server.udt_port)
+          JavaLib::UdtServer.start(config.udt_host,config.udt_port)
           GameMachine.stdout(
-            "UDT starting on #{config.server.udt_host}:#{config.server.udt_port}"
+            "UDT starting on #{config.udt_host}:#{config.udt_port}"
           )
         end
         
-        if config.server.http_enabled
+        if config.http_enabled
           props = JavaLib::Props.new(Endpoints::Http::Auth)
           Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
           props = JavaLib::Props.new(Endpoints::Http::Rpc)
@@ -177,16 +185,6 @@ module GameMachine
         ]
       end
 
-      def map_settings
-        config.game_handler = Settings.game_handler
-        config.login_username = 'player'
-        config.authtoken = 'authorized'
-        config.data_store = Settings.data_store
-        config.seeds = Settings.seeds
-        config.servers = Settings.servers
-        server = config.servers.send(config.name)
-        config.server = server
-      end
 
     end
   end

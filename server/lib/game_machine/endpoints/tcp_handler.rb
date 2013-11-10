@@ -1,9 +1,10 @@
 module GameMachine
   module Endpoints
     class TcpHandler < Actor::Base
-      GAME_HANDLER = Settings.game_handler
 
+      attr_reader :game_handler
       def post_init(*args)
+        @game_handler = Application.config.game_handler
         @name = args.first
         @con_ref = nil
         @client_id = nil
@@ -13,7 +14,7 @@ module GameMachine
       def on_receive(message)
         if message.kind_of?(JavaLib::Tcp::ConnectionClosed)
           client_message = client_disconnect_message(@client_id)
-          Actor::Base.find(GAME_HANDLER).tell(client_message,get_self)
+          Actor::Base.find(game_handler).tell(client_message,get_self)
           get_context.stop(get_self)
         elsif message.kind_of?(JavaLib::Tcp::Received)
           handle_incoming(message)
@@ -51,7 +52,7 @@ module GameMachine
           client_message = create_client_message(
             message_bytes,@client_id
           )
-          Actor::Base.find(GAME_HANDLER).tell(client_message,get_self)
+          Actor::Base.find(game_handler).tell(client_message,get_self)
         end
       rescue Exception => e
         GameMachine.logger.error "TcpHandler.handle_incoming: #{@name} #{e.to_s}"

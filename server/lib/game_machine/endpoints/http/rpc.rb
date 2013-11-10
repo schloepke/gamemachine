@@ -10,7 +10,7 @@ module GameMachine
         end
 
         def getEndpointUri
-          return "jetty:http://#{Application.config.server.http_host}:#{Application.config.server.http_port}/rpc?traceEnabled=false"
+          return "jetty:http://#{Application.config.ttp_host}:#{Application.config.http_port}/rpc?traceEnabled=false"
         end
 
         def onReceive(message)

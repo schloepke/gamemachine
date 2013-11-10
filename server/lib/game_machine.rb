@@ -61,7 +61,4 @@ require_relative 'game_machine/navigation'
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-if GameMachine::Settings.mono_enabled
-  require_relative 'game_machine/mono'
-end
 

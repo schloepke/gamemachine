@@ -9,19 +9,25 @@ module GameMachine
     # @aspects GetNeighbors
     class EntityTracking < Actor::Base
 
-      GRID =  JavaLib::Grid.new(Settings.world_grid_size,Settings.world_grid_cell_size)
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
 
       attr_reader :grid
 
+      def self.grid
+        if @grid
+          @grid
+        else
+          @grid = JavaLib::Grid.new(Application.config.world_grid_size,Application.config.world_grid_cell_size)
+        end
+      end
 
       def post_init
         @entity_updates = []
-        @grid = GRID
+        @grid = self.class.grid
         @paths = {}
-        @width = GRID.get_width
-        @cell_count = GRID.get_cell_count
+        @width = grid.get_width
+        @cell_count = grid.get_cell_count
       end
 
       def on_receive(message)
@@ -91,7 +97,7 @@ module GameMachine
       end
 
       def self.neighbors_from_grid(x,z,neighbor_type)
-        GRID.neighbors(x,z,neighbor_type)
+        grid.neighbors(x,z,neighbor_type)
       end
 
       def self.neighbors_to_entity(x,z,neighbor_type)

@@ -36,7 +36,7 @@ module GameMachine
       end
 
       def destroy_player(player_id)
-        GameSystems::EntityTracking::GRID.remove(player_id)
+        GameSystems::EntityTracking.grid.remove(player_id)
         Authentication.unregister_player(player_id)
         destroy_player_controller(player_id)
       end

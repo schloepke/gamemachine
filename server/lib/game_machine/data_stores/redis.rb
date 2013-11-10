@@ -38,10 +38,6 @@ module GameMachine
         @pool.return_resource(jedis)
       end
 
-      def servers
-        Settings.couchbase_servers.map {|server| java.net.URI.new(server)}
-      end
-
       def shutdown
         @pool.destroy
       end

@@ -1,12 +1,13 @@
 module GameMachine
   module Endpoints
     class Udp < Actor::Base
-      GAME_HANDLER = Settings.game_handler
 
       # TODO lookup inactive clients, and send a client_disconnected
       # message to the request handler.  Currently clients that do not
       # send a logout get left in the world
+      attr_reader :game_handler
       def post_init(*args)
+        @game_handler = Application.config.game_handler
         @clients = {}
         @socket = nil
       end
@@ -52,7 +53,7 @@ module GameMachine
         client_message = create_client_message(
           message.data.to_array,message.sender.to_s
         )
-        Actor::Base.find(GAME_HANDLER).send_message(
+        Actor::Base.find(game_handler).send_message(
           client_message, :sender => get_self
         )
       rescue Exception => e

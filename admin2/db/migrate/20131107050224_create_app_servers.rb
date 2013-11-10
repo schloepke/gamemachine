@@ -33,6 +33,6 @@ class CreateAppServers < ActiveRecord::Migration
       t.integer   :akka_port
       t.timestamps
     end
-    add_index :app_servers, [:name, :user_id], :unique => true
+    add_index :app_servers, [:name, :environment], :unique => true
   end
 end

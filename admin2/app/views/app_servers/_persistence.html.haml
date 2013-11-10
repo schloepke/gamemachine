@@ -6,21 +6,21 @@
           %label.col-lg-4
             Cache writes per second
           .col-lg-3
-            = @server.text_field :cache_writes_per_second, :class => 'form-control'
+            = f.text_field :cache_writes_per_second, :class => 'form-control'
         .form-group
           %label.col-lg-4
             Cache write interval
           .col-lg-3
-            = @server.text_field :cache_write_interval, :class => 'form-control'
+            = f.text_field :cache_write_interval, :class => 'form-control'
         .form-group
           %label.col-lg-4
             Data store
           .col-lg-8
-            = @server.text_field :data_store, :class => 'form-control'
+            = f.text_field :data_store, :class => 'form-control'
         .form-group
           %label.col-lg-4
             Couchbase servers
           .col-lg-8
-            = @server.text_field :couchbase_servers, :class => 'form-control'
+            = f.text_field :couchbase_servers, :class => 'form-control'
       .col-lg-6
         About environment

@@ -11,7 +11,7 @@ module GameMachine
       end
 
       def servers
-        Settings.couchbase_servers.map {|server| java.net.URI.new(server)}
+        Application.config.couchbase_servers.map {|server| java.net.URI.new(server)}
       end
     end
   end

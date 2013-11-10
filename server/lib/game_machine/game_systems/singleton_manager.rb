@@ -38,12 +38,12 @@ module GameMachine
       aspect %w(DestroySingleton)
 
       def post_init(*args)
-        router_count = Settings.singleton_manager_router_count
+        router_count = Application.config.singleton_manager_router_count
         @actor_refs = create_singleton_routers(router_count)
 
         @slice_size = router_count / 10
         @slices = @actor_refs.each_slice(@slice_size).to_a
-        update_interval = Settings.singleton_manager_update_interval
+        update_interval = Application.config.singleton_manager_update_interval
         schedule_update(update_interval)
       end
 
@@ -88,7 +88,9 @@ module GameMachine
       end
 
       def schedule_update(update_interval)
-        duration = GameMachine::JavaLib::Duration.create(update_interval, java.util.concurrent.TimeUnit::MILLISECONDS)
+        duration = GameMachine::JavaLib::Duration.create(
+          update_interval, java.util.concurrent.TimeUnit::MILLISECONDS
+        )
         scheduler = get_context.system.scheduler
         dispatcher = get_context.system.dispatcher
         scheduler.schedule(duration, duration, get_self, "update", dispatcher, nil)

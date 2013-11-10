@@ -12,7 +12,7 @@ module GameMachine
     def_delegators :@store, :get, :set, :delete, :delete_all, :shutdown
 
     def initialize
-      @store_name = Settings.data_store
+      @store_name = Application.config.data_store
       connect
     end
 

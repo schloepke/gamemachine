@@ -5,7 +5,7 @@ module GameMachine
     describe GridCommands do
 
       let(:grid) do
-        GameMachine::GameSystems::EntityTracking::GRID
+        GameMachine::GameSystems::EntityTracking.grid
       end
 
       subject{GridCommands.new}

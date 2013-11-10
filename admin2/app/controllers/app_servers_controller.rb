@@ -28,7 +28,8 @@ class AppServersController < ApplicationController
   # POST /servers
   # POST /servers.json
   def create
-    @app_server = AppServer.new(server_params)
+    @app_server = AppServer.template.dup
+    @app_server.name = server_params.fetch(:name)
     respond_to do |format|
       if @app_server.save
         format.html { redirect_to @app_server, notice: 'AppServer was successfully created.' }
@@ -68,6 +69,6 @@ class AppServersController < ApplicationController
     end
 
     def server_params
-      params.require(:server).permit!
+      params.require(:app_server).permit!
     end
 end

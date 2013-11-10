@@ -1,7 +1,14 @@
 User.destroy_all
 Cluster.destroy_all
 AppServer.destroy_all
-user = User.create(:email => 'admin@gamemachine.io')
+user = User.new({
+  email: 'template@gamemachine.io',
+  password: 'password',
+  password_confirmation: 'password',
+  is_active: false
+})
+user.save!
+
 cluster = Cluster.create(:name => 'development')
 user.clusters << cluster
 app_server = AppServer.create(

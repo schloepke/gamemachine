@@ -10,7 +10,7 @@ module GameMachine
         :add_user
 
       def initialize
-        @handler = Settings.auth_handler.constantize.new
+        @handler = Application.config.auth_handler.constantize.new
       end
 
       def set_handler(handler_name)

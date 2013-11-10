@@ -1,57 +1,29 @@
 class GameConfig
 
-  attr_reader :servers, :app_settings, :environments
-  def initialize(user_id)
-    @servers = Server.where(:user_id => user_id)
-    @app_settings = AppSetting.where(:server_id => @servers.map(&:id))
-    @environments = @app_settings.map(&:environment)
+  attr_reader :app_servers, :environments
+  def initialize(user)
+    @app_servers = user.app_servers
   end
 
-  class << self
-    def environments
-      AppSetting.all.map(&:environment)
-    end
-
-    def string_to_array(str)
-      str.split(',')
-    end
-
-    def setting_to_hash(setting)
-      attributes = setting.attributes
-      attributes['seeds'] = string_to_array(attributes['seeds'])
-      attributes
-    end
-
-    def servers_to_hash(servers)
-      {}.tap do |server_hash|
-        servers.each do |server|
-          attributes = server.attributes
-          server_hash[server.name] = attributes
+  def export
+    config = Hash.new.tap do |config|
+      app_servers.map(&:environment).each do |env|
+        config[env] = {'servers' => {}}
+        app_servers.where(:environment => env).each do |app_server|
+          attributes = app_server.attributes
+          attributes.delete('name')
+          attributes['seeds'] = attributes['seeds'].to_s.split(',')
+          config[env]['servers'][app_server.name] = attributes
         end
       end
-    end
-
-    def write_config(yaml)
-      file = File.join(GAME_MACHINE_ROOT,'config','config.yml')
-      File.open(file,'w') {|f| f.write(yaml)}
-    end
-
-    def publish
-      write_config(generate)
-    end
-
-    def generate
-      config_hash = {}
-      environments.each do |env|
-        config_hash[env] = setting_to_hash(
-          Setting.find_by_environment(env)
-        )
-        config_hash[env]['servers'] = servers_to_hash(
-          Server.where(:environment => env)
-        )
-      end
-      config_hash.to_yaml
-    end
-
+    end.to_yaml
+    write_config(config)
   end
+
+  def write_config(yaml)
+    file = File.join(GAME_MACHINE_ROOT,'config','config.yml')
+    File.open(file,'w') {|f| f.write(yaml)}
+  end
+
+
 end
