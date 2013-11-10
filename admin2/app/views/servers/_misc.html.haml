@@ -1,0 +1,61 @@
+.panel.panel-default
+  .panel-body
+    .row
+      .col-lg-6
+        .form-group
+          %label.col-lg-4
+            Environment
+          .col-lg-8
+            = @app_server.text_field :environment, :class => 'form-control'
+      .col-lg-6
+        About environment
+.panel.panel-default
+  .panel-body
+    .row
+      .col-lg-6
+        .form-group
+          %label.col-lg-4
+            Game Handler
+          .col-lg-8
+            = @app_server.text_field :game_handler, :class => 'form-control'
+      .col-lg-6
+        About environment
+.panel.panel-default
+  .panel-body
+    .row
+      .col-lg-6
+        .form-group
+          %label.col-lg-4
+            Auth Handler
+          .col-lg-8
+            = @app_server.text_field :auth_handler, :class => 'form-control'
+      .col-lg-6
+        About environment
+.panel.panel-default
+  .panel-body
+    .row
+      .col-lg-6
+        .form-group
+          %label.col-lg-4
+            Singleton manager router count
+          .col-lg-3
+            = @app_server.text_field :singleton_manager_router_count, :class => 'form-control'
+        .form-group
+          %label.col-lg-4
+            Singleton manager update interval
+          .col-lg-3
+            = @app_server.text_field :singleton_manager_update_interval, :class => 'form-control'
+      .col-lg-6
+        About environment
+.panel.panel-default
+  .panel-body
+    .row
+      .col-lg-6
+        .form-group
+          %label.col-lg-4
+            Enable Mono
+          .col-lg-8
+            .make-switch.switch-small
+              = @app_server.check_box :mono_enabled
+      .col-lg-6
+        About environment

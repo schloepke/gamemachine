@@ -1,0 +1,26 @@
+development:
+  adapter: jdbcmysql
+  encoding: utf8
+  reconnect: false
+  database: game_machine_development
+  pool: 5
+  username: root
+  password:
+
+test:
+  adapter: jdbcmysql
+  encoding: utf8
+  reconnect: false
+  database: game_machine_test
+  pool: 5
+  username: root
+  password:
+
+production:
+  adapter: jdbcmysql
+  encoding: utf8
+  reconnect: false
+  database: game_machine_production
+  pool: 5
+  username: root
+  password:

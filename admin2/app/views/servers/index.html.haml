@@ -1,0 +1,30 @@
+.row{:style => 'padding-bottom:15px;'}
+  .col-lg-8
+    Machines
+  .col-lg-4
+    = link_to 'Add Machine', new_server_path,:class => 'btn btn-primary'
+
+%table.table.table-striped
+  %tr
+    %th
+      Size
+    %th
+      Name
+    %th
+      IP Address
+    %th
+      Status
+    %th
+  - @app_servers.each do |server|
+    %tr
+      %td Large
+      %td= link_to server.name, edit_server_path(server)
+      %td 127.0.0.1
+      %td Up
+      %td
+        = link_to "Delete #{server.name}",
+          server_path(server), :method => :delete,
+          :data => {:confirm => t('.confirm',
+          :default => t("helpers.links.confirm", :default => 'Are you sure?'))},
+          :class => 'btn btn-mini btn-danger'
+
