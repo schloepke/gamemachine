@@ -1,27 +1,13 @@
-require 'pathname'
 module GameMachine
   class Application
 
     class << self
 
       def initialize!(name='default', cluster=false)
-        config.name = name
+        AppConfig.instance.load_config(name)
         config.cluster = cluster
-        config.login_username = 'player'
-        config.authtoken = 'authorized'
-
-        Settings.servers.send(config.name).each do |key,value|
-          config.send("#{key}=",value)
-        end
-
-        config.handlers = default_handlers
-        config.request_handler_routers = 20
-        config.game_handler_routers = 20
-        config.authentication_handler_ring_size = 160
-        akka.initialize!(config.name,config.cluster)
-        if config.mono_enabled
-          require_relative 'mono'
-        end
+        akka.initialize!
+        load_mono
       end
 
       def auth_handler
@@ -37,7 +23,7 @@ module GameMachine
       end
 
       def config
-        @config ||= OpenStruct.new
+        @config ||= AppConfig.instance.config
       end
 
       def registered
@@ -66,14 +52,20 @@ module GameMachine
       def start
         load_game_data
         start_actor_system
-        AuthHandlers::Base.instance
-        DataStore.instance
+        auth_handler
+        data_store
         start_endpoints
         start_core_systems
         start_handlers
         start_game_systems
-        load_games
+        GameLoader.new.load_all
         GameMachine.stdout("Game Machine start successful")
+      end
+
+      def load_mono
+        if config.mono_enabled
+          require_relative 'mono'
+        end
       end
 
       def load_game_data
@@ -115,31 +107,6 @@ module GameMachine
         end
       end
 
-      def game_dirs
-        games_root = File.join(GameMachine.app_root,'../games')
-        Pathname.glob("#{games_root}/*/")
-      end
-
-      def load_games
-        return if GameMachine.env == 'test'
-        game_dirs.each do |game_dir|
-          bootfile = File.join(game_dir,'boot.rb')
-          puts bootfile
-          if File.exists?(bootfile)
-            load_game(bootfile)
-            GameMachine.logger.info "#{bootfile} loaded"
-            GameMachine.stdout "#{bootfile} loaded"
-          else
-            GameMachine.logger.info "#{bootfile} not found"
-            GameMachine.stdout "#{bootfile} not found"
-          end
-        end
-      end
-
-      def load_game(bootfile)
-        require bootfile
-      end
-
       def start_handlers
         Actor::Builder.new(Handlers::Request).with_router(
           JavaLib::RoundRobinRouter,config.request_handler_routers
@@ -152,6 +119,7 @@ module GameMachine
         ).start
       end
 
+      # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(PlayerGateway).start
@@ -174,17 +142,6 @@ module GameMachine
         Actor::Builder.new(GameSystems::SingletonManager).start
         Actor::Builder.new(GameSystems::PlayerManager).with_router(JavaLib::RoundRobinRouter,2).start
       end
-
-      private
-
-      def default_handlers
-        [
-          Handlers::Request,
-          Handlers::Authentication,
-          Handlers::Game
-        ]
-      end
-
 
     end
   end

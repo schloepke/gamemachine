@@ -1,6 +1,6 @@
-class GameConfig
+class AppServerConfig
 
-  attr_reader :app_servers, :environments
+  attr_reader :app_servers
   def initialize(user)
     @app_servers = user.app_servers
   end

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'jruby/core_ext'
 module GameMachine
   describe "misc" do 
     let(:entity) do 
@@ -10,6 +11,7 @@ module GameMachine
       entity.player = player
       entity
     end
+
 
     it "protobuf delimited" do
       message = MessageLib::ClientMessage.new.add_entity(

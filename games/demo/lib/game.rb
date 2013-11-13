@@ -16,7 +16,7 @@ module Demo
       load_game_data
       GameMachine::Actor::Builder.new(CombatController).
         with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
-      50.times do |i|
+      1000.times do |i|
         create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
       end
     end
@@ -27,7 +27,7 @@ module Demo
     end
 
     def create_npc(id)
-      max = GameMachine::Settings.world_grid_size - 10
+      max = GameMachine::Application.config.world_grid_size - 10
 
       x = 513.0#rand(max) + 1
       z = 529.0#rand(max) + 1

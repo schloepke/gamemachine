@@ -10,8 +10,8 @@ module GameMachine
       def preStart
         @mgr = JavaLib::Tcp.get(getContext.system).getManager
         inet = JavaLib::InetSocketAddress.new(
-          Application.config.server.tcp_host,
-          Application.config.server.tcp_port
+          Application.config.tcp_host,
+          Application.config.tcp_port
         )
         @mgr.tell( JavaLib::TcpMessage.bind(getSelf,inet,100), getSelf)
       end

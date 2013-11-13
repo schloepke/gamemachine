@@ -23,10 +23,12 @@ java_import 'com.game_machine.core.net.client.UdtClientHandler'
 require_relative 'game_machine/java_lib'
 
 require_relative 'game_machine/version'
+require_relative 'game_machine/grid'
+require_relative 'game_machine/game_loader'
 require_relative 'game_machine/message_buffer'
 require_relative 'game_machine/vector'
 require_relative 'game_machine/logger'
-require_relative 'game_machine/settings'
+require_relative 'game_machine/app_config'
 require_relative 'game_machine/helpers/state_machine'
 require_relative 'game_machine/actor'
 require_relative 'game_machine/commands'
@@ -60,5 +62,6 @@ require_relative 'game_machine/navigation'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
+
 
 

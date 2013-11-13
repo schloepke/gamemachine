@@ -55,6 +55,25 @@ ActiveRecord::Schema.define(version: 20131110041550) do
     t.integer "user_id"
   end
 
+  create_table "game_users", force: true do |t|
+    t.string   "user"
+    t.string   "pass"
+    t.string   "roles"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "protobuf_fields", force: true do |t|
+    t.string  "field_type"
+    t.string  "value_type"
+    t.string  "name"
+    t.integer "protobuf_message_id"
+  end
+
+  create_table "protobuf_messages", force: true do |t|
+    t.string "name"
+  end
+
   create_table "users", force: true do |t|
     t.string   "name"
     t.boolean  "is_active"

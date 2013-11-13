@@ -8,7 +8,7 @@ module GameMachine
 
     def on_receive(message)
       if message.is_a?(String)
-        delta = GameMachine::GameSystems::EntityTracking.grid.current_delta
+        delta = Grid.default_grid.current_delta
         return if delta.length == 0
         GameMachine::ClusterMonitor.remote_members.keys.each do |address|
           @paths[address] ||= "#{address}#{self.class.local_path(self.class.name)}"

@@ -14,17 +14,9 @@ module GameMachine
 
       attr_reader :grid
 
-      def self.grid
-        if @grid
-          @grid
-        else
-          @grid = JavaLib::Grid.new(Application.config.world_grid_size,Application.config.world_grid_cell_size)
-        end
-      end
-
       def post_init
         @entity_updates = []
-        @grid = self.class.grid
+        @grid = Grid.default_grid
         @paths = {}
         @width = grid.get_width
         @cell_count = grid.get_cell_count
@@ -64,7 +56,7 @@ module GameMachine
         type = message.get_neighbors.neighbor_type
         x = message.get_neighbors.vector3.x
         z = message.get_neighbors.vector3.z
-        search_results = self.class.neighbors_from_grid(x,z,type)
+        search_results = grid.neighbors(x,z,type)
        
         neighbors = {:players => [], :npcs => []}
         search_results.each do |grid_value|
@@ -96,23 +88,6 @@ module GameMachine
         PlayerGateway.find.tell(entity)
       end
 
-      def self.neighbors_from_grid(x,z,neighbor_type)
-        grid.neighbors(x,z,neighbor_type)
-      end
-
-      def self.neighbors_to_entity(x,z,neighbor_type)
-        grid_values = neighbors_from_grid(x,z,neighbor_type)
-        entity = MessageLib::Entity.new.set_neighbors(MessageLib::Neighbors.new).set_id('0')
-        neighbors = entity.neighbors
-        grid_values.each do |grid_value|
-          if grid_value.entityType == 'player'
-            neighbors.add_player(location_entity(grid_value))
-          elsif grid_value.entityType == 'npc'
-            neighbors.add_npc(location_entity(grid_value))
-          end
-        end
-        entity
-      end
     end
   end
 end

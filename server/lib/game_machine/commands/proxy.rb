@@ -1,14 +1,7 @@
 module GameMachine
   module Commands
 
-    class Proxy# < Actor::Base
-
-      def self.call_java
-        JavaLib::CommandProxy.test
-      end
-
-      def self.call_ruby
-      end
+    class Proxy < Actor::Base
 
       def post_init(*args)
 
