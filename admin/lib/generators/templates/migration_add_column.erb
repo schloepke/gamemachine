@@ -1,5 +1,0 @@
-class Add<%=@migration_class_name%> < ActiveRecord::Migration
-  def change
-    add_column :<%=@name_plural%>, :<%=@field.name.downcase%>,  :<%=@field.value_type%>
-  end
-end

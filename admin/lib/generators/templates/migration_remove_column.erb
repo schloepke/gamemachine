@@ -1,5 +1,0 @@
-class Remove<%=@migration_class_name%> < ActiveRecord::Migration
-  def change
-    remove_column :<%=@name_plural%>, :<%=@field.name.downcase%>
-  end
-end

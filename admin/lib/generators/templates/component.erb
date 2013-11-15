@@ -1,9 +1,0 @@
-module GameData
-  class <%=@class_name%> < ActiveRecord::Base
-    has_many :<%=@join_model_name%>
-    has_many :entities, :through => :<%=@join_model_name%>
-    Entity.has_many :<%=@join_model_name%>
-    Entity.has_many :<%=@name.pluralize%>, :through => :<%=@join_model_name%>
-  end
-end
-
