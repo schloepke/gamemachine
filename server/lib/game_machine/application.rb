@@ -75,8 +75,6 @@ module GameMachine
       end
 
       def start_endpoints
-        Actor::Builder.new(Endpoints::ActorUdp).start
-
         if config.tcp_enabled
           Actor::Builder.new(Endpoints::Tcp).start
           GameMachine.stdout(

@@ -12,6 +12,7 @@ end
 
 opts = Trollop::options do
   opt :cluster, "run in cluster mode", :type => :string
+  opt :console, "Start a console", :type => :string
   opt :name, "Config name, defaults to 'default'", :type => :string
   opt :config, "Config file, defaults to  config/config.yml", :type => :string
   version "GameMachine 0.0.1"
@@ -27,6 +28,9 @@ if opts[:config]
   ENV['CONFIG_FILE'] = opts[:config]
 end
 
+console = opts[:console] || false
+cluster = opts[:cluster] || false
+
 name = opts[:name] || 'default'
-GameMachine::Runner.start(name,opts[:cluster] || false)
+GameMachine::Runner.start(name,cluster,console)
 

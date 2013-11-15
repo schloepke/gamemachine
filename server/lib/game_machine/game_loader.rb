@@ -8,7 +8,7 @@ module GameMachine
     end
 
     def load_from_dir(dir)
-      bootfile = File.join(game_dir,'boot.rb')
+      bootfile = File.join(dir,'boot.rb')
       if File.exists?(bootfile)
         load_game(bootfile)
         GameMachine.logger.info "#{bootfile} loaded"
