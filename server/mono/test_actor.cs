@@ -28,19 +28,21 @@ namespace GameMachine
 			//throw new System.ArgumentException("test exception please ignore", "");
 			try {
 				
-				//Console.WriteLine ("OnReceive");
-				//Entity entity = message as Entity;
+				Entity entity = message as Entity;
 				StringBuilder sb = new StringBuilder (256);
-				callJava ("TEST MESSAGE",sb.Capacity, sb);
+
 				//Console.WriteLine ("callJava result " + sb.ToString().Length);
 				Entity testEntity = new Entity ();
 				testEntity.id = "1";
-				byte[] data = Actor.EntityToByteArray (testEntity);
+				byte[] data = Actor.EntityToByteArray (entity);
+				string res = Convert.ToBase64String(data);
+				callJava (res, sb.Capacity, sb);
+				return;
 				testEntity = Actor.ByteArrayToEntity (data);
 				//mut.WaitOne();
 				//Entity entity = ByteArrayToEntity (bytes);
 				//mut.ReleaseMutex();
-				return;
+				//return;
 				//Tell ("GameMachine::GameSystems::LocalEcho", entity);
 				//Neighbors neighbors = GetNeighbors (1.0f, 1.0f);
 			} catch (Exception ex) {

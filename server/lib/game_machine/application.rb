@@ -44,6 +44,7 @@ module GameMachine
       end
 
       def stop
+        Mono::Vm.instance.unload
         stop_actor_system
         DataStore.instance.shutdown
         JavaLib::UdtServer.stop
@@ -65,6 +66,7 @@ module GameMachine
       def load_mono
         if config.mono_enabled
           require_relative 'mono'
+          Mono::Vm.instance.load
         end
       end
 

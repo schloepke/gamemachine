@@ -3,9 +3,13 @@ module GameMachine
   module Actor
     class MonoActor < Base
 
+      def self.images
+        @@images ||= java.util.concurrent.ConcurrentHashMap.new
+      end
+
       def self.call_mono(message,image,domain,namespace,klass)
         thread_id = JRuby.reference(Thread.current).native_thread.id
-        Mono.attach_current_thread(domain)
+        #Mono.attach_current_thread(domain)
         bytes = message.to_byte_array
         byte_string = bytes.to_s
         encoded_bytes = Base64.encode64(byte_string)
@@ -27,7 +31,9 @@ module GameMachine
 
         #puts "ENCODED #{encoded_bytes} = #{encoded_bytes_size}"
         #res = Mono.ftest(@namespace,@klass,actor_id, encoded_bytes, encoded_bytes_size)
+        #puts 'before_on_receive'
         res = Mono.on_receive2(domain,image,ns_mem_buf,klass_mem_buf,mem_buf, bytes_mem_buf, encoded_bytes_size)
+        #puts 'after_on_receive'
         #res = Mono.on_receive(@mono_object,bytes.to_s,bytes.size)
         if res == 0
           raise "Mono managed code threw exception, restarting actor"
@@ -39,6 +45,7 @@ module GameMachine
         @namespace = args[1]
         @klass = args[2]
         @domain = args[3]
+        @image = args[4]
       end
 
       def create_mono_object
@@ -54,15 +61,24 @@ module GameMachine
         #end
       end
 
+      def ensure_image
+        thread_id = JRuby.reference(Thread.current).native_thread.id
+        image = self.class.images.fetch(thread_id,nil)
+        if image.nil?
+          Mono.attach_current_thread(@domain)
+          image = Mono.load_assembly(@domain,@path)
+          self.class.images[thread_id] = image
+        end
+        image
+      end
+
       def postStop
         puts 'postStop'
         #Mono.destroy_object(@mono_object)
       end
 
       def on_receive(message)
-        if @image.nil?
-          create_mono_object
-        end
+        Mono.attach_current_thread(@domain)
 
         self.class.call_mono(message,@image,@domain,@namespace,@klass)
         sender.tell(message,self)

@@ -10,7 +10,7 @@ public class ResourceModule : NancyModule
 {
     public ResourceModule() : base("/actor")
     {
-        Post["/message", true] = async (x, ct) => {
+        Get["/message", true] = async (x, ct) => {
 			//Console.WriteLine (this.Request);
             return "OK";
         };

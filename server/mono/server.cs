@@ -12,7 +12,7 @@ class Server
 	public static void Main (string[] args)
 	{
 		// initialize an instance of NancyHost (found in the Nancy.Hosting.Self package)
-		var host = new NancyHost (new Uri ("http://192.168.1.6:8888"));    
+		var host = new NancyHost (new Uri ("http://127.0.0.1:8888"));    
 		host.Start ();  // start hosting
  
 		//Under mono if you deamonize a process a Console.ReadLine with cause an EOF 

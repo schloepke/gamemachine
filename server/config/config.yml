@@ -114,6 +114,7 @@ test:
       world_grid_size: 2000
       world_grid_cell_size: 25
       mono_enabled: true
+      mono_dll: test_actor.dll
       singleton_manager_router_count: 200
       singleton_manager_update_interval: 100
       couchbase_servers: http://217.0.0.1:8091/pools

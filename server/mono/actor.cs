@@ -31,9 +31,9 @@ namespace GameMachine
 		public Actor ()
 		{
 			AppDomain domain = AppDomain.CurrentDomain;
-			Console.WriteLine ("Domain = " + domain.FriendlyName);
-			Console.WriteLine ("ApplicationBase = " + domain.SetupInformation.ApplicationBase);
-			Console.WriteLine ("ConfigurationFile = " + domain.SetupInformation.ConfigurationFile);
+			//Console.WriteLine ("Domain = " + domain.FriendlyName);
+			//Console.WriteLine ("ApplicationBase = " + domain.SetupInformation.ApplicationBase);
+			//Console.WriteLine ("ConfigurationFile = " + domain.SetupInformation.ConfigurationFile);
 			//remote = new IPEndPoint (IPAddress.Parse (udpHost), udpPort);
 			//udpClient = new UdpClient ();
 			//udpClient.Connect (remote);
@@ -55,13 +55,13 @@ namespace GameMachine
 		{
 			try {
 				if (str.Length != strlen) {
-					Console.WriteLine (str.Length+" != "+strlen);
+					Console.WriteLine (str.Length + " != " + strlen);
 				}
 				//Console.WriteLine (str);
 				byte[] bytes = Convert.FromBase64String (str);
-				//byte[] bytes = System.Text.Encoding.ASCII.GetBytes (str);
-				//byte[] bytes = new byte[str.Length * sizeof(char)];
-				//System.Buffer.BlockCopy (str.ToCharArray (), 0, bytes, 0, bytes.Length);
+				//byte[] bytes2 = System.Text.Encoding.ASCII.GetBytes (str);
+				byte[] bytes2 = new byte[str.Length * sizeof(char)];
+				System.Buffer.BlockCopy (str.ToCharArray (), 0, bytes2, 0, bytes2.Length);
 				int len = Buffer.ByteLength (bytes);
 				//Console.WriteLine ("bytes len= "+len+" str len= "+str.Length);
 				//Console.WriteLine (str);
@@ -71,6 +71,7 @@ namespace GameMachine
 					actor.OnReceive (entity);
 				} else {
 					string typeName = name_space + "." + klass;
+					//Console.WriteLine ("typeName=" + typeName);
 					Type type = Type.GetType (typeName);
 					if (type == null) {
 						Console.WriteLine (typeName + " is null");
@@ -89,7 +90,7 @@ namespace GameMachine
 		}
 		
 		[DllImport("actor")]
-		public static extern void callJava(string message, int len, StringBuilder result);
+		public static extern void callJava (string message, int len, StringBuilder result);
 		
 		public async void RpcAsync (Entity message)
 		{
@@ -211,7 +212,7 @@ namespace GameMachine
 			if (sp.ClientCertificate == null)
 				Console.WriteLine ("ClientCertificate = (null)");
 			else
-				Console. WriteLine ("ClientCertificate = " + sp.ClientCertificate.ToString ());
+				Console.WriteLine ("ClientCertificate = " + sp.ClientCertificate.ToString ());
 
 			Console.WriteLine ("ProtocolVersion = " + sp.ProtocolVersion.ToString ());
 			Console.WriteLine ("SupportsPipelining = " + sp.SupportsPipelining);

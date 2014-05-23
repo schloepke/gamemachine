@@ -17,6 +17,7 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features|integration_tests)/})
   gem.require_paths = ["lib"]
 
+  gem.add_dependency 'i18n'
   gem.add_dependency 'rjack-logback'
   gem.add_dependency 'settingslogic'
   gem.add_dependency 'slop'
@@ -28,14 +29,13 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'state_machine'
   gem.add_dependency 'ffi'
   gem.add_dependency 'trollop'
-  gem.add_dependency 'active_support'
+  gem.add_dependency 'activesupport', '~> 3.0.0'
   gem.add_dependency 'pry'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec-mocks'
   gem.add_development_dependency 'rspec-expectations'
-  gem.add_development_dependency 'pry'
   gem.add_development_dependency 'guard-jruby-rspec'
   gem.add_development_dependency 'descriptive_statistics'
   gem.add_development_dependency 'faraday'
