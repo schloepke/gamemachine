@@ -1,5 +1,14 @@
+# Fairly experimental.  Afraid to abstract this out too much at this point.
+# Mono crashes after a while in it's JIT engine while under concurrency.  So
+# we force all calls into mono to run on a single thread.
+
 require 'ffi'
 require 'base64'
+java_import 'java.util.concurrent.ThreadPoolExecutor'
+java_import 'java.util.concurrent.TimeUnit'
+java_import 'java.util.concurrent.LinkedBlockingQueue'
+java_import 'java.util.concurrent.FutureTask'
+java_import 'java.util.concurrent.Callable'
 module Mono
   extend FFI::Library
   sofile = File.join(File.dirname(__FILE__), '../../mono/libactor.so')
@@ -9,22 +18,17 @@ module Mono
     attach_function :load_assembly, [:pointer, :string], :pointer
     attach_function :create_object, [:pointer, :string, :string], :pointer
     attach_function :destroy_object, [:uint32], :void
-    attach_function :on_receive2, [:pointer, :pointer, :pointer, :pointer, :pointer,:pointer,:int], :int
-    attach_function :ftest, [:string, :string, :string,:string,:int], :int
+    attach_function :on_receive, [:pointer, :pointer, :pointer, :pointer, :pointer,:pointer,:uint], :int
     attach_function :unload_mono, [], :void
     attach_function :create_domain, [:string], :pointer
     attach_function :attach_current_thread, [:pointer], :void
     attach_function :set_callback, [:int,:pointer], :void
 
 
-    Callback = FFI::Function.new(:void, [:string,:int, :pointer]) do |message,len,mem_buf|
-      message = Base64.decode64(message)
+    Callback = FFI::Function.new(:void, [:pointer,:uint]) do |buf,len|
+      message = buf.read_bytes(len)
       entity = GameMachine::MessageLib::Entity.parse_from(message.to_java_bytes)
-      #puts entity.id
-      thread_id = JRuby.reference(Thread.current).native_thread.id
       Vm.instance.response = entity
-      #puts "CALLBACK #{len} #{message} #{mem_buf}"
-      #mem_buf.put_string(0, "test 1 2 3")
     end
   end
 
@@ -81,8 +85,6 @@ module Mono
       thread_id = JRuby.reference(Thread.current).native_thread.id
       bytes = message.to_byte_array
       byte_string = bytes.to_s
-      encoded_bytes = Base64.encode64(byte_string)
-      encoded_bytes_size = encoded_bytes.size
       actor_id = thread_id.to_s
       if actor_id == '' or actor_id.nil?
         puts "actor_id invalid #{actor_id}"
@@ -93,12 +95,14 @@ module Mono
       ns_mem_buf.put_string(0, namespace)
       klass_mem_buf = FFI::MemoryPointer.new(:string, klass.size)
       klass_mem_buf.put_string(0, klass)
-      bytes_mem_buf = FFI::MemoryPointer.new(:string, encoded_bytes_size)
-      bytes_mem_buf.put_string(0, encoded_bytes)
+
+      bytes_mem_buf = FFI::MemoryPointer.new(:char, byte_string.size)
+      bytes_mem_buf.put_bytes(0, byte_string)
+
       mem_buf = FFI::MemoryPointer.new(:string, actor_id.size)
       mem_buf.put_string(0, actor_id)
 
-      return_val = Mono.on_receive2(domain,image,ns_mem_buf,klass_mem_buf,mem_buf, bytes_mem_buf, encoded_bytes_size)
+      return_val = Mono.on_receive(domain,image,ns_mem_buf,klass_mem_buf,mem_buf, bytes_mem_buf, byte_string.size)
       if return_val == 0
         raise "Mono managed code threw exception, restarting actor"
       end

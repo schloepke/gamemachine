@@ -228,6 +228,9 @@ message GetNeighbors {
   optional string gridName = 5;
 }
 
+message MessageRouting {
+  optional string destination = 1;
+}
 
 message Entity {
   optional Player player = 1;
@@ -265,6 +268,7 @@ message Entity {
   optional Rpc rpc = 40;
   optional Subscribers subscribers = 41;
   optional bool save = 42;
+  optional MessageRouting messageRouting = 43;
   //GAME_ENTITY_MESSAGES
 }
 

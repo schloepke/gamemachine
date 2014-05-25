@@ -18,21 +18,51 @@ STR2 = Array.new(1000) {|i| CHARS.sample}.join
 module GameMachine
   describe 'mono' do
 
-    it "mono_vm_test1" do
+    it "message gateway" do
+      Actor::Builder.new(Endpoints::MessageGateway).start
+      sleep 1
+      puts GameSystems::Devnull.to_s
+      str = Array.new(1000) {|i| CHARS.sample}.join
+      message = MessageLib::Entity.new.set_id(STR)
+      message.set_message_routing(
+       MessageLib::MessageRouting.new.set_destination('GameMachine.TestActor')
+      )
+      puts timed = Benchmark.realtime {
+        100.times do
+          Endpoints::MessageGateway.find.tell(message)
+        end
+      }
+      sleep 2
+    end
+
+    xit "no_threadpool" do
       namespace = 'GameMachine'
       klass = 'TestActor'
       vm = Mono::Vm.instance
+      str = Array.new(1000) {|i| CHARS.sample}.join
       message = MessageLib::Entity.new.set_id(STR)
       puts timed = Benchmark.realtime {
-      10000.times do |i|
-        response = vm.send_message(namespace,klass,message)
-      end
+        10000.times do |i|
+          response = vm.call_mono(namespace,klass,message)
+        end
+      }
+    end
+    xit "mono_vm_test1" do
+      namespace = 'GameMachine'
+      klass = 'TestActor'
+      vm = Mono::Vm.instance
+      str = Array.new(1000) {|i| CHARS.sample}.join
+      message = MessageLib::Entity.new.set_id(STR)
+      puts timed = Benchmark.realtime {
+        10.times do |i|
+          response = vm.send_message(namespace,klass,message)
+        end
       }
     end
 
     xit "mono_vm_test" do
       Actor::Builder.new(MonoTest).with_router(JavaLib::RoundRobinRouter,10).start
-      message = MessageLib::Entity.new.set_id(STR)
+      message = MessageLib::Entity.new.set_id(STR2)
       puts timed = Benchmark.realtime {
       10000.times do |i|
         #MonoTest.find.tell(message)
@@ -40,49 +70,6 @@ module GameMachine
       end
       }
     end
-
-    xit "mono loop test" do
-      path = "/home/chris/game_machine/server/mono/test_actor.dll"
-      Mono.load_mono(path)
-      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
-      namespace = 'GameMachine'
-      klass = 'TestActor'
-      Mono.attach_current_thread(domain)
-      image = Mono.load_assembly(domain,path)
-      #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,2).start
-      Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain,image).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
-      Mono.set_callback(1,Mono::Callback)
-      message = MessageLib::Entity.new.set_id(STR)
-      100.times do
-        #MonoTest.find.tell(message)
-        MonoTest.find.ask(message,10)
-      end
-    end
-
-    xit "can send message to ruby" do
-      props = JavaLib::Props.new(Endpoints::Http::Rpc)
-      Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
-      Actor::Builder.new(Endpoints::ActorUdp).start
-      path = "/home/chris/game_machine/server/mono/test_actor.dll"
-      Mono.load_mono(path)
-      domain = Mono.create_domain('/home/chris/game_machine/server/mono/app.config')
-      #Actor::Builder.new(MonoTest,path,'GameMachine','TestActor').with_router(JavaLib::RoundRobinRouter,10).start
-      Actor::Builder.new(MonoTest,path,'GameMachine','TestActor',domain).with_router(JavaLib::RoundRobinRouter,10).with_dispatcher("default-pinned-dispatcher").start
-      Mono.set_callback(1,Mono::Callback)
-      sleep 1
-      threads = []
-      5.times do
-        sleep 1
-        threads << Thread.new do
-          100000.times do
-            entity = MessageLib::Entity.new.set_id(STR)
-            MonoTest.find.ask(entity,10)
-          end
-        end
-      end
-      threads.map(&:join)
-    end
-
 
     xit "stress test mono http" do
       puts 'starting'

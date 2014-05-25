@@ -488,6 +488,14 @@ namespace com.game_machine.entity_system.generated
       get { return _name; }
       set { _name = value; }
     }
+    private com.game_machine.entity_system.generated.Subscribers _subscribers = null;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"subscribers", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public com.game_machine.entity_system.generated.Subscribers subscribers
+    {
+      get { return _subscribers; }
+      set { _subscribers = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -576,6 +584,23 @@ namespace com.game_machine.entity_system.generated
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Subscribers")]
+  public partial class Subscribers : global::ProtoBuf.IExtensible
+  {
+    public Subscribers() {}
+    
+    private readonly global::System.Collections.Generic.List<string> _subscriberId = new global::System.Collections.Generic.List<string>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"subscriberId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<string> subscriberId
+    {
+      get { return _subscriberId; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Subscribe")]
   public partial class Subscribe : global::ProtoBuf.IExtensible
   {
@@ -644,6 +669,23 @@ namespace com.game_machine.entity_system.generated
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ObjectdbDel")]
+  public partial class ObjectdbDel : global::ProtoBuf.IExtensible
+  {
+    public ObjectdbDel() {}
+    
+    private string _entityId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"entityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string entityId
+    {
+      get { return _entityId; }
+      set { _entityId = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ObjectdbGet")]
   public partial class ObjectdbGet : global::ProtoBuf.IExtensible
   {
@@ -683,15 +725,16 @@ namespace com.game_machine.entity_system.generated
   {
     public ObjectdbUpdate() {}
     
-    private string _entityId;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"entityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string entityId
+    private string _currentEntityId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"currentEntityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string currentEntityId
     {
-      get { return _entityId; }
-      set { _entityId = value; }
+      get { return _currentEntityId; }
+      set { _currentEntityId = value; }
     }
-    private string _updateClass;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"updateClass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _updateClass = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"updateClass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
     public string updateClass
     {
       get { return _updateClass; }
@@ -703,6 +746,13 @@ namespace com.game_machine.entity_system.generated
     {
       get { return _updateMethod; }
       set { _updateMethod = value; }
+    }
+    private com.game_machine.entity_system.generated.Entity _updateEntity;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"updateEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public com.game_machine.entity_system.generated.Entity updateEntity
+    {
+      get { return _updateEntity; }
+      set { _updateEntity = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1267,6 +1317,24 @@ namespace com.game_machine.entity_system.generated
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"MessageRouting")]
+  public partial class MessageRouting : global::ProtoBuf.IExtensible
+  {
+    public MessageRouting() {}
+    
+    private string _destination = "";
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"destination", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string destination
+    {
+      get { return _destination; }
+      set { _destination = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Entity")]
   public partial class Entity : global::ProtoBuf.IExtensible
   {
@@ -1534,6 +1602,30 @@ namespace com.game_machine.entity_system.generated
     {
       get { return _rpc; }
       set { _rpc = value; }
+    }
+    private com.game_machine.entity_system.generated.Subscribers _subscribers = null;
+    [global::ProtoBuf.ProtoMember(41, IsRequired = false, Name=@"subscribers", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public com.game_machine.entity_system.generated.Subscribers subscribers
+    {
+      get { return _subscribers; }
+      set { _subscribers = value; }
+    }
+    private bool _save = default(bool);
+    [global::ProtoBuf.ProtoMember(42, IsRequired = false, Name=@"save", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool save
+    {
+      get { return _save; }
+      set { _save = value; }
+    }
+    private com.game_machine.entity_system.generated.MessageRouting _messageRouting = null;
+    [global::ProtoBuf.ProtoMember(43, IsRequired = false, Name=@"messageRouting", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public com.game_machine.entity_system.generated.MessageRouting messageRouting
+    {
+      get { return _messageRouting; }
+      set { _messageRouting = value; }
     }
     private com.game_machine.entity_system.generated.Health _health = null;
     [global::ProtoBuf.ProtoMember(101, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]

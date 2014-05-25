@@ -77,6 +77,12 @@ module GameMachine
       end
 
       def start_endpoints
+        if config.message_gateway_host
+          Actor::Builder.new(Endpoints::MessageGateway).start
+          GameMachine.stdout(
+            "MessageGateway starting on #{config.message_gateway_host}:#{config.message_gateway_port}"
+          )
+        end
         if config.tcp_enabled
           Actor::Builder.new(Endpoints::Tcp).start
           GameMachine.stdout(
@@ -134,6 +140,7 @@ module GameMachine
       end
 
       def start_game_systems
+        Actor::Builder.new(GameSystems::Devnull).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
