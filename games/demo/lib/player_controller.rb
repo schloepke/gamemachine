@@ -22,6 +22,8 @@ module Demo
 
     def on_receive(message)
       if message.has_player_authenticated
+        GameMachine.logger.error "#{self.class.name} #{message.player}"
+        commands.player.send_message(message,message.player.id)
         if entity = commands.datastore.get(message.player.id)
           set_player_health(entity.player)
         else

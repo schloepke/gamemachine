@@ -16,12 +16,14 @@ module GameMachine
         def onReceive(message)
           params = message_to_params(message)
           if auth = login(params['username'],params['password'])
-            server = "#{Application.config.http_host}:#{Application.config.http_port}"
-            response = {:server => server, :authtoken => auth}
+            response = auth
           else
-            response = {:error => 'bad login'}
+            response = "error"
           end
-          getSender.tell(JSON.generate(response),get_self)
+          getSender.tell(response,get_self)
+        rescue Exception => e
+          GameMachine.logger.error "#{self.class.name} #{e.to_s}"
+          getSender.tell('error',get_self)
         end
 
         private

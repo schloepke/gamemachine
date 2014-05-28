@@ -1330,6 +1330,22 @@ namespace com.game_machine.entity_system.generated
       get { return _destination; }
       set { _destination = value; }
     }
+    private string _senderId = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"senderId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string senderId
+    {
+      get { return _senderId; }
+      set { _senderId = value; }
+    }
+    private string _id = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

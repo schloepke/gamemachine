@@ -16,6 +16,8 @@ namespace GameMachine
 	{
 		private IPEndPoint udp_ep;
 		private UdpClient udpClient;
+		private int port = 8800;
+		private string host = "127.0.0.1";
 
 		public ProxyClient()
 		{
@@ -50,7 +52,7 @@ namespace GameMachine
 		
 		public void Send(byte[] bytes)
 		{
-			udpClient.BeginSend(bytes, bytes.Length, "127.0.0.1", 8800, new AsyncCallback(SendCallback), udpClient);
+			udpClient.BeginSend(bytes, bytes.Length, host, port, new AsyncCallback(SendCallback), udpClient);
 		}
 		
 		private void dataReady (IAsyncResult ar)
@@ -58,8 +60,6 @@ namespace GameMachine
 			byte[] bytes = udpClient.EndReceive (ar, ref udp_ep);
 			receiveData ();
 			MessageRouter.Route(bytes,this);
-			//Task.Factory.StartNew(() => {MessageRouter.Route(bytes,this); });
-			//receiveData ();
 		}
 		
 		private void receiveData ()

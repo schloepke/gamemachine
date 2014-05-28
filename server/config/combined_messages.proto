@@ -265,6 +265,8 @@ message GetNeighbors {
 
 message MessageRouting {
   optional string destination = 1;
+  optional string senderId = 2;
+  optional string id = 3;
 }
 
 message Entity {
