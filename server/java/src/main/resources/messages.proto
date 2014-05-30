@@ -108,6 +108,11 @@ message ObjectdbDel {
 
 message ObjectdbGet {
   required string entityId = 1;
+  optional string playerId = 2;
+}
+
+message ObjectdbGetResponse {
+  required bool entityFound = 1;
 }
 
 message ObjectdbPut {
@@ -234,6 +239,10 @@ message MessageRouting {
   optional string id = 3;
 }
 
+message NativeBytes {
+  required bytes bytes = 1;
+}
+
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
@@ -271,6 +280,8 @@ message Entity {
   optional Subscribers subscribers = 41;
   optional bool save = 42;
   optional MessageRouting messageRouting = 43;
+  optional ObjectdbGetResponse objectdbGetResponse = 44;
+  optional NativeBytes nativeBytes = 45;
   //GAME_ENTITY_MESSAGES
 }
 

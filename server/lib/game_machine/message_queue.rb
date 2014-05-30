@@ -9,6 +9,7 @@ module GameMachine
 
     def on_receive(message)
       unless @mediator
+        GameMachine.logger.info "Cluster mediator not found, message queue disabled!"
         unhandled(message)
         return
       end

@@ -1,6 +1,7 @@
 module GameMachine
 
   class ObjectDb < Actor::Base
+    include GameMachine::Commands
 
     class << self
       def dbprocs
@@ -56,7 +57,19 @@ module GameMachine
         set_entity(message.get_entity)
         sender.tell(true)
       elsif message.is_a?(MessageLib::ObjectdbGet)
-        sender.tell(get_entity(message.get_entity_id) || false)
+        if message.has_player_id
+          response = MessageLib::ObjectdbGetResponse.new
+          if entity = get_entity(message.get_entity_id)
+            entity = MessageLib::Entity.new.set_id(message.get_entity_id)
+            response.set_entity_found(true)
+          else
+            response.set_entity_found(false)
+          end
+          entity.set_objectdb_get_response(response)
+          commands.player.send_message(entity,message.player_id)
+        else
+          sender.tell(get_entity(message.get_entity_id) || false)
+        end
       elsif message.is_a?(MessageLib::ObjectdbDel)
         delete_entity(message.get_entity_id)
       else

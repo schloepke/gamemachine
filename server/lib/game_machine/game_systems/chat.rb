@@ -94,7 +94,10 @@ module GameMachine
 
       def join_channels(chat_channels)
         chat_channels.each do |channel|
-          next if @topic_handlers[channel.name]
+          if @topic_handlers[channel.name]
+            GameMachine.logger.info "Topic handler exists for #{channel.name}, not creating"
+            next
+          end
           create_topic_handler(channel.name)
           message = MessageLib::Subscribe.new.set_topic(channel.name)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
@@ -103,7 +106,6 @@ module GameMachine
         end
       end
 
-      # TODO destroy topic handler when leaving channel
       def leave_channels(chat_channels)
         chat_channels.each do |channel|
           if topic_handler = topic_handler_for(channel.name)
@@ -111,6 +113,8 @@ module GameMachine
             message_queue.tell(message,topic_handler_for(channel.name).actor)
             @subscriptions.delete_if {|sub| sub == channel.name}
             remove_subscriber(@player_id,channel.name)
+            topic_handler.tell(JavaLib::PoisonPill.get_instance)
+            @topic_handlers.delete(channel.name)
           else
             GameMachine.logger.info "leave_channel: no topic handler found for #{channel.name}"
           end
