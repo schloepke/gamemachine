@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using GameMachine;
+using Entity = GameMachine.Messages.Entity;
+using Player = GameMachine.Messages.Player;
 
 public class HelloGameMachine : MonoBehaviour
 {
@@ -27,9 +29,17 @@ public class HelloGameMachine : MonoBehaviour
     void OnAppStarted()
     {
         StartChat();
-
+        StartPersistence();
+        Entity entity = new Entity();
+        entity.id = "route_test";
+        entity.json = true;
+        Player player = new Player();
+        player.id = User.Instance.username;
+        entity.player = player;
+        ActorSystem.Instance.Find("/remote/Demo/ExampleController").Tell(entity);
+        
     }
-
+    
     void StartChat()
     {
         GameObject camera = GameObject.Find("Main Camera");
@@ -37,4 +47,13 @@ public class HelloGameMachine : MonoBehaviour
         chatBox.transform.parent = camera.transform;
         chatBox.AddComponent("Chat");
     }
+
+    void StartPersistence()
+    {
+        GameObject camera = GameObject.Find("Main Camera");
+        GameObject misc = new GameObject("Misc");
+        misc.transform.parent = camera.transform;
+        misc.AddComponent("Persistence");
+    }
+
 }

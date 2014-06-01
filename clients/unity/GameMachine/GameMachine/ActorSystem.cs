@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using  System.Text.RegularExpressions;
 using GameMachine;
 using Entity = GameMachine.Messages.Entity;
+using JsonEntity = GameMachine.Messages.JsonEntity;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace GameMachine
@@ -74,8 +76,14 @@ namespace GameMachine
             }
         }
 
-        public void TellRemote(string destination, Entity entity)
+        public void TellRemote(Entity entity)
         {
+            if (entity.json)
+            {
+                JsonEntity json = new JsonEntity();
+                json.json = JsonConvert.SerializeObject(entity);
+                entity.jsonEntity = json;
+            }
             client.SendEntity(entity);
         }
 
@@ -90,63 +98,93 @@ namespace GameMachine
             }
         }
 
-        public int DeliverQueuedMessages()
+        public void DeliverQueuedMessages()
         {
-            int count = 0;
-
             Entity entity = new Entity();
-            MethodInfo method;
-            bool findFailed;
+            
             for (int i = 0; i < 10; i++)
             {
                 if (client.entityQueue.TryDequeue(out entity))
                 {
-                    Logger.Debug("Processing entity");
-                    foreach (UntypedActor actor in actors.Values)
+                    // See if we have a json entity
+                    if (entity.jsonEntity != null)
                     {
-                        Logger.Debug("Processing actor " + actor.GetType().Name);
-
-                        List<List<string>> componentSets = actor.GetComponentSets();
-                        foreach (List<string> componentSet in componentSets)
-                        {
-                            // See if message contains component set
-                            findFailed = false;
-                            foreach (string component in componentSet)
-                            {
-                                if (methods.ContainsKey(component))
-                                {
-                                    method = methods [component];
-
-                                    Logger.Debug("Looking for component " + component);
-                                    if (method.Invoke(entity, null) == null)
-                                    {
-                                        findFailed = true;
-                                            
-                                    } else
-                                    {
-                                        Logger.Debug("Found component " + component);
-                                    }
-                                } else
-                                {
-                                    Logger.Debug("Bad Component " + component);
-                                }
-
-                            }
-                            if (!findFailed)
-                            {
-                                actor.Tell(entity);
-                                findFailed = false;
-                                count++;
-                                break;
-                            }
-                        }
+                        entity = JsonConvert.DeserializeObject<Entity>(entity.jsonEntity.json);
                     }
+                    
+                    // entities with a destination get routed directly
+                    if (!String.IsNullOrEmpty(entity.destination))
+                    {
+                        DeliverByDestination(entity);
+                    } else
+                    {
+                        DeliverByComponent(entity);
+                    }
+
                 } else
                 {
                     break;
                 }
             }
-            return count;
+        }
+
+        public void DeliverByDestination(Entity entity)
+        {
+            UntypedActor actor = Find(entity.destination);
+            if (actor.GetType().Name == "DeadLetters")
+            {
+                Logger.Debug("Incoming entity has invalid destination: " + entity.destination);
+            } else
+            {
+                actor.Tell(entity);
+            }
+        }
+
+        public void DeliverByComponent(Entity entity)
+        {
+            MethodInfo method;
+            bool findFailed;
+
+            foreach (UntypedActor actor in actors.Values)
+            {
+                //Logger.Debug("Processing actor " + actor.GetType().Name);
+                
+                List<List<string>> componentSets = actor.GetComponentSets();
+                foreach (List<string> componentSet in componentSets)
+                {
+
+                    // See if message contains component set
+                    findFailed = false;
+                    foreach (string component in componentSet)
+                    {
+                        if (methods.ContainsKey(component))
+                        {
+                            method = methods [component];
+                            
+                            //Logger.Debug("Looking for component " + component);
+                            if (method.Invoke(entity, null) == null)
+                            {
+                                findFailed = true;
+                                
+                            } else
+                            {
+                                Logger.Debug("Found component " + component);
+                            }
+                        } else
+                        {
+                            Logger.Debug("Bad Component " + component);
+                        }
+                        
+                    }
+
+                    if (!findFailed)
+                    {
+                        actor.Tell(entity);
+                        findFailed = false;
+                        break;
+                    }
+                }
+            }
         }
 
     }

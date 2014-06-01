@@ -1,6 +1,8 @@
 using  ProtoBuf;
 using Entity = GameMachine.Messages.Entity;
 using GameMachine;
+using  System.Text.RegularExpressions;
+using System;
 
 public class RemoteActorRef : UntypedActor
 {
@@ -13,6 +15,12 @@ public class RemoteActorRef : UntypedActor
 
     public override void OnReceive(object message)
     {
-        actorSystem.TellRemote(destination, message as Entity);
+        Entity entity = message as Entity;
+        if (!String.IsNullOrEmpty(destination) && destination != "default")
+        {
+            entity.destination = destination;
+        }
+
+        actorSystem.TellRemote(entity);
     }
 }
