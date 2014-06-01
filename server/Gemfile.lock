@@ -8,6 +8,7 @@ PATH
       guard-process
       guard-rake
       guard-shell
+      hashie
       i18n
       json
       pry
@@ -53,6 +54,7 @@ GEM
       rspec (~> 2.14)
     guard-shell (0.6.1)
       guard (>= 1.1.0)
+    hashie (2.1.1)
     i18n (0.6.9)
     json (1.8.1-java)
     listen (2.2.0)

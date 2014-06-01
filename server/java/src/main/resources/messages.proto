@@ -1,5 +1,4 @@
 package com.game_machine.entity_system.generated;
-
 option optimize_for = SPEED;
 
 //GAME_MESSAGES
@@ -243,6 +242,10 @@ message NativeBytes {
   required bytes bytes = 1;
 }
 
+message JsonEntity {
+  required string json = 1;
+}
+
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
@@ -282,6 +285,10 @@ message Entity {
   optional MessageRouting messageRouting = 43;
   optional ObjectdbGetResponse objectdbGetResponse = 44;
   optional NativeBytes nativeBytes = 45;
+  optional ObjectdbGet objectdbGet = 46;
+  optional JsonEntity jsonEntity = 47;
+  optional string destination = 48;
+  optional bool json = 49;
   //GAME_ENTITY_MESSAGES
 }
 

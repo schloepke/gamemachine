@@ -13,7 +13,17 @@ module GameMachine
     end
 
 
-    it "protobuf delimited" do
+    xit "extends protobuf messages" do
+      MessageLib::Entity.class_eval do
+        define_method :doit do
+          "done it"
+        end
+      end
+      entity = MessageLib::Entity.new.set_id('3')
+      puts entity.doit
+    end
+
+    xit "protobuf delimited" do
       message = MessageLib::ClientMessage.new.add_entity(
         MessageLib::Entity.new.set_id('asjfl;asjflkasjdfljaslf')
       )
@@ -29,7 +39,7 @@ module GameMachine
       stream.read(bytes,0,stream.available)
     end
 
-    it "marshal" do
+    xit "marshal" do
       system = Akka.instance.actor_system
       serialization = JavaLib::SerializationExtension.get(system)
       serializer = serialization.findSerializerFor(entity)

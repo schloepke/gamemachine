@@ -2,9 +2,16 @@ require 'pathname'
 module GameMachine
   class GameLoader
 
+    class << self
+
+      def games_root
+        File.join(GameMachine.app_root,'../games')
+      end
+    end
+
+
     def game_dirs
-      games_root = File.join(GameMachine.app_root,'../games')
-      Pathname.glob("#{games_root}/*/")
+      Pathname.glob("#{self.class.games_root}/*/")
     end
 
     def load_from_dir(dir)

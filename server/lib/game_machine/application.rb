@@ -51,6 +51,7 @@ module GameMachine
       end
 
       def start
+        GameMachine::Actor::Reloadable.update_paths(true)
         load_game_data
         start_actor_system
         auth_handler
@@ -133,6 +134,7 @@ module GameMachine
         Actor::Builder.new(ObjectDb).distributed(2).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start
+        Actor::Builder.new(ReloadableMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
@@ -141,6 +143,7 @@ module GameMachine
 
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).with_router(JavaLib::RoundRobinRouter,4).start
+        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start

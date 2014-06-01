@@ -13,6 +13,7 @@ module GameMachine
         alias_method :apply, :new
         alias_method :create, :new
 
+
         # Sets the system wide player controller class.
         # When a player logs in, a player controller with this class
         # will be created. The system notifies the player controller when
@@ -28,6 +29,7 @@ module GameMachine
         def player_controller
           @@player_controller
         end
+
 
         def aspects
           @aspects ||= []
@@ -124,7 +126,6 @@ module GameMachine
       end
 
       def onReceive(message)
-        #GameMachine.logger.debug("#{self.class.name} got #{message}")
         on_receive(message)
       end
 

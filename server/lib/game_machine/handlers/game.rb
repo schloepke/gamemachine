@@ -21,6 +21,13 @@ module GameMachine
             entity.set_save(false)
             commands.datastore.put(entity)
           end
+          if entity.has_destination
+            destination = entity.destination.gsub('/','::')
+            entity.set_destination(nil)
+            GameMachine.logger.debug("RouteToDestination: #{entity.id} #{destination}")
+            Actor::Base.find(destination).tell(entity)
+            next
+          end
           component_names = entity.component_names
           GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?
@@ -29,6 +36,7 @@ module GameMachine
             klass.aspects.each do |aspect|
               next if dispatched
               if (aspect & component_names).size == aspect.size
+                GameMachine.logger.debug "Routing #{entity} via #{aspect} #{component_names} to #{klass}"
                 klass.find.tell(entity)
                 dispatched = true
               end

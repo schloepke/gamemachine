@@ -1,6 +1,7 @@
 require_relative 'npc_controller'
 require_relative 'combat_controller'
 require_relative 'player_controller'
+require_relative 'example_controller'
 
 module Demo
   class Game
@@ -12,6 +13,8 @@ module Demo
     end
 
     def start
+      GameMachine.logger.info "Starting #{ExampleController.name}"
+      GameMachine::Actor::Builder.new(ExampleController).start
       load_navmesh
       load_game_data
       GameMachine::Actor::Builder.new(CombatController).
