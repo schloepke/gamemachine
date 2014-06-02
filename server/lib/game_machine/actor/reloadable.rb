@@ -49,7 +49,7 @@ module GameMachine
             else
               File.open(file,'rb') do |f|
                 str = f.read
-                if str.match(/Actor\:\:Development/)
+                if str.match(/Actor\:\:Base/)
                   fileinfo = {:changed => true, :file => file, :mtime => mtime}
                   if first_run
                     fileinfo[:changed] = false

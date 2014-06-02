@@ -1,5 +1,6 @@
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
+ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
 ENV['GAME_ENV'] ||= 'development'
 
 module GameMachine
@@ -9,6 +10,10 @@ module GameMachine
 
   def self.app_root
     ENV.fetch('APP_ROOT')
+  end
+
+  def self.java_root
+    ENV.fetch('JAVA_ROOT')
   end
 end
 
@@ -21,6 +26,11 @@ java_import 'com.game_machine.core.net.client.UdtClient'
 java_import 'com.game_machine.core.net.client.UdtClientHandler'
 
 require_relative 'game_machine/java_lib'
+
+if GameMachine.env == 'development'
+  require_relative '../java/local_lib/protostuff-compiler-1.0.7-jarjar.jar'
+  require_relative 'game_machine/protobuf/generate'
+end
 
 require_relative 'game_machine/version'
 require_relative 'game_machine/grid'
@@ -61,6 +71,9 @@ require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
 require_relative 'game_machine/navigation'
+require_relative 'game_machine/rest_api/router'
+require_relative 'game_machine/rest_api/protobuf_compiler'
+require_relative 'game_machine/rest_api/auth'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS

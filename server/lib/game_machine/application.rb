@@ -59,6 +59,11 @@ module GameMachine
         start_endpoints
         start_core_systems
         start_handlers
+
+        if GameMachine.env == 'development'
+          start_development_systems
+        end
+
         start_game_systems
         GameLoader.new.load_all
         GameMachine.stdout("Game Machine start successful")
@@ -126,6 +131,10 @@ module GameMachine
         ).start
       end
 
+      def start_development_systems
+        Actor::Builder.new(RestApi::ProtobufCompiler).start
+      end
+
       # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
@@ -139,6 +148,8 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start
+        Actor::Builder.new(RestApi::Router).start
+        Actor::Builder.new(RestApi::Auth).start
       end
 
       def start_game_systems

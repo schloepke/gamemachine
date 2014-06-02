@@ -64,7 +64,7 @@ task uberjar(type: Jar) {
 }
 
 task codegen(type: Exec) {
-	File templateFile = file('src/main/resources/codegen.rb')
+	File templateFile = file('protogen.rb')
     commandLine 'jruby',templateFile
 }
 
