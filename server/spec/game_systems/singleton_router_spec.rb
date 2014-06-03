@@ -5,8 +5,7 @@ module GameMachine
     describe SingletonRouter do
 
       subject do
-        props = JavaLib::Props.new(SingletonRouter);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'singleton_router_test');
+        ref = Actor::Builder.new(SingletonRouter).with_name('singleton_router_test').test_ref
         ref.underlying_actor.post_init
         ref.underlying_actor
       end

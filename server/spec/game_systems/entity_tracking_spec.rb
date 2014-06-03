@@ -6,8 +6,7 @@ module GameMachine
 
 
       subject do
-        props = JavaLib::Props.new(EntityTracking);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'entity_tracking_test');
+        ref = Actor::Builder.new(EntityTracking).with_name('entity_tracking_test').test_ref
         ref.underlying_actor.post_init
         ref.underlying_actor
       end

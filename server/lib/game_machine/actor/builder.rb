@@ -1,3 +1,4 @@
+require 'jruby/core_ext'
 module GameMachine
   module Actor
 
@@ -14,8 +15,14 @@ module GameMachine
         @name = @klass.name
         @create_hashring = false
         @hashring_size = 0
-        @props = JavaLib::Props.new(Actor::Factory.new(@klass,args))
+        factory = Actor::Factory.new(@klass,args)
+        @props = JavaLib::Props.create(
+          JavaLib::ActorFactory.java_class,factory,@klass.name)
         @actor_system = Akka.instance.actor_system
+      end
+
+      def test_ref
+        JavaLib::TestActorRef.create(@actor_system,@props,@name)
       end
 
       # Sets the parent actor

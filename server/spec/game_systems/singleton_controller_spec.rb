@@ -10,9 +10,13 @@ module GameMachine
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
+      let(:singleton2) do
+        Actor::Builder.new(SingletonController).
+          with_name('singleton_controller_test2').test_ref
+      end
+
       subject do
-        props = JavaLib::Props.new(SingletonController);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'singleton_controller_test');
+        ref = Actor::Builder.new(SingletonController).with_name('singleton_controller_test').test_ref
         ref.underlying_actor.post_init(*[entity])
         ref.underlying_actor
       end
@@ -28,8 +32,8 @@ module GameMachine
         end
 
         it "calls start" do
-          expect_any_instance_of(SingletonController).to receive(:start)
-          subject
+          expect(singleton2.underlying_actor).to receive(:start)
+          singleton2.underlying_actor.post_init(*[entity])
         end
       end
 

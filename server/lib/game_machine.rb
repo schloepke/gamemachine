@@ -27,11 +27,7 @@ java_import 'com.game_machine.core.net.client.UdtClientHandler'
 
 require_relative 'game_machine/java_lib'
 
-if GameMachine.env == 'development'
-  require_relative '../java/local_lib/protostuff-compiler-1.0.7-jarjar.jar'
-  require_relative 'game_machine/protobuf/generate'
-end
-
+require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
 require_relative 'game_machine/grid'
 require_relative 'game_machine/game_loader'

@@ -18,8 +18,7 @@ module GameMachine
       end
 
       subject do
-        props = JavaLib::Props.new(Authentication)
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Authentication.name)
+        ref = Actor::Builder.new(Authentication).test_ref
         ref.underlying_actor.initialize_states
         ref.underlying_actor
       end

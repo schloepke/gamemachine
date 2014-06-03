@@ -66,20 +66,21 @@ module GameMachine
 
       def generate
         game_protofile = File.join(config_path,'game_messages.proto')
-        game_entity_messages_file = File.join(config_path,'game_entity_messages.proto')
         protofile = File.join(config_path,'messages.proto')
 
         if File.exists?(game_protofile)
           game_messages = File.read(game_protofile)
-          game_entity_messages = File.read(game_entity_messages_file)
+          gm = Protobuf::GameMessages.new(game_protofile)
+          entity_fields = gm.create_entity_fields
+          game_entity_fields = entity_fields.join("\n")
         else
           game_messages = ''
-          game_entity_messages = ''
+          game_entity_fields = ''
         end
         messages = File.read(protofile)
 
         combined_messages = messages.sub('//GAME_MESSAGES',game_messages)
-        combined_messages = combined_messages.sub('//GAME_ENTITY_MESSAGES',game_entity_messages)
+        combined_messages = combined_messages.sub('//GAME_ENTITY_MESSAGES',game_entity_fields)
         combined_messages_protofile = File.join(config_path,'combined_messages.proto')
 
         File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}

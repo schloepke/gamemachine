@@ -324,13 +324,12 @@ message Entity {
   optional JsonEntity jsonEntity = 47;
   optional string destination = 48;
   optional bool json = 49;
-  optional Health health = 101;
-optional Effect effect = 102;
-optional EffectList effectList = 103;
-optional CombatAbility combatAbility = 104;
-optional Attack attack = 105;
-optional IsPlayer isPlayer = 106;
-
+  optional Health health = 1000;
+optional Effect effect = 1001;
+optional EffectList effectList = 1002;
+optional CombatAbility combatAbility = 1003;
+optional Attack attack = 1004;
+optional IsPlayer isPlayer = 1005;
 }
 
 message EntityList {
