@@ -22,8 +22,8 @@ require 'java'
 jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
 jars.each {|jar| require jar}
 
-java_import 'com.game_machine.core.net.client.UdtClient'
-java_import 'com.game_machine.core.net.client.UdtClientHandler'
+#java_import 'com.game_machine.core.net.client.UdtClient'
+#java_import 'com.game_machine.core.net.client.UdtClientHandler'
 
 require_relative 'game_machine/java_lib'
 
@@ -66,13 +66,14 @@ require_relative 'game_machine/player_registry'
 require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
-require_relative 'game_machine/navigation'
+#require_relative 'game_machine/navigation'
 require_relative 'game_machine/rest_api/router'
 require_relative 'game_machine/rest_api/protobuf_compiler'
 require_relative 'game_machine/rest_api/auth'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
+
 
 
 

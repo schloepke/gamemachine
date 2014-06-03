@@ -12,7 +12,7 @@ development:
       cache_writes_per_second: -1
       world_grid_size: 2000
       world_grid_cell_size: 25
-      mono_enabled: true
+      mono_enabled: false
       mono_dll: test_actor.dll
       singleton_manager_router_count: 200
       singleton_manager_update_interval: 100
@@ -24,7 +24,7 @@ development:
       udp_enabled: true
       udp_host: 0.0.0.0
       udp_port: 8100
-      udt_enabled: true
+      udt_enabled: false
       udt_host: localhost
       udt_port: 8200
       tcp_enabled: true
@@ -128,7 +128,7 @@ test:
       udp_enabled: true
       udp_host: 0.0.0.0
       udp_port: 8100
-      udt_enabled: true
+      udt_enabled: false
       udt_host: localhost
       udt_port: 8200
       tcp_enabled: true

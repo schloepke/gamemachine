@@ -15,13 +15,13 @@ module Demo
     def start
       GameMachine.logger.info "Starting #{ExampleController.name}"
       GameMachine::Actor::Builder.new(ExampleController).start
-      load_navmesh
+      #load_navmesh
       load_game_data
-      GameMachine::Actor::Builder.new(CombatController).
-        with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
-      1.times do |i|
-        create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
-      end
+      #GameMachine::Actor::Builder.new(CombatController).
+      #  with_router(GameMachine::JavaLib::RoundRobinRouter,10).start
+      #1.times do |i|
+      #  create_npc("#{GameMachine::Application.config.akka_port}_#{i}")
+      #end
     end
 
     def load_navmesh\

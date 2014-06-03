@@ -104,20 +104,15 @@ module GameMachine
         end
 
         if config.udt_enabled
-          Actor::Builder.new(Endpoints::Udt).start
-          JavaLib::UdtServer.start(config.udt_host,config.udt_port)
-          GameMachine.stdout(
-            "UDT starting on #{config.udt_host}:#{config.udt_port}"
-          )
+          #Actor::Builder.new(Endpoints::Udt).start
+          #JavaLib::UdtServer.start(config.udt_host,config.udt_port)
+          #GameMachine.stdout(
+          #  "UDT starting on #{config.udt_host}:#{config.udt_port}"
+          #)
         end
         
         if config.http_enabled
           Actor::Builder.new(Endpoints::Http::Auth).start
-          return
-          props = JavaLib::Props.new(Endpoints::Http::Auth)
-          Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
-          props = JavaLib::Props.new(Endpoints::Http::Rpc)
-          Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
         end
       end
 

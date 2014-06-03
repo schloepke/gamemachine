@@ -26,6 +26,7 @@ module GameMachine
           if http_message[:method] == 'POST'
             http_message[:body] = message.getBodyAs(java.lang.String.java_class, getCamelContext)
           end
+          http_message[:camel_message] = message
           RestApi::Router.find.tell(http_message,get_self)
         rescue Exception => e
           GameMachine.logger.error "#{self.class.name} #{e.to_s}"
