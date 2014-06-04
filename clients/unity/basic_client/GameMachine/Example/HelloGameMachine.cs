@@ -12,6 +12,7 @@ public class HelloGameMachine : MonoBehaviour
     // and actor system.  Custom actors should be created after OnAppStarted is called.
     void Start()
     {
+        // Replace with your own user object if you want. 
         User user = User.Instance;
         user.SetUser("player", "pass");
 

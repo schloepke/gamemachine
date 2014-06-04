@@ -1,6 +1,5 @@
 
 using GameMachine;
-
 using Entity = GameMachine.Messages.Entity;
 using ObjectdbGet = GameMachine.Messages.ObjectdbGet;
 using ObjectdbGetResponse = GameMachine.Messages.ObjectdbGetResponse;
