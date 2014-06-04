@@ -10,33 +10,29 @@ module GameMachine
         end
 
         def getEndpointUri
-          return "jetty:http://#{Application.config.http_host}:#{Application.config.http_port}/auth?traceEnabled=false"
+          return "jetty:http://#{Application.config.http_host}:#{Application.config.http_port}/?matchOnUriPrefix=true&traceEnabled=false"
         end
 
         def onReceive(message)
-          params = message_to_params(message)
-          if auth = login(params['username'],params['password'])
-            response = auth
-          else
-            response = "error"
+          headers = message.get_headers
+          headers.each do |key,value|
+            GameMachine.logger.info "Header: #{key}=#{value}"
           end
-          getSender.tell(response,get_self)
+          http_message = {:reply_to => getSender, :camel_message => message}
+          headers = message.get_headers
+          http_message[:query] = headers.fetch('CamelHttpQuery',nil)
+          http_message[:uri] = headers.fetch('CamelHttpUri',nil)
+          http_message[:method] = headers.fetch('CamelHttpMethod',nil)
+          if http_message[:method] == 'POST'
+            http_message[:body] = message.getBodyAs(java.lang.String.java_class, getCamelContext)
+          end
+          http_message[:camel_message] = message
+          RestApi::Router.find.tell(http_message,get_self)
         rescue Exception => e
           GameMachine.logger.error "#{self.class.name} #{e.to_s}"
           getSender.tell('error',get_self)
         end
 
-        private
-
-        def login(user,pass)
-          Application.auth_handler.authorize(user,pass)
-        end
-
-        def message_to_params(message)
-          body = message.getBodyAs(java.lang.String.java_class, getCamelContext)
-          data = URI.decode_www_form(body)
-          data.each_with_object({}) {|d,acc| acc[d[0]] = d[1]}
-        end
 
       end
     end

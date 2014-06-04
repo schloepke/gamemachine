@@ -8,8 +8,7 @@ module GameMachine
       let(:aspect) {['one','two']}
 
       subject do
-        props = JavaLib::Props.new(Actor::Base);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, Actor::Base.name);
+        ref = Actor::Builder.new(Actor::Base).test_ref
         ref.underlying_actor
       end
 

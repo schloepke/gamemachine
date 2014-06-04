@@ -27,7 +27,7 @@ module GameMachine
 
         def reload_actor(basename)
           if klassname = registered_actors.fetch(basename,nil)
-            Base.find(klassname).tell('reload')
+            Base.find(klassname).tell('reload_because_changed')
           end
         end
 

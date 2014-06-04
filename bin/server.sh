@@ -34,10 +34,22 @@ stop_daemon() {
 if [ -e "$PID_FILE" ]; then
   echo "Stopping $APP_NAME."
   PID=`cat $PID_FILE`
-  for i in {1..10} ; do
-    kill -TERM $PID 2> /dev/null
+  for i in 1 2 3 4 5 6 7 8 9 10
+  do
+    if [ "$i" -gt 2 ] ;then
+      echo "Using kill -9"
+      kill -9 $PID 2> /dev/null
+    else
+      kill -TERM $PID 2> /dev/null
+    fi
+    echo "try $i"
+    if [ `ps $PID 2> /dev/null | grep $PID | wc -l` -eq 1 ]; then
+      echo "$APP_NAME still running"
+    else
+      echo "$APP_NAME killed"
+      break;
+    fi
     sleep 1
-    [ `ps $PID 2> /dev/null | grep $PID | wc -l` -eq 0 ] && break
   done
   rm $PID_FILE
 else

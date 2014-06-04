@@ -13,7 +13,6 @@ module GameMachine
         alias_method :apply, :new
         alias_method :create, :new
 
-
         # Sets the system wide player controller class.
         # When a player logs in, a player controller with this class
         # will be created. The system notifies the player controller when

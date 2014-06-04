@@ -48,8 +48,7 @@ module GameMachine
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
       subject do
-        props = JavaLib::Props.new(GameSystems::Chat);
-        ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'chat_test');
+        ref = Actor::Builder.new(GameSystems::Chat).with_name('chat_test').test_ref
         ref.underlying_actor.post_init(player_id)
         ref.underlying_actor
       end

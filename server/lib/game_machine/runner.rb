@@ -13,9 +13,6 @@ module GameMachine
       GameMachine.logger.info "Using name #{name}"
       GameMachine::Application.initialize!(name,cluster)
       GameMachine::Application.start
-      if console
-        binding.pry
-      end
     end
 
   end

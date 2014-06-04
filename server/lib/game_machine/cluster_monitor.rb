@@ -37,7 +37,9 @@ module GameMachine
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
         Akka.instance.init_cluster!(@cluster.self_address.to_string)
-        @cluster.subscribe(getSelf, JavaLib::ClusterEvent::ClusterDomainEvent.java_class)
+        @cluster.subscribe(getSelf,
+                           JavaLib::ClusterEvent::MemberEvent.java_class,
+                           JavaLib::ClusterEvent::UnreachableMember.java_class)
       end
       @observers = []
     end

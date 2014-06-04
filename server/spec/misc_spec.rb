@@ -13,6 +13,13 @@ module GameMachine
     end
 
 
+    xit "parses game messages" do
+      file = File.join(GameMachine.app_root,'config','game_messages.proto')
+      obj = Protobuf::GameMessages.new(file)
+      fields = obj.create_entity_fields
+      puts fields.inspect
+    end
+
     xit "extends protobuf messages" do
       MessageLib::Entity.class_eval do
         define_method :doit do

@@ -1,16 +1,16 @@
 module GameMachine
   module Actor
-    class Development < Base
+    module Development
 
-      class << self
+      def self.included(base)
+        Reloadable.register(base.name)
+        base.extend(ClassMethods)
+      end
 
-        def reload_on_change
-          Reloadable.register(self.name)
-          @reload_on_change = true
-        end
+      module ClassMethods
 
         def reload_on_change?
-          @reload_on_change ? true : false
+          true
         end
       end
 
@@ -19,7 +19,7 @@ module GameMachine
       end
 
       def onReceive(message)
-        if message == 'reload'
+        if message == 'reload_because_changed'
           kill_self("Actor code change")
         else
           on_receive(message)

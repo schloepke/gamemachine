@@ -8,7 +8,7 @@ module GameMachine
         @grid = GridCommands.new
         @chat = ChatCommands.new
         @datastore = DatastoreCommands.new
-        @navigation = NavigationCommands.new
+        #@navigation = NavigationCommands.new
       end
     end
   end

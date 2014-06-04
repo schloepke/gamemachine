@@ -2,7 +2,7 @@ module GameMachine
   module Actor
 
     class Factory
-      include JavaLib::UntypedActorFactory
+      include JavaLib::IActorFactory
 
       def initialize(klass,args)
         @klass = klass

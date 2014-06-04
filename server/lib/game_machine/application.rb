@@ -59,9 +59,27 @@ module GameMachine
         start_endpoints
         start_core_systems
         start_handlers
+
+        if GameMachine.env == 'development'
+          start_development_systems
+        end
+
         start_game_systems
         GameLoader.new.load_all
         GameMachine.stdout("Game Machine start successful")
+        web
+      end
+
+      def web
+        require_relative '../../web/app'
+        return
+        web_root = File.join(GameMachine.app_root,'web')
+        config_dir = File.join(GameMachine.app_root,'web','config','trinidad.yml')
+        require 'trinidad'
+        Trinidad::CommandLineParser.parse(["-d","#{web_root}","-f","#{config_dir}"])
+        GameMachine.logger.info "Trinidad Config #{Trinidad.configuration.inspect}"
+        Trinidad::Server.new(Trinidad.configuration).start
+
       end
 
       def load_mono
@@ -99,18 +117,15 @@ module GameMachine
         end
 
         if config.udt_enabled
-          Actor::Builder.new(Endpoints::Udt).start
-          JavaLib::UdtServer.start(config.udt_host,config.udt_port)
-          GameMachine.stdout(
-            "UDT starting on #{config.udt_host}:#{config.udt_port}"
-          )
+          #Actor::Builder.new(Endpoints::Udt).start
+          #JavaLib::UdtServer.start(config.udt_host,config.udt_port)
+          #GameMachine.stdout(
+          #  "UDT starting on #{config.udt_host}:#{config.udt_port}"
+          #)
         end
         
         if config.http_enabled
-          props = JavaLib::Props.new(Endpoints::Http::Auth)
-          Akka.instance.actor_system.actor_of(props,Endpoints::Http::Auth.name)
-          props = JavaLib::Props.new(Endpoints::Http::Rpc)
-          Akka.instance.actor_system.actor_of(props,Endpoints::Http::Rpc.name)
+          #Actor::Builder.new(Endpoints::Http::Auth).start
         end
       end
 
@@ -126,6 +141,10 @@ module GameMachine
         ).start
       end
 
+      def start_development_systems
+        Actor::Builder.new(RestApi::ProtobufCompiler).start
+      end
+
       # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
@@ -139,6 +158,8 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start
+        Actor::Builder.new(RestApi::Router).start
+        Actor::Builder.new(RestApi::Auth).start
       end
 
       def start_game_systems

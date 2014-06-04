@@ -4,8 +4,7 @@ module GameMachine
   describe Actor::Ref do
 
     let(:local_echo) do
-      props = JavaLib::Props.new(GameSystems::LocalEcho);
-      ref = JavaLib::TestActorRef.create(Akka.instance.actor_system, props, 'localecho1');
+      ref = Actor::Builder.new(GameSystems::LocalEcho).with_name('localecho1').test_ref
       ref.underlying_actor
     end
 
@@ -67,13 +66,6 @@ module GameMachine
       it "timeout option should be passed to ask" do
         subject.should_receive(:ask).with('test',2)
         subject.send_message('test', :timeout => 2, :blocking => true)
-      end
-
-      it "actor should get a message" do
-        local_echo.should_receive(:on_receive).with('hi')
-        ref = GameSystems::LocalEcho.find('localecho1')
-        ref.tell('hi')
-        sleep 0.200
       end
 
       it "should get returned message" do
