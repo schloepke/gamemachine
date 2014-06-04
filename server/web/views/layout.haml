@@ -1,0 +1,37 @@
+!!! 5
+%html
+  %head
+    %meta{:charset=>"utf-8"}
+    %meta{'http-equiv'=>"X-UA-Compatible", :content=>"IE=edge"}
+    %meta{:name=>"viewport", :content=>"width=device-width, initial-scale=1"}
+    %link{:rel=>"stylesheet", :href=>"//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"}
+    %link{:rel=>"stylesheet", :href=>"//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css"}
+    %script{:src=>"https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"}
+    %script{:src=>"//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"}
+    %body
+      .container-fluid
+        .row
+          .col-xs-12
+            .h2
+              %a{:href => '/'} Game Machine
+      .container-fluid
+        .row
+          .col-xs-2
+            .menu
+              .messages
+                .h4 Messages
+                %ul
+                  %li
+                    %a{:href => '/messages/game'} Edit game messages
+                  %li
+                    %a{:href => '/messages/all?format=proto'} Download protofile
+                  %li
+                    %a{:href => '/messages/all?format=view'} View all messages
+              .logs
+                .h4 Logs
+                %ul
+                  %li
+                    %a{:href => '/logs'} System logs
+          .col-xs-9
+            = yield
+          .col-xs-1

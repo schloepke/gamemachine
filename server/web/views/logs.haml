@@ -1,0 +1,32 @@
+.container-fluid
+  .row
+    - @logtypes.each do |logtype,name|
+      .col-xs-2
+        .h4
+          %a{:href => "/logs?logtype=#{logtype}"}
+            = name
+.container-fluid
+  .row
+    .col-xs-12
+      .h4
+        = @logtypes[@logtype]
+  .row
+    .col-xs-12
+      %table.table.table-condensed.table-bordered
+        - if @logtype == :app
+          %tr
+            %th Timestamp
+            %th Severity
+            %th Service
+            %th Message
+          - @content.each do |line|
+            %tr
+              %td= line[0]
+              %td= line[1]
+              %td= line[2]
+              %td= line[3]
+        - else
+          - @content.each do |line|
+            %tr
+              %td= line
+

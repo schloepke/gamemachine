@@ -1,11 +1,11 @@
 module Demo
   class ExampleController < GameMachine::Actor::Base
-    include GameMachine::Commands
     include GameMachine
+    include GameMachine::Commands
+    include GameMachine::Actor::Development
 
-    reload_on_change
     def post_init(*args)
-      GameMachine.logger.info "#{self.class.name} post_init called v4"
+      GameMachine.logger.info "#{self.class.name} post_init called v7"
     end
 
     def on_receive(message)

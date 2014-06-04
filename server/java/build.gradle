@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
   compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.+'
-  compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
+  //compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.+'
   compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-remote_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-testkit_$scala_version", version:"$akka_version"
@@ -45,7 +45,7 @@ dependencies {
   compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
   compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
   //compile(group: 'io.netty', name: 'netty-all', version:'4.0.11.Final')
-  compile 'org.apache.camel:camel-jetty:2.10.3'
+  //compile 'org.apache.camel:camel-jetty:2.10.3'
   compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:0.9.5'
   

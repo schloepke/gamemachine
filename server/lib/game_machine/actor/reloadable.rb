@@ -27,7 +27,7 @@ module GameMachine
 
         def reload_actor(basename)
           if klassname = registered_actors.fetch(basename,nil)
-            Base.find(klassname).tell('reload')
+            Base.find(klassname).tell('reload_because_changed')
           end
         end
 
@@ -49,7 +49,7 @@ module GameMachine
             else
               File.open(file,'rb') do |f|
                 str = f.read
-                if str.match(/Actor\:\:Base/)
+                if str.match(/Actor\:\:Development/)
                   fileinfo = {:changed => true, :file => file, :mtime => mtime}
                   if first_run
                     fileinfo[:changed] = false

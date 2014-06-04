@@ -26,6 +26,7 @@ jars.each {|jar| require jar}
 #java_import 'com.game_machine.core.net.client.UdtClientHandler'
 
 require_relative 'game_machine/java_lib'
+require_relative 'game_machine/file_tail'
 
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
@@ -70,6 +71,7 @@ require_relative 'game_machine/clients'
 require_relative 'game_machine/rest_api/router'
 require_relative 'game_machine/rest_api/protobuf_compiler'
 require_relative 'game_machine/rest_api/auth'
+require_relative 'game_machine/rest_api/template'
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS

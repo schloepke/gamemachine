@@ -17,6 +17,12 @@ module GameMachine
         @app_root = app_root
       end
 
+      def self.compile(path)
+        loader = CachingProtoLoader.new
+        file = java.io.File.new(path)
+        ProtoUtil.parseProto(file)
+      end
+
       def erb_template
         File.join(app_root,'lib','game_machine', 'protobuf','component.erb')
       end
@@ -85,9 +91,7 @@ module GameMachine
 
         File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}
 
-        loader = CachingProtoLoader.new
-        file = java.io.File.new(combined_messages_protofile)
-        proto = ProtoUtil.parseProto(file)
+        proto = self.class.compile(combined_messages_protofile)
 
         write_components(proto)
         #FileUtils.rm(combined_messages_protofile)

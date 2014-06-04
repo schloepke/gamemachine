@@ -67,6 +67,19 @@ module GameMachine
         start_game_systems
         GameLoader.new.load_all
         GameMachine.stdout("Game Machine start successful")
+        web
+      end
+
+      def web
+        require_relative '../../web/app'
+        return
+        web_root = File.join(GameMachine.app_root,'web')
+        config_dir = File.join(GameMachine.app_root,'web','config','trinidad.yml')
+        require 'trinidad'
+        Trinidad::CommandLineParser.parse(["-d","#{web_root}","-f","#{config_dir}"])
+        GameMachine.logger.info "Trinidad Config #{Trinidad.configuration.inspect}"
+        Trinidad::Server.new(Trinidad.configuration).start
+
       end
 
       def load_mono
@@ -112,7 +125,7 @@ module GameMachine
         end
         
         if config.http_enabled
-          Actor::Builder.new(Endpoints::Http::Auth).start
+          #Actor::Builder.new(Endpoints::Http::Auth).start
         end
       end
 

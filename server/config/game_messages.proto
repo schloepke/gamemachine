@@ -1,3 +1,4 @@
+
 message Health {
   required  int32  health = 1;
 }
@@ -32,4 +33,3 @@ message Attack {
 message IsPlayer {
   optional  bool  enabled = 1;
 }
-

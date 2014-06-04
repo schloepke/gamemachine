@@ -1,0 +1,33 @@
+.container-fluid
+  .row
+    .col-xs-6
+      %blockquote
+        - if @messages == :game
+          Add, update, or remove messages using the editor.  When you save them
+          a new master messages proto file will be generated for you to download.
+        - else
+          This is the combined list of built in plus user modifiable messages.
+          This is what the protofile that you can download contains.
+  .row
+    .col-xs-6
+      %div#editor
+  .row{:style => 'margin-top:10px;'}
+    .col-xs-6
+      %form{:action => '/messages/game', :method => 'POST'}
+        .form-group
+          %input{:id => 'editor_content', :type => 'hidden', :name => 'game_messages', :value=>"#{@content}"}
+          -if @messages == :game
+            %button{:type=>"submit", :class => "btn btn-primary"}
+              Save Messages
+%script{:src => 'http://cdnjs.cloudflare.com/ajax/libs/ace/1.1.3/ace.js'}
+:javascript
+  $(document).ready(function() {
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/textmate");
+    editor.setOptions({ maxLines: 500, minLines: 40, autoScrollEditorIntoView: true });
+    editor.setValue($('#editor_content').val());
+    editor.getSession().setMode("ace/mode/protobuf");
+    editor.getSession().on('change', function(e) {
+        $('#editor_content').val(editor.getValue());
+    });
+  });

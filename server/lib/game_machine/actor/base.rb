@@ -13,15 +13,6 @@ module GameMachine
         alias_method :apply, :new
         alias_method :create, :new
 
-        def reload_on_change
-          Reloadable.register(self.name)
-          @reload_on_change = true
-        end
-
-        def reload_on_change?
-          @reload_on_change ? true : false
-        end
-
         # Sets the system wide player controller class.
         # When a player logs in, a player controller with this class
         # will be created. The system notifies the player controller when
@@ -133,16 +124,8 @@ module GameMachine
 
       end
 
-      def kill_self(reason)
-        raise "Killing #{self}: #{reason}"
-      end
-
       def onReceive(message)
-        if self.class.reload_on_change? && message == 'reload'
-          kill_self("Actor code change")
-        else
-          on_receive(message)
-        end
+        on_receive(message)
       end
 
       def on_receive(message)
