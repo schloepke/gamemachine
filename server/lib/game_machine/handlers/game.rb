@@ -18,8 +18,7 @@ module GameMachine
       def dispatch_entities(entities)
         entities.each do |entity|
           if entity.save
-            entity.set_save(false)
-            commands.datastore.put(entity)
+            entity = GameSystems::ObjectDbProxy.save_entity(entity)
           end
           if entity.has_destination
             destination = entity.destination.gsub('/','::')
