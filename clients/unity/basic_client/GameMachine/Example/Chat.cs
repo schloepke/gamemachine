@@ -2,6 +2,18 @@
 using System.Collections;
 using GameMachine;
 
+// This class loads a UI component and sets up the callbacks to tie the UI to the messaging system.
+
+// Note that the chat system is built using our messaging system, which uses a publish/subscribe model.  This makes it
+// simple to use not just for chat but for general grouping amd matchmaking as well. 
+
+// To create a simple matchmaking system, just create a channel to use as the lobby channel.  When players leave
+// the lobby to join a game, simply have them leave the lobby channel and join the game specific channel. 
+// TODO  The above requires that we expose the subscriber list for each channel in Messenger.  We are receiving that data
+// but Messenger is not currently extracting it and making it available.
+
+
+
 // To replace the UI with you own you will need to provide your own UI game object with
 // a method for receiving and sending messages.  This example uses a javascript ui, so we have to use
 // the SendMessage functionality to pass messages back and forth.

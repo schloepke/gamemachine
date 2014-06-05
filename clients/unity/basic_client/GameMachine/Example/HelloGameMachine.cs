@@ -8,14 +8,17 @@ using Player = GameMachine.Messages.Player;
 public class HelloGameMachine : MonoBehaviour
 {
 
-    // Start GameMachine.  Calls OnAppStarted once it has loaded and initialized the network
-    // and actor system.  Custom actors should be created after OnAppStarted is called.
+    // Example of how to wire up GameMachine in your application.  We use the Start function
+    // here as the entry point to kick everything off, but you can initialize anyplace you like.
+   
     void Start()
     {
         // Replace with your own user object if you want. 
         User user = User.Instance;
         user.SetUser("player", "pass");
 
+        // GameMachine.App is the only GameMachine class that is a MonoBehavior
+        // You want to add it as a component to just ONE game object in your game.
         GameMachine.App.AppStarted callback = OnAppStarted;
         GameMachine.App app = this.gameObject.
             AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
@@ -27,10 +30,18 @@ public class HelloGameMachine : MonoBehaviour
     }
 
 
+    // When this is called GameMachine core is loaded, the client is connected, and
+    // the actor system is running.
     void OnAppStarted()
     {
+        // Start our chat example
         StartChat();
+
+        // Setup the persistence layer.  This is an optional feature, see the Persistence class
+        // for how it works.
         StartPersistence();
+
+
         Entity entity = new Entity();
         entity.id = "route_test";
         entity.json = true;
