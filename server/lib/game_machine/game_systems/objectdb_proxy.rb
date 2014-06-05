@@ -13,7 +13,6 @@ module GameMachine
         scoped_id = scope_entity_id(entity.id,entity.player.id)
         entity.set_id(scoped_id)
         entity.set_save(false)
-        GameMachine.logger.info "ObjectDbProxy save scoped_id #{scoped_id}"
         ref = ObjectDb.find_distributed(entity.get_id)
         ref.tell(MessageLib::ObjectdbPut.new.set_entity(entity))
         entity
@@ -38,12 +37,10 @@ module GameMachine
 
             # Make request with scoped id
             scoped_id = self.class.scope_entity_id(entity_id,player_id)
-            GameMachine.logger.info "ObjectDbProxy scoped_id #{scoped_id}"
             if entity = commands.datastore.get(scoped_id)
 
               # Unscope the entity id
               unscoped_id = self.class.unscope_entity_id(entity.id,player_id)
-              GameMachine.logger.info "ObjectDbProxy unscoped_id #{unscoped_id}"
               entity.set_id(unscoped_id)
 
               response.set_entity_found(true)
@@ -55,7 +52,6 @@ module GameMachine
 
             entity.set_objectdb_get_response(response)
             commands.player.send_message(entity,player_id)
-            GameMachine.logger.info "ObjectDbProxy send #{entity} to #{player_id}"
           end
         end
       end

@@ -87,8 +87,8 @@ extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float st
     int npolys = m_npolys;
 
     float iterPos[3], targetPos[3];
-    query->closestPointOnPoly(m_startRef, m_spos, iterPos);
-    query->closestPointOnPoly(polys[npolys-1], m_epos, targetPos);
+    query->closestPointOnPoly(m_startRef, m_spos, iterPos,0);
+    query->closestPointOnPoly(polys[npolys-1], m_epos, targetPos,0);
 
     m_nsmoothPath = 0;
     

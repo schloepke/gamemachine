@@ -1,3 +1,0 @@
-[submodule "server/pathfinding/recastnavigation"]
-	path = server/pathfinding/recastnavigation
-	url = git@github.com:memononen/recastnavigation.git
