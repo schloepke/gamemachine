@@ -5,7 +5,7 @@ module GameMachine
     class << self
 
       def games_root
-        File.join(GameMachine.app_root,'../games')
+        File.join(GameMachine.app_root,'/games')
       end
     end
 

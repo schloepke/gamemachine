@@ -72,6 +72,8 @@ require_relative 'game_machine/clients'
 
 if Config::CONFIG['target_os'] == 'linux'
   require_relative 'game_machine/navigation'
+else
+  GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"
 end
 
 

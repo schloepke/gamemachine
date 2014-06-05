@@ -29,7 +29,9 @@ if opts[:config]
 end
 
 console = opts[:console] || false
-cluster = opts[:cluster] || false
+
+# Always run in cluster mode.  Akka pub/sub depends on it
+cluster = true
 
 name = opts[:name] || 'default'
 GameMachine::Runner.start(name,cluster,console)

@@ -44,10 +44,12 @@ module GameMachine
       end
 
       def stop
-        Mono::Vm.instance.unload
+        if config.mono_enabled
+          Mono::Vm.instance.unload
+        end
+
         stop_actor_system
         DataStore.instance.shutdown
-        JavaLib::UdtServer.stop
       end
 
       def start
@@ -67,19 +69,13 @@ module GameMachine
         start_game_systems
         GameLoader.new.load_all
         GameMachine.stdout("Game Machine start successful")
-        web
+
+        # This call blocks, make it the last thing we do
+        start_web
       end
 
-      def web
+      def start_web
         require_relative '../../web/app'
-        return
-        web_root = File.join(GameMachine.app_root,'web')
-        config_dir = File.join(GameMachine.app_root,'web','config','trinidad.yml')
-        require 'trinidad'
-        Trinidad::CommandLineParser.parse(["-d","#{web_root}","-f","#{config_dir}"])
-        GameMachine.logger.info "Trinidad Config #{Trinidad.configuration.inspect}"
-        Trinidad::Server.new(Trinidad.configuration).start
-
       end
 
       def load_mono
@@ -116,17 +112,6 @@ module GameMachine
           )
         end
 
-        if config.udt_enabled
-          #Actor::Builder.new(Endpoints::Udt).start
-          #JavaLib::UdtServer.start(config.udt_host,config.udt_port)
-          #GameMachine.stdout(
-          #  "UDT starting on #{config.udt_host}:#{config.udt_port}"
-          #)
-        end
-        
-        if config.http_enabled
-          #Actor::Builder.new(Endpoints::Http::Auth).start
-        end
       end
 
       def start_handlers
@@ -142,7 +127,6 @@ module GameMachine
       end
 
       def start_development_systems
-        Actor::Builder.new(RestApi::ProtobufCompiler).start
       end
 
       # TODO configurize router sizes
@@ -158,8 +142,6 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start
-        Actor::Builder.new(RestApi::Router).start
-        Actor::Builder.new(RestApi::Auth).start
       end
 
       def start_game_systems

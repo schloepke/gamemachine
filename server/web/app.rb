@@ -12,10 +12,10 @@ require_relative 'controllers/log_controller'
 
 class WebApp < Sinatra::Base
   CONTROLLERS = {}
-  set :bind, '192.168.1.8'
-  set :port, 3000
+  set :bind, GameMachine::Application.config.http_host
+  set :port, GameMachine::Application.config.http_port
   set :server, 'trinidad'
-  set :root, '/home/chris/game_machine/server/web'
+  set :root, File.expand_path(File.dirname(__FILE__))
   mime_type :proto, 'application/octet-stream'
 
   register Sinatra::MultiRoute
