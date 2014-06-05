@@ -116,7 +116,7 @@ test:
       cache_writes_per_second: -1
       world_grid_size: 2000
       world_grid_cell_size: 25
-      mono_enabled: true
+      mono_enabled: false
       mono_dll: test_actor.dll
       singleton_manager_router_count: 200
       singleton_manager_update_interval: 100

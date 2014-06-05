@@ -1,4 +1,6 @@
 
+require 'rbconfig'
+
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
 ENV['GAME_ENV'] ||= 'development'
@@ -67,11 +69,11 @@ require_relative 'game_machine/player_registry'
 require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
-#require_relative 'game_machine/navigation'
-require_relative 'game_machine/rest_api/router'
-require_relative 'game_machine/rest_api/protobuf_compiler'
-require_relative 'game_machine/rest_api/auth'
-require_relative 'game_machine/rest_api/template'
+
+if Config::CONFIG['target_os'] == 'linux'
+  require_relative 'game_machine/navigation'
+end
+
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
