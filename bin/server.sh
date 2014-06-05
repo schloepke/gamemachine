@@ -1,7 +1,13 @@
 #!/bin/bash
-export LD_PRELOAD=/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjsig.so
+#export LD_PRELOAD=/usr/lib/jvm/java-7-openjdk-amd64/jre/lib/amd64/libjsig.so
 SCRIPT_PATH=`dirname "$0"`; SCRIPT_PATH=`eval "cd \"$SCRIPT_PATH\" && pwd"`
 SERVER_HOME=$SCRIPT_PATH/../server
+SERVER_LOG=$SERVER_HOME/log
+SERVER_TMP=$SERVER_HOME/tmp
+
+mkdir -p $SERVER_LOG
+mkdir -p $SERVER_TMP
+
 cd $SERVER_HOME
 
 #unset GEM_HOME
