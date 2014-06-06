@@ -19,7 +19,7 @@ development:
       couchbase_servers: http://217.0.0.1:8091/pools
       auth_handler: GameMachine::AuthHandlers::Basic
       http_enabled: true
-      http_host: 192.168.1.8
+      http_host: 127.0.0.1
       http_port: 3000
       udp_enabled: true
       udp_host: 0.0.0.0
