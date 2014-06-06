@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Game machine by chrisochs</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Game machine</h1>
+        <p>Multiplayer game engine</p>
+
+        <p class="view"><a href="https://github.com/chrisochs/game_machine">View the Project on GitHub <small>chrisochs/game_machine</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/chrisochs/game_machine/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/chrisochs/game_machine/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/chrisochs/game_machine">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="game-machine" class="anchor" href="#game-machine"><span class="octicon octicon-link"></span></a>Game Machine</h1>
+
+<p>Game Machine is a highly performant, scalable massive multiplayer game engine written in
+<a href="http://www.jruby.org">Jruby</a>.
+It is based on <a href="http://www.akka.io">Akka</a>, an actor based messaging system
+built on the JVM.  Game machine makes it simple to write performant, scalable
+code using higher level abstractions.  </p>
+
+<h1>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h1>
+
+<ul>
+<li>UDP/UDT/TCP networking.</li>
+<li>Http for login/authorization.</li>
+<li>Fully distributed architecture.
+
+<ul>
+<li>Distributed player registry.</li>
+<li>Distributed player/npc controllers.</li>
+<li>Distributed grid with spatial hashing and fast neighbor lookups.</li>
+<li>Distributed chat/group system.</li>
+</ul>
+</li>
+<li>Entity component system.
+
+<ul>
+<li>Entities and components are protocol buffers.</li>
+<li>Integrates seamlessly with Akka messaging.</li>
+<li>Everything is an entity/message.</li>
+</ul>
+</li>
+<li>Object persistence
+
+<ul>
+<li>Distributed transactional updates.</li>
+<li>Memory based with write behind cache to key/value store.</li>
+<li>Pluggable persistence.  Coubhbase, Mapdb, and memory already supported.</li>
+</ul>
+</li>
+<li>Pathfinding based on Recastnavigation</li>
+<li>Polyglot framework
+
+<ul>
+<li>Java</li>
+<li>Scala</li>
+<li>Jruby</li>
+<li>C#</li>
+</ul>
+</li>
+</ul><h1>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h1>
+
+<p>The old gem installation has been removed.  We are now putting together an
+install based on Vagrant, which will provide a complete working server out of
+the box.</p>
+
+<h1>
+<a name="documentation" class="anchor" href="#documentation"><span class="octicon octicon-link"></span></a>Documentation</h1>
+
+<p>Documentation and SDK's for Java, Ruby, and C# will be coming soon.</p>
+
+<h1>
+<a name="whats-new" class="anchor" href="#whats-new"><span class="octicon octicon-link"></span></a>What's new</h1>
+
+<p>C# actors via embedding mono is the main big feature that was added.  We are
+currentl working on the end user api and a Unity3D SDK.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/chrisochs">chrisochs</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
