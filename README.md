@@ -37,7 +37,5 @@ We believe that the key to being productive is a combination of using the right 
 - Web control panel
 
 
-**
-[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started)
-**
+**[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
 
