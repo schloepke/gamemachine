@@ -71,10 +71,12 @@ module GameMachine
         GameMachine.stdout("Game Machine start successful")
 
         # This call blocks, make it the last thing we do
-        start_web
+        if config.http_enabled
+          start_http
+        end
       end
 
-      def start_web
+      def start_http
         require_relative '../../web/app'
       end
 

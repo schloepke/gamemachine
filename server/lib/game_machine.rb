@@ -28,7 +28,6 @@ jars.each {|jar| require jar}
 #java_import 'com.game_machine.core.net.client.UdtClientHandler'
 
 require_relative 'game_machine/java_lib'
-require_relative 'game_machine/file_tail'
 
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
