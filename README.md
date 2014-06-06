@@ -1,47 +1,41 @@
 
-#Game Machine
+# Game Machine
 
-Game Machine is a highly performant, scalable massive multiplayer game engine written in
-[Jruby](http://www.jruby.org).
-It is based on [Akka](http://www.akka.io), an actor based messaging system
-built on the JVM.  Game machine makes it simple to write performant, scalable
-code using higher level abstractions.  
+Multiplayer game development is harder then it needs to be.  Game Machine is an attempt to solve that.
 
-#Features
+## The right architecture
+Game Machine uses an actor model based on message passing, built on top of a state of the art distributed computing framework.  Everything in Game Machine is a node in the cluster, including clients.
 
-- UDP/UDT/TCP networking.
+
+## Better abstractions
+Much of the difficulty in writing multiplayer games is that our methods for structuring our code, have been separate from how we handle concurrency.   Game Machine uses a model where concurrency is baked in.  You never have to deal with threads, locks, or concurrent data structures in your game code.  At the same time game logic is automatically concurrent, able to distribute itself over an entire cluster and run at high concurrency.
+
+## Agile
+We believe that the key to being productive is a combination of using the right tools for the job, and making smart engineering trade-offs.  Game Machine is based on the JVM and uses the [Akka](http://www.akka.io) framework for the core architecture.  Where possible we write higher level features in [Jruby](http://www.jruby.org), and move to java code where performance dictates.  There is also support for writing game logic in C#.
+
+##Features
+
+- UDP/TCP networking.
 - Http for login/authorization.
 - Fully distributed architecture.
   - Distributed player registry.
   - Distributed player/npc controllers.
   - Distributed grid with spatial hashing and fast neighbor lookups.
-  - Distributed chat/group system.
+  - Chat/Group/Matchmaking based on pub/sub messaging.
 - Entity component system.
   - Entities and components are protocol buffers.
-  - Integrates seamlessly with Akka messaging.
   - Everything is an entity/message.
+  - Client integration based on messaging.
 - Object persistence
   - Distributed transactional updates.
   - Memory based with write behind cache to key/value store.
   - Pluggable persistence.  Coubhbase, Mapdb, and memory already supported.
 - Pathfinding based on Recastnavigation
 - Polyglot framework
-  - Java
-  - Scala
-  - Jruby
+  - Any JVM language
   - C#
+- Web control panel
 
-#Installation
 
-The old gem installation has been removed.  We are now putting together an
-install based on Vagrant, which will provide a complete working server out of
-the box.
+**[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
 
-#Documentation
-
-Documentation and SDK's for Java, Ruby, and C# will be coming soon.
-
-#What's new
-
-C# actors via embedding mono is the main big feature that was added.  We are
-currentl working on the end user api and a Unity3D SDK.
