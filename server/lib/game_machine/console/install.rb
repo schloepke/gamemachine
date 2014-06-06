@@ -12,8 +12,11 @@ module GameMachine
         puts "Installing from #{install_source_path}"
       end
 
-      def error
-        puts "Invalid install path #{install_path}"
+      def error(reason='')
+        puts "Invalid install path #{install_path} (#{reason})"
+      end
+
+      def valid_input?
       end
 
       def run!
@@ -23,19 +26,21 @@ module GameMachine
         end
 
         if install_path.nil? || install_path.empty?
-          error
+          error("Invalid input")
           return
         end
 
-        if valid_install_path?
-          install
-        else
-          error
+        if File.exists?(install_path)
+          error("Directory exists")
+          return
         end
+
+        @install_path = File.expand_path(install_path)
+        install
       end
 
       def show_help
-        puts "new [relative path to install directory]"
+        puts "new [install directory]"
       end
 
       def valid_install_path?

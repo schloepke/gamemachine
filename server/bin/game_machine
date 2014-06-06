@@ -22,7 +22,7 @@ require_relative '../lib/game_machine/console'
 if command == 'new'
   bin_path = File.dirname(__FILE__)
   install_source_path = File.expand_path(
-    File.join(bin_path,'../../')
+    File.join(bin_path,'../')
   )
   GameMachine::Console::Install.new(ARGV,install_source_path).run!
 
