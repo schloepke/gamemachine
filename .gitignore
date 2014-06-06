@@ -27,3 +27,10 @@ server/log
 server/tmp
 server/pathfinding/build
 server/java/src/main/java/com/game_machine/entity_system/generated/*.java
+
+
+## Documentation cache and generated files:
+/.yardoc/
+/_yardoc/
+/doc/
+/rdoc/
