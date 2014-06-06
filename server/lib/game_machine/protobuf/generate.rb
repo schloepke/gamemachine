@@ -24,7 +24,7 @@ module GameMachine
       end
 
       def erb_template
-        File.join(app_root,'lib','game_machine', 'protobuf','component.erb')
+        File.join(app_root,'java','component.erb')
       end
 
       def java_src

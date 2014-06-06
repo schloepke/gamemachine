@@ -24,6 +24,7 @@ command = aliases[command] || command
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
+ENV['GAME_ENV'] = 'development'
 
 require_relative '../lib/game_machine/console'
 
@@ -35,14 +36,16 @@ if command == 'new'
   GameMachine::Console::Install.new(ARGV,install_source_path).run!
 
 elsif command == 'build'
-  load_game_machine
+  require_relative  '../java/local_lib/protostuff-compiler-1.0.7-jarjar.jar'
+  require_relative '../lib/game_machine/protobuf/game_messages.rb'
+  require_relative '../lib/game_machine/protobuf/generate.rb'
   GameMachine::Console::Build.new(ARGV).run!
 
 elsif command == 'server'
-  load_game_machine
-  # Need to set environment vars before loading everything
+  # Need to set environment vars before loading everything.
   server = GameMachine::Console::Server.new(ARGV)
   server.set_environment
+  load_game_machine
 
 
   # Run the server
