@@ -36,25 +36,6 @@ We believe that the key to being productive is a combination of using the right 
   - C#
 - Web control panel
 
-##Installation
 
-[Install Jruby](http://jruby.org/download)
+[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started}
 
-Now install the gem
-
-    $ gem install gamemachine
-
-Create a new server application and cd to the directory that is created for you
-
-    $ gamemachine new myserver
-    $ cd myserver
-
-Build the server
-
-    $ gamemachine build
-
-Run it!
-
-    $ gamemachine server
-
-For more information please read the pages on our wiki
