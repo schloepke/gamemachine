@@ -61,8 +61,8 @@ module GameMachine
 
     def set_seeds(config)
       seeds = Application.config.seeds.map do |seed| 
-        seed_host = app_config.server_config(server).akka_host
-        seed_port = app_config.instance.server_config(server).akka_port
+        seed_host = app_config.server_config(seed).akka_host
+        seed_port = app_config.server_config(seed).akka_port
         "\"akka.tcp://cluster@#{seed_host}:#{seed_port}\""
       end
       config.sub!('SEEDS',seeds.join(','))
