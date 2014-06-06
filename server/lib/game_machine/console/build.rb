@@ -25,7 +25,8 @@ module GameMachine
       end
 
       def generate_code
-        system("cd #{java_root}; #{gradlew} codegen")
+        protogen = GameMachine::Protobuf::Generate.new(ENV['APP_ROOT'])
+        protogen.generate
       end
 
       def remove_libs
