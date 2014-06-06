@@ -58,6 +58,11 @@ module GameMachine
         FileUtils.cp_r(config_source,path)
         FileUtils.cp_r(games_source,path)
         FileUtils.cp_r(java_source,path)
+        FileUtils.cp_r(script_source,path)
+      end
+
+      def script_source
+        File.join(install_source_path,'script')
       end
 
       def config_source

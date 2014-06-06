@@ -30,7 +30,7 @@ if [ -e "$PID_FILE" ]; then
   exit 1
 else
   echo "Starting $APP_NAME with args $ARGV."
-  nohup jruby bin/game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  nohup game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
   echo $! > "$PID_FILE"
   exit $?
 fi
