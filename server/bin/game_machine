@@ -1,38 +1,53 @@
-#!/usr/bin/env ruby
+#!/usr/bin/env jruby
 
 require 'rubygems'
-require 'trollop'
 require 'fileutils'
 
-begin
-  require 'game_machine'
-rescue LoadError
-  require_relative '../lib/game_machine'
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+  "n"  => "new",
+  "b"  => "build",
+  "s"  => "server"
+}
+
+command = ARGV.shift
+command = aliases[command] || command
+
+ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
+ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
+
+require_relative '../lib/game_machine/console'
+
+if command == 'new'
+  bin_path = File.dirname(__FILE__)
+  install_source_path = File.expand_path(
+    File.join(bin_path,'../../')
+  )
+  GameMachine::Console::Install.new(ARGV,install_source_path).run!
+
+elsif command == 'build'
+  GameMachine::Console::Build.new(ARGV).run!
+
+elsif command == 'server'
+
+  # Need to set environment vars before loading everything
+  server = GameMachine::Console::Server.new(ARGV)
+  server.set_environment
+
+  begin
+    require 'game_machine'
+  rescue LoadError
+    require_relative '../lib/game_machine'
+  end
+
+  # Run the server
+  server.run!
+else
+
+  puts "Usage: game_machine [server|install] [options]"
+  puts "     Use --help after a valid command for command specific help"
+  puts "     Example: game_machine server --help"
 end
 
-opts = Trollop::options do
-  opt :cluster, "run in cluster mode", :type => :string
-  opt :console, "Start a console", :type => :string
-  opt :name, "Config name, defaults to 'default'", :type => :string
-  opt :config, "Config file, defaults to  config/config.yml", :type => :string
-  version "GameMachine 0.0.1"
-  banner <<-EOS
-Usage:
-EOS
-end
-opts[:name].strip! if opts[:name]
-opts[:config].strip! if opts[:config]
-opts[:cluster].strip! if opts[:cluster]
-
-if opts[:config]
-  ENV['CONFIG_FILE'] = opts[:config]
-end
-
-console = opts[:console] || false
-
-# Always run in cluster mode.  Akka pub/sub depends on it
-cluster = true
-
-name = opts[:name] || 'default'
-GameMachine::Runner.start(name,cluster,console)
 

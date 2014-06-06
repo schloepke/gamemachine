@@ -1,10 +1,6 @@
 
 require 'rbconfig'
 
-ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
-ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
-ENV['GAME_ENV'] ||= 'development'
-
 module GameMachine
   def self.env
     ENV.fetch('GAME_ENV')
@@ -60,7 +56,6 @@ require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/cluster_monitor'
 require_relative 'game_machine/reloadable_monitor'
 require_relative 'game_machine/scheduler'
-require_relative 'game_machine/runner'
 require_relative 'game_machine/endpoints'
 require_relative 'game_machine/protobuf_extensions/entity_helper'
 require_relative 'game_machine/helpers/game_message'

@@ -22,7 +22,7 @@ OUT_FILE=$SERVER_HOME/log/game_machine.stdout
 PID_PATH=$SERVER_HOME/tmp
 PID_FILE=$PID_PATH/game_machine.pid
 mkdir -p $PID_PATH
-ARGV="$2 $3 $4"
+ARGV="$2 $3 $4 $5 $6 $7"
 
 start_daemon() {
 if [ -e "$PID_FILE" ]; then
@@ -30,7 +30,7 @@ if [ -e "$PID_FILE" ]; then
   exit 1
 else
   echo "Starting $APP_NAME with args $ARGV."
-  nohup jruby bin/game_machine "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  nohup jruby bin/game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
   echo $! > "$PID_FILE"
   exit $?
 fi
