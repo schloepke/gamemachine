@@ -21,7 +21,7 @@ module GameMachine
       end
 
       def build_code
-        system("cd #{java_root}; #{gradlew} build")
+        system("cd #{java_root} && #{gradlew} build")
       end
 
       def generate_code
@@ -34,7 +34,7 @@ module GameMachine
       end
 
       def install_libs
-        system("cd #{java_root}; #{gradlew} install_libs")
+        system("cd #{java_root} && #{gradlew} install_libs")
       end
 
       def run!

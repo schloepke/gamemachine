@@ -29,8 +29,13 @@ if [ -e "$PID_FILE" ]; then
   echo "PID file already exists."
   exit 1
 else
-  echo "Starting $APP_NAME with args $ARGV."
-  nohup game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  if [ -e "./bin/game_machine" ]; then
+    echo "Starting local $APP_NAME with args $ARGV."
+    nohup ./bin/game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  else
+    echo "Starting $APP_NAME with args $ARGV."
+    nohup game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+  fi
   echo $! > "$PID_FILE"
   exit $?
 fi
