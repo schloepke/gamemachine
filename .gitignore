@@ -11,7 +11,6 @@ nbproject
 *.swp
 .gradle
 .vagrant
-*.gem
 /pkg/
 server/tmp
 server/config/config.yml
