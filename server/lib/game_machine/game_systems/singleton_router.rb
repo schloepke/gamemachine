@@ -1,4 +1,3 @@
-require 'benchmark'
 require 'active_support/inflector'
 module GameMachine
   module GameSystems

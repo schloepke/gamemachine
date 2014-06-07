@@ -26,7 +26,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ffi'
   gem.add_dependency 'activesupport', '~> 3.0.0'
   gem.add_dependency 'hashie'
-  gem.add_dependency 'trinidad'
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-contrib'
   gem.add_dependency 'haml'

@@ -3,8 +3,8 @@ require 'consistent_hashing'
 module GameMachine
   class Hashring
 
-    RING_SIZE = 160
-    REPLICAS = 160
+    RING_SIZE = 24
+    REPLICAS = 3
 
     attr_reader :buckets
 
