@@ -20,12 +20,10 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'i18n'
   gem.add_dependency 'rjack-logback'
   gem.add_dependency 'settingslogic'
-  gem.add_dependency 'slop'
   gem.add_dependency 'consistent-hashing'
   gem.add_dependency  'json'
   gem.add_dependency 'state_machine'
   gem.add_dependency 'ffi'
-  gem.add_dependency 'trollop'
   gem.add_dependency 'activesupport', '~> 3.0.0'
   gem.add_dependency 'hashie'
   gem.add_dependency 'trinidad'
@@ -37,9 +35,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec-mocks'
   gem.add_development_dependency 'rspec-expectations'
-  gem.add_development_dependency 'guard-jruby-rspec'
   gem.add_development_dependency 'descriptive_statistics'
-  gem.add_development_dependency 'faraday'
 
   
 end
