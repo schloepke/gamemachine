@@ -1,10 +1,11 @@
 using GameMachine;
-using Entity = com.game_machine.entity_system.generated.Entity;
+using Entity = GameMachine.Messages.Entity;
 namespace GameMachine
 {
-	public interface IActor {
-		void OnReceive (object message);
-		void PostInit (ProxyClient proxyClient);
-		void Tell(string destination, Entity entity);
-	}
+    public interface IActor
+    {
+        void OnReceive(object message);
+        void PostInit(ProxyClient proxyClient);
+        void Tell(string destination, Entity entity);
+    }
 }
