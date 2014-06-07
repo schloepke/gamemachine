@@ -38,3 +38,11 @@ We believe that the key to being productive is a combination of using the right 
 
 
 **[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
+
+
+We now have a google group for getting help with Game Machine
+
+https://groups.google.com/forum/#!forum/gamemachine-users
+
+
+

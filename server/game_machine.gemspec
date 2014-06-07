@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version     = GameMachine::VERSION
   gem.authors     = ["Chris Ochs"]
   gem.email       = ["chris@ochsnet.com"]
-  gem.homepage    = "https://github.com/chrisochs/game_machine"
+  gem.homepage    = "https://github.com/gamemachine/gamemachine"
   gem.summary     = %q{Game Machine}
   gem.description = %q{game server}
 
