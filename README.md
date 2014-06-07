@@ -1,5 +1,5 @@
-gamemachine
-=# Game Machine
+
+# Game Machine
 
 Multiplayer game development is harder then it needs to be.  Game Machine is an attempt to solve that.
 
