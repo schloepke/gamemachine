@@ -66,6 +66,10 @@ namespace GameMachine
             messenger.AddComponentSet("ChatMessage");
             messenger.AddComponentSet("ChatChannels");
             ActorSystem.Instance.RegisterActor(messenger);
+
+            EntityTracking entityTracking = new EntityTracking();
+            entityTracking.AddComponentSet("Neighbors");
+            ActorSystem.Instance.RegisterActor(entityTracking);
         }
 
         // This triggers the actor system to deliver waiting messages

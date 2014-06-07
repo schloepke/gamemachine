@@ -41,6 +41,7 @@ public class HelloGameMachine : MonoBehaviour
         // for how it works.
         StartPersistence();
 
+        StartAreaOfInterest();
 
         Entity entity = new Entity();
         entity.id = "route_test";
@@ -51,7 +52,13 @@ public class HelloGameMachine : MonoBehaviour
         ActorSystem.Instance.Find("/remote/Demo/ExampleController").Tell(entity);
         
     }
-    
+
+    void StartAreaOfInterest()
+    {
+        GameObject misc = GameObject.Find("Misc");
+        misc.AddComponent("AreaOfInterest");
+    }
+
     void StartChat()
     {
         GameObject camera = GameObject.Find("Main Camera");
