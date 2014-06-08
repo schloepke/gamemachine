@@ -9,7 +9,6 @@ module Demo
     end
 
     def on_receive(message)
-      message.any
       message = Helpers::JsonObject.from_entity(message)
       GameMachine.logger.info("#{self.class.name} got #{message}")
       commands.player.send_message(message.to_entity,message.player.id)
