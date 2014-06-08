@@ -106,8 +106,8 @@ module GameMachine
         current_entity.set_chat_channels(channels)
       end
 
-      def chat_channel(topic)
-        MessageLib::ChatChannel.new.set_name(topic)
+      def chat_channel(topic,flags='')
+        MessageLib::ChatChannel.new.set_name(topic).set_flags(flags)
       end
 
       def chat_message(type,message_text,topic)
@@ -120,9 +120,9 @@ module GameMachine
         current_entity.set_chat_message(message)
       end
 
-      def join_chat(topic)
+      def join_chat(topic,flags='')
         current_entity.set_join_chat(
-          MessageLib::JoinChat.new.add_chat_channel(chat_channel(topic))
+          MessageLib::JoinChat.new.add_chat_channel(chat_channel(topic,flags))
         )
       end
 

@@ -23,6 +23,12 @@ module GameMachine
         game_message.to_entity
       end
 
+      let(:join_request_with_flags) do
+        flags = 'subscribers|blah'
+        game_message.join_chat(topic,flags)
+        game_message.to_entity
+      end
+
       let(:join_request) do
         game_message.join_chat(topic)
         game_message.to_entity
@@ -83,6 +89,29 @@ module GameMachine
           subject.on_receive(leave_request)
           subscribers = Chat.subscribers_for_topic(topic)
           expect(subscribers.get_subscriber_id_count).to eql(0)
+        end
+      end
+
+      describe "channel flags" do
+        it "joining a channel with flags should persist the flag" do
+          subject.on_receive(join_request_with_flags)
+          topic_flags = subject.get_flags.fetch(topic,[])
+          topic_flags.include?('subscribers').should be_true
+        end
+
+        it "chat status should add subscribers to channel if flag is set" do
+          subject.on_receive(join_request_with_flags)
+          expect_any_instance_of(MessageLib::ChatChannel).to receive(:set_subscribers)
+          entity = MessageLib::Entity.new.set_chat_status(MessageLib::ChatStatus.new)
+          subject.on_receive(entity)
+        end
+      end
+
+      describe "subscriptions" do
+        it "joining a channel should persist subscriptions" do
+          subject.on_receive(join_request_with_flags)
+          subscriptions = subject.get_subscriptions
+          subscriptions.include?(topic).should be_true
         end
       end
 

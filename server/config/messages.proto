@@ -56,6 +56,7 @@ message ErrorMessage {
   required string message = 2;
 }
 
+
 message ChatChannels {
   repeated ChatChannel chatChannel = 1;
 }
@@ -63,6 +64,7 @@ message ChatChannels {
 message ChatChannel {
   required string name = 1;
   optional Subscribers subscribers = 2;
+  optional string flags = 3;
 }
 
 message JoinChat {
@@ -81,6 +83,9 @@ message ChatMessage {
 }
 
 message ChatRegister {
+}
+
+message ChatStatus {
 }
 
 message Subscribers {
@@ -289,6 +294,8 @@ message Entity {
   optional JsonEntity jsonEntity = 47;
   optional string destination = 48;
   optional bool json = 49;
+  optional string params = 50;
+  optional ChatStatus chatStatus = 51;
   //GAME_ENTITY_MESSAGES
 }
 

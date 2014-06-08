@@ -17,6 +17,7 @@ module GameMachine
       aspect %w(ChatMessage Player)
       aspect %w(JoinChat Player)
       aspect %w(LeaveChat Player)
+      aspect %w(ChatStatus Player)
 
       def post_init(*args)
         @chat_actors = {}
