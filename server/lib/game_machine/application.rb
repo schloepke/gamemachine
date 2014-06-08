@@ -144,7 +144,7 @@ module GameMachine
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::Devnull).with_router(JavaLib::RoundRobinRouter,4).start
+        Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start

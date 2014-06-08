@@ -25,7 +25,7 @@ namespace GameMachine
                 Tell("/GameMachine/GameSystems/Devnull", entity);
             } catch (Exception ex)
             {
-                ProxyServer.logger.info(ex);
+                ProxyServer.logger.Info(ex);
             }
 
         }

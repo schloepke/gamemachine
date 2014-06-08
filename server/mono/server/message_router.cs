@@ -9,13 +9,14 @@ using System.Threading;
 using Entity = GameMachine.Messages.Entity;
 using GameMachine;
 using System.Collections.Concurrent;
+using NLog;
 
 namespace GameMachine
 {
     public class MessageRouter
     {
         public static ConcurrentDictionary<string,IActor> actors = new ConcurrentDictionary<string,IActor>();
-
+		public static Logger logger = LogManager.GetLogger("GameMachine");
 		
         public static void Route(byte[] bytes, ProxyClient proxyClient)
         {
@@ -43,7 +44,7 @@ namespace GameMachine
                     Type type = Type.GetType(typeName);
                     if (type == null)
                     {
-                        ProxyServer.logger.info(typeName + " is null");
+                        MessageRouter.logger.Info(typeName + " is null");
                         return;
                     }
                     actor = Activator.CreateInstance(type) as IActor;
@@ -53,7 +54,7 @@ namespace GameMachine
                         actor.OnReceive(entity);
                     } else
                     {
-                        ProxyServer.logger.info("Unable to add actor " + id);
+                        MessageRouter.logger.Info("Unable to add actor " + id);
                     }
                 }
             } catch (Exception ex)
