@@ -12,6 +12,7 @@ module GameMachine
     # @aspects JoinChat Player
     # @aspects LeaveChat Player
     class ChatManager < Actor::Base
+      include GameMachine::Commands
 
 
       aspect %w(ChatMessage Player)
@@ -19,8 +20,28 @@ module GameMachine
       aspect %w(LeaveChat Player)
       aspect %w(ChatStatus Player)
 
+      def define_update_procs
+        commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
+          if current_entity.has_subscribers
+            if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
+              subscriber_id_list.remove(update_entity.id)
+            end
+          end
+          current_entity
+        end
+
+        commands.datastore.define_dbproc(:chat_add_subscriber) do |current_entity,update_entity|
+          unless current_entity.has_subscribers
+            current_entity.set_subscribers(MessageLib::Subscribers.new)
+          end
+          current_entity.subscribers.add_subscriber_id(update_entity.id)
+          current_entity
+        end
+      end
+
       def post_init(*args)
         @chat_actors = {}
+        define_update_procs
       end
 
       def on_receive(message)

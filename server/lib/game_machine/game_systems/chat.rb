@@ -12,23 +12,6 @@ module GameMachine
         end
       end
 
-      def define_update_procs
-        commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
-          if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
-            subscriber_id_list.remove(update_entity.id)
-          end
-          current_entity
-        end
-
-        commands.datastore.define_dbproc(:chat_add_subscriber) do |current_entity,update_entity|
-          unless current_entity.has_subscribers
-            current_entity.set_subscribers(MessageLib::Subscribers.new)
-          end
-          current_entity.subscribers.add_subscriber_id(update_entity.id)
-          current_entity
-        end
-      end
-
       def post_init(*args)
         @player_id = args.first
         @topic_handlers = {}
@@ -38,9 +21,15 @@ module GameMachine
         @subscriptions = get_subscriptions
         @channel_flags = get_flags
 
-        # TODO move to the manager, we are just redefining the same procs over
-        # and over by it being here
-        define_update_procs
+        # Make sure we re-create our state from the persisted state if we died
+        load_state
+      end
+
+      def load_state
+        @subscriptions.each do |name|
+          flags = flags_for_channel(name).join('|')
+          join_channel(name,flags)
+        end
       end
 
       def on_receive(entity)
@@ -68,7 +57,6 @@ module GameMachine
         channels = MessageLib::ChatChannels.new
         @subscriptions.each do |name|
           flags = @channel_flags.fetch(name,[])
-          GameMachine.logger.info "SUB=#{name} FLAGS=#{flags.inspect}"
           channel = MessageLib::ChatChannel.new.set_name(name)
           if flags.include?('subscribers')
             channel.set_subscribers(self.class.subscribers_for_topic(name))
@@ -138,6 +126,10 @@ module GameMachine
         "channel_flags#{@player_id}#{name}"
       end
 
+      def flags_for_channel(channel_name)
+        @channel_flags.fetch(channel_name,[])
+      end
+
       def get_flags
         {}.tap do |flags|
           @subscriptions.each do |name|
@@ -148,11 +140,11 @@ module GameMachine
         end
       end
 
-      def set_channel_flags(channel)
-        return if channel.flags.nil?
-        @channel_flags[channel.name] = parse_channel_flags(channel.flags)
-        flags_id = channel_flags_id(channel.name)
-        entity = MessageLib::Entity.new.set_id(flags_id).set_params(channel.flags)
+      def set_channel_flags(name,flags)
+        return if flags.nil?
+        @channel_flags[name] = parse_channel_flags(flags)
+        flags_id = channel_flags_id(name)
+        entity = MessageLib::Entity.new.set_id(flags_id).set_params(flags)
         commands.datastore.put(entity)
       end
 
@@ -167,14 +159,18 @@ module GameMachine
             GameMachine.logger.info "Topic handler exists for #{channel.name}, not creating"
             next
           end
-          create_topic_handler(channel.name)
-          message = MessageLib::Subscribe.new.set_topic(channel.name)
-          message_queue.tell(message,topic_handler_for(channel.name).actor)
-          @subscriptions.add(channel.name)
-          save_subscriptions
-          add_subscriber(@player_id,channel.name)
-          set_channel_flags(channel)
+          join_channel(channel.name,channel.flags)
         end
+      end
+
+      def join_channel(name,flags)
+        create_topic_handler(name)
+        message = MessageLib::Subscribe.new.set_topic(name)
+        message_queue.tell(message,topic_handler_for(name).actor)
+        @subscriptions.add(name)
+        save_subscriptions
+        add_subscriber(@player_id,name)
+        set_channel_flags(name,flags)
       end
 
       def leave_channels(chat_channels)
