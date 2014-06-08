@@ -35,6 +35,7 @@ namespace GameMachine
 
         public void Update(float x, float y, float z, string neighborType)
         {
+           
             Entity entity = new Entity();
             entity.id = "1";
             entity.entityType = "player";

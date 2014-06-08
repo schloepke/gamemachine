@@ -496,6 +496,14 @@ namespace GameMachine.Messages
       get { return _subscribers; }
       set { _subscribers = value; }
     }
+    private string _flags = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"flags", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string flags
+    {
+      get { return _flags; }
+      set { _flags = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -569,6 +577,14 @@ namespace GameMachine.Messages
       get { return _senderId; }
       set { _senderId = value; }
     }
+    private GameMachine.Messages.Entity _entity = null;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.Entity entity
+    {
+      get { return _entity; }
+      set { _entity = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -578,6 +594,16 @@ namespace GameMachine.Messages
   public partial class ChatRegister : global::ProtoBuf.IExtensible
   {
     public ChatRegister() {}
+    
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ChatStatus")]
+  public partial class ChatStatus : global::ProtoBuf.IExtensible
+  {
+    public ChatStatus() {}
     
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1750,8 +1776,24 @@ namespace GameMachine.Messages
       get { return _json; }
       set { _json = value; }
     }
+    private string _params = "";
+    [global::ProtoBuf.ProtoMember(50, IsRequired = false, Name=@"params", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string @params
+    {
+      get { return _params; }
+      set { _params = value; }
+    }
+    private GameMachine.Messages.ChatStatus _chatStatus = null;
+    [global::ProtoBuf.ProtoMember(51, IsRequired = false, Name=@"chatStatus", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.ChatStatus chatStatus
+    {
+      get { return _chatStatus; }
+      set { _chatStatus = value; }
+    }
     private GameMachine.Messages.Health _health = null;
-    [global::ProtoBuf.ProtoMember(101, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.Health health
     {
@@ -1759,7 +1801,7 @@ namespace GameMachine.Messages
       set { _health = value; }
     }
     private GameMachine.Messages.Effect _effect = null;
-    [global::ProtoBuf.ProtoMember(102, IsRequired = false, Name=@"effect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1001, IsRequired = false, Name=@"effect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.Effect effect
     {
@@ -1767,7 +1809,7 @@ namespace GameMachine.Messages
       set { _effect = value; }
     }
     private GameMachine.Messages.EffectList _effectList = null;
-    [global::ProtoBuf.ProtoMember(103, IsRequired = false, Name=@"effectList", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1002, IsRequired = false, Name=@"effectList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.EffectList effectList
     {
@@ -1775,7 +1817,7 @@ namespace GameMachine.Messages
       set { _effectList = value; }
     }
     private GameMachine.Messages.CombatAbility _combatAbility = null;
-    [global::ProtoBuf.ProtoMember(104, IsRequired = false, Name=@"combatAbility", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1003, IsRequired = false, Name=@"combatAbility", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.CombatAbility combatAbility
     {
@@ -1783,7 +1825,7 @@ namespace GameMachine.Messages
       set { _combatAbility = value; }
     }
     private GameMachine.Messages.Attack _attack = null;
-    [global::ProtoBuf.ProtoMember(105, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1004, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.Attack attack
     {
@@ -1791,7 +1833,7 @@ namespace GameMachine.Messages
       set { _attack = value; }
     }
     private GameMachine.Messages.IsPlayer _isPlayer = null;
-    [global::ProtoBuf.ProtoMember(106, IsRequired = false, Name=@"isPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1005, IsRequired = false, Name=@"isPlayer", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.IsPlayer isPlayer
     {

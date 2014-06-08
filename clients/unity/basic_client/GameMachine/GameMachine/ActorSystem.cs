@@ -6,6 +6,8 @@ using GameMachine;
 using Entity = GameMachine.Messages.Entity;
 using JsonEntity = GameMachine.Messages.JsonEntity;
 using Newtonsoft.Json;
+using System.IO;
+using ProtoBuf;
 using UnityEngine;
 
 namespace GameMachine

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using ChatMessage = GameMachine.Messages.ChatMessage;
 using GameMachine;
 
 // This class loads a UI component and sets up the callbacks to tie the UI to the messaging system.
@@ -7,10 +8,16 @@ using GameMachine;
 // Note that the chat system is built using our messaging system, which uses a publish/subscribe model.  This makes it
 // simple to use not just for chat but for general grouping amd matchmaking as well. 
 
-// To create a simple matchmaking system, just create a channel to use as the lobby channel.  When players leave
-// the lobby to join a game, simply have them leave the lobby channel and join the game specific channel. 
-// TODO  The above requires that we expose the subscriber list for each channel in Messenger.  We are receiving that data
-// but Messenger is not currently extracting it and making it available.
+// When joining and leaving channels, the server will send you a complete list of the channels you are subscribed to.
+//  This can be accessed by calling messenger.subscriptions.  If you have set the flags for the channel to return
+// subscribers (see below), the update from the server will include a complete subscriber list for each channel.
+// You can access the subscribers list by calling messenger.subscribers, which returns a dictionary where the key
+// is the channel name, and the value is a list of subscribers.
+
+//  You can use the messenger system to create matchmaking systems or for groups.  It is designed for any kind of
+// group based messeging that you need.  Chat messages are also not restricted to just text.  You can create chat
+// messages with an attached entity, that can contain anything an entity can hold, which is literally anything.
+// To send advanced messages use the SendChatMessage function instead of SendMessage. 
 
 
 
@@ -47,9 +54,17 @@ public class Chat : MonoBehaviour
         Messenger.MessageReceived messageCallback = MessageReceived;
         messenger.OnMessageReceived(messageCallback);
 
-        // Join an initial channel.  You do not have to do this here, it's just
-        // to show how you can join channels via code.
-        messenger.joinChannel("global");
+        // These are example of the functions available now that the system is running.
+
+
+        // Join an initial channel.  The second argument is a flags string
+        // that sets certain flags on a channel.  Currently 'subscribers' is the
+        // one valid option.  If subscribers is set, status updates from the server
+        // will include a complete subscriber list for each channel.
+        messenger.joinChannel("global", "subscribers");
+
+        //  
+        messenger.ChatStatus();
     }
 	
     public void ChannelLeft(string channelName)
@@ -66,10 +81,20 @@ public class Chat : MonoBehaviour
 
     }
     
-    public void MessageReceived(string message)
+    public void MessageReceived(object message)
     {
-        Logger.Debug("Chat message " + message);
-        chatGui.SendMessage("receiveMessage", message);
+        string text;
+        string name = message.GetType().Name;
+        if (name == "string")
+        {
+            text = message as string;
+        } else
+        {
+            ChatMessage chatMessage = message as ChatMessage;
+            text = chatMessage.message;
+        }
+        Logger.Debug("Chat message " + text);
+        chatGui.SendMessage("receiveMessage", text);
     }
 
     public void SendChatMessage(string message)

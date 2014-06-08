@@ -9,6 +9,7 @@ using LeaveChat = GameMachine.Messages.LeaveChat;
 using ChatChannel = GameMachine.Messages.ChatChannel;
 using ChatMessage = GameMachine.Messages.ChatMessage;
 using ChatChannels = GameMachine.Messages.ChatChannels;
+using ChatStatus = GameMachine.Messages.ChatStatus;
 using Entity = GameMachine.Messages.Entity;
 
 namespace GameMachine
@@ -16,9 +17,10 @@ namespace GameMachine
     public class Messenger : UntypedActor
     {
     
+        public Dictionary<string, List<string>> subscribers = new Dictionary<string, List<string>>();
         public List<string> subscriptions = new List<string>();
 
-        public delegate void MessageReceived(string message);
+        public delegate void MessageReceived(object message);
         public delegate void ChannelJoined(string channelName);
         public delegate void ChannelLeft(string channelName);
 
@@ -28,6 +30,18 @@ namespace GameMachine
     
         public Messenger()
         {
+        }
+
+       
+        public List<string> SubcribersFor(string subscription)
+        {
+            if (subscribers.ContainsKey(subscription))
+            {
+                return subscribers [subscription];
+            } else
+            {
+                return new List<string>();
+            }
         }
 
         public void OnChannelLeft(ChannelLeft callback)
@@ -45,6 +59,18 @@ namespace GameMachine
             messageReceived = callback;
         }
 
+        // Use this if you want to create your own ChatMessage.
+        // This is useful if you want to embed other data besides text.
+        //  Do this by attaching an entity to the ChatMessage.
+        public void SendChatMessage(ChatMessage message)
+        {
+            Entity entity = new Entity();
+            entity.id = "chatmessage";
+            entity.chatMessage = message;
+            actorSystem.Find("/remote/default").Tell(entity);
+        }
+
+        // Simple usage, just sends text
         public void sendMessage(string senderId, string channelName, string messageText, string messageType)
         {
             Entity entity = new Entity();
@@ -61,7 +87,10 @@ namespace GameMachine
             actorSystem.Find("/remote/default").Tell(entity);
         }
     
-        public void joinChannel(string channelName)
+        // flags is a pipe separated list of strings.  Currently subscribers is the only flag recognized
+        //  If the subscribers flag is set, the status updates from the server will include a list of subscribers
+        // in each channel, instead of just the channel name.
+        public void joinChannel(string channelName, string flags="")
         {
             if (subscriptions.Contains(channelName))
             {
@@ -73,6 +102,7 @@ namespace GameMachine
             JoinChat joinChat = new JoinChat();
             ChatChannel chatChannel = new ChatChannel();
             chatChannel.name = channelName;
+            chatChannel.flags = flags;
             joinChat.chatChannel.Add(chatChannel);
             entity.joinChat = joinChat;
             actorSystem.Find("/remote/default").Tell(entity);
@@ -91,17 +121,30 @@ namespace GameMachine
             actorSystem.Find("/remote/default").Tell(entity);
         }
 
+        // Tells the chat system to send you a complete list of channels you are subscribed to.
+        //  If you joined a channel with the subscribers flag set, you will also get back a full
+        // list of subscribers for that channel.
+        public void ChatStatus()
+        {
+            Entity entity = new Entity();
+            entity.id = "chat_status";
+            entity.chatStatus = new ChatStatus();
+            actorSystem.Find("/remote/default").Tell(entity);
+        }
+
         private void processChannels(ChatChannels chatChannels)
         {
             List<string> channels = new List<string>();
             foreach (ChatChannel chatChannel in chatChannels.chatChannel)
             {
                 channels.Add(chatChannel.name);
+                subscribers [chatChannel.name] = chatChannel.subscribers.subscriberId;
             }
 
             foreach (string name in channels.Except(subscriptions))
             {
                 subscriptions.Add(name);
+
                 channelJoined(name);
             }
 
@@ -125,7 +168,7 @@ namespace GameMachine
 
             if (entity.chatMessage != null)
             {
-                messageReceived(entity.chatMessage.message);
+                messageReceived(entity.chatMessage);
             }
 
         }
