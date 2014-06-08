@@ -63,6 +63,7 @@ require_relative 'game_machine/player_registry'
 require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
+require_relative 'game_machine/mono_server'
 
 if Config::CONFIG['target_os'] == 'linux'
   require_relative 'game_machine/navigation'

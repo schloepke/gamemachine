@@ -7,7 +7,6 @@ module GameMachine
         AppConfig.instance.load_config(name)
         config.cluster = cluster
         akka.initialize!
-        load_mono
       end
 
       def auth_handler
@@ -44,10 +43,6 @@ module GameMachine
       end
 
       def stop
-        if config.mono_enabled
-          Mono::Vm.instance.unload
-        end
-
         stop_actor_system
         DataStore.instance.shutdown
       end
@@ -68,6 +63,8 @@ module GameMachine
 
         start_game_systems
         GameLoader.new.load_all
+        start_mono
+
         GameMachine.stdout("Game Machine start successful")
 
         # This call blocks, make it the last thing we do
@@ -80,10 +77,10 @@ module GameMachine
         require_relative '../../web/app'
       end
 
-      def load_mono
+      def start_mono
         if config.mono_enabled
-          require_relative 'mono'
-          Mono::Vm.instance.load
+          GameMachine.logger.info "Starting mono server"
+          MonoServer.new.run!
         end
       end
 
@@ -94,10 +91,10 @@ module GameMachine
       end
 
       def start_endpoints
-        if config.message_gateway_host
-          Actor::Builder.new(Endpoints::MessageGateway).start
+        if config.mono_enabled
+          Actor::Builder.new(Endpoints::MonoGateway).start
           GameMachine.stdout(
-            "MessageGateway starting on #{config.message_gateway_host}:#{config.message_gateway_port}"
+            "MonoGateway starting on #{config.mono_gateway_host}:#{config.mono_gateway_port}"
           )
         end
         if config.tcp_enabled

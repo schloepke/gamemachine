@@ -13,7 +13,6 @@ development:
       world_grid_size: 2000
       world_grid_cell_size: 25
       mono_enabled: false
-      mono_dll: test_actor.dll
       singleton_manager_router_count: 200
       singleton_manager_update_interval: 100
       couchbase_servers: http://217.0.0.1:8091/pools
@@ -24,19 +23,14 @@ development:
       udp_enabled: true
       udp_host: 0.0.0.0
       udp_port: 8100
-      udt_enabled: false
-      udt_host: localhost
-      udt_port: 8200
       tcp_enabled: true
       tcp_host: 0.0.0.0
       tcp_port: 8700
       akka_host: localhost
       akka_port: 2551
-      created_at: 2013-11-10 05:38:50.000000000 Z
-      updated_at: 2013-11-10 05:38:50.000000000 Z
       seeds: []
-      message_gateway_host: 0.0.0.0
-      message_gateway_port: 8800
+      mono_gateway_host: 0.0.0.0
+      mono_gateway_port: 8800
     seed01:
       id: 2
       user_id: 1
@@ -139,5 +133,5 @@ test:
       created_at: 2013-11-10 05:38:50.000000000 Z
       updated_at: 2013-11-10 05:38:50.000000000 Z
       seeds: []
-      message_gateway_host: 0.0.0.0
-      message_gateway_port: 8800
+      mono_gateway_host: 0.0.0.0
+      mono_gateway_port: 8800

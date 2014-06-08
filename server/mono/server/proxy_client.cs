@@ -19,8 +19,9 @@ namespace GameMachine
         private int port = 8800;
         private string host = "127.0.0.1";
 
-        public ProxyClient()
+        public ProxyClient(int _port)
         {
+          port = _port;
         }
 
         public void Start()

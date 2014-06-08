@@ -22,10 +22,10 @@ namespace GameMachine
             try
             {
                 Entity entity = message as Entity;
-                Tell("GameMachine::GameSystems::Devnull", entity);
+                Tell("/GameMachine/GameSystems/Devnull", entity);
             } catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                ProxyServer.logger.info(ex);
             }
 
         }

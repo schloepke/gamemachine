@@ -43,7 +43,7 @@ namespace GameMachine
                     Type type = Type.GetType(typeName);
                     if (type == null)
                     {
-                        Console.WriteLine(typeName + " is null");
+                        ProxyServer.logger.info(typeName + " is null");
                         return;
                     }
                     actor = Activator.CreateInstance(type) as IActor;
@@ -53,7 +53,7 @@ namespace GameMachine
                         actor.OnReceive(entity);
                     } else
                     {
-                        Console.WriteLine("Unable to add actor " + id);
+                        ProxyServer.logger.info("Unable to add actor " + id);
                     }
                 }
             } catch (Exception ex)
