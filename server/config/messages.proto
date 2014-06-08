@@ -80,6 +80,7 @@ message ChatMessage {
   required string message = 2;
   required string type = 3;
   optional string senderId = 4;
+  optional Entity entity = 5;
 }
 
 message ChatRegister {

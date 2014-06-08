@@ -13,6 +13,14 @@ module GameMachine
     end
 
 
+    xit "vector3" do
+      vector = MessageLib::Vector3.new.set_x(0.0)
+      bytes = vector.to_byte_array
+      File.open('/tmp/bytes.txt','wb') {|f| f.write(bytes)}
+      vector = MessageLib::Vector3.parse_from(bytes)
+      expect(vector.x).to eq 0
+    end
+
     xit "parses game messages" do
       file = File.join(GameMachine.app_root,'config','game_messages.proto')
       obj = Protobuf::GameMessages.new(file)

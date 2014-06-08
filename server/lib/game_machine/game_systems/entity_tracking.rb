@@ -46,9 +46,9 @@ module GameMachine
       def location_entity(grid_value)
         MessageLib::Entity.new.set_id(grid_value.id).set_vector3(
           MessageLib::Vector3.new.
-          set_xi(grid_value.x.to_i).
-          set_yi(grid_value.z.to_i).
-          set_zi(grid_value.y.to_i)
+          set_x(grid_value.x).
+          set_y(grid_value.z).
+          set_z(grid_value.y)
         )
       end
 
@@ -56,6 +56,14 @@ module GameMachine
         type = message.get_neighbors.neighbor_type
         x = message.get_neighbors.vector3.x
         z = message.get_neighbors.vector3.z
+
+        # Either .net or java protobufs have a bug with 0 floats
+        if x.nil?
+          x = 0
+        end
+        if z.nil?
+          z = 0
+        end
         search_results = grid.neighbors(x,z,type)
        
         neighbors = {:players => [], :npcs => []}
