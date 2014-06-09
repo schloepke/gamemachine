@@ -12,7 +12,7 @@ module GameMachine
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
 
-      attr_reader :grid
+      attr_reader :grid, :extra_params
 
       def post_init
         @entity_updates = []
@@ -20,6 +20,7 @@ module GameMachine
         @paths = {}
         @width = grid.get_width
         @cell_count = grid.get_cell_count
+        @extra_params = {}
       end
 
       def on_receive(message)
@@ -41,15 +42,26 @@ module GameMachine
       def set_entity_location(entity)
         vector = entity.vector3
         @grid.set(entity.id,vector.x,vector.z,vector.y,entity.entity_type)
+        if entity.has_track_extra
+          @extra_params[entity.id] = entity.track_extra
+        end
       end
 
       def location_entity(grid_value)
-        MessageLib::Entity.new.set_id(grid_value.id).set_vector3(
+        entity = MessageLib::Entity.new.set_id(grid_value.id)
+
+        entity.set_vector3(
           MessageLib::Vector3.new.
           set_x(grid_value.x).
           set_y(grid_value.z).
           set_z(grid_value.y)
         )
+
+        if @extra_params.has_key?(grid_value.id)
+          track_extra = @extra_params.fetch(grid_value.id)
+          entity.set_track_extra(track_extra)
+        end
+        entity
       end
 
       def send_neighbors(message)
@@ -66,16 +78,11 @@ module GameMachine
         end
         search_results = grid.neighbors(x,z,type)
        
-        neighbors = {:players => [], :npcs => []}
-        search_results.each do |grid_value|
-          if grid_value.entityType == 'player'
-            neighbors[:players] << location_entity(grid_value)
-          elsif grid_value.entityType == 'npc'
-            neighbors[:npcs] << location_entity(grid_value)
-          end
+        neighbors = search_results.map do |grid_value|
+          location_entity(grid_value)
         end
  
-        if neighbors[:players].empty? && neighbors[:npcs].empty?
+        if neighbors.empty?
           return
         end
 
@@ -86,9 +93,7 @@ module GameMachine
 
       def send_neighbors_to_player(neighbors,player)
         entity = MessageLib::Entity.new.set_neighbors(
-          MessageLib::Neighbors.new.
-          set_player_list(neighbors[:players]).
-          set_npc_list(neighbors[:npcs])
+          MessageLib::Neighbors.new.set_entity_list(neighbors)
         )
         entity.set_id(player.id)
         entity.set_player(player)

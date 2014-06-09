@@ -2,6 +2,15 @@ package com.game_machine.entity_system.generated;
 option optimize_for = SPEED;
 
 
+// Used to by the entity tracking system to attack additional fields to your
+// tracking updates.  You can change any of the fields in TrackExtra to suit your
+// needs, but do NOT remove the message definition!
+
+message TrackExtra {
+  optional float speed = 1;
+  optional float velocity = 2;
+}
+
 message Health {
   required  int32  health = 1;
 }
@@ -37,6 +46,7 @@ message IsPlayer {
   optional  bool  enabled = 1;
 }
 
+
 message Rpc {
   required string method = 1;
   repeated string arguments = 2;
@@ -53,6 +63,7 @@ message MessageEnvelope {
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
+  optional TrackExtra trackExtra = 3;
 }
 
 
@@ -185,19 +196,6 @@ message IsNpc {
   required bool enabled = 1;
 }
 
-message DestroySingleton {
-  required string id = 1;
-}
-
-message NotifySingleton {
-  required string id = 1;
-}
-
-message CreateSingleton {
-  required string id = 1;
-  required string controller = 2;
-}
-
 message Player {
   required string id = 1;
   optional string name = 2;
@@ -205,7 +203,6 @@ message Player {
   optional string authtoken = 4;
   optional Transform transform = 5;
 }
-
 
 message Vector3 {
   optional float x = 1;
@@ -261,8 +258,7 @@ message TestObject {
   
   
 message Neighbors {
-  repeated Entity npc = 1;
-  repeated Entity player = 2;
+  repeated Entity entity = 1;
 }
 
 message GetNeighbors {
@@ -310,12 +306,9 @@ message Entity {
   optional Transform transform = 23;
   optional IsNpc isNpc = 24;
   optional Vector3 vector3 = 25;
-  optional CreateSingleton createSingleton = 26;
   optional EntityList entityList = 27;
   optional bool  published = 29;
   optional string entityType = 30;
-  optional NotifySingleton notifySingleton = 31;
-  optional DestroySingleton destroySingleton = 32;
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
@@ -331,12 +324,13 @@ message Entity {
   optional bool json = 49;
   optional string params = 50;
   optional ChatStatus chatStatus = 51;
-  optional Health health = 1000;
-optional Effect effect = 1001;
-optional EffectList effectList = 1002;
-optional CombatAbility combatAbility = 1003;
-optional Attack attack = 1004;
-optional IsPlayer isPlayer = 1005;
+  optional TrackExtra trackExtra = 1000;
+optional Health health = 1001;
+optional Effect effect = 1002;
+optional EffectList effectList = 1003;
+optional CombatAbility combatAbility = 1004;
+optional Attack attack = 1005;
+optional IsPlayer isPlayer = 1006;
 }
 
 message EntityList {

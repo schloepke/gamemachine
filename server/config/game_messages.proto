@@ -1,4 +1,13 @@
 
+// Used to by the entity tracking system to attack additional fields to your
+// tracking updates.  You can change any of the fields in TrackExtra to suit your
+// needs, but do NOT remove the message definition!
+
+message TrackExtra {
+  optional float speed = 1;
+  optional float velocity = 2;
+}
+
 message Health {
   required  int32  health = 1;
 }

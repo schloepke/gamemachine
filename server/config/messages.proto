@@ -19,6 +19,7 @@ message MessageEnvelope {
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
+  optional TrackExtra trackExtra = 3;
 }
 
 
@@ -151,19 +152,6 @@ message IsNpc {
   required bool enabled = 1;
 }
 
-message DestroySingleton {
-  required string id = 1;
-}
-
-message NotifySingleton {
-  required string id = 1;
-}
-
-message CreateSingleton {
-  required string id = 1;
-  required string controller = 2;
-}
-
 message Player {
   required string id = 1;
   optional string name = 2;
@@ -171,7 +159,6 @@ message Player {
   optional string authtoken = 4;
   optional Transform transform = 5;
 }
-
 
 message Vector3 {
   optional float x = 1;
@@ -227,8 +214,7 @@ message TestObject {
   
   
 message Neighbors {
-  repeated Entity npc = 1;
-  repeated Entity player = 2;
+  repeated Entity entity = 1;
 }
 
 message GetNeighbors {
@@ -276,12 +262,9 @@ message Entity {
   optional Transform transform = 23;
   optional IsNpc isNpc = 24;
   optional Vector3 vector3 = 25;
-  optional CreateSingleton createSingleton = 26;
   optional EntityList entityList = 27;
   optional bool  published = 29;
   optional string entityType = 30;
-  optional NotifySingleton notifySingleton = 31;
-  optional DestroySingleton destroySingleton = 32;
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
