@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using  System.Collections.Generic;
 using GameMachine;
+using Entity = GameMachine.Messages.Entity;
 
 // This is an example of how to track objects in the game that are near you.
 // The basic flow is that you send a message to the server at regular intervals with your position, and a request
@@ -55,12 +57,24 @@ public class AreaOfInterest : MonoBehaviour
         {
             lastUpdate = Time.time;
             Vector3 position = this.gameObject.transform.position;
+
+            // Sends the server our coordinates to track, and tells
+            // the server to send us all objects within range that are of type npc.
             entityTracking.Update(position.x, position.y, position.z, "npc");
         }
     }
 
     void OnPlayersReceived(object message)
     {
+        // Structure below is the same for players and npcs
+        List<Entity> entities = message as List<Entity>;
+        foreach (Entity entity in entities)
+        {
+            float x = entity.vector3.x;
+            float y = entity.vector3.y;
+            float z = entity.vector3.z;
+            string playerId = entity.id;
+        }
         Logger.Debug("Players received");
     }
 

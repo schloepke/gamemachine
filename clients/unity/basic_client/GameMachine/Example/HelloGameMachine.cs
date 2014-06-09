@@ -41,16 +41,9 @@ public class HelloGameMachine : MonoBehaviour
         // for how it works.
         StartPersistence();
 
+        // Start sending/receiving location updates
         StartAreaOfInterest();
-
-        Entity entity = new Entity();
-        entity.id = "route_test";
-        entity.json = true;
-        Player player = new Player();
-        player.id = User.Instance.username;
-        entity.player = player;
-        ActorSystem.Instance.Find("/remote/Demo/ExampleController").Tell(entity);
-        
+                
     }
 
     void StartAreaOfInterest()
