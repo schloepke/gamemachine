@@ -59,6 +59,11 @@ module GameMachine
         FileUtils.cp_r(games_source,path)
         FileUtils.cp_r(java_source,path)
         FileUtils.cp_r(script_source,path)
+        FileUtils.cp_r(mono_source,path)
+      end
+
+      def mono_source
+        File.join(install_source_path,'mono')
       end
 
       def script_source
