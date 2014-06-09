@@ -54,16 +54,15 @@ public class Chat : MonoBehaviour
         Messenger.MessageReceived messageCallback = MessageReceived;
         messenger.OnMessageReceived(messageCallback);
 
-        // These are example of the functions available now that the system is running.
-
-
         // Join an initial channel.  The second argument is a flags string
         // that sets certain flags on a channel.  Currently 'subscribers' is the
         // one valid option.  If subscribers is set, status updates from the server
         // will include a complete subscriber list for each channel.
         messenger.joinChannel("global", "subscribers");
 
-        //  
+        // Send this whenever you want a list of subscribed channels, and the optional
+        // subscriber list if you have set the subscribers flag.  Remember you get this
+        // automatically when you join/leave a channel.
         messenger.ChatStatus();
     }
 	
@@ -80,7 +79,11 @@ public class Chat : MonoBehaviour
         chatGui.SendMessage("receiveMessage", "You have joined " + channelName);
 
     }
-    
+
+    // This is our callback function.  Messenger will send us
+    // ChatMessage objects.  We also use this for our chat commands
+    // handler, that will send error messages to this function to 
+    // be send to the gui. (If we had a C# chat gui this would be cleaner).
     public void MessageReceived(object message)
     {
         string text;
