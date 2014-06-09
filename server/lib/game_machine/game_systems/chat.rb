@@ -85,13 +85,13 @@ module GameMachine
       def remove_subscriber(subscriber_id,topic)
         stored_entity_id = "chat_topic_#{topic}"
         entity = MessageLib::Entity.new.set_id(subscriber_id)
-        commands.datastore.call_dbproc(:chat_remove_subscriber,stored_entity_id,entity)
+        commands.datastore.call_dbproc(:chat_remove_subscriber,stored_entity_id,entity,false)
       end
 
       def add_subscriber(subscriber_id,topic)
         stored_entity_id = "chat_topic_#{topic}"
         entity = MessageLib::Entity.new.set_id(subscriber_id)
-        commands.datastore.call_dbproc(:chat_add_subscriber,stored_entity_id,entity)
+        commands.datastore.call_dbproc(:chat_add_subscriber,stored_entity_id,entity,false)
       end
 
       def save_subscriptions
@@ -171,6 +171,7 @@ module GameMachine
         save_subscriptions
         add_subscriber(@player_id,name)
         set_channel_flags(name,flags)
+        GameMachine.logger.info "Player #{@player_id} Joined channel #{name} with flags #{flags}"
       end
 
       def leave_channels(chat_channels)

@@ -39,6 +39,7 @@ module GameMachine
       describe "multiple players" do
 
         it "creates chat actors for each player" do
+          subject.post_init
           1.upto(10) do |i|
             entity = MessageLib::Entity.new.set_id(i.to_s)
             player = MessageLib::Player.new.set_id(i.to_s)
@@ -51,8 +52,9 @@ module GameMachine
             entity.set_join_chat(join)
             subject.on_receive(entity)
           end
+          sleep 2
          subscribers = GameMachine::GameSystems::Chat.subscribers_for_topic('test_channel')
-         expect(subscribers.size).to eq 10
+         expect(subscribers.subscriberId.size).to eq 10
         end
       end
 
