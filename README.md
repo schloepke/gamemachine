@@ -1,48 +1,32 @@
 
-# Game Machine
+# Welcome to Game Machine
 
-Multiplayer game development is harder then it needs to be.  Game Machine is an attempt to solve that.
+Game Machine is a server side platform for creating real time multiplayer games that won't make your head hurt.
 
-## The right architecture
-Game Machine uses an actor model based on message passing, built on top of a state of the art distributed computing framework.  Everything in Game Machine is a node in the cluster, including clients.
+Our goal is to solve the hard problems for you, and let you spend time writing game logic.
 
-
-## Better abstractions
-Much of the difficulty in writing multiplayer games is that our methods for structuring our code, have been separate from how we handle concurrency.   Game Machine uses a model where concurrency is baked in.  You never have to deal with threads, locks, or concurrent data structures in your game code.  At the same time game logic is automatically concurrent, able to distribute itself over an entire cluster and run at high concurrency.
-
-## Agile
-We believe that the key to being productive is a combination of using the right tools for the job, and making smart engineering trade-offs.  Game Machine is based on the JVM and uses the [Akka](http://www.akka.io) framework for the core architecture.  Where possible we write higher level features in [Jruby](http://www.jruby.org), and move to java code where performance dictates.  There is also support for writing game logic in C#.
-
-##Features
-
-- UDP/TCP networking.
-- Http for login/authorization.
-- Fully distributed architecture.
-  - Distributed player registry.
-  - Distributed player/npc controllers.
-  - Distributed grid with spatial hashing and fast neighbor lookups.
-  - Chat/Group/Matchmaking based on pub/sub messaging.
-- Entity component system.
-  - Entities and components are protocol buffers.
-  - Everything is an entity/message.
-  - Client integration based on messaging.
-- Object persistence
-  - Distributed transactional updates.
-  - Memory based with write behind cache to key/value store.
-  - Pluggable persistence.  Coubhbase, Mapdb, and memory already supported.
-- Pathfinding based on Recastnavigation
-- Polyglot framework
-  - Any JVM language
-  - C#
-- Web control panel
+Game Machine uses the [Actor Model](http://en.wikipedia.org/wiki/Actor_model) for writing game logic and is based on [Akka](http://www.akka.io).  You create game logic inside actors that can communicate with other actors by sending messages to them.  You never have to deal with threads, locking, or concurrent data structures, just game logic.
 
 
-**[Getting started with Game Machine](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
+Game Machine runs on the JVM, and provides first class support for ruby, java, and scala.  In addition we provide the [ability to run C#](https://github.com/gamemachine/gamemachine/wiki/C%23-Mono-support), although with some limitations in functionality.
 
+###Features
 
-We now have a google group for getting help with Game Machine
+Out of the box no server programming required:
 
-https://groups.google.com/forum/#!forum/gamemachine-users
+* **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
+* **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Group-messaging)**
+* **[Login & Authentication](https://github.com/gamemachine/gamemachine/wiki/Login-and-authentication)**
+* **[Simple persistence](https://github.com/gamemachine/gamemachine/wiki/Simple-persistence)**
 
+###Getting Started
 
+**[Install the server](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
 
+**[Download the Unity client](https://github.com/gamemachine/gamemachine/tree/master/clients/unity/basic_client)**
+  
+ 
+###Writing server side game logic
+
+* [Game Machine technical overview](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-technical-overview) (start here)
+* Creating your own game systems
