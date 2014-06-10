@@ -1,5 +1,6 @@
 ---
 development:
+  protogen_out_dir: /tmp
   servers:
     default:
       id: 1

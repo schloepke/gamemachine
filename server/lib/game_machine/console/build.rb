@@ -42,8 +42,7 @@ module GameMachine
 
       def generate_code
         generate_java_code
-        puts "OS=#{Config::CONFIG['target_os']}"
-        if Config::CONFIG['target_os'] != 'linux'
+        if Config::CONFIG['target_os'].match(/mswin)
           generate_csharp_code
         end
       end
