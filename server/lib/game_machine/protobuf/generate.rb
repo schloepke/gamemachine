@@ -90,6 +90,16 @@ module GameMachine
 
         File.open(combined_messages_protofile,'w') {|f| f.write(combined_messages)}
 
+        # test message defintion validity
+        #tmp_dir = File.join('/tmp/proto_test')
+        #FileUtils.rm_rf(tmp_dir)
+        #FileUtils.mkdir_p(tmp_dir)
+        #unless system("protoc #{combined_messages_protofile} --java_out=#{tmp_dir}")
+        #  return false
+        #end
+
+        # This just stops generating code when it hits an error, but does not
+        # throw an exception
         proto = self.class.compile(combined_messages_protofile)
 
         write_components(proto)

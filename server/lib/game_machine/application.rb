@@ -141,6 +141,12 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(GameSystems::EntityLoader).start
+
+
+        if ENV.has_key?('RESTARTABLE')
+          GameMachine.logger.info "restartable=true.  Will respond to tmp/gm_restart.txt"
+          Actor::Builder.new(RestartWatcher).start
+        end
       end
 
       def start_game_systems

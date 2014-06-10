@@ -28,9 +28,14 @@ module Web
       def logs(logtype)
         readlog(logtype).map do |line|
           if logtype == :app
-            line.match(/^(.*?)\[(.*?)\]\s(INFO|ERROR|DEBUG|WARN)\s(.*)/)
-            # timestamp,severity,service,message
-            [$1,$3.to_sym,$2,$4]
+            begin
+              line.match(/^(.*?)\[(.*?)\]\s(INFO|ERROR|DEBUG|WARN)\s(.*)/)
+
+              # timestamp,severity,service,message
+              [$1,$3.to_sym,$2,$4]
+            rescue Exception => e
+              ['unknown','UNKNOWN','unknown',line]
+            end
           else
             line
           end

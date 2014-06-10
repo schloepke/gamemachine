@@ -26,7 +26,6 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    #Mono::Vm.instance.unload
     GameMachine::Application.stop_actor_system
   end
 

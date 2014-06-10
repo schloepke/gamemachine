@@ -1,4 +1,4 @@
-
+require 'json'
 require 'sinatra/base'
 require 'sinatra/multi_route'
 
@@ -18,6 +18,12 @@ class WebApp < Sinatra::Base
 
   register Sinatra::MultiRoute
 
+  def base_uri
+    host =  GameMachine::Application.config.http_host
+    port = GameMachine::Application.config.http_port
+    "http://#{host}:#{port}"
+  end
+
   def controller(name)
     case name
     when :index
@@ -32,8 +38,19 @@ class WebApp < Sinatra::Base
   end
 
   get '/' do
-    @content = controller(:index).set_request(request,params).get
+    if request.params['restarted']
+      @restarted = true
+    end
     haml :index
+  end
+
+  get '/alive' do
+    JSON.generate({})
+  end
+
+  get '/restart' do
+    haml :restart
+    WebApp.quit!
   end
 
   get '/logs' do
@@ -55,8 +72,12 @@ class WebApp < Sinatra::Base
 
   post '/messages/game' do
     @content = controller(:messages).set_request(request,params).update
-    @messages = :game
-    haml :game_messages
+    if @content == 'restart'
+      haml :restart
+    else
+      @messages = :game
+      haml :game_messages
+    end
   end
 
   get '/messages/all' do

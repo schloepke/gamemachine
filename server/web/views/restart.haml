@@ -1,0 +1,35 @@
+
+.h3
+  Game Machine is restarting...
+.h4
+  Specifically, the following is happening
+%ul
+  %li
+    Protocol buffer classes are being generated
+  %li
+    Java message code is recompiled
+  %li
+    If on windows, a new messages.cs is generated
+  %li
+    Game Machine is restarted
+.h4
+  You will be redirected to the index page once the restart is complete
+:javascript
+  $(document).ready(function() {
+    (function poll(){
+      setTimeout(function(){
+        $.ajax({ url: "/alive",
+        error: function(xhr,status,error){
+          poll();
+        },
+        success: function(data){
+          window.location = "/?restarted=true";
+            //Update your dashboard gauge
+            //salesGauge.setValue(data.value);
+
+            //Setup the next poll recursively
+          poll();
+          }, dataType: "json"});
+      }, 2000);
+    })();
+  });

@@ -1,11 +1,23 @@
 .container-fluid
   .row
     .col-xs-6
-      %blockquote
-        - if @messages == :game
-          Add, update, or remove messages using the editor.  When you save them
-          a new master messages proto file will be generated for you to download.
-        - else
+      - if @messages == :game
+        .h4
+          Add, update, or remove messages using the editor.
+        %ul
+          %li
+            If running Game Machine in loop mode, saving this file will restart
+            the server with the new message changes
+          %li
+            If running under windows, a new messages.cs will be generated and
+            placed in the Game Machine root folder.  You can set where this file
+            is written to by changing protogen_out_dir in config/config.yml
+          %li
+            If you have a syntax error in the message file you will not see any
+            errors.  The system will simply not regenerate new code. The fix
+            for this is platform specific, we are working on it.
+      - else
+        .h4
           This is the combined list of built in plus user modifiable messages.
           This is what the protofile that you can download contains.
   .row

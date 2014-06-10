@@ -16,7 +16,8 @@ ARGV << '--help' if ARGV.empty?
 aliases = {
   "n"  => "new",
   "b"  => "build",
-  "s"  => "server"
+  "s"  => "server",
+  "sl" => "server_loop"
 }
 
 command = ARGV.shift
@@ -47,14 +48,32 @@ elsif command == 'server'
   server.set_environment
   load_game_machine
 
-
   # Run the server
   server.run!
+
+elsif command == 'loop'
+  GameMachine::Console::Server.run_in_loop
 else
 
-  puts "Usage: game_machine [server|install] [options]"
-  puts "     Use --help after a valid command for command specific help"
-  puts "     Example: game_machine server --help"
+puts <<EOF
+  Usage:
+  
+  game_machine server [options]      Start the server
+    -r, --restartable                If tmp/gm_restart.txt should trigger a restart
+    -s, --server=name                Server name
+    -c, --config=name                Configuration file
+    -e, --environment=name           Specifies the environment to run under (development/production).
+                                     Default: development
+
+  game_machine server_loop           Runs server in loop that restarts when tmp/gm_restart.txt
+                                     is present. On restart it will run build then server -r.
+
+  game_machine build                 Generate and compile protobuf messages
+
+  game_machine new [path]            Create a new Game Machine application at the
+                                     specified path
+    
+EOF
 end
 
 

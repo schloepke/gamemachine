@@ -25,6 +25,13 @@ module Web
         write_file(@game_messages_file,content)
         GameMachine::Console::Build.new([]).generate_code
         game_messages = read_file(@game_messages_file)
+
+        if ENV.has_key?('RESTARTABLE')
+          GameMachine::Console::Server.restart!
+          return 'restart'
+        else
+          return game_messages
+        end
       end
 
       private
