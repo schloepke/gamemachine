@@ -29,12 +29,14 @@ module GameMachine
         protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','csharp','protogen_csharp.exe')
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
         messages_out_path =  Settings.protogen_out_dir
-        messages_out_file =  File.join(messages_out_path,'messages.cs')
         if File.exists?(messages_out_path)
-          cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
-          puts "Running #{cmd}"
-          system(cmd)
+          messages_out_file =  File.join(messages_out_path,'messages.cs')
+        else
+          messages_out_file =  File.join(ENV['APP_ROOT'],'messages.cs')
         end
+        cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
+        puts "Running #{cmd}"
+        system(cmd)
       end
 
       def generate_java_code
