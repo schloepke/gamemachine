@@ -1,4 +1,5 @@
 require 'fileutils'
+require_relative '../settings'
 module GameMachine
   module Console
     class Build
