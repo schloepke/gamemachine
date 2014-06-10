@@ -14,6 +14,7 @@ class WebApp < Sinatra::Base
   set :bind, GameMachine::Application.config.http_host
   set :port, GameMachine::Application.config.http_port
   set :root, File.expand_path(File.dirname(__FILE__))
+  set :environment, :production
   mime_type :proto, 'application/octet-stream'
 
   register Sinatra::MultiRoute
@@ -50,7 +51,6 @@ class WebApp < Sinatra::Base
 
   get '/restart' do
     haml :restart
-    WebApp.quit!
   end
 
   get '/logs' do
