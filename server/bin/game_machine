@@ -51,7 +51,7 @@ elsif command == 'server'
   # Run the server
   server.run!
 
-elsif command == 'loop'
+elsif command == 'server_loop'
   GameMachine::Console::Server.run_in_loop
 else
 
