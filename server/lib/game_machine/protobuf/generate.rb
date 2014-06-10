@@ -28,8 +28,7 @@ module GameMachine
       end
 
       def java_src
-        File.join(app_root,'java','src','main','java','com',
-                  'game_machine','entity_system','generated')
+        File.join(app_root,'java','src','main','java','GameMachine', 'Messages')
       end
 
       def config_path

@@ -22,7 +22,7 @@ server/java/lib
 server/log
 server/tmp
 server/pathfinding/build
-server/java/src/main/java/com/game_machine/entity_system/generated/*.java
+server/java/src/main/java/GameMachine/Messages/*.java
 
 
 ## Documentation cache and generated files:
