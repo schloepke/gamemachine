@@ -3,6 +3,7 @@ using System.Collections;
 using  System.Collections.Generic;
 using GameMachine;
 using Entity = GameMachine.Messages.Entity;
+using TrackExtra = GameMachine.Messages.TrackExtra;
 
 // This is an example of how to track objects in the game that are near you.
 // The basic flow is that you send a message to the server at regular intervals with your position, and a request
@@ -44,11 +45,8 @@ public class AreaOfInterest : MonoBehaviour
 
         entityTracking = ActorSystem.Instance.Find("EntityTracking") as EntityTracking;
 
-        EntityTracking.PlayersReceived playersCallback = OnPlayersReceived;
-        entityTracking.OnPlayersReceived(playersCallback);
-
-        EntityTracking.NpcsReceived npcsCallback = OnNpcsReceived;
-        entityTracking.OnNpcsReceived(npcsCallback);
+        EntityTracking.UpdateReceived callback = OnUpdateReceived;
+        entityTracking.OnUpdateReceived(callback);
     }
 	
     void Update()
@@ -58,28 +56,34 @@ public class AreaOfInterest : MonoBehaviour
             lastUpdate = Time.time;
             Vector3 position = this.gameObject.transform.position;
 
-            // Sends the server our coordinates to track, and tells
-            // the server to send us all objects within range that are of type npc.
-            entityTracking.Update(position.x, position.y, position.z, "npc");
+            // Create object with our coordinates
+            TrackingUpdate update = new TrackingUpdate(position.x, position.y, position.z);
+
+            // Optional.  Tell the server to set our entity type to this value.  Searches
+            // can filter on this.
+            //update.entityType = "player";
+
+            // Optional, tell the server to filter on this type of entity in the search, and only
+            // return entities that match this type.  A null value means return anything within radius.
+            //update.neighborEntityType = "npc";
+
+
+            TrackExtra trackExtra = new TrackExtra();
+            trackExtra.speed = 1.0f;
+            trackExtra.velocity = 12.0f;
+            update.trackExtra = trackExtra;
+               
+            entityTracking.Update(update);
         }
     }
 
-    void OnPlayersReceived(object message)
+    void OnUpdateReceived(List<TrackingUpdate> updates)
     {
-        // Structure below is the same for players and npcs
-        List<Entity> entities = message as List<Entity>;
-        foreach (Entity entity in entities)
+        foreach (TrackingUpdate update in updates)
         {
-            float x = entity.vector3.x;
-            float y = entity.vector3.y;
-            float z = entity.vector3.z;
-            string playerId = entity.id;
+
         }
-        Logger.Debug("Players received");
+        Logger.Debug("Update received");
     }
 
-    void OnNpcsReceived(object message)
-    {
-        Logger.Debug("Npcs received");
-    }
 }
