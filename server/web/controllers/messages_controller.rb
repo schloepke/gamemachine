@@ -23,7 +23,7 @@ module Web
         FileUtils.cp(@game_messages_file,"#{@game_messages_file}.bak")
         content = params['game_messages']
         write_file(@game_messages_file,content)
-        generate_combined
+        GameMachine::Console::Build.new([]).generate_code
         game_messages = read_file(@game_messages_file)
       end
 
