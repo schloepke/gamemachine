@@ -46,7 +46,6 @@ message IsPlayer {
   optional  bool  enabled = 1;
 }
 
-
 message Rpc {
   required string method = 1;
   repeated string arguments = 2;
