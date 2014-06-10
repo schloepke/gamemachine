@@ -1,6 +1,6 @@
 ---
 development:
-  protogen_out_dir: /tmp
+  protogen_out_dir: /changeme
   servers:
     default:
       id: 1

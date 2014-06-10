@@ -1,5 +1,4 @@
 
-#require 'trinidad'
 require 'sinatra/base'
 require 'sinatra/multi_route'
 
@@ -14,7 +13,6 @@ class WebApp < Sinatra::Base
   CONTROLLERS = {}
   set :bind, GameMachine::Application.config.http_host
   set :port, GameMachine::Application.config.http_port
-  #set :server, 'trinidad'
   set :root, File.expand_path(File.dirname(__FILE__))
   mime_type :proto, 'application/octet-stream'
 
@@ -57,6 +55,7 @@ class WebApp < Sinatra::Base
 
   post '/messages/game' do
     @content = controller(:messages).set_request(request,params).update
+    @messages = :game
     haml :game_messages
   end
 

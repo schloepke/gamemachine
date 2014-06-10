@@ -1,5 +1,6 @@
 ---
 development:
+  protogen_out_dir: /changeme
   servers:
     game01:
       id: 1
