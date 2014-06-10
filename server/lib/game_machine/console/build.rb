@@ -26,7 +26,7 @@ module GameMachine
       end
 
       def generate_csharp_code
-        protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','protogen_csharp.exe')
+        protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','csharp','protogen_csharp.exe')
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
         messages_out_path =  Settings.protogen_out_dir
         messages_out_file =  File.join(messages_out_path,'messages.cs')
