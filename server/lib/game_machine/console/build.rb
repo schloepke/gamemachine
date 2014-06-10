@@ -42,7 +42,7 @@ module GameMachine
 
       def generate_code
         generate_java_code
-        if Config::CONFIG['target_os'].match(/mswin)
+        if Config::CONFIG['target_os'].match(/mswin/)
           generate_csharp_code
         end
       end
