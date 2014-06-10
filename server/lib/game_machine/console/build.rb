@@ -31,7 +31,9 @@ module GameMachine
         messages_out_path =  Settings.protogen_out_dir
         messages_out_file =  File.join(messages_out_path,'messages.cs')
         if File.directory?(messages_out_path)
-          system("#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}")
+          cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
+          puts "Running #{cmd}"
+          system(cmd)
         end
       end
 
