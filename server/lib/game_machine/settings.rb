@@ -3,9 +3,9 @@ require 'settingslogic'
 module GameMachine
   class Settings < Settingslogic
     source  File.expand_path(
-      ENV['CONFIG_FILE'] || File.join(GameMachine.app_root, "config/config.yml")
+      ENV['CONFIG_FILE'] || File.join(ENV['APP_ROOT'], "config/config.yml")
     )
-    namespace GameMachine.env
+    namespace ENV['GAME_ENV']
 
   end 
 end
