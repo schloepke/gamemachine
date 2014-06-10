@@ -3,7 +3,7 @@ package com.game_machine.core;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import com.game_machine.entity_system.generated.Entity;
+import GameMachine.Messages.Entity;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 

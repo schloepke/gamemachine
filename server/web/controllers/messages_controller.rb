@@ -12,8 +12,7 @@ module Web
       end
 
       def all
-        content = read_file(@combined_messages_file)
-        content.sub('package com.game_machine.entity_system.generated','package GameMachine.Messages')
+        read_file(@combined_messages_file)
       end
 
       def game
