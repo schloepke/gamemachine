@@ -151,7 +151,6 @@ module GameMachine
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::ChatManager).start
-        Actor::Builder.new(GameSystems::SingletonManager).start
         Actor::Builder.new(GameSystems::PlayerManager).with_router(JavaLib::RoundRobinRouter,2).start
       end
 
