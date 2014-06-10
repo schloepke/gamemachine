@@ -68,6 +68,9 @@ public class AreaOfInterest : MonoBehaviour
             //update.neighborEntityType = "npc";
 
 
+            // TrackExtra is a message you can customize any way you want and allows you to extend the fields that
+            // the tracking system stores. It will be saved on the server and returned in tracking updates to other clients.
+            // TrackExtra is located in config/game_messages.proto on the server, or you can edit it via the web ui.
             TrackExtra trackExtra = new TrackExtra();
             trackExtra.speed = 1.0f;
             trackExtra.velocity = 12.0f;
