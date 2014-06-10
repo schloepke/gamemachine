@@ -30,7 +30,7 @@ module GameMachine
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
         messages_out_path =  Settings.protogen_out_dir
         messages_out_file =  File.join(messages_out_path,'messages.cs')
-        if File.directory?(messages_out_path)
+        if File.exists?(messages_out_path)
           cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
           puts "Running #{cmd}"
           system(cmd)
