@@ -12,8 +12,10 @@ module GameMachine
         end
       end
 
+      attr_reader :chat_id, :registered_as
       def post_init(*args)
-        @player_id = args.first
+        @chat_id = args.first
+        @registered_as = args.last
         @topic_handlers = {}
 
         # Update these values from the datastore, as this state needs to
@@ -63,7 +65,12 @@ module GameMachine
           end
           channels.add_chat_channel(channel)
         end
-        commands.player.send_message(channels,@player_id)
+        if registered_as == 'player'
+          commands.player.send_message(channels,chat_id)
+        else
+          message = MessageLib::Entity.new.set_id(chat_id).set_chat_channels(channels)
+          Actor::Base.find(registered_as).tell(message,get_self)
+        end
       end
 
       def message_queue
@@ -75,8 +82,8 @@ module GameMachine
       end
 
       def create_topic_handler(topic)
-        name = "topic#{@player_id}#{topic}"
-        builder = Actor::Builder.new(GameSystems::ChatTopic,@player_id)
+        name = "topic#{chat_id}#{topic}"
+        builder = Actor::Builder.new(GameSystems::ChatTopic,chat_id,registered_as)
         ref = builder.with_parent(context).with_name(name).start
         actor_ref = Actor::Ref.new(ref,GameSystems::ChatTopic.name)
         @topic_handlers[topic] = actor_ref
@@ -95,7 +102,7 @@ module GameMachine
       end
 
       def save_subscriptions
-        entity_id = "subscriptions_#{@player_id}"
+        entity_id = "subscriptions_#{chat_id}"
         channels = MessageLib::ChatChannels.new
         @subscriptions.each do |name|
           channel = MessageLib::ChatChannel.new.set_name(name)
@@ -107,7 +114,7 @@ module GameMachine
 
       def get_subscriptions
         subscriptions = Set.new
-        entity_id = "subscriptions_#{@player_id}"
+        entity_id = "subscriptions_#{chat_id}"
         if entity = commands.datastore.get(entity_id)
           if chat_channels = entity.chat_channels.get_chat_channel_list
             chat_channels.each do |channel|
@@ -123,7 +130,7 @@ module GameMachine
       end
 
       def channel_flags_id(name)
-        "channel_flags#{@player_id}#{name}"
+        "channel_flags#{@chat_id}#{name}"
       end
 
       def flags_for_channel(channel_name)
@@ -165,13 +172,13 @@ module GameMachine
             next
           end
 
-          # Private channels.  format priv_[player_id]_[channel name]
+          # Private channels.  format priv_[chat_id]_[channel name]
           # Players can create private channels with their player id, other
           # players must have an invite to join someone elses private channel
           if channel.name.match(/^priv/)
             channel_parts = channel.name.split('/')
 
-            if @player_id == channel_parts[1]
+            if chat_id == channel_parts[1]
               join_channel(channel.name,channel.flags)
             elsif channel.invite_id
               if invite_exists?(channel.name,channel.invite_id)
@@ -190,9 +197,9 @@ module GameMachine
         message_queue.tell(message,topic_handler_for(name).actor)
         @subscriptions.add(name)
         save_subscriptions
-        add_subscriber(@player_id,name)
+        add_subscriber(chat_id,name)
         set_channel_flags(name,flags)
-        GameMachine.logger.info "Player #{@player_id} Joined channel #{name} with flags #{flags}"
+        GameMachine.logger.info "Player #{chat_id} Joined channel #{name} with flags #{flags}"
       end
 
       def leave_channels(chat_channels)
@@ -202,7 +209,7 @@ module GameMachine
             message_queue.tell(message,topic_handler_for(channel.name).actor)
             @subscriptions.delete_if {|sub| sub == channel.name}
             save_subscriptions
-            remove_subscriber(@player_id,channel.name)
+            remove_subscriber(chat_id,channel.name)
             topic_handler.tell(JavaLib::PoisonPill.get_instance)
             @topic_handlers.delete(channel.name)
             delete_channel_flags(channel.name)

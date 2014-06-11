@@ -63,17 +63,15 @@ module GameMachine
         end
 
         it "creates chat actor for player if it does not exist" do
-          Chat.any_instance.should_receive(:on_receive).with(chat_message)
-          ChatManager.should_receive_message(chat_message) do
-            ChatManager.find.tell(chat_message)
-          end
+          expect(subject).to receive(:forward_chat_request)
+          subject.on_receive(chat_message)
         end
 
         it "destroys chat actor on client disconnect" do
           ChatManager.should_receive_message(join_request) do
             ChatManager.find.tell(join_request)
           end
-          ChatManager.any_instance.should_receive(:destroy_child).with(disconnected)
+          ChatManager.any_instance.should_receive(:destroy_child).with(disconnected.player_id)
           ChatManager.should_receive_message(disconnected) do
             ChatManager.find.tell(disconnected)
           end

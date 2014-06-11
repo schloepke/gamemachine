@@ -85,6 +85,11 @@ message ChatChannel {
   optional string invite_id = 5;
 }
 
+message ChatRegister {
+  required string chatId = 1;
+  required string registerAs = 2;
+}
+
 message JoinChat {
   repeated ChatChannel chatChannel = 1;
 }
@@ -101,8 +106,6 @@ message ChatMessage {
   optional Entity entity = 5;
 }
 
-message ChatRegister {
-}
 
 message ChatStatus {
 }

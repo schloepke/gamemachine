@@ -47,19 +47,24 @@ module GameMachine
 
       def on_receive(message)
         if message.is_a?(MessageLib::Disconnected)
-          destroy_child(message)
-        else
-          if message.has_chat_invite
-            send_invite(message.chat_invite)
-          else
-            unless @chat_actors.has_key?(message.player.id)
-              create_child(message.player.id)
-              PlayerRegistry.find.tell(
-                MessageLib::RegisterPlayerObserver.new.set_player_id(message.player.id)
-              )
-            end
-            forward_chat_request(message.player.id,message)
+          destroy_child(message.player_id)
+          return
+        end
+
+        if message.has_chat_invite
+          send_invite(message.chat_invite)
+        elsif message.has_chat_register
+          unless @chat_actors.has_key?(message.chat_register.chat_id)
+            create_child(message.chat_register.chat_id,message.chat_register.register_as)
           end
+        else
+          unless @chat_actors.has_key?(message.player.id)
+            create_child(message.player.id)
+            PlayerRegistry.find.tell(
+              MessageLib::RegisterPlayerObserver.new.set_player_id(message.player.id)
+            )
+          end
+          forward_chat_request(message.player.id,message)
         end
       end
 
@@ -76,31 +81,30 @@ module GameMachine
         commands.player.send_message(chat_invite,chat_invite.invitee)
       end
 
-      def destroy_child(message)
-        player_id = message.player_id
-        if @chat_actors.has_key?(player_id)
-          forward_chat_request(player_id,JavaLib::PoisonPill.get_instance)
-          @chat_actors.delete(player_id)
-          GameMachine.logger.debug "Chat child for #{player_id} killed"
+      def destroy_child(chat_id)
+        if @chat_actors.has_key?(chat_id)
+          forward_chat_request(chat_id,JavaLib::PoisonPill.get_instance)
+          @chat_actors.delete(chat_id)
+          GameMachine.logger.debug "Chat child for #{chat_id} killed"
         else
-          GameMachine.logger.info "chat actor for player_id #{player_id} not found"
+          GameMachine.logger.info "chat actor for chat_id #{chat_id} not found"
         end
       end
 
-      def forward_chat_request(player_id,message)
-        @chat_actors[player_id].tell(message,nil)
+      def forward_chat_request(chat_id,message)
+        @chat_actors[chat_id].tell(message,nil)
       end
 
-      def child_name(player_id)
-        "chat#{player_id}"
+      def child_name(chat_id)
+        "chat#{chat_id}"
       end
 
-      def create_child(player_id)
-        name = child_name(player_id)
-        builder = Actor::Builder.new(GameSystems::Chat,player_id)
+      def create_child(chat_id,register_as='player')
+        name = child_name(chat_id)
+        builder = Actor::Builder.new(GameSystems::Chat,chat_id,register_as)
         child = builder.with_parent(context).with_name(name).start
-        @chat_actors[player_id] = Actor::Ref.new(child,GameSystems::Chat.name)
-        GameMachine.logger.debug "Chat child for #{player_id} created"
+        @chat_actors[chat_id] = Actor::Ref.new(child,GameSystems::Chat.name)
+        GameMachine.logger.debug "Chat child for #{chat_id} created"
       end
     end
   end

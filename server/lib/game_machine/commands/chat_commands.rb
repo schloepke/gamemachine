@@ -11,9 +11,18 @@ module GameMachine
       end
 
       def send_group_message(topic,text,player_id)
-        message = chat_message('group',text,topic)
-        entity = entity_with_player(player_id,player_id).set_chat_message(message)
+        message = chat_message('group',text,topic,player_id)
+        entity = entity_with_player(player_id,player_id).
+          set_chat_message(message.chat_message)
         GameSystems::ChatManager.find.tell(entity)
+      end
+
+      def register(chat_id,register_as)
+        message = entity(chat_id).set_chat_register(
+          MessageLib::ChatRegister.new.set_chat_id(chat_id).
+          set_register_as(register_as)
+        )
+        GameSystems::ChatManager.find.tell(message)
       end
 
       def join(topic,player_id,invite_id=nil)
@@ -55,10 +64,14 @@ module GameMachine
        )
       end
 
-      def chat_message(type,message_text,topic,sender_id='')
+      def chat_message(type,message_text,topic,sender_id=nil)
         chat_message = MessageLib::ChatMessage.new.set_chat_channel(
           chat_channel(topic)
-        ).set_message(message_text).set_type(type).set_sender_id(sender_id)
+        ).set_message(message_text).set_type(type)
+
+        if sender_id
+          chat_message.set_sender_id(sender_id)
+        end
         entity(entity_id).set_chat_message(chat_message)
       end
 

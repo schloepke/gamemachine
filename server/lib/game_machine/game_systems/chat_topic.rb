@@ -3,8 +3,10 @@ module GameMachine
     class ChatTopic < Actor::Base
       include Commands
 
+      attr_reader :chat_id, :registered_as
       def post_init(*args)
-        @player_id = args.first
+        @chat_id = args.first
+        @registered_as = args.last
       end
 
       def on_receive(message)
@@ -19,8 +21,13 @@ module GameMachine
       private
 
       def receive_chat_message(chat_message)
-        GameMachine.logger.info "Sending chat message #{chat_message.message} to #{@player_id}"
-        commands.player.send_message(chat_message,@player_id)
+        GameMachine.logger.info "Sending chat message #{chat_message.message} to #{chat_id}"
+        if registered_as == 'player'
+          commands.player.send_message(chat_message,chat_id)
+        else
+          message = MessageLib::Entity.new.set_id(chat_id).set_chat_message(chat_message)
+          Actor::Base.find(registered_as).tell(message,get_self)
+        end
       end
 
     end
