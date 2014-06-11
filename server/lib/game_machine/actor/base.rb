@@ -136,6 +136,21 @@ module GameMachine
         Actor::Ref.new(get_sender)
       end
 
+      def schedule_message(message,update_interval,unit=:ms)
+        if unit == :seconds
+          unit = java.util.concurrent.TimeUnit::SECONDS
+        elsif unit == :ms
+          unit = java.util.concurrent.TimeUnit::MILLISECONDS
+        else
+          GameMachine.logger.error "Invalid unit argument for schedule_message (#{unit})"
+          return
+        end
+
+        duration = GameMachine::JavaLib::Duration.create(update_interval, unit)
+        scheduler = get_context.system.scheduler
+        dispatcher = get_context.system.dispatcher
+        scheduler.schedule(duration, duration, get_self, message, dispatcher, nil)
+      end
     end
   end
 end

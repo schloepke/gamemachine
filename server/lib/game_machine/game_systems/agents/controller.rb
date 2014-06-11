@@ -35,15 +35,6 @@ module GameMachine
           end
         end
 
-        def schedule_message(message,update_interval)
-          duration = GameMachine::JavaLib::Duration.create(
-            update_interval, java.util.concurrent.TimeUnit::MILLISECONDS
-          )
-          scheduler = get_context.system.scheduler
-          dispatcher = get_context.system.dispatcher
-          scheduler.schedule(duration, duration, get_self, message, dispatcher, nil)
-        end
-
         def update_agents
           agents_to_create = {}
           agents_to_destroy = {}

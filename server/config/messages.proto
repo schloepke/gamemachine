@@ -57,6 +57,22 @@ message ErrorMessage {
   required string message = 2;
 }
 
+message ChatInvite {
+  required string invitee = 1;
+  required string inviter = 2;
+  required string channelName = 4;
+  required string invite_id = 5;
+}
+
+message ChatBanned {
+  required string banned_id = 1;
+  required string channelNname = 2;
+  optional string reason = 3;
+}
+
+message ChatBannedList {
+  repeated ChatBanned chatBanned = 1;
+}
 
 message ChatChannels {
   repeated ChatChannel chatChannel = 1;
@@ -66,6 +82,7 @@ message ChatChannel {
   required string name = 1;
   optional Subscribers subscribers = 2;
   optional string flags = 3;
+  optional string invite_id = 5;
 }
 
 message JoinChat {
@@ -280,6 +297,8 @@ message Entity {
   optional bool json = 49;
   optional string params = 50;
   optional ChatStatus chatStatus = 51;
+  optional ChatBannedList chatBannedList = 52;
+  optional ChatInvite chatInvite = 53;
   //GAME_ENTITY_MESSAGES
 }
 

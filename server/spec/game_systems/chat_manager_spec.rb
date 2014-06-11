@@ -31,31 +31,26 @@ module GameMachine
         MessageLib::Disconnected.new.set_client_id(client_id).set_player_id(player_id)
       end
 
+      let(:chat_invite) do
+        chat = Commands::ChatCommands.new
+        chat.invite_message('inviter','invitee','test')
+      end
+
       subject do
         ref = Actor::Builder.new(GameSystems::ChatManager).with_name('chat_manager').test_ref
         ref.underlying_actor
       end
 
+      describe "chat invites" do
+        it "chat manager calls send_invite when it receives a chat invite" do
+          expect(subject).to receive(:send_invite).with(chat_invite.chat_invite)
+          subject.on_receive(chat_invite)
+        end
+
+      end
+
       describe "multiple players" do
 
-        it "creates chat actors for each player" do
-          subject.post_init
-          1.upto(10) do |i|
-            entity = MessageLib::Entity.new.set_id(i.to_s)
-            player = MessageLib::Player.new.set_id(i.to_s)
-            entity.set_player(player)
-            join = MessageLib::JoinChat.new
-            channel = MessageLib::ChatChannel.new
-            channel.set_name("test_channel")
-            channel.set_flags("subscribers")
-            join.add_chat_channel(channel)
-            entity.set_join_chat(join)
-            subject.on_receive(entity)
-          end
-          sleep 2
-         subscribers = GameMachine::GameSystems::Chat.subscribers_for_topic('test_channel')
-         expect(subscribers.subscriberId.size).to eq 10
-        end
       end
 
       describe "managing chat messages" do

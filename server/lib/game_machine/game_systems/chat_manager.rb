@@ -19,6 +19,7 @@ module GameMachine
       aspect %w(JoinChat Player)
       aspect %w(LeaveChat Player)
       aspect %w(ChatStatus Player)
+      aspect %w(ChatInvite Player)
 
       def define_update_procs
         commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
@@ -48,17 +49,32 @@ module GameMachine
         if message.is_a?(MessageLib::Disconnected)
           destroy_child(message)
         else
-          unless @chat_actors.has_key?(message.player.id)
-            create_child(message.player.id)
-            PlayerRegistry.find.tell(
-              MessageLib::RegisterPlayerObserver.new.set_player_id(message.player.id)
-            )
+          if message.has_chat_invite
+            send_invite(message.chat_invite)
+          else
+            unless @chat_actors.has_key?(message.player.id)
+              create_child(message.player.id)
+              PlayerRegistry.find.tell(
+                MessageLib::RegisterPlayerObserver.new.set_player_id(message.player.id)
+              )
+            end
+            forward_chat_request(message.player.id,message)
           end
-          forward_chat_request(message.player.id,message)
         end
       end
 
       private
+
+      # TODO implement expiring cache store for stuff like this (invites)
+      # We cannot just delete the invite when everyone leaves the channel,
+      # because we have no way of knowing when everyone has left
+      def send_invite(chat_invite)
+        invite_id = Uniqueid.generate_token(chat_invite.inviter)
+        stored_id = "invite_#{invite.channel_name}_#{token}"
+        commands.datastore.put(MessageLib::Entity.new.set_id(stored_id))
+        chat_invite.set_invite_id(invite_id)
+        commands.player.send_message(chat_invite,chat_invite.invitee)
+      end
 
       def destroy_child(message)
         player_id = message.player_id

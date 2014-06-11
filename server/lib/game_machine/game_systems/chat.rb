@@ -153,13 +153,34 @@ module GameMachine
         commands.datastore.delete(flags_id)
       end
 
+      def invite_exists?(channel_name,invite_id)
+        key = "invite_#{channel_name}_#{invite_id}"
+        commands.datastore.get(key)
+      end
+
       def join_channels(chat_channels)
         chat_channels.each do |channel|
           if @topic_handlers[channel.name]
             GameMachine.logger.info "Topic handler exists for #{channel.name}, not creating"
             next
           end
-          join_channel(channel.name,channel.flags)
+
+          # Private channels.  format priv_[player_id]_[channel name]
+          # Players can create private channels with their player id, other
+          # players must have an invite to join someone elses private channel
+          if channel.name.match(/^priv/)
+            channel_parts = channel.name.split('/')
+
+            if @player_id == channel_parts[1]
+              join_channel(channel.name,channel.flags)
+            elsif channel.invite_id
+              if invite_exists?(channel.name,channel.invite_id)
+                join_channel(channel.name,channel.flags)
+              end
+            end
+          else
+            join_channel(channel.name,channel.flags)
+          end
         end
       end
 

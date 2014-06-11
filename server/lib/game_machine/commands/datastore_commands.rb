@@ -26,7 +26,7 @@ module GameMachine
 
       def get(entity_id)
         ref = ObjectDb.find_distributed(entity_id)
-        ref.ask(MessageLib::ObjectdbGet.new.set_entity_id(entity_id), 100)
+        ref.ask(MessageLib::ObjectdbGet.new.set_entity_id(entity_id), 1000)
       end
 
       def delete(entity_id)

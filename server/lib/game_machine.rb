@@ -65,6 +65,7 @@ require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
 require_relative 'game_machine/mono_server'
 require_relative 'game_machine/restart_watcher'
+require_relative 'game_machine/uniqueid'
 
 if Config::CONFIG['target_os'] == 'linux'
   require_relative 'game_machine/navigation'

@@ -70,6 +70,32 @@ module GameMachine
         commands.datastore.delete("chat_topic_#{topic}")
       end
 
+      describe "private channels" do
+
+        it "joining private channel without invite should fail" do
+          channel_name = "priv/otherplayer/test"
+          join_message = commands.chat.join_message(channel_name,player_id)
+          expect(subject).to_not receive(:join_channel)
+          subject.on_receive(join_message)
+        end
+
+        it "joining my own channel should work" do
+          channel_name = "priv/#{player_id}/test"
+          join_message = commands.chat.join_message(channel_name,player_id)
+          expect(subject).to receive(:join_channel)
+          subject.on_receive(join_message)
+        end
+
+        it "joining private channel with invite should work" do
+          channel_name = "priv/otherplayer/test"
+          join_message = commands.chat.join_message(channel_name,player_id,'myinvite')
+          expect(subject).to receive(:join_channel)
+          expect(subject).to receive(:invite_exists?).with(channel_name,'myinvite').and_return(true)
+          subject.on_receive(join_message)
+
+        end
+      end
+
       describe "#subscribers_for_topic" do
         it "subscriber id count is zero when no subscribers" do
           subscribers = Chat.subscribers_for_topic(topic)

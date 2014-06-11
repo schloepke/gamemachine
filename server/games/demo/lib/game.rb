@@ -1,7 +1,6 @@
 require_relative 'npc_controller'
 require_relative 'combat_controller'
 require_relative 'player_controller'
-require_relative 'example_controller'
 
 module Demo
   class Game
