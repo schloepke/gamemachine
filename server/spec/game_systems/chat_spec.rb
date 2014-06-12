@@ -63,10 +63,6 @@ module GameMachine
         Chat.any_instance.stub(:load_state)
         Actor::Builder.new(GameSystems::Chat,player_id).start
         MessageQueue.stub(:find).and_return(actor_ref)
-        PlayerRegistry.register_player(
-          game_message.client_message.player.id,
-          game_message.client_connection(client_id,gateway)
-        )
         commands.datastore.delete("chat_topic_#{topic}")
       end
 

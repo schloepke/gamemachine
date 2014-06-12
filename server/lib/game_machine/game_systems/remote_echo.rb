@@ -1,11 +1,11 @@
 module GameMachine
   module GameSystems
     class RemoteEcho < Actor::Base
+      include GameMachine::Commands
       aspect %w(EchoTest)
 
       def on_receive(message)
-        message.set_send_to_player(true)
-        PlayerGateway.find.tell(message)
+        commands.player.send_message(message,message.player.id)
       end
     end
   end

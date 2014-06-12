@@ -8,6 +8,7 @@ module GameMachine
     # @aspects TrackEntity
     # @aspects GetNeighbors
     class EntityTracking < Actor::Base
+      include GameMachine::Commands
 
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
@@ -98,7 +99,7 @@ module GameMachine
         entity.set_id(player.id)
         entity.set_player(player)
         entity.set_send_to_player(true)
-        PlayerGateway.find.tell(entity)
+        commands.player.send_message(entity,player.id)
       end
 
     end

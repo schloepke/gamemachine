@@ -227,7 +227,7 @@ module GameMachine
         entity.set_player(player)
         entity.set_chat_message(chat_message)
         entity.set_send_to_player(true)
-        PlayerGateway.find.tell(entity)
+        commands.player.send_message(entity)
       end
 
       def send_group_message(chat_message)

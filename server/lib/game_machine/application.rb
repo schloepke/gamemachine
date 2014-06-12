@@ -117,9 +117,6 @@ module GameMachine
         Actor::Builder.new(Handlers::Request).with_router(
           JavaLib::RoundRobinRouter,config.request_handler_routers
         ).start
-        Actor::Builder.new(Handlers::Authentication).distributed(
-          config.authentication_handler_ring_size
-        ).start
         Actor::Builder.new(Handlers::Game).with_router(
           JavaLib::RoundRobinRouter,config.game_handler_routers
         ).start
@@ -131,8 +128,7 @@ module GameMachine
       # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(PlayerGateway).start
-        Actor::Builder.new(PlayerRegistry).start
+        Actor::Builder.new(ClientManager).start
         Actor::Builder.new(ObjectDb).distributed(2).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start

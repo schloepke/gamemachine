@@ -18,7 +18,7 @@ module GameMachine
           end
         end
         entity.set_send_to_player(true)
-        PlayerGateway.find.tell(entity)
+        ClientManager.find.tell(entity)
       end
     end
   end

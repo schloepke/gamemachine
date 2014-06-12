@@ -22,7 +22,7 @@ module GameMachine
       describe "player" do
         describe "#send_message" do
           before(:each) do
-            PlayerGateway.stub(:find).and_return(actor_ref)
+            ClientManager.stub(:find).and_return(actor_ref)
           end
 
           it "sends component to player wrapped in entity" do

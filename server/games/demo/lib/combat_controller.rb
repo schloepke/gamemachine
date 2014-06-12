@@ -10,7 +10,7 @@ module Demo
       update_entity.set_id(player.id)
       update_entity.set_player(player)
       update_entity.set_send_to_player(true)
-      PlayerGateway.find.tell(update_entity)
+      commands.player.send_message(update_entity)
     end
 
     def post_init(*args)

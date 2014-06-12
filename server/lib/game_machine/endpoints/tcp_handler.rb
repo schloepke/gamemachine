@@ -30,6 +30,11 @@ module GameMachine
 
       private
 
+      def client_connection(client_id)
+        MessageLib::ClientConnection.new.set_id(client_id).
+          set_gateway(@name).set_server(Application.config.name)
+      end
+
       def client_disconnect_message(client_id)
         MessageLib::ClientMessage.new.set_client_disconnect(
           MessageLib::ClientDisconnect.new.set_client_connection(

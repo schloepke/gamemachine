@@ -42,15 +42,25 @@ module GameMachine
                            JavaLib::ClusterEvent::UnreachableMember.java_class)
       end
       @observers = []
+      @notify_on_up_observers = []
+      @notify_on_down_observers = []
     end
 
     def notify_observers
       @observers.each {|observer| observer.tell('cluster_update',get_self)}
+      @notify_on_down_observers.each {|i| i[1].tell(i[0],get_self)}
+      @notify_on_up_observers.each {|i| i[1].tell(i[0],get_self)}
     end
 
     def on_receive(message)
-      if message.is_a?(String) && message == 'register_observer'
-        @observers << sender
+      if message.is_a?(String)
+        if message == 'register_observer'
+          @observers << sender
+        elsif message == 'notify_on_up'
+          @notify_on_up_observers << [message,sender]
+        elsif message == 'notify_on_down'
+          @notify_on_down_observers << [message,sender]
+        end
       elsif message.is_a?(JavaLib::ClusterEvent::SeenChanged)
 
       elsif message.is_a?(JavaLib::ClusterEvent::MemberRemoved)

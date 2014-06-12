@@ -21,7 +21,7 @@ module GameMachine
       private
 
       def receive_chat_message(chat_message)
-        GameMachine.logger.info "Sending chat message #{chat_message.message} to #{chat_id}"
+        GameMachine.logger.debug "Sending chat message #{chat_message.message} to #{chat_id}"
         if registered_as == 'player'
           commands.player.send_message(chat_message,chat_id)
         else

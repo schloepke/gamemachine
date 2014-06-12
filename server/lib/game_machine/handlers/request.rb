@@ -2,20 +2,25 @@ module GameMachine
   module Handlers
     class Request < Actor::Base
 
+      def post_init(*args)
+        @auth_handler = Authentication.new
+      end
+
       def on_receive(message)
         if message.is_a?(MessageLib::ClientMessage)
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
-              GameMachine::GameSystems::PlayerManager.find.tell(message)
+              unregister_client(message)
             end
-          elsif message.has_client_disconnect
-            GameMachine::GameSystems::PlayerManager.find.tell(message)
           elsif message.has_player
             update_entities(message)
             if Authentication.authenticated?(message.player)
               game_handler.tell(message)
             else
-              authenticate_player(message)
+              if @auth_handler.authenticate!(message.player)
+                register_client(message)
+                game_handler.tell(message)
+              end
             end
           else
             unhandled(message)
@@ -26,6 +31,31 @@ module GameMachine
       end
 
       private
+
+      def register_client(message)
+        player_id = message.player.id
+        client_id = message.client_connection.id
+        register = MessageLib::ClientManagerRegister.new.
+          set_register_type('client').set_name(client_id)
+        entity = MessageLib::Entity.new.set_id(client_id).
+          set_client_manager_register(register).set_client_connection(
+          message.client_connection
+        )
+        entity.set_player(message.player)
+        ClientManager.find.tell(entity)
+      end
+
+      def unregister_client(message)
+        player_id = message.player.id
+        client_id = message.client_connection.id
+        Authentication.unregister_player(player_id)
+        entity = MessageLib::Entity.new.set_id(client_id).set_client_manager_unregister(
+          MessageLib::ClientManagerUnregister.new.set_register_type('client').
+            set_name(client_id)
+        )
+        entity.set_player(message.player)
+        ClientManager.find.tell(entity)
+      end
 
       def game_handler
         @game_handler ||= Handlers::Game.find

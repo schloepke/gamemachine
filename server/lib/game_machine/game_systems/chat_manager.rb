@@ -46,11 +46,6 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(MessageLib::Disconnected)
-          destroy_child(message.player_id)
-          return
-        end
-
         if message.has_chat_invite
           send_invite(message.chat_invite)
         elsif message.has_chat_register
@@ -60,9 +55,6 @@ module GameMachine
         else
           unless @chat_actors.has_key?(message.player.id)
             create_child(message.player.id)
-            PlayerRegistry.find.tell(
-              MessageLib::RegisterPlayerObserver.new.set_player_id(message.player.id)
-            )
           end
           forward_chat_request(message.player.id,message)
         end

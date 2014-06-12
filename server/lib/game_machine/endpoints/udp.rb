@@ -49,9 +49,13 @@ module GameMachine
       end
 
       def handle_incoming(message)
-        @clients[message.sender.to_s] = message.sender
+        client_id = message.sender.to_s
+        unless @clients.has_key?(client_id)
+          @clients[client_id] = message.sender
+        end
+
         client_message = create_client_message(
-          message.data.to_array,message.sender.to_s
+          message.data.to_array,client_id
         )
         Actor::Base.find(game_handler).send_message(
           client_message, :sender => get_self
@@ -60,10 +64,14 @@ module GameMachine
         GameMachine.logger.error "#{self.class.name} #{e.to_s}"
       end
 
+      def client_connection(client_id)
+        MessageLib::ClientConnection.new.set_id(client_id).
+          set_gateway(self.class.name).set_server(Application.config.name)
+      end
+
       def create_client_message(data,client_id)
         MessageLib::ClientMessage.parse_from(data).set_client_connection(
-          MessageLib::ClientConnection.new.set_id(client_id).set_gateway(self.class.name).
-          set_server(Application.config.name)
+          client_connection(client_id)
         )
       end
 

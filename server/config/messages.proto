@@ -34,11 +34,6 @@ message PlayerRegister {
   optional string observer = 3;
 }
 
-message Disconnected {
-  required string playerId = 1;
-  required string clientId = 2;
-}
-
 message PlayerLogout {
   required string playerId = 1;
   optional string authtoken = 2;
@@ -48,9 +43,6 @@ message PlayerAuthenticated {
   required string playerId = 1;
 }
 
-message ClientDisconnect {
-  required ClientConnection clientConnection = 1;
-}
 
 message ErrorMessage {
   required string code = 1;
@@ -108,6 +100,23 @@ message ChatMessage {
 
 
 message ChatStatus {
+}
+
+message ClientEvent {
+  required string event = 1;
+  required string clientId = 2;
+  required string senderId = 3;
+}
+
+message ClientManagerUnregister {
+  optional string registerType = 1;
+  optional string name = 2;
+}
+
+message ClientManagerRegister {
+  optional string events = 1;
+  optional string registerType = 2;
+  optional string name = 3;
 }
 
 message Subscribers {
@@ -302,6 +311,9 @@ message Entity {
   optional ChatStatus chatStatus = 51;
   optional ChatBannedList chatBannedList = 52;
   optional ChatInvite chatInvite = 53;
+  optional ClientManagerRegister clientManagerRegister = 54;
+  optional ClientManagerUnregister clientManagerUnregister = 55;
+  optional ClientEvent clientEvent = 56;
   //GAME_ENTITY_MESSAGES
 }
 
@@ -314,7 +326,6 @@ message ClientMessage {
   optional Player player = 2;
   optional PlayerLogin playerLogin = 3;
   optional ClientConnection clientConnection = 4;
-  optional ClientDisconnect clientDisconnect = 5;
   optional PlayerLogout playerLogout = 6;
   optional ErrorMessage errorMessage = 17;
 }
