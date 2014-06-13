@@ -128,7 +128,6 @@ module GameMachine
       # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(ClientManager).start
         Actor::Builder.new(ObjectDb).distributed(2).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start
@@ -136,6 +135,7 @@ module GameMachine
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
+        Actor::Builder.new(ClientManager).start
         Actor::Builder.new(GameSystems::EntityLoader).start
 
 

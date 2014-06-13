@@ -19,8 +19,8 @@ module GameMachine
   end
 
   module JavaLib
+    java_import 'akka.cluster.ClusterEvent'
     include_package 'akka.serialization'
-    include_package 'pathfinder'
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
     include_package 'akka.io'
@@ -35,9 +35,7 @@ module GameMachine
     include_package 'akka.camel.javaapi'
     include_package 'akka.camel'
     include_package 'com.game_machine.core'
-    include_package 'com.game_machine.core.net.server'
     include_package 'java.net'
-    include_package 'com.barchart.udt'
     include_package 'java.util.concurrent.atomic'
     include_package 'scala.concurrent.duration'
     include_package 'scala.concurrent'
@@ -46,9 +44,5 @@ module GameMachine
     include_package 'java.io'
     include_package 'com.couchbase.client'
     include_package 'io.netty.channel'
-    include_package 'com.overload.loc'
-    include_package 'com.overload.algorithms.pathfinding'
-    include_package 'com.jme3.bullet'
-    include_package 'com.jme3.bullet.collision.shapes'
   end
 end

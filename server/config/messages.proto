@@ -23,17 +23,6 @@ message TrackEntity {
 }
 
 
-message RegisterPlayerObserver {
-  required string playerId = 1;
-  required string event = 2;
-}
-
-message PlayerRegister {
-  required string playerId = 1;
-  required ClientConnection clientConnection = 2;
-  optional string observer = 3;
-}
-
 message PlayerLogout {
   required string playerId = 1;
   optional string authtoken = 2;
@@ -42,7 +31,6 @@ message PlayerLogout {
 message PlayerAuthenticated {
   required string playerId = 1;
 }
-
 
 message ErrorMessage {
   required string code = 1;
@@ -106,6 +94,11 @@ message ClientEvent {
   required string event = 1;
   required string clientId = 2;
   required string senderId = 3;
+  optional string playerId = 4;
+}
+
+message ClientEvents {
+  repeated ClientEvent clientEvent = 1;
 }
 
 message ClientManagerUnregister {
@@ -285,7 +278,6 @@ message Entity {
   optional ChatRegister chatRegister = 15;
   optional ChatChannels chatChannels = 16;
   optional ErrorMessage errorMessage = 17;
-  optional RegisterPlayerObserver registerPlayerObserver = 18;
   optional GetNeighbors getNeighbors = 21;
   optional TrackEntity trackEntity = 22;
   optional Transform transform = 23;
@@ -314,6 +306,7 @@ message Entity {
   optional ClientManagerRegister clientManagerRegister = 54;
   optional ClientManagerUnregister clientManagerUnregister = 55;
   optional ClientEvent clientEvent = 56;
+  optional ClientEvents clientEvents = 57;
   //GAME_ENTITY_MESSAGES
 }
 

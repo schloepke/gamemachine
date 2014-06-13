@@ -15,7 +15,7 @@ module GameMachine
           Actor::Ref.new(@paths[address],self.class.name).tell(delta)
         end
       else
-        GameMachine::GameSystems::EntityTracking.grid.update_from_delta(message)
+        Grid.default_grid.update_from_delta(message)
       end
       
     end

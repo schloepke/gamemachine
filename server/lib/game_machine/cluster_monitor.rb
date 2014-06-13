@@ -46,10 +46,16 @@ module GameMachine
       @notify_on_down_observers = []
     end
 
+    def notify_member_up
+      @notify_on_up_observers.each {|i| i[1].tell(i[0],get_self)}
+    end
+
+    def notify_member_down
+      @notify_on_down_observers.each {|i| i[1].tell(i[0],get_self)}
+    end
+
     def notify_observers
       @observers.each {|observer| observer.tell('cluster_update',get_self)}
-      @notify_on_down_observers.each {|i| i[1].tell(i[0],get_self)}
-      @notify_on_up_observers.each {|i| i[1].tell(i[0],get_self)}
     end
 
     def on_receive(message)
@@ -70,7 +76,9 @@ module GameMachine
         self.class.remove_remote_member(address)
 
         notify_observers
+        notify_member_down
 
+        GameMachine.logger.info "MemberRemoved #{address}"
       elsif message.is_a?(JavaLib::ClusterEvent::MemberUp)
         address = message.member.address.to_string
         self.class.add_cluster_member(address,message.member)
@@ -80,8 +88,9 @@ module GameMachine
           self.class.add_remote_member(address,message.member)
         end
 
+        notify_member_up
         notify_observers
-
+        GameMachine.logger.info "MemberUp #{address}"
       elsif message.is_a?(JavaLib::ClusterEvent::ClusterMetricsChanged)
 
       elsif message.is_a?(JavaLib::ClusterEvent::CurrentClusterState)

@@ -39,7 +39,8 @@ module GameMachine
 
     let('client_disconnected_event') do
       MessageLib::Entity.new.set_id(client_name).set_client_event(
-        MessageLib::ClientEvent.new.set_event('disconnected').set_client_id(client_name)
+        MessageLib::ClientEvent.new.set_event('disconnected').set_client_id(client_name).
+        set_player_id(player_id)
       )
     end
 
@@ -48,7 +49,7 @@ module GameMachine
     let('client_connected_event') do
       MessageLib::Entity.new.set_id(client_name).set_client_event(
         MessageLib::ClientEvent.new.set_event('connected').set_client_id(client_name).
-        set_sender_id(sender_id)
+        set_sender_id(sender_id).set_player_id(player_id)
       )
     end
 
@@ -75,19 +76,23 @@ module GameMachine
     describe "#process_player_message" do
       it "should send message to remote manager if player is remote" do
         subject.remote_clients[client_name] = actor_ref
-        subject.local_players[player_id] = client_name
+        subject.players[player_id] = client_name
         expect(actor_ref).to receive(:tell).with(remote_player_message)
         subject.on_receive(remote_player_message)
       end
       it "should send message directly to player if player is local" do
         subject.local_clients[client_name] = client_connection
-        subject.local_players[player_id] = client_name
+        subject.players[player_id] = client_name
         expect(subject).to receive(:send_to_player)
         subject.on_receive(local_player_message)
       end
     end
 
     describe "#process_client_event" do
+      it "on connect should set players entry" do
+        subject.on_receive(client_connected_event)
+        expect(subject.players.has_key?(player_id)).to be_true
+      end
       it "on connect should set remote_clients entry" do
         subject.on_receive(client_connected_event)
         expect(subject.remote_clients.has_key?(client_name)).to be_true
@@ -112,13 +117,13 @@ module GameMachine
       end
 
       it "client register should call send_client_event" do
-        expect(subject).to receive(:send_client_event).with(client_name,'connected')
+        expect(subject).to receive(:send_client_event).with(client_name,player_id,'connected')
         subject.on_receive(client_register)
       end
 
       describe "#unregister_sender" do
         it "sends disconnected message to message queue" do
-          expect(subject).to receive(:send_client_event).with(client_name,'disconnected')
+          expect(subject).to receive(:send_client_event).with(client_name,player_id,'disconnected')
           subject.on_receive(client_unregister)
         end
 
@@ -129,6 +134,7 @@ module GameMachine
         end
       end
     end
+
 
   end
 
