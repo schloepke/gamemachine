@@ -9,7 +9,6 @@ using ProtoBuf;
 using System.Collections.Concurrent;
 using GameMachine;
 using ClientMessage = GameMachine.Messages.ClientMessage;
-using Player = GameMachine.Messages.Player;
 using Entity = GameMachine.Messages.Entity;
 
 
@@ -38,12 +37,17 @@ namespace GameMachine
 
         public ClientMessage CreateClientMessage()
         {
-            Player player = new Player();
+            GameMachine.Messages.Player player = new GameMachine.Messages.Player();
             player.id = playerId;
             player.authtoken = authtoken;
             ClientMessage clientMessage = new ClientMessage();
             clientMessage.player = player;
             return clientMessage;
+        }
+
+        public void Stop()
+        {
+            udpClient.Close();
         }
 
         private void Start()

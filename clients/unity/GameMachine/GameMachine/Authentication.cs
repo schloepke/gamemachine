@@ -6,7 +6,7 @@ namespace GameMachine
 {
     public class Authentication
     {
-        public delegate void Success(string username,string authtoken);
+        public delegate void Success(string authtoken);
         public delegate void Error(string reason);
         private string uri;
 
@@ -28,7 +28,7 @@ namespace GameMachine
                 error(www.error);
             } else
             {
-                success(username, www.text);
+                success(www.text);
             }
         }
     }
