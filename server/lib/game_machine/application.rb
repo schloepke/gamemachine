@@ -105,17 +105,16 @@ module GameMachine
         end
 
         if config.udp_enabled
-          
           JavaLib::UdpServer.start(config.udp_host,config.udp_port)
-          Actor::Builder.new(Handlers::Gateway).with_router(
+          Actor::Builder.new(Endpoints::UdpIncoming).with_router(
             JavaLib::RoundRobinRouter,10).start
-          #Actor::Builder.new(Handlers::Gateway).start
-          return
 
-          Actor::Builder.new(Endpoints::Udp).start
-          GameMachine.stdout(
-            "UDP starting on #{config.udp_host}:#{config.udp_port}"
-          )
+          # Built in Akka udp. Performed badly we have more control by working
+          # directly with Netty
+          #Actor::Builder.new(Endpoints::Udp).start
+          #GameMachine.stdout(
+          #  "UDP starting on #{config.udp_host}:#{config.udp_port}"
+          #)
         end
 
       end

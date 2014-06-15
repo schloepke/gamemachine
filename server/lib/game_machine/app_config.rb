@@ -19,13 +19,21 @@ module GameMachine
       Settings.servers.send(server)
     end
 
+    def set_defaults
+      unless config.request_handler_routers
+        config.request_handler_routers = 10
+      end
+      unless config.game_handler_routers
+        config.game_handler_routers = 10
+      end
+      unless config.udp_routers
+        config.udp_routers = 10
+      end
+    end
+
     def load_config(name)
       config.name = name
-      config.login_username = 'player'
-      config.authtoken = 'authorized'
-      config.request_handler_routers = 20
-      config.game_handler_routers = 20
-      config.authentication_handler_ring_size = 160
+      set_defaults
       load_settings(name)
     end
 

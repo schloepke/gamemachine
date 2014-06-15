@@ -1,6 +1,6 @@
 module GameMachine
-  module Handlers
-    class Gateway < Actor::Base
+  module Endpoints
+    class UdpIncoming < Actor::Base
 
       def self.clients
         if @clients
@@ -28,7 +28,8 @@ module GameMachine
         client_connection = create_client_connection(client_id)
         client_message = create_client_message(message.bytes,client_connection)
 
-        if client_message.has_player_logout
+        # Ensure we kill the player gateway actor on logout or on new connection
+        if client_message.has_player_logout || client_message.has_player_connect
           destroy_child(client_message.player.id)
           self.class.clients.delete(client_message.player.id)
           return
@@ -54,13 +55,13 @@ module GameMachine
       end
 
       def create_child(client_connection,client,server,player_id)
-        builder = Actor::Builder.new(PlayerGateway,client_connection,client,server,player_id)
+        builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id)
         builder.with_name(player_id).start
       end
 
       def destroy_child(player_id)
         Actor::Base.find(player_id).tell(JavaLib::PoisonPill.get_instance)
-        GameMachine.logger.info "Player gateway #{player_id} killed"
+        GameMachine.logger.info "Player gateway sent poison pill to #{player_id}"
       end
 
       def create_client_connection(client_id)

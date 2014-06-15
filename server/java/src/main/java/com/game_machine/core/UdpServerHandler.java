@@ -32,7 +32,7 @@ public final class UdpServerHandler extends
 	
 	public UdpServerHandler() {
 		this.inbound = ActorUtil
-				.getSelectionByName("GameMachine::Handlers::Gateway");
+				.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
 	}
 
 	@Override
