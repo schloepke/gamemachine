@@ -32,19 +32,20 @@ module GameMachine
         if client_message.has_player_logout || client_message.has_player_connect
           destroy_child(client_message.player.id)
           self.class.clients.delete(client_message.player.id)
-          return
-        end
-
-        unless self.class.clients.has_key?(client_message.player.id)
-          client = {
-            :host => message.host,
-            :port => message.port,
-            :ctx => message.ctx,
-            :client_connection => client_connection
-          }
-          GameMachine.logger.info "#{client.inspect}"
-          self.class.clients[client_message.player.id] = client
-          create_child(client_connection,client,@server,client_message.player.id)
+          
+          if client_message.has_player_connect
+            unless self.class.clients.has_key?(client_message.player.id)
+              client = {
+                :host => message.host,
+                :port => message.port,
+                :ctx => message.ctx,
+                :client_connection => client_connection
+              }
+              GameMachine.logger.info "#{client.inspect}"
+              self.class.clients[client_message.player.id] = client
+              create_child(client_connection,client,@server,client_message.player.id)
+            end
+          end
         end
 
         game_handler.send_message(

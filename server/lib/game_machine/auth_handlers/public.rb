@@ -12,14 +12,14 @@ module GameMachine
       end
 
       def authorize(user,pass)
-        true
+        authtoken(user,'public')
       end
 
       def authtoken_for(user)
         if @sessions.has_key?(user)
           @sessions[user]
         else
-          @sessions[user] = authtoken(user,'test')
+          @sessions[user] = authtoken(user,'public')
         end
       end
 

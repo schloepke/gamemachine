@@ -3,6 +3,12 @@ module GameMachine
     class Game < Actor::Base 
       include Commands
 
+      attr_reader :destinations
+      def post_init(*args)
+        @destinations = {}
+      end
+
+
       def on_receive(message)
         if message.is_a?(MessageLib::ClientMessage)
           if message.get_entity_list
@@ -20,13 +26,20 @@ module GameMachine
           if entity.save
             entity = GameSystems::ObjectDbProxy.save_entity(entity)
           end
+
           if entity.has_destination
-            destination = entity.destination.gsub('/','::')
+            unless actor_ref = destinations.fetch(entity.destination,nil)
+              destination = entity.destination.gsub('/','::')
+              actor_ref = Actor::Base.find(destination)
+              destinations[entity.destination] = actor_ref
+            end
             entity.set_destination(nil)
+            actor_ref.tell(entity)
             GameMachine.logger.debug("RouteToDestination: #{entity.id} #{destination}")
-            Actor::Base.find(destination).tell(entity)
             next
           end
+
+          # TODO: Optimize this
           component_names = entity.component_names
           GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?

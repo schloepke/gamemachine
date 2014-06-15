@@ -47,6 +47,7 @@ module GameMachine
       end
 
       def unregister_client(message)
+        GameMachine.logger.info "Unregister #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         Authentication.unregister_player(player_id)
