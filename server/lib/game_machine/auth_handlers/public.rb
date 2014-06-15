@@ -16,7 +16,11 @@ module GameMachine
       end
 
       def authtoken_for(user)
-        authtoken(user,'test')
+        if @sessions.has_key?(user)
+          @sessions[user]
+        else
+          @sessions[user] = authtoken(user,'test')
+        end
       end
 
       private

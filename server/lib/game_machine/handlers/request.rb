@@ -33,6 +33,7 @@ module GameMachine
       private
 
       def register_client(message)
+        GameMachine.logger.info "Register #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         register = MessageLib::ClientManagerRegister.new.
