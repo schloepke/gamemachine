@@ -11,41 +11,49 @@ namespace GameMachine.Example
     public class HelloGameMachine : MonoBehaviour
     {
 
-        // Example of how to wire up GameMachine in your application.  We use the Start function
-        // here as the entry point to kick everything off, but you can initialize anyplace you like.
+        // Example of how to wire up GameMachine in your application.  
+
    
         private GameMachine.App app;
 
         void Start()
         {
+            // Set our server properties
+            GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";
+            GameMachine.Config.udpHost = "192.168.1.8";
+            //GameMachine.Config.udpHost = "127.0.0.1";
+            GameMachine.Config.udpPort = 8100;
+
             // Replace with your own user object if you want. 
-            User user = User.Instance;
+            GameMachine.User user = GameMachine.User.Instance;
             user.SetUser("player", "pass");
-            Login(user.username, user.password);
-        }
-	
-        void Login(string username, string password)
-        {
+
+            // Callbacks for authentication
             GameMachine.Authentication.Success success = OnAuthenticationSuccess;
             GameMachine.Authentication.Error error = OnAuthenticationError;
 
-            // GameMachine.App is the only GameMachine class that is a MonoBehavior
-            // You want to add it as a component to just ONE game object in your game.
+            // You need to add GameMachine.App as a component to either this or another game object in your scene
             app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
-            app.Login(username, password, success, error);
 
+            // Attempt to login.  Authentication success callback will be fired on success
+            app.Login(user.username, user.password, success, error);
         }
 
         void OnAuthenticationError(string error)
         {
             Logger.Debug("Authentication Failed: " + error);
         }
-        
+
+        // Authentication successful.  Now we run the app which sets up the connection and 
+        // initializes the actor system.  We also start up our example systems here.
         public void OnAuthenticationSuccess(string authtoken)
         {
             // After this is called GameMachine core is loaded, the client is connected, and
             // the actor system is running.
             app.Run(User.Instance.username, authtoken);
+
+
+            // Everything below here is example code we are starting up.
 
             // Start our chat example
             StartChat();
