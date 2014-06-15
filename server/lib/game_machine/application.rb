@@ -105,6 +105,13 @@ module GameMachine
         end
 
         if config.udp_enabled
+          
+          JavaLib::UdpServer.start(config.udp_host,config.udp_port)
+          Actor::Builder.new(Handlers::Gateway).with_router(
+            JavaLib::RoundRobinRouter,10).start
+          #Actor::Builder.new(Handlers::Gateway).start
+          return
+
           Actor::Builder.new(Endpoints::Udp).start
           GameMachine.stdout(
             "UDP starting on #{config.udp_host}:#{config.udp_port}"
@@ -151,7 +158,7 @@ module GameMachine
         Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,2).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::PlayerManager).with_router(JavaLib::RoundRobinRouter,2).start
       end

@@ -77,7 +77,8 @@ module GameMachine
       client_message.set_client_connection(client_connection)
       message.set_send_to_player(false)
       client_message.add_entity(message)
-      Actor::Base.find(client_connection.gateway).tell(client_message)
+      Handlers::Gateway.find.tell(client_message)
+      #Actor::Base.find(client_connection.gateway).tell(client_message)
     end
 
     def sender_id_to_actor_ref(sender_id)
@@ -123,6 +124,7 @@ module GameMachine
         send_client_event(name,message.player.id,'connected')
         local_clients[name] = message.client_connection
         players[message.player.id] = name
+        get_sender.tell(message,get_self)
         GameMachine.logger.debug("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
