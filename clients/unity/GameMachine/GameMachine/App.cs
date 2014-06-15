@@ -60,6 +60,11 @@ namespace GameMachine
             ActorSystem.Instance.RegisterActor(entityTracking);
         }
 
+        void Start()
+        {
+            Application.runInBackground = true;
+        }
+
         void OnApplicationQuit()
         {
             client.Stop();
