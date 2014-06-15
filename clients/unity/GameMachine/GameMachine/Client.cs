@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using GameMachine;
 using ClientMessage = GameMachine.Messages.ClientMessage;
 using Entity = GameMachine.Messages.Entity;
+using PlayerLogout = GameMachine.Messages.PlayerLogout;
 
 
 namespace GameMachine
@@ -47,6 +48,13 @@ namespace GameMachine
 
         public void Stop()
         {
+            PlayerLogout logout = new PlayerLogout();
+            logout.authtoken = authtoken;
+            logout.playerId = playerId;
+            ClientMessage message = CreateClientMessage();
+            message.playerLogout = logout;
+            Send(Serialize(message));
+            Thread.Sleep(20);
             udpClient.Close();
         }
 
@@ -56,6 +64,9 @@ namespace GameMachine
             udpClient = new UdpClient(udp_ep);
             receiveData();
 
+            ClientMessage message = CreateClientMessage();
+            message.playerConnect = new GameMachine.Messages.PlayerConnect();
+            Send(Serialize(message));
         }
 				
         private void SendCallback(IAsyncResult ar)
