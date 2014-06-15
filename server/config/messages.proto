@@ -29,6 +29,7 @@ message PlayerLogout {
 }
 
 message PlayerConnect {}
+message PlayerConnected {}
 
 message PlayerAuthenticated {
   required string playerId = 1;
@@ -162,12 +163,6 @@ message ClientConnection {
   optional string server = 3;
 }
 
-
-message PlayerLogin {
-  required string username = 1;
-  required string password = 2;
-}
-
 message Name {
   required string value = 1;
 }
@@ -270,7 +265,6 @@ message Entity {
   optional ClientConnection clientConnection = 5;
   optional EchoTest echoTest = 6;
   required string id = 7;
-  optional PlayerLogin playerLogin = 8;
   optional Subscribe subscribe = 9;
   optional Publish publish = 10;
   optional ChatChannel chatChannel = 11;
@@ -319,9 +313,9 @@ message EntityList {
 message ClientMessage {
   repeated Entity entity = 1;
   optional Player player = 2;
-  optional PlayerLogin playerLogin = 3;
   optional ClientConnection clientConnection = 4;
   optional PlayerLogout playerLogout = 5;
   optional ErrorMessage errorMessage = 6;
   optional PlayerConnect playerConnect = 7;
+  optional PlayerConnected playerConnected = 8;
 }
