@@ -52,7 +52,7 @@ namespace GameMachine
 
         private void Start()
         {
-            udp_ep = new IPEndPoint(IPAddress.Any, 11000);
+            udp_ep = new IPEndPoint(IPAddress.Any, 0);
             udpClient = new UdpClient(udp_ep);
             receiveData();
 
