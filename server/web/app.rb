@@ -94,7 +94,13 @@ class WebApp < Sinatra::Base
   end
 
   route :get, :post, '/auth' do
-    controller(:auth).set_request(request,params).get
+    res = controller(:auth).set_request(request,params).get
+    if res == 'error'
+      status 403
+      body res
+    else
+      res
+    end
   end
 end
 

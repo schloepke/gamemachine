@@ -27,6 +27,8 @@ module GameMachine
         elsif message.is_a?(MessageLib::ClientMessage)
           handle_outgoing(message)
         elsif message.kind_of?(JavaLib::Udp::Received)
+          echo(message)
+          return
           handle_incoming(message)
         elsif message == JavaLib::UdpMessage::unbind
           @socket.tell(message, get_self)

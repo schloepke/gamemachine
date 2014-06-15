@@ -4,6 +4,7 @@ module GameMachine
 
     attr_reader :local_actors, :remote_clients, :local_clients, :channel, :players, :client_to_player
     def post_init(*args)
+      @server = Application.config.name
       @channel = 'client_events'
       @local_actors = {}
       @remote_clients = {}
@@ -25,6 +26,9 @@ module GameMachine
 
         # client events come from other client managers
         elsif message.has_client_event
+          if message.client_event.sender_id.match(/#@server/)
+            return
+          end
           process_client_event(message.client_event)
         
         # Unregister requests come from clients only
@@ -104,7 +108,7 @@ module GameMachine
         send_client_event(name,message.player.id,'disconnected')
         local_clients.delete(name)
         players.delete(message.player.id)
-        GameMachine.logger.info("#{self.class.name} client #{name} unregistered")
+        GameMachine.logger.debug("#{self.class.name} client #{name} unregistered")
       end
     end
 
@@ -119,7 +123,7 @@ module GameMachine
         send_client_event(name,message.player.id,'connected')
         local_clients[name] = message.client_connection
         players[message.player.id] = name
-        GameMachine.logger.info("#{self.class.name} client #{name} registered")
+        GameMachine.logger.debug("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
         local_actors[name] = events

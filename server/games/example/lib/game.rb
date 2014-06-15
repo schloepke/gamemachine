@@ -1,6 +1,7 @@
 
 require_relative 'example_controller'
 require_relative 'chatbot'
+require_relative 'npc'
 
 module Example
   class Game
@@ -21,6 +22,7 @@ module Example
       # it starts
       game_data = load_game_data
       GameMachine::Actor::Builder.new(ExampleController,game_data).start
+      GameMachine::Actor::Builder.new(Npc).start
 
       # Creating the actor with a specific name.  Useful if you want to start up
       # multiple actors all using the same actor class.
