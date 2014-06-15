@@ -29,64 +29,67 @@ using TrackExtra = GameMachine.Messages.TrackExtra;
 //   - world_grid_cell_size must divide evenly into world_grid_size.
 //   - world_grid_size must be >= world_grid_cell_size * 3
 //   - world_grid_cell_size is always your search radius.
-
-public class AreaOfInterest : MonoBehaviour
+namespace GameMachine.Example
 {
 
-    private double lastUpdate = 0;
-    private double updatesPerSecond = 10;
-    private double updateInterval;
-    private EntityTracking entityTracking;
-
-    void Start()
+    public class AreaOfInterest : MonoBehaviour
     {
-	
-        updateInterval = 0.60 / updatesPerSecond;
 
-        entityTracking = ActorSystem.Instance.Find("EntityTracking") as EntityTracking;
+        private double lastUpdate = 0;
+        private double updatesPerSecond = 10;
+        private double updateInterval;
+        private EntityTracking entityTracking;
 
-        EntityTracking.UpdateReceived callback = OnUpdateReceived;
-        entityTracking.OnUpdateReceived(callback);
-    }
-	
-    void Update()
-    {
-        if (Time.time > (lastUpdate + updateInterval))
+        void Start()
         {
-            lastUpdate = Time.time;
-            Vector3 position = this.gameObject.transform.position;
+	
+            updateInterval = 0.60 / updatesPerSecond;
 
-            // Create object with our coordinates
-            TrackingUpdate update = new TrackingUpdate(position.x, position.y, position.z);
+            entityTracking = ActorSystem.Instance.Find("EntityTracking") as EntityTracking;
 
-            // Optional.  Tell the server to set our entity type to this value.  Searches
-            // can filter on this.
-            //update.entityType = "player";
+            EntityTracking.UpdateReceived callback = OnUpdateReceived;
+            entityTracking.OnUpdateReceived(callback);
+        }
+	
+        void Update()
+        {
+            if (Time.time > (lastUpdate + updateInterval))
+            {
+                lastUpdate = Time.time;
+                Vector3 position = this.gameObject.transform.position;
 
-            // Optional, tell the server to filter on this type of entity in the search, and only
-            // return entities that match this type.  A null value means return anything within radius.
-            //update.neighborEntityType = "npc";
+                // Create object with our coordinates
+                TrackingUpdate update = new TrackingUpdate(position.x, position.y, position.z);
+
+                // Optional.  Tell the server to set our entity type to this value.  Searches
+                // can filter on this.
+                //update.entityType = "player";
+
+                // Optional, tell the server to filter on this type of entity in the search, and only
+                // return entities that match this type.  A null value means return anything within radius.
+                //update.neighborEntityType = "npc";
 
 
-            // TrackExtra is a message you can customize any way you want and allows you to extend the fields that
-            // the tracking system stores. It will be saved on the server and returned in tracking updates to other clients.
-            // TrackExtra is located in config/game_messages.proto on the server, or you can edit it via the web ui.
-            TrackExtra trackExtra = new TrackExtra();
-            trackExtra.speed = 1.0f;
-            trackExtra.velocity = 12.0f;
-            update.trackExtra = trackExtra;
+                // TrackExtra is a message you can customize any way you want and allows you to extend the fields that
+                // the tracking system stores. It will be saved on the server and returned in tracking updates to other clients.
+                // TrackExtra is located in config/game_messages.proto on the server, or you can edit it via the web ui.
+                TrackExtra trackExtra = new TrackExtra();
+                trackExtra.speed = 1.0f;
+                trackExtra.velocity = 12.0f;
+                update.trackExtra = trackExtra;
                
-            entityTracking.Update(update);
+                entityTracking.Update(update);
+            }
         }
-    }
 
-    void OnUpdateReceived(List<TrackingUpdate> updates)
-    {
-        foreach (TrackingUpdate update in updates)
+        void OnUpdateReceived(List<TrackingUpdate> updates)
         {
+            foreach (TrackingUpdate update in updates)
+            {
 
+            }
+            Logger.Debug("Update received");
         }
-        Logger.Debug("Update received");
-    }
 
+    }
 }

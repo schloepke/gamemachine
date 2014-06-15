@@ -1,5 +1,5 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 using GameMachine;
 
 /*
@@ -23,35 +23,23 @@ namespace GameMachine
 {
     public class App : MonoBehaviour
     {
-        public delegate void AppStarted();
+        public Client client;
 
-        private AppStarted appStarted;
-
-        public void Run(string username, string password, AppStarted callback)
+        public void Login(string username, string password, Authentication.Success success, Authentication.Error error)
         {
-            appStarted = callback;
             Authentication auth = new Authentication();
-            Authentication.Success success = AuthenticationSuccess;
-            Authentication.Error error = AuthenticationError;
-        
             StartCoroutine(auth.Authenticate(username, password, success, error));
         }
 
-        public void AuthenticationSuccess(string username, string authtoken)
+        public void Run(string username, string authtoken)
         {
             // Create client and start actor system
-            Client client = new Client(username, authtoken);
+            client = new Client(username, authtoken);
             ActorSystem.Instance.Start(client);
 
             // Now create the actors
             CreateActors();
-            appStarted();
             Logger.Debug("Actor system started");
-        }
-
-        public void AuthenticationError(string reason)
-        {
-            Logger.Debug("Authentication Failed: " + reason);
         }
 
         public void CreateActors()
@@ -72,7 +60,6 @@ namespace GameMachine
             ActorSystem.Instance.RegisterActor(entityTracking);
         }
 
-        // This triggers the actor system to deliver waiting messages
         void Update()
         {
             if (ActorSystem.Instance.Running)
