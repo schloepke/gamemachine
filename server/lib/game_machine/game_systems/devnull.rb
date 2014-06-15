@@ -6,7 +6,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        GameMachine.logger.info("Devnull got #{message}")
+        GameMachine.logger.debug("Devnull got #{message}")
       end
     end
   end

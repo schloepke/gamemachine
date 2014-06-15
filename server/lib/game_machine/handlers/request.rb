@@ -42,7 +42,7 @@ module GameMachine
           message.client_connection
         )
         entity.set_player(message.player)
-        ClientManager.find.tell(entity)
+        ClientManager.find.ask(entity,5000)
       end
 
       def unregister_client(message)
@@ -67,12 +67,6 @@ module GameMachine
             entity.set_player(message.player)
           end
         end
-      end
-
-      def authenticate_player(message)
-        Authentication.find_distributed_local(
-          message.player.id
-        ).tell(message,self)
       end
 
     end
