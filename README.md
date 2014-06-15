@@ -31,9 +31,9 @@ Advanced server side functionality:
 
 ###Getting Started
 
-**[Install the server](https://github.com/gamemachine/gamemachine/wiki/Getting-started)**
+**[Install the server](https://github.com/gamemachine/gamemachine/wiki/Installation)**
 
-**[Download the Unity client](https://github.com/gamemachine/gamemachine/tree/master/clients/unity/basic_client)**
+**[Download the Unity client](https://github.com/gamemachine/gamemachine/blob/master/clients/unity/GameMachineClient.unitypackage)**
   
  
 ###Writing server side game logic
@@ -47,3 +47,4 @@ Advanced server side functionality:
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
+
