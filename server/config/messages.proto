@@ -161,6 +161,7 @@ message ClientConnection {
   required string id = 1;
   optional string gateway = 2;
   optional string server = 3;
+  optional string type = 4 [default = cluster];
 }
 
 message Name {

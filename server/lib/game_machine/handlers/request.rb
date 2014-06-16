@@ -54,7 +54,7 @@ module GameMachine
         entity = MessageLib::Entity.new.set_id(client_id).set_client_manager_unregister(
           MessageLib::ClientManagerUnregister.new.set_register_type('client').
             set_name(client_id)
-        )
+        ).set_client_connection(message.client_connection)
         entity.set_player(message.player)
         ClientManager.find.tell(entity)
       end

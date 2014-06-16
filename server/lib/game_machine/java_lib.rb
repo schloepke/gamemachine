@@ -34,6 +34,7 @@ module GameMachine
     include_package 'akka.event'
     include_package 'akka.camel.javaapi'
     include_package 'akka.camel'
+    java_import 'com.game_machine.core.Grid'
     include_package 'com.game_machine.core'
     include_package 'java.net'
     include_package 'java.util.concurrent.atomic'

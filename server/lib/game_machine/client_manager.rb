@@ -1,8 +1,24 @@
 
 module GameMachine
   class ClientManager < Actor::Base
-
     attr_reader :local_actors, :remote_clients, :local_clients, :channel, :players, :client_to_player
+
+    def self.local_players
+      if @local_players
+        @local_players
+      else
+        @local_players = java.util.concurrent.ConcurrentHashMap.new
+      end
+    end
+
+    def self.send_to_player(message)
+      if local_players.has_key?(message.player.id)
+        Actor::Base.find(message.player.id).tell(message)
+      else
+        find.tell(message)
+      end
+    end
+
     def post_init(*args)
       @server = Application.config.name
       @channel = 'client_events'
@@ -22,11 +38,11 @@ module GameMachine
 
         # Outgoing message to player
         if message.send_to_player
-          process_player_message(message)
+          send_to_remote_player(message)
 
         # client events come from other client managers
         elsif message.has_client_event
-          if message.client_event.sender_id.match(/#@server/)
+          if message.client_event.sender_id.match(/#{@server}/)
             return
           end
           process_client_event(message.client_event)
@@ -61,24 +77,13 @@ module GameMachine
       remote_ref.tell(entity,get_self)
     end
 
-    def process_player_message(message)
+    def send_to_remote_player(message)
       #GameMachine.logger.info("#{self.class.name} process_player_message")
       if client_id = players.fetch(message.player.id,nil)
-        if client_connection = local_clients.fetch(client_id,nil)
-          send_to_player(message,client_connection)
-        elsif remote_ref = remote_clients.fetch(client_id,nil)
+        if remote_ref = remote_clients.fetch(client_id,nil)
           remote_ref.tell(message)
         end
       end
-    end
-
-    def send_to_player(message,client_connection)
-      client_message = MessageLib::ClientMessage.new
-      client_message.set_client_connection(client_connection)
-      message.set_send_to_player(false)
-      client_message.add_entity(message)
-      Handlers::Gateway.find.tell(client_message)
-      #Actor::Base.find(client_connection.gateway).tell(client_message)
     end
 
     def sender_id_to_actor_ref(sender_id)
@@ -101,14 +106,26 @@ module GameMachine
       end
     end
 
+    def cluster_connection?(client_connection)
+      case client_connection.type
+      when 'local'
+        false
+      else
+        true
+      end
+    end
+
     def unregister_sender(message)
       unregister_msg = message.client_manager_unregister
       register_type = unregister_msg.register_type
       name = unregister_msg.name
       if register_type == 'client'
-        send_client_event(name,message.player.id,'disconnected')
+        if cluster_connection?(message.client_connection)
+          send_client_event(name,message.player.id,'disconnected')
+        end
         local_clients.delete(name)
         players.delete(message.player.id)
+        self.class.local_players.delete(message.player.id)
         GameMachine.logger.debug("#{self.class.name} client #{name} unregistered")
       end
     end
@@ -121,9 +138,12 @@ module GameMachine
 
       # Client register
       if register_type == 'client'
-        send_client_event(name,message.player.id,'connected')
+        if cluster_connection?(message.client_connection)
+          send_client_event(name,message.player.id,'connected')
+        end
         local_clients[name] = message.client_connection
         players[message.player.id] = name
+        self.class.local_players[message.player.id] = true
         get_sender.tell(message,get_self)
         GameMachine.logger.debug("#{self.class.name} client #{name} registered")
       # Actor register
@@ -131,7 +151,6 @@ module GameMachine
         local_actors[name] = events
       end
     end
-
 
     def create_client_event(client_id,player_id,event)
       client_event = MessageLib::ClientEvent.new.set_client_id(client_id).

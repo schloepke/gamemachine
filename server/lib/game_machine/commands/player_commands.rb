@@ -18,7 +18,7 @@ module GameMachine
           end
         end
         entity.set_send_to_player(true)
-        Actor::Base.find(player_id).tell(entity)
+        ClientManager.send_to_player(entity)
       end
     end
   end
