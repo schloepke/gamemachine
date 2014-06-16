@@ -24,15 +24,19 @@ namespace GameMachine
         private ClientMessage clientMessage;
         private string playerId;
         private string authtoken;
-        public ConcurrentQueue<Entity> entityQueue = new ConcurrentQueue<Entity>();
+        private bool measure = false;
+        public static ConcurrentQueue<Entity> entityQueue = new ConcurrentQueue<Entity>();
 
-        public Client(string _playerId, string _authtoken)
+
+        public Client(string _playerId, string _authtoken, bool measure=false)
         {
             playerId = _playerId;
             authtoken = _authtoken;
             host = Config.udpHost;
             port = Config.udpPort;
             clientMessage = CreateClientMessage();
+            this.measure = measure;
+
             Start();
         }
 
@@ -53,8 +57,8 @@ namespace GameMachine
             logout.playerId = playerId;
             ClientMessage message = CreateClientMessage();
             message.playerLogout = logout;
-            Send(Serialize(message));
-            Thread.Sleep(20);
+            byte[] bytes = Serialize(message);
+            udpClient.Send(bytes, bytes.Length, host, port);
             udpClient.Close();
         }
 
@@ -93,7 +97,14 @@ namespace GameMachine
             ClientMessage message = Deserialize(bytes);
             foreach (Entity entity in message.entity)
             {
-                entityQueue.Enqueue(entity);
+                if (measure)
+                {
+                    Client.entityQueue.Enqueue(entity); 
+                } else
+                {
+                    ClientMessageQueue.entityQueue.Enqueue(entity); 
+                }
+
             }
             receiveData();
         }

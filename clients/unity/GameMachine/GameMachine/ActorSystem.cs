@@ -15,7 +15,7 @@ namespace GameMachine
     public sealed class ActorSystem
     {
         private Client client;
-        private int updateCount = 0;
+        private Client regionClient;
         private Dictionary<string, UntypedActor> actors = new Dictionary<string, UntypedActor>();
         private Dictionary<string, MethodInfo> methods = new Dictionary<string, MethodInfo>();
         public bool Running = false;
@@ -40,6 +40,11 @@ namespace GameMachine
             RegisterActor(deadletters);
             CreateMethodCache();
             Running = true;
+        }
+
+        public void SetRegionClient(Client client)
+        {
+            this.regionClient = client;
         }
 
         public void RegisterActor(UntypedActor actor)
@@ -68,14 +73,9 @@ namespace GameMachine
 
         // updateFrequency is the number of frames to wait for between
         // queue checks.  
-        public void Update(int updateFrequency)
+        public void Update()
         {
-            updateCount++;
-            if (updateCount >= updateFrequency)
-            {
-                updateCount = 0;
-                DeliverQueuedMessages();
-            }
+            DeliverQueuedMessages();
         }
 
         public void TellRemote(Entity entity)
@@ -106,7 +106,7 @@ namespace GameMachine
             
             for (int i = 0; i < 10; i++)
             {
-                if (client.entityQueue.TryDequeue(out entity))
+                if (ClientMessageQueue.entityQueue.TryDequeue(out entity))
                 {
                     // See if we have a json entity
                     if (entity.jsonEntity != null)
@@ -170,7 +170,7 @@ namespace GameMachine
                                 
                             } else
                             {
-                                Logger.Debug("Found component " + component);
+                                //Logger.Debug("Found component " + component);
                             }
                         } else
                         {

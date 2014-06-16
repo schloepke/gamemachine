@@ -46,7 +46,10 @@ namespace GameMachine
             Entity entity = message as Entity;
             if (entity.objectdbGetResponse.entityFound)
             {
-                objectReceived(entity);
+                if (objectReceived != null)
+                {
+                    objectReceived(entity);
+                }
             }
         }
     }

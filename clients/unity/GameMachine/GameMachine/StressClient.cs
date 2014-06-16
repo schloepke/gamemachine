@@ -30,7 +30,7 @@ namespace GameMachine
 
         public void StartClient(string username)
         {
-            client = new Client(username, authtoken);
+            client = new Client(username, authtoken, true);
             started = true;
             SendTimed();
         }
@@ -46,14 +46,14 @@ namespace GameMachine
 
                     Entity entity = new Entity();
                    
-                    if (client.entityQueue.TryDequeue(out entity))
+                    if (Client.entityQueue.TryDequeue(out entity))
                     {
                         double messageReceivedAt = Time.realtimeSinceStartup - messageSentAt;
                         times.Add(messageReceivedAt);
                         SendTimed();
                     }
 
-                    if (times.Count >= 10)
+                    if (times.Count >= 100)
                     {
                         double average = Mean(times);
                         Logger.Debug(average.ToString());

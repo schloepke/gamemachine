@@ -16,6 +16,7 @@ namespace GameMachine.Example
    
         private GameMachine.App app;
 
+
         void Start()
         {
             // Set our server properties
@@ -35,7 +36,7 @@ namespace GameMachine.Example
             // You need to add GameMachine.App as a component to either this or another game object in your scene
             app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
 
-            // Attempt to login.  Authentication success callback will be fired on success
+            // Attempt to login.  Authentication success callback will be fired on success.
             app.Login(user.username, user.password, success, error);
         }
 
@@ -45,26 +46,33 @@ namespace GameMachine.Example
         }
 
         // Authentication successful.  Now we run the app which sets up the connection and 
-        // initializes the actor system.  We also start up our example systems here.
+        // initializes the actor system. 
         public void OnAuthenticationSuccess(string authtoken)
         {
-            // After this is called GameMachine core is loaded, the client is connected, and
-            // the actor system is running.
+            Logger.Debug("Authentication Success");
+            GameMachine.App.AppStarted callback = OnAppStarted;
+            app.OnAppStarted(callback);
+           
             app.Run(User.Instance.username, authtoken);
+        }
 
-
-            // Everything below here is example code we are starting up.
+        // This is called once we have a connection and everything is started
+        public void OnAppStarted()
+        {
+            Logger.Debug("OnAppStarted");
 
             // Start our chat example
             StartChat();
-
+            Logger.Debug("Chat started");
+            
             // Setup the persistence layer.  This is an optional feature, see the Persistence class
             // for how it works.
             StartPersistence();
-
+            Logger.Debug("Peristence started");
+            
             // Start sending/receiving location updates
             StartAreaOfInterest();
-                
+            Logger.Debug("AreaOfInterest started");
         }
 
         void StartAreaOfInterest()
