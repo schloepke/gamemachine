@@ -107,6 +107,11 @@ namespace GameMachine
 
         void Update()
         {
+            if (!running)
+            {
+                return;
+            }
+
             if (Time.time > (lastUpdate + updateInterval))
             {
                 lastUpdate = Time.time;
