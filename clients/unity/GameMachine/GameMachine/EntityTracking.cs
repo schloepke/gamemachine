@@ -78,9 +78,11 @@ namespace GameMachine
                         updates.Add(update);
                     }
 
-                    updateReceived(updates);
+                    if (updateReceived != null)
+                    {
+                        updateReceived(updates);
+                    }
                 }
-                    
             }
         }
 

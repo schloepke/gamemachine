@@ -12,9 +12,13 @@ namespace GameMachine
         void Start()
         {
             Application.runInBackground = true;
-            int count = 100;
+            int count = 30;
             string username;
             string authtoken = "stresstest";
+            GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";
+            GameMachine.Config.udpHost = "192.168.1.8";
+            //GameMachine.Config.udpHost = "127.0.0.1";
+            GameMachine.Config.udpPort = 8100;
 
 
 

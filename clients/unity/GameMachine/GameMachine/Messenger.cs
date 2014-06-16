@@ -168,7 +168,11 @@ namespace GameMachine
 
             if (entity.chatMessage != null)
             {
-                messageReceived(entity.chatMessage);
+                if (messageReceived != null)
+                {
+                    messageReceived(entity.chatMessage);
+                }
+
             }
 
         }

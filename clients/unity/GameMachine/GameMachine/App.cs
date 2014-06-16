@@ -1,29 +1,36 @@
 ﻿using System.Collections;
 using UnityEngine;
 using GameMachine;
+using Entity = GameMachine.Messages.Entity;
 
-/*
- * Authenticates the user and starts up the actor system.  
- * 
- * The basics steps are as follows.
- * 
- * 1. Login via http with a username and password.  The http server will return an authorization token. 
- * 
- * 2. Initialize the Udp client with the username and auth token.  The client uses non blocking IO and 
- * processes all sends and receives in separate threads.  Received messages are put into a concurrent queue
- * where the actor system will later dequeue them and deliver to the actors.
- * 
- * 3.  Start the actor system. 
- * 
- * 4.  Create the actors
- * 
- */
 
 namespace GameMachine
 {
     public class App : MonoBehaviour
     {
         public Client client;
+        private RemoteEcho remoteEcho;
+
+        public bool running = false;
+        public bool connected = false;
+
+        private double lastUpdate = 0;
+        private double updatesPerSecond = 10;
+        private double updateInterval;
+
+        private double lastEcho = 0;
+        private double echosPerSecond = 1;
+        private double echoInterval;
+        private double lastEchoReceived = 0;
+        private double echoTimeout = 5.0f;
+
+        public delegate void AppStarted();
+        private AppStarted appStarted;
+
+        public void OnAppStarted(AppStarted callback)
+        {
+            appStarted = callback;
+        }
 
         public void Login(string username, string password, Authentication.Success success, Authentication.Error error)
         {
@@ -38,11 +45,10 @@ namespace GameMachine
             ActorSystem.Instance.Start(client);
 
             // Now create the actors
-            CreateActors();
-            Logger.Debug("Actor system started");
+            StartCoreActors();
         }
 
-        public void CreateActors()
+        public void StartCoreActors()
         {
             // Actors that come with GameMachine
 
@@ -58,24 +64,69 @@ namespace GameMachine
             EntityTracking entityTracking = new EntityTracking();
             entityTracking.AddComponentSet("Neighbors");
             ActorSystem.Instance.RegisterActor(entityTracking);
+
+
+            remoteEcho = new RemoteEcho();
+            remoteEcho.AddComponentSet("EchoTest");
+            ActorSystem.Instance.RegisterActor(remoteEcho);
+            
+            RemoteEcho.EchoReceived callback = OnEchoReceived;
+            remoteEcho.OnEchoReceived(callback);
+            running = true;
+            Logger.Debug("App running - waiting to verify connection");
+        }
+
+        void OnEchoReceived()
+        {
+            if (!connected)
+            {
+                connected = true;
+                Logger.Debug("App connected");
+                appStarted();
+
+            }
+
+            lastEchoReceived = Time.time;
         }
 
         void Start()
         {
             Application.runInBackground = true;
+            echoInterval = 0.60 / echosPerSecond;
+            updateInterval = 0.60 / updatesPerSecond;
         }
 
         void OnApplicationQuit()
         {
-            client.Stop();
+            if (client != null)
+            {
+                client.Stop();
+            }
         }
+
 
         void Update()
         {
-            if (ActorSystem.Instance.Running)
+            if (Time.time > (lastUpdate + updateInterval))
             {
-                ActorSystem.Instance.Update(6);
+                lastUpdate = Time.time;
+                if (running && ActorSystem.Instance.Running)
+                {
+                    ActorSystem.Instance.Update();
+                }
+
+                if (Time.time > (lastEcho + echoInterval))
+                {
+                    lastEcho = Time.time;
+
+                    if ((Time.time - lastEchoReceived) >= echoTimeout)
+                    {
+                        connected = false;
+                    }
+                    remoteEcho.Echo();
+                }
             }
         }
+
     }
 }
