@@ -27,24 +27,24 @@ module GameMachine
       MessageLib::Entity.new.set_id(client_name).set_client_manager_register(
         MessageLib::ClientManagerRegister.new.set_register_type('client').
           set_name(client_name)
-      ).set_player(player)
+      ).set_player(player).set_client_connection(client_connection)
     end
 
     let("client_unregister") do
       MessageLib::Entity.new.set_id(client_name).set_client_manager_unregister(
         MessageLib::ClientManagerUnregister.new.set_register_type('client').
           set_name(client_name)
-      ).set_player(player)
+      ).set_player(player).set_client_connection(client_connection)
     end
 
     let('client_disconnected_event') do
       MessageLib::Entity.new.set_id(client_name).set_client_event(
         MessageLib::ClientEvent.new.set_event('disconnected').set_client_id(client_name).
-        set_player_id(player_id)
+        set_sender_id(sender_id).set_player_id(player_id)
       )
     end
 
-    let(:sender_id) {['default',ClientManager.name].join('|')}
+    let(:sender_id) {['server2',ClientManager.name].join('|')}
 
     let('client_connected_event') do
       MessageLib::Entity.new.set_id(client_name).set_client_event(
@@ -73,18 +73,35 @@ module GameMachine
       ref.underlying_actor
     end
 
-    describe "#process_player_message" do
-      it "should send message to remote manager if player is remote" do
-        subject.remote_clients[client_name] = actor_ref
-        subject.players[player_id] = client_name
-        expect(actor_ref).to receive(:tell).with(remote_player_message)
-        subject.on_receive(remote_player_message)
+    before(:each) do
+      subject.class.local_players.delete(player_id)
+    end
+
+    describe "#on_receive" do
+
+      it "should not process client even if message is from self" do
+        client_connected_event.client_event.set_sender_id("default|me")
+        expect(subject).to_not receive(:process_client_event)
+        subject.on_receive(client_connected_event)
       end
+    end
+
+    describe "#send_to_player" do
       it "should send message directly to player if player is local" do
         subject.local_clients[client_name] = client_connection
         subject.players[player_id] = client_name
-        expect(subject).to receive(:send_to_player)
-        subject.on_receive(local_player_message)
+        subject.class.local_players[player_id] = true
+        actor_ref.stub(:tell)
+        expect(Actor::Base).to receive(:find).with(player_id).and_return(actor_ref)
+        ClientManager.send_to_player(local_player_message)
+      end
+
+      it "should send message to remote manager if player is remote" do
+        subject.remote_clients[client_name] = actor_ref
+        subject.players[player_id] = client_name
+        ClientManager.stub(:find).and_return(actor_ref)
+        expect(actor_ref).to receive(:tell).with(remote_player_message)
+        ClientManager.send_to_player(remote_player_message)
       end
     end
 
@@ -93,6 +110,7 @@ module GameMachine
         subject.on_receive(client_connected_event)
         expect(subject.players.has_key?(player_id)).to be_true
       end
+
       it "on connect should set remote_clients entry" do
         subject.on_receive(client_connected_event)
         expect(subject.remote_clients.has_key?(client_name)).to be_true
@@ -121,17 +139,29 @@ module GameMachine
         subject.on_receive(client_register)
       end
 
-      describe "#unregister_sender" do
-        it "sends disconnected message to message queue" do
-          expect(subject).to receive(:send_client_event).with(client_name,player_id,'disconnected')
-          subject.on_receive(client_unregister)
-        end
+      it "should not send client event for local connenction" do
+        client_register.client_connection.set_type('local')
+        expect(subject).to_not receive(:send_client_event)
+        subject.on_receive(client_register)
+      end
+    end
 
-        it "removes local client reference" do
-          subject.local_clients[client_name] = true
-          subject.on_receive(client_unregister)
-          expect(subject.local_clients.has_key?(client_name)).to be_false
-        end
+    describe "#unregister_sender" do
+      it "sends disconnected message to message queue" do
+        expect(subject).to receive(:send_client_event).with(client_name,player_id,'disconnected')
+        subject.on_receive(client_unregister)
+      end
+
+      it "removes local client reference" do
+        subject.local_clients[client_name] = true
+        subject.on_receive(client_unregister)
+        expect(subject.local_clients.has_key?(client_name)).to be_false
+      end
+
+      it "should not send client event for local connenction" do
+        client_unregister.client_connection.set_type('local')
+        expect(subject).to_not receive(:send_client_event)
+        subject.on_receive(client_unregister)
       end
     end
 
