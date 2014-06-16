@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sundome
+  m_Shader: {fileID: 4800000, guid: 6d823d6637eb24dcc95e698a1171b40b, type: 3}
+  m_ShaderKeywords: []
+  m_CustomRenderQueue: -1
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs: {}
+    m_Floats:
+      data:
+        first:
+          name: _Size
+        second: 177.851898
+      data:
+        first:
+          name: _Power
+        second: 2
+      data:
+        first:
+          name: _ArcLength
+        second: .222222209
+    m_Colors:
+      data:
+        first:
+          name: _SkyColor
+        second: {r: 0, g: .266666651, b: .533333302, a: 1}
+      data:
+        first:
+          name: _Scatter
+        second: {r: .714403331, g: .763374507, b: .729766786, a: .777777791}
+      data:
+        first:
+          name: _Light
+        second: {r: .642787635, g: .766044438, b: 0, a: 0}
+      data:
+        first:
+          name: _LightNormal
+        second: {r: .642787635, g: .766044438, b: 0, a: 0}
+      data:
+        first:
+          name: _Origin
+        second: {r: 0, g: 1, b: 0, a: 0}
