@@ -59,7 +59,7 @@ namespace GameMachine.Example
                 Vector3 position = this.gameObject.transform.position;
 
                 // Create object with our coordinates
-                TrackingUpdate update = new TrackingUpdate(position.x, position.y, position.z);
+                TrackingUpdate update = new TrackingUpdate(User.Instance.username, position.x, position.y, position.z);
 
                 // Optional.  Tell the server to set our entity type to this value.  Searches
                 // can filter on this.

@@ -19,16 +19,25 @@ namespace GameMachine.World
         private string loginError = "";
         private bool disableGui = false;
         private GameMachine.App app;
+        private bool showLogin = true;
 
         void OnGUI()
         {
-
+            if (!showLogin)
+            {
+                return;
+            }
 
             loginWindow = GUI.Window(0, loginWindow, WindowFunction, "Game Machine Login");
         }
         
         void WindowFunction(int windowID)
         {
+            if (!showLogin)
+            {
+                return;
+            }
+
             if (disableGui)
             {
                 GUI.enabled = false;
@@ -81,7 +90,9 @@ namespace GameMachine.World
 
         public void OnAppStarted()
         {
-            Application.LoadLevel("world_main");
+            showLogin = false;
+            Destroy(GameObject.Find("Main Camera"));
+            Application.LoadLevelAdditive("world_main");
         }
 
         // Use this for initialization

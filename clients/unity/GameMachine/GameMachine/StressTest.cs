@@ -12,7 +12,7 @@ namespace GameMachine
         void Start()
         {
             Application.runInBackground = true;
-            int count = 30;
+            int count = 150;
             string username;
             string authtoken = "stresstest";
             GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";

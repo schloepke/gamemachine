@@ -71,13 +71,6 @@ namespace GameMachine
             }
         }
 
-        // updateFrequency is the number of frames to wait for between
-        // queue checks.  
-        public void Update()
-        {
-            DeliverQueuedMessages();
-        }
-
         public void TellRemote(Entity entity)
         {
             if (entity.json)
@@ -98,6 +91,11 @@ namespace GameMachine
                 string name = info.Name;
                 methods.Add(name, minfo);
             }
+        }
+
+        public void Update()
+        {
+            DeliverQueuedMessages();
         }
 
         public void DeliverQueuedMessages()

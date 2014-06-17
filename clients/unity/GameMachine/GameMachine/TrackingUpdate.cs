@@ -15,8 +15,9 @@ namespace GameMachine
         public string neighborEntityType;
         public TrackExtra trackExtra;
 
-        public TrackingUpdate(float x, float y, float z)
+        public TrackingUpdate(string entityId, float x, float y, float z)
         {
+            this.entityId = entityId;
             this.x = x;
             this.y = y;
             this.z = z;
