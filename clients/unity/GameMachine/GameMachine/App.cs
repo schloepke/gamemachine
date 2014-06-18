@@ -14,9 +14,6 @@ namespace GameMachine
         public bool running = false;
         public bool connected = false;
 
-        private double lastUpdate = 0;
-        private double updatesPerSecond = 10;
-        private double updateInterval;
 
         private double lastEcho = 0;
         private double echosPerSecond = 1;
@@ -25,13 +22,22 @@ namespace GameMachine
         private double echoTimeout = 5.0f;
 
         public delegate void AppStarted();
+        public delegate void ConnectionTimeout();
         private AppStarted appStarted;
+        private ConnectionTimeout connectionTimeout;
+        private float disconnectTime;
         private bool appStartedCalled = false;
 
 
         public void OnAppStarted(AppStarted callback)
         {
             appStarted = callback;
+        }
+
+        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout, float disconnectTime=10f)
+        {
+            this.connectionTimeout = connectionTimeout;
+            this.disconnectTime = disconnectTime;
         }
 
         public void Login(string username, string password, Authentication.Success success, Authentication.Error error)
@@ -98,46 +104,51 @@ namespace GameMachine
         {
             Application.runInBackground = true;
             echoInterval = 0.60 / echosPerSecond;
-            updateInterval = 0.60 / updatesPerSecond;
+            lastEchoReceived = Time.time;
+            InvokeRepeating("UpdateNetwork", 0.010f, 0.06F);
         }
 
         void OnApplicationQuit()
         {
             if (client != null)
             {
+                Logger.Debug("Stopping client");
                 client.Stop();
             }
         }
 
 
-        void Update()
+        void UpdateNetwork()
         {
             if (!running)
             {
                 return;
             }
-
-            if (Time.time > (lastUpdate + updateInterval))
+            
+           
+            if (running && ActorSystem.Instance.Running)
             {
-                lastUpdate = Time.time;
-                if (running && ActorSystem.Instance.Running)
+                ActorSystem.Instance.Update();
+            }
+                
+            if (Time.time > (lastEcho + echoInterval))
+            {
+                lastEcho = Time.time;
+                    
+                if ((Time.time - lastEchoReceived) >= echoTimeout)
                 {
-                    ActorSystem.Instance.Update();
-                }
-
-                if (Time.time > (lastEcho + echoInterval))
-                {
-                    lastEcho = Time.time;
-
-                    if ((Time.time - lastEchoReceived) >= echoTimeout)
+                    connected = false;
+                    Logger.Debug("Echo timeout");
+                    if ((Time.time - lastEchoReceived) >= disconnectTime)
                     {
-                        connected = false;
-                        Logger.Debug("Connectivity timeout");
+                        Logger.Debug("Connection timeout");
+                        connectionTimeout();
                     }
-                    remoteEcho.Echo();
                 }
+                remoteEcho.Echo();
             }
         }
+
 
     }
 }

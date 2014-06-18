@@ -84,8 +84,17 @@ namespace GameMachine.World
         {
             GameMachine.App.AppStarted callback = OnAppStarted;
             app.OnAppStarted(callback);
+
+            GameMachine.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
+            app.OnConnectionTimeout(connectionCallback);
+
             app.Run(User.Instance.username, authtoken);
 
+        }
+
+        public void OnConnectionTimeout()
+        {
+            Application.LoadLevel("world_disconnected");
         }
 
         public void OnAppStarted()

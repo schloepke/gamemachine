@@ -387,6 +387,7 @@ namespace KAM3RA
                 // we're damping velocity in Update() so we only set non-zero velocity here
                 if (userVelocity != Vector3.zero)
                     velocity = transform.TransformDirection(userVelocity) * ScaledSpeed;
+
             } else if (type != Type.Ground)
             {
                 // no side-to-side movement whether flying or hovering, if not colliding
@@ -836,10 +837,13 @@ namespace KAM3RA
             }
             public string Name
             {
-                get { foreach (StateName m in map)
+                get
+                {
+                    foreach (StateName m in map)
                         if (m.state == state)
                             return m.name;
-                    return "Idle"; }
+                    return "Idle";
+                }
             }
             public bool Moving 								{ get { return IsState(MOVING); } }
             public bool MovingForward 						{ get { return state == "WalkForward" || state == "RunForward"; } }
