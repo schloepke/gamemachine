@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    game_machine (0.0.2)
+    game_machine (0.0.5)
       activesupport (~> 3.0.0)
       consistent-hashing
       ffi
@@ -14,6 +14,7 @@ PATH
       sinatra
       sinatra-contrib
       state_machine
+      webrick
 
 GEM
   remote: https://rubygems.org/
@@ -63,6 +64,7 @@ GEM
       tilt (~> 1.3)
     state_machine (1.2.0)
     tilt (1.4.1)
+    webrick (1.3.1)
 
 PLATFORMS
   java
