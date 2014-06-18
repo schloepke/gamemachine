@@ -106,6 +106,12 @@ namespace GameMachine
             {
                 if (ClientMessageQueue.entityQueue.TryDequeue(out entity))
                 {
+                    if (entity.neighbors != null)
+                    {
+                        EntityTracking entityTracking = actors ["EntityTracking"] as EntityTracking;
+                        entityTracking.OnReceive(entity);
+                        continue;
+                    }
                     // See if we have a json entity
                     if (entity.jsonEntity != null)
                     {

@@ -14,9 +14,6 @@ namespace GameMachine
         public bool running = false;
         public bool connected = false;
 
-        private double lastUpdate = 0;
-        private double updatesPerSecond = 10;
-        private double updateInterval;
 
         private double lastEcho = 0;
         private double echosPerSecond = 1;
@@ -98,7 +95,7 @@ namespace GameMachine
         {
             Application.runInBackground = true;
             echoInterval = 0.60 / echosPerSecond;
-            updateInterval = 0.60 / updatesPerSecond;
+            InvokeRepeating("UpdateNetwork", 0.010f, 0.06F);
         }
 
         void OnApplicationQuit()
@@ -110,34 +107,32 @@ namespace GameMachine
         }
 
 
-        void Update()
+        void UpdateNetwork()
         {
             if (!running)
             {
                 return;
             }
-
-            if (Time.time > (lastUpdate + updateInterval))
+            
+           
+            if (running && ActorSystem.Instance.Running)
             {
-                lastUpdate = Time.time;
-                if (running && ActorSystem.Instance.Running)
+                ActorSystem.Instance.Update();
+            }
+                
+            if (Time.time > (lastEcho + echoInterval))
+            {
+                lastEcho = Time.time;
+                    
+                if ((Time.time - lastEchoReceived) >= echoTimeout)
                 {
-                    ActorSystem.Instance.Update();
+                    connected = false;
+                    Logger.Debug("Connectivity timeout");
                 }
-
-                if (Time.time > (lastEcho + echoInterval))
-                {
-                    lastEcho = Time.time;
-
-                    if ((Time.time - lastEchoReceived) >= echoTimeout)
-                    {
-                        connected = false;
-                        Logger.Debug("Connectivity timeout");
-                    }
-                    remoteEcho.Echo();
-                }
+                remoteEcho.Echo();
             }
         }
+
 
     }
 }
