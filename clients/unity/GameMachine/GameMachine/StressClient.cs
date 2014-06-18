@@ -5,6 +5,10 @@ using GameMachine;
 using Entity = GameMachine.Messages.Entity;
 using EchoTest = GameMachine.Messages.EchoTest;
 using Player = GameMachine.Messages.Player;
+using TrackEntity = GameMachine.Messages.TrackEntity;
+using Neighbors = GameMachine.Messages.Neighbors;
+using GetNeighbors = GameMachine.Messages.GetNeighbors;
+using TrackExtra = GameMachine.Messages.TrackExtra;
 
 namespace GameMachine
 {
@@ -17,7 +21,7 @@ namespace GameMachine
         public bool started = false;
 
         private double lastUpdate = 0;
-        private double updatesPerSecond = 15;
+        private double updatesPerSecond = 10;
         private double updateInterval;
         private double messageSentAt;
 
@@ -31,6 +35,7 @@ namespace GameMachine
         public void StartClient(string username)
         {
             client = new Client(username, authtoken, true);
+            this.username = username;
             started = true;
             SendTimed();
         }
@@ -53,7 +58,7 @@ namespace GameMachine
                         SendTimed();
                     }
 
-                    if (times.Count >= 100)
+                    if (times.Count >= 50)
                     {
                         double average = Mean(times);
                         Logger.Debug(average.ToString());
@@ -78,9 +83,30 @@ namespace GameMachine
 
         void SendMessage()
         {
-            EchoTest();
+            //EchoTest();
+            Track();
         }
 
+        public void Track()
+        {
+            Entity entity = new Entity();
+            entity.id = username;
+            entity.entityType = "player";
+            
+            entity.vector3 = new GameMachine.Messages.Vector3();
+            entity.vector3.x = 500;
+            entity.vector3.z = 500;
+            entity.vector3.y = 10;
+            
+            TrackEntity trackEntity = new TrackEntity();
+            trackEntity.value = true;
+            entity.trackEntity = trackEntity;
+            GetNeighbors getNeighbors = new GetNeighbors();
+            getNeighbors.vector3 = entity.vector3;
+
+            entity.getNeighbors = getNeighbors;
+            client.SendEntity(entity); 
+        }
         public void Devnull()
         {
             Entity entity = new Entity();

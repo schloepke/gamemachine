@@ -36,7 +36,7 @@ namespace GameMachine
         {
            
             Entity entity = new Entity();
-            entity.id = "1";
+            entity.id = update.entityId;
             entity.entityType = update.entityType;
 
             entity.vector3 = new Vector3();
@@ -67,8 +67,7 @@ namespace GameMachine
                     List<TrackingUpdate> updates = new List<TrackingUpdate>();
                     foreach (Entity r in entity.neighbors.entity)
                     {
-                        TrackingUpdate update = new TrackingUpdate(r.vector3.x, r.vector3.y, r.vector3.z);
-                        update.entityId = r.id;
+                        TrackingUpdate update = new TrackingUpdate(r.id, r.vector3.x, r.vector3.y, r.vector3.z);
                         if (r.trackExtra != null)
                         {
                             update.trackExtra = r.trackExtra;

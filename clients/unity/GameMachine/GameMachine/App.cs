@@ -26,6 +26,8 @@ namespace GameMachine
 
         public delegate void AppStarted();
         private AppStarted appStarted;
+        private bool appStartedCalled = false;
+
 
         public void OnAppStarted(AppStarted callback)
         {
@@ -82,8 +84,11 @@ namespace GameMachine
             {
                 connected = true;
                 Logger.Debug("App connected");
-                appStarted();
-
+                if (!appStartedCalled)
+                {
+                    appStarted();
+                    appStartedCalled = true;
+                }
             }
 
             lastEchoReceived = Time.time;
@@ -107,6 +112,11 @@ namespace GameMachine
 
         void Update()
         {
+            if (!running)
+            {
+                return;
+            }
+
             if (Time.time > (lastUpdate + updateInterval))
             {
                 lastUpdate = Time.time;
@@ -122,6 +132,7 @@ namespace GameMachine
                     if ((Time.time - lastEchoReceived) >= echoTimeout)
                     {
                         connected = false;
+                        Logger.Debug("Connectivity timeout");
                     }
                     remoteEcho.Echo();
                 }

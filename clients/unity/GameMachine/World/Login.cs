@@ -16,18 +16,28 @@ namespace GameMachine.World
         private string username = "player";
         private string password = "pass";
         private bool hasError = false;
+        private string loginError = "";
         private bool disableGui = false;
         private GameMachine.App app;
+        private bool showLogin = true;
 
         void OnGUI()
         {
-
+            if (!showLogin)
+            {
+                return;
+            }
 
             loginWindow = GUI.Window(0, loginWindow, WindowFunction, "Game Machine Login");
         }
         
         void WindowFunction(int windowID)
         {
+            if (!showLogin)
+            {
+                return;
+            }
+
             if (disableGui)
             {
                 GUI.enabled = false;
@@ -40,13 +50,19 @@ namespace GameMachine.World
 
             if (hasError)
             {
-                GUI.Label(new Rect(25, 150, 100, 30), "Login Failed");
+                GUI.Label(new Rect(25, 150, 400, 30), "Login Failed: " + loginError);
             }
 
 
             if (GUI.Button(new Rect(200, 200, 100, 30), "Login"))
             {
                 disableGui = true;
+
+                GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";
+                GameMachine.Config.udpHost = "192.168.1.8";
+                //GameMachine.Config.udpHost = "127.0.0.1";
+                GameMachine.Config.udpPort = 8100;
+
                 User user = User.Instance;
                 user.SetUser(username.ToString(), password.ToString());
                 GameMachine.Authentication.Success success = OnAuthenticationSuccess;
@@ -60,13 +76,23 @@ namespace GameMachine.World
         {
             Logger.Debug("Authentication Failed: " + error);
             hasError = true;
+            loginError = error.Replace(System.Environment.NewLine, "");
             disableGui = false;
         }
 
         public void OnAuthenticationSuccess(string authtoken)
         {
+            GameMachine.App.AppStarted callback = OnAppStarted;
+            app.OnAppStarted(callback);
             app.Run(User.Instance.username, authtoken);
-            //Application.LoadLevel("world_main");
+
+        }
+
+        public void OnAppStarted()
+        {
+            showLogin = false;
+            Destroy(GameObject.Find("Main Camera"));
+            Application.LoadLevelAdditive("world_main");
         }
 
         // Use this for initialization
