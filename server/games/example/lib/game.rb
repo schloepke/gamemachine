@@ -1,9 +1,10 @@
 require 'digest/md5'
 require_relative 'example_controller'
 require_relative 'chatbot'
+require_relative 'npc_movement'
 require_relative 'npc'
+require_relative 'aggressive_npc'
 require_relative 'npc_group'
-require_relative 'npc_manager'
 
 module Example
   class Game
@@ -45,15 +46,19 @@ module Example
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
+      spawn_npcs('male',1000,Npc)
+      spawn_npcs('viking',800,Npc)
+      spawn_npcs('golem',1000,Npc)
+      spawn_npcs('worm',800,AggressiveNpc)
 
-      actor_refs = []
-      5000.times.map {|i| "Mob_#{i}"}.each_slice(20).each do |group|
+    end
+
+    def spawn_npcs(type,count,klass)
+      count.times.map {|i| "#{type}_#{i}"}.each_slice(20).each do |group|
         name = Digest::MD5.hexdigest(group.join(''))
-        actor_refs << GameMachine::Actor::Builder.new(NpcGroup,group).with_name(name).start
+        GameMachine::Actor::Builder.new(NpcGroup,group,klass).with_name(name).start
         sleep 0.05
       end
-
-      #GameMachine::Actor::Builder.new(NpcManager,actor_refs).start
     end
 
     def load_game_data

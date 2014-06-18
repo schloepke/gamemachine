@@ -7,6 +7,10 @@ module GameMachine
       new(ar[0],ar[1],ar[2])
     end
 
+    def self.from(v)
+      new(v.x,v.y,v.z)
+    end
+
     def initialize(x=0.0,y=0.0,z=0.0)
       @x = x
       @y = y
@@ -16,6 +20,7 @@ module GameMachine
     def==(v)
       @x == v.x && @y = v.y && @z = v.z
     end
+
 
     def zero?
       @x == 0 && @y == 0 && z == 0
@@ -36,8 +41,9 @@ module GameMachine
     def distance_squared(v)
       dx = @x - v.x
       dy = @y - v.y
-      dz = @z - v.z
-      (dx * dx + dy * dy + dz * dz);
+      #dz = @z - v.z
+      #(dx * dx + dy * dy + dz * dz);
+      (dx * dx + dy * dy);
     end
 
     def distance(v)

@@ -6,8 +6,9 @@ module Example
     def post_init(*args)
       @npcs = {}
       group = args.first
+      klass = args.last
       group.each do |npc_id|
-        npcs[npc_id] = Npc.new(npc_id)
+        npcs[npc_id] = klass.new(npc_id)
       end
       schedule_message('update',50)
     end

@@ -2,45 +2,48 @@ module Example
   class Npc
     include GameMachine::Commands
 
-    attr_accessor :position, :last_move, :speed, :id, :position_changed, :players, :target, :has_target
+    attr_accessor :position, :id, :players, :movement, :player_index, :home
+
     def initialize(id)
       @id = id
       @position = GameMachine::Vector.new
+      @last_ai = Time.now.to_i
+      @player_check_counter = 0
+      @players = {}
+      set_spawn_point
+      @movement = NpcMovement.new(id,position)
+      @home = GameMachine::Vector.from(position)
+      get_players
+      #GameMachine.logger.info "Npc #{id} created"
+      post_init
+    end
+
+    def post_init
+    end
+
+    def set_spawn_point
       position.x = rand(1000) + 1
       position.y = rand(1000) + 1
-      #position.z = 40
-      @last_move = Time.now.to_f
-      @speed = 0.4
+    end
 
-      @last_ai = Time.now.to_i
-      @step_count = 0
-      @move_count = 0
-      @position_changed = false
-      @player_check_counter = 0
-      @has_target = false
-      @target = GameMachine::Vector.new
+    def has_players?
+      players.size > 0
+    end
 
-      get_players
-      commands.grid.track(id,position.x,position.y,position.z)
-      GameMachine.logger.info "Npc #{id} created"
+    def sorted_players
+      players.values.sort do |a,b|
+        position.distance(a[:vector]) <=> position.distance(b[:vector])
+      end
     end
 
     def get_players
-      @players = commands.grid.neighbors(position.x,position.y)
+      commands.grid.neighbors(position.x,position.y).each do |player|
+        @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
+      end
     end
 
     def check_players
-      # If no players are in range, skip a couple of updates
-      if players.empty?
-        @player_check_counter += 1
-        if @player_check_counter >= 4
-          @player_check_counter = 0
-          get_players
-        end
-      else
-        get_players
-      end
-      players.size
+      get_players
     end
 
     def run_ai
@@ -48,63 +51,24 @@ module Example
     end
 
     def pick_random_target
+      target = GameMachine::Vector.new
       target.x = position.x + rand(-30..30)
       target.y = position.y + rand(-30..30)
-
-      # Move one unit per second
-      # tick = 50ms. one unit every 20 ticks
-      distance = position.distance(target)
-      if distance == 0
-        return
-      end
-
-      @x_inc = (target.x - position.x) / distance
-      @y_inc = (target.y - position.y) / distance
-      if id == "Mob_400"
-        #@move_start = Time.now.to_f
-        #puts "Moving #{distance.inspect}"
-      end
-      @has_target = true
+      @target = target
+      movement.set_target(target)
     end
 
     def update
-      @position_changed = false
-      run_ai unless has_target
-
-      if has_target
-        if @move_count >= 20
-          move(target)
-          @move_count = 0
+      if movement.has_target
+        if movement.reached_target
+          run_ai
         end
+      else
+        run_ai
       end
 
-      # Only update position if we moved
-      if position_changed
-        commands.grid.track(id,position.x.round(2),position.y.round(2),position.z)
-        @position_changed = false
-      end
-      @move_count += 1
+      movement.update
     end
 
-    def move(target)
-      delta_time = Time.now.to_f - last_move.to_f
-
-      position.x += (@x_inc * delta_time)
-      position.y += (@y_inc * delta_time)
-      
-      if position.distance(target) <= 1.0
-        position.x = target.x
-        position.y = target.y
-        @has_target = false
-        if id == "Mob_400"
-          #puts "Move Finished #{Time.now.to_f - @move_start}"
-        end
-      end
-      if id == "Mob_400"
-        #puts "#{position.inspect} > #{target.inspect}"
-      end
-      @last_move = Time.now.to_f
-      @position_changed = true
-    end
   end
 end
