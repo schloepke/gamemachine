@@ -44,10 +44,19 @@ module GameMachine
       Math.sqrt(distance_squared(v))
     end
 
+    def lerp(vector,percent)
+      @x = lerp_float(x,vector.x,percent)
+      @y = lerp_float(y,vector.y,percent)
+    end
+
+    def lerp_float(start_loc,end_loc,percent)
+      start_loc + (percent * (end_loc - start_loc))
+    end
+
     def interpolate(vector,change_amount)
       @x=(1-change_amount)*@x + change_amount*vector.x
       @y=(1-change_amount)*@y + change_amount*vector.y
-      @z=(1-change_amount)*@z + change_amount*vector.z
+      #@z=(1-change_amount)*@z + change_amount*vector.z
     end
 
     def inspect

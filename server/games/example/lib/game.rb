@@ -1,7 +1,9 @@
-
+require 'digest/md5'
 require_relative 'example_controller'
 require_relative 'chatbot'
 require_relative 'npc'
+require_relative 'npc_group'
+require_relative 'npc_manager'
 
 module Example
   class Game
@@ -22,7 +24,6 @@ module Example
       # it starts
       game_data = load_game_data
       GameMachine::Actor::Builder.new(ExampleController,game_data).start
-      GameMachine::Actor::Builder.new(Npc).start
 
       # Creating the actor with a specific name.  Useful if you want to start up
       # multiple actors all using the same actor class.
@@ -43,6 +44,16 @@ module Example
 
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
+
+
+      actor_refs = []
+      5000.times.map {|i| "Mob_#{i}"}.each_slice(20).each do |group|
+        name = Digest::MD5.hexdigest(group.join(''))
+        actor_refs << GameMachine::Actor::Builder.new(NpcGroup,group).with_name(name).start
+        sleep 0.05
+      end
+
+      #GameMachine::Actor::Builder.new(NpcManager,actor_refs).start
     end
 
     def load_game_data
