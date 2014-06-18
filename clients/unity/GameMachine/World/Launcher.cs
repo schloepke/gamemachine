@@ -23,7 +23,7 @@ namespace GameMachine.World
             GameObject player = GameObject.Find("Player");
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
 
-            //StartChat();
+            StartChat();
             //GameObject spartan = (GameObject)Instantiate(Resources.Load("Viking/Viking"));
             //GameObject avatar = player.transform.Search("SpartanKing").gameObject;
             //Destroy(avatar);

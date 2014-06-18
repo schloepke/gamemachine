@@ -22,13 +22,22 @@ namespace GameMachine
         private double echoTimeout = 5.0f;
 
         public delegate void AppStarted();
+        public delegate void ConnectionTimeout();
         private AppStarted appStarted;
+        private ConnectionTimeout connectionTimeout;
+        private float disconnectTime;
         private bool appStartedCalled = false;
 
 
         public void OnAppStarted(AppStarted callback)
         {
             appStarted = callback;
+        }
+
+        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout, float disconnectTime=10f)
+        {
+            this.connectionTimeout = connectionTimeout;
+            this.disconnectTime = disconnectTime;
         }
 
         public void Login(string username, string password, Authentication.Success success, Authentication.Error error)
@@ -95,6 +104,7 @@ namespace GameMachine
         {
             Application.runInBackground = true;
             echoInterval = 0.60 / echosPerSecond;
+            lastEchoReceived = Time.time;
             InvokeRepeating("UpdateNetwork", 0.010f, 0.06F);
         }
 
@@ -102,6 +112,7 @@ namespace GameMachine
         {
             if (client != null)
             {
+                Logger.Debug("Stopping client");
                 client.Stop();
             }
         }
@@ -127,7 +138,12 @@ namespace GameMachine
                 if ((Time.time - lastEchoReceived) >= echoTimeout)
                 {
                     connected = false;
-                    Logger.Debug("Connectivity timeout");
+                    Logger.Debug("Echo timeout");
+                    if ((Time.time - lastEchoReceived) >= disconnectTime)
+                    {
+                        Logger.Debug("Connection timeout");
+                        connectionTimeout();
+                    }
                 }
                 remoteEcho.Echo();
             }

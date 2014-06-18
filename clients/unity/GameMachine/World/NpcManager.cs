@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using  System.Text.RegularExpressions;
 using GameMachine.World;
 
 namespace GameMachine.World
@@ -17,12 +18,12 @@ namespace GameMachine.World
 
         void Start()
         {
-            InvokeRepeating("ExpireNpcs", 2, 0.3F);
+            InvokeRepeating("ExpireNpcs", 2, 0.5F);
         }
 
         public void ExpireNpcs()
         {
-            var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.3f).ToArray();
+            var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.5f).ToArray();
             foreach (var item in itemsToRemove)
             {
                 Logger.Debug("Removing " + item.Key);
@@ -57,7 +58,23 @@ namespace GameMachine.World
                     if (update.entityId != User.Instance.username)
                     {
                         // New npc
-                        npcObject = (GameObject)Instantiate(Resources.Load("Npc"));
+                        string npcType = "Npc";
+
+                        if (update.entityId.StartsWith("male"))
+                        {
+                            npcType = "MaleNpc";
+                        } else if (update.entityId.StartsWith("viking"))
+                        {
+                            npcType = "NPc";
+                        } else if (update.entityId.StartsWith("golem"))
+                        {
+                            npcType = "GolemNpc";
+                        } else if (update.entityId.StartsWith("worm"))
+                        {
+                            npcType = "WormNpc";
+                        }
+
+                        npcObject = (GameObject)Instantiate(Resources.Load(npcType));
                         npcObject.name = update.entityId;
                         Npc npc = npcObject.GetComponent<Npc>();
                         npc.name = update.entityId;

@@ -21,17 +21,11 @@ namespace GameMachine.World
             base.Start();
             SetNameTag(name);
             controller = GetComponent<CharacterController>();
-
-            // we're giving all NPC's hover ability
             this.type = Type.Ground;
         }
 
         public Vector3 SpawnLocation(Vector3 vector)
         {
-            if (vector == null)
-            {
-                Logger.Debug("VECTOR NULL");
-            }
             terrain = Terrain.activeTerrain;
             float height = terrain.SampleHeight(vector);
             Vector3 spawnPoint = new Vector3(vector.x, (height + 1.05f), vector.z);
@@ -95,7 +89,14 @@ namespace GameMachine.World
             {
                 if (speed > 2.0f)
                 {
-                    State = "RunForward";
+                    if (animation ["Run"])
+                    {
+                        State = "RunForward";
+                    } else
+                    {
+                        State = "WalkForward";
+                    }
+
                 } else
                 {
                     State = "WalkForward";
@@ -115,40 +116,6 @@ namespace GameMachine.World
                 State = "Idle";
             }
 
-            return;
-
-//            if (Colliding)
-//            {
-//
-//               
-//                Vector3 position = transform.position;
-//                Vector3 destination = target;
-//                float distance = Vector3.Distance(KAM3RA.User.VectorXZ(position), KAM3RA.User.VectorXZ(destination));
-//                //Logger.Debug(distance.ToString());
-//                if (distance < 1.0f)
-//                {
-//                    State = "Idle";
-//                    return;
-//                } else
-//                {
-//                    State = Speed > (2f * transform.localScale.y) ? "RunForward" : "WalkForward";
-//                }
-//                if (!TooFast)
-//                {
-//                    velocity = (destination - position).normalized * ScaledSpeed;
-//
-//
-//
-//
-//                }
-//                KAM3RA.User.LookAt2D(transform, destination);
-//                //transform.position = Vector3.MoveTowards(transform.position, target, 5 * Time.deltaTime);
-//                if (distance < 2f)
-//                {
-//                    rigidbody.AddForce(velocity * 1.25f, ForceMode.VelocityChange);
-//                }
-//
-//            }
         }
     }
 }
