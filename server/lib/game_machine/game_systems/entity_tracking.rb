@@ -42,7 +42,7 @@ module GameMachine
 
       def set_entity_location(entity)
         vector = entity.vector3
-        @grid.set(entity.id,vector.x,vector.z,vector.y,entity.entity_type)
+        @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
         if entity.has_track_extra
           @extra_params[entity.id] = entity.track_extra
         end
@@ -54,8 +54,8 @@ module GameMachine
         entity.set_vector3(
           MessageLib::Vector3.new.
           set_x(grid_value.x).
-          set_y(grid_value.z).
-          set_z(grid_value.y)
+          set_y(grid_value.y).
+          set_z(grid_value.z)
         )
 
         if @extra_params.has_key?(grid_value.id)
@@ -68,16 +68,16 @@ module GameMachine
       def send_neighbors(message)
         type = message.get_neighbors.neighbor_type
         x = message.get_neighbors.vector3.x
-        z = message.get_neighbors.vector3.z
+        y = message.get_neighbors.vector3.y
 
         # Either .net or java protobufs have a bug with 0 floats
         if x.nil?
           x = 0
         end
-        if z.nil?
-          z = 0
+        if y.nil?
+          y = 0
         end
-        search_results = grid.neighbors(x,z,type)
+        search_results = grid.neighbors(x,y,type)
        
         neighbors = search_results.map do |grid_value|
           location_entity(grid_value)

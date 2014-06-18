@@ -19,12 +19,12 @@ module GameMachine
         grid.get(id)
       end
 
-      def neighbors(x,z,type='player')
-        grid.neighbors(x,z,type)
+      def neighbors(x,y,type='player')
+        grid.neighbors(x,y,type)
       end
 
-      def track(id,x,z,y,entity_type='npc')
-        grid.set(id,x,z,y,entity_type)
+      def track(id,x,y,z,entity_type='npc')
+        grid.set(id,x,y,z,entity_type)
       end
 
     end
