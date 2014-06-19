@@ -25,12 +25,12 @@ module GameMachine
         cell_size=Application.config.world_grid_cell_size
       )
 
-        grid = JavaLib::Grid.new(grid_size,cell_size)
         unless grids.containsKey(name)
+          grid = JavaLib::Grid.new(grid_size,cell_size)
           grids.put(name,grid)
         end
 
-        grid
+        grids.fetch(name)
       end
     end
 
