@@ -85,6 +85,7 @@ module Example
       @last_move = Time.now.to_f
       @position_changed = true
     rescue Exception => e
+      @reached_target = true
       GameMachine.logger.error "#{self.class.name} #{e.to_s}"
     end
   end
