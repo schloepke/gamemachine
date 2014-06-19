@@ -1,6 +1,8 @@
 
 require 'rbconfig'
 
+require_relative 'game_machine/securerandom'
+
 module GameMachine
   def self.env
     ENV.fetch('GAME_ENV')
