@@ -47,7 +47,7 @@ module Example
           movement.set_target(player[:vector])
           @target_id = player[:id]
           movement.speed_scale = 3
-          log("target chosen")
+          #log("target chosen")
         end
       end
     end

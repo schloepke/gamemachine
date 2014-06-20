@@ -52,9 +52,9 @@ module Example
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
-      #spawn_npcs('male',1000,Npc)
-      #spawn_npcs('viking',800,Npc)
-      #spawn_npcs('golem',1000,Npc)
+      spawn_npcs('male',1000,Npc)
+      spawn_npcs('viking',800,Npc)
+      spawn_npcs('golem',1000,Npc)
       spawn_npcs('worm',800,AggressiveNpc)
 
       GameMachine::Actor::Builder.new(CombatController).start

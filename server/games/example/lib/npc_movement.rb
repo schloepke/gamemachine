@@ -95,9 +95,9 @@ module Example
         @reached_target = true
       end
 
-      if id.match(/worm/)
-        puts "#{id}: x: #{move_x} y: #{move_y} #{position.inspect} --> #{current_target.inspect}   distance: #{position.distance(current_target)} time: #{delta_time}"
-      end
+      #if id.match(/worm/)
+      #  puts "#{id}: x: #{move_x} y: #{move_y} #{position.inspect} --> #{current_target.inspect}   distance: #{position.distance(current_target)} time: #{delta_time}"
+      #end
       @last_move = Time.now.to_f
       @position_changed = true
     end

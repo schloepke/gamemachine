@@ -42,6 +42,9 @@ module GameMachine
 
       def set_entity_location(entity)
         vector = entity.vector3
+        #if entity.entity_type == 'player'
+        #  GameMachine.logger.info "Player: #{vector.x} #{vector.y} #{vector.z}"
+        #end
         @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
         if entity.has_track_extra
           @extra_params[entity.id] = entity.track_extra

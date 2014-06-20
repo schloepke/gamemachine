@@ -10,7 +10,7 @@ module Example
       group.each do |npc_id|
         npcs[npc_id] = klass.new(npc_id)
       end
-      schedule_message('update',30)
+      schedule_message('update',50)
     end
 
     def on_receive(message)

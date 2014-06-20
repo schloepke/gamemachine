@@ -8,9 +8,9 @@ module Example
     end
 
     def on_receive(message)
-      GameMachine.logger.info "Combatcontroller #{message}"
+      #GameMachine.logger.info "Combatcontroller #{message}"
       if message.is_a?(Attack)
-        GameMachine.logger.info "looking up stats for #{message.target}"
+        #GameMachine.logger.info "looking up stats for #{message.target}"
         if user_stats = UserStats.find(message.target)
           GameMachine.logger.info "health #{user_stats.health}"
           damage = 4
