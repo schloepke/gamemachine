@@ -1020,6 +1020,14 @@ namespace GameMachine.Messages
       get { return _server; }
       set { _server = value; }
     }
+    private string _type = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1524,6 +1532,31 @@ namespace GameMachine.Messages
       get { return _json; }
       set { _json = value; }
     }
+    private string _klass = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"klass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string klass
+    {
+      get { return _klass; }
+      set { _klass = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"JsonStorage")]
+  public partial class JsonStorage : global::ProtoBuf.IExtensible
+  {
+    public JsonStorage() {}
+    
+    private string _json;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"json", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string json
+    {
+      get { return _json; }
+      set { _json = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1892,6 +1925,14 @@ namespace GameMachine.Messages
     {
       get { return _clientEvents; }
       set { _clientEvents = value; }
+    }
+    private GameMachine.Messages.JsonStorage _jsonStorage = null;
+    [global::ProtoBuf.ProtoMember(58, IsRequired = false, Name=@"jsonStorage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.JsonStorage jsonStorage
+    {
+      get { return _jsonStorage; }
+      set { _jsonStorage = value; }
     }
     private GameMachine.Messages.TrackExtra _trackExtra = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"trackExtra", DataFormat = global::ProtoBuf.DataFormat.Default)]

@@ -73,6 +73,13 @@ namespace GameMachine.Example
             // Start sending/receiving location updates
             StartAreaOfInterest();
             Logger.Debug("AreaOfInterest started");
+
+            JsonModel.Register(typeof(Attack), "Example::Models::Attack", "Example/CombatController");
+            Attack attack = new Attack();
+            attack.attacker = "test";
+            attack.target = "test";
+            attack.combat_ability = "test attack";
+            attack.Send();
         }
 
         void StartAreaOfInterest()

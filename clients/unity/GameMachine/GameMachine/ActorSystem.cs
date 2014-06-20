@@ -73,12 +73,6 @@ namespace GameMachine
 
         public void TellRemote(Entity entity)
         {
-            if (entity.json)
-            {
-                JsonEntity json = new JsonEntity();
-                json.json = JsonConvert.SerializeObject(entity);
-                entity.jsonEntity = json;
-            }
             client.SendEntity(entity);
         }
 
@@ -115,7 +109,7 @@ namespace GameMachine
                     // See if we have a json entity
                     if (entity.jsonEntity != null)
                     {
-                        JsonModel.OnRecieve(entity.jsonEntity.json);
+                        JsonModel.OnReceive(entity.jsonEntity.klass, entity.jsonEntity.json);
                         continue;
                     }
                     
