@@ -12,16 +12,33 @@ module GameMachine
         @client.close
       end
 
+      def keys
+        @client.keys
+      end
+
+      def dump(path,format=:yaml)
+        raise NotImplementedError
+      end
+
+      def load(path,format=:yaml)
+        raise NotImplementedError
+      end
+
       def set(key,value)
         @client.put(key,value)
+        @db.commit
+      end
+
+      def dbfile
+        File.join(GameMachine.app_root,'db','mapdb.db')
       end
 
       def connect
         unless @client
-          db = DataStores::DBMaker.newFileDB(java.io.File.new("/tmp/game_machine.db")).
+          @db = DataStores::DBMaker.newFileDB(java.io.File.new(dbfile)).
             closeOnJvmShutdown.
             make
-          @client = db.getTreeMap("entities")
+          @client = @db.getTreeMap("entities")
         end
         @client
       end

@@ -1,6 +1,13 @@
 require 'digest/md5'
+require 'virtus'
+require_relative 'models/user_stats'
+require_relative 'models/attack'
+require_relative 'models/user'
+require_relative 'authentication_handler'
+require_relative 'player_register'
 require_relative 'example_controller'
 require_relative 'chatbot'
+require_relative 'combat_controller'
 require_relative 'npc_movement'
 require_relative 'npc'
 require_relative 'aggressive_npc'
@@ -23,8 +30,7 @@ module Example
       # Builder.new takes the classname of the actor,and any number of other arguments.
       # These extra arguments will be sent to the actor's post_init method when
       # it starts
-      game_data = load_game_data
-      GameMachine::Actor::Builder.new(ExampleController,game_data).start
+      GameMachine::Actor::Builder.new(ExampleController).start
 
       # Creating the actor with a specific name.  Useful if you want to start up
       # multiple actors all using the same actor class.
@@ -46,10 +52,12 @@ module Example
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
-      spawn_npcs('male',1000,Npc)
-      spawn_npcs('viking',800,Npc)
-      spawn_npcs('golem',1000,Npc)
+      #spawn_npcs('male',1000,Npc)
+      #spawn_npcs('viking',800,Npc)
+      #spawn_npcs('golem',1000,Npc)
       spawn_npcs('worm',800,AggressiveNpc)
+
+      GameMachine::Actor::Builder.new(CombatController).start
 
     end
 
@@ -61,11 +69,5 @@ module Example
       end
     end
 
-    def load_game_data
-      # load_from is just a helper to load yaml data.
-      GameMachine::GameData.load_from(
-        File.join(game_root,'/data/game_data.yml')
-      )
-    end
   end
 end

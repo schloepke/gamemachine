@@ -3,6 +3,11 @@ module GameMachine
     class Base
 
       attr_reader :player, :grid, :chat, :datastore, :navigation
+
+      def self.commands
+        @commands ||= new
+      end
+
       def initialize
         @player = PlayerCommands.new
         @grid = GridCommands.new

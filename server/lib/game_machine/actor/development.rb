@@ -19,6 +19,7 @@ module GameMachine
       end
 
       def onReceive(message)
+        message = Base.model_filter(message)
         if message == 'reload_because_changed'
           kill_self("Actor code change")
         else

@@ -258,6 +258,10 @@ message JsonEntity {
   required string json = 1;
 }
 
+message JsonStorage {
+  required string json = 1;
+}
+
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
@@ -304,6 +308,7 @@ message Entity {
   optional ClientManagerUnregister clientManagerUnregister = 55;
   optional ClientEvent clientEvent = 56;
   optional ClientEvents clientEvents = 57;
+  optional JsonStorage jsonStorage = 58;
   //GAME_ENTITY_MESSAGES
 }
 

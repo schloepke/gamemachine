@@ -14,9 +14,6 @@ module GameMachine
       end
 
       describe "authenticating a player" do
-        before(:each) do
-          Application.auth_handler.load_users
-        end
 
         context "player is authenticated" do
           it "authenticates player with valid authtoken" do

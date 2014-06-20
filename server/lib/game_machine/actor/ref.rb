@@ -29,11 +29,13 @@ module GameMachine
       end
 
       def tell(message,sender=nil)
+        message = convert_if_model(message)
         actor.tell(message,sender_for(sender))
         true
       end
 
       def ask(message,timeout)
+        message = convert_if_model(message)
         duration = duration_in_ms(timeout)
         t = JavaLib::Timeout.new(duration)
         if actor.is_a?(JavaLib::ActorSelection)
@@ -49,6 +51,14 @@ module GameMachine
       end
 
       private
+
+      def convert_if_model(message)
+        if message.is_a?(GameMachine::Model)
+          message.to_entity
+        else
+          message
+        end
+      end
 
       def duration_in_ms(ms)
         JavaLib::Duration.create(ms, java.util.concurrent.TimeUnit::MILLISECONDS)

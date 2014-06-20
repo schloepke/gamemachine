@@ -6,7 +6,7 @@ module Web
         if auth = login(params['username'],params['password'])
           auth
         else
-          GameMachine.logger.info "Login Error: #{params['username']}"
+          GameMachine.logger.info "#{self.class.name} Login Error: #{params['username']}"
           "error"
         end
       end

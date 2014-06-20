@@ -15,6 +15,7 @@ module GameMachine
         @game_handler = Actor::Base.find(Application.config.game_handler)
         @server = JavaLib::UdpServer.getUdpServer
         @server_handler = @server.getHandler
+        @auth_handler = Handlers::Authentication.new
       end
 
       def on_receive(message)
@@ -30,6 +31,13 @@ module GameMachine
 
         # Ensure we kill the player gateway actor on logout or on new connection
         if client_message.has_player_logout || client_message.has_player_connect
+
+          # Ensure valid authtoken before doing anything
+          unless @auth_handler.valid_authtoken?(client_message.player)
+            GameaMachine.logger.info "Unauthenticated client attempting to login/logout"
+            return
+          end
+
           destroy_child(client_message.player.id)
           self.class.clients.delete(client_message.player.id)
           

@@ -16,7 +16,6 @@ RSpec.configure do |config|
   end
 
   config.before(:each) do
-    GameMachine::Application.load_game_data
     GameMachine::AuthHandlers::Base.instance
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems

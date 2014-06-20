@@ -49,9 +49,7 @@ module GameMachine
 
       def start
         GameMachine::Actor::Reloadable.update_paths(true)
-        load_game_data
         start_actor_system
-        auth_handler
         data_store
         start_endpoints
         start_core_systems
@@ -63,6 +61,7 @@ module GameMachine
 
         start_game_systems
         GameLoader.new.load_all
+        auth_handler
         start_mono
 
         GameMachine.stdout("Game Machine start successful")
@@ -82,12 +81,6 @@ module GameMachine
           GameMachine.logger.info "Starting mono server"
           MonoServer.new.run!
         end
-      end
-
-      def load_game_data
-        GameMachine::GameData.load_from(
-          File.join(GameMachine.app_root,'config/game_data.yml')
-        )
       end
 
       def start_endpoints

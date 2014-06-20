@@ -9,6 +9,9 @@ module GameMachine
           unless entity.has_player
             set_player(entity,player_id)
           end
+        elsif message.is_a?(GameMachine::Model)
+          entity = entity_with_player(player_id,player_id)
+          entity.set_json_entity(message.to_json_entity)
         else
           entity = entity_with_player(player_id,player_id)
           if is_component?(message)

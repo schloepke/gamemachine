@@ -7,6 +7,7 @@ require_relative 'controllers/index_controller'
 require_relative 'controllers/messages_controller'
 require_relative 'controllers/auth_controller'
 require_relative 'controllers/log_controller'
+require_relative 'controllers/player_register_controller'
 
 
 class WebApp < Sinatra::Base
@@ -14,7 +15,7 @@ class WebApp < Sinatra::Base
   set :bind, GameMachine::Application.config.http_host
   set :port, GameMachine::Application.config.http_port
   set :root, File.expand_path(File.dirname(__FILE__))
-  set :environment, :production
+  set :environment, :development
   mime_type :proto, 'application/octet-stream'
 
   register Sinatra::MultiRoute
@@ -35,7 +36,29 @@ class WebApp < Sinatra::Base
       CONTROLLERS[name] ||= Web::Controllers::MessagesController.new
     when :log
       CONTROLLERS[name] ||= Web::Controllers::LogController.new
+    when :player_register
+      CONTROLLERS[name] ||= Web::Controllers::PlayerRegisterController.new
     end
+  end
+
+
+  get '/player_register' do
+    @content = {}
+    haml :player_register
+  end
+
+  post '/player_register.html' do
+    @content = controller(:player_register).set_request(request,params).create
+    if @content['error']
+      haml :player_register
+    else
+      haml :player_registered
+    end
+  end
+
+  post '/player_register.json' do
+    content = controller(:player_register).set_request(request,params).create
+    JSON.generate(content)
   end
 
   get '/' do

@@ -6,15 +6,9 @@ module Example
 
     # This is our initializer method. It is called once on actor start.
     #
-    attr_reader :game_data
     def post_init(*args)
-
-      # Pull the game data out of args
-      @game_data = args.first
-
       # Just because
       GameMachine.logger.info "#{self.class.name} post_init called"
-
     end
 
     def on_receive(message)

@@ -7,6 +7,8 @@ module GameMachine
     # @abstract All game actors inherit fromm this class
     class Base < JavaLib::UntypedActor
   
+      ON_RECEIVE_HOOKS = {}
+
       @@player_controller = nil
 
       class << self
@@ -99,6 +101,13 @@ module GameMachine
           "/user/#{name}"
         end
 
+        def model_filter(message)
+          if message.is_a?(MessageLib::Entity) && message.has_json_entity
+            message = Model.from_entity(message)
+          end
+          message
+        end
+
         private
 
         def ensure_hashring(name)
@@ -124,8 +133,16 @@ module GameMachine
 
       end
 
-      def onReceive(message)
+      # This indirection is primarily because Akka's test actors
+      # hide onReceive, so in tests we need to call receive_message
+      def receive_message(message)
+        message = self.class.model_filter(message)
         on_receive(message)
+      end
+
+      # So we can hook into message passing for our own filters and the like
+      def onReceive(message)
+        receive_message(message)
       end
 
       def on_receive(message)

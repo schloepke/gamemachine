@@ -4,7 +4,8 @@ module Example
 
     attr_reader :current_target, :position, :move_x, :move_y, :updates_for_move,
       :position_changed, :has_target, :updates_between_move, :last_move, :id,
-      :reached_target
+      :reached_target, :current_distance_to_target
+    attr_accessor :speed_scale
     def initialize(id,position)
       @id = id
       @position = position
@@ -14,6 +15,8 @@ module Example
       @reached_target = false
       @updates_for_move = 0
       @updates_between_move = 20
+      @speed_scale = 1.0
+      @current_distance_to_target = 0
       commands.grid.track(id,position.x,position.y,position.z)
     end
 
@@ -39,7 +42,7 @@ module Example
     end
 
     def distance_to_target
-      current_target ? position.distance(current_target) : 0
+      current_distance_to_target
     end
 
     def set_target(target)
@@ -50,13 +53,19 @@ module Example
     end
 
     def update_target(target)
-      distance = position.distance(target)
-      if distance == 0
-        return false
-      end
+      @current_distance_to_target = position.distance(target)
       @current_target = target
-      @move_x = (current_target.x - position.x) / distance
-      @move_y = (current_target.y - position.y) / distance
+
+      if current_distance_to_target == 0
+        @reached_target = true
+        return
+      end
+
+      # Default is move one unit * delta_time per tick.  use scale_speed to
+      # adjust it on the fly (smaller scale is faster)
+      @move_x = (current_target.x - position.x) / current_distance_to_target
+      @move_y = (current_target.y - position.y) / current_distance_to_target
+      current_distance_to_target
     end
 
     def drop_target
@@ -65,28 +74,32 @@ module Example
       @move_y = nil
       @has_target = false
       @reached_target = false
+      @current_distance_to_target = 0
     end
 
     def move
+      @current_distance_to_target =  position.distance(current_target)
+      if current_distance_to_target <= 5
+        @speed_scale = 1.0
+      end
+
       delta_time = Time.now.to_f - last_move.to_f
 
-      position.x += (move_x * delta_time)
-      position.y += (move_y * delta_time)
+      position.x += (move_x * (delta_time * speed_scale))
+      position.y += (move_y * (delta_time * speed_scale))
       
-      if position.distance(current_target) <= 1.0
+
+      if current_distance_to_target <= 1.0
         position.x = current_target.x
         position.y = current_target.y
         @reached_target = true
       end
 
-      #if id.match(/worm/)
-      #  puts "#{id}: x: #{move_x} y: #{move_y} #{position.inspect} --> #{current_target.inspect}   distance: #{position.distance(current_target)} time: #{delta_time}"
-      #end
+      if id.match(/worm/)
+        puts "#{id}: x: #{move_x} y: #{move_y} #{position.inspect} --> #{current_target.inspect}   distance: #{position.distance(current_target)} time: #{delta_time}"
+      end
       @last_move = Time.now.to_f
       @position_changed = true
-    rescue Exception => e
-      @reached_target = true
-      GameMachine.logger.error "#{self.class.name} #{e.to_s}"
     end
   end
 end
