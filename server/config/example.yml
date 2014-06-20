@@ -1,0 +1,43 @@
+development:
+  protogen_out_dir: /changeme
+  servers:
+    default:
+      id: 1
+      user_id: 1
+      cluster_id: 1
+      environment: development
+      player_register_handler: Example::PlayerRegister
+      game_handler: GameMachine::Handlers::Request
+      game_handler_routers: 10
+      request_handler_routers: 10
+      udp_routers: 10
+      data_store: couchbase
+      cache_write_interval: -1
+      cache_writes_per_second: -1
+      world_grid_size: 4000
+      world_grid_cell_size: 50
+      mono_enabled: true
+      mono_dll: test_actor.dll
+      singleton_manager_router_count: 200
+      singleton_manager_update_interval: 100
+      couchbase_servers:
+        - http://192.168.1.8:8091/pools
+      #auth_handler: Example::AuthenticationHandler
+      auth_handler: GameMachine::AuthHandlers::Public
+      http_enabled: true
+      http_host: 127.0.0.1
+      http_port: 3000
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8100
+      udt_enabled: false
+      udt_host: localhost
+      udt_port: 8200
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
+      akka_host: localhost
+      akka_port: 2551
+      seeds: []
+      mono_gateway_host: 127.0.0.1
+      mono_gateway_port: 8800
