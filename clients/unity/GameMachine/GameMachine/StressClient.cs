@@ -24,48 +24,52 @@ namespace GameMachine
         private double updatesPerSecond = 10;
         private double updateInterval;
         private double messageSentAt;
+        private GameMachine.Messages.Vector3 entityVector;
 
         private List<double> times = new List<double>();
 
         void Start()
         {
-            updateInterval = 0.60 / updatesPerSecond;
+
         }
 
         public void StartClient(string username)
         {
+            entityVector = new GameMachine.Messages.Vector3();
+            Random random = new Random();
+            entityVector.x = Random.Range(5f, 1000f);
+            entityVector.y = Random.Range(5f, 20f);
+            entityVector.z = Random.Range(5f, 1000f);
+            Logger.Debug(entityVector.x + " " + entityVector.y + " " + entityVector.z);
+
             client = new Client(username, authtoken, true);
             this.username = username;
             started = true;
             SendTimed();
+            InvokeRepeating("UpdateMessage", 2, 0.06F);
+
         }
 
-        void Update()
+        void UpdateMessage()
         {
             if (started)
             {
-                if (Time.time > (lastUpdate + updateInterval))
-                {
-                    lastUpdate = Time.time;
-
-
-                    Entity entity = new Entity();
+                Entity entity = new Entity();
                    
-                    if (Client.entityQueue.TryDequeue(out entity))
-                    {
-                        double messageReceivedAt = Time.realtimeSinceStartup - messageSentAt;
-                        times.Add(messageReceivedAt);
-                        SendTimed();
-                    }
-
-                    if (times.Count >= 50)
-                    {
-                        double average = Mean(times);
-                        Logger.Debug(average.ToString());
-                        times.Clear();
-                    }
-
+                if (Client.entityQueue.TryDequeue(out entity))
+                {
+                    double messageReceivedAt = Time.realtimeSinceStartup - messageSentAt;
+                    times.Add(messageReceivedAt);
+                    SendTimed();
                 }
+
+                if (times.Count >= 50)
+                {
+                    double average = Mean(times);
+                    Logger.Debug(average.ToString());
+                    times.Clear();
+                }
+
             }
 
         }
@@ -93,10 +97,8 @@ namespace GameMachine
             entity.id = username;
             entity.entityType = "player";
             
-            entity.vector3 = new GameMachine.Messages.Vector3();
-            entity.vector3.x = 500;
-            entity.vector3.z = 500;
-            entity.vector3.y = 10;
+            entity.vector3 = entityVector;
+
             
             TrackEntity trackEntity = new TrackEntity();
             trackEntity.value = true;

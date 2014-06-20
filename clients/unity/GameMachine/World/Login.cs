@@ -21,6 +21,17 @@ namespace GameMachine.World
         private GameMachine.App app;
         private bool showLogin = true;
 
+        void setConfig()
+        {
+            //string host = "162.243.128.58";
+            string host = "192.168.1.8";
+
+            GameMachine.Config.authUri = "http://" + host + ":3000/auth";
+            GameMachine.Config.udpHost = host;
+            //GameMachine.Config.udpHost = "127.0.0.1";
+            GameMachine.Config.udpPort = 8100;
+        }
+
         void OnGUI()
         {
             if (!showLogin)
@@ -57,11 +68,9 @@ namespace GameMachine.World
             if (GUI.Button(new Rect(200, 200, 100, 30), "Login"))
             {
                 disableGui = true;
+                setConfig();
 
-                GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";
-                GameMachine.Config.udpHost = "192.168.1.8";
-                //GameMachine.Config.udpHost = "127.0.0.1";
-                GameMachine.Config.udpPort = 8100;
+
 
                 User user = User.Instance;
                 user.SetUser(username.ToString(), password.ToString());

@@ -115,7 +115,8 @@ namespace GameMachine
                     // See if we have a json entity
                     if (entity.jsonEntity != null)
                     {
-                        entity = JsonConvert.DeserializeObject<Entity>(entity.jsonEntity.json);
+                        JsonModel.OnRecieve(entity.jsonEntity.json);
+                        continue;
                     }
                     
                     // entities with a destination get routed directly

@@ -23,7 +23,7 @@ namespace GameMachine.World
 
         public void ExpireNpcs()
         {
-            var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.5f).ToArray();
+            var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.9f).ToArray();
             foreach (var item in itemsToRemove)
             {
                 Logger.Debug("Removing " + item.Key);
