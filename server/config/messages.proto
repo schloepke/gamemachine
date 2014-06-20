@@ -256,6 +256,7 @@ message NativeBytes {
 
 message JsonEntity {
   required string json = 1;
+  optional string klass = 2;
 }
 
 message JsonStorage {
