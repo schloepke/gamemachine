@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using  System.Text.RegularExpressions;
 using GameMachine.World;
+using TrackExtra = GameMachine.Messages.TrackExtra;
 
 namespace GameMachine.World
 {
@@ -51,7 +52,17 @@ namespace GameMachine.World
                 {
                     // Update existing npc
                     Npc npc = npcs [update.entityId];
-                    npc.UpdateTarget(new Vector3(update.x, update.z, update.y));
+
+                    if (update.trackExtra == null)
+                    {
+                        npc.UpdateTarget(new Vector3(update.x, update.z, update.y));
+                    } else
+                    {
+                        TrackExtra extra = update.trackExtra;
+                        Vector3 target = new Vector3(update.x, update.z, update.y);
+                        Vector3 direction = new Vector3(extra.direction.x, extra.direction.y, extra.direction.z);
+                        npc.UpdatePlayer(target, direction, extra.speed);
+                    }
 
                 } else
                 {
@@ -80,6 +91,13 @@ namespace GameMachine.World
                         npc.name = update.entityId;
                         npcs.Add(update.entityId, npc);
                         npc.transform.position = npc.SpawnLocation(new Vector3(update.x, 0f, update.y));
+
+                        if (npcType == "OtherPlayer")
+                        {
+                            npc.isPlayer = true;
+                            TrackExtra extra = update.trackExtra;
+                        }
+
                         //npc.transform.position = new Vector3(update.x, 40f, update.y);
                     }
                 }

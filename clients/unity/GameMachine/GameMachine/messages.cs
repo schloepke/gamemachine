@@ -31,6 +31,14 @@ namespace GameMachine.Messages
       get { return _velocity; }
       set { _velocity = value; }
     }
+    private GameMachine.Messages.Vector3 _direction = null;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"direction", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.Vector3 direction
+    {
+      get { return _direction; }
+      set { _direction = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -786,6 +794,37 @@ namespace GameMachine.Messages
     {
       get { return _name; }
       set { _name = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ClientManagerEvent")]
+  public partial class ClientManagerEvent : global::ProtoBuf.IExtensible
+  {
+    public ClientManagerEvent() {}
+    
+    private string _client_id;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"client_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string client_id
+    {
+      get { return _client_id; }
+      set { _client_id = value; }
+    }
+    private string _player_id;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"player_id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string player_id
+    {
+      get { return _player_id; }
+      set { _player_id = value; }
+    }
+    private string _event;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"event", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string @event
+    {
+      get { return _event; }
+      set { _event = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1933,6 +1972,14 @@ namespace GameMachine.Messages
     {
       get { return _jsonStorage; }
       set { _jsonStorage = value; }
+    }
+    private GameMachine.Messages.ClientManagerEvent _clientManagerEvent = null;
+    [global::ProtoBuf.ProtoMember(59, IsRequired = false, Name=@"clientManagerEvent", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.ClientManagerEvent clientManagerEvent
+    {
+      get { return _clientManagerEvent; }
+      set { _clientManagerEvent = value; }
     }
     private GameMachine.Messages.TrackExtra _trackExtra = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"trackExtra", DataFormat = global::ProtoBuf.DataFormat.Default)]

@@ -13,7 +13,9 @@ namespace GameMachine.World
         
         private EntityTracking entityTracking;
         private NpcManager npcManager;
-        
+        private KAM3RA.User cameraUser;
+        private GameMachine.Messages.Vector3 directionVector = new GameMachine.Messages.Vector3();
+
         void Start()
         {
             
@@ -26,16 +28,28 @@ namespace GameMachine.World
 
             npcManager = world.GetComponent<NpcManager>() as NpcManager;
 
-            InvokeRepeating("UpdateTracking", 0.010f, 0.06F);
+            GameObject camera = GameObject.Find("KAM3RA");
+            cameraUser = camera.GetComponent<KAM3RA.User>();
+
+            InvokeRepeating("UpdateTracking", 0.010f, 0.08F);
         }
         
         void UpdateTracking()
         {
 
             Vector3 position = this.gameObject.transform.position;
-                
+            Vector3 direction = cameraUser.Direction;
+            Logger.Debug("DIRECTION " + direction.ToString());
+            directionVector.x = direction.x;
+            directionVector.y = direction.y;
+            directionVector.z = direction.z;
+
             TrackingUpdate update = new TrackingUpdate(User.Instance.username, position.x, position.z, position.y);
             update.entityType = "player";
+            TrackExtra trackExtra = new TrackExtra();
+            trackExtra.speed = 4.0f;
+            trackExtra.direction = directionVector;
+            update.trackExtra = trackExtra;
 
             // Get everyone
             //update.neighborEntityType = "npc";
