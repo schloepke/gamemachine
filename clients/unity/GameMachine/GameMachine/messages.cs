@@ -1601,6 +1601,23 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Regions")]
+  public partial class Regions : global::ProtoBuf.IExtensible
+  {
+    public Regions() {}
+    
+    private string _regions;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"regions", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string regions
+    {
+      get { return _regions; }
+      set { _regions = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Entity")]
   public partial class Entity : global::ProtoBuf.IExtensible
   {
@@ -1980,6 +1997,14 @@ namespace GameMachine.Messages
     {
       get { return _clientManagerEvent; }
       set { _clientManagerEvent = value; }
+    }
+    private GameMachine.Messages.Regions _regions = null;
+    [global::ProtoBuf.ProtoMember(60, IsRequired = false, Name=@"regions", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.Regions regions
+    {
+      get { return _regions; }
+      set { _regions = value; }
     }
     private GameMachine.Messages.TrackExtra _trackExtra = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"trackExtra", DataFormat = global::ProtoBuf.DataFormat.Default)]

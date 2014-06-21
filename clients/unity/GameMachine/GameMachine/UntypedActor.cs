@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using  System.Collections.Generic;
 using  System.Text.RegularExpressions;
+using Entity = GameMachine.Messages.Entity;
 
 namespace GameMachine
 {
@@ -11,6 +12,7 @@ namespace GameMachine
     {
         protected List<List<string>> componentSets = new List<List<string>>();
         public ActorSystem actorSystem;
+       
 
         public UntypedActor()
         {

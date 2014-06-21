@@ -7,10 +7,21 @@ using System;
 public class RemoteActorRef : UntypedActor
 {
     private string destination;
+    private bool regional = false;
 
     public RemoteActorRef(string _destination)
     {
         destination = _destination;
+    }
+
+    public void SetRegional(bool regional)
+    {
+        this.regional = regional;
+    }
+        
+    public bool isRegional()
+    {
+        return regional;
     }
 
     public override void OnReceive(object message)
@@ -21,6 +32,13 @@ public class RemoteActorRef : UntypedActor
             entity.destination = destination;
         }
 
-        actorSystem.TellRemote(entity);
+        if (isRegional())
+        {
+            actorSystem.TellRemoteRegion(entity);
+        } else
+        {
+            actorSystem.TellRemote(entity);
+        }
+
     }
 }

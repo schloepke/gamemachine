@@ -67,7 +67,7 @@ namespace GameMachine
             Entity entity = new Entity();
             entity.id = "chatmessage";
             entity.chatMessage = message;
-            actorSystem.Find("/remote/default").Tell(entity);
+            actorSystem.FindRemote("default").Tell(entity);
         }
 
         // Simple usage, just sends text
@@ -84,7 +84,7 @@ namespace GameMachine
             chatMessage.type = messageType;
             chatMessage.senderId = senderId;
             entity.chatMessage = chatMessage;
-            actorSystem.Find("/remote/default").Tell(entity);
+            actorSystem.FindRemote("default").Tell(entity);
         }
     
         // flags is a pipe separated list of strings.  Currently subscribers is the only flag recognized
@@ -105,7 +105,7 @@ namespace GameMachine
             chatChannel.flags = flags;
             joinChat.chatChannel.Add(chatChannel);
             entity.joinChat = joinChat;
-            actorSystem.Find("/remote/default").Tell(entity);
+            actorSystem.FindRemote("default").Tell(entity);
         }
     
         public void leaveChannel(string channelName)
@@ -118,7 +118,7 @@ namespace GameMachine
             chatChannel.name = channelName;
             leaveChat.chatChannel.Add(chatChannel);
             entity.leaveChat = leaveChat;
-            actorSystem.Find("/remote/default").Tell(entity);
+            actorSystem.FindRemote("default").Tell(entity);
         }
 
         // Tells the chat system to send you a complete list of channels you are subscribed to.
@@ -129,7 +129,7 @@ namespace GameMachine
             Entity entity = new Entity();
             entity.id = "chat_status";
             entity.chatStatus = new ChatStatus();
-            actorSystem.Find("/remote/default").Tell(entity);
+            actorSystem.FindRemote("default").Tell(entity);
         }
 
         private void processChannels(ChatChannels chatChannels)

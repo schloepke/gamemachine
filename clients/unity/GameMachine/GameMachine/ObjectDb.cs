@@ -33,13 +33,13 @@ namespace GameMachine
             get.entityId = entityId;
             get.playerId = playerId;
             entity.objectdbGet = get;
-            ActorSystem.Instance.Find("/remote/default").Tell(entity);
+            ActorSystem.Instance.FindRemote("default").Tell(entity);
         }
         public void Save(object message)
         {
             Entity entity = message as Entity;
             entity.save = true;
-            ActorSystem.Instance.Find("/remote/default").Tell(entity);
+            ActorSystem.Instance.FindRemote("default").Tell(entity);
         }
         public override void OnReceive(object message)
         {

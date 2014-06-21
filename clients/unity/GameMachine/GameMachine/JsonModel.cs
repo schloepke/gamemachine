@@ -45,7 +45,7 @@ namespace GameMachine
 
         public void Send()
         {
-            string destination = "/remote/" + destinations [this.GetType().Name];
+            string destination = destinations [this.GetType().Name];
             Send(destination);
         }
 
@@ -62,7 +62,7 @@ namespace GameMachine
 
             entity.jsonEntity = jsonEntity;
             entity.destination = destination;
-            ActorSystem.Instance.Find(destination).Tell(entity);
+            ActorSystem.Instance.FindRemote(destination).Tell(entity);
         }
 
     }

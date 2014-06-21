@@ -30,7 +30,7 @@ namespace GameMachine.World
             var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.9f).ToArray();
             foreach (var item in itemsToRemove)
             {
-                Logger.Debug("Removing " + item.Key);
+                //Logger.Debug("Removing " + item.Key);
                 Destroy(item.Value.gameObject);
                 npcs.Remove(item.Key);
             }

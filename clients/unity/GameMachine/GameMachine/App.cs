@@ -77,11 +77,21 @@ namespace GameMachine
             remoteEcho = new RemoteEcho();
             remoteEcho.AddComponentSet("EchoTest");
             ActorSystem.Instance.RegisterActor(remoteEcho);
-            
+
+            RegionHandler regionHandler = new RegionHandler();
+            regionHandler.AddComponentSet("Regions");
+            ActorSystem.Instance.RegisterActor(regionHandler);
+            InvokeRepeating("UpdateRegions", 2.0f, 20.0F);
+
             RemoteEcho.EchoReceived callback = OnEchoReceived;
             remoteEcho.OnEchoReceived(callback);
             running = true;
             Logger.Debug("App running - waiting to verify connection");
+        }
+
+        void UpdateRegions()
+        {
+            RegionHandler.SendRequest();
         }
 
         void OnEchoReceived()

@@ -54,16 +54,32 @@ namespace GameMachine
             actors.Add(name, actor);
         }
 
+        public UntypedActor FindRemote(string name)
+        {
+            return Find(name, false, true);
+        }
+
+
+        public UntypedActor FindRegional(string name)
+        {
+            return Find(name, true, true);
+        }
+
         public UntypedActor Find(string name)
+        {
+            return Find(name, false, false);
+        }
+
+        public UntypedActor Find(string name, bool regional, bool remote)
         {
             if (actors.ContainsKey(name))
             {
                 return actors [name];
-            } else if (name.StartsWith("/remote/"))
+            } else if (remote)
             {
-                name = name.Replace("/remote/", "");
                 RemoteActorRef remoteActorRef = new RemoteActorRef(name);
                 remoteActorRef.SetActorSystem(this);
+                remoteActorRef.SetRegional(regional);
                 return remoteActorRef;
             } else
             {
@@ -74,6 +90,17 @@ namespace GameMachine
         public void TellRemote(Entity entity)
         {
             client.SendEntity(entity);
+        }
+
+        public void TellRemoteRegion(Entity entity)
+        {
+            if (regionClient == null)
+            {
+                Logger.Debug("No region client set!");
+            } else
+            {
+                regionClient.SendEntity(entity);
+            }
         }
 
         private void CreateMethodCache()
