@@ -3,7 +3,7 @@ module GameMachine
 
     def post_init(*args)
       @paths = {}
-      schedule_update(80)
+      #schedule_update(80)
     end
 
     def on_receive(message)

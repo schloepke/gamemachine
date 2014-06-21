@@ -37,6 +37,7 @@ module Example
     end
 
     def get_players
+      @players = {}
       commands.grid.neighbors(position.x,position.y).each do |player|
         @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
       end

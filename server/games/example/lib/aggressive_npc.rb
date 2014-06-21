@@ -36,8 +36,10 @@ module Example
     def update_target
       if target = players.fetch(target_id,nil)
         movement.update_target(target[:vector])
+        true
       else
         @target_id = nil
+        false
       end
     end
 
@@ -47,7 +49,7 @@ module Example
           movement.set_target(player[:vector])
           @target_id = player[:id]
           movement.speed_scale = 3
-          #log("target chosen")
+          #log("target chosen #{@target_id}")
         end
       end
     end
@@ -97,7 +99,7 @@ module Example
         :combat_ability => 'bite'
       )
       CombatController.find.tell(attack)
-      log("attacked target")
+      #log("attacked target #{target_id}")
       @last_attack = Time.now.to_i
     end
 
@@ -122,9 +124,24 @@ module Example
 
       if @acquire_target_counter >= @acquire_target_interval
         check_players
-        if has_players? && !has_target?
-          choose_target
+        if has_players?
+          unless has_target?
+            choose_target
+          end
+        else
+          # No players but we have a player target?  Player must have logged out
+          # or otherwise disappeared, so we need to reset
+          if @target_id && @target_id != 'home'
+            GameMachine.logger.info "#{id} No players but has target!?? (target: #{@target_id})"
+            reset_target
+            go_home!
+          elsif movement.position.distance(home) > 0
+            GameMachine.logger.info "#{id} No players but is #{position.distance(home)} from home (target: #{@target_id})"
+            reset_target
+            go_home!
+          end
         end
+
         @acquire_target_counter = 0
       end
 
@@ -136,8 +153,14 @@ module Example
         if movement.reached_target
           reset_target
         else
-          update_target
-          movement.update
+          if update_target
+            movement.update
+          else
+            # Target out of range for some reason (logged out, etc..)
+            GameMachine.logger.info "#{id} lost target! #{@target_id}"
+            reset_target
+            go_home!
+          end
         end
       end
 

@@ -17,18 +17,20 @@ module Example
     end
 
     def on_receive(message)
-      #GameMachine.logger.info "Combatcontroller #{message}"
+      GameMachine.logger.info "Combatcontroller #{message}"
       if message.is_a?(Attack)
         #GameMachine.logger.info "looking up stats for #{message.target}"
         if user_stats = UserStats.find(message.target)
           GameMachine.logger.info "health #{user_stats.health}"
-          dmg = damage
-          if user_stats.health - dmg <= 0
-            user_stats.health = 0
-          else
-            user_stats.health -= dmg
+          if hit?
+            dmg = damage
+            if user_stats.health - dmg <= 0
+              user_stats.health = 0
+            else
+              user_stats.health -= dmg
+            end
+            user_stats.save
           end
-          user_stats.save
         end
       end
     end

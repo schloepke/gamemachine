@@ -93,7 +93,7 @@ module GameMachine
     end
 
     def to_json_entity
-      MessageLib::JsonEntity.new.set_json(to_json)
+      MessageLib::JsonEntity.new.set_json(to_json).set_klass(self.class.name)
     end
 
     def to_storage_entity

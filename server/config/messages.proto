@@ -89,7 +89,6 @@ message ChatMessage {
   optional Entity entity = 5;
 }
 
-
 message ChatStatus {
 }
 
@@ -113,6 +112,12 @@ message ClientManagerRegister {
   optional string events = 1;
   optional string registerType = 2;
   optional string name = 3;
+}
+
+message ClientManagerEvent {
+  required string client_id = 1;
+  required string player_id = 2;
+  required string event = 3;
 }
 
 message Subscribers {
@@ -310,6 +315,7 @@ message Entity {
   optional ClientEvent clientEvent = 56;
   optional ClientEvents clientEvents = 57;
   optional JsonStorage jsonStorage = 58;
+  optional ClientManagerEvent clientManagerEvent = 59;
   //GAME_ENTITY_MESSAGES
 }
 

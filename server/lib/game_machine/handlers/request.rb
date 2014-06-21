@@ -36,6 +36,7 @@ module GameMachine
         GameMachine.logger.info "Register #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
+        #GameMachine.logger.info "player_id=#{message.player.id} client_id=#{client_id}"
         register = MessageLib::ClientManagerRegister.new.
           set_register_type('client').set_name(client_id)
         entity = MessageLib::Entity.new.set_id(client_id).

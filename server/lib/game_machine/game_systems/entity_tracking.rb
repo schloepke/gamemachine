@@ -22,6 +22,7 @@ module GameMachine
         @width = grid.get_width
         @cell_count = grid.get_cell_count
         @extra_params = {}
+        commands.misc.client_manager_register(self.class.name)
       end
 
       def on_receive(message)
@@ -32,6 +33,11 @@ module GameMachine
 
           if message.track_entity
             set_entity_location(message)
+          end
+        elsif message.is_a?(MessageLib::ClientManagerEvent)
+          if message.event == 'disconnected'
+            @grid.remove(message.player_id)
+            GameMachine.logger.info "#{message.player_id} removed from grid"
           end
         else
           unhandled(message)

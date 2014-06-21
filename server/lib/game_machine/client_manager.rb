@@ -123,6 +123,10 @@ module GameMachine
         if cluster_connection?(message.client_connection)
           send_client_event(name,message.player.id,'disconnected')
         end
+
+        # Notify registered actors using a client manager event
+        send_client_manager_event(name,message.player.id,'disconnected')
+
         local_clients.delete(name)
         players.delete(message.player.id)
         self.class.local_players.delete(message.player.id)
@@ -150,6 +154,19 @@ module GameMachine
       elsif register_type == 'actor'
         local_actors[name] = events
       end
+    end
+
+
+    def send_client_manager_event(client_id,player_id,event)
+      local_actors.each do |name,events|
+        client_manager_event = create_client_manager_event(client_id,player_id,event)
+        Actor::Base.find(name).tell(client_manager_event)
+      end
+    end
+
+    def create_client_manager_event(client_id,player_id,event)
+      client_manager_event = MessageLib::ClientManagerEvent.new.
+        set_client_id(client_id).set_player_id(player_id).set_event(event)
     end
 
     def create_client_event(client_id,player_id,event)

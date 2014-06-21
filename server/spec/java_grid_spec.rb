@@ -39,6 +39,7 @@ module GameMachine
         subject.remove('blah')
         points = subject.grid_values_in_cell(0)
         expect(points).to be_empty
+        expect(subject.neighbors(0,0,25,nil)).to be_empty
       end
     end
 
