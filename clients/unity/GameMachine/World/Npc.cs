@@ -10,9 +10,13 @@ namespace GameMachine.World
         private Vector3 targetLocation ;
         public string name;
         private Vector3 currentTarget;
+        private Vector3 currentDirection;
+        private float currentSpeed;
+
         public float lastUpdate;
         private CharacterController controller;
         private Terrain terrain;
+        public bool isPlayer = false;
 
         protected override void Start()
         {
@@ -40,16 +44,72 @@ namespace GameMachine.World
                 return;
             }
 
+
+
             if (currentTarget != null)
             {
                
-                MoveToTarget(currentTarget);
-
+                if (isPlayer)
+                {
+                    MovePlayer();
+                } else
+                {
+                    MoveToTarget(currentTarget);
+                }
             }
             if (State == "Idle")
             {
                 return;
             }
+        }
+
+        public void UpdatePlayer(Vector3 target, Vector3 direction, float speed)
+        {
+            currentTarget = target;
+            currentDirection = direction;
+            currentDirection.y = 0;
+            currentSpeed = speed;
+            lastUpdate = Time.time;
+        }
+
+        public void MovePlayer()
+        {
+
+            Quaternion qTo = Quaternion.LookRotation(currentDirection);
+            
+            transform.rotation = Quaternion.Slerp(transform.rotation, qTo, 4f * Time.deltaTime);
+
+            //if (currentDirection != Vector3.zero)
+            //{
+            //    transform.rotation = Quaternion.LookRotation(currentDirection);
+            //}
+
+            float distance = Vector3.Distance(KAM3RA.User.VectorXZ(transform.position), KAM3RA.User.VectorXZ(currentTarget));
+            speed = 4f; //ScaleSpeed(distance);
+            Logger.Debug("target=" + currentTarget.ToString() + " direction=" + currentDirection.ToString() + " distance=" + distance);
+            if (distance >= 0.3f)
+            {
+                if (speed > 2.0f)
+                {
+                    if (animation ["Run"])
+                    {
+                        State = "RunForward";
+                    } else
+                    {
+                        State = "WalkForward";
+                    }
+                    
+                } else
+                {
+                    State = "WalkForward";
+                }
+                Vector3 targetDir = currentTarget - transform.position;
+                controller.SimpleMove(targetDir * 0.8f * speed);
+            } else
+            {
+                State = "Idle";
+            }
+
         }
 
         public void UpdateTarget(Vector3 target)
