@@ -4,8 +4,9 @@ using  System.Collections.Generic;
 using GameMachine;
 using Newtonsoft.Json;
 
-// Example json model class for sending and receiving json messages from the server
-//  The server has a corresponding json model
+// Json models are an alternative to protocol buffers.  They are slower and larger, but much
+// simpler to work with.  The server side has a corresponding json model.
+
 
 // Register our json models.  Register takes the typeof of our model, the fully qualified
 // classname of the server model, and the route to the server side actor we will send this to.

@@ -58,14 +58,14 @@ namespace GameMachine.World
                     if (update.entityId != User.Instance.username)
                     {
                         // New npc
-                        string npcType = "Npc";
+                        string npcType = "OtherPlayer";
 
                         if (update.entityId.StartsWith("male"))
                         {
                             npcType = "MaleNpc";
                         } else if (update.entityId.StartsWith("viking"))
                         {
-                            npcType = "NPc";
+                            npcType = "Npc";
                         } else if (update.entityId.StartsWith("golem"))
                         {
                             npcType = "GolemNpc";

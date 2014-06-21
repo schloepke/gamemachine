@@ -21,7 +21,12 @@ namespace GameMachine.World
             world.AddComponent("NpcManager");
 
             GameObject player = GameObject.Find("Player");
+            GameMachine.World.Player playerComponent = player.GetComponent<GameMachine.World.Player>();
+            playerComponent.SetNameTag(User.Instance.username);
+
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
+
+
 
             StartChat();
             //GameObject spartan = (GameObject)Instantiate(Resources.Load("Viking/Viking"));
