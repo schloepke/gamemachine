@@ -5,6 +5,7 @@ require_relative 'models/attack'
 require_relative 'models/user'
 require_relative 'models/combat_update'
 require_relative 'authentication_handler'
+require_relative 'tracking_handler'
 require_relative 'player_register'
 require_relative 'example_controller'
 require_relative 'chatbot'
@@ -53,9 +54,9 @@ module Example
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
-      spawn_npcs('male',800,Npc)
+      #spawn_npcs('male',800,Npc)
       spawn_npcs('viking',800,Npc)
-      spawn_npcs('golem',700,Npc)
+      #spawn_npcs('golem',700,Npc)
       spawn_npcs('worm',800,AggressiveNpc)
 
       GameMachine::Actor::Builder.new(CombatController).start

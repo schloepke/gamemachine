@@ -13,15 +13,20 @@ module GameMachine
       aspect %w(TrackEntity)
       aspect %w(GetNeighbors)
 
+
+
+      EXTRA = java.util.concurrent.ConcurrentHashMap.new
       attr_reader :grid, :extra_params
 
       def post_init
+        if handler_klass = Application.config.entity_tracking_handler
+         @tracking_handler = handler_klass.constantize.new
+        end
         @entity_updates = []
         @grid = Grid.default_grid
         @paths = {}
         @width = grid.get_width
         @cell_count = grid.get_cell_count
-        @extra_params = {}
         commands.misc.client_manager_register(self.class.name)
       end
 
@@ -31,12 +36,22 @@ module GameMachine
             send_neighbors(message)
           end
 
+          # If a tracking handler is defined, it must return true to have
+          # the player location saved
           if message.track_entity
-            set_entity_location(message)
+            #GameMachine.logger.info "#{message.player.id} tracked"
+            if @tracking_handler && message.entity_type == 'player'
+              if @tracking_handler.verify(message)
+                set_entity_location(message)
+              end
+            else
+              set_entity_location(message)
+            end
           end
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
             @grid.remove(message.player_id)
+            EXTRA.delete(message.player_id)
             GameMachine.logger.info "#{message.player_id} removed from grid"
           end
         else
@@ -48,12 +63,10 @@ module GameMachine
 
       def set_entity_location(entity)
         vector = entity.vector3
-        #if entity.entity_type == 'player'
-        #  GameMachine.logger.info "Player: #{vector.x} #{vector.y} #{vector.z}"
-        #end
         @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
-        if entity.has_track_extra
-          @extra_params[entity.id] = entity.track_extra
+        if entity.track_entity.has_track_extra
+          track_extra = entity.track_entity.track_extra
+          EXTRA[entity.id] = track_extra
         end
       end
 
@@ -67,8 +80,8 @@ module GameMachine
           set_z(grid_value.z)
         )
 
-        if @extra_params.has_key?(grid_value.id)
-          track_extra = @extra_params.fetch(grid_value.id)
+        if EXTRA.has_key?(grid_value.id)
+          track_extra = EXTRA.fetch(grid_value.id)
           entity.set_track_extra(track_extra)
         end
         entity

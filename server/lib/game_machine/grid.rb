@@ -26,6 +26,7 @@ module GameMachine
       )
 
         unless grids.containsKey(name)
+          GameMachine.logger.info "CREATING GRID #{name}"
           grid = JavaLib::Grid.new(grid_size,cell_size)
           grids.put(name,grid)
         end
