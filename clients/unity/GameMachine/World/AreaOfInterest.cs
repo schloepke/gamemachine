@@ -39,27 +39,15 @@ namespace GameMachine.World
 
             Vector3 position = this.gameObject.transform.position;
             Vector3 direction = cameraUser.Direction;
-            Logger.Debug("DIRECTION " + direction.ToString());
+
             directionVector.x = direction.x;
-            directionVector.y = direction.y;
             directionVector.z = direction.z;
 
             TrackingUpdate update = new TrackingUpdate(User.Instance.username, position.x, position.z, position.y);
             update.entityType = "player";
             TrackExtra trackExtra = new TrackExtra();
-            trackExtra.speed = 4.0f;
             trackExtra.direction = directionVector;
             update.trackExtra = trackExtra;
-
-            // Get everyone
-            //update.neighborEntityType = "npc";
-
-            // Don't need yet
-            //TrackExtra trackExtra = new TrackExtra();
-            //trackExtra.speed = 1.0f;
-            //trackExtra.velocity = 12.0f;
-            //update.trackExtra = trackExtra;
-                
             entityTracking.Update(update);
         }
         

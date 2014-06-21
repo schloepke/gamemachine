@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using KAM3RA;
 
+// TODO separate classes for npc and player
 namespace GameMachine.World
 {
     public class Npc : NpcController
@@ -25,6 +26,7 @@ namespace GameMachine.World
             base.Start();
             SetNameTag(name);
             controller = GetComponent<CharacterController>();
+            controller.detectCollisions = false;
             this.type = Type.Ground;
         }
 
@@ -79,14 +81,9 @@ namespace GameMachine.World
             
             transform.rotation = Quaternion.Slerp(transform.rotation, qTo, 4f * Time.deltaTime);
 
-            //if (currentDirection != Vector3.zero)
-            //{
-            //    transform.rotation = Quaternion.LookRotation(currentDirection);
-            //}
-
             float distance = Vector3.Distance(KAM3RA.User.VectorXZ(transform.position), KAM3RA.User.VectorXZ(currentTarget));
-            speed = 4f; //ScaleSpeed(distance);
-            Logger.Debug("target=" + currentTarget.ToString() + " direction=" + currentDirection.ToString() + " distance=" + distance);
+            speed = 3.7f; //ScaleSpeed(distance);
+            //Logger.Debug("target=" + currentTarget.ToString() + " direction=" + currentDirection.ToString() + " distance=" + distance);
             if (distance >= 0.3f)
             {
                 if (speed > 2.0f)
@@ -167,9 +164,7 @@ namespace GameMachine.World
                 Vector3 targetDir = target - transform.position;
                 Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
                 KAM3RA.User.LookAt2D(transform, target);
-                //newDir.y = 0;
-                //transform.rotation = Quaternion.LookRotation(newDir);
-
+               
                 controller.SimpleMove(newDir * 0.8f * speed);
             } else
             {

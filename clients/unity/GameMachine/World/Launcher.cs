@@ -26,17 +26,7 @@ namespace GameMachine.World
 
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
 
-
-
             StartChat();
-            //GameObject spartan = (GameObject)Instantiate(Resources.Load("Viking/Viking"));
-            //GameObject avatar = player.transform.Search("SpartanKing").gameObject;
-            //Destroy(avatar);
-
-
-
-
-
         }
 	
         void StartChat()
@@ -47,7 +37,6 @@ namespace GameMachine.World
             chatBox.AddComponent("Chat");
         }
 
-        // Update is called once per frame
         void Update()
         {
 	
