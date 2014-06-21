@@ -48,6 +48,8 @@ module GameMachine
       end
 
       def start
+        Grid.default_grid
+        game_preload
         GameMachine::Actor::Reloadable.update_paths(true)
         start_actor_system
         data_store
@@ -69,6 +71,14 @@ module GameMachine
         # This call blocks, make it the last thing we do
         if config.http_enabled
           start_http
+        end
+      end
+
+      def game_preload
+        begin
+          require_relative '../../games/preload.rb'
+        rescue LoadError => e
+          GameMachine.logger.info "preload.rb not found"
         end
       end
 
@@ -147,7 +157,7 @@ module GameMachine
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,4).start
+        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
