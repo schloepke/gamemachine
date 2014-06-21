@@ -20,7 +20,7 @@ RSpec.configure do |config|
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers
-    GameMachine::Application.start_game_systems
+    #GameMachine::Application.start_game_systems
     GameMachine::GameLoader.new.load_all
   end
 

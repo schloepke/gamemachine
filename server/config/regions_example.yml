@@ -1,0 +1,17 @@
+---
+development:
+  regions:
+    zone1:
+      - seed01
+      - default
+    zone2:
+      - seed02
+      - default
+test:
+  regions:
+    zone1:
+      - seed01
+      - default
+    zone2:
+      - seed02
+      - default
