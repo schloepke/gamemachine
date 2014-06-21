@@ -22,6 +22,9 @@ namespace GameMachine.World
             InvokeRepeating("ExpireNpcs", 2, 0.5F);
         }
 
+        // Remove objects from world that we haven't seen an update for in a while.  This is fairly strict
+        // right now until we put in the ability to 'warp' objects that are really behind to their proper
+        // location
         public void ExpireNpcs()
         {
             var itemsToRemove = npcs.Where(f => (Time.time - f.Value.lastUpdate) > 0.9f).ToArray();
@@ -76,7 +79,7 @@ namespace GameMachine.World
                             npcType = "MaleNpc";
                         } else if (update.entityId.StartsWith("viking"))
                         {
-                            npcType = "Npc";
+                            npcType = "MaxNpc";
                         } else if (update.entityId.StartsWith("golem"))
                         {
                             npcType = "GolemNpc";
