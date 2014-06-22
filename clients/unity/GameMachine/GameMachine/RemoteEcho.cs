@@ -27,7 +27,7 @@ namespace GameMachine
             EchoTest echoTest = new EchoTest();
             echoTest.message = "echo";
             entity.echoTest = echoTest;
-            ActorSystem.Instance.Find("/remote/GameMachine/GameSystems/RemoteEcho").Tell(entity);
+            ActorSystem.Instance.FindRemote("GameMachine/GameSystems/RemoteEcho").Tell(entity);
         }
        
         public override void OnReceive(object message)

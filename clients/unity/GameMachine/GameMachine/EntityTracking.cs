@@ -55,7 +55,7 @@ namespace GameMachine
             entity.getNeighbors = CreateGetNeighbors(update.neighborEntityType, entity.vector3);
 
            
-            ActorSystem.Instance.Find("/remote/default").Tell(entity);
+            ActorSystem.Instance.FindRemote("default").Tell(entity);
         }
         public override void OnReceive(object message)
         {
