@@ -19,6 +19,10 @@ module GameMachine
         grid.get(id)
       end
 
+      def get_neighbors_for(id,entity_type='player')
+        grid.getNeighborsFor(id,entity_type)
+      end
+
       def neighbors(x,y,type='player')
         grid.neighbors(x,y,type)
       end

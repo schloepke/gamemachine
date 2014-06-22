@@ -124,6 +124,11 @@ public class Grid {
 		return a;
 	}
 
+	public ArrayList<GridValue> getNeighborsFor(String id, String entityType) {
+		GridValue gridValue = get(id);
+		return neighbors(gridValue.x, gridValue.y, entityType);
+	}
+	
 	public GridValue get(String id) {
 		return objectIndex.get(id);
 	}

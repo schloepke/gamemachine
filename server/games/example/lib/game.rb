@@ -1,6 +1,6 @@
 require 'digest/md5'
 require 'virtus'
-require_relative 'models/user_stats'
+require_relative 'models/vitals'
 require_relative 'models/attack'
 require_relative 'models/user'
 require_relative 'models/combat_update'
@@ -14,6 +14,7 @@ require_relative 'npc_movement'
 require_relative 'npc'
 require_relative 'aggressive_npc'
 require_relative 'npc_group'
+require_relative 'player_manager'
 
 module Example
   class Game
@@ -26,6 +27,7 @@ module Example
 
     def start
 
+      GameMachine::Actor::Builder.new(PlayerManager).start
       # Start your custom actors here.  In this example we show a simple method
       # for loading some static data and passing it to the actor.
       

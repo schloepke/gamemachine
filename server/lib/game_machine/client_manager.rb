@@ -11,6 +11,18 @@ module GameMachine
       end
     end
 
+    # Includes region + combined.
+    def self.local_connections
+      local_players.select {|player_id,type| type != 'cluster'}
+    end
+
+    # Cluster only connections.  We should not be handling things like
+    # entity tracking for this type of connection.  This is for stuff that is
+    # not latency sensitive such as chat, groups, etc..
+    def self.cluster_connections
+      local_players.select {|player_id,type| type == 'cluster'}
+    end
+
     def self.send_to_player(message)
       if local_players.has_key?(message.player.id)
         Actor::Base.find(message.player.id).tell(message)
@@ -108,10 +120,12 @@ module GameMachine
 
     def cluster_connection?(client_connection)
       case client_connection.type
-      when 'local'
-        false
-      else
+      when 'cluster'
         true
+      when 'combined'
+        true
+      else
+        false
       end
     end
 
@@ -147,7 +161,7 @@ module GameMachine
         end
         local_clients[name] = message.client_connection
         players[message.player.id] = name
-        self.class.local_players[message.player.id] = true
+        self.class.local_players[message.player.id] = message.client_connection.type
         get_sender.tell(message,get_self)
         GameMachine.logger.debug("#{self.class.name} client #{name} registered")
       # Actor register

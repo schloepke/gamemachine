@@ -33,6 +33,12 @@ module GameMachine
       end
     end
 
+    def start_player_manager
+      if klass = Application.config.player_manager
+        Actor::Builder.new(klass.constantize).start
+      end
+    end
+
     def load_game(bootfile)
       require bootfile
     end

@@ -1,8 +1,9 @@
 module Example
   class Npc
     include GameMachine::Commands
+    include Models
 
-    attr_accessor :position, :id, :players, :movement, :player_index, :home
+    attr_accessor :position, :id, :players, :movement, :player_index, :home, :vitals
 
     def initialize(id)
       @id = id
@@ -15,7 +16,22 @@ module Example
       @home = GameMachine::Vector.from(position)
       get_players
       #GameMachine.logger.info "Npc #{id} created"
+      find_or_create_vitals
       post_init
+    end
+
+    def find_or_create_vitals
+      unless @vitals = Vitals.find(id,5000)
+        @vitals = Vitals.new(
+          :id => id,
+          :max_health => 50,
+          :health => 50,
+          :defense_skill => 5,
+          :offense_skill => 5,
+          :entity_type => 'npc'
+        )
+        @vitals.save
+      end
     end
 
     def post_init

@@ -56,11 +56,13 @@ module Example
       end
 
       # Create character
-      stats = UserStats.new(
+      stats = Vitals.new(
         :id => username,
+        :max_health => 100,
         :health => 100,
         :defense_skill => 10,
-        :offense_skill => 10
+        :offense_skill => 10,
+        :entity_type => 'player'
       )
       if stats.valid?
         stats.save

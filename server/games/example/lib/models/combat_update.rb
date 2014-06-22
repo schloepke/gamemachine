@@ -6,7 +6,6 @@ module Example
       attribute :combat_ability, String
       attribute :damage, Integer
       attribute :target_health, Integer
-      attribute :target_dead, Integer
     end
   end
 end

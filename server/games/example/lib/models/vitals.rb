@@ -1,12 +1,14 @@
 module Example
   module Models
-    class UserStats < GameMachine::Model
+    class Vitals < GameMachine::Model
+      attribute :max_health, Integer
       attribute :health, Integer
       attribute :id, String
       attribute :defense_skill, Integer
       attribute :offense_skill, Integer
+      attribute :entity_type, String
 
-      set_id_scope :ustats
+      set_id_scope :vitals
     end
   end
 end

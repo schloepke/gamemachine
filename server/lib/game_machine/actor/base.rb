@@ -103,7 +103,12 @@ module GameMachine
 
         def model_filter(message)
           if message.is_a?(MessageLib::Entity) && message.has_json_entity
-            message = Model.from_entity(message)
+            # Don't convert outgoing messages
+            if message.send_to_player
+              message
+            else
+              message = Model.from_entity(message)
+            end
           end
           message
         end

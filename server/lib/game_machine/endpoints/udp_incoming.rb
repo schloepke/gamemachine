@@ -24,10 +24,16 @@ module GameMachine
         end
       end
 
+      def client_id_from_message(message)
+        "#{message.host}:#{message.port}"
+      end
+
       def handle_incoming(message)
-        client_id = "#{message.host}:#{message.port}"
-        client_connection = create_client_connection(client_id)
-        client_message = create_client_message(message.bytes,client_connection)
+        client_id = client_id_from_message(message)
+        client_message = MessageLib::ClientMessage.parse_from(message.bytes)
+        client_connection = create_client_connection(
+          client_id,client_message.connection_type
+        )
 
         # Ensure we kill the player gateway actor on logout or on new connection
         if client_message.has_player_logout || client_message.has_player_connect
@@ -73,15 +79,28 @@ module GameMachine
         GameMachine.logger.info "Player gateway sent poison pill to #{player_id}"
       end
 
-      def create_client_connection(client_id)
-        MessageLib::ClientConnection.new.set_id(client_id).
-          set_gateway(self.class.name).set_server(Application.config.name)
+      # region and cluster connections are for when you have
+      # dedicated region servers.  If you do not the connection type can be
+      # left out by the client and it will default to combined.
+      def client_connection_type(connection_type)
+        if connection_type.nil?
+          'combined'
+        else
+          if connection_type == 1
+            'region'
+          elsif connection_type == 2
+            'cluster'
+          else
+            'combined'
+          end
+        end
       end
-
-      def create_client_message(data,client_connection)
-        MessageLib::ClientMessage.parse_from(data).set_client_connection(
-          client_connection
-        )
+      
+      def create_client_connection(client_id,connection_type)
+        MessageLib::ClientConnection.new.set_id(client_id).
+          set_gateway(self.class.name).
+          set_server(Application.config.name).
+          set_type(client_connection_type(connection_type))
       end
 
     end
