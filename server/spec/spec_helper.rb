@@ -17,6 +17,7 @@ RSpec.configure do |config|
 
   config.before(:each) do
     GameMachine::AuthHandlers::Base.instance
+    GameMachine::Application.create_grids
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers

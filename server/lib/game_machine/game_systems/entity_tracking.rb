@@ -23,8 +23,8 @@ module GameMachine
          @tracking_handler = handler_klass.constantize.new
         end
         @entity_updates = []
-        @grid = Grid.default_grid
-        @aoe_grid = Grid.find_or_create('aoe',4000,5)
+        @grid = Grid.find_or_create('default')
+        @aoe_grid = Grid.find_or_create('aoe')
         @paths = {}
         @width = grid.get_width
         @cell_count = grid.get_cell_count

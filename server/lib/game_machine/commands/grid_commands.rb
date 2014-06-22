@@ -2,15 +2,10 @@ module GameMachine
   module Commands
     class GridCommands
 
-      attr_reader :grid_name, :aoe_grid, :grid
+      attr_reader :aoe_grid, :grid
       def initialize
-        @grid_name = 'default'
-        @aoe_grid = Grid.find_or_create('aoe',4000,5)
-        @grid = Grid.find_or_create(grid_name)
-      end
-
-      def set_grid(grid_name)
-        @grid_name = grid_name
+        @aoe_grid = Grid.find_or_create('aoe')
+        @grid = Grid.find_or_create('default')
       end
 
       def find_by_id(id)

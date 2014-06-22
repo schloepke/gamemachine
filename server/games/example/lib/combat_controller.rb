@@ -17,7 +17,7 @@ module Example
 
     attr_reader :aoe_grid
     def post_init(*args)
-      @aoe_grid = GameMachine::Grid.find_or_create('aoe',4000,5)
+      @aoe_grid = GameMachine::Grid.find_or_create('aoe')
     end
 
     def hit?

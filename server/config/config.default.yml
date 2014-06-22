@@ -1,0 +1,58 @@
+---
+development:
+  servers:
+    default:
+      environment: development
+      # Authorization handler.  Public allows any authtoken to be used and
+      # does not check username/password
+      auth_handler: GameMachine::AuthHandlers::Public
+      # Class that handles user registration via web page
+      player_register_handler: Example::PlayerRegister
+      # Top level actor that handles game messages. Don't change this 
+      game_handler: GameMachine::Handlers::Request
+      # Hook for accessing location updates from players (cheat prevention)
+      entity_tracking_handler: Example::TrackingHandler
+      # Size of the router for incoming message from all clients
+      game_handler_routers: 10
+      # Also in the pipeline for all incoming requests, should be set the same as
+      # game_handler_routers
+      request_handler_routers: 10
+      # router size for the udp actor that handles all incoming upd messages
+      udp_routers: 10
+      # What data store the object database will use (one of memory, mapdb, or couchbase)
+      data_store: couchbase
+      # Advanced settings for write behind cache.  -1 disables.  This is fine for
+      # all but large games with high traffic (hundreds of writes per second)
+      cache_write_interval: -1
+      cache_writes_per_second: -1
+      # Spatial grids.  default, aoe, and local_chat are required.
+      # value is grid size, cell size, and update frequency
+      grids:
+        default: 4000, 50, 1
+        aoe: 4000, 5, 1
+        local_chat: 4000, 10, 10
+      # Couchbase config
+      couchbase_servers:
+        - http://192.168.1.8:8091/pools
+      #auth_handler: Example::AuthenticationHandler
+      http_enabled: true
+      http_host: 192.168.1.8
+      http_port: 3000
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 8100
+      udt_enabled: false
+      udt_host: localhost
+      udt_port: 8200
+      tcp_enabled: true
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
+      akka_host: localhost
+      akka_port: 2551
+      # array of seed servers.  Required if node is in a cluster
+      seeds: []
+      # Mono server settings
+      mono_enabled: false
+      mono_dll: test_actor.dll
+      mono_gateway_host: 127.0.0.1
+      mono_gateway_port: 8800

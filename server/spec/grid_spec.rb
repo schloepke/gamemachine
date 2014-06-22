@@ -8,6 +8,20 @@ module GameMachine
       Grid.reset_grids
     end
 
+    describe "#update_freqency_for" do
+      it "returns the update freqency for the named grid" do
+        Grid.load_from_config
+        expect(Grid.update_frequency_for('default')).to eq 1
+      end
+    end
+
+    describe "#load_from_config" do
+      it "should create grids from config" do
+        Grid.load_from_config
+        expect(Grid.config.has_key?('default')).to be_true
+      end
+    end
+
     describe "#find_or_create" do
       it "creates a grid if none exists for the given name" do
         grid = subject.find_or_create('test')

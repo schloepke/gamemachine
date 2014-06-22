@@ -75,8 +75,7 @@ module GameMachine
       end
 
       def create_grids
-        Grid.default_grid
-        Grid.find_or_create('aoe',4000,5)
+        Grid.load_from_config
       end
 
       def game_preload

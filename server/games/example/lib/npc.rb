@@ -17,12 +17,19 @@ module Example
       @home = GameMachine::Vector.from(position)
       get_players
       #GameMachine.logger.info "Npc #{id} created"
-      find_or_create_vitals
+      initialize_vitals
       post_init
     end
 
-    def find_or_create_vitals
-      unless @vitals = Vitals.find(id,5000)
+    def initialize_vitals
+      if @vitals = Vitals.find(id,5000)
+
+        # Put dead npc's back to full health
+        if @vitals.health < @vitals.max_health
+          @vitals.health = @vitals.max_health
+          @vitals.save
+        end
+      else
         @vitals = Vitals.new(
           :id => id,
           :max_health => 50,

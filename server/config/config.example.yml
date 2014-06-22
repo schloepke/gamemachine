@@ -1,5 +1,4 @@
 development:
-  protogen_out_dir: /changeme
   servers:
     default:
       id: 1
@@ -8,22 +7,23 @@ development:
       environment: development
       player_register_handler: Example::PlayerRegister
       game_handler: GameMachine::Handlers::Request
+      entity_tracking_handler: Example::TrackingHandler
       game_handler_routers: 10
       request_handler_routers: 10
       udp_routers: 10
-      data_store: couchbase
+      data_store: mapdb
       cache_write_interval: -1
       cache_writes_per_second: -1
-      world_grid_size: 4000
-      world_grid_cell_size: 50
-      mono_enabled: true
+      grids:
+        default: 4000, 50, 1
+        aoe: 4000, 5, 1
+        local_chat: 4000, 10, 10
+      mono_enabled: false
       mono_dll: test_actor.dll
-      singleton_manager_router_count: 200
-      singleton_manager_update_interval: 100
       couchbase_servers:
-        - http://192.168.1.8:8091/pools
-      #auth_handler: Example::AuthenticationHandler
-      auth_handler: GameMachine::AuthHandlers::Public
+        - http://127.0.0.1:8091/pools
+      auth_handler: Example::AuthenticationHandler
+      #auth_handler: GameMachine::AuthHandlers::Public
       http_enabled: true
       http_host: 127.0.0.1
       http_port: 3000
