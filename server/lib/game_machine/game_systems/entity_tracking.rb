@@ -16,7 +16,7 @@ module GameMachine
 
 
       EXTRA = java.util.concurrent.ConcurrentHashMap.new
-      attr_reader :grid, :extra_params
+      attr_reader :grid, :extra_params, :aoe_grid
 
       def post_init
         if handler_klass = Application.config.entity_tracking_handler
@@ -24,6 +24,7 @@ module GameMachine
         end
         @entity_updates = []
         @grid = Grid.default_grid
+        @aoe_grid = Grid.find_or_create('aoe',4000,5)
         @paths = {}
         @width = grid.get_width
         @cell_count = grid.get_cell_count
@@ -51,6 +52,7 @@ module GameMachine
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
             @grid.remove(message.player_id)
+            @aoe_grid.remove(message.player_id)
             EXTRA.delete(message.player_id)
             GameMachine.logger.info "#{message.player_id} removed from grid"
           end
@@ -64,6 +66,7 @@ module GameMachine
       def set_entity_location(entity)
         vector = entity.vector3
         @grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
+        @aoe_grid.set(entity.id,vector.x,vector.y,vector.z,entity.entity_type)
         if entity.track_entity.has_track_extra
           track_extra = entity.track_entity.track_extra
           EXTRA[entity.id] = track_extra

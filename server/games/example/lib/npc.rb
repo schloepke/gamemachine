@@ -3,9 +3,10 @@ module Example
     include GameMachine::Commands
     include Models
 
-    attr_accessor :position, :id, :players, :movement, :player_index, :home, :vitals
+    attr_accessor :position, :id, :players, :movement, :player_index, :home, :vitals, :dead
 
     def initialize(id)
+      @dead = false
       @id = id
       @position = GameMachine::Vector.new
       @last_ai = Time.now.to_i
@@ -35,6 +36,14 @@ module Example
     end
 
     def post_init
+    end
+
+    def update_combat(combat_update)
+      if combat_update.target == id && combat_update.target_health == 0
+        @dead = true
+        GameMachine.logger.info "Npc #{id} died!"
+        commands.grid.remove(id)
+      end
     end
 
     def set_spawn_point
@@ -76,6 +85,7 @@ module Example
     end
 
     def update
+      return if dead
       if movement.has_target
         if movement.reached_target
           run_ai

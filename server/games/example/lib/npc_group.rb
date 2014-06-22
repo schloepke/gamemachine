@@ -18,7 +18,12 @@ module Example
         npcs.each do |id,npc|
           npc.update
         end
+      elsif message.is_a?(Models::CombatUpdate)
+        if npc = npcs.fetch(message.target,nil)
+          npc.update_combat(message)
+        end
       end
+
     end
 
   end

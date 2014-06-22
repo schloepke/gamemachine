@@ -48,7 +48,7 @@ module GameMachine
       end
 
       def start
-        Grid.default_grid
+        create_grids
         game_preload
         GameMachine::Actor::Reloadable.update_paths(true)
         start_actor_system
@@ -72,6 +72,11 @@ module GameMachine
         if config.http_enabled
           start_http
         end
+      end
+
+      def create_grids
+        Grid.default_grid
+        Grid.find_or_create('aoe',4000,5)
       end
 
       def game_preload

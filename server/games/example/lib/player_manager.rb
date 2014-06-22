@@ -1,5 +1,6 @@
 module Example
   class PlayerManager < GameMachine::Actor::Base
+    include Models
 
     attr_reader :player_ids
     def post_init(*args)
@@ -10,7 +11,7 @@ module Example
 
     # All players currently logged into this node
     def update_player_ids
-      @player_ids = GameMachine::ClientManager.local_connections.values
+      @player_ids = GameMachine::ClientManager.local_connections.keys
     end
 
     def on_receive(message)

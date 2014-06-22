@@ -336,5 +336,5 @@ message ClientMessage {
   optional ErrorMessage errorMessage = 6;
   optional PlayerConnect playerConnect = 7;
   optional PlayerConnected playerConnected = 8;
-  required int32 connection_type = 9;
+  optional int32 connection_type = 9;
 }

@@ -21,6 +21,15 @@ module Example
     include GameMachine::Commands
 
     attr_reader :game_root
+
+    def self.npcs
+      if @npcs
+        @npcs
+      else
+        @npcs = java.util.concurrent.ConcurrentHashMap.new
+      end
+    end
+
     def initialize(game_root)
       @game_root = game_root
     end
@@ -57,9 +66,9 @@ module Example
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
       #spawn_npcs('male',800,Npc)
-      spawn_npcs('viking',800,Npc)
+      #spawn_npcs('viking',800,Npc)
       #spawn_npcs('golem',700,Npc)
-      spawn_npcs('worm',800,AggressiveNpc)
+      spawn_npcs('worm',2000,AggressiveNpc)
 
       GameMachine::Actor::Builder.new(CombatController).start
 
@@ -68,6 +77,9 @@ module Example
     def spawn_npcs(type,count,klass)
       count.times.map {|i| "#{type}_#{i}"}.each_slice(20).each do |group|
         name = Digest::MD5.hexdigest(group.join(''))
+        group.each do |npc_name|
+          self.class.npcs[npc_name] = name
+        end
         GameMachine::Actor::Builder.new(NpcGroup,group,klass).with_name(name).start
         sleep 0.05
       end

@@ -2,17 +2,15 @@ module GameMachine
   module Commands
     class GridCommands
 
-      attr_reader :grid_name
+      attr_reader :grid_name, :aoe_grid, :grid
       def initialize
         @grid_name = 'default'
+        @aoe_grid = Grid.find_or_create('aoe',4000,5)
+        @grid = Grid.find_or_create(grid_name)
       end
 
       def set_grid(grid_name)
         @grid_name = grid_name
-      end
-
-      def grid
-        Grid.find_or_create(grid_name)
       end
 
       def find_by_id(id)
@@ -27,8 +25,14 @@ module GameMachine
         grid.neighbors(x,y,type)
       end
 
+      def remove(id)
+        grid.remove(id)
+        aoe_grid.remove(id)
+      end
+
       def track(id,x,y,z,entity_type='npc')
         grid.set(id,x,y,z,entity_type)
+        aoe_grid.set(id,x,y,z,entity_type)
       end
 
     end

@@ -34,6 +34,7 @@ module GameMachine
         client_connection = create_client_connection(
           client_id,client_message.connection_type
         )
+        client_message.set_client_connection(client_connection)
 
         # Ensure we kill the player gateway actor on logout or on new connection
         if client_message.has_player_logout || client_message.has_player_connect

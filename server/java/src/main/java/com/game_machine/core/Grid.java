@@ -126,6 +126,10 @@ public class Grid {
 
 	public ArrayList<GridValue> getNeighborsFor(String id, String entityType) {
 		GridValue gridValue = get(id);
+		if (gridValue == null)
+		{
+			return null;
+		}
 		return neighbors(gridValue.x, gridValue.y, entityType);
 	}
 	

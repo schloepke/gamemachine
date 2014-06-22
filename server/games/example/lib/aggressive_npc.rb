@@ -104,6 +104,7 @@ module Example
     end
 
     def update
+      return if dead
       if going_home?
         if reached_home?
           log("home reached")
