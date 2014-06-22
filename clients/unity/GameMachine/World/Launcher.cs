@@ -26,6 +26,10 @@ namespace GameMachine.World
 
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
 
+            JsonModel.Register(typeof(Attack), "Example::Models::Attack", "Example/CombatController");
+            JsonModel.Register(typeof(Vitals), "Example::Models::Vitals");
+            JsonModel.Register(typeof(CombatUpdate), "Example::Models::CombatUpdate");
+
             StartChat();
         }
 	

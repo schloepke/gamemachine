@@ -12,6 +12,7 @@ namespace GameMachine.World
     {
 
         public static Dictionary<string, Npc> npcs = new Dictionary<string, Npc>();
+        public string playerType = "SwordsPlayer";
 
         NpcManager()
         {
@@ -72,14 +73,14 @@ namespace GameMachine.World
                     if (update.entityId != User.Instance.username)
                     {
                         // New npc
-                        string npcType = "OtherPlayer";
+                        string npcType = "SwordsPlayer";
 
                         if (update.entityId.StartsWith("male"))
                         {
                             npcType = "MaleNpc";
                         } else if (update.entityId.StartsWith("viking"))
                         {
-                            npcType = "MaxNpc";
+                            npcType = "Npc";
                         } else if (update.entityId.StartsWith("golem"))
                         {
                             npcType = "GolemNpc";
@@ -95,7 +96,7 @@ namespace GameMachine.World
                         npcs.Add(update.entityId, npc);
                         npc.transform.position = npc.SpawnLocation(new Vector3(update.x, 0f, update.y));
 
-                        if (npcType == "OtherPlayer")
+                        if (npcType == playerType)
                         {
                             npc.isPlayer = true;
                             TrackExtra extra = update.trackExtra;

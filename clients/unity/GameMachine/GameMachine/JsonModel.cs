@@ -37,10 +37,9 @@ namespace GameMachine
         public static void OnReceive(string remoteClass, string json)
         {
             Type t = models [remoteClass];
-            MethodInfo method 
-                = t.GetMethod("Receive", BindingFlags.Static | BindingFlags.Public);
-            
-            method.Invoke(json, null);
+            MethodInfo method = t.GetMethod("Receive");
+            string[] args = {json};
+            method.Invoke(null, args);
         }
 
         public void Send()
@@ -53,7 +52,6 @@ namespace GameMachine
         {
             string remoteClass = this.GetType().Name;
             this.klass = localToRemote [remoteClass];
-            Logger.Debug(this.klass);
 
             Entity entity = new Entity();
             entity.id = "";
