@@ -36,7 +36,6 @@ module Example
 
     def start
 
-      GameMachine::Actor::Builder.new(PlayerManager).start
       # Start your custom actors here.  In this example we show a simple method
       # for loading some static data and passing it to the actor.
       
@@ -65,11 +64,27 @@ module Example
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
 
+      # Misc player management stuff is taken care of by the player manager.
+      # This is game specific.
+      GameMachine::Actor::Builder.new(PlayerManager).start
+
+      # Our npc spawner. This is a fairly simple implementation that does not
+      # have the best fault tolerance if the NpcGroup actors die for some reason.
+      # That could be easily fixed by having them save the npc list in their
+      # post_init, and read it on startup if it exists, recreating all the npc's.
+      # A more advanced solution would query the region manager to see what region
+      # it is responsible for, and load the npc list for that region.
+
+      # Non aggressive npc's, these cannot be damaged
       #spawn_npcs('male',800,Npc)
       #spawn_npcs('viking',800,Npc)
       #spawn_npcs('golem',700,Npc)
+
+      # Highly aggressive, players can damage these
       spawn_npcs('worm',2000,AggressiveNpc)
 
+      # Single combat controller. This could alternatively
+      # run under a router to spread the load out (via with_router)
       GameMachine::Actor::Builder.new(CombatController).start
 
     end

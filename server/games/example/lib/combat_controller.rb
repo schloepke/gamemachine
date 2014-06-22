@@ -1,3 +1,15 @@
+
+# Handles all the combat.  Npc controllers and clients send Attack messages
+# to this actor which calculates damage, persists any changes, and sends out
+# combat updates to all players in the area as well as to any npc's that were
+# hit.
+
+# If the attack combat_ability is 'aoe', we use the aoe grid which is a 
+# secondary grid with a smaller radius.  Currently we use the attacker as the
+# point to query on, but it could be easily extended to use any point, so you
+# could have aoe damage with a center anywhere you want it to be.
+
+
 module Example
   class CombatController < GameMachine::Actor::Base
     include GameMachine::Commands

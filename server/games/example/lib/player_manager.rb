@@ -1,3 +1,5 @@
+
+# We use this for player specific maintenance, such as regenerating health
 module Example
   class PlayerManager < GameMachine::Actor::Base
     include Models
