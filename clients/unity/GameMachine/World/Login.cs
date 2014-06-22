@@ -70,8 +70,6 @@ namespace GameMachine.World
                 disableGui = true;
                 setConfig();
 
-
-
                 User user = User.Instance;
                 user.SetUser(username.ToString(), password.ToString());
                 GameMachine.Authentication.Success success = OnAuthenticationSuccess;

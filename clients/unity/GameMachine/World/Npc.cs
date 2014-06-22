@@ -19,6 +19,7 @@ namespace GameMachine.World
         private Terrain terrain;
         public bool isPlayer = false;
 
+
         protected override void Start()
         {
             terrain = Terrain.activeTerrain;
@@ -26,7 +27,7 @@ namespace GameMachine.World
             base.Start();
             SetNameTag(name);
             controller = GetComponent<CharacterController>();
-            controller.detectCollisions = false;
+            //controller.detectCollisions = false;
             this.type = Type.Ground;
         }
 
@@ -46,8 +47,6 @@ namespace GameMachine.World
                 return;
             }
 
-
-
             if (currentTarget != null)
             {
                
@@ -64,6 +63,8 @@ namespace GameMachine.World
                 return;
             }
         }
+
+
 
         public void UpdatePlayer(Vector3 target, Vector3 direction, float speed)
         {

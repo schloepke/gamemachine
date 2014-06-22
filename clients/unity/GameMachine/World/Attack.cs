@@ -24,7 +24,7 @@ using Newtonsoft.Json;
 // JsonModel.Register(typeof(Attack), "Example::Models::Attack");
 // attack.Send("Example/CombatController");
 
-namespace GameMachine.Example
+namespace GameMachine.World
 {
     
     public class Attack : JsonModel

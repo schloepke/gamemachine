@@ -2144,6 +2144,13 @@ namespace GameMachine.Messages
       get { return _playerConnected; }
       set { _playerConnected = value; }
     }
+    private int _connection_type;
+    [global::ProtoBuf.ProtoMember(9, IsRequired = true, Name=@"connection_type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int connection_type
+    {
+      get { return _connection_type; }
+      set { _connection_type = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }

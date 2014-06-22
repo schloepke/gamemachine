@@ -98,7 +98,7 @@ namespace GameMachine.Example
                 ChatMessage chatMessage = message as ChatMessage;
                 text = chatMessage.message;
             }
-            Logger.Debug("Chat message " + text);
+            //Logger.Debug("Chat message " + text);
             chatGui.SendMessage("receiveMessage", text);
         }
 
