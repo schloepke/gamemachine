@@ -19,6 +19,23 @@ namespace GameMachine.World
         public static void Receive(string json)
         {
             CombatUpdate combatUpdate = JsonConvert.DeserializeObject < CombatUpdate >(json);
+
+            if (GameMachine.World.Launcher.playerComponent.name == combatUpdate.target)
+            {
+                GameMachine.World.Launcher.playerComponent.Attacked(combatUpdate);
+            }
+
+            Npc npc;
+
+            if (GameMachine.World.NpcManager.npcs.ContainsKey(combatUpdate.attacker))
+            {
+                npc = GameMachine.World.NpcManager.npcs [combatUpdate.attacker];
+                npc.Attack(combatUpdate);
+            } else if (GameMachine.World.NpcManager.npcs.ContainsKey(combatUpdate.target))
+            {
+                npc = GameMachine.World.NpcManager.npcs [combatUpdate.target];
+                npc.Attacked(combatUpdate);
+            }
         }
        
         public override string ToJson()

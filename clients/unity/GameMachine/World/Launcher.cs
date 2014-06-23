@@ -11,24 +11,22 @@ namespace GameMachine.World
     public class Launcher : MonoBehaviour
     {
 
-       
+        public static GameMachine.World.Player playerComponent;
+        public static GameObject sounds;
 
         // Use this for initialization
         void Start()
         {
 	
+            sounds = GameObject.Find("Sounds");
             GameObject world = GameObject.Find("World");
             world.AddComponent("NpcManager");
 
             GameObject player = GameObject.Find("Player");
-            GameMachine.World.Player playerComponent = player.GetComponent<GameMachine.World.Player>();
+            playerComponent = player.GetComponent<GameMachine.World.Player>();
             playerComponent.SetNameTag(User.Instance.username);
 
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
-
-            JsonModel.Register(typeof(Attack), "Example::Models::Attack", "Example/CombatController");
-            JsonModel.Register(typeof(Vitals), "Example::Models::Vitals");
-            JsonModel.Register(typeof(CombatUpdate), "Example::Models::CombatUpdate");
 
             StartChat();
         }

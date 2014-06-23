@@ -12,7 +12,7 @@ namespace GameMachine.World
     {
 
         public static Dictionary<string, Npc> npcs = new Dictionary<string, Npc>();
-        public string playerType = "SwordsPlayer";
+        public string playerType = "OtherPlayer";
 
         NpcManager()
         {
@@ -73,7 +73,7 @@ namespace GameMachine.World
                     if (update.entityId != User.Instance.username)
                     {
                         // New npc
-                        string npcType = "SwordsPlayer";
+                        string npcType = "OtherPlayer";
 
                         if (update.entityId.StartsWith("male"))
                         {

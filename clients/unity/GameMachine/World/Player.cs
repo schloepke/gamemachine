@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using  System.Collections.Generic;
 using KAM3RA;
 
 namespace GameMachine.World
@@ -8,12 +9,20 @@ namespace GameMachine.World
     {
         private float attackCooldown;
         private float lastAttack;
+        private Statbar statbar;
+        public static Vitals vitals;
+        private Sounds sounds;
 
         protected override void Update()
         {
             base.Update();
 
-            if (Time.time - lastAttack < 1.0f)
+            if (vitals != null)
+            {
+                UpdateVitals();
+            }
+
+            if (Time.time - lastAttack < 0.5f)
             {
                 State = "Attack";
             }
@@ -26,11 +35,37 @@ namespace GameMachine.World
                 AoeAttack();
             }
         }
+
+        void UpdateVitals()
+        {
+            statbar.health = vitals.health;
+            vitals = null;
+        }
+
+        public void Attacked(CombatUpdate combatUpdate)
+        {
+            statbar.health = combatUpdate.target_health;
+        }
+
+
         protected override void Start()
         {
+            sounds = GameObject.Find("KAM3RA").GetComponent<Sounds>();
+
+            if (vitals != null)
+            {
+                Terrain terrain = Terrain.activeTerrain;
+                Vector3 vitalsVector = new Vector3(vitals.x, 0f, vitals.y);
+                float height = terrain.SampleHeight(vitalsVector);
+                Vector3 spawnPoint = new Vector3(vitals.x, (height + 0.05f), vitals.y);
+                this.gameObject.transform.position = spawnPoint;
+            }
+
+
             base.Start();
             attackCooldown = 1.5f;
             lastAttack = Time.time;
+            statbar = this.gameObject.GetComponent<Statbar>();
         }
         
                 
@@ -41,6 +76,7 @@ namespace GameMachine.World
             attack.target = targetId;
             attack.combat_ability = combatAbility;
             attack.Send();
+            sounds.PlaySword(); 
         }
 
         private void AoeAttack()

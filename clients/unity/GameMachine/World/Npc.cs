@@ -18,6 +18,7 @@ namespace GameMachine.World
         private CharacterController controller;
         private Terrain terrain;
         public bool isPlayer = false;
+        private float lastAttack;
 
 
         protected override void Start()
@@ -75,6 +76,17 @@ namespace GameMachine.World
             lastUpdate = Time.time;
         }
 
+        public void Attack(CombatUpdate combatUpdate)
+        {
+            lastAttack = Time.time;
+            State = "Attack";
+        }
+
+        public void Attacked(CombatUpdate combatUpdate)
+        {
+            SetNameTag(name + " (" + combatUpdate.target_health + ")");
+        }
+
         public void MovePlayer()
         {
 
@@ -83,13 +95,12 @@ namespace GameMachine.World
             transform.rotation = Quaternion.Slerp(transform.rotation, qTo, 4f * Time.deltaTime);
 
             float distance = Vector3.Distance(KAM3RA.User.VectorXZ(transform.position), KAM3RA.User.VectorXZ(currentTarget));
-            speed = 3.7f; //ScaleSpeed(distance);
-            //Logger.Debug("target=" + currentTarget.ToString() + " direction=" + currentDirection.ToString() + " distance=" + distance);
+            speed = 4.0f; //ScaleSpeed(distance);
             if (distance >= 0.3f)
             {
                 if (speed > 2.0f)
                 {
-                    if (animation ["Run"])
+                    if (animation ["Run"] || animation ["run"])
                     {
                         State = "RunForward";
                     } else
@@ -106,6 +117,12 @@ namespace GameMachine.World
             } else
             {
                 State = "Idle";
+            }
+
+
+            if (Time.time - lastAttack < 1.0f)
+            {
+                State = "Attack";
             }
 
         }
