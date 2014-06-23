@@ -16,26 +16,7 @@
               %a{:href => '/'} Game Machine
       .container-fluid
         .row
-          .col-xs-2
-            .menu
-              .messages
-                .h4 Players
-                %ul
-                  %li
-                    %a{:href => '/player_register', :target => '_blank'} Register player
-                .h4 Messages
-                %ul
-                  %li
-                    %a{:href => '/messages/game'} Edit game messages
-                  %li
-                    %a{:href => '/messages/all?format=proto'} Download protofile
-                  %li
-                    %a{:href => '/messages/all?format=view'} View all messages
-              .logs
-                .h4 Logs
-                %ul
-                  %li
-                    %a{:href => '/logs'} System logs
+          .col-xs-1
           .col-xs-9
             = yield
-          .col-xs-1
+          .col-xs-2

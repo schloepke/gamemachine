@@ -76,12 +76,12 @@ module Example
       # it is responsible for, and load the npc list for that region.
 
       # Non aggressive npc's, these cannot be damaged
-      #spawn_npcs('male',800,Npc)
-      #spawn_npcs('viking',800,Npc)
+      #spawn_npcs('male',100,Npc)
+      #spawn_npcs('viking',100,Npc)
       #spawn_npcs('golem',700,Npc)
 
       # Highly aggressive, players can damage these
-      spawn_npcs('worm',2000,AggressiveNpc)
+      #spawn_npcs('worm',1000,AggressiveNpc)
 
       # Single combat controller. This could alternatively
       # run under a router to spread the load out (via with_router)

@@ -21,13 +21,14 @@ module Example
     end
 
     def hit?
+      return true
       chance = rand(0..10)
       chance >= 5 ? true : false
     end
 
     def damage(entity_type)
       if entity_type == 'player'
-        rand(0..4)
+        rand(1..8)
       else
         rand(20..120)
       end
@@ -55,7 +56,7 @@ module Example
         neighbors = commands.grid.get_neighbors_for(attack.attacker)
 
         combat_updates.each do |combat_update|
-          #GameMachine.logger.info "#{combat_update.attacker} hit #{combat_update.target} for #{combat_update.damage} #{attack.combat_ability} damage"
+          GameMachine.logger.info "#{combat_update.attacker} hit #{combat_update.target} for #{combat_update.damage} #{attack.combat_ability} damage"
           commands.player.send_message(combat_update,player_id)
 
           if neighbors

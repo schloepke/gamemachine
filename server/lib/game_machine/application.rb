@@ -149,8 +149,10 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(2).start
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(ClientManager).start
-        Actor::Builder.new(GameSystems::RegionManager).start
         Actor::Builder.new(GameSystems::EntityLoader).start
+
+        # Our cluster singleton for managing regions
+        Actor::Builder.new(GameSystems::RegionManager).singleton
 
 
         if ENV.has_key?('RESTARTABLE')

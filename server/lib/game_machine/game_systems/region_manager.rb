@@ -3,48 +3,91 @@ module GameMachine
   module GameSystems
     class RegionManager < Actor::Base
       include GameMachine::Commands
+      include GameMachine::Models
 
-
-      def self.servers
-        if @servers
-          @servers
-        else
-          @servers = java.util.concurrent.ConcurrentHashMap.new
-        end
-      end
-
-      def self.regions
-        if @regions
-          @regions
-        else
-          @regions = java.util.concurrent.ConcurrentHashMap.new
-        end
-      end
-
-      # Return region that this server is in, if any
-      def self.region_for(server)
-        servers[server]
-      end
-
+      attr_reader :regions, :servers
       def post_init(*args)
-        RegionSettings.regions.each do |name,servers|
+        @regions = {}
+        @servers = {}
+        load_from_config
+        schedule_message('check_regions',2,:seconds)
+      end
 
-          # Placeholder
-          server = servers.first
-          self.class.regions[name] = server
-          self.class.servers[server] = name
+      def check_regions
+        unassign_down_servers
+        assign_servers
+        notify_managers
+      end
+
+      def notify_managers
+        @regions.each do |name,region|
+          if region.manager
+            region.manager.constantize.find.tell(name)
+          end
         end
+      end
+
+      def load_from_config
+        RegionSettings.regions.each do |name,manager|
+          unless region = Region.find(name,5000)
+            region = Region.new(
+              :name => name,
+              :manager => manager
+            )
+            region.save
+          end
+          regions[name] = region
+        end
+      end
+
+      def unassign_down_servers
+        regions.each do |name,region|
+          if region.server
+            unless ClusterMonitor.cluster_members.has_key?(region.server)
+              servers.delete(region.server)
+              region.server = nil
+              region.save
+            end
+          end
+        end
+      end
+
+      def assign_servers
+        regions.each do |name,region|
+          if region.server.nil?
+            ClusterMonitor.cluster_members.keys.each do |address|
+              unless servers.has_key?(address)
+                region.server = address
+                servers[address] = name
+                region.save
+                break
+              end
+            end
+          end
+        end
+      end
+
+      def server_hostname(server)
+        server.sub('akka.tcp://cluster@','').split(':').first
       end
 
       def regions_string
-        self.class.regions.map {|name,server| "#{name}=#{server}"}.join('|')
+        regions.select{|name,region| !region.server.nil?}.map do |name,region|
+          "#{region.name}=#{server_hostname(region.server)}"
+        end.join('|')
       end
 
       def on_receive(message)
-        regions_msg = MessageLib::Regions.new.set_regions(regions_string)
-        entity = MessageLib::Entity.new.set_id(message.player.id).set_regions(regions_msg)
-        commands.player.send_message(entity,message.player.id)
-        GameMachine.logger.info "#{self.class.name} sent regions to #{message.player.id}"
+        if message.is_a?(String)
+          if message == 'check_regions'
+            check_regions
+          else
+            regions_msg = MessageLib::Regions.new.set_regions(regions_string)
+            entity = MessageLib::Entity.new.set_id(message.player.id).set_regions(regions_msg)
+            commands.player.send_message(entity,message.player.id)
+            #GameMachine.logger.info "#{self.class.name} sent regions to #{message.player.id}"
+          end
+        end
       end
 
     end

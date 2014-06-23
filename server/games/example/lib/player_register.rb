@@ -62,7 +62,9 @@ module Example
         :health => 100,
         :defense_skill => 10,
         :offense_skill => 10,
-        :entity_type => 'player'
+        :entity_type => 'player',
+        :x => 500,
+        :y => 500
       )
       if stats.valid?
         stats.save

@@ -3,6 +3,7 @@
 module Example
   class PlayerManager < GameMachine::Actor::Base
     include Models
+    include GameMachine::Commands
 
     attr_reader :player_ids
     def post_init(*args)
@@ -26,7 +27,12 @@ module Example
               if vitals.health > vitals.max_health
                 vitals.health = vitals.max_health
               end
+              if grid_value = commands.grid.find_by_id(player_id)
+                vitals.x = grid_value.x
+                vitals.y = grid_value.y
+              end
               vitals.save
+              commands.player.send_message(vitals,player_id)
             end
           end
         end

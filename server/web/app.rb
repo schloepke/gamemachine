@@ -44,15 +44,15 @@ class WebApp < Sinatra::Base
 
   get '/player_register' do
     @content = {}
-    haml :player_register
+    haml :player_register, :layout => :register_layout
   end
 
   post '/player_register.html' do
     @content = controller(:player_register).set_request(request,params).create
     if @content['error']
-      haml :player_register
+      haml :player_register, :layout => :register_layout
     else
-      haml :player_registered
+      haml :player_registered, :layout => :register_layout
     end
   end
 

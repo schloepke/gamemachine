@@ -7,6 +7,8 @@ module Example
       attribute :defense_skill, Integer
       attribute :offense_skill, Integer
       attribute :entity_type, String
+      attribute :x, Integer
+      attribute :y, Integer
 
       set_id_scope :vitals
     end

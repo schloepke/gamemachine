@@ -22,7 +22,6 @@ message TrackEntity {
   optional TrackExtra trackExtra = 3;
 }
 
-
 message PlayerLogout {
   required string playerId = 1;
   optional string authtoken = 2;

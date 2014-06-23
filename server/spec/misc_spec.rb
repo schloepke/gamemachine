@@ -12,6 +12,11 @@ module GameMachine
       entity
     end
 
+    it "singleton manager" do
+      ref = Akka.instance.actor_system.actor_selection('/user/region_manager_proxy')
+      ref.tell('HELLO',nil)
+      sleep 1
+    end
 
     xit "vector3" do
       vector = MessageLib::Vector3.new.set_x(0.0)

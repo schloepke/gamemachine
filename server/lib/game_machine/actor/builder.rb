@@ -21,6 +21,18 @@ module GameMachine
         @actor_system = Akka.instance.actor_system
       end
 
+      # Special case.  Must be created like so:
+      # Actor::Builder.new(SingletonActorClass).singleton
+      # NO OTHER OPTIONS.  It will fail anyways if you do
+      def singleton
+        @actor_system.actor_of(
+          JavaLib::ClusterSingletonManager.defaultProps(
+            @props,@name,JavaLib::PoisonPill.get_instance,nil),'singleton')
+        @actor_system.actor_of(
+          JavaLib::ClusterSingletonProxy.defaultProps(
+            "user/singleton/#{@name}", nil), @name);
+      end
+
       def test_ref
         JavaLib::TestActorRef.create(@actor_system,@props,@name)
       end

@@ -20,6 +20,8 @@ module GameMachine
 
   module JavaLib
     java_import 'akka.cluster.ClusterEvent'
+    java_import 'akka.contrib.pattern.ClusterSingletonManager'
+    java_import 'akka.contrib.pattern.ClusterSingletonProxy'
     include_package 'akka.serialization'
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
