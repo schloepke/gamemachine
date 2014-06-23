@@ -504,6 +504,7 @@ namespace GameMachine.World
                 Add("Jump", "Jump");        // start a jump
                 Add("Fall", "Fall");        // after a certain velocity.y threshold, fall
                 Add("Fly", "Fly");          // flying in-air
+                Add("Attack", "attack");          // flying in-air
             }
             public string Name
             {

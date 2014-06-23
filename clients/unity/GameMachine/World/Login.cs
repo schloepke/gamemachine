@@ -106,6 +106,25 @@ namespace GameMachine.World
 
         public void OnAppStarted()
         {
+            JsonModel.Register(typeof(Attack), "Example::Models::Attack", "Example/CombatController");
+            JsonModel.Register(typeof(Vitals), "Example::Models::Vitals");
+            JsonModel.Register(typeof(CombatUpdate), "Example::Models::CombatUpdate");
+            Invoke("WaitForPlayerVitals", 0.05f);
+        }
+
+        public void WaitForPlayerVitals()
+        {
+            if (GameMachine.World.Player.vitals == null)
+            {
+                Invoke("WaitForPlayerVitals", 0.05f);
+            } else
+            {
+                OnPlayerVitalsReceived();
+            }
+        }
+
+        public void OnPlayerVitalsReceived()
+        {
             showLogin = false;
             Destroy(GameObject.Find("Main Camera"));
             Application.LoadLevelAdditive("world_main");
