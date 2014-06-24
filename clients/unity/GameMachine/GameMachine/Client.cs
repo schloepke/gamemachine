@@ -25,19 +25,29 @@ namespace GameMachine
         private string playerId;
         private string authtoken;
         private bool measure = false;
+        public bool running = false;
+
+        // 0 = combined.  Single server setup where cluster/region is on one server, or where
+        // you simply do not have regions.
+        // 1 = region.  Region connection.
+        // 2 = cluster.  Cluster connection
+        private int connectionType = 0;
         public static ConcurrentQueue<Entity> entityQueue = new ConcurrentQueue<Entity>();
 
 
-        public Client(string _playerId, string _authtoken, bool measure=false)
+        public Client(string host, int port, string _playerId, string _authtoken, bool measure=false)
         {
             playerId = _playerId;
             authtoken = _authtoken;
-            host = Config.udpHost;
-            port = Config.udpPort;
+            this.host = host;
+            this.port = port;
             clientMessage = CreateClientMessage();
             this.measure = measure;
+        }
 
-            Start();
+        public void SetConnectionType(int connectionType)
+        {
+            this.connectionType = connectionType;
         }
 
         public ClientMessage CreateClientMessage()
@@ -46,12 +56,14 @@ namespace GameMachine
             player.id = playerId;
             player.authtoken = authtoken;
             ClientMessage clientMessage = new ClientMessage();
+            clientMessage.connection_type = connectionType;
             clientMessage.player = player;
             return clientMessage;
         }
 
         public void Stop()
         {
+            running = false;
             PlayerLogout logout = new PlayerLogout();
             logout.authtoken = authtoken;
             logout.playerId = playerId;
@@ -62,8 +74,9 @@ namespace GameMachine
             udpClient.Close();
         }
 
-        private void Start()
+        public void Start()
         {
+            running = true;
             udp_ep = new IPEndPoint(IPAddress.Any, 0);
             udpClient = new UdpClient(udp_ep);
             receiveData();

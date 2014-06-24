@@ -22,8 +22,6 @@ namespace GameMachine.World
         {
             sounds = GameObject.Find("Sounds");
             GameObject world = GameObject.Find("World");
-            //world.AddComponent("NpcManager");
-            //GameObject player = GameObject.Find("Player");
             StartChat();
         }
 
@@ -33,7 +31,6 @@ namespace GameMachine.World
             player.name = playerName;
             playerComponent = player.GetComponent<GameMachine.World.Player>();
             playerComponent.SetNameTag(User.Instance.username);
-            
             AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
         }
 
@@ -69,8 +66,6 @@ namespace GameMachine.World
                     worldStarted = true;
                     AddPlayer();
                 }
-
-
             }
         }
 

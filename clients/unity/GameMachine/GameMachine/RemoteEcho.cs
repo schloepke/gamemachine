@@ -13,6 +13,9 @@ namespace GameMachine
         
         public delegate void EchoReceived();
         private EchoReceived echoReceived;
+        public delegate void RegionEchoReceived();
+        private RegionEchoReceived regionEchoReceived;
+
         private string playerId;
         
         public void OnEchoReceived(EchoReceived callback)
@@ -20,25 +23,51 @@ namespace GameMachine
             echoReceived = callback;
         }
 
-        public void Echo()
+        public void OnRegionEchoReceived(RegionEchoReceived callback)
+        {
+            regionEchoReceived = callback;
+        }
+
+        public Entity EchoMessage(string id)
         {
             Entity entity = new Entity();
-            entity.id = "echo";
+            entity.id = id;
             EchoTest echoTest = new EchoTest();
-            echoTest.message = "echo";
+            echoTest.message = id;
             entity.echoTest = echoTest;
-            ActorSystem.Instance.FindRemote("GameMachine/GameSystems/RemoteEcho").Tell(entity);
+            return entity;
+        }
+
+        public void Echo()
+        {
+
+            ActorSystem.Instance.FindRemote("GameMachine/GameSystems/RemoteEcho").Tell(EchoMessage("cluster"));
         }
        
+        public void RegionEcho()
+        {
+            ActorSystem.Instance.FindRegional("GameMachine/GameSystems/RemoteEcho").Tell(EchoMessage("region"));
+        }
+
         public override void OnReceive(object message)
         {
             Entity entity = message as Entity;
             if (entity.echoTest != null)
             {
-                if (echoReceived != null)
+                if (entity.id == "cluster")
                 {
-                    echoReceived();
+                    if (echoReceived != null)
+                    {
+                        echoReceived();
+                    }
+                } else if (entity.id == "region")
+                {
+                    if (regionEchoReceived != null)
+                    {
+                        regionEchoReceived();
+                    }
                 }
+
             }
         }
     }

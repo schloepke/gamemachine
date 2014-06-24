@@ -8,14 +8,8 @@ namespace GameMachine
     {
         public delegate void Success(string authtoken);
         public delegate void Error(string reason);
-        private string uri;
 
-        public Authentication()
-        {
-            uri = Config.authUri;
-        }
-
-        public IEnumerator Authenticate(string username, string password, Success success, Error error)
+        public IEnumerator Authenticate(string uri, string username, string password, Success success, Error error)
         {
             var form = new WWWForm();
             form.AddField("username", username);

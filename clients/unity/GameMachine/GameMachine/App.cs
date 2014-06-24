@@ -9,7 +9,7 @@ namespace GameMachine
     public class App : MonoBehaviour
     {
         public Client client;
-        private RemoteEcho remoteEcho;
+        public static RemoteEcho remoteEcho;
 
         public bool running = false;
         public bool connected = false;
@@ -40,16 +40,17 @@ namespace GameMachine
             this.disconnectTime = disconnectTime;
         }
 
-        public void Login(string username, string password, Authentication.Success success, Authentication.Error error)
+        public void Login(string uri, string username, string password, Authentication.Success success, Authentication.Error error)
         {
             Authentication auth = new Authentication();
-            StartCoroutine(auth.Authenticate(username, password, success, error));
+            StartCoroutine(auth.Authenticate(uri, username, password, success, error));
         }
 
-        public void Run(string username, string authtoken)
+        public void Run(string host, int port, string username, string authtoken)
         {
             // Create client and start actor system
-            client = new Client(username, authtoken);
+            client = new Client(host, port, username, authtoken);
+            client.Start();
             ActorSystem.Instance.Start(client);
 
             // Now create the actors
