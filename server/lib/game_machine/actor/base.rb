@@ -74,6 +74,12 @@ module GameMachine
           Actor::Ref.new(local_path(name),name)
         end
 
+        # find using fully qualified address, ie akka://cluster@ ...
+        def find_by_address(address,name=self.name)
+          path = "#{address}#{local_path(name)}"
+          Actor::Ref.new(path,name)
+        end
+
         # Find a remote actor by name
         # @return [Actor::Ref]
         def find_remote(server,name=self.name)

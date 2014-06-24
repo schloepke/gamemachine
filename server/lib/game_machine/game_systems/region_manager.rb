@@ -20,9 +20,9 @@ module GameMachine
       end
 
       def notify_managers
-        @regions.each do |name,region|
-          if region.manager
-            region.manager.constantize.find.tell(name)
+        regions.each do |name,region|
+          if region.manager && region.server
+            region.manager.constantize.find_by_address(region.server).tell(region)
           end
         end
       end
@@ -31,12 +31,16 @@ module GameMachine
         RegionSettings.regions.each do |name,manager|
           unless region = Region.find(name,5000)
             region = Region.new(
+              :id => name,
               :name => name,
               :manager => manager
             )
             region.save
           end
           regions[name] = region
+          if region.server
+            servers[region.server] = name
+          end
         end
       end
 
@@ -44,6 +48,7 @@ module GameMachine
         regions.each do |name,region|
           if region.server
             unless ClusterMonitor.cluster_members.has_key?(region.server)
+              GameMachine.logger.warn "Node #{region.server} no longer in cluster, region #{region.name} dissasociated"
               servers.delete(region.server)
               region.server = nil
               region.save
@@ -60,6 +65,7 @@ module GameMachine
                 region.server = address
                 servers[address] = name
                 region.save
+                GameMachine.logger.warn "Region #{region.name} assigned to #{region.server}"
                 break
               end
             end

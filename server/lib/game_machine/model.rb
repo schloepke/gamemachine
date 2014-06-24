@@ -55,7 +55,11 @@ module GameMachine
       end
 
       def scope_for(id)
-        "#{id_scope}|#{id}"
+        if id_scope
+          "#{id_scope}|#{id}"
+        else
+          id
+        end
       end
 
       def set_id_scope(scope)
@@ -105,11 +109,7 @@ module GameMachine
     end
 
     def save
-      if id.nil?
-        return false
-      else
-        commands.datastore.put(to_storage_entity)
-      end
+      commands.datastore.put(to_storage_entity)
     end
 
     def save!

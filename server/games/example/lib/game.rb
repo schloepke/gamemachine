@@ -15,6 +15,7 @@ require_relative 'npc'
 require_relative 'aggressive_npc'
 require_relative 'npc_group'
 require_relative 'player_manager'
+require_relative 'zone_manager'
 
 module Example
   class Game
@@ -63,6 +64,8 @@ module Example
 
       # Start our chatbot
       GameMachine::Actor::Builder.new(Chatbot,'global').start
+
+      GameMachine::Actor::Builder.new(ZoneManager).start
 
       # Misc player management stuff is taken care of by the player manager.
       # This is game specific.

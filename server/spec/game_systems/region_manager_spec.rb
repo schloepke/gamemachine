@@ -59,10 +59,13 @@ module GameMachine
 
       describe "#notify_managers" do
         it "should send message to manager of each region" do
-          expect(GameSystems::Zone1Manager).to receive(:find).
-            and_return(actor_ref)
-          expect(GameSystems::Zone2Manager).to receive(:find).
-            and_return(actor_ref)
+          subject.stub(:regions).and_return(regions)
+          region1.stub(:server).and_return(server1_address)
+          region2.stub(:server).and_return(server2_address)
+          expect(GameSystems::Zone1Manager).to receive(:find_by_address).
+            with(server1_address).  and_return(actor_ref)
+          expect(GameSystems::Zone2Manager).to receive(:find_by_address).
+            with(server2_address).  and_return(actor_ref)
           subject.notify_managers
         end
       end
@@ -76,9 +79,9 @@ module GameMachine
             with('zone2',5000).and_return(nil)
 
           expect(Models::Region).to receive(:new).
-            with(:name => 'zone1', :manager => zone1_manager).and_return(region1)
+            with(:id => 'zone1', :name => 'zone1', :manager => zone1_manager).and_return(region1)
           expect(Models::Region).to receive(:new).
-            with(:name => 'zone2', :manager => zone2_manager).and_return(region2)
+            with(:id => 'zone2', :name => 'zone2', :manager => zone2_manager).and_return(region2)
 
           expect(region1).to receive(:save)
           expect(region2).to receive(:save)
