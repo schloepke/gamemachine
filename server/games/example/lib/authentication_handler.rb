@@ -23,6 +23,8 @@ module Example
         GameMachine.logger.info "user: #{user.id} #{user.password}"
         if password == user.password
           @sessions[username] = authtoken(username,password)
+          user.authtoken = @sessions[username]
+          user.save
           return @sessions[username]
         end
       end
@@ -32,7 +34,22 @@ module Example
     # Returns a session token for a logged in user.  This must be a string and
     # should not be too long, as it gets sent with every message.
     def authtoken_for(username)
-      @sessions.fetch(username,nil)
+      if authtoken = @sessions.fetch(username,nil)
+        return authtoken
+
+      # user authenticated on different server, we have to look up their authtoken
+      # and save it in the local sessions hash
+      elsif user = User.find(username)
+        if user.authtoken
+          @sessions[username] = authtoken
+          return user.authtoken
+        else
+          nil
+        end
+      else
+        GameMachine.logger.info "Failed to find authtoken for #{username}"
+        nil
+      end
     end
 
     private

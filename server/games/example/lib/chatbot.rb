@@ -20,8 +20,8 @@ module Example
       # Then we send a regular join request
       commands.chat.join('global',chatbot_id)
 
-      # Send ourselves a 'doit' message every 5 seconds
-      schedule_message('doit',5,:seconds)
+      # Send ourselves a 'doit' message every few seconds
+      schedule_message('doit',50,:seconds)
     end
 
     def message_queue
