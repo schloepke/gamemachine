@@ -15,7 +15,7 @@ namespace GameMachine
         {
             Entity entity = new Entity();
             entity.id = "regions";
-            ActorSystem.Instance.FindRemote("GameMachine/GameSystems/RegionManager").Tell(entity);
+            ActorSystem.Instance.FindRemote("GameMachine/GameSystems/RegionService").Tell(entity);
             Logger.Debug("Send region request");
         }
         
