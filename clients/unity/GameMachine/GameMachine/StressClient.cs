@@ -25,8 +25,12 @@ namespace GameMachine
         private double updateInterval;
         private double messageSentAt;
         private GameMachine.Messages.Vector3 entityVector;
-
         private List<double> times = new List<double>();
+        private string authUri;
+
+        public string udpHost;
+        public int udpPort;
+        public int udpRegionPort;
 
         void Start()
         {
@@ -42,7 +46,7 @@ namespace GameMachine
             entityVector.z = Random.Range(5f, 1000f);
             Logger.Debug(entityVector.x + " " + entityVector.y + " " + entityVector.z);
 
-            client = new Client(username, authtoken, true);
+            client = new Client(udpHost, udpPort, username, authtoken, true);
             this.username = username;
             started = true;
             SendTimed();

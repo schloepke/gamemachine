@@ -36,11 +36,14 @@ namespace GameMachine
         
         public static void OnReceive(string remoteClass, string json)
         {
-            Logger.Debug(remoteClass);
-            Type t = models [remoteClass];
-            MethodInfo method = t.GetMethod("Receive");
-            string[] args = {json};
-            method.Invoke(null, args);
+            if (models.ContainsKey(remoteClass))
+            {
+                Type t = models [remoteClass];
+                MethodInfo method = t.GetMethod("Receive");
+                string[] args = {json};
+                method.Invoke(null, args);
+            }
+
         }
 
         public void Send()

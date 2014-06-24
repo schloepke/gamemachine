@@ -20,16 +20,15 @@ namespace GameMachine.World
         private bool disableGui = false;
         private GameMachine.App app;
         private bool showLogin = true;
+        private string authUri;
+
+        public string udpHost;
+        public int udpPort;
+        public int udpRegionPort;
 
         void setConfig()
         {
-            //string host = "162.243.128.58";
-            string host = "192.168.1.8";
-
-            GameMachine.Config.authUri = "http://" + host + ":3000/auth";
-            GameMachine.Config.udpHost = host;
-            //GameMachine.Config.udpHost = "127.0.0.1";
-            GameMachine.Config.udpPort = 8100;
+            authUri = "http://" + udpHost + ":3000/auth";
         }
 
         void OnGUI()
@@ -75,7 +74,7 @@ namespace GameMachine.World
                 GameMachine.Authentication.Success success = OnAuthenticationSuccess;
                 GameMachine.Authentication.Error error = OnAuthenticationError;
                 app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
-                app.Login(user.username, user.password, success, error);
+                app.Login(authUri, user.username, user.password, success, error);
             }
         }
 
@@ -95,7 +94,7 @@ namespace GameMachine.World
             GameMachine.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
             app.OnConnectionTimeout(connectionCallback);
 
-            app.Run(User.Instance.username, authtoken);
+            app.Run(udpHost, udpPort, User.Instance.username, authtoken);
 
         }
 

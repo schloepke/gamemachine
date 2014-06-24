@@ -7,23 +7,20 @@ using Player = GameMachine.Messages.Player;
 
 namespace GameMachine.Example
 {
-
     public class HelloGameMachine : MonoBehaviour
     {
-
         // Example of how to wire up GameMachine in your application.  
 
-   
         private GameMachine.App app;
-
+        private GameMachine.RegionClient regionClient;
+        private string authUri;
+        public string udpHost;
+        public int udpPort;
+        public int udpRegionPort;
 
         void Start()
         {
-            // Set our server properties
-            GameMachine.Config.authUri = "http://192.168.1.8:3000/auth";
-            GameMachine.Config.udpHost = "192.168.1.8";
-            //GameMachine.Config.udpHost = "127.0.0.1";
-            GameMachine.Config.udpPort = 8100;
+            authUri = "http://" + udpHost + ":3000/auth";
 
             // Replace with your own user object if you want. 
             GameMachine.User user = GameMachine.User.Instance;
@@ -37,7 +34,7 @@ namespace GameMachine.Example
             app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
 
             // Attempt to login.  Authentication success callback will be fired on success.
-            app.Login(user.username, user.password, success, error);
+            app.Login(authUri, user.username, user.password, success, error);
         }
 
         void OnAuthenticationError(string error)
@@ -53,7 +50,13 @@ namespace GameMachine.Example
             GameMachine.App.AppStarted callback = OnAppStarted;
             app.OnAppStarted(callback);
            
-            app.Run(User.Instance.username, authtoken);
+            GameMachine.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
+            app.OnConnectionTimeout(connectionCallback);
+
+            app.Run(udpHost, udpPort, User.Instance.username, authtoken);
+
+            // Region connections.  
+            StartRegionClient(authtoken);
         }
 
         // This is called once we have a connection and everything is started
@@ -74,6 +77,34 @@ namespace GameMachine.Example
             StartAreaOfInterest();
             Logger.Debug("AreaOfInterest started");
 
+        }
+
+        public void OnConnectionTimeout()
+        {
+            Logger.Debug("Connection timed out");
+        }
+
+        void StartRegionClient(string authtoken)
+        {
+            regionClient = this.gameObject.AddComponent(Type.GetType("GameMachine.RegionClient")) as GameMachine.RegionClient;
+            GameMachine.RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
+            regionClient.OnConnectionTimeout(connectionCallback);
+
+            regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
+            regionClient.Connect("zone2", udpHost);
+            RegionClient.RegionClientStarted callback = OnRegionClientStarted;
+            regionClient.OnRegionClientStarted(callback);
+        }
+
+        public void OnRegionConnectionTimeout()
+        {
+            Logger.Debug("Region Connection timed out");
+            regionClient.Disconnect();
+        }
+
+        void OnRegionClientStarted()
+        {
+            Logger.Debug("OnRegionClientStarted called");
         }
 
         void StartAreaOfInterest()

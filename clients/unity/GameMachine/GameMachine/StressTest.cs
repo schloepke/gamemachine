@@ -17,16 +17,6 @@ namespace GameMachine
             int count = 50;
             string username;
             string authtoken = "stresstest";
-            //string host = "162.243.128.58";
-            //string host = "192.168.1.8";
-            string host = "127.0.0.1";
-            
-            GameMachine.Config.authUri = "http://" + host + ":3000/auth";
-            GameMachine.Config.udpHost = host;
-            //GameMachine.Config.udpHost = "127.0.0.1";
-            GameMachine.Config.udpPort = 8100;
-
-
 
             for (int i = 0; i < count; i++)
             {
