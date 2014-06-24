@@ -154,6 +154,9 @@ module GameMachine
         # Our cluster singleton for managing regions
         Actor::Builder.new(GameSystems::RegionManager).singleton
 
+        # Hands out current region info to clients/other actors
+        Actor::Builder.new(GameSystems::RegionService).start
+
 
         if ENV.has_key?('RESTARTABLE')
           GameMachine.logger.info "restartable=true.  Will respond to tmp/gm_restart.txt"

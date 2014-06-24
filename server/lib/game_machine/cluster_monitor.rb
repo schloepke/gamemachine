@@ -40,6 +40,7 @@ module GameMachine
         @cluster.subscribe(getSelf,
                            JavaLib::ClusterEvent::MemberEvent.java_class,
                            JavaLib::ClusterEvent::UnreachableMember.java_class)
+        GameMachine.logger.info "Cluster address #{@cluster.self_address.to_string}"
       end
       @observers = []
       @notify_on_up_observers = []

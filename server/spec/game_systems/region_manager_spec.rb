@@ -133,25 +133,6 @@ module GameMachine
         end
       end
 
-      describe "#server_hsotname" do
-        it "should parse akka address to hostname" do
-          expect(subject.server_hostname(server1_address)).to eq 'localhost'
-        end
-      end
-
-      describe "#regions_string" do
-        it "should return correctly formatted string" do
-          subject.stub(:regions).and_return(regions)
-          region1.stub(:server).and_return(server1_address)
-          region2.stub(:server).and_return(server2_address)
-          expected = "zone1=localhost|zone2=localhost"
-          expect(subject.regions_string).to eq expected
-        end
-
-        it "should return empty string with no servers assigned for regions" do
-          expect(subject.regions_string).to eq ''
-        end
-      end
     end
   end
 end

@@ -1,6 +1,7 @@
 module GameMachine
   module Handlers
     class Request < Actor::Base
+      include Commands
 
       def post_init(*args)
         @auth_handler = Authentication.new
@@ -11,6 +12,7 @@ module GameMachine
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
               unregister_client(message)
+              commands.misc.player_status_change(message.player.id,:unregistered)
             end
           elsif message.has_player
             update_entities(message)
@@ -19,6 +21,7 @@ module GameMachine
             else
               if @auth_handler.authenticate!(message.player)
                 register_client(message)
+                commands.misc.player_status_change(message.player.id,:registered)
                 game_handler.tell(message)
               end
             end

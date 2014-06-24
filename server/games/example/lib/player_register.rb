@@ -64,7 +64,8 @@ module Example
         :offense_skill => 10,
         :entity_type => 'player',
         :x => 500,
-        :y => 500
+        :y => 500,
+        :zone => 'zone1'
       )
       if stats.valid?
         stats.save
