@@ -17,6 +17,7 @@ namespace GameMachine.World
         public int defense_skill { get; set; }
         public int x { get; set; }
         public int y { get; set; }
+        public string zone { get; set; }
 
         public static void Receive(string json)
         {

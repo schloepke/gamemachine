@@ -48,17 +48,38 @@ namespace GameMachine.World
         }
 
 
+        public void Spawn(float x, float y)
+        {
+            Logger.Debug("Spawn point " + x.ToString() + " " + y.ToString());
+            Terrain terrain = Terrain.activeTerrain;
+            Vector3 vitalsVector = new Vector3(x, 0f, y);
+            float height = terrain.SampleHeight(vitalsVector);
+            Vector3 spawnPoint = new Vector3(x, (height + 0.05f), y);
+            this.gameObject.transform.position = spawnPoint;
+        }
+
+        protected override void LateUpdate()
+        {
+            if (Time.time - lastAttack < 0.5f)
+            {
+                State = "Attack";
+            }
+            // set the animation state here
+            if (animation != null)
+                animation.CrossFade(States.Name);
+            
+            // update sound -- not implemented in Actor but subs would implement
+            UpdateSound();
+        }
+
         protected override void Start()
         {
             sounds = GameObject.Find("KAM3RA").GetComponent<Sounds>();
 
             if (vitals != null)
             {
-                Terrain terrain = Terrain.activeTerrain;
-                Vector3 vitalsVector = new Vector3(vitals.x, 0f, vitals.y);
-                float height = terrain.SampleHeight(vitalsVector);
-                Vector3 spawnPoint = new Vector3(vitals.x, (height + 0.05f), vitals.y);
-                this.gameObject.transform.position = spawnPoint;
+                Spawn(vitals.x, vitals.y);
+
             }
 
 
