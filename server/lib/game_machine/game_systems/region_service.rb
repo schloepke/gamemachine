@@ -52,9 +52,10 @@ module GameMachine
 
       def load_from_config
         RegionSettings.regions.each do |name,manager|
-          if region = Region.find(name)
-            self.class.regions[name] = region
-          end
+
+          # load even if nil, which can happen.  update will populate it
+          region = Region.find(name)
+          self.class.regions[name] = region
         end
       end
 
@@ -63,7 +64,7 @@ module GameMachine
       end
 
       def regions_string
-        self.class.regions.select{|name,region| !region.server.nil?}.map do |name,region|
+        self.class.regions.select{|name,region| region && !region.server.nil?}.map do |name,region|
           "#{region.name}=#{server_hostname(region.server)}"
         end.join('|')
       end
