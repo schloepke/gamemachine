@@ -15,6 +15,7 @@ module Example
       set_spawn_point
       @movement = NpcMovement.new(id,position)
       @home = GameMachine::Vector.from(position)
+      @target = GameMachine::Vector.new
       get_players
       #GameMachine.logger.info "Npc #{id} created"
       initialize_vitals
@@ -34,8 +35,6 @@ module Example
           :id => id,
           :max_health => 50,
           :health => 50,
-          :defense_skill => 5,
-          :offense_skill => 5,
           :entity_type => 'npc'
         )
         @vitals.save
@@ -84,11 +83,9 @@ module Example
     end
 
     def pick_random_target
-      target = GameMachine::Vector.new
-      target.x = position.x + rand(-30..30)
-      target.y = position.y + rand(-30..30)
-      @target = target
-      movement.set_target(target)
+      @target.x = position.x + rand(-30..30)
+      @target.y = position.y + rand(-30..30)
+      movement.set_target(@target)
     end
 
     def update

@@ -15,7 +15,7 @@ module Example
 
     def on_receive(message)
       if message == 'update'
-        npcs.each do |id,npc|
+        npcs.each_value do |npc|
           npc.update
         end
       elsif message.is_a?(Models::CombatUpdate)

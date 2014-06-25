@@ -34,7 +34,7 @@ module Example
 
       # Only update position if we moved
       if position_changed
-        commands.grid.track(id,position.x.round(2),position.y.round(2),position.z)
+        commands.grid.track(id,position.x.round(2),position.y.round(2),0)
         @position_changed = false
       end
 
