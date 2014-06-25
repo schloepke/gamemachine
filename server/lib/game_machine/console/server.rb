@@ -72,6 +72,15 @@ module GameMachine
         GameMachine::Application.start
       end
 
+      def load_server_from_file
+        path = File.join(File.expand_path(Dir.pwd),'servername.txt')
+        if File.exists?(path)
+          return File.read(path).chomp
+        else
+          nil
+        end
+      end
+
       def parse_arguments(arguments)
         options = {}
 
@@ -96,6 +105,11 @@ module GameMachine
 
         unless options.has_key?(:server)
           options[:server] = 'default'
+        end
+
+        if server = load_server_from_file
+          options[:server] = server
+          puts "server name #{server} set from servername.txt"
         end
 
         options
