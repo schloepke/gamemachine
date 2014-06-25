@@ -25,10 +25,10 @@ module GameMachine
 
     def self.send_to_player(message)
       if local_players.has_key?(message.player.id)
-        GameMachine.logger.info("#{self.class.name} send_to_local_player")
+        GameMachine.logger.info("#{self.name} send_to_local_player")
         Actor::Base.find(message.player.id).tell(message)
       else
-        GameMachine.logger.info("#{self.class.name} send_to_remote_player")
+        GameMachine.logger.info("#{self.name} send_to_remote_player")
         find.tell(message)
       end
     end
@@ -145,7 +145,7 @@ module GameMachine
         local_clients.delete(name)
         players.delete(message.player.id)
         self.class.local_players.delete(message.player.id)
-        GameMachine.logger.debug("#{self.class.name} client #{name} unregistered")
+        GameMachine.logger.info("#{self.class.name} client #{name} unregistered")
       end
     end
 
@@ -164,7 +164,7 @@ module GameMachine
         players[message.player.id] = name
         self.class.local_players[message.player.id] = message.client_connection.type
         get_sender.tell(message,get_self)
-        GameMachine.logger.debug("#{self.class.name} client #{name} registered")
+        GameMachine.logger.info("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
         local_actors[name] = events
