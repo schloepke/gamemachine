@@ -25,8 +25,10 @@ module GameMachine
 
     def self.send_to_player(message)
       if local_players.has_key?(message.player.id)
+        GameMachine.logger.info("#{self.class.name} send_to_local_player")
         Actor::Base.find(message.player.id).tell(message)
       else
+        GameMachine.logger.info("#{self.class.name} send_to_remote_player")
         find.tell(message)
       end
     end
@@ -90,7 +92,6 @@ module GameMachine
     end
 
     def send_to_remote_player(message)
-      #GameMachine.logger.info("#{self.class.name} process_player_message")
       if client_id = players.fetch(message.player.id,nil)
         if remote_ref = remote_clients.fetch(client_id,nil)
           remote_ref.tell(message)
