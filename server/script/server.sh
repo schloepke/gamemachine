@@ -22,7 +22,7 @@ OUT_FILE=$SERVER_HOME/log/game_machine.stdout
 PID_PATH=$SERVER_HOME/tmp
 PID_FILE=$PID_PATH/game_machine.pid
 mkdir -p $PID_PATH
-ARGV="$2 $3 $4 $5 $6 $7"
+ARGV="$2"
 
 start_daemon() {
 if [ -e "$PID_FILE" ]; then
@@ -31,7 +31,7 @@ if [ -e "$PID_FILE" ]; then
 else
   if [ -e "./bin/game_machine" ]; then
     echo "Starting local $APP_NAME with args $ARGV."
-    nohup ./bin/game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
+    nohup ./bin/game_machine s -s "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
   else
     echo "Starting $APP_NAME with args $ARGV."
     nohup game_machine server "$ARGV" 2>> "$ERR_FILE" >> "$OUT_FILE" &
