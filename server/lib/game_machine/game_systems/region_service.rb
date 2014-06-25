@@ -64,8 +64,15 @@ module GameMachine
       end
 
       def regions_string
-        self.class.regions.select{|name,region| region && !region.server.nil?}.map do |name,region|
-          "#{region.name}=#{server_hostname(region.server)}"
+        #self.class.regions.select{|name,region| region && !region.server.nil?}.map do |name,region|
+        #  "#{region.name}=#{server_hostname(region.server)}"
+        #end.join('|')
+        self.class.regions..map do |name,region|
+          if region
+            "#{name}="
+          else
+            "#{region.name}=#{server_hostname(region.server)}"
+          end
         end.join('|')
       end
 
