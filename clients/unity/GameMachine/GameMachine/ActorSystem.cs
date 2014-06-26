@@ -62,7 +62,13 @@ namespace GameMachine
 
         public UntypedActor FindRegional(string name)
         {
-            return Find(name, true, true);
+            if (RegionClient.connected)
+            {
+                return Find(name, true, true);
+            } else
+            {
+                return Find(name, false, true);
+            }
         }
 
         public UntypedActor Find(string name)

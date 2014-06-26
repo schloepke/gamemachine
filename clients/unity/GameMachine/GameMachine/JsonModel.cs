@@ -14,11 +14,20 @@ namespace GameMachine
         public string id { get; set; }
         public string klass { get; set; }
 
+        // We default to regional as json models are almost entirely userland, which means
+        // they will be regional/single server and not cluster wide services.
+        private bool isRegional = true;
+
         public abstract string ToJson();
 
         public static Dictionary<string, Type> models = new Dictionary<string, Type>();
         public static Dictionary<string, string> localToRemote = new Dictionary<string, string>();
         public static Dictionary<string, string> destinations = new Dictionary<string, string>();
+
+        public void SetRegional(bool regional)
+        {
+            this.isRegional = regional;
+        }
 
         public static void Register(Type t, string remoteClass)
         {
@@ -64,7 +73,15 @@ namespace GameMachine
 
             entity.jsonEntity = jsonEntity;
             entity.destination = destination;
-            ActorSystem.Instance.FindRemote(destination).Tell(entity);
+
+            if (isRegional)
+            {
+                ActorSystem.Instance.FindRegional(destination).Tell(entity);
+            } else
+            {
+                ActorSystem.Instance.FindRemote(destination).Tell(entity);
+            }
+
         }
 
     }

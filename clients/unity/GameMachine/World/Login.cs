@@ -20,16 +20,12 @@ namespace GameMachine.World
         private bool disableGui = false;
         private GameMachine.App app;
         private bool showLogin = true;
-        private string authUri;
 
-        public string udpHost;
-        public int udpPort;
-        public int udpRegionPort;
-
-        void setConfig()
-        {
-            authUri = "http://" + udpHost + ":3000/auth";
-        }
+        public static GameMachine.RegionClient regionClient;
+        public string authUri = "http://127.0.0.1:3000/auth";
+        public string udpHost = "127.0.0.1";
+        public int udpPort = 8100;
+        public int udpRegionPort = 8100;
 
         void OnGUI()
         {
@@ -67,7 +63,6 @@ namespace GameMachine.World
             if (GUI.Button(new Rect(200, 200, 100, 30), "Login"))
             {
                 disableGui = true;
-                setConfig();
 
                 User user = User.Instance;
                 user.SetUser(username.ToString(), password.ToString());
@@ -95,6 +90,7 @@ namespace GameMachine.World
             app.OnConnectionTimeout(connectionCallback);
 
             app.Run(udpHost, udpPort, User.Instance.username, authtoken);
+            StartRegionClient(authtoken);
 
         }
 
@@ -127,6 +123,33 @@ namespace GameMachine.World
             showLogin = false;
             Destroy(GameObject.Find("Main Camera"));
             Application.LoadLevelAdditive("world_main");
+        }
+
+        void StartRegionClient(string authtoken)
+        {
+            regionClient = this.gameObject.AddComponent(Type.GetType("GameMachine.RegionClient")) as GameMachine.RegionClient;
+            GameMachine.RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
+            regionClient.OnConnectionTimeout(connectionCallback);
+
+            RegionClient.RegionClientStarted callback = OnRegionClientStarted;
+            regionClient.OnRegionClientStarted(callback);
+
+            regionClient.Init(8100, User.Instance.username, authtoken);
+            // Connect to a region by name
+            // regionClient.Connect("zone2");
+                
+            // Disconnect from the current region
+            //regionClient.Disconnect();
+        }
+        
+        public void OnRegionConnectionTimeout()
+        {
+            Logger.Debug("Region Connection timed out");
+        }
+        
+        void OnRegionClientStarted()
+        {
+            Logger.Debug("OnRegionClientStarted called");
         }
 
         // Use this for initialization

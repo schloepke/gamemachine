@@ -15,8 +15,8 @@ namespace GameMachine.World
         public int max_health { get; set; }
         public int offense_skill { get; set; }
         public int defense_skill { get; set; }
-        public int x { get; set; }
-        public int y { get; set; }
+        public float x { get; set; }
+        public float y { get; set; }
         public string zone { get; set; }
 
         public static void Receive(string json)

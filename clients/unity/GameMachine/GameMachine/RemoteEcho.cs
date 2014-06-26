@@ -46,7 +46,9 @@ namespace GameMachine
        
         public void RegionEcho()
         {
-            ActorSystem.Instance.FindRegional("GameMachine/GameSystems/RemoteEcho").Tell(EchoMessage("region"));
+            // We dont' use FindRegional here because it falls back to FindRemote, which in this specific case
+            // we don't want
+            ActorSystem.Instance.Find("GameMachine/GameSystems/RemoteEcho", true, true).Tell(EchoMessage("region"));
         }
 
         public override void OnReceive(object message)

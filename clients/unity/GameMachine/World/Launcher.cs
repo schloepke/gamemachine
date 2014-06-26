@@ -71,22 +71,36 @@ namespace GameMachine.World
 
         public void EnterZone(string zone)
         {
-            GameObject terrain = GameObject.Find(currentZone + "Terrain");
-            Destroy(terrain);
-            RemovePlayer();
+
+
+            if (RegionHandler.regions.ContainsKey(zone))
+            {
+                Logger.Debug("Entering Zone " + zone);
+                Login.regionClient.Connect(zone);
+            } else
+            {
+                Logger.Debug("Zone not found!");
+                return;
+            }
+
+            if (currentZone != null)
+            {
+                GameObject terrain = GameObject.Find(currentZone + "Terrain");
+                Destroy(terrain);
+                RemovePlayer();
+            }
+
 
             currentZone = zone;
             Application.LoadLevelAdditive(currentZone);
-            Invoke("WaitForTerrain", 0.05f);
+            Invoke("WaitForTerrain", 1.05f);
         }
 
         void Start()
         {
-            currentZone = GameMachine.World.Player.vitals.zone;
+            string zone = GameMachine.World.Player.vitals.zone;
             playerName = GameMachine.World.Player.vitals.id;
-            Logger.Debug("Loading Zone " + currentZone);
-            Application.LoadLevelAdditive(currentZone);
-            Invoke("WaitForTerrain", 1.05f);
+            EnterZone(zone);
         }
 	
         public static void StartChat()

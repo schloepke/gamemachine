@@ -26,6 +26,7 @@ namespace GameMachine
             {
                 List<string> r;
                 List<string> regionServer;
+                Logger.Debug(entity.regions.regions);
                 r = new List<string>(entity.regions.regions.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
                 foreach (string region in r)
                 {

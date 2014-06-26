@@ -11,20 +11,22 @@ namespace GameMachine
         public Client client;
 
         public bool running = false;
-        public bool connected = false;
+        public static bool connected = false;
         
         
         private double lastEcho = 0;
         private double echosPerSecond = 1;
         private double echoInterval;
         private double lastEchoReceived = 0;
-        private double echoTimeout = 5.0f;
-        
+
+        public double echoTimeout = 5.0f;
+        public float disconnectTime = 10f;
+
         public delegate void RegionClientStarted();
         public delegate void ConnectionTimeout();
         private RegionClientStarted regionClientStarted;
         private ConnectionTimeout connectionTimeout;
-        private float disconnectTime;
+
         private bool regionStartedCalled = false;
         private int port;
         private string username;
@@ -37,10 +39,9 @@ namespace GameMachine
             regionClientStarted = callback;
         }
         
-        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout, float disconnectTime=10f)
+        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout)
         {
             this.connectionTimeout = connectionTimeout;
-            this.disconnectTime = disconnectTime;
         }
          
         public void Disconnect()
@@ -50,7 +51,7 @@ namespace GameMachine
             regionStartedCalled = false;
             connected = false;
             ActorSystem.Instance.SetRegionClient(null);
-            if (client.running)
+            if (client != null && client.running)
             {
                 client.Stop();
             }
@@ -65,6 +66,11 @@ namespace GameMachine
 
         public void Connect(string region, string host)
         {
+            if (running)
+            {
+                Disconnect();
+            }
+            Logger.Debug("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
             client = new Client(host, port, username, authtoken);
             client.SetConnectionType(2);
             client.Start();
@@ -133,6 +139,7 @@ namespace GameMachine
                         Logger.Debug("Region Connection timeout");
                         if (connectionTimeout != null)
                         {
+                            Disconnect();
                             connectionTimeout();
                         }
 

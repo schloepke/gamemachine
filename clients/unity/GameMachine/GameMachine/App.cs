@@ -19,13 +19,14 @@ namespace GameMachine
         private double echosPerSecond = 1;
         private double echoInterval;
         private double lastEchoReceived = 0;
-        private double echoTimeout = 5.0f;
+        public double echoTimeout = 5.0f;
+        public float disconnectTime = 10f;
 
         public delegate void AppStarted();
         public delegate void ConnectionTimeout();
         private AppStarted appStarted;
         private ConnectionTimeout connectionTimeout;
-        private float disconnectTime;
+
         private bool appStartedCalled = false;
 
 
@@ -34,10 +35,9 @@ namespace GameMachine
             appStarted = callback;
         }
 
-        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout, float disconnectTime=10f)
+        public void OnConnectionTimeout(ConnectionTimeout connectionTimeout)
         {
             this.connectionTimeout = connectionTimeout;
-            this.disconnectTime = disconnectTime;
         }
 
         public void Login(string uri, string username, string password, Authentication.Success success, Authentication.Error error)
@@ -82,7 +82,7 @@ namespace GameMachine
             RegionHandler regionHandler = new RegionHandler();
             regionHandler.AddComponentSet("Regions");
             ActorSystem.Instance.RegisterActor(regionHandler);
-            InvokeRepeating("UpdateRegions", 2.0f, 20.0F);
+
 
             RemoteEcho.EchoReceived callback = OnEchoReceived;
             remoteEcho.OnEchoReceived(callback);
@@ -105,6 +105,7 @@ namespace GameMachine
                 {
                     appStarted();
                     appStartedCalled = true;
+                    InvokeRepeating("UpdateRegions", 0.01f, 20.0F);
                 }
             }
 

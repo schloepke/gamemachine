@@ -13,15 +13,13 @@ namespace GameMachine.Example
 
         private GameMachine.App app;
         private GameMachine.RegionClient regionClient;
-        private string authUri;
-        public string udpHost;
-        public int udpPort;
-        public int udpRegionPort;
+        public string authUri = "http://127.0.0.1:3000/auth";
+        public string udpHost = "127.0.0.1";
+        public int udpPort = 8100;
+        public bool testRegionConnection = false;
 
         void Start()
         {
-            authUri = "http://" + udpHost + ":3000/auth";
-
             // Replace with your own user object if you want. 
             GameMachine.User user = GameMachine.User.Instance;
             user.SetUser("player", "pass");
@@ -90,16 +88,37 @@ namespace GameMachine.Example
             GameMachine.RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
             regionClient.OnConnectionTimeout(connectionCallback);
 
-            regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
-            regionClient.Connect("zone2", udpHost);
+
+
             RegionClient.RegionClientStarted callback = OnRegionClientStarted;
             regionClient.OnRegionClientStarted(callback);
+
+            // This is how you would setup and connect/disconnect from regions.  This is
+            // basically a stub for being able to test the functionality.
+            if (testRegionConnection)
+            {
+                // Call this once
+                regionClient.Init(8101, User.Instance.username, authtoken);
+
+                // Connect to a region by name
+                // regionClient.Connect("zone2");
+
+                // Disconnect from the current region
+                //regionClient.Disconnect();
+
+                // Connect to region server specifying a host.  Just ignore this
+                // unless you are developing/testing the core server code. This is
+                // needed when running multilple server instances under the same ip,
+                // which for a real game you would never do.
+                regionClient.Connect("zone2", "192.168.1.8");
+
+
+            }
         }
 
         public void OnRegionConnectionTimeout()
         {
             Logger.Debug("Region Connection timed out");
-            regionClient.Disconnect();
         }
 
         void OnRegionClientStarted()
