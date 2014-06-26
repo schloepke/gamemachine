@@ -1,4 +1,5 @@
 require 'active_model'
+require 'json'
 # JSON models that will get converted appropriately when sent to or
 # received by actors.
 
