@@ -1,6 +1,5 @@
 
 # Welcome to Game Machine
-# Welcome to Game Machine
 
 Game Machine is a server side platform for creating real time multiplayer games.  It was designed to be simple
 to use while also being performant and inherently scalable.
