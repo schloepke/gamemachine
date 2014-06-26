@@ -53,6 +53,8 @@ module GameMachine
       def load_from_config
         RegionSettings.regions.each do |name,manager|
 
+          # Make sure we set some value here, it will get updated with a valid
+          # region in update_regions
           if region = Region.find(name)
             self.class.regions[name] = region
           else
@@ -80,8 +82,6 @@ module GameMachine
           # TODO fix this, leaving for now until we figure out how complex this needs
           # to be
           if message.id == 'regions'
-            GameMachine.logger.info "Request for regions from #{message.player.id}"
-            GameMachine.logger.info self.class.regions.inspect
             regions_msg = MessageLib::Regions.new.set_regions(regions_string)
             entity = MessageLib::Entity.new.set_id(message.player.id).set_regions(regions_msg)
             commands.player.send_message(entity,message.player.id)
