@@ -90,7 +90,6 @@ module GameMachine
     end
 
     def send_to_remote_player(message)
-      #GameMachine.logger.info("#{self.class.name} process_player_message")
       if client_id = players.fetch(message.player.id,nil)
         if remote_ref = remote_clients.fetch(client_id,nil)
           remote_ref.tell(message)
@@ -144,7 +143,7 @@ module GameMachine
         local_clients.delete(name)
         players.delete(message.player.id)
         self.class.local_players.delete(message.player.id)
-        GameMachine.logger.debug("#{self.class.name} client #{name} unregistered")
+        GameMachine.logger.info("#{self.class.name} client #{name} unregistered")
       end
     end
 
@@ -163,7 +162,7 @@ module GameMachine
         players[message.player.id] = name
         self.class.local_players[message.player.id] = message.client_connection.type
         get_sender.tell(message,get_self)
-        GameMachine.logger.debug("#{self.class.name} client #{name} registered")
+        GameMachine.logger.info("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
         local_actors[name] = events

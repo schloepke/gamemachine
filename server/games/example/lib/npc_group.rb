@@ -10,12 +10,12 @@ module Example
       group.each do |npc_id|
         npcs[npc_id] = klass.new(npc_id)
       end
-      schedule_message('update',50)
+      schedule_message('update',30)
     end
 
     def on_receive(message)
       if message == 'update'
-        npcs.each do |id,npc|
+        npcs.each_value do |npc|
           npc.update
         end
       elsif message.is_a?(Models::CombatUpdate)

@@ -15,18 +15,21 @@ require 'active_model'
 #validates :age, numericality: true
 #validates :username, uniqueness: true
 #validates :username, presence: true
-
+require 'ostruct'
 
 module GameMachine
-  class Model
+  class Model < OpenStruct
     include GameMachine::Commands
-    include Virtus.model
     include ActiveModel::Validations
 
-    attribute :id, String
     validates :id, presence: true
 
     class << self
+
+      def attribute(*args)
+
+      end
+
       def find(id,timeout=1000)
         scoped_id = scope_for(id)
         if entity = Commands::Base.commands.datastore.get(scoped_id,timeout)
@@ -69,6 +72,10 @@ module GameMachine
       def id_scope
         @id_scope
       end
+    end
+
+    def attributes
+      self.marshal_dump
     end
 
     def scoped_id

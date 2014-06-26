@@ -14,7 +14,7 @@ module Example
       @has_target = false
       @reached_target = false
       @updates_for_move = 0
-      @updates_between_move = 20
+      @updates_between_move = 15
       @speed_scale = 1.0
       @current_distance_to_target = 0
       commands.grid.track(id,position.x,position.y,position.z)
@@ -34,7 +34,7 @@ module Example
 
       # Only update position if we moved
       if position_changed
-        commands.grid.track(id,position.x.round(2),position.y.round(2),position.z)
+        commands.grid.track(id,position.x.round(2),position.y.round(2),0)
         @position_changed = false
       end
 

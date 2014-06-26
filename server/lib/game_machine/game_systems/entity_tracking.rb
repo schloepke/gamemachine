@@ -1,6 +1,5 @@
 module GameMachine
   module GameSystems
-
     # @note Handles player location tracking and neighbor requests.
     #   The client must explicitly send a TrackEntit component to the server
     #   to be tracked, it doesn't happen automatically.

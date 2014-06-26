@@ -16,7 +16,7 @@ module GameMachine
     ENV.fetch('JAVA_ROOT')
   end
 end
-
+require 'active_support/core_ext/string'
 require 'java'
 
 jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]

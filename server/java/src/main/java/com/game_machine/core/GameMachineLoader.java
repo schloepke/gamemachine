@@ -20,8 +20,6 @@ public class GameMachineLoader {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
-		SingletonManager manager = new SingletonManager();
-		//manager.start(actorSystem);
 	}
 
 }

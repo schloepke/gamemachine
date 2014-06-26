@@ -41,7 +41,11 @@ module GameMachine
 
           # Ensure valid authtoken before doing anything
           unless @auth_handler.valid_authtoken?(client_message.player)
-            GameaMachine.logger.info "Unauthenticated client attempting to login/logout"
+            if client_message.has_player_logout
+              GameMachine.logger.info "Unauthenticated client #{client_message.player.id} attempting to logout"
+            elsif client_message.has_player_connect
+              GameMachine.logger.info "Unauthenticated client #{client_message.player.id} attempting to login"
+            end
             return
           end
 
