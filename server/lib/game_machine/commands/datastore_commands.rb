@@ -25,7 +25,7 @@ module GameMachine
       end
 
       def put_direct(entity)
-        store.put(entity.id,entity.to_byte_array)
+        store.set(entity.id,entity.to_byte_array)
       end
 
       def get_direct(entity_id)
