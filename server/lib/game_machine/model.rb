@@ -1,4 +1,3 @@
-require 'virtus'
 require 'active_model'
 # JSON models that will get converted appropriately when sent to or
 # received by actors.

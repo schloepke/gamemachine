@@ -1,5 +1,4 @@
 require 'digest/md5'
-require 'virtus'
 require_relative 'models/vitals'
 require_relative 'models/attack'
 require_relative 'models/user'
