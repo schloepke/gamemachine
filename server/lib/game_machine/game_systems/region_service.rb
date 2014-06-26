@@ -53,9 +53,11 @@ module GameMachine
       def load_from_config
         RegionSettings.regions.each do |name,manager|
 
-          # load even if nil, which can happen.  update will populate it
-          region = Region.find(name)
-          self.class.regions[name] = region
+          if region = Region.find(name)
+            self.class.regions[name] = region
+          else
+            self.class.regions[name] = false
+          end
         end
       end
 
