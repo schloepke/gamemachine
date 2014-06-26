@@ -35,7 +35,7 @@ module GameMachine
               :name => name,
               :manager => manager
             )
-            region.save
+            commands.datastore.put_direct(region.to_storage_entity)
           end
           regions[name] = region
           if region.server
@@ -51,7 +51,7 @@ module GameMachine
               GameMachine.logger.warn "Node #{region.server} no longer in cluster, region #{region.name} dissasociated"
               servers.delete(region.server)
               region.server = nil
-              region.save
+              commands.datastore.put_direct(region.to_storage_entity)
             end
           end
         end
@@ -64,7 +64,7 @@ module GameMachine
               unless servers.has_key?(address)
                 region.server = address
                 servers[address] = name
-                region.save
+                commands.datastore.put_direct(region.to_storage_entity)
                 GameMachine.logger.warn "Region #{region.name} assigned to #{region.server}"
                 break
               end
