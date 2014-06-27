@@ -14,7 +14,8 @@ module Example
       @acquire_target_interval = 5
       @agro_radius = 15
       @leash_radius = 30
-
+  
+      movement.speed_scale = 4
       @last_attack = Time.now.to_i
       @attack_interval = 2
     end
@@ -48,7 +49,6 @@ module Example
         if position.distance(player[:vector]) <= @agro_radius
           movement.set_target(player[:vector])
           @target_id = player[:id]
-          movement.speed_scale = 3
           #log("target chosen #{@target_id}")
         end
       end
@@ -61,7 +61,7 @@ module Example
           return true
         elsif movement.current_target &&
           (movement.position.distance(movement.current_target) > @leash_radius)
-          true
+          return true
         end
       end
       false
@@ -71,7 +71,6 @@ module Example
       log("going home")
       @target_id = 'home'
       movement.set_target(@home)
-      movement.speed_scale = 5
     end
 
     def going_home?
@@ -84,7 +83,6 @@ module Example
 
     def reset_target
       movement.drop_target
-      movement.speed_scale = 1.0
       @target_id = nil
     end
 
@@ -123,7 +121,10 @@ module Example
         return
       end
 
-      if @acquire_target_counter >= @acquire_target_interval
+      # if we have a target, acquire their location every tick, otherwise only
+      # check every acquire_target_interval updates
+      if has_target? || @acquire_target_counter >= @acquire_target_interval
+        movement.updates_between_move = 1
         check_players
         if has_players?
           unless has_target?
@@ -144,6 +145,8 @@ module Example
         end
 
         @acquire_target_counter = 0
+      else
+        movement.updates_between_move = 20
       end
 
       if has_target?

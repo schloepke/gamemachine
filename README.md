@@ -1,50 +1,47 @@
 
 # Welcome to Game Machine
 
-Game Machine is a server side platform for creating real time multiplayer games that won't make your head hurt.
+Game Machine is a server side platform for creating real time multiplayer games.  It was designed to be simple
+to use while also being performant and inherently scalable.
 
-Our goal is to solve the hard problems for you, and let you spend time writing game logic.
+###Simple solutions for complex problems
+Game Machine provides higher level abstractions for tough problems like concurrency, persistence, and locality.  We use the actor model built on Akka to provide low latency concurrency, a distributed object store for fast data access, and distributed region management for locality and zones.
 
-Game Machine uses the [Actor Model](http://en.wikipedia.org/wiki/Actor_model) for writing game logic and is based on [Akka](http://www.akka.io).  You create game logic inside actors that can communicate with other actors by sending messages to them.  You never have to deal with threads, locking, or concurrent data structures, just game logic.
+###Resilient and scalable by design
+Scalable systems must be built around the premise that failure is natural and common.  A failure in one part of your system should not interrupt users.  With Game Machine we write resilient systems using actors and supervisors that monitor and react when something fails.  You can build hierarchies of control and management that can restart failed system, move them to another node, or simply let them fail and notify someone.
 
+### Productve development environment
+We leverage the power of the JVM to allow developers to build game logic quickly in jruby, and easily move that logic to scala or java if and when performance dictates. In Game Machine regardless of language all actors inherit from a single base class, and they all work the same way.  Migrating code to another JVM language is a matter of syntax, not structural change.
 
-Game Machine runs on the JVM, and provides first class support for ruby, java, and scala.  In addition we provide the [ability to run C#](https://github.com/gamemachine/gamemachine/wiki/C%23-Mono-support), although with some limitations in functionality.
+Our example world was built entirely in jruby.  We run it on a 4 node cluster of $20 per month vm's.  It has 6000 npc's all running on a 30ms tick, and can support several hundred logged in players.  We wrote it in one week.
 
-Game Machine is highly scalable, fully distributed, and simple to deploy.  It uses a [reactive](http://www.reactivemanifesto.org/) architecture and is designed to have no single point of failure.  
-
+###Open source
+We strongly believe that core technology should be open source.  This benefits everyone and allows more resource and time to be spent making games instead of architecture.  Our goal is to lower the cost of multiplayer games industry wide by providing a robust open source solution.
 
 ###Features
 
-Out of the box no server programming required:
+Out of the box:
 
 * **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
 * **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Group-messaging)**
 * **[Login & Authentication](https://github.com/gamemachine/gamemachine/wiki/Login-and-authentication)**
-* **[Simple persistence](https://github.com/gamemachine/gamemachine/wiki/Simple-persistence)**
+* Distributed object store
+* Locality (zones/regions)
+* Simple framework for writing server side logic
+* Fully distributed.  Easy to deploy and manage.
 
-Advanced server side functionality:
-
-* Distributed AI controllers
-* [Distributed memory store](https://github.com/gamemachine/gamemachine/wiki/Object-database-archtiecture) with pluggable persistence
-* Simple integration with external services via [Apache Camel](http://architects.dzone.com/articles/apache-camel-integration)
-* Automatic scaling of your game code via the [Game Machine cluster](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-Cluster)
 
 ###Getting Started
+
+**Note:  New release with more examples and a public testing cluster coming by 7/1/2014
 
 **[Install the server](https://github.com/gamemachine/gamemachine/wiki/Installation)**
 
 **[Download the Unity client](https://github.com/gamemachine/gamemachine/blob/master/clients/unity/GameMachineClient.unitypackage)**
   
  
-###Writing server side game logic
-
-* [Game Machine technical overview](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-technical-overview) (start here)
-* Creating your own game systems
-
-
 ###Support
 
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
-

@@ -176,7 +176,7 @@ public class Grid {
 		}
 		cells.get(cell).put(id, gridValue);
 
-		deltaIndex.put(id, gridValue);
+		//deltaIndex.put(id, gridValue);
 
 		return true;
 	}

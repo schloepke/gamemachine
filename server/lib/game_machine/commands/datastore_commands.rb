@@ -2,6 +2,11 @@ module GameMachine
   module Commands
     class DatastoreCommands
 
+      attr_reader :store
+      def initialize
+        @store = DataStore.instance
+      end
+
       def define_dbproc(name,&blk)
         ObjectDb.dbprocs[name] = blk
       end
@@ -17,6 +22,22 @@ module GameMachine
         else
           ref.tell(message)
         end
+      end
+
+      def put!(entity)
+        store.set(entity.id,entity.to_byte_array)
+      end
+
+      def get!(entity_id)
+        if bytes = store.get(entity_id)
+          MessageLib::Entity.parse_from(bytes)
+        else
+          nil
+        end
+      end
+
+      def del!(entity_id)
+        store.delete(entity_id)
       end
 
       def put(entity)

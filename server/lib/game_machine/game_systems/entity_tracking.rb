@@ -117,13 +117,15 @@ module GameMachine
       end
 
       def send_neighbors_to_player(neighbors,player)
-        entity = MessageLib::Entity.new.set_neighbors(
-          MessageLib::Neighbors.new.set_entity_list(neighbors)
-        )
-        entity.set_id(player.id)
-        entity.set_player(player)
-        entity.set_send_to_player(true)
-        commands.player.send_message(entity,player.id)
+        neighbors.each_slice(30) do |group|
+          entity = MessageLib::Entity.new.set_neighbors(
+            MessageLib::Neighbors.new.set_entity_list(group)
+          )
+          entity.set_id(player.id)
+          entity.set_player(player)
+          entity.set_send_to_player(true)
+          commands.player.send_message(entity,player.id)
+        end
       end
 
     end

@@ -14,15 +14,15 @@ module Example
       GameMachine::Actor::Builder.new(CombatController).start
 
       if zone == 'zone1'
-        spawn_npcs('male',500,Npc)
+        spawn_npcs('male',1000,Npc)
         spawn_npcs('viking',500,Npc)
         spawn_npcs('golem',500,Npc)
-        spawn_npcs('worm',500,AggressiveNpc)
+        spawn_npcs('worm',1000,AggressiveNpc)
       elsif zone == 'zone2'
-        spawn_npcs('male',500,Npc)
+        spawn_npcs('male',1000,Npc)
         spawn_npcs('viking',500,Npc)
         spawn_npcs('golem',500,Npc)
-        spawn_npcs('worm',500,AggressiveNpc)
+        spawn_npcs('worm',1000,AggressiveNpc)
       end
     end
 
@@ -33,6 +33,8 @@ module Example
           Game.npcs[npc_name] = name
         end
         GameMachine::Actor::Builder.new(NpcGroup,group,klass).with_name(name).start
+        #name = "#{name}_runner"
+        #GameMachine::Actor::Builder.new(NpcGroupRunner,group,klass,name).with_name(name).start
       end
     end
 

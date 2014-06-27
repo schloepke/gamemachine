@@ -1,5 +1,5 @@
-require 'virtus'
 require 'active_model'
+require 'json'
 # JSON models that will get converted appropriately when sent to or
 # received by actors.
 
@@ -28,6 +28,15 @@ module GameMachine
 
       def attribute(*args)
 
+      end
+
+      def find!(id)
+        scoped_id = scope_for(id)
+        if entity = Commands::Base.commands.datastore.get!(scoped_id)
+          from_entity(entity,:json_storage)
+        else
+          nil
+        end
       end
 
       def find(id,timeout=1000)
@@ -120,10 +129,7 @@ module GameMachine
     end
 
     def save!
-      unless valid?
-        raise RuntimeError, errors
-      end
-      save
+      commands.datastore.put!(to_storage_entity)
     end
 
   end

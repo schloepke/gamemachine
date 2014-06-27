@@ -26,7 +26,13 @@ module Example
           user.authtoken = @sessions[username]
           user.save
           return @sessions[username]
+        else
+          GameMachine.logger.info "user: #{user.id} password does not match"
+          false
         end
+      else
+        GameMachine.logger.info "user: #{username} not found"
+        false
       end
       false
     end
@@ -35,7 +41,6 @@ module Example
     # should not be too long, as it gets sent with every message.
     def authtoken_for(username)
       if authtoken = @sessions.fetch(username,nil)
-         GameMachine.logger.info "Authoken for #{username} is #{authtoken}"
         return authtoken
 
       # user authenticated on different server, we have to look up their authtoken

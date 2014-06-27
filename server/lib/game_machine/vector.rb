@@ -65,6 +65,29 @@ module GameMachine
       #@z=(1-change_amount)*@z + change_amount*vector.z
     end
 
+    def -(v1)
+      self.class.new( @x - v1.x, @y - v1.y )
+    end
+
+    def self.norm(i)
+      r = 0
+      length = Math.sqrt(i*i)
+      if length != 0
+        r = i * (1/length)
+      end
+      r
+    end
+
+    def normalize
+      vector = self.class.new
+      length = Math.sqrt(@x*@x + @y*@y)
+      if length != 0
+        vector.x = @x * (1/length)
+        vector.y = @y * (1/length)
+      end
+      vector
+    end
+
     def inspect
       "#{x} #{y} #{z}"
     end
