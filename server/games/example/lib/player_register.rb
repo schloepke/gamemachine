@@ -49,10 +49,10 @@ module Example
         :id => username,
         :password => password,
       )
-      if user.valid?
+      if user.password.size > 4
         user.save
       else
-        errors.merge!(user.errors)
+        add_error('password', 'length must be > 4')
       end
 
       # Create character
@@ -67,11 +67,7 @@ module Example
         :y => 500,
         :zone => 'zone1'
       )
-      if stats.valid?
         stats.save
-      else
-        errors.merge!(stats.errors)
-      end
 
       if valid?
         success("Account created!")

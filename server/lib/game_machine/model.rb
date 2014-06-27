@@ -1,4 +1,3 @@
-require 'active_model'
 require 'json'
 # JSON models that will get converted appropriately when sent to or
 # received by actors.
@@ -7,22 +6,11 @@ require 'json'
 # are a special case for the object database and are left untouched
 # by the tell/ask/on_receive filters
 
-# Validation examples
-#validates :username, exclusion: { in: %w(admin superuser) }
-#validates :email, format: { with: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i, on: :create }
-#validates :age, inclusion: { in: 0..9 }
-#validates :first_name, length: { maximum: 30 }
-#validates :age, numericality: true
-#validates :username, uniqueness: true
-#validates :username, presence: true
 require 'ostruct'
 
 module GameMachine
   class Model < OpenStruct
     include GameMachine::Commands
-    include ActiveModel::Validations
-
-    validates :id, presence: true
 
     class << self
 

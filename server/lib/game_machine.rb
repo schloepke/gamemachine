@@ -1,6 +1,8 @@
 
 require 'rbconfig'
 
+require_relative 'game_machine/ruby_extensions/nilclass'
+require_relative 'game_machine/ruby_extensions/string'
 require_relative 'game_machine/securerandom'
 
 module GameMachine
@@ -16,7 +18,6 @@ module GameMachine
     ENV.fetch('JAVA_ROOT')
   end
 end
-require 'active_support/core_ext/string'
 require 'java'
 
 jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
@@ -55,6 +56,7 @@ require_relative 'game_machine/auth_handlers/base'
 require_relative 'game_machine/auth_handlers/public'
 require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/cluster_monitor'
+require_relative 'game_machine/system_stats'
 require_relative 'game_machine/reloadable_monitor'
 require_relative 'game_machine/client_manager'
 require_relative 'game_machine/scheduler'

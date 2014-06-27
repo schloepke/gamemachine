@@ -1,6 +1,5 @@
 require 'spec_helper'
 require 'json'
-require 'virtus'
 require 'benchmark'
 
 module GameMachine
@@ -19,8 +18,6 @@ module GameMachine
       attribute :name, String
       attribute :defense_skill, Integer
       attribute :attack_skill, Integer
-      validates :id, exclusion: { in: %w(one user) }
-      validates :id, presence: true
     end
 
     let(:scoped_model) do
@@ -59,15 +56,6 @@ module GameMachine
       end
     end
 
-    describe "#valid?" do
-      it "should give correct answer" do
-        test_model.id = 'one'
-        expect(test_model.valid?).to be_false
-        expect(test_model.errors.size).to eq 1
-        test_model.id = "myname"
-        expect(test_model.valid?).to be_true
-      end
-    end
 
     describe "#save" do
 
