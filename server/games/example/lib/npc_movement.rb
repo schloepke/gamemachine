@@ -3,7 +3,7 @@ module Example
     include GameMachine::Commands
 
     attr_accessor :updates_between_move
-    attr_reader :current_target, :position, :move_x, :move_y, :updates_for_move,
+    attr_reader :current_target, :position, :updates_for_move,
       :position_changed, :has_target, :last_move, :id,
       :reached_target, :current_distance_to_target
     attr_accessor :speed_scale
@@ -15,8 +15,8 @@ module Example
       @has_target = false
       @reached_target = false
       @updates_for_move = 0
-      @updates_between_move = 20
-      @speed_scale = 1.0
+      @updates_between_move = 15
+      @speed_scale = 4
       @current_distance_to_target = 0
       commands.grid.track(id,position.x,position.y,position.z)
     end
@@ -62,15 +62,11 @@ module Example
         return
       end
 
-      @move_x = (current_target.x - position.x) / current_distance_to_target
-      @move_y = (current_target.y - position.y) / current_distance_to_target
       current_distance_to_target
     end
 
     def drop_target
       @current_target = nil
-      @move_x = nil
-      @move_y = nil
       @has_target = false
       @reached_target = false
       @current_distance_to_target = 0
@@ -87,21 +83,31 @@ module Example
       if current_distance_to_target == 0
         set_reached_target
         return
-      elsif current_distance_to_target <= 5
-        @speed_scale = 1.0
       end
 
       delta_time = Time.now.to_f - last_move.to_f
 
-      position.x += (move_x * (delta_time * speed_scale))
-      position.y += (move_y * (delta_time * speed_scale))
+      # Save object creation by not using methods that return new vector
+      x = current_target.x - position.x
+      y = current_target.y - position.y
+      dirx = GameMachine::Vector.norm(x)
+      diry = GameMachine::Vector.norm(y)
+      position.x += dirx * speed_scale * delta_time
+      position.y += diry * speed_scale * delta_time
 
-      if current_distance_to_target <= 1.0
+      #direction = (current_target - position).normalize
+      #position.x += direction.x * speed_scale * delta_time
+      #position.y += direction.y * speed_scale * delta_time
+
+      # Not really what we want
+      #position.interpolate(current_target, speed_scale * delta_time)
+
+      if position.distance(current_target) > current_distance_to_target
         set_reached_target
       end
 
-      #if id.match(/worm/)
-      #  puts "#{id}: x: #{move_x} y: #{move_y} #{position.inspect} --> #{current_target.inspect}   distance: #{position.distance(current_target)} time: #{delta_time}"
+      #if id.match(/viking_499/) || id.match(/worm/)
+      #  puts "#{id}: old_distance :#{current_distance_to_target} new_distance: #{position.distance(current_target)} time: #{delta_time}"
       #end
       @last_move = Time.now.to_f
       @position_changed = true

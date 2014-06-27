@@ -14,6 +14,7 @@ module Example
       @players = {}
       set_spawn_point
       @movement = NpcMovement.new(id,position)
+      movement.speed_scale = 2
       @home = GameMachine::Vector.from(position)
       @target = GameMachine::Vector.new
       get_players
