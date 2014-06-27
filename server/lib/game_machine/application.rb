@@ -150,6 +150,7 @@ module GameMachine
         Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(ClientManager).start
         Actor::Builder.new(GameSystems::EntityLoader).start
+        Actor::Builder.new(SystemStats).start
 
         # Our cluster singleton for managing regions
         Actor::Builder.new(GameSystems::RegionManager).singleton

@@ -3,7 +3,6 @@ module ClassMethods
 
   require "rspec/mocks/standalone"
   require "rspec/expectations"
-  require "test/unit"
 
     include RSpec::Matchers
 

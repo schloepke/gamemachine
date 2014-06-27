@@ -1,7 +1,6 @@
 package com.game_machine.core;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,12 +13,10 @@ public class Grid {
 	private int width;
 	private int cellCount;
 
-	private ConcurrentHashMap<String, GridValue> deltaIndex = new ConcurrentHashMap<String, GridValue>();
-	private ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
-	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
-	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
-	private ConcurrentHashMap<String, ArrayList<GridValue>> neighborsCache = new ConcurrentHashMap<String, ArrayList<GridValue>>();
-	private ConcurrentHashMap<String, Long> lastNeighborsCall = new ConcurrentHashMap<String, Long>();
+	public ConcurrentHashMap<String, GridValue> deltaIndex = new ConcurrentHashMap<String, GridValue>();
+	public ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
+	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
+	public ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
 	public Grid(int max, int cellSize) {
 		this.max = max;
@@ -159,9 +156,7 @@ public class Grid {
 		}
 
 		int cell = hash(x, y);
-		if (!cells.containsKey(cell)) {
-			cells.put(cell, new ConcurrentHashMap<String, GridValue>());
-		}
+		
 
 		GridValue gridValue;
 		gridValue = new GridValue(id, cell, x, y, z, entityType);
@@ -170,9 +165,18 @@ public class Grid {
 			objectIndex.put(id, gridValue);
 		} else {
 			if (oldValue.cell != cell) {
-				cells.get(oldValue.cell).remove(id);
+				ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(oldValue.cell);
+				cellGridValues.remove(id);
+				if (cellGridValues.size() == 0) {
+					cells.remove(oldValue.cell);
+				}
+					
 			}
 			objectIndex.replace(id, gridValue);
+		}
+		
+		if (!cells.containsKey(cell)) {
+			cells.put(cell, new ConcurrentHashMap<String, GridValue>());
 		}
 		cells.get(cell).put(id, gridValue);
 
