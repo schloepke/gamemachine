@@ -19,6 +19,7 @@ namespace GameMachine.World
         private Terrain terrain;
         public bool isPlayer = false;
         private float lastAttack;
+        public bool isAggressive = false;
 
 
         protected override void Start()
@@ -120,7 +121,7 @@ namespace GameMachine.World
             }
 
 
-            if (Time.time - lastAttack < 1.0f)
+            if (Time.time - lastAttack < 0.5f)
             {
                 State = "Attack";
             }
@@ -135,20 +136,16 @@ namespace GameMachine.World
 
         public float ScaleSpeed(float distance)
         {
-            float scaledSpeed = 1.2f;
-            if (distance > 10.0f)
+            float scaledSpeed;
+            if (isAggressive)
             {
-                scaledSpeed = 4.0f;
-            } else if (distance > 5.0f)
+                scaledSpeed = 5.5f;
+            } else
             {
-                scaledSpeed = 3.0f;
-            } else if (distance > 2.5f)
-            {
-                scaledSpeed = 1.8f;
-            } else if (distance > 2.0f)
-            {
-                scaledSpeed = 1.5f;
+                scaledSpeed = 2.5f;
+
             }
+           
             return scaledSpeed;
         }
 

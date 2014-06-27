@@ -36,8 +36,11 @@ namespace GameMachine.World
 
                 GUI.DrawTexture(new Rect(0, 0, box.width, box.height), background, ScaleMode.StretchToFill);
                 GUI.DrawTexture(new Rect(0, 0, box.width * health / maxHealth, box.height), foreground, ScaleMode.StretchToFill);
+
+
             }
             GUI.EndGroup();
+            GUI.Label(new Rect(200 + 40, 0, 140, 30), "Npc's in view range: " + NpcManager.npcCount);
         }
 
     }

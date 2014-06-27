@@ -73,10 +73,10 @@ namespace GameMachine.World
                 text = message as string;
             } else
             {
+                Logger.Debug(name);
                 ChatMessage chatMessage = message as ChatMessage;
                 text = chatMessage.message;
             }
-            Logger.Debug("Chat message " + text);
             chatGui.SendMessage("receiveMessage", text);
         }
 
