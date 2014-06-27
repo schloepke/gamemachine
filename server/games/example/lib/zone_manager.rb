@@ -14,15 +14,15 @@ module Example
       GameMachine::Actor::Builder.new(CombatController).start
 
       if zone == 'zone1'
-        spawn_npcs('male',1000,Npc)
-        spawn_npcs('viking',1000,Npc)
-        spawn_npcs('golem',1000,Npc)
-        spawn_npcs('worm',1000,AggressiveNpc)
+        spawn_npcs('male',500,Npc)
+        spawn_npcs('viking',500,Npc)
+        spawn_npcs('golem',500,Npc)
+        spawn_npcs('worm',500,AggressiveNpc)
       elsif zone == 'zone2'
         spawn_npcs('male',500,Npc)
         spawn_npcs('viking',500,Npc)
         spawn_npcs('golem',500,Npc)
-        spawn_npcs('worm',1000,AggressiveNpc)
+        spawn_npcs('worm',500,AggressiveNpc)
       end
     end
 
