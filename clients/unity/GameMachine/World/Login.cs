@@ -22,10 +22,11 @@ namespace GameMachine.World
         private bool showLogin = true;
 
         public static GameMachine.RegionClient regionClient;
-        public string authUri = "http://127.0.0.1:3000/auth";
+        private string authUri;
         public string udpHost = "127.0.0.1";
-        public int udpPort = 8100;
-        public int udpRegionPort = 8100;
+        public int udpPort = 24130;
+        public int udpRegionPort = 24130;
+        public bool useRegions = false;
 
         void OnGUI()
         {
@@ -68,6 +69,8 @@ namespace GameMachine.World
                 user.SetUser(username.ToString(), password.ToString());
                 GameMachine.Authentication.Success success = OnAuthenticationSuccess;
                 GameMachine.Authentication.Error error = OnAuthenticationError;
+
+                authUri = "http://" + udpHost + ":3000/auth";
                 app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
                 app.Login(authUri, user.username, user.password, success, error);
             }
@@ -134,7 +137,7 @@ namespace GameMachine.World
             RegionClient.RegionClientStarted callback = OnRegionClientStarted;
             regionClient.OnRegionClientStarted(callback);
 
-            regionClient.Init(8100, User.Instance.username, authtoken);
+            regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
             // Connect to a region by name
             // regionClient.Connect("zone2");
                 

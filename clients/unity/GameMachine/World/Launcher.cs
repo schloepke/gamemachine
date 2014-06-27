@@ -16,6 +16,7 @@ namespace GameMachine.World
         public static string currentZone;
         public static bool worldStarted = false;
         public string playerName;
+        private Login login;
 
 
         public void StartWorld()
@@ -72,15 +73,17 @@ namespace GameMachine.World
         public void EnterZone(string zone)
         {
 
-
-            if (RegionHandler.regions.ContainsKey(zone))
+            if (login.useRegions)
             {
-                Logger.Debug("Entering Zone " + zone);
-                Login.regionClient.Connect(zone);
-            } else
-            {
-                Logger.Debug("Zone not found!");
-                return;
+                if (RegionHandler.regions.ContainsKey(zone))
+                {
+                    Logger.Debug("Entering Zone " + zone);
+                    Login.regionClient.Connect(zone);
+                } else
+                {
+                    Logger.Debug("Zone not found");
+                    return;
+                }
             }
 
             if (currentZone != null)
@@ -98,8 +101,10 @@ namespace GameMachine.World
 
         void Start()
         {
+            GameObject worldLogin = GameObject.Find("Login");
+            login = worldLogin.GetComponent<Login>() as Login;
             string zone = GameMachine.World.Player.vitals.zone;
-            playerName = GameMachine.World.Player.vitals.id;
+            playerName = User.Instance.username;
             EnterZone(zone);
         }
 	

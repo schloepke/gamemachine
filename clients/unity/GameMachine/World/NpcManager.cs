@@ -12,6 +12,7 @@ namespace GameMachine.World
     {
 
         public static Dictionary<string, Npc> npcs = new Dictionary<string, Npc>();
+        public static int npcCount = 0;
         public string playerType = "OtherPlayer";
 
         NpcManager()
@@ -20,7 +21,7 @@ namespace GameMachine.World
 
         void Start()
         {
-            InvokeRepeating("ExpireNpcs", 2, 0.5F);
+            InvokeRepeating("ExpireNpcs", 2, 1.5F);
         }
 
         // Remove objects from world that we haven't seen an update for in a while.  This is fairly strict
@@ -46,7 +47,7 @@ namespace GameMachine.World
 
         public void UpdateFromTracking(List<TrackingUpdate> updates)
         {
-
+            npcCount = npcs.Count;
             GameObject npcObject;
 
             foreach (TrackingUpdate update in updates)
@@ -93,6 +94,10 @@ namespace GameMachine.World
                         npcObject.name = update.entityId;
                         Npc npc = npcObject.GetComponent<Npc>();
                         npc.name = update.entityId;
+                        if (npcType == "WormNpc")
+                        {
+                            npc.isAggressive = true;
+                        }
                         npcs.Add(update.entityId, npc);
                         npc.transform.position = npc.SpawnLocation(new Vector3(update.x, 0f, update.y));
 
