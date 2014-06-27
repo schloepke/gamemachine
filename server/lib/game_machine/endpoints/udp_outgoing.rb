@@ -24,8 +24,11 @@ module GameMachine
       end
 
       def send_to_client(message)
+        bytes = message.to_byte_array
+        puts bytes.length
+
         server.sendToClient(
-          message.to_byte_array,
+          bytes,
           client[:host],
           client[:port],
           client[:ctx]

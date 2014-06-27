@@ -29,7 +29,7 @@ module GameMachine
 
       def load_from_config
         RegionSettings.regions.each do |name,manager|
-          unless region = Region.find(name,5000)
+          unless region = Region.find!(name)
             region = Region.new(
               :id => name,
               :name => name,
