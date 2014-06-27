@@ -70,7 +70,13 @@ module Example
     def get_players
       @players = {}
       commands.grid.neighbors(position.x,position.y).each do |player|
-        @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
+        if @players[player.id]
+          @players[player.id].x = player.x
+          @players[player.id].y = player.y
+          @players[player.id].z = 0
+        else
+          @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
+        end
       end
     end
 

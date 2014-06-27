@@ -24,11 +24,11 @@ module GameMachine
         end
       end
 
-      def put_direct(entity)
+      def put!(entity)
         store.set(entity.id,entity.to_byte_array)
       end
 
-      def get_direct(entity_id)
+      def get!(entity_id)
         if bytes = store.get(entity_id)
           MessageLib::Entity.parse_from(bytes)
         else
@@ -36,7 +36,7 @@ module GameMachine
         end
       end
 
-      def del_direct(entity_id)
+      def del!(entity_id)
         store.delete(entity_id)
       end
 

@@ -61,7 +61,7 @@ module Example
           return true
         elsif movement.current_target &&
           (movement.position.distance(movement.current_target) > @leash_radius)
-          true
+          return true
         end
       end
       false
@@ -123,7 +123,10 @@ module Example
         return
       end
 
-      if @acquire_target_counter >= @acquire_target_interval
+      # if we have a target, acquire their location every tick, otherwise only
+      # check every acquire_target_interval updates
+      if has_target? || @acquire_target_counter >= @acquire_target_interval
+        movement.updates_between_move = 1
         check_players
         if has_players?
           unless has_target?
@@ -144,6 +147,8 @@ module Example
         end
 
         @acquire_target_counter = 0
+      else
+        movement.updates_between_move = 20
       end
 
       if has_target?

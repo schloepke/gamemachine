@@ -41,7 +41,7 @@ module GameMachine
 
       def update_regions
         self.class.regions.keys.each do |name|
-          if region = Region.find(name)
+          if region = Region.find!(name)
             self.class.regions[name] = region
             if region.server == self.class.address
               self.class.region = name
@@ -55,7 +55,7 @@ module GameMachine
 
           # Make sure we set some value here, it will get updated with a valid
           # region in update_regions
-          if region = Region.find(name)
+          if region = Region.find!(name)
             self.class.regions[name] = region
           else
             self.class.regions[name] = false

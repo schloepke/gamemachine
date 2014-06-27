@@ -30,6 +30,15 @@ module GameMachine
 
       end
 
+      def find!(id)
+        scoped_id = scope_for(id)
+        if entity = Commands::Base.commands.datastore.get!(scoped_id)
+          from_entity(entity,:json_storage)
+        else
+          nil
+        end
+      end
+
       def find(id,timeout=1000)
         scoped_id = scope_for(id)
         if entity = Commands::Base.commands.datastore.get(scoped_id,timeout)
@@ -120,10 +129,7 @@ module GameMachine
     end
 
     def save!
-      unless valid?
-        raise RuntimeError, errors
-      end
-      save
+      commands.datastore.put!(to_storage_entity)
     end
 
   end

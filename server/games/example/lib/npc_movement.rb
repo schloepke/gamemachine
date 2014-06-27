@@ -2,8 +2,9 @@ module Example
   class NpcMovement
     include GameMachine::Commands
 
+    attr_accessor :updates_between_move
     attr_reader :current_target, :position, :move_x, :move_y, :updates_for_move,
-      :position_changed, :has_target, :updates_between_move, :last_move, :id,
+      :position_changed, :has_target, :last_move, :id,
       :reached_target, :current_distance_to_target
     attr_accessor :speed_scale
     def initialize(id,position)
@@ -14,7 +15,7 @@ module Example
       @has_target = false
       @reached_target = false
       @updates_for_move = 0
-      @updates_between_move = 15
+      @updates_between_move = 20
       @speed_scale = 1.0
       @current_distance_to_target = 0
       commands.grid.track(id,position.x,position.y,position.z)
@@ -34,7 +35,7 @@ module Example
 
       # Only update position if we moved
       if position_changed
-        commands.grid.track(id,position.x.round(2),position.y.round(2),0)
+        commands.grid.track(id,position.x,position.y,0)
         @position_changed = false
       end
 
@@ -61,8 +62,6 @@ module Example
         return
       end
 
-      # Default is move one unit * delta_time per tick.  use scale_speed to
-      # adjust it on the fly (smaller scale is faster)
       @move_x = (current_target.x - position.x) / current_distance_to_target
       @move_y = (current_target.y - position.y) / current_distance_to_target
       current_distance_to_target
@@ -77,9 +76,18 @@ module Example
       @current_distance_to_target = 0
     end
 
+    def set_reached_target
+      position.x = current_target.x
+      position.y = current_target.y
+      @reached_target = true
+    end
+
     def move
       @current_distance_to_target =  position.distance(current_target)
-      if current_distance_to_target <= 5
+      if current_distance_to_target == 0
+        set_reached_target
+        return
+      elsif current_distance_to_target <= 5
         @speed_scale = 1.0
       end
 
@@ -87,12 +95,9 @@ module Example
 
       position.x += (move_x * (delta_time * speed_scale))
       position.y += (move_y * (delta_time * speed_scale))
-      
 
       if current_distance_to_target <= 1.0
-        position.x = current_target.x
-        position.y = current_target.y
-        @reached_target = true
+        set_reached_target
       end
 
       #if id.match(/worm/)
