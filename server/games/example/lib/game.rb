@@ -21,7 +21,7 @@ module Example
   class Game
     include GameMachine::Commands
 
-    attr_reader :game_root
+    attr_reader :game_root, :game_data
 
     def self.npcs
       if @npcs
@@ -33,6 +33,7 @@ module Example
 
     def initialize(game_root)
       @game_root = game_root
+      @game_data = load_game_data
     end
 
     def start
@@ -72,9 +73,13 @@ module Example
       # This actor is responsible for starting up everything associated with a zone.
       # It waits until the region manager tells it that it is responsible for a
       # particular zone.
-      GameMachine::Actor::Builder.new(ZoneManager).start
+      GameMachine::Actor::Builder.new(ZoneManager,game_data).start
     end
 
+    def load_game_data
+      filename = File.join(game_root,'/data/game_data.yml')
+      YAML.load(File.read(filename))
+    end
 
   end
 end
