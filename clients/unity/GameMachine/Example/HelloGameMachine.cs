@@ -13,16 +13,26 @@ namespace GameMachine.Example
 
         private GameMachine.App app;
         private GameMachine.RegionClient regionClient;
-        public string authUri = "http://127.0.0.1:3000/auth";
+        private string authUri;
+
         public string udpHost = "127.0.0.1";
-        public int udpPort = 8100;
-        public bool testRegionConnection = false;
+        public int udpPort = 24130;
+        public int udpRegionPort = 24130;
+        public bool useRegions = false;
+        public string username;
+        public string password;
 
         void Start()
         {
+            if (username != null && password != null)
+            {
+                User.Instance.SetUser(username, password);
+            }
+           
+
+            authUri = "http://" + udpHost + ":3000/auth";
             // Replace with your own user object if you want. 
             GameMachine.User user = GameMachine.User.Instance;
-            user.SetUser("player", "pass");
 
             // Callbacks for authentication
             GameMachine.Authentication.Success success = OnAuthenticationSuccess;
@@ -95,10 +105,10 @@ namespace GameMachine.Example
 
             // This is how you would setup and connect/disconnect from regions.  This is
             // basically a stub for being able to test the functionality.
-            if (testRegionConnection)
+            if (useRegions)
             {
                 // Call this once
-                regionClient.Init(8101, User.Instance.username, authtoken);
+                regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
 
                 // Connect to a region by name
                 // regionClient.Connect("zone2");

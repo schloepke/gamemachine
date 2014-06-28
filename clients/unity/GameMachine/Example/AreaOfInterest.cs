@@ -80,7 +80,6 @@ namespace GameMachine.Example
             {
 
             }
-            //Logger.Debug("Update received");
         }
 
     }

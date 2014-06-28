@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -104,7 +104,6 @@ namespace GameMachine.World
                         if (npcType == playerType)
                         {
                             npc.isPlayer = true;
-                            TrackExtra extra = update.trackExtra;
                         }
 
                         //npc.transform.position = new Vector3(update.x, 40f, update.y);

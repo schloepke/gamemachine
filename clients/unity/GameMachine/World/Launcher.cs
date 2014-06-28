@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using System.Collections;
 using  System.Collections.Generic;
-using System.Collections;
 using GameMachine.World;
 using GameMachine;
 
@@ -22,7 +21,6 @@ namespace GameMachine.World
         public void StartWorld()
         {
             sounds = GameObject.Find("Sounds");
-            GameObject world = GameObject.Find("World");
             StartChat();
         }
 
@@ -32,7 +30,7 @@ namespace GameMachine.World
             player.name = playerName;
             playerComponent = player.GetComponent<GameMachine.World.Player>();
             playerComponent.SetNameTag(User.Instance.username);
-            AreaOfInterest tracker = player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest")) as AreaOfInterest;
+            player.AddComponent(Type.GetType("GameMachine.World.AreaOfInterest"));
         }
 
         public void RemovePlayer()

@@ -9,10 +9,8 @@ namespace GameMachine.World
     public class Npc : NpcController
     {
         private Vector3 targetLocation ;
-        public string name;
         private Vector3 currentTarget;
         private Vector3 currentDirection;
-        private float currentSpeed;
 
         public float lastUpdate;
         private CharacterController controller;
@@ -73,7 +71,6 @@ namespace GameMachine.World
             currentTarget = target;
             currentDirection = direction;
             currentDirection.y = 0;
-            currentSpeed = speed;
             lastUpdate = Time.time;
         }
 

@@ -13,8 +13,8 @@ namespace GameMachine.World
         private float windowHeight;
         private float windowWidth;
         private float windowTop;
-        private string username = "player";
-        private string password = "pass";
+        public string username = "player";
+        public string password = "pass";
         private bool hasError = false;
         private string loginError = "";
         private bool disableGui = false;
@@ -138,11 +138,6 @@ namespace GameMachine.World
             regionClient.OnRegionClientStarted(callback);
 
             regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
-            // Connect to a region by name
-            // regionClient.Connect("zone2");
-                
-            // Disconnect from the current region
-            //regionClient.Disconnect();
         }
         
         public void OnRegionConnectionTimeout()
@@ -155,7 +150,6 @@ namespace GameMachine.World
             Logger.Debug("OnRegionClientStarted called");
         }
 
-        // Use this for initialization
         void Start()
         {
             windowWidth = 500;

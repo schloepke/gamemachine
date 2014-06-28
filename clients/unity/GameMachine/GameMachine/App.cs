@@ -68,6 +68,7 @@ namespace GameMachine
             Messenger messenger = new Messenger();
             messenger.AddComponentSet("ChatMessage");
             messenger.AddComponentSet("ChatChannels");
+            messenger.AddComponentSet("ChatInvite");
             ActorSystem.Instance.RegisterActor(messenger);
 
             EntityTracking entityTracking = new EntityTracking();

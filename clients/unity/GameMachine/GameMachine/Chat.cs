@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using ChatMessage = GameMachine.Messages.ChatMessage;
+using ChatInvite = GameMachine.Messages.ChatInvite;
 using GameMachine;
 
 // This class loads a UI component and sets up the callbacks to tie the UI to the messaging system.
@@ -25,18 +26,19 @@ using GameMachine;
 // a method for receiving and sending messages.  This example uses a javascript ui, so we have to use
 // the SendMessage functionality to pass messages back and forth.
 
-namespace GameMachine.Example
+namespace GameMachine
 {
     public class Chat : MonoBehaviour
     {
-        private Component chatGui;
+        private Chatbox chatbox;
         private Messenger messenger;
         private ChatCommands chatCommands;
+        private GroupUi groupUi;
 
         void Start()
         {
             // Gui component.
-            chatGui = this.gameObject.AddComponent("FPSChat");
+            chatbox = this.gameObject.AddComponent<Chatbox>() as Chatbox;
 
             // The messaging actor
             messenger = ActorSystem.Instance.Find("Messenger") as Messenger;
@@ -56,29 +58,69 @@ namespace GameMachine.Example
             Messenger.MessageReceived messageCallback = MessageReceived;
             messenger.OnMessageReceived(messageCallback);
 
+            Messenger.InviteReceived inviteCallback = InviteReceived;
+            messenger.OnInviteReceived(inviteCallback);
+
             // Join an initial channel.  The second argument is a flags string
             // that sets certain flags on a channel.  Currently 'subscribers' is the
             // one valid option.  If subscribers is set, status updates from the server
             // will include a complete subscriber list for each channel.
-            messenger.joinChannel("global", "subscribers");
+            messenger.JoinChannel("global", "subscribers");
 
             // Send this whenever you want a list of subscribed channels, and the optional
             // subscriber list if you have set the subscribers flag.  Remember you get this
             // automatically when you join/leave a channel.
-            messenger.ChatStatus();
+            InvokeRepeating("UpdateChatStatus", 0.01f, 5.0F);
+
         }
 	
+        private void UpdateChatStatus()
+        {
+            messenger.ChatStatus();
+        }
+        public void InviteReceived(object message)
+        {
+            ChatInvite chatInvite = message as ChatInvite;
+            messenger.JoinChannel(chatInvite.channelName, chatInvite.invite_id);
+        }
+
         public void ChannelLeft(string channelName)
         {
             Logger.Debug("Left " + channelName);
-            chatGui.SendMessage("receiveMessage", "You have left " + channelName);
-        
+            chatbox.AddMessage("yellow|You have left " + channelName);
+            if (channelName.StartsWith("priv_"))
+            {
+                groupUi = this.gameObject.GetComponent<GameMachine.GroupUi>() as GroupUi;
+                if (groupUi != null)
+                {
+                    if (groupUi.channelName == channelName)
+                    {
+                        Destroy(groupUi);
+                    }
+                }
+            }
         }
 
         public void ChannelJoined(string channelName)
         {
             Logger.Debug("Joined " + channelName);
-            chatGui.SendMessage("receiveMessage", "You have joined " + channelName);
+
+
+            if (channelName.StartsWith("priv_"))
+            {
+                groupUi = this.gameObject.GetComponent<GameMachine.GroupUi>() as GroupUi;
+                if (groupUi != null)
+                {
+                    Destroy(groupUi);
+                }
+                groupUi = this.gameObject.AddComponent<GameMachine.GroupUi>() as GroupUi;
+                groupUi.Join(messenger, channelName);
+                chatCommands.currentGroup = channelName;
+                chatbox.AddMessage("yellow|You have joined a group");
+            } else
+            {
+                chatbox.AddMessage("yellow|You have joined " + channelName);
+            }
 
         }
 
@@ -89,17 +131,30 @@ namespace GameMachine.Example
         public void MessageReceived(object message)
         {
             string text;
+            string color = "white";
             string name = message.GetType().Name;
-            if (name == "string")
+            Logger.Debug("MessageRecieved type " + name);
+            if (name == "String")
             {
                 text = message as string;
             } else
             {
                 ChatMessage chatMessage = message as ChatMessage;
-                text = chatMessage.message;
+                string channelName = chatMessage.chatChannel.name;
+                text = chatMessage.senderId + ": " + chatMessage.message;
+
+                if (chatMessage.type == "group")
+                {
+                    color = "green";
+                } else
+                {
+                    color = "white";
+                }
+                text = color + "|" + text;
             }
+
             //Logger.Debug("Chat message " + text);
-            chatGui.SendMessage("receiveMessage", text);
+            chatbox.AddMessage(text);
         }
 
         public void SendChatMessage(string message)

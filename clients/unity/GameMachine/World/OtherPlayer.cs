@@ -8,7 +8,6 @@ namespace GameMachine.World
     public class OtherPlayer : NpcController
     {
         private Vector3 targetLocation ;
-        public string name;
         private Vector3 currentTarget;
         public float lastUpdate;
         private CharacterController controller;
