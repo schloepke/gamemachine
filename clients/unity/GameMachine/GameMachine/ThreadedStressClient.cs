@@ -21,10 +21,6 @@ namespace GameMachine
         public string authtoken = "stresstest";
         public bool started = false;
         
-        private double lastUpdate = 0;
-        private double updatesPerSecond = 10;
-        private double updateInterval;
-        private double messageSentAt;
         private GameMachine.Messages.Vector3 entityVector;
         private List<double> times = new List<double>();
 

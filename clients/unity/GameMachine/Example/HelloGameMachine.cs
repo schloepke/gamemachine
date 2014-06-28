@@ -13,16 +13,23 @@ namespace GameMachine.Example
 
         private GameMachine.App app;
         private GameMachine.RegionClient regionClient;
-        public string authUri = "http://127.0.0.1:3000/auth";
+        private string authUri;
+
         public string udpHost = "127.0.0.1";
-        public int udpPort = 8100;
-        public bool testRegionConnection = false;
+        public int udpPort = 24130;
+        public int udpRegionPort = 24130;
+        public bool useRegions = false;
+        public string username;
+        public string password;
 
         void Start()
         {
-            // Replace with your own user object if you want. 
-            GameMachine.User user = GameMachine.User.Instance;
-            user.SetUser("player", "pass");
+            if (username != null && password != null)
+            {
+                User.Instance.SetUser(username, password);
+            }
+           
+            authUri = "http://" + udpHost + ":3000/auth";
 
             // Callbacks for authentication
             GameMachine.Authentication.Success success = OnAuthenticationSuccess;
@@ -32,7 +39,7 @@ namespace GameMachine.Example
             app = this.gameObject.AddComponent(Type.GetType("GameMachine.App")) as GameMachine.App;
 
             // Attempt to login.  Authentication success callback will be fired on success.
-            app.Login(authUri, user.username, user.password, success, error);
+            app.Login(authUri, GameMachine.User.Instance.username, GameMachine.User.Instance.password, success, error);
         }
 
         void OnAuthenticationError(string error)
@@ -95,24 +102,14 @@ namespace GameMachine.Example
 
             // This is how you would setup and connect/disconnect from regions.  This is
             // basically a stub for being able to test the functionality.
-            if (testRegionConnection)
+            if (useRegions)
             {
                 // Call this once
-                regionClient.Init(8101, User.Instance.username, authtoken);
+                regionClient.Init(udpRegionPort, User.Instance.username, authtoken);
 
-                // Connect to a region by name
+                // Connect to a region by name.  This disconnects you from any current region you
+                // are connected to.
                 // regionClient.Connect("zone2");
-
-                // Disconnect from the current region
-                //regionClient.Disconnect();
-
-                // Connect to region server specifying a host.  Just ignore this
-                // unless you are developing/testing the core server code. This is
-                // needed when running multilple server instances under the same ip,
-                // which for a real game you would never do.
-                regionClient.Connect("zone2", "192.168.1.8");
-
-
             }
         }
 

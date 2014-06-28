@@ -70,8 +70,8 @@ namespace GameMachine.Example
             // Look for native byte messages
             if (entity.nativeBytes != null)
             {
-                byte[] bytes = entity.nativeBytes.bytes;
-                Logger.Debug("Found native bytes");
+                //byte[] bytes = entity.nativeBytes.bytes;
+                //Logger.Debug("Found native bytes");
             }
 
         }

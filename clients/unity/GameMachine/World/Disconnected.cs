@@ -13,14 +13,9 @@ namespace GameMachine.World
         private float windowHeight;
         private float windowWidth;
         private float windowTop;
-        private string username = "player";
-        private string password = "pass";
-        private bool hasError = false;
-        private string loginError = "";
-        private bool disableGui = false;
+
         private GameMachine.App app;
-        private bool showLogin = true;
-        
+
         void OnGUI()
         {
           

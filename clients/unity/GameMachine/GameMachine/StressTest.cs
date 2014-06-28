@@ -16,7 +16,6 @@ namespace GameMachine
             Application.runInBackground = true;
             int count = 50;
             string username;
-            string authtoken = "stresstest";
 
             for (int i = 0; i < count; i++)
             {
