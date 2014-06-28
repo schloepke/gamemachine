@@ -35,7 +35,7 @@ module Example
 
       # Only update position if we moved
       if position_changed
-        commands.grid.track(id,position.x,position.y,0)
+        commands.grid.track(id,position.x,position.y,position.z)
         @position_changed = false
       end
 
@@ -90,25 +90,19 @@ module Example
       # Save object creation by not using methods that return new vector
       x = current_target.x - position.x
       y = current_target.y - position.y
-      dirx = GameMachine::Vector.norm(x)
-      diry = GameMachine::Vector.norm(y)
+      dirx,diry = GameMachine::Vector.norm(x,y)
       position.x += dirx * speed_scale * delta_time
       position.y += diry * speed_scale * delta_time
 
-      #direction = (current_target - position).normalize
-      #position.x += direction.x * speed_scale * delta_time
-      #position.y += direction.y * speed_scale * delta_time
+      #dir = (current_target - position).normalize
+      #position.x += dir.x * speed_scale * delta_time
+      #position.y += dir.y * speed_scale * delta_time
 
-      # Not really what we want
-      #position.interpolate(current_target, speed_scale * delta_time)
 
       if position.distance(current_target) > current_distance_to_target
         set_reached_target
       end
 
-      #if id.match(/viking_499/) || id.match(/worm/)
-      #  puts "#{id}: old_distance :#{current_distance_to_target} new_distance: #{position.distance(current_target)} time: #{delta_time}"
-      #end
       @last_move = Time.now.to_f
       @position_changed = true
     end

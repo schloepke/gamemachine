@@ -69,13 +69,15 @@ module GameMachine
       self.class.new( @x - v1.x, @y - v1.y )
     end
 
-    def self.norm(i)
-      r = 0
-      length = Math.sqrt(i*i)
+    def self.norm(x,y)
+      dx = 0.0
+      dy = 0.0
+      length = Math.sqrt(x*x + y*y)
       if length != 0
-        r = i * (1/length)
+        dx = x * (1/length)
+        dy = y * (1/length)
       end
-      r
+      [dx,dy]
     end
 
     def normalize
