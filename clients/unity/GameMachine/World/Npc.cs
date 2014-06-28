@@ -176,7 +176,6 @@ namespace GameMachine.World
                 Vector3 targetDir = target - transform.position;
                 Vector3 newDir = Vector3.RotateTowards(transform.forward, targetDir, step, 0.0F);
                 KAM3RA.User.LookAt2D(transform, target);
-               
                 controller.SimpleMove(newDir * 0.8f * speed);
             } else
             {
