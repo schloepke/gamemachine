@@ -73,7 +73,7 @@ module Example
         if @players[player.id]
           @players[player.id][:vector].x = player.x
           @players[player.id][:vector].y = player.y
-          @players[player.id][:vector].z = 0
+          @players[player.id][:vector].z = player.z
         else
           @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
         end

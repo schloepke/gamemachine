@@ -77,9 +77,9 @@ module GameMachine
 
         entity.set_vector3(
           MessageLib::Vector3.new.
-          set_x(grid_value.x).
-          set_y(grid_value.y).
-          set_z(grid_value.z)
+          set_x(grid_value.x.round(4)).
+          set_y(grid_value.y.round(4)).
+          set_z(grid_value.z.round(4))
         )
 
         if EXTRA.has_key?(grid_value.id)
