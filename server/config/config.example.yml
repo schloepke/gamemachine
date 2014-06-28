@@ -23,7 +23,7 @@ development:
       # router size for the udp actor that handles all incoming upd messages
       udp_routers: 10
       # What data store the object database will use (one of memory, mapdb, or couchbase)
-      data_store: couchbase
+      data_store: memory
       # Advanced settings for write behind cache.  -1 disables.  This is fine for
       # all but large games with high traffic (hundreds of writes per second)
       cache_write_interval: -1
@@ -52,6 +52,41 @@ development:
       # array of seed servers.  Required if node is in a cluster
       seeds: [default,seed01]
       # Mono server settings
+      mono_enabled: false
+      mono_dll: test_actor.dll
+      mono_gateway_host: 127.0.0.1
+      mono_gateway_port: 8800
+    seed01:
+      environment: development
+      auth_handler: Example::AuthenticationHandler
+      player_register_handler: Example::PlayerRegister
+      player_manager: Example::PlayerManager
+      game_handler: GameMachine::Handlers::Request
+      entity_tracking_handler: Example::TrackingHandler
+      game_handler_routers: 10
+      request_handler_routers: 10
+      udp_routers: 10
+      data_store: memory
+      cache_write_interval: -1
+      cache_writes_per_second: -1
+      grids:
+        default: 4000, 50, 1
+        aoe: 4000, 5, 1
+        local_chat: 4000, 10, 10
+      couchbase_servers:
+        - http://127.0.0.1:8091/pools
+      http_enabled: false
+      http_host: 127.0.0.1
+      http_port: 3000
+      udp_enabled: true
+      udp_host: 0.0.0.0
+      udp_port: 24130
+      tcp_enabled: false
+      tcp_host: 0.0.0.0
+      tcp_port: 8700
+      akka_host: 127.0.0.1
+      akka_port: 2551
+      seeds: [default,seed01]
       mono_enabled: false
       mono_dll: test_actor.dll
       mono_gateway_host: 127.0.0.1
