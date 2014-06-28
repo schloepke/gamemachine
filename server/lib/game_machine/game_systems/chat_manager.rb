@@ -24,8 +24,13 @@ module GameMachine
       def define_update_procs
         commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
           if current_entity.has_subscribers
-            if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list
-              subscriber_id_list.remove(update_entity.id)
+            if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list.to_a
+              current_entity.subscribers.set_subscriber_id_list(nil)
+              subscriber_id_list.each do |name|
+                unless name == update_entity.id
+                  current_entity.subscribers.add_subscriber_id(name)
+                end
+              end
             end
           end
           current_entity
@@ -67,7 +72,7 @@ module GameMachine
       # because we have no way of knowing when everyone has left
       def send_invite(chat_invite)
         invite_id = Uniqueid.generate_token(chat_invite.inviter)
-        stored_id = "invite_#{invite.channel_name}_#{token}"
+        stored_id = "invite_#{chat_invite.channel_name}_#{invite_id}"
         commands.datastore.put(MessageLib::Entity.new.set_id(stored_id))
         chat_invite.set_invite_id(invite_id)
         commands.player.send_message(chat_invite,chat_invite.invitee)

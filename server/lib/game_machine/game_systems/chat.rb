@@ -172,17 +172,18 @@ module GameMachine
             next
           end
 
+          GameMachine.logger.info "Join request #{channel.name}"
           # Private channels.  format priv_[chat_id]_[channel name]
           # Players can create private channels with their player id, other
           # players must have an invite to join someone elses private channel
           if channel.name.match(/^priv/)
-            channel_parts = channel.name.split('/')
-
-            if chat_id == channel_parts[1]
+            if channel.name.match(/^priv_#{chat_id}/)
               join_channel(channel.name,channel.flags)
             elsif channel.invite_id
               if invite_exists?(channel.name,channel.invite_id)
                 join_channel(channel.name,channel.flags)
+              else
+                GameMachine.logger.info "Invite id #{channel.invite_id} not found"
               end
             end
           else
