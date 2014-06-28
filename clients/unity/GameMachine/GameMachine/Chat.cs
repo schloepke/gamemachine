@@ -15,16 +15,24 @@ using GameMachine;
 // You can access the subscribers list by calling messenger.subscribers, which returns a dictionary where the key
 // is the channel name, and the value is a list of subscribers.
 
-//  You can use the messenger system to create matchmaking systems or for groups.  It is designed for any kind of
-// group based messeging that you need.  Chat messages are also not restricted to just text.  You can create chat
-// messages with an attached entity, that can contain anything an entity can hold, which is literally anything.
-// To send advanced messages use the SendChatMessage function instead of SendMessage. 
+// Basic workflow
 
+// Incoming messages get routed to messenger.  Messenger calls our callbacks in this class for new messages as well as when joining/leaving
+// a channel and when we get an invite to a private channel.
+// This class does some formatting on the message and then sends it to Chatbox for display.
 
+// Outgoing messages go straight from Chatbox to messenger, which sends them to the server.
 
-// To replace the UI with you own you will need to provide your own UI game object with
-// a method for receiving and sending messages.  This example uses a javascript ui, so we have to use
-// the SendMessage functionality to pass messages back and forth.
+// Note that channels you are subscribed to persist when you logout by default.  You can call messenger.LeaveAllChannels()
+// to unsubscribe from all channels.  We currently do not do that anywhere.
+
+// Note on attaching arbitrary data to chat messages.  Yes you can do that, chat messages can have an entity attached that can contain anything.
+// No you should probably not do that.  Just because someone is in a channel with you does not mean that channel is the right mechanism for obtaining
+// other information about that user.  For example, the combat system sends combat updates that include health for every player in range if they get hit.
+//  That is where you should get health of players.  The ability to pass extra information via chat messages was primarily put there for P2P data.  The chat system
+// is simply not designed for handling things like low latency updates between players.  For that case see the extra info that can be passed via entity tracking, that
+// is generally the right way to distribute small pieces of extra player data, as that information is already being updated 10 times a second, and it is region based so
+// performance will be much better.
 
 namespace GameMachine
 {
@@ -68,8 +76,8 @@ namespace GameMachine
             messenger.JoinChannel("global", "subscribers");
 
             // Send this whenever you want a list of subscribed channels, and the optional
-            // subscriber list if you have set the subscribers flag.  Remember you get this
-            // automatically when you join/leave a channel.
+            // subscriber list if you have set the subscribers flag.  We do it on an interval
+            // so that you get notified when new players join a group you are in.
             InvokeRepeating("UpdateChatStatus", 0.01f, 5.0F);
 
         }
