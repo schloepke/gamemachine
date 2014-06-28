@@ -124,7 +124,7 @@ namespace GameMachine
 
         public void JoinChannel(string channelName)
         {
-            JoinChannel(channelName, "subscribers");
+            JoinChannel(channelName, "subscribers", null);
         }
 
         public void JoinChannel(string channelName, string inviteId)
