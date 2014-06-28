@@ -67,11 +67,11 @@ public class Chatbox : MonoBehaviour
         foreach (string entry in chatEntries)
         {
             string text;
+            GUI.contentColor = Color.white;
             List<string> words = new List<string>(entry.Split("|".ToCharArray(), StringSplitOptions.RemoveEmptyEntries));
             if (words.Count == 1)
             {
                 text = words [0];
-                GUI.contentColor = Color.white;
             } else
             {
                 text = words [1];
@@ -84,6 +84,9 @@ public class Chatbox : MonoBehaviour
                 } else  if (words [0] == "red")
                 {
                     GUI.contentColor = Color.red;
+                } else  if (words [0] == "magenta")
+                {
+                    GUI.contentColor = Color.magenta;
                 }
             }
             GUILayout.BeginHorizontal();
@@ -113,14 +116,14 @@ public class Chatbox : MonoBehaviour
     {
         msg = msg.Replace("\n", "");
         msg = msg.Replace("\n", "");
-        //AddMessage(msg);
-        inputField = ""; //Clear line
+        inputField = "";
         lastUnfocus = Time.time;
         this.gameObject.GetComponent<GameMachine.Chat>().SendChatMessage(msg);
     }
 
-    public void  AddMessage(string msg)
+    public void  AddMessage(string color, string msg)
     {
+        msg = color + "|" + msg;
         chatEntries.Add(msg);
         lastEntry = Time.time;
 

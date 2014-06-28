@@ -87,7 +87,7 @@ namespace GameMachine
         public void ChannelLeft(string channelName)
         {
             Logger.Debug("Left " + channelName);
-            chatbox.AddMessage("yellow|You have left " + channelName);
+            chatbox.AddMessage("yellow", "You have left " + channelName);
             if (channelName.StartsWith("priv_"))
             {
                 groupUi = this.gameObject.GetComponent<GameMachine.GroupUi>() as GroupUi;
@@ -116,10 +116,10 @@ namespace GameMachine
                 groupUi = this.gameObject.AddComponent<GameMachine.GroupUi>() as GroupUi;
                 groupUi.Join(messenger, channelName);
                 chatCommands.currentGroup = channelName;
-                chatbox.AddMessage("yellow|You have joined a group");
+                chatbox.AddMessage("yellow", "You have joined a group");
             } else
             {
-                chatbox.AddMessage("yellow|You have joined " + channelName);
+                chatbox.AddMessage("yellow", "You have joined " + channelName);
             }
 
         }
@@ -132,6 +132,7 @@ namespace GameMachine
         {
             string text;
             string color = "white";
+            string channel = "local";
             string name = message.GetType().Name;
             Logger.Debug("MessageRecieved type " + name);
             if (name == "String")
@@ -145,16 +146,25 @@ namespace GameMachine
 
                 if (chatMessage.type == "group")
                 {
-                    color = "green";
+                    if (chatMessage.chatChannel.name.StartsWith("priv_"))
+                    {
+                        color = "magenta";
+                        channel = "group";
+                    } else
+                    {
+                        color = "green";
+                        channel = channelName;
+                    }
+
                 } else
                 {
                     color = "white";
                 }
-                text = color + "|" + text;
+                text = "|" + "[" + channel + "] " + text;
             }
 
             //Logger.Debug("Chat message " + text);
-            chatbox.AddMessage(text);
+            chatbox.AddMessage(color, text);
         }
 
         public void SendChatMessage(string message)
