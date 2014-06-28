@@ -40,7 +40,10 @@ module GameMachine
           unless current_entity.has_subscribers
             current_entity.set_subscribers(MessageLib::Subscribers.new)
           end
-          current_entity.subscribers.add_subscriber_id(update_entity.id)
+          subscriber_id_list = current_entity.subscribers.get_subscriber_id_list.to_a
+          unless subscriber_id_list.include?(update_entity.id)
+            current_entity.subscribers.add_subscriber_id(update_entity.id)
+          end
           current_entity
         end
       end
