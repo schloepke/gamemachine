@@ -33,11 +33,12 @@ Out of the box:
 
 ###Getting Started
 
-**Note:  New release with more examples and a public testing cluster coming by 7/1/2014
+**[Play the public demo](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-public-demo)**
 
 **[Install the server](https://github.com/gamemachine/gamemachine/wiki/Installation)**
 
-**[Download the Unity client](https://github.com/gamemachine/gamemachine/blob/master/clients/unity/GameMachineClient.unitypackage)**
+**[Download a Unity package](https://github.com/gamemachine/gamemachine/wiki/Unity-packages)**
+
   
  
 ###Support
@@ -45,3 +46,4 @@ Out of the box:
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
+
