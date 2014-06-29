@@ -23,7 +23,7 @@ Out of the box:
 
 * **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
 * **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Group-messaging)**
-* **[Login & Authentication](https://github.com/gamemachine/gamemachine/wiki/Login-and-authentication)**
+* Login & Authentication
 * Distributed object store
 * Locality (zones/regions)
 * Simple framework for writing server side logic
