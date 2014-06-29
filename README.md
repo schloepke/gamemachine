@@ -13,7 +13,6 @@ Scalable systems must be built around the premise that failure is natural and co
 ### Productve development environment
 We leverage the power of the JVM to allow developers to build game logic quickly in jruby, and easily move that logic to scala or java if and when performance dictates. In Game Machine regardless of language all actors inherit from a single base class, and they all work the same way.  Migrating code to another JVM language is a matter of syntax, not structural change.
 
-
 ###Open source
 We strongly believe that core technology should be open source.  This benefits everyone and allows more resource and time to be spent making games instead of architecture.  Our goal is to lower the cost of multiplayer games industry wide by providing a robust open source solution.
 
@@ -24,10 +23,10 @@ Out of the box:
 * **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
 * **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Group-messaging)**
 * Login & Authentication
-* Distributed object store
-* Locality (zones/regions)
+* **[Distributed object store](https://github.com/gamemachine/gamemachine/wiki/Object-database-archtiecture)**
+* **[Locality (zones/regions)](https://github.com/gamemachine/gamemachine/wiki/Region-servers)**
 * Simple framework for writing server side logic
-* Fully distributed.  Easy to deploy and manage.
+* **[Fully distributed.  Easy to deploy and manage](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-Cluster)**
 
 
 ###Getting Started
@@ -45,4 +44,3 @@ Out of the box:
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
-
