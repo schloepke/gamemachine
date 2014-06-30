@@ -31,9 +31,7 @@ module GameMachine
     def get_entity(entity_id)
       entity = entities.fetch(entity_id,nil)
       if entity.nil?
-        if bytes = store.get(entity_id)
-          entity = MessageLib::Entity.parse_from(bytes)
-        end
+        entity = store.get(entity_id)
       end
       entity
     end

@@ -9,7 +9,7 @@ module GameMachine
     include Singleton
     extend Forwardable
 
-    def_delegators :@store, :get, :set, :delete, :delete_all, :shutdown, :keys, :dump, :load
+    def_delegators :@store, :delete, :delete_all, :shutdown, :keys, :dump, :load
 
     attr_reader :store
     def initialize
@@ -21,6 +21,27 @@ module GameMachine
       @store = nil
       @store_name = store_name
       connect
+    end
+
+
+    def get(key)
+      value = @store.get(key)
+      return nil if value.nil?
+      if value.is_a?(String)
+        MessageLib::Entity.new.set_id(key).set_json_storage(
+          MessageLib::JsonStorage.new.set_json(value)
+        )
+      else
+        MessageLib::Entity.parse_from(value)
+      end
+    end
+
+    def set(key,value)
+      if value.has_json_storage
+        @store.set(key,value.json_storage.json)
+      else
+        @store.set(key,value.to_byte_array)
+      end
     end
 
     private

@@ -35,9 +35,10 @@ development:
         aoe: 4000, 5, 1
         local_chat: 4000, 10, 10
       # Couchbase config
+      couchbase_bucket: default
+      couchbase_password:
       couchbase_servers:
         - http://127.0.0.1:8091/pools
-      #auth_handler: Example::AuthenticationHandler
       http_enabled: true
       http_host: 0.0.0.0
       http_port: 3000
@@ -73,6 +74,8 @@ development:
         default: 4000, 50, 1
         aoe: 4000, 5, 1
         local_chat: 4000, 10, 10
+      couchbase_bucket: default
+      couchbase_password:
       couchbase_servers:
         - http://127.0.0.1:8091/pools
       http_enabled: false

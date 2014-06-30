@@ -137,7 +137,7 @@ module GameMachine
         enqueue(message.id)
       else
         message = swap_if_queued_exists(message)
-        @store.set(message.id, message.to_byte_array)
+        @store.set(message.id, message)
         @last_write = current_time
         set_updated_at(message)
       end
