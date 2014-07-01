@@ -25,15 +25,11 @@ module GameMachine
       end
 
       def put!(entity)
-        store.set(entity.id,entity.to_byte_array)
+        store.set(entity.id,entity)
       end
 
       def get!(entity_id)
-        if bytes = store.get(entity_id)
-          MessageLib::Entity.parse_from(bytes)
-        else
-          nil
-        end
+        store.get(entity_id)
       end
 
       def del!(entity_id)

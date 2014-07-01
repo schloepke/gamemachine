@@ -45,7 +45,9 @@ dependencies {
   compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
   //compile(group: 'io.netty', name: 'netty-all', version:'4.0.11.Final')
   //compile 'org.apache.camel:camel-jetty:2.10.3'
-  compile(group: 'couchbase', name: 'couchbase-client', version:'1.1.7')
+  //compile(group: 'couchbase', name: 'couchbase-client', version:'1.4.2')
+  compile 'com.basho.riak:riak-client:1.4.4'
+  compile 'com.couchbase.client:couchbase-client:1.4.2'
   compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:1.0.3'
   compile 'io.netty:netty-testsuite:4.0.20.Final'
