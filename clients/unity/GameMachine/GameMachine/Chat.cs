@@ -1,8 +1,11 @@
 using UnityEngine;
 using System.Collections;
+using  System.Collections.Generic;
+using System.Text.RegularExpressions;
 using ChatMessage = GameMachine.Messages.ChatMessage;
 using ChatInvite = GameMachine.Messages.ChatInvite;
 using GameMachine;
+
 
 // This class loads a UI component and sets up the callbacks to tie the UI to the messaging system.
 
@@ -36,153 +39,156 @@ using GameMachine;
 
 namespace GameMachine
 {
-    public class Chat : MonoBehaviour
-    {
-        private Chatbox chatbox;
-        private Messenger messenger;
-        private ChatCommands chatCommands;
-        private GroupUi groupUi;
+	public class Chat : MonoBehaviour
+	{
+		private Chatbox chatbox;
+		private Messenger messenger;
+		private ChatCommands chatCommands;
 
-        void Start()
-        {
-            // Gui component.
-            chatbox = this.gameObject.AddComponent<Chatbox>() as Chatbox;
+		public static string currentGroup;
+		public static string currentTeam;
+		public TeamUi teamUi;
 
-            // The messaging actor
-            messenger = ActorSystem.Instance.Find("Messenger") as Messenger;
+		void Start ()
+		{
+			// Gui component.
+			chatbox = this.gameObject.AddComponent<Chatbox> () as Chatbox;
 
-            // Parses the chat language used by the gui and calls messenger
-            // Feel free to provide your own implementation, this is mostly a starting point.
-            // Supported syntax is documented in the source
-            chatCommands = new ChatCommands(messenger);
+			teamUi = this.gameObject.AddComponent<TeamUi> () as TeamUi;
 
-            // Setup callacks so we get notified when we join/leave channels and receive messages
-            Messenger.ChannelJoined channelCallback = ChannelJoined;
-            messenger.OnChannelJoined(channelCallback);
+			// The messaging actor
+			messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
 
-            Messenger.ChannelLeft channelLeftCallback = ChannelLeft;
-            messenger.OnChannelLeft(channelLeftCallback);
+			// Parses the chat language used by the gui and calls messenger
+			// Feel free to provide your own implementation, this is mostly a starting point.
+			// Supported syntax is documented in the source
+			chatCommands = new ChatCommands (messenger);
+
+			// Setup callacks so we get notified when we join/leave channels and receive messages
+			Messenger.ChannelJoined channelCallback = ChannelJoined;
+			messenger.OnChannelJoined (channelCallback);
+
+			Messenger.ChannelLeft channelLeftCallback = ChannelLeft;
+			messenger.OnChannelLeft (channelLeftCallback);
         
-            Messenger.MessageReceived messageCallback = MessageReceived;
-            messenger.OnMessageReceived(messageCallback);
+			Messenger.MessageReceived messageCallback = MessageReceived;
+			messenger.OnMessageReceived (messageCallback);
 
-            Messenger.InviteReceived inviteCallback = InviteReceived;
-            messenger.OnInviteReceived(inviteCallback);
+			Messenger.InviteReceived inviteCallback = InviteReceived;
+			messenger.OnInviteReceived (inviteCallback);
 
-            // Join an initial channel.  The second argument is a flags string
-            // that sets certain flags on a channel.  Currently 'subscribers' is the
-            // one valid option.  If subscribers is set, status updates from the server
-            // will include a complete subscriber list for each channel.
-            messenger.JoinChannel("global", "subscribers");
+			// Join an initial channel.  The second argument is a flags string
+			// that sets certain flags on a channel.  Currently 'subscribers' is the
+			// one valid option.  If subscribers is set, status updates from the server
+			// will include a complete subscriber list for each channel.
+			messenger.JoinChannel ("MainLobby", "subscribers");
 
-            // Send this whenever you want a list of subscribed channels, and the optional
-            // subscriber list if you have set the subscribers flag.  We do it on an interval
-            // so that you get notified when new players join a group you are in.
-            InvokeRepeating("UpdateChatStatus", 0.01f, 5.0F);
+			// Send this whenever you want a list of subscribed channels, and the optional
+			// subscriber list if you have set the subscribers flag.  We do it on an interval
+			// so that you get notified when new players join a group you are in.
+			// For matchmaking you probably want this value lower so it appears more
+			// responsive.  For mmo type games it could be somewhat higher.
+			InvokeRepeating ("UpdateChatStatus", 0.01f, 1.0F);
 
-        }
+		}
 	
-        private void UpdateChatStatus()
-        {
-            messenger.ChatStatus();
-        }
-        public void InviteReceived(object message)
-        {
-            ChatInvite chatInvite = message as ChatInvite;
-            messenger.JoinChannel(chatInvite.channelName, chatInvite.invite_id);
-        }
+		private void UpdateChatStatus ()
+		{
+			messenger.ChatStatus ();
+		}
 
-        public void ChannelLeft(string channelName)
-        {
-            Logger.Debug("Left " + channelName);
-            chatbox.AddMessage("yellow", "You have left " + channelName);
-            if (channelName.StartsWith("priv_"))
-            {
-                groupUi = this.gameObject.GetComponent<GameMachine.GroupUi>() as GroupUi;
-                if (groupUi != null)
-                {
-                    if (groupUi.channelName == channelName)
-                    {
-                        Destroy(groupUi);
-                    }
-                }
-            }
-        }
+		public void InviteReceived (object message)
+		{
+			ChatInvite chatInvite = message as ChatInvite;
+			messenger.JoinChannel (chatInvite.channelName, chatInvite.invite_id);
+		}
 
-        public void ChannelJoined(string channelName)
-        {
-            Logger.Debug("Joined " + channelName);
+		public void ChannelLeft (string channelName)
+		{
+			Logger.Debug ("Left " + channelName);
+
+			if (channelName.StartsWith ("priv_")) {
+				if (channelName.EndsWith ("group")) {
+					LeaveGroup (channelName);
+				}
+			} else {
+				chatbox.AddMessage ("yellow", "You have left " + channelName);
+			}
+		}
+
+		public void LeaveGroup (string channelName)
+		{
+			chatbox.AddMessage ("yellow", "You have left your group");
+		}
 
 
-            if (channelName.StartsWith("priv_"))
-            {
-                groupUi = this.gameObject.GetComponent<GameMachine.GroupUi>() as GroupUi;
-                if (groupUi != null)
-                {
-                    Destroy(groupUi);
-                }
-                groupUi = this.gameObject.AddComponent<GameMachine.GroupUi>() as GroupUi;
-                groupUi.Join(messenger, channelName);
-                chatCommands.currentGroup = channelName;
-                chatbox.AddMessage("yellow", "You have joined a group");
-            } else
-            {
-                chatbox.AddMessage("yellow", "You have joined " + channelName);
-            }
+		public void CreateGroup (string channelName)
+		{
+			ChannelUi.DestroyChannelUi (channelName);
+			ChannelUi.CreateChannelUi (this.gameObject, channelName, "Group");
+			currentGroup = channelName;
+			chatbox.AddMessage ("yellow", "You have joined a group");
+		}
 
-        }
+		public void ChannelJoined (string channelName)
+		{
+			// private message
+			if (channelName.StartsWith ("priv_")) {
+				// private group
+				if (channelName.EndsWith ("group")) {
+					CreateGroup (channelName);
+				}
+			} else {
+				chatbox.AddMessage ("yellow", "You have joined " + channelName);
+			}
 
-        // This is our callback function.  Messenger will send us
-        // ChatMessage objects.  We also use this for our chat commands
-        // handler, that will send error messages to this function to 
-        // be send to the gui. (If we had a C# chat gui this would be cleaner).
-        public void MessageReceived(object message)
-        {
-            string text;
-            string color = "white";
-            string channel = "local";
-            string name = message.GetType().Name;
-            Logger.Debug("MessageRecieved type " + name);
-            if (name == "String")
-            {
-                text = message as string;
-            } else
-            {
-                ChatMessage chatMessage = message as ChatMessage;
-                string channelName = chatMessage.chatChannel.name;
-                text = chatMessage.senderId + ": " + chatMessage.message;
+		}
 
-                if (chatMessage.type == "group")
-                {
-                    if (chatMessage.chatChannel.name.StartsWith("priv_"))
-                    {
-                        color = "magenta";
-                        channel = "group";
-                    } else
-                    {
-                        color = "green";
-                        channel = channelName;
-                    }
+		// This is our callback function.  Messenger will send us
+		// ChatMessage objects.  We also use this for our chat commands
+		// handler, that will send error messages to this function to 
+		// be send to the gui.
+		public void MessageReceived (object message)
+		{
+			string text;
+			string color = "white";
+			string channel = "local";
+			string name = message.GetType ().Name;
+			Logger.Debug ("MessageRecieved type " + name);
+			if (name == "String") {
+				text = message as string;
+			} else {
+				ChatMessage chatMessage = message as ChatMessage;
+				string channelName = chatMessage.chatChannel.name;
+				text = chatMessage.senderId + ": " + chatMessage.message;
 
-                } else
-                {
-                    color = "white";
-                }
-                text = "|" + "[" + channel + "] " + text;
-            }
+				if (chatMessage.type == "group") {
+					if (chatMessage.chatChannel.name.StartsWith ("priv_")) {
+						color = "magenta";
+						channel = "group";
+					} else {
+						color = "green";
+						channel = channelName;
+					}
 
-            //Logger.Debug("Chat message " + text);
-            chatbox.AddMessage(color, text);
-        }
+				} else {
+					color = "white";
+				}
+				text = "|" + "[" + channel + "] " + text;
+			}
 
-        public void SendChatMessage(string message)
-        {
-            chatCommands.process(User.Instance.username, message);
-        }
+			//Logger.Debug("Chat message " + text);
+			chatbox.AddMessage (color, text);
+		}
 
-        void Update()
-        {
+		public void SendChatMessage (string message)
+		{
+			chatCommands.process (User.Instance.username, message);
+		}
+
+		void Update ()
+		{
         
-        }
-    }
+		}
+	}
 }
