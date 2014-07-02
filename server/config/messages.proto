@@ -91,6 +91,10 @@ message ChatMessage {
 message ChatStatus {
 }
 
+message ChatDestroy {
+  required string playerId = 1;
+}
+
 message ClientEvent {
   required string event = 1;
   required string clientId = 2;

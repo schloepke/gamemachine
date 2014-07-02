@@ -25,36 +25,25 @@ module GameMachine
 
       let(:actor_ref) {double('Actor::Ref', :tell => true)}
 
+      subject do
+        ref = Actor::Builder.new(Request).with_name('request_test').test_ref
+        ref.underlying_actor
+      end
+
       describe "#on_receive" do
 
-        before(:each) do
-          Actor::Builder.new(Request).with_name('test_request_handler').start
-        end
-
         it "sets player on entities" do
+          Authentication.stub(:authenticated?).and_return(true)
           message = client_message
           entity = message.get_entity_list.first
           entity.should_receive(:set_player).with(message.player)
-          Request.should_receive_message(message,'test_request_handler') do
-            Request.find('test_request_handler').tell(message)
-          end
+          subject.on_receive(message)
         end
 
 
         it "calls unhandled if not a client message" do
-          Request.any_instance.should_receive(:unhandled).with('test')
-          Request.should_receive_message('test','test_request_handler') do
-            Request.find('test_request_handler').tell('test')
-          end
-        end
-
-        it "calls unhandled if player is not set" do
-          message = client_message
-          message.set_player(nil)
-          Request.any_instance.should_receive(:unhandled).with(message)
-          Request.should_receive_message(message,'test_request_handler') do
-            Request.find('test_request_handler').tell(message)
-          end
+          expect(subject).to receive(:unhandled).with('test')
+          subject.on_receive('test')
         end
 
       end

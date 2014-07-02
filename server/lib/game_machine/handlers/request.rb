@@ -61,6 +61,10 @@ module GameMachine
         ).set_client_connection(message.client_connection)
         entity.set_player(message.player)
         ClientManager.find.tell(entity)
+
+        ## Just for now, need to do this correctly by registering with the client manager
+        chat_destroy = MessageLib::ChatDestroy.new.set_player_id(message.player.id)
+        GameSystems::ChatManager.find.tell(chat_destroy)
       end
 
       def game_handler

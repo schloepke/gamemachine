@@ -22,7 +22,11 @@ module GameMachine
       aspect %w(ChatInvite Player)
 
       def define_update_procs
-        commands.datastore.define_dbproc(:chat_remove_subscriber) do |current_entity,update_entity|
+        commands.datastore.define_dbproc(:chat_remove_subscriber) do |id,current_entity,update_entity|
+          if current_entity.nil?
+            current_entity = MessageLib::Entity.new.set_id(id)
+          end
+
           if current_entity.has_subscribers
             if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list.to_a
               current_entity.subscribers.set_subscriber_id_list(nil)
@@ -36,10 +40,15 @@ module GameMachine
           current_entity
         end
 
-        commands.datastore.define_dbproc(:chat_add_subscriber) do |current_entity,update_entity|
+        commands.datastore.define_dbproc(:chat_add_subscriber) do |id,current_entity,update_entity|
+          if current_entity.nil?
+            current_entity = MessageLib::Entity.new.set_id(id)
+          end
+
           unless current_entity.has_subscribers
             current_entity.set_subscribers(MessageLib::Subscribers.new)
           end
+
           subscriber_id_list = current_entity.subscribers.get_subscriber_id_list.to_a
           unless subscriber_id_list.include?(update_entity.id)
             current_entity.subscribers.add_subscriber_id(update_entity.id)
@@ -54,6 +63,14 @@ module GameMachine
       end
 
       def on_receive(message)
+        if message.is_a?(MessageLib::ChatDestroy)
+          if @chat_actors.has_key?(message.player_id)
+            ask_child(message.player_id,message)
+            destroy_child(message.player_id)
+          end
+          return
+        end
+
         if message.has_chat_invite
           send_invite(message.chat_invite)
         elsif message.has_chat_register
@@ -85,10 +102,14 @@ module GameMachine
         if @chat_actors.has_key?(chat_id)
           forward_chat_request(chat_id,JavaLib::PoisonPill.get_instance)
           @chat_actors.delete(chat_id)
-          GameMachine.logger.debug "Chat child for #{chat_id} killed"
+          GameMachine.logger.info "Chat child for #{chat_id} killed"
         else
           GameMachine.logger.info "chat actor for chat_id #{chat_id} not found"
         end
+      end
+
+      def ask_child(chat_id,message)
+        @chat_actors[chat_id].ask(message,500)
       end
 
       def forward_chat_request(chat_id,message)

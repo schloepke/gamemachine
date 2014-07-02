@@ -62,17 +62,12 @@ module GameMachine
       it "should return true on success" do
         expect(test_model.save).to be_true
       end
-
-      it "should return false if id is nil" do
-        test_model.id = nil
-        expect(test_model.save).to be_false
-      end
     end
 
     describe "#save!" do
-      it "should raise an exception if id is nil" do
-        test_model.id = nil
-        expect {test_model.save!}.to raise_error
+      it "should call datastore.put!" do
+        expect_any_instance_of(GameMachine::Commands::DatastoreCommands).to receive(:put!)
+        test_model.save!
       end
 
       it "should not raise an exception if id is not nil" do

@@ -18,6 +18,14 @@ module GameMachine
 
       end
 
+      def delete(id)
+        commands.datastore.delete(id)
+      end
+
+      def delete!(id)
+        commands.datastore.delete!(id)
+      end
+
       def find!(id)
         scoped_id = scope_for(id)
         if entity = Commands::Base.commands.datastore.get!(scoped_id)
@@ -118,6 +126,14 @@ module GameMachine
 
     def save!
       commands.datastore.put!(to_storage_entity)
+    end
+
+    def destroy
+      commands.datastore.delete(scoped_id)
+    end
+
+    def destroy!
+      commands.datastore.delete!(scoped_id)
     end
 
   end

@@ -69,14 +69,9 @@ module Example
     end
 
     def get_players
+      @players = {}
       commands.grid.neighbors(position.x,position.y).each do |player|
-        if @players[player.id]
-          @players[player.id][:vector].x = player.x
-          @players[player.id][:vector].y = player.y
-          @players[player.id][:vector].z = player.z
-        else
-          @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
-        end
+        @players[player.id] = {:id => player.id, :vector => GameMachine::Vector.from(player)}
       end
     end
 
