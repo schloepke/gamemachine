@@ -8,9 +8,7 @@ module GameMachine
       end
 
       def define_dbproc(name,&blk)
-        if ObjectDb.dbprocs.get(name)
-          ObjectDb.dbprocs[name] = blk
-        end
+        ObjectDb.dbprocs[name] = blk
       end
 
       def call_dbproc(name,current_entity_id,update_entity,blocking=true)

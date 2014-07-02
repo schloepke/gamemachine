@@ -4,6 +4,9 @@ module GameMachine
       include MessageHelper
 
       def send_message(message,player_id)
+        if player_id.nil?
+          raise "player id cannot be nil"
+        end
         if is_entity?(message)
           entity = message
           unless entity.has_player

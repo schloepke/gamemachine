@@ -103,7 +103,7 @@ module GameMachine
           if team.access == 'public' || invite_accepted
             unless team.members.include?(message.player_id)
               team.members << message.player_id
-              #team.save!
+              team.save!
               create_player_team(team.name,message.player_id)
               commands.datastore.call_dbproc(:team_update_team,'teams',team.to_storage_entity,false)
             end
@@ -178,7 +178,6 @@ module GameMachine
           teams_request(message)
         elsif message.is_a?(LeaveTeam)
           leave_team(message)
-          teams_request(message)
         elsif message.is_a?(TeamsRequest)
           teams_request(message)
         end
@@ -193,10 +192,10 @@ module GameMachine
           end
 
           team = Team.from_entity(update_entity,:json_storage)
-          team_to_update = teams.teams.select {|t| t['name'] == team.name}.first
+          team_to_update = teams.teams.select {|t| t.name == team.name}.first
           if team_to_update
-            teams.teams.delete_if {|t| t['name'] == team.name}
-            teams.teams << team.attributes
+            teams.teams.delete_if {|t| t.name == team.name}
+            teams.teams << team
           end
           teams.to_storage_entity
         end
@@ -209,8 +208,8 @@ module GameMachine
           end
 
           team = Team.from_entity(update_entity,:json_storage)
-          teams.teams.delete_if {|t| t['name'] == team.name}
-          teams.teams << team.attributes
+          teams.teams.delete_if {|t| t.name == team.name}
+          teams.teams << team
           teams.to_storage_entity
         end
 
@@ -222,7 +221,7 @@ module GameMachine
           end
 
           team = Team.from_entity(update_entity,:json_storage)
-          teams.teams.delete_if {|t| t['name'] == team.name}
+          teams.teams.delete_if {|t| t.name == team.name}
           teams.to_storage_entity
         end
 

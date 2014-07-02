@@ -5,13 +5,6 @@ require 'benchmark'
 module GameMachine
   describe "model" do
 
-    class ScopedModel < GameMachine::Model
-      attribute :health, Integer
-      attribute :name, String
-      attribute :defense_skill, Integer
-      attribute :attack_skill, Integer
-      set_id_scope :tm
-    end
 
     class TestModel < GameMachine::Model
       attribute :health, Integer
@@ -19,6 +12,17 @@ module GameMachine
       attribute :defense_skill, Integer
       attribute :attack_skill, Integer
     end
+
+    class ScopedModel < GameMachine::Model
+      attribute :health, Integer
+      attribute :name, String
+      attribute :defense_skill, Integer
+      attribute :attack_skill, Integer
+      attribute :test_models, Array
+      attribute :test_model, TestModel
+      set_id_scope :tm
+    end
+
 
     let(:scoped_model) do
       model = ScopedModel.new(:health => 100, :id => 'myid')
@@ -32,6 +36,19 @@ module GameMachine
       model = TestModel.new(:health => 100, :id => 'myid')
     end
 
+
+    describe "nesting" do
+
+     it "should parse correctly" do
+        scoped_model.test_models = []
+        scoped_model.test_models << test_model
+        scoped_model.test_models << test_model
+        scoped_model.test_model = test_model
+        puts scoped_model.as_json.inspect
+        hash = JSON.parse(scoped_model.to_json)
+        ScopedModel.from_hash(hash)
+     end
+    end
 
     context :scoped_model do
 

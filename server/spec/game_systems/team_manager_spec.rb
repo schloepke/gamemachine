@@ -58,9 +58,7 @@ module GameMachine
       end
 
       before(:each) do
-        Commands::DatastoreCommands.stub(:define_dbproc)
-        Commands::DatastoreCommands.stub(:call_dbproc)
-        ChatManager.stub(:find).and_return(actor_ref)
+        Commands::PlayerCommands.any_instance.stub(:send_message).and_return(true)
       end
 
       describe "create_team" do
@@ -167,9 +165,6 @@ module GameMachine
         end
 
         it "should not add member to team if access is private" do
-          # Really strange, not stubbing this throws a concurrenthashmap null key
-          # exception
-          team.stub(:save!).and_return(true)
           Team.stub(:find!).and_return(private_team)
           expect(subject).to_not receive(:create_player_team)
           subject.on_receive(join_team)
