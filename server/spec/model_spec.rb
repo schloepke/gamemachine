@@ -37,17 +37,17 @@ module GameMachine
     end
 
 
-    describe "nesting" do
 
-     it "should parse correctly" do
-        scoped_model.test_models = []
-        scoped_model.test_models << test_model
-        scoped_model.test_models << test_model
-        scoped_model.test_model = test_model
-        puts scoped_model.as_json.inspect
-        hash = JSON.parse(scoped_model.to_json)
-        ScopedModel.from_hash(hash)
-     end
+    # Unfinished but leaving here for now
+    describe "nesting" do
+      it "should parse correctly" do
+          scoped_model.test_models = []
+          scoped_model.test_models << test_model
+          scoped_model.test_models << test_model
+          scoped_model.test_model = test_model
+          hash = JSON.parse(scoped_model.to_json)
+          ScopedModel.from_hash(hash)
+      end
     end
 
     context :scoped_model do

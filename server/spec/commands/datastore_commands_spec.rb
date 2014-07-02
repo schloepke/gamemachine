@@ -20,11 +20,11 @@ module GameMachine
       subject{DatastoreCommands.new}
 
       before(:each) do
-        subject.define_dbproc(:test1) do |current_entity,update_entity|
+        subject.define_dbproc(:test1) do |id,current_entity,update_entity|
           expect(update_entity).to eql(entity)
           current_entity
         end
-        subject.define_dbproc(:test2) do |current_entity,update_entity|
+        subject.define_dbproc(:test2) do |id,current_entity,update_entity|
           current_entity.set_entity_type('dunno')
           current_entity
         end
@@ -61,10 +61,6 @@ module GameMachine
           subject.call_dbproc(:test1, entity.get_id,entity,false).should be_true
         end
 
-        it "if called with an entity id that does not exist, it creates it" do
-          returned_entity = subject.call_dbproc(:test1, 'blah',entity,true)
-          expect(returned_entity.id).to eql('blah')
-        end
       end
 
       describe "#get" do

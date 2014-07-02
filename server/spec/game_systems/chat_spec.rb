@@ -76,7 +76,7 @@ module GameMachine
         end
 
         it "joining my own channel should work" do
-          channel_name = "priv/#{player_id}/test"
+          channel_name = "priv_#{player_id}_test"
           join_message = commands.chat.join_message(channel_name,player_id)
           expect(subject).to receive(:join_channel)
           subject.on_receive(join_message)
@@ -101,10 +101,8 @@ module GameMachine
 
       describe "subscribers list updates" do
         it "joining a channel adds player to subscriber list" do
+          expect(subject).to receive(:add_subscriber)
           subject.on_receive(join_request)
-          subscribers = Chat.subscribers_for_topic(topic)
-          expect(subscribers.get_subscriber_id_count).to eql(1)
-          expect(subscribers.get_subscriber_id_list.first).to eql(player_id)
           subject.on_receive(leave_request)
         end
 

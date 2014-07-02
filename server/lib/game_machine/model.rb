@@ -70,27 +70,29 @@ module GameMachine
       def id_scope
         @id_scope
       end
-    end
 
-    def self.from_hash(attributes)
-      if klass = attributes.delete('klass')
-        attributes = attributes.each_with_object({}) do |(k, v), h|
-          if v.kind_of?(Hash)
-            h[k] = from_hash(v)
-          elsif v.kind_of?(Array)
-            h[k] = v.collect do |e|
-              e.kind_of?(Hash) ? from_hash(e) : e
+      def from_hash(attributes)
+        if klass = attributes.delete('klass')
+          attributes = attributes.each_with_object({}) do |(k, v), h|
+            if v.kind_of?(Hash)
+              h[k] = from_hash(v)
+            elsif v.kind_of?(Array)
+              h[k] = v.collect do |e|
+                e.kind_of?(Hash) ? from_hash(e) : e
+              end
+            else
+              h[k] = v
             end
-          else
-            h[k] = v
           end
+          model = klass.constantize.new(attributes)
+          model.id = model.unscoped_id
+          model
+        else
+          OpenStruct.new(attributes)
         end
-        model = klass.constantize.new(attributes)
-        model.id = model.unscoped_id
-        model
       end
-
     end
+
 
     def as_json
       attributes['id'] = scoped_id
