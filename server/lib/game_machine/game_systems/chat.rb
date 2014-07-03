@@ -35,6 +35,11 @@ module GameMachine
       end
 
       def on_receive(entity)
+        if entity.is_a?(MessageLib::ChatDestroy)
+          leave_all_channels
+          return
+        end
+
         if entity.has_join_chat
           join_channels(entity.join_chat.get_chat_channel_list)
           send_status
@@ -71,6 +76,15 @@ module GameMachine
           message = MessageLib::Entity.new.set_id(chat_id).set_chat_channels(channels)
           Actor::Base.find(registered_as).tell(message,get_self)
         end
+      end
+
+      def leave_all_channels
+        channels = MessageLib::ChatChannels.new
+        @subscriptions.each do |name|
+          channel = MessageLib::ChatChannel.new.set_name(name)
+          leave_channel(channel)
+        end
+        get_sender.tell('complete',get_self)
       end
 
       def message_queue
@@ -205,18 +219,22 @@ module GameMachine
 
       def leave_channels(chat_channels)
         chat_channels.each do |channel|
-          if topic_handler = topic_handler_for(channel.name)
-            message = MessageLib::Unsubscribe.new.set_topic(channel.name)
-            message_queue.tell(message,topic_handler_for(channel.name).actor)
-            @subscriptions.delete_if {|sub| sub == channel.name}
-            save_subscriptions
-            remove_subscriber(chat_id,channel.name)
-            topic_handler.tell(JavaLib::PoisonPill.get_instance)
-            @topic_handlers.delete(channel.name)
-            delete_channel_flags(channel.name)
-          else
-            GameMachine.logger.info "leave_channel: no topic handler found for #{channel.name}"
-          end
+          leave_channel(channel)
+        end
+      end
+
+      def leave_channel(channel)
+        if topic_handler = topic_handler_for(channel.name)
+          message = MessageLib::Unsubscribe.new.set_topic(channel.name)
+          message_queue.tell(message,topic_handler_for(channel.name).actor)
+          @subscriptions.delete_if {|sub| sub == channel.name}
+          save_subscriptions
+          remove_subscriber(chat_id,channel.name)
+          topic_handler.tell(JavaLib::PoisonPill.get_instance)
+          @topic_handlers.delete(channel.name)
+          delete_channel_flags(channel.name)
+        else
+          GameMachine.logger.info "leave_channel: no topic handler found for #{channel.name}"
         end
       end
 

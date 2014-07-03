@@ -113,7 +113,11 @@ module GameMachine
             if message.send_to_player
               message
             else
-              message = Model.from_entity(message)
+              model = Model.from_entity(message)
+              if message.has_player
+                model.player_id = message.player.id
+              end
+              return model
             end
           end
           message

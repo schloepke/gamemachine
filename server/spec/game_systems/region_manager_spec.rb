@@ -2,6 +2,7 @@ require 'spec_helper'
 
 module GameMachine
   module GameSystems
+    include Models
 
     class Zone2Manager < Actor::Base
       def on_receive(message);end
@@ -42,14 +43,20 @@ module GameMachine
         ref.underlying_actor
       end
 
+      before(:each) do
+        RegionManager.any_instance.stub(:post_init)
+        subject.regions = {}
+        subject.servers = {}
+      end
+
       describe "#assign_servers" do
         it "should assign servers to regions that have none" do
           subject.stub(:regions).and_return(regions)
           ClusterMonitor.stub(:cluster_members).and_return(cluster_members)
           expect(region1).to receive(:server=)
           expect(region2).to receive(:server=)
-          expect(region1).to receive(:save)
-          expect(region2).to receive(:save)
+          expect(region1).to receive(:save!)
+          expect(region2).to receive(:save!)
           subject.assign_servers
           expect(subject.servers[server1_address]).to eq region1.name
           expect(subject.servers[server2_address]).to eq region2.name
@@ -73,25 +80,27 @@ module GameMachine
       describe "#load_from_config" do
         
         it "should create new regions that do not exist" do
-          expect(Models::Region).to receive(:find).
-            with('zone1',5000).and_return(nil)
-          expect(Models::Region).to receive(:find).
-            with('zone2',5000).and_return(nil)
+          expect(Region).to receive(:find!).
+            with('zone1').and_return(nil)
+          expect(Region).to receive(:find!).
+            with('zone2').and_return(nil)
 
-          expect(Models::Region).to receive(:new).
+          expect(Region).to receive(:new).
             with(:id => 'zone1', :name => 'zone1', :manager => zone1_manager).and_return(region1)
-          expect(Models::Region).to receive(:new).
+          expect(Region).to receive(:new).
             with(:id => 'zone2', :name => 'zone2', :manager => zone2_manager).and_return(region2)
 
-          expect(region1).to receive(:save)
-          expect(region2).to receive(:save)
+          expect(region1).to receive(:save!)
+          expect(region2).to receive(:save!)
+          subject.load_from_config
           expect(subject.regions['zone1']).to eq region1
           expect(subject.regions['zone2']).to eq region2
         end
         
         it "should load regions that exist" do
-          expect(Models::Region).to receive(:find).with('zone1',5000).and_return(region1)
-          expect(Models::Region).to receive(:find).with('zone2',5000).and_return(region2)
+          expect(Region).to receive(:find!).with('zone1').and_return(region1)
+          expect(Region).to receive(:find!).with('zone2').and_return(region2)
+          subject.load_from_config
           expect(subject.regions['zone1']).to eq region1
           expect(subject.regions['zone2']).to eq region2
         end
@@ -111,6 +120,7 @@ module GameMachine
         context "node has been downed" do
 
           before(:each) do
+            subject.load_from_config
             subject.regions['zone1'].server = server2_address
             subject.servers[server2_address] = 'zone1'
             ClusterMonitor.stub(:cluster_members).and_return(cluster_with_down_members)
@@ -127,7 +137,7 @@ module GameMachine
           end
 
           it "should save region" do
-            expect(subject.regions['zone1']).to receive(:save)
+            expect(subject.regions['zone1']).to receive(:save!)
             subject.unassign_down_servers
           end
         end

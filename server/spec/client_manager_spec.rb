@@ -55,7 +55,7 @@ module GameMachine
 
     let(:client_connection) do
       MessageLib::ClientConnection.new.set_id(client_name).set_gateway('udp').
-        set_server('server')
+        set_server('server').set_type('cluster')
     end
 
     let('local_player_message') do

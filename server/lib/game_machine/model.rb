@@ -18,6 +18,14 @@ module GameMachine
 
       end
 
+      def delete(id)
+        commands.datastore.delete(id)
+      end
+
+      def delete!(id)
+        commands.datastore.delete!(id)
+      end
+
       def find!(id)
         scoped_id = scope_for(id)
         if entity = Commands::Base.commands.datastore.get!(scoped_id)
@@ -44,14 +52,7 @@ module GameMachine
           json = entity.json_entity.json
         end
 
-        attributes = JSON.parse(json)
-        if klass = attributes.delete('klass')
-          model = klass.constantize.new(attributes)
-          model.id = model.unscoped_id
-          model
-        else
-          raise "Unable to find klass attribute in #{attributes.inspect}"
-        end
+        self.from_hash(JSON.parse(json))
       end
 
       def scope_for(id)
@@ -69,6 +70,48 @@ module GameMachine
       def id_scope
         @id_scope
       end
+
+      def from_hash(attributes)
+        if klass = attributes.delete('klass')
+          attributes = attributes.each_with_object({}) do |(k, v), h|
+            if v.kind_of?(Hash)
+              h[k] = from_hash(v)
+            elsif v.kind_of?(Array)
+              h[k] = v.collect do |e|
+                e.kind_of?(Hash) ? from_hash(e) : e
+              end
+            else
+              h[k] = v
+            end
+          end
+          model = klass.constantize.new(attributes)
+          model.id = model.unscoped_id
+          model
+        else
+          OpenStruct.new(attributes)
+        end
+      end
+    end
+
+
+    def as_json
+      attributes['id'] = scoped_id
+      attributes.merge!(:klass => self.class.name)
+      attributes.each_with_object({}) do |(k, v), h|
+        if v.kind_of?(OpenStruct) 
+          h[k] = v.as_json
+        elsif v.is_a?(Array)
+          h[k] = v.collect do |e|
+            e.kind_of?(OpenStruct) ? e.as_json : e
+          end
+        else
+          h[k] = v
+        end
+      end
+    end
+
+    def to_json
+      JSON.generate(as_json)
     end
 
     def attributes
@@ -89,11 +132,6 @@ module GameMachine
       else
         id
       end
-    end
-
-    def to_json
-      attributes['id'] = scoped_id
-      JSON.dump(attributes.merge(:klass => self.class.name))
     end
 
     def to_entity
@@ -118,6 +156,14 @@ module GameMachine
 
     def save!
       commands.datastore.put!(to_storage_entity)
+    end
+
+    def destroy
+      commands.datastore.delete(scoped_id)
+    end
+
+    def destroy!
+      commands.datastore.delete!(scoped_id)
     end
 
   end

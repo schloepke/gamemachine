@@ -60,7 +60,6 @@ module GameMachine
                 :ctx => message.ctx,
                 :client_connection => client_connection
               }
-              GameMachine.logger.info "#{client.inspect}"
               self.class.clients[client_message.player.id] = client
               create_child(client_connection,client,@server,client_message.player.id)
             end

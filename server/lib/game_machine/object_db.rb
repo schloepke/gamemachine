@@ -3,7 +3,11 @@ module GameMachine
 
     class << self
       def dbprocs
-        @dbprocs ||= java.util.concurrent.ConcurrentHashMap.new
+        if @dbprocs
+          @dbprocs
+        else
+          @dbprocs = java.util.concurrent.ConcurrentHashMap.new
+        end
       end
     end
 
@@ -41,14 +45,18 @@ module GameMachine
         procname = message.get_update_method.to_sym
         current_entity_id = message.get_current_entity_id
         update_entity = message.get_update_entity
-        unless current_entity = get_entity(current_entity_id)
-          current_entity = MessageLib::Entity.new.set_id(current_entity_id)
+        current_entity = get_entity(current_entity_id)
+        if self.class.dbprocs.has_key?(procname)
+          dbproc = self.class.dbprocs[procname]
+          returned_entity = dbproc.call(
+            current_entity_id,current_entity,update_entity
+          )
+          set_entity(returned_entity)
+          sender.tell(returned_entity || false)
+        else
+          GameMachine.logger.warn("Unable to find dbproc #{procname}")
         end
-        returned_entity = self.class.dbprocs[procname].call(
-          current_entity,update_entity
-        )
-        set_entity(returned_entity)
-        sender.tell(returned_entity || false)
+
       elsif message.is_a?(MessageLib::ObjectdbPut)
         set_entity(message.get_entity)
         sender.tell(true)

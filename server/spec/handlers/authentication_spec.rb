@@ -20,15 +20,6 @@ module GameMachine
             expect(subject.authenticate!(player)).to be_true
           end
         end
-
-        context "player is not authenticated" do
-          it "does not authenticate player with invalid authtoken" do
-            player.set_authtoken('badtoken')
-            expect(subject.authenticate!(player)).to be_false
-          end
-        end
-
-
       end
 
     end

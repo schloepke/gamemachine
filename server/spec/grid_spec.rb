@@ -2,6 +2,10 @@ require 'spec_helper'
 module GameMachine
   describe Grid do
 
+    let(:test_grid_config) do
+      {:grid_size => 10, :cell_size => 10, :update_frequency => 1}
+    end
+
     subject {Grid}
 
     before(:each) do 
@@ -23,6 +27,12 @@ module GameMachine
     end
 
     describe "#find_or_create" do
+
+      before(:each) do
+        expect(subject.config).to receive(:fetch).with('test').
+          and_return(test_grid_config)
+      end
+
       it "creates a grid if none exists for the given name" do
         grid = subject.find_or_create('test')
         expect(grid).to be_instance_of(JavaLib::Grid)

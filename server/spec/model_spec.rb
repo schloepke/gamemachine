@@ -5,13 +5,6 @@ require 'benchmark'
 module GameMachine
   describe "model" do
 
-    class ScopedModel < GameMachine::Model
-      attribute :health, Integer
-      attribute :name, String
-      attribute :defense_skill, Integer
-      attribute :attack_skill, Integer
-      set_id_scope :tm
-    end
 
     class TestModel < GameMachine::Model
       attribute :health, Integer
@@ -19,6 +12,17 @@ module GameMachine
       attribute :defense_skill, Integer
       attribute :attack_skill, Integer
     end
+
+    class ScopedModel < GameMachine::Model
+      attribute :health, Integer
+      attribute :name, String
+      attribute :defense_skill, Integer
+      attribute :attack_skill, Integer
+      attribute :test_models, Array
+      attribute :test_model, TestModel
+      set_id_scope :tm
+    end
+
 
     let(:scoped_model) do
       model = ScopedModel.new(:health => 100, :id => 'myid')
@@ -32,6 +36,19 @@ module GameMachine
       model = TestModel.new(:health => 100, :id => 'myid')
     end
 
+
+
+    # Unfinished but leaving here for now
+    describe "nesting" do
+      it "should parse correctly" do
+          scoped_model.test_models = []
+          scoped_model.test_models << test_model
+          scoped_model.test_models << test_model
+          scoped_model.test_model = test_model
+          hash = JSON.parse(scoped_model.to_json)
+          ScopedModel.from_hash(hash)
+      end
+    end
 
     context :scoped_model do
 
@@ -62,17 +79,12 @@ module GameMachine
       it "should return true on success" do
         expect(test_model.save).to be_true
       end
-
-      it "should return false if id is nil" do
-        test_model.id = nil
-        expect(test_model.save).to be_false
-      end
     end
 
     describe "#save!" do
-      it "should raise an exception if id is nil" do
-        test_model.id = nil
-        expect {test_model.save!}.to raise_error
+      it "should call datastore.put!" do
+        expect_any_instance_of(GameMachine::Commands::DatastoreCommands).to receive(:put!)
+        test_model.save!
       end
 
       it "should not raise an exception if id is not nil" do

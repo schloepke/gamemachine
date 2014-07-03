@@ -5,7 +5,7 @@ module GameMachine
       include GameMachine::Commands
       include GameMachine::Models
 
-      attr_reader :regions, :servers
+      attr_accessor :regions, :servers
       def post_init(*args)
         @regions = {}
         @servers = {}

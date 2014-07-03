@@ -32,7 +32,7 @@ module GameMachine
         store.get(entity_id)
       end
 
-      def del!(entity_id)
+      def delete!(entity_id)
         store.delete(entity_id)
       end
 
