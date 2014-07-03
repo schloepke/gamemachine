@@ -60,9 +60,9 @@ module GameMachine
       end
 
       before(:each) do
-        Chat.any_instance.stub(:load_state)
+        allow_any_instance_of(Chat).to receive(:load_state)
         Actor::Builder.new(GameSystems::Chat,player_id).start
-        MessageQueue.stub(:find).and_return(actor_ref)
+        allow(MessageQueue).to receive(:find).and_return(actor_ref)
         commands.datastore.delete("chat_topic_#{topic}")
       end
 
@@ -118,7 +118,7 @@ module GameMachine
         it "joining a channel with flags should persist the flag" do
           subject.on_receive(join_request_with_flags)
           topic_flags = subject.get_flags.fetch(topic,[])
-          topic_flags.include?('subscribers').should be_true
+          expect(topic_flags.include?('subscribers')).to be_truthy
         end
 
         it "chat status should add subscribers to channel if flag is set" do
@@ -133,46 +133,46 @@ module GameMachine
         it "joining a channel should persist subscriptions" do
           subject.on_receive(join_request_with_flags)
           subscriptions = subject.get_subscriptions
-          subscriptions.include?(topic).should be_true
+          expect(subscriptions.include?(topic)).to be_truthy
         end
       end
 
       describe "joining and leaving channels" do
         it "processes the entity as a leave channel request" do
-          subject.should_receive(:leave_channels)
+          expect(subject).to receive(:leave_channels)
           subject.on_receive(leave_request)
         end
 
         it "sends an unsubscribe message to message queue" do
           subject.on_receive(join_request)
-          actor_ref.should_receive(:tell).with(kind_of(MessageLib::Unsubscribe),anything())
+          expect(actor_ref).to receive(:tell).with(kind_of(MessageLib::Unsubscribe),anything())
           subject.on_receive(leave_request)
         end
 
         it "processes the entity as a join channel request" do
-          subject.should_receive(:join_channels)
+          expect(subject).to receive(:join_channels)
           subject.on_receive(join_request)
         end
 
         it "sends a subscribe message to message queue" do
-          actor_ref.should_receive(:tell).exactly(1).times
+          expect(actor_ref).to receive(:tell).exactly(1).times
           subject.on_receive(join_request)
         end
 
         it "processes multiple requests in a single message" do
-          subject.should_receive(:join_channels).once
-          subject.should_receive(:leave_channels).once
-          subject.should_receive(:send_message).once
+          expect(subject).to receive(:join_channels).once
+          expect(subject).to receive(:leave_channels).once
+          expect(subject).to receive(:send_message).once
           subject.on_receive(all_requests)
         end
 
         it "send a private chat message" do
-          subject.should_receive(:send_private_message).once
+          expect(subject).to receive(:send_private_message).once
           subject.on_receive(private_chat_request)
         end
 
         it "send a group chat message" do
-          subject.should_receive(:send_group_message).once
+          expect(subject).to receive(:send_group_message).once
           subject.on_receive(public_chat_request)
         end
 

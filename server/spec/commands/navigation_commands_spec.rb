@@ -11,9 +11,9 @@ module GameMachine
       subject{NavigationCommands.new}
 
       before(:each) do
-        Navigation::DetourPath.stub(:query_ref).and_return(query_ref)
-        Navigation::DetourNavmesh.stub(:create).and_return(navmesh)
-        Navigation::DetourNavmesh.stub(:find).and_return(navmesh)
+        allow(Navigation::DetourPath).to receive(:query_ref).and_return(query_ref)
+        allow(Navigation::DetourNavmesh).to receive(:create).and_return(navmesh)
+        allow(Navigation::DetourNavmesh).to receive(:find).and_return(navmesh)
       end
 
       describe "#load_navmesh" do

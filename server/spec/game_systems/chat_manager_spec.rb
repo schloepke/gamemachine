@@ -25,7 +25,7 @@ module GameMachine
         game_message.to_entity
       end
 
-      let(:actor_builder) {mock('Actor::Builder', :with_parent => actor_builder, :start => true)}
+      let(:actor_builder) {double('Actor::Builder', :with_parent => actor_builder, :start => true)}
 
       let(:chat_invite) do
         chat = Commands::ChatCommands.new
