@@ -1,3 +1,4 @@
+require 'digest'
 module GameMachine
   module GameSystems
     class Chat < Actor::Base
@@ -98,7 +99,8 @@ module GameMachine
       def create_topic_handler(topic)
         name = "topic#{chat_id}#{topic}"
         builder = Actor::Builder.new(GameSystems::ChatTopic,chat_id,registered_as)
-        ref = builder.with_parent(context).with_name(name).start
+        actor_name = Digest::MD5.hexdigest(name)
+        ref = builder.with_parent(context).with_name(actor_name).start
         actor_ref = Actor::Ref.new(ref,GameSystems::ChatTopic.name)
         @topic_handlers[topic] = actor_ref
       end

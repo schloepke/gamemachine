@@ -9,7 +9,7 @@ module GameMachine
 
     describe "#set" do
       it "returns true when value is set" do
-        expect(subject.set('blah',0,0,0,'player')).to be_true
+        expect(subject.set('blah',0,0,0,'player')).to be_truthy
       end
 
       it "creates a grid point in correct cell" do

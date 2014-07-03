@@ -17,7 +17,7 @@ module GameMachine
 
         context "player is authenticated" do
           it "authenticates player with valid authtoken" do
-            expect(subject.authenticate!(player)).to be_true
+            expect(subject.authenticate!(player)).to be_truthy
           end
         end
       end

@@ -91,7 +91,7 @@ module GameMachine
         subject.local_clients[client_name] = client_connection
         subject.players[player_id] = client_name
         subject.class.local_players[player_id] = true
-        actor_ref.stub(:tell)
+        allow(actor_ref).to receive(:tell)
         expect(Actor::Base).to receive(:find).with(player_id).and_return(actor_ref)
         ClientManager.send_to_player(local_player_message)
       end
@@ -99,7 +99,7 @@ module GameMachine
       it "should send message to remote manager if player is remote" do
         subject.remote_clients[client_name] = actor_ref
         subject.players[player_id] = client_name
-        ClientManager.stub(:find).and_return(actor_ref)
+        allow(ClientManager).to receive(:find).and_return(actor_ref)
         expect(actor_ref).to receive(:tell).with(remote_player_message)
         ClientManager.send_to_player(remote_player_message)
       end
@@ -108,30 +108,30 @@ module GameMachine
     describe "#process_client_event" do
       it "on connect should set players entry" do
         subject.on_receive(client_connected_event)
-        expect(subject.players.has_key?(player_id)).to be_true
+        expect(subject.players.has_key?(player_id)).to be_truthy
       end
 
       it "on connect should set remote_clients entry" do
         subject.on_receive(client_connected_event)
-        expect(subject.remote_clients.has_key?(client_name)).to be_true
+        expect(subject.remote_clients.has_key?(client_name)).to be_truthy
       end
 
       it "on disconnect event should remove remote client reference" do
         subject.remote_clients[client_name] = true
         subject.on_receive(client_disconnected_event)
-        expect(subject.remote_clients.has_key?(client_name)).to be_false
+        expect(subject.remote_clients.has_key?(client_name)).to be_falsey
       end
     end
 
     describe "#register_sender" do
       it "should add local client entry if client" do
         subject.on_receive(client_register)
-        expect(subject.local_clients.has_key?(client_name)).to be_true
+        expect(subject.local_clients.has_key?(client_name)).to be_truthy
       end
 
       it "should add local actor entry if actor" do
         subject.on_receive(actor_register)
-        expect(subject.local_actors.has_key?(actor_name)).to be_true
+        expect(subject.local_actors.has_key?(actor_name)).to be_truthy
       end
 
       it "client register should call send_client_event" do
@@ -155,7 +155,7 @@ module GameMachine
       it "removes local client reference" do
         subject.local_clients[client_name] = true
         subject.on_receive(client_unregister)
-        expect(subject.local_clients.has_key?(client_name)).to be_false
+        expect(subject.local_clients.has_key?(client_name)).to be_falsey
       end
 
       it "should not send client event for local connenction" do

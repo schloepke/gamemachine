@@ -58,21 +58,21 @@ module GameMachine
             my_agents = agents.clone
             my_agents.delete(:agent1)
             my_agents.delete(:agent2)
-            subject.stub(:local_agents).and_return(my_agents)
+            allow(subject).to receive(:local_agents).and_return(my_agents)
             subject.update_agents
             expect(subject.children.size).to eq 3
-            expect(subject.children.has_key?(:agent1)).to be_false
-            expect(subject.children.has_key?(:agent2)).to be_false
+            expect(subject.children.has_key?(:agent1)).to be_falsey
+            expect(subject.children.has_key?(:agent2)).to be_falsey
           end
 
           it "should create new children it becomes responsible for" do
             my_agents = agents.clone
             my_agents[:agent6] = 'TestAgent'
-            subject.stub(:agent_config).and_return(my_agents)
-            subject.stub(:local_agents).and_return(my_agents)
+            allow(subject).to receive(:agent_config).and_return(my_agents)
+            allow(subject).to receive(:local_agents).and_return(my_agents)
             subject.update_agents
             expect(subject.children.size).to eq 6
-            expect(subject.children.has_key?(:agent6)).to be_true
+            expect(subject.children.has_key?(:agent6)).to be_truthy
           end
         end
 

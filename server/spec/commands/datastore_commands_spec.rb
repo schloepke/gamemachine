@@ -32,7 +32,7 @@ module GameMachine
 
       describe "#put" do
         it "sets the value" do
-          subject.put(entity).should be_true
+          expect(subject.put(entity)).to be_truthy
         end
       end
 
@@ -42,8 +42,8 @@ module GameMachine
           sleep 0.100
             
           result = subject.call_dbproc(:test1, entity.get_id,entity,true)
-          result.should be_kind_of(MessageLib::Entity)
-          result.get_id.should == entity.get_id
+          expect(result).to be_kind_of(MessageLib::Entity)
+          expect(result.get_id).to eq(entity.get_id)
         end
 
         it "returns updated entity" do
@@ -51,27 +51,27 @@ module GameMachine
           sleep 0.100
             
           result = subject.call_dbproc(:test2, entity.get_id,entity,true)
-          result.get_entity_type.should == 'dunno'
+          expect(result.get_entity_type).to eq('dunno')
         end
 
         it "returns true when called with blocking=false" do
           subject.put(entity)
           sleep 0.100
             
-          subject.call_dbproc(:test1, entity.get_id,entity,false).should be_true
+          expect(subject.call_dbproc(:test1, entity.get_id,entity,false)).to be_truthy
         end
 
       end
 
       describe "#get" do
         it "should return false if object does not exist" do
-          subject.get('xx').should be_false
+          expect(subject.get('xx')).to be_falsey
         end
 
         it "should return object if exists" do
           subject.put(entity)
           sleep 0.100
-          subject.get('1').should == entity
+          expect(subject.get('1')).to eq(entity)
         end
       end
 
@@ -79,7 +79,7 @@ module GameMachine
         it "removes the entity from the data store" do
           subject.put(entity)
           subject.delete(entity.id)
-          subject.get('1').should be_false
+          expect(subject.get('1')).to be_falsey
         end
       end
     end

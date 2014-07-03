@@ -77,7 +77,7 @@ module GameMachine
     describe "#save" do
 
       it "should return true on success" do
-        expect(test_model.save).to be_true
+        expect(test_model.save).to be_truthy
       end
     end
 
@@ -95,13 +95,13 @@ module GameMachine
     describe "#to_json" do
       it "should set klass" do
         model_hash = JSON.parse(test_model.to_json)
-        expect(model_hash.has_key?('klass')).to be_true
+        expect(model_hash.has_key?('klass')).to be_truthy
       end
     end
 
     describe "#to_entity" do
       it "should return an entity with json entity" do
-        expect(test_model.to_entity.has_json_entity).to be_true
+        expect(test_model.to_entity.has_json_entity).to be_truthy
       end
     end
 

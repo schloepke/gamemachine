@@ -22,7 +22,7 @@ module GameMachine
     describe "#load_from_config" do
       it "should create grids from config" do
         Grid.load_from_config
-        expect(Grid.config.has_key?('default')).to be_true
+        expect(Grid.config.has_key?('default')).to be_truthy
       end
     end
 

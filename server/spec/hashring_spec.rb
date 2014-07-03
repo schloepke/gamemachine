@@ -12,47 +12,47 @@ module GameMachine
 
     describe "#nodes" do
       it "nodes should equal buckets" do
-        subject.nodes.sort.should == buckets.sort
+        expect(subject.nodes.sort).to eq(buckets.sort)
       end
     end
 
     describe "#points" do
       it "should be number of points equal to REPLICAS * buckets.size " do
-        subject.points.size.should == subject.buckets.size * Hashring::REPLICAS
+        expect(subject.points.size).to eq(subject.buckets.size * Hashring::REPLICAS)
       end
     end
 
     describe "#bucket_for" do
       it "returns bucket for value" do
-        buckets.include?(subject.bucket_for('test')).should be_true
+        expect(buckets.include?(subject.bucket_for('test'))).to be_truthy
       end
     end
 
     describe "#remove_bucket" do
       it "removes the bucket from buckets array" do
         subject.remove_bucket('server1')
-        subject.buckets.size.should == 1
-        subject.buckets.first.should == 'server2'
+        expect(subject.buckets.size).to eq(1)
+        expect(subject.buckets.first).to eq('server2')
       end
 
       it "removes node from ring" do
         subject.remove_bucket('server1')
-        subject.nodes.size.should == 1
-        subject.buckets.first.should == 'server2'
+        expect(subject.nodes.size).to eq(1)
+        expect(subject.buckets.first).to eq('server2')
       end
     end
 
     describe "#add_bucket" do
       it "adds new bucket to buckets array" do
         subject.add_bucket('blah')
-        subject.buckets.size.should == 3
-        subject.buckets.sort.first.should == 'blah'
+        expect(subject.buckets.size).to eq(3)
+        expect(subject.buckets.sort.first).to eq('blah')
       end
 
       it "adds node to ring" do
         subject.add_bucket('blah')
-        subject.nodes.size.should == 3
-        subject.nodes.sort.first.should == 'blah'
+        expect(subject.nodes.size).to eq(3)
+        expect(subject.nodes.sort.first).to eq('blah')
       end
     end
   end

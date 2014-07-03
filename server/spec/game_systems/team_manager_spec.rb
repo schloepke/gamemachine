@@ -58,35 +58,35 @@ module GameMachine
       end
 
       before(:each) do
-        Commands::PlayerCommands.any_instance.stub(:send_message).and_return(true)
+        allow_any_instance_of(Commands::PlayerCommands).to receive(:send_message).and_return(true)
       end
 
       describe "create_team" do
 
         before(:each) do
-          subject.stub(:send_team_joined).and_return(true)
+          allow(subject).to receive(:send_team_joined).and_return(true)
         end
 
         it "should create a team" do
-          Team.stub(:find!).and_return(nil)
+          allow(Team).to receive(:find!).and_return(nil)
           expect_any_instance_of(Team).to receive(:save!)
           subject.on_receive(create_team)
         end
 
         it "should send chat join request" do
-          Team.stub(:find!).and_return(nil)
+          allow(Team).to receive(:find!).and_return(nil)
           expect(subject).to receive(:join_chat).with(team_name,player_id)
           subject.on_receive(create_team)
         end
 
         it "should not create a team if one exists" do
-          Team.stub(:find!).and_return(team)
-          expect(subject.create_team(create_team)).to be_false
+          allow(Team).to receive(:find!).and_return(team)
+          expect(subject.create_team(create_team)).to be_falsey
         end
 
         it "should create invite id if private team" do
-          Team.stub(:find!).and_return(nil)
-          subject.stub(:team_id).and_return 'team_id'
+          allow(Team).to receive(:find!).and_return(nil)
+          allow(subject).to receive(:team_id).and_return 'team_id'
           expect(Uniqueid).to receive(:generate_token).with(team_name).and_return invite_id
           subject.on_receive(create_private_team)
         end
@@ -94,7 +94,7 @@ module GameMachine
 
       describe "destroy_team" do
         before(:each) do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
         end
 
         it "should delete the team" do
@@ -124,13 +124,13 @@ module GameMachine
 
       describe "leave_team" do
         before(:each) do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
         end
 
         it "should remove member from team" do
           leave_team.player_id = player2
           subject.on_receive(leave_team)
-          expect(team.members.include?(player2)).to be_false
+          expect(team.members.include?(player2)).to be_falsey
         end
 
         it "should destroy team if player is owner" do
@@ -149,7 +149,7 @@ module GameMachine
       describe "join_team" do
 
         before(:each) do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
         end
 
         it "should add member to the team" do
@@ -165,7 +165,7 @@ module GameMachine
         end
 
         it "should not add member to team if access is private" do
-          Team.stub(:find!).and_return(private_team)
+          allow(Team).to receive(:find!).and_return(private_team)
           expect(subject).to_not receive(:create_player_team)
           subject.on_receive(join_team)
         end
@@ -188,14 +188,14 @@ module GameMachine
       describe "team_invite" do
 
         it "should forward the invite message to the invitee" do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
           team_invite.player_id = player_id
           expect_any_instance_of(Commands::PlayerCommands).to receive(:send_message)
           subject.on_receive(team_invite)
         end
 
         it "should set the invite id to the team invite id" do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
           team_invite.player_id = player_id
           team.invite_id = 'blah'
           expect(team_invite).to receive("invite_id=").with('blah')
@@ -206,7 +206,7 @@ module GameMachine
       describe "team_accept_invite" do
 
         it "should add member to team with correct invite id" do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
           team_invite.player_id = player_id
           team.invite_id = invite_id
           expect(subject).to receive(:join_team)
@@ -214,7 +214,7 @@ module GameMachine
         end
 
         it "should not add member to team with incorrect invite id" do
-          Team.stub(:find!).and_return(team)
+          allow(Team).to receive(:find!).and_return(team)
           team_invite.player_id = player_id
           team.invite_id = 'bad invite'
           expect(subject).to_not receive(:join_team)

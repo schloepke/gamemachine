@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'jruby/core_ext'
 module GameMachine
+
   describe "misc" do 
     let(:entity) do 
       entity = MessageLib::Entity.new
@@ -12,10 +13,9 @@ module GameMachine
       entity
     end
 
-    it "singleton manager" do
+    xit "singleton manager" do
       ref = Akka.instance.actor_system.actor_selection('/user/region_manager_proxy')
       ref.tell('HELLO',nil)
-      sleep 1
     end
 
     xit "vector3" do

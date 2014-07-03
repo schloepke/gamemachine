@@ -33,10 +33,10 @@ module GameMachine
       describe "#on_receive" do
 
         it "sets player on entities" do
-          Authentication.stub(:authenticated?).and_return(true)
+          allow(Authentication).to receive(:authenticated?).and_return(true)
           message = client_message
           entity = message.get_entity_list.first
-          entity.should_receive(:set_player).with(message.player)
+          expect(entity).to receive(:set_player).with(message.player)
           subject.on_receive(message)
         end
 

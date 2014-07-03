@@ -9,7 +9,7 @@ module GameMachine
       subject{ChatCommands.new}
 
       before(:each) do
-        GameSystems::ChatManager.stub(:find).and_return(actor_ref)
+        allow(GameSystems::ChatManager).to receive(:find).and_return(actor_ref)
       end
 
       describe "#send_private_message" do

@@ -44,15 +44,15 @@ module GameMachine
       end
 
       before(:each) do
-        RegionManager.any_instance.stub(:post_init)
+        allow_any_instance_of(RegionManager).to receive(:post_init)
         subject.regions = {}
         subject.servers = {}
       end
 
       describe "#assign_servers" do
         it "should assign servers to regions that have none" do
-          subject.stub(:regions).and_return(regions)
-          ClusterMonitor.stub(:cluster_members).and_return(cluster_members)
+          allow(subject).to receive(:regions).and_return(regions)
+          allow(ClusterMonitor).to receive(:cluster_members).and_return(cluster_members)
           expect(region1).to receive(:server=)
           expect(region2).to receive(:server=)
           expect(region1).to receive(:save!)
@@ -66,9 +66,9 @@ module GameMachine
 
       describe "#notify_managers" do
         it "should send message to manager of each region" do
-          subject.stub(:regions).and_return(regions)
-          region1.stub(:server).and_return(server1_address)
-          region2.stub(:server).and_return(server2_address)
+          allow(subject).to receive(:regions).and_return(regions)
+          allow(region1).to receive(:server).and_return(server1_address)
+          allow(region2).to receive(:server).and_return(server2_address)
           expect(GameSystems::Zone1Manager).to receive(:find_by_address).
             with(server1_address).  and_return(actor_ref)
           expect(GameSystems::Zone2Manager).to receive(:find_by_address).
@@ -110,7 +110,7 @@ module GameMachine
 
         context "nodes have not changed" do
           it "should not unassign servers from regions" do
-            ClusterMonitor.stub(:cluster_members).and_return(cluster_members)
+            allow(ClusterMonitor).to receive(:cluster_members).and_return(cluster_members)
             subject.unassign_down_servers
             expect(region1).to_not receive(:save)
             expect(region2).to_not receive(:save)
@@ -123,7 +123,7 @@ module GameMachine
             subject.load_from_config
             subject.regions['zone1'].server = server2_address
             subject.servers[server2_address] = 'zone1'
-            ClusterMonitor.stub(:cluster_members).and_return(cluster_with_down_members)
+            allow(ClusterMonitor).to receive(:cluster_members).and_return(cluster_with_down_members)
           end
 
           it "should set region server to nil" do
@@ -133,7 +133,7 @@ module GameMachine
 
           it "should remove servers entry" do
             subject.unassign_down_servers
-            expect(subject.servers.has_key?(server2_address)).to be_false
+            expect(subject.servers.has_key?(server2_address)).to be_falsey
           end
 
           it "should save region" do
