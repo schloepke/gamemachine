@@ -13,6 +13,7 @@ namespace GameMachine.Models.Team
 		public string name { get; set; }
 		public string owner { get; set; }
 		public string access { get; set; }
+		public int max_members { get; set; }
 
 		
 		public static void Receive (string json)

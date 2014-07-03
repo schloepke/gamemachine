@@ -20,6 +20,7 @@ namespace GameMachine
 		private string teamName = "";
 		public bool hasTeam = false;
 		public Team currentTeam;
+		public ChannelUi currentChannelUi;
 		private float leftTeamAt = Time.time;
 		private Messenger messenger;
 		private TeamInvite teamInvite;
@@ -95,18 +96,20 @@ namespace GameMachine
 
 		private void JoinTeam (Team team)
 		{
-			if (Time.time - leftTeamAt < 5.0f) {
+			if (Time.time - leftTeamAt < 1.0f) {
 				return;
 			}
 			ChannelUi.DestroyChannelUi (team.name);
-			ChannelUi channelUi = ChannelUi.CreateChannelUi (this.gameObject, team.name, "Team");
-			if (User.Instance.username == team.owner) {
-				channelUi.buttonName = "Disband Team";
+			currentChannelUi = ChannelUi.CreateChannelUi (this.gameObject, team.name, "Team");
+			if (User.Instance.username == team.owner && team.destroy_on_owner_leave) {
+				currentChannelUi.buttonName = "Disband Team";
+			} else {
+				currentChannelUi.buttonName = "Leave Team";
 			}
-			channelUi.title = "Team " + team.name;
+			currentChannelUi.title = "Team " + team.name;
 			hasTeam = true;
 			ChannelUi.ChannelLeft channelLeft = OnChannelUiLeft;
-			channelUi.OnChannelLeft (channelLeft);
+			currentChannelUi.OnChannelLeft (channelLeft);
 		}
 
 		public Teams GetTeams ()
@@ -134,8 +137,14 @@ namespace GameMachine
 		// TeamsRequest
 		public void OnTeamReceived (Team team)
 		{
-			if (!hasTeam) {
-				currentTeam = team;
+			currentTeam = team;
+			if (hasTeam) {
+				if (team.owner == User.Instance.username && team.destroy_on_owner_leave) {
+					currentChannelUi.buttonName = "Disband Team";
+				} else {
+					currentChannelUi.buttonName = "Leave Team";
+				}
+			} else {
 				JoinTeam (team);
 			}
 		}
@@ -164,6 +173,7 @@ namespace GameMachine
 		// Server told us we left the team.
 		public void OnLeftTeam (TeamLeft teamLeft)
 		{
+			currentChannelUi = null;
 			ChannelUi.DestroyChannelUi (teamLeft.name);
 			hasTeam = false;
 			currentTeam = null;
