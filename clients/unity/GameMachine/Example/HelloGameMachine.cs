@@ -2,6 +2,8 @@
 using System;
 using System.Collections;
 using GameMachine;
+using GameMachine.Core;
+using GameMachine.Chat;
 using Entity = GameMachine.Messages.Entity;
 using Player = GameMachine.Messages.Player;
 using GameMachine.Models.Team;
@@ -12,8 +14,8 @@ namespace GameMachine.Example
 	{
 		// Example of how to wire up GameMachine in your application.  
 
-		private GameMachine.App app;
-		private GameMachine.RegionClient regionClient;
+		private GameMachine.Core.App app;
+		private GameMachine.Core.RegionClient regionClient;
 		private string authUri;
 
 		public string udpHost = "127.0.0.1";
@@ -32,14 +34,14 @@ namespace GameMachine.Example
 			authUri = "http://" + udpHost + ":3000/auth";
 
 			// Callbacks for authentication
-			GameMachine.Authentication.Success success = OnAuthenticationSuccess;
-			GameMachine.Authentication.Error error = OnAuthenticationError;
+			Authentication.Success success = OnAuthenticationSuccess;
+			Authentication.Error error = OnAuthenticationError;
 
 			// You need to add GameMachine.App as a component to either this or another game object in your scene
-			app = this.gameObject.AddComponent (Type.GetType ("GameMachine.App")) as GameMachine.App;
+			app = this.gameObject.AddComponent (Type.GetType ("GameMachine.Core.App")) as GameMachine.Core.App;
 
 			// Attempt to login.  Authentication success callback will be fired on success.
-			app.Login (authUri, GameMachine.User.Instance.username, GameMachine.User.Instance.password, success, error);
+			app.Login (authUri, GameMachine.Core.User.Instance.username, GameMachine.Core.User.Instance.password, success, error);
 		}
 
 		void OnAuthenticationError (string error)
@@ -52,10 +54,10 @@ namespace GameMachine.Example
 		public void OnAuthenticationSuccess (string authtoken)
 		{
 			Logger.Debug ("Authentication Success");
-			GameMachine.App.AppStarted callback = OnAppStarted;
+			GameMachine.Core.App.AppStarted callback = OnAppStarted;
 			app.OnAppStarted (callback);
            
-			GameMachine.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
+			GameMachine.Core.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
 			app.OnConnectionTimeout (connectionCallback);
 
 			app.Run (udpHost, udpPort, User.Instance.username, authtoken);
@@ -93,8 +95,8 @@ namespace GameMachine.Example
 
 		void StartRegionClient (string authtoken)
 		{
-			regionClient = this.gameObject.AddComponent (Type.GetType ("GameMachine.RegionClient")) as GameMachine.RegionClient;
-			GameMachine.RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
+			regionClient = this.gameObject.AddComponent (Type.GetType ("GameMachine.RegionClient")) as GameMachine.Core.RegionClient;
+			GameMachine.Core.RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
 			regionClient.OnConnectionTimeout (connectionCallback);
 
 

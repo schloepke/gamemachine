@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using  System.Collections.Generic;
 using GameMachine;
+using GameMachine.Core;
 using Newtonsoft.Json;
 
 // Json models are an alternative to protocol buffers.  They are slower and larger, but much
@@ -27,28 +28,28 @@ using Newtonsoft.Json;
 namespace GameMachine.World
 {
     
-    public class Attack : JsonModel
-    {
-        // Model properties
-        // properties of server and client models must have the same case!
-        // Feel free to choose whatever case you like, we follow the server
-        // naming here which is underscored.
-        public string target { get; set; }
-        public string attacker { get; set; }
-        public string combat_ability { get; set; }
+	public class Attack : JsonModel
+	{
+		// Model properties
+		// properties of server and client models must have the same case!
+		// Feel free to choose whatever case you like, we follow the server
+		// naming here which is underscored.
+		public string target { get; set; }
+		public string attacker { get; set; }
+		public string combat_ability { get; set; }
 
 
-        // This is where incoming json messages go.  Deserialize and then do what
-        // you want with it.
-        public static void Receive(string json)
-        {
-            Attack attack = JsonConvert.DeserializeObject < Attack >(json);
-        }
+		// This is where incoming json messages go.  Deserialize and then do what
+		// you want with it.
+		public static void Receive (string json)
+		{
+			Attack attack = JsonConvert.DeserializeObject < Attack > (json);
+		}
 
-        // Serialize your model here
-        public override string ToJson()
-        {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
-    }
+		// Serialize your model here
+		public override string ToJson ()
+		{
+			return JsonConvert.SerializeObject (this, Formatting.Indented);
+		}
+	}
 }

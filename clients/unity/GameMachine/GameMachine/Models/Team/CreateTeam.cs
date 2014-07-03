@@ -2,6 +2,7 @@
 using System;
 using  System.Collections.Generic;
 using GameMachine;
+using GameMachine.Core;
 using Newtonsoft.Json;
 
 namespace GameMachine.Models.Team

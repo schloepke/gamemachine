@@ -2,6 +2,7 @@
 using System;
 using  System.Collections.Generic;
 using GameMachine;
+using GameMachine.Core;
 using Newtonsoft.Json;
 
 namespace GameMachine.Models.Team
@@ -11,6 +12,7 @@ namespace GameMachine.Models.Team
 	{
 		public string name { get; set; }
 		public string invite_id { get; set; }
+		public string invitee { get; set; }
 
 		public static void Receive (string json)
 		{
