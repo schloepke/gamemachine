@@ -7,6 +7,7 @@ message TrackExtra {
   optional float speed = 1;
   optional float velocity = 2;
   optional Vector3 direction = 3;
+  optional string json = 4;
 }
 
 message Health {
