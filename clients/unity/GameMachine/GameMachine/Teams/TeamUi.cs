@@ -18,6 +18,7 @@ namespace GameMachine
 		private Teams teams;
 		private TeamsManager teamsManager;
 		private string teamName = "";
+		private string teamMaxMembers = "6";
 		public bool hasTeam = false;
 		public Team currentTeam;
 		public ChannelUi currentChannelUi;
@@ -36,19 +37,30 @@ namespace GameMachine
 		
 		void WindowFunction2 (int windowID)
 		{
-			if (!hasTeam) {
-				GUILayout.BeginHorizontal ();
+			GUILayout.BeginHorizontal ();
+			if (hasTeam) {
+				if (currentTeam.match_id == null) {
+					if (GUILayout.Button ("Find Match")) {
+						FindMatch ();
+					}
+				} else {
+					GUILayout.Label ("Joined match " + currentTeam.match_id + " on server " + currentTeam.match_server);
+				}
+
+			} else {
 				if (GUILayout.Button ("Create team")) {
 					CreateTeam (teamName, "public");
 				}
 				if (GUILayout.Button ("Create private team")) {
 					CreateTeam (teamName, "private");
 				}
-                
+				GUILayout.Label ("Name:");
 				teamName = GUILayout.TextField (teamName);
-				GUILayout.EndHorizontal ();
-			}			
+				GUILayout.Label ("Max members:");
+				teamMaxMembers = GUILayout.TextField (teamMaxMembers);
 
+			}			
+			GUILayout.EndHorizontal ();
 
 			if (teams != null) {
 				GUILayout.Label ("");
@@ -85,12 +97,19 @@ namespace GameMachine
 			GUI.DragWindow ();
 		}
 
+		private void FindMatch ()
+		{
+			FindMatch findMatch = new FindMatch ();
+			findMatch.team_name = currentTeam.name;
+			findMatch.Send ();
+		}
 		private void CreateTeam (string teamName, string access)
 		{
 			CreateTeam createTeam = new CreateTeam ();
 			createTeam.name = teamName;
 			createTeam.owner = User.Instance.username;
 			createTeam.access = access;
+			createTeam.max_members = System.Convert.ToInt32 (teamMaxMembers);
 			createTeam.Send ();
 		}
 
@@ -101,11 +120,7 @@ namespace GameMachine
 			}
 			ChannelUi.DestroyChannelUi (team.name);
 			currentChannelUi = ChannelUi.CreateChannelUi (this.gameObject, team.name, "Team");
-			if (User.Instance.username == team.owner && team.destroy_on_owner_leave) {
-				currentChannelUi.buttonName = "Disband Team";
-			} else {
-				currentChannelUi.buttonName = "Leave Team";
-			}
+			currentChannelUi.buttonName = "Leave Team";
 			currentChannelUi.title = "Team " + team.name;
 			hasTeam = true;
 			ChannelUi.ChannelLeft channelLeft = OnChannelUiLeft;
@@ -139,10 +154,7 @@ namespace GameMachine
 		{
 			currentTeam = team;
 			if (hasTeam) {
-				if (team.owner == User.Instance.username && team.destroy_on_owner_leave) {
-					currentChannelUi.buttonName = "Disband Team";
-				} else {
-					currentChannelUi.buttonName = "Leave Team";
+				if (currentTeam.match_id != null) {
 				}
 			} else {
 				JoinTeam (team);

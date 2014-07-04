@@ -16,6 +16,8 @@ namespace GameMachine.Models.Team
 		public string access { get; set; }
 		public List<string> members { get; set; }
 		public string invite_id { get; set; }
+		public string match_server { get; set; }
+		public string match_id { get; set; }
 		public int max_members { get; set; }
 		public bool destroy_on_owner_leave { get; set; }
 

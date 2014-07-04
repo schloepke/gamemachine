@@ -66,22 +66,10 @@ namespace GameMachine
 						teamInvite.Send ();
 					}
 				}
-
 				GUILayout.EndHorizontal ();
 			}
 			GUILayout.Label ("");
-			if (GUILayout.Button ("Leave Lobby")) {
-				messenger.leaveChannel (channelName);
-				if (channelLeft != null) {
-					channelLeft (name);
-				}
-				Destroy (this.gameObject);
-			}
-			
 			GUI.DragWindow ();
-			
-			
-			
 		}
 		
 		void UpdateMembers ()

@@ -49,14 +49,11 @@ namespace GameMachine.Chat
 
 		public static string currentGroup;
 		public static string currentTeam;
-		public TeamUi teamUi;
 
 		void Start ()
 		{
 			// Gui component.
 			chatbox = this.gameObject.AddComponent<Chatbox> () as Chatbox;
-
-			teamUi = this.gameObject.AddComponent<TeamUi> () as TeamUi;
 
 			// The messaging actor
 			messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
@@ -79,12 +76,6 @@ namespace GameMachine.Chat
 			Messenger.InviteReceived inviteCallback = InviteReceived;
 			messenger.OnInviteReceived (inviteCallback);
 
-			// Join an initial channel.  The second argument is a flags string
-			// that sets certain flags on a channel.  Currently 'subscribers' is the
-			// one valid option.  If subscribers is set, status updates from the server
-			// will include a complete subscriber list for each channel.
-			messenger.JoinChannel ("MainLobby", "subscribers");
-
 			// Send this whenever you want a list of subscribed channels, and the optional
 			// subscriber list if you have set the subscribers flag.  We do it on an interval
 			// so that you get notified when new players join a group you are in.
@@ -100,7 +91,7 @@ namespace GameMachine.Chat
 			EchoTest test = new EchoTest ();
 			test.test = "test";
 			test.id = "test1";
-			messenger.SendJsonModel (User.Instance.username, "MainLobby", test, "group");
+			messenger.SendJsonModel (User.Instance.username, "Lobby", test, "group");
 			test.id = "test2";
 			test.Save ();
 			JsonModel.Find ("test2", typeof(EchoTest));
