@@ -11,11 +11,16 @@ module GameMachine
       let(:player_id) {'player'}
       let(:player2) {'player2'}
       let(:team_name) {'team1'}
+      let(:team_name2) {'team2'}
       let(:team_members) {[player_id]}
       let(:invite_id) {'invite'}
 
       let(:team) do
         Team.new(:owner => player_id, :name => team_name, :access => 'public', :members => team_members)
+      end
+
+      let(:team_two_members) do
+        Team.new(:owner => player_id, :name => team_name2, :access => 'public', :members => [player_id,player2])
       end
 
       let(:team_invite) do
@@ -50,7 +55,16 @@ module GameMachine
         CreateTeam.new(:owner => player_id, :name => team_name, :access => 'private')
       end
 
-        let(:actor_ref) {double('ActorRef', :tell => true)}
+      let(:start_match) do
+        StartMatch.new(:game_handler => nil, :team_names => [team_name,team_name2])
+      end
+
+      let(:end_match) do
+        EndMatch.new(:match_id => 'team1_team2')
+      end
+
+      let(:match) {double('Match')}
+      let(:actor_ref) {double('ActorRef', :tell => true)}
 
       subject do
         ref = Actor::Builder.new(TeamManager).with_name('team_manager_test').test_ref
@@ -59,9 +73,10 @@ module GameMachine
 
       before(:each) do
         allow_any_instance_of(Commands::PlayerCommands).to receive(:send_message).and_return(true)
+        allow_any_instance_of(Commands::MiscCommands).to receive(:client_manager_register).and_return(true)
       end
 
-      describe "create_team" do
+      describe "#create_team" do
 
         before(:each) do
           allow(subject).to receive(:send_team_joined).and_return(true)
@@ -92,7 +107,7 @@ module GameMachine
         end
       end
 
-      describe "destroy_team" do
+      describe "#destroy_team" do
         before(:each) do
           allow(Team).to receive(:find!).and_return(team)
         end
@@ -122,9 +137,25 @@ module GameMachine
         end
       end
 
-      describe "leave_team" do
+      describe "#leave_team" do
+
         before(:each) do
           allow(Team).to receive(:find!).and_return(team)
+        end
+
+        it "should destroy team if last member leaves" do
+          leave_team.player_id = player_id
+          expect(subject).to receive(:destroy_team)
+          expect(subject).to receive(:destroy_on_owner_leave?).and_return(false)
+          subject.on_receive(leave_team)
+        end
+
+        it "should reassign owner if owner leaves" do
+          allow(Team).to receive(:find!).and_return(team_two_members)
+          leave_team.player_id = player_id
+          allow(subject).to receive(:destroy_on_owner_leave?).and_return(false)
+          subject.on_receive(leave_team)
+          expect(team_two_members.owner).to eql(player2)
         end
 
         it "should remove member from team" do
@@ -135,7 +166,7 @@ module GameMachine
 
         it "should destroy team if player is owner" do
           leave_team.player_id = player_id
-          expect(team).to receive(:destroy!)
+          expect(subject).to receive(:destroy_team)
           subject.on_receive(leave_team)
         end
 
@@ -146,7 +177,7 @@ module GameMachine
         end
       end
 
-      describe "join_team" do
+      describe "#join_team" do
 
         before(:each) do
           allow(Team).to receive(:find!).and_return(team)
@@ -185,7 +216,7 @@ module GameMachine
         end
       end
 
-      describe "team_invite" do
+      describe "#team_invite" do
 
         it "should forward the invite message to the invitee" do
           allow(Team).to receive(:find!).and_return(team)
@@ -221,6 +252,40 @@ module GameMachine
           subject.on_receive(team_accept_invite)
         end
       end
+
+      describe "#start_match" do
+        it "should create the match" do
+          allow(Team).to receive(:find!).with('team1').and_return(team)
+          allow(Team).to receive(:find!).with('team2').and_return(team_two_members)
+          expect(match).to receive(:save)
+          expect(Match).to receive(:new).
+            with(
+              :id => 'team1_team2',
+              :teams => [team,team_two_members],
+              :server => 'localhost',
+              :game_handler => nil
+          ).and_return(match)
+          subject.on_receive(start_match)
+        end
+
+        it "should save teams with match id" do
+          allow(Team).to receive(:find!).with('team1').and_return(team)
+          allow(Team).to receive(:find!).with('team2').and_return(team_two_members)
+          expect(team).to receive(:match_id=).with('team1_team2')
+          expect(team_two_members).to receive(:match_id=).with('team1_team2')
+          subject.on_receive(start_match)
+        end
+      end
+
+      describe "#end_match" do
+        it "should destroy the match" do
+          allow(match).to receive(:teams).and_return([team,team_two_members])
+          expect(Match).to receive(:find!).with('team1_team2').and_return(match)
+          expect(match).to receive(:destroy)
+          subject.on_receive(end_match)
+        end
+      end
+
     end
   end
 end

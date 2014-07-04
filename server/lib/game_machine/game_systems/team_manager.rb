@@ -13,6 +13,10 @@ module GameMachine
         commands.misc.client_manager_register(self.class.name)
       end
 
+      def self.match_id_for(team_names)
+        team_names.sort.join('_')
+      end
+
       def chat_channel(topic,flags)
         MessageLib::ChatChannel.new.set_name(topic).set_flags(flags)
       end
@@ -89,19 +93,24 @@ module GameMachine
         team_handler.can_create_team?(team_name, player_id)
       end
 
-      def handler_team_added(team_name)
+      def handler_update_teams
         return true unless team_handler
-        team_handler.team_added(team_name)
-      end
-
-      def handler_team_removed(team_name)
-        return true unless team_handler
-        team_handler.team_added(team_name)
+        team_handler.update_teams
       end
 
       def destroy_on_owner_leave?
         return true unless team_handler
         team_handler.destroy_on_owner_leave?
+      end
+
+      def handler_find_match(team_name)
+        return true unless team_handler
+        team_handler.match!(team_name)
+      end
+
+      def handler_match_started(match)
+        return true unless team_handler
+        team_handler.match_started(match)
       end
 
       def create_team(message)
@@ -136,7 +145,7 @@ module GameMachine
         commands.datastore.call_dbproc(:team_add_team,'teams',team.to_storage_entity,false)
         join_chat(team.name,team.owner)
         send_team_joined(team.name,message.player_id)
-        handler_team_added(team.name)
+        handler_update_teams
       end
 
       def member_disconnected(message)
@@ -159,10 +168,17 @@ module GameMachine
             end
             commands.datastore.call_dbproc(:team_remove_team,'teams',team.to_storage_entity,false)
             team.destroy!
-            handler_team_removed(team.name)
+            handler_update_teams
+
+            # team destroyed ends match
+            if team.match_id
+              end_match(EndMatch.new(:match_id => team.match_id))
+            end
           end
         end
-        send_team_left(message.name,message.player_id)
+        unless force
+          send_team_left(message.name,message.player_id)
+        end
       end
 
       def join_team(message,invite_accepted=false)
@@ -252,21 +268,64 @@ module GameMachine
         end
       end
 
+      def end_match(message)
+        if match = Match.find!(message.match_id)
+          match.teams.each do |team|
+            if team = Team.find!(team.name)
+              team.match_id = nil
+              team.save!
+            end
+          end
+          match.destroy
+        end
+      end
+
+      # Called internally or from another actor to start an already defined match
+      def start_match(message)
+        # Don't accept requests from clients
+        if message.player_id
+          return
+        end
+
+        match_id = self.class.match_id_for(message.team_names)
+        if match = Match.find!(match_id)
+          GameMachine.logger.warn "Match #{match_id} already created"
+          return
+        end
+
+        teams = message.team_names.collect {|name| Team.find!(name)}.compact
+        if teams.size != message.team_names.size
+          GameMachne.logger.warn "#{self.class.name} Unable to find all teams for match"
+          return
+        end
+
+        server = Akka.instance.hashring.bucket_for(match_id)
+        server = server.sub('akka.tcp://cluster@','').split(':').first
+
+        match = Match.new(
+          :id => match_id,
+          :teams => teams,
+          :server => server,
+          :game_handler => message.game_handler
+        )
+
+        teams.each do |team|
+          team.match_id = match_id
+          team.match_server = server
+          team.save
+          commands.datastore.call_dbproc(:team_update_team,'teams',team.to_storage_entity,false)
+        end
+
+        match.save
+        handler_match_started(match)
+        GameMachine.logger.info "#{self.class.name} Match #{match} started"
+      end
+
       def find_match(message)
         if team = Team.find(message.team_name)
-          if match_data = handler_find_match(message.team_name)
-            if opponent = Team.find(match_data.fetch(:team_name))
-              key = team.name + opponent.name
-              server = Akka.instance.hashring.bucket_for(key)
-              match = Match.new(
-                :server => server,
-                :game_handler => match_data.fetch(:game_handler,nil)
-              )
-              participants = team.members + opponent.members
-              participants.each do |participant|
-                commands.player.send_message(match,participant)
-              end
-            end
+          if s = handler_find_match(message.team_name)
+            GameMachine.logger.info "Match found: #{s}"
+            start_match(s)
           end
         end
       end
@@ -290,6 +349,10 @@ module GameMachine
           teams_request(message)
         elsif message.is_a?(FindMatch)
           find_match(message)
+        elsif message.is_a?(StartMatch)
+          start_match(message)
+        elsif message.is_a?(EndMatch)
+          end_match(message)
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
             member_disconnected(message)

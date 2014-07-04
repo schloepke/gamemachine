@@ -49,8 +49,12 @@ module GameMachine
 
       def start
         create_grids
-        game_preload
-        GameMachine::Actor::Reloadable.update_paths(true)
+
+        unless GameMachine.env == 'test'
+          game_preload
+          GameMachine::Actor::Reloadable.update_paths(true)
+        end
+
         start_actor_system
         data_store
         start_endpoints
@@ -62,7 +66,11 @@ module GameMachine
         end
 
         start_game_systems
-        GameLoader.new.load_all
+
+        unless GameMachine.env == 'test'
+          GameLoader.new.load_all
+        end
+
         auth_handler
         start_mono
 
