@@ -18,6 +18,7 @@ namespace GameMachine
 		private Teams teams;
 		private TeamsManager teamsManager;
 		private string teamName = "";
+		private string teamMaxMembers = "6";
 		public bool hasTeam = false;
 		public Team currentTeam;
 		public ChannelUi currentChannelUi;
@@ -53,7 +54,11 @@ namespace GameMachine
 				if (GUILayout.Button ("Create private team")) {
 					CreateTeam (teamName, "private");
 				}
+				GUILayout.Label ("Name:");
 				teamName = GUILayout.TextField (teamName);
+				GUILayout.Label ("Max members:");
+				teamMaxMembers = GUILayout.TextField (teamMaxMembers);
+
 			}			
 			GUILayout.EndHorizontal ();
 
@@ -104,6 +109,7 @@ namespace GameMachine
 			createTeam.name = teamName;
 			createTeam.owner = User.Instance.username;
 			createTeam.access = access;
+			createTeam.max_members = System.Convert.ToInt32 (teamMaxMembers);
 			createTeam.Send ();
 		}
 
@@ -149,7 +155,6 @@ namespace GameMachine
 			currentTeam = team;
 			if (hasTeam) {
 				if (currentTeam.match_id != null) {
-					Logger.Debug ("MATCH FOUND " + currentTeam.match_id);
 				}
 			} else {
 				JoinTeam (team);

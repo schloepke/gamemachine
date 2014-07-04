@@ -15,6 +15,11 @@ namespace GameMachine.Example
 
 		private Login login;
 
+		void Start ()
+		{
+			LoadLogin ();
+		}
+
 		void LoadLogin ()
 		{
 			login = this.gameObject.GetComponent<Login> () as Login;
@@ -23,12 +28,6 @@ namespace GameMachine.Example
 			} else {
 				login.SetGameMachineApp (this);
 			}
-			
-		}
-		
-		void Start ()
-		{
-			LoadLogin ();
 		}
 
 		public void ConnectionTimeout ()
@@ -39,19 +38,9 @@ namespace GameMachine.Example
 		// This is called once we have a connection and everything is started
 		public void OnLoggedIn ()
 		{
-			Logger.Debug ("OnAppStarted");
-
-
-
 			// Start our chat example
 			StartChat ();
-			Logger.Debug ("Chat started");
-            
-			// Setup the persistence layer.  This is an optional feature, see the Persistence class
-			// for how it works.
-			StartPersistence ();
-			Logger.Debug ("Peristence started");
-            
+
 			// Start sending/receiving location updates
 			StartAreaOfInterest ();
 			Logger.Debug ("AreaOfInterest started");
@@ -60,7 +49,7 @@ namespace GameMachine.Example
 
 		void StartAreaOfInterest ()
 		{
-			GameObject misc = GameObject.Find ("Misc");
+			GameObject misc = GameObject.Find ("Game");
 			misc.AddComponent ("AreaOfInterest");
 		}
 
@@ -73,14 +62,6 @@ namespace GameMachine.Example
 
 			// Add Teams
 			chatBox.AddComponent<TeamUi> ();
-		}
-
-		void StartPersistence ()
-		{
-			GameObject camera = GameObject.Find ("Camera");
-			GameObject misc = new GameObject ("Misc");
-			misc.transform.parent = camera.transform;
-			misc.AddComponent ("Persistence");
 		}
 
 	}
