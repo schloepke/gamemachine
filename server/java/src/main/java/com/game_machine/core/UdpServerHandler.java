@@ -14,6 +14,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import GameMachine.Messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
@@ -32,7 +33,7 @@ public final class UdpServerHandler extends
 	
 	public UdpServerHandler() {
 		this.inbound = ActorUtil
-				.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
+				.getSelectionByName("message_gateway");
 	}
 
 	@Override
@@ -78,8 +79,9 @@ public final class UdpServerHandler extends
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
 
+		ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
 		
-		NetMessage gameMessage = new NetMessage(null, NetMessage.UDP, bytes, m
+		NetMessage gameMessage = new NetMessage(null, NetMessage.UDP, clientMessage, m
 				.sender().getHostString(), m.sender().getPort(), ctx);
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));

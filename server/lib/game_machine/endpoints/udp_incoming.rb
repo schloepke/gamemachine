@@ -30,7 +30,7 @@ module GameMachine
 
       def handle_incoming(message)
         client_id = client_id_from_message(message)
-        client_message = MessageLib::ClientMessage.parse_from(message.bytes)
+        client_message = message.clientMessage
         client_connection = create_client_connection(
           client_id,client_message.connection_type
         )

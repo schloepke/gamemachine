@@ -324,6 +324,7 @@ message Entity {
   optional JsonStorage jsonStorage = 58;
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
+  optional bool fastpath = 61;
   //GAME_ENTITY_MESSAGES
 }
 
