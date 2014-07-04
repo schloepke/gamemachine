@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System;
 using  System.Collections.Generic;
 using GameMachine;
@@ -8,12 +8,13 @@ using Newtonsoft.Json;
 namespace GameMachine.Models.Team
 {
 	
-	public class TeamsRequest : JsonModel
+	public class FindMatch : JsonModel
 	{
-		public string filter { get; set; }
+		public string team_name { get; set; }
+
 		public static void Receive (string json)
 		{
-			TeamsRequest teamsRequest = JsonConvert.DeserializeObject < TeamsRequest > (json);
+			FindMatch findMatch = JsonConvert.DeserializeObject < FindMatch > (json);
 		}
 		
 		public override string ToJson ()
