@@ -341,4 +341,5 @@ message ClientMessage {
   optional PlayerConnect playerConnect = 7;
   optional PlayerConnected playerConnected = 8;
   optional int32 connection_type = 9;
+  optional bool fastpath = 10;
 }
