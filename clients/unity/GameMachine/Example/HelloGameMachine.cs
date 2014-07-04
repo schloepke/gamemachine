@@ -138,6 +138,9 @@ namespace GameMachine.Example
 			GameObject chatBox = new GameObject ("ChatBox");
 			chatBox.transform.parent = camera.transform;
 			chatBox.AddComponent ("Chat");
+
+			// Add Teams
+			chatBox.AddComponent<TeamUi> ();
 		}
 
 		void StartPersistence ()

@@ -127,7 +127,7 @@ namespace GameMachine.World
 
 		void StartRegionClient (string authtoken)
 		{
-			regionClient = this.gameObject.AddComponent (Type.GetType ("GameMachine.RegionClient")) as RegionClient;
+			regionClient = this.gameObject.AddComponent (Type.GetType ("GameMachine.Core.RegionClient")) as RegionClient;
 			RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
 			regionClient.OnConnectionTimeout (connectionCallback);
 

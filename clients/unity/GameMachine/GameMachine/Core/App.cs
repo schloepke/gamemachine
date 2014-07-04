@@ -97,6 +97,8 @@ namespace GameMachine.Core
 			JsonModel.Register (typeof(TeamJoined), "GameMachine::Models::TeamJoined", "GameMachine/GameSystems/TeamManager");
 			JsonModel.Register (typeof(LeaveTeam), "GameMachine::Models::LeaveTeam", "GameMachine/GameSystems/TeamManager");
 			JsonModel.Register (typeof(TeamLeft), "GameMachine::Models::TeamLeft", "GameMachine/GameSystems/TeamManager");
+			JsonModel.Register (typeof(Match), "GameMachine::Models::Match", "GameMachine/GameSystems/TeamManager");
+			JsonModel.Register (typeof(FindMatch), "GameMachine::Models::FindMatch", "GameMachine/GameSystems/TeamManager");
 			JsonModel.Register (typeof(EchoTest), "GameMachine::Models::EchoTest");
 
 			running = true;

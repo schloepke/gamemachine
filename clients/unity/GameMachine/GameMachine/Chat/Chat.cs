@@ -49,14 +49,11 @@ namespace GameMachine.Chat
 
 		public static string currentGroup;
 		public static string currentTeam;
-		public TeamUi teamUi;
 
 		void Start ()
 		{
 			// Gui component.
 			chatbox = this.gameObject.AddComponent<Chatbox> () as Chatbox;
-
-			teamUi = this.gameObject.AddComponent<TeamUi> () as TeamUi;
 
 			// The messaging actor
 			messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
