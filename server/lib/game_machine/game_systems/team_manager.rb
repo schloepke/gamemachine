@@ -64,6 +64,7 @@ module GameMachine
 
       def teams_request(message)
         if teams = Teams.find('teams')
+          teams = handler_teams_filter(teams,message)
           commands.player.send_message(teams,message.player_id)
         end
         send_team(message)
@@ -101,6 +102,11 @@ module GameMachine
       def destroy_on_owner_leave?
         return true unless team_handler
         team_handler.destroy_on_owner_leave?
+      end
+
+      def handler_teams_filter(teams,teams_request)
+        return true unless team_handler
+        team_handler.teams_filter(teams,teams_request)
       end
 
       def handler_find_match(team_name)
@@ -269,6 +275,10 @@ module GameMachine
       end
 
       def end_match(message)
+        if message.player_id
+          return
+        end
+
         if match = Match.find!(message.match_id)
           match.teams.each do |team|
             if team = Team.find!(team.name)
