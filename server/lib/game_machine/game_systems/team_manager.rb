@@ -105,7 +105,7 @@ module GameMachine
       end
 
       def handler_teams_filter(teams,teams_request)
-        return true unless team_handler
+        return teams unless team_handler
         team_handler.teams_filter(teams,teams_request)
       end
 

@@ -3,6 +3,9 @@ development:
   servers:
     default:
       environment: development
+      # Handles requests for matchmaking and custom filtering for teams.
+      # If no team handler is defined defaults are used
+      team_handler: Plugins::TeamHandler
       # Authorization handler.  Public allows any authtoken to be used and
       # does not check username/password
       auth_handler: Example::AuthenticationHandler
@@ -59,6 +62,7 @@ development:
       mono_gateway_port: 8800
     seed01:
       environment: development
+      team_handler: Plugins::TeamHandler
       auth_handler: Example::AuthenticationHandler
       player_register_handler: Example::PlayerRegister
       player_manager: Example::PlayerManager
