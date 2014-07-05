@@ -80,7 +80,7 @@ public final class UdpServerHandler extends
 				.sender().getHostString(), m.sender().getPort(), ctx);
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));
-		this.inbound.tell(gameMessage, null);
+		//this.inbound.tell(gameMessage, null);
 
 	}
 
