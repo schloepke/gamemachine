@@ -36,7 +36,7 @@ public class MessageGateway extends UntypedActor {
 		
 		// Incoming message
 		if (message instanceof NetMessage) {
-			messageCount.incrementAndGet();
+			//messageCount.incrementAndGet();
 			NetMessage netMessage = (NetMessage)message;
 			
 			ClientMessage clientMessage = ClientMessage.parseFrom(netMessage.bytes);
