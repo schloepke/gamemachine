@@ -3,6 +3,8 @@ module GameMachine
 
     def post_init(*args)
       @last_count = 0
+      @last_in_count = 0
+      @last_out_count = 0
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
       end
@@ -15,8 +17,19 @@ module GameMachine
         if message == 'message_count'
           current_count = JavaLib::MessageGateway.messageCount.incrementAndGet
           diff = current_count - @last_count
-          GameMachine.logger.info "MessagesPerSecond: #{diff}"
+          GameMachine.logger.info "GatewayMessagesPerSecond: #{diff}"
           @last_count = current_count
+
+          current_count = JavaLib::UdpServerHandler.countIn.incrementAndGet
+          diff = current_count - @last_in_count
+          GameMachine.logger.info "MessagesInPerSecond: #{diff}"
+          @last_in_count = current_count
+
+          current_count = JavaLib::UdpServerHandler.countOut.incrementAndGet
+          diff = current_count - @last_out_count
+          GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
+          @last_out_count = current_count
+
         elsif message == 'update'
           JavaLib::Grid.grids.each do |name,grid|
             object_index_size = grid.objectIndex.length
