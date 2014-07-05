@@ -22,13 +22,14 @@ public class EntityTracking extends UntypedActor {
 	private Grid aoeGrid;
 	private Grid grid;
 	private ActorSelection messageGateway;
+	private ArrayList<GridValue> testValues;
 	
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
 		grid = Grid.find("default");
 		aoeGrid = Grid.find("aoe");
 		Commands.clientManagerRegister(name);
-		testValues();
+		testValues = getTestValues();
 	}
 	
 	@Override
@@ -61,12 +62,15 @@ public class EntityTracking extends UntypedActor {
 		}
 	
 	
-	private void testValues() {
+	private ArrayList<GridValue> getTestValues() {
 		
-		for(Integer i=1; i<50; i++){
+		ArrayList<GridValue> values = new ArrayList<GridValue>();
+		for(Integer i=1; i<100; i++){
 			Float id = randomInRange(1f,5000f);
-			grid.set(Float.toString(id), randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
+			GridValue v = new GridValue(Float.toString(id), 1,randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
+			values.add(v);
 		}
+		return values;
 	}
 	
 	private void removePlayerData(ClientManagerEvent event) {
@@ -86,13 +90,15 @@ public class EntityTracking extends UntypedActor {
 		}
 		
 		
-		ArrayList<GridValue> searchResults = grid.neighbors(x, y, entity.getNeighbors.neighborType);
-		ArrayList<Neighbors> neighbors = gridValuesToNeighbors(searchResults);
+		ArrayList<GridValue> searchResults = testValues;//grid.neighbors(x, y, entity.getNeighbors.neighborType);
 		
-		for (Neighbors neighbor : neighbors) {
-			SendToGateway(entity.player,neighbor);
+		if (searchResults.size() >= 1) {
+			ArrayList<Neighbors> neighbors = gridValuesToNeighbors(searchResults);
+			
+			for (Neighbors neighbor : neighbors) {
+				SendToGateway(entity.player,neighbor);
+			}
 		}
-		
 	}
 		
 	private void SendToGateway(Player player,Neighbors slice) {
@@ -113,7 +119,9 @@ public class EntityTracking extends UntypedActor {
 			slice.addY(gridvalue.y);
 			slice.addZ(gridvalue.z);
 			if (extra.containsKey(gridvalue.id)) {
-				slice.setTrackExtra(extra.get(gridvalue.id));
+				slice.addTrackExtra(extra.get(gridvalue.id));
+			} else {
+				slice.addTrackExtra(null);
 			}
 			
 			count++;

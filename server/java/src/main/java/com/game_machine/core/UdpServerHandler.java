@@ -8,6 +8,7 @@ import io.netty.channel.socket.DatagramPacket;
 
 import java.net.InetSocketAddress;
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,9 @@ import akka.actor.ActorSelection;
 public final class UdpServerHandler extends
 		SimpleChannelInboundHandler<DatagramPacket> {
 
+	public static AtomicInteger countIn = new AtomicInteger();
+	public static AtomicInteger countOut = new AtomicInteger();
+	
 	private static final Logger log = LoggerFactory
 			.getLogger(UdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
@@ -58,6 +62,7 @@ public final class UdpServerHandler extends
 			DatagramPacket packet = new DatagramPacket(buf,
 					InetSocketAddress.createUnresolved(host, port));
 			ctx.writeAndFlush(packet);
+			countOut.incrementAndGet();
 	}
 
 	public void echo(ChannelHandlerContext ctx, DatagramPacket m, byte[] bytes)
@@ -82,6 +87,7 @@ public final class UdpServerHandler extends
 				+ new String(bytes));
 		//MessageGateway.messageCount.getAndIncrement();
 		this.inbound.tell(gameMessage, null);
+		countIn.incrementAndGet();
 
 	}
 
