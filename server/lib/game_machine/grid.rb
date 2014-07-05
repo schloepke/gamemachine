@@ -28,15 +28,7 @@ module GameMachine
       end
 
       def reset_grids
-        @grids = java.util.concurrent.ConcurrentHashMap.new
-      end
-
-      def grids
-        if @grids
-          return @grids
-        else
-          reset_grids
-        end
+        JavaLib::Grid.reset_grids
       end
 
       def default_grid
@@ -44,15 +36,10 @@ module GameMachine
       end
 
       def find_or_create(name)
-        unless grids.containsKey(name)
-          GameMachine.logger.info "CREATING GRID #{name}"
-          grid_config = config.fetch(name)
-          grid = JavaLib::Grid.new(grid_config.fetch(:grid_size),
+        GameMachine.logger.info "CREATING GRID #{name}"
+        grid_config = config.fetch(name)
+        JavaLib::Grid.find_or_create(name,grid_config.fetch(:grid_size),
                                    grid_config.fetch(:cell_size))
-          grids.put(name,grid)
-        end
-
-        grids.fetch(name)
       end
     end
 

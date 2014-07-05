@@ -13,11 +13,36 @@ public class Grid {
 	private int width;
 	private int cellCount;
 
+	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
+	
 	public ConcurrentHashMap<String, GridValue> deltaIndex = new ConcurrentHashMap<String, GridValue>();
 	public ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
 	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
 	public ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
+	public static void resetGrids()
+	{
+		grids = new ConcurrentHashMap<String, Grid>();
+	}
+	
+	public static Grid findOrCreate(String name, int gridSize, int cellSize) {
+		if (grids.containsKey(name)) {
+			return grids.get(name);
+		} else {
+			Grid grid = new Grid(gridSize,cellSize);
+			grids.put(name, grid);
+			return grid;
+		}
+	}
+	
+	public static Grid find(String name) {
+		if (grids.containsKey(name)) {
+			return grids.get(name);
+		} else {
+			return null;
+		}
+	}
+	
 	public Grid(int max, int cellSize) {
 		this.max = max;
 		this.cellSize = cellSize;

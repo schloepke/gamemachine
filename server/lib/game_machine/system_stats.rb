@@ -11,7 +11,7 @@ module GameMachine
     def on_receive(message)
       if message.is_a?(String) and message == 'update'
 
-        Grid.grids.each do |name,grid|
+        JavaLib::Grid.grids.each do |name,grid|
           object_index_size = grid.objectIndex.length
           cellscache_size = grid.cellsCache.length
           cells_size = grid.cells.length

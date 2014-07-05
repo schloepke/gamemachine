@@ -148,6 +148,7 @@ module GameMachine
 
       # TODO configurize router sizes
       def start_core_systems
+        JavaLib::GameMachineLoader.StartMessageGateway
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(ObjectDb).distributed(2).start
         Actor::Builder.new(MessageQueue).start
@@ -176,7 +177,7 @@ module GameMachine
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
         Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::EntityTracking).with_router(JavaLib::RoundRobinRouter,10).start
+        JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
