@@ -44,7 +44,7 @@ public class EntityTracking extends UntypedActor {
 			if (entity.hasTrackEntity()) {
 				setEntityLocation(entity);
 			}
-			MessageGateway.messageCount.incrementAndGet();
+			
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent)message;
 			if (event.event.equals("disconnected")) {
@@ -63,7 +63,7 @@ public class EntityTracking extends UntypedActor {
 	
 	private void testValues() {
 		
-		for(Integer i=1; i<500; i++){
+		for(Integer i=1; i<50; i++){
 			Float id = randomInRange(1f,5000f);
 			grid.set(Float.toString(id), randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
 		}
