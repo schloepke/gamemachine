@@ -247,6 +247,7 @@ message Neighbors {
   repeated float y = 3;
   repeated float z = 4;
   repeated string vector_id = 5;
+  optional TrackExtra trackExtra = 6;
 }
 
 message GetNeighbors {
