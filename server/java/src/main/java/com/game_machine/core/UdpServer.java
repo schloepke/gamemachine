@@ -61,7 +61,7 @@ public final class UdpServer implements Runnable {
 	public void run() {
 		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
-		EventLoopGroup group = new NioEventLoopGroup();
+		EventLoopGroup group = new NioEventLoopGroup(5);
 		try {
 		Bootstrap boot = new Bootstrap();
 		boot.channel(NioDatagramChannel.class);
