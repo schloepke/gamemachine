@@ -56,7 +56,7 @@ public final class UdpServerHandler extends
 
 			ByteBuf buf = Unpooled.copiedBuffer(bytes);
 			DatagramPacket packet = new DatagramPacket(buf,
-					new InetSocketAddress(host, port));
+					InetSocketAddress.createUnresolved(host, port));
 			ctx.writeAndFlush(packet);
 	}
 
