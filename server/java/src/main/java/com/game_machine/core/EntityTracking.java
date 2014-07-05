@@ -28,6 +28,7 @@ public class EntityTracking extends UntypedActor {
 		grid = Grid.find("default");
 		aoeGrid = Grid.find("aoe");
 		Commands.clientManagerRegister(name);
+		testValues();
 	}
 	
 	@Override
@@ -55,6 +56,18 @@ public class EntityTracking extends UntypedActor {
 
 	}
 	
+	private float randomInRange(float min, float max) {
+		  return (float) (Math.random() < 0.5 ? ((1-Math.random()) * (max-min) + min) : (Math.random() * (max-min) + min));
+		}
+	
+	
+	private void testValues() {
+		for(Integer i=1; i<50; i++){
+			Float id = randomInRange(1f,5000f);
+			grid.set(Float.toString(id), randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
+		}
+	}
+	
 	private void removePlayerData(ClientManagerEvent event) {
 		grid.remove(event.player_id);
 		aoeGrid.remove(event.player_id);
@@ -72,36 +85,14 @@ public class EntityTracking extends UntypedActor {
 		}
 		
 		ArrayList<GridValue> searchResults = grid.neighbors(x, y, entity.getNeighbors.neighborType);
-		ArrayList<Entity> neighbors = neighborsAsEntity(searchResults);
+		ArrayList<Neighbors> neighbors = gridValuesToNeighbors(searchResults);
 		
-		if (neighbors.isEmpty()) {
-			return;
-		}
-		
-		if (entity.hasPlayer()) {
-			SendNeighbors(neighbors, entity.player);
-		}
-	}
-	
-	private void SendNeighbors(ArrayList<Entity> neighbors, Player player) {
-		int count = 0;
-		Neighbors slice = new Neighbors();
-		
-		for (Entity entity : neighbors) {
-			slice.addEntity(entity);
-			count++;
-			if (count >= 20) {
-				SendToGateway(player,slice);
-				count = 0;
-				slice = new Neighbors();
-			}
-		}
-		if (slice.getEntityCount() >= 1) {
-			SendToGateway(player,slice);
+		for (Neighbors neighbor : neighbors) {
+			SendToGateway(entity.player,neighbor);
 		}
 		
 	}
-	
+		
 	private void SendToGateway(Player player,Neighbors slice) {
 		Entity playerMessage = new Entity();
 		playerMessage.setNeighbors(slice);
@@ -110,21 +101,27 @@ public class EntityTracking extends UntypedActor {
 		messageGateway.tell(playerMessage, getSelf());
 	}
 	
-	private ArrayList<Entity> neighborsAsEntity(ArrayList<GridValue> searchResults) {
-		ArrayList<Entity> neighbors = new ArrayList<Entity>();
+	private ArrayList<Neighbors> gridValuesToNeighbors(ArrayList<GridValue> searchResults) {
+		int count = 0;
+		ArrayList<Neighbors> neighbors = new ArrayList<Neighbors>();
+		Neighbors slice = new Neighbors();
 		for (GridValue gridvalue : searchResults) {
-			Entity result = new Entity();
-			result.setId(gridvalue.id);
-			GameMachine.Messages.Vector3 vector = new GameMachine.Messages.Vector3();
-			vector.setX(gridvalue.x);
-			vector.setY(gridvalue.y);
-			vector.setZ(gridvalue.z);
-			result.setVector3(vector);
-			
+			slice.addVector_id(gridvalue.id);
+			slice.addX(gridvalue.x);
+			slice.addY(gridvalue.y);
+			slice.addZ(gridvalue.z);
 			if (extra.containsKey(gridvalue.id)) {
-				result.setTrackExtra(extra.get(gridvalue.id));
+				slice.setTrackExtra(extra.get(gridvalue.id));
 			}
-			neighbors.add(result);
+			
+			count++;
+			if (count >= 20) {
+				neighbors.add(slice);
+				count = 0;
+				slice = new Neighbors();
+			}
+			
+			
 		}
 		return neighbors;
 	}

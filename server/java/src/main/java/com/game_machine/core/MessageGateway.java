@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.ClientMessage;
@@ -12,6 +13,7 @@ import akka.event.LoggingAdapter;
 
 public class MessageGateway extends UntypedActor {
 
+	public static AtomicInteger messageCount;
 	public static ConcurrentHashMap<String, NetMessage> netMessages = new ConcurrentHashMap<String, NetMessage>();
 	public static String name = "message_gateway";
 	
@@ -26,6 +28,7 @@ public class MessageGateway extends UntypedActor {
 		udpIncoming = ActorUtil.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
 		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
+		messageCount = new AtomicInteger();
 	}
 	
 	@Override
@@ -33,9 +36,10 @@ public class MessageGateway extends UntypedActor {
 		
 		// Incoming message
 		if (message instanceof NetMessage) {
+			messageCount.incrementAndGet();
 			NetMessage netMessage = (NetMessage)message;
-			if (netMessage.clientMessage.fastpath != null) {
-				ClientMessage clientMessage = netMessage.clientMessage;
+			ClientMessage clientMessage = ClientMessage.parseFrom(netMessage.bytes);
+			if (clientMessage.fastpath != null) {
 				
 				if (!netMessages.containsKey(clientMessage.player.id)) {
 					netMessages.put(clientMessage.player.id, netMessage);
@@ -50,7 +54,6 @@ public class MessageGateway extends UntypedActor {
 			Entity entity = (Entity)message;
 			NetMessage netMessage = netMessages.get(entity.player.id);
 			ClientMessage clientMessage = new ClientMessage();
-			//clientMessage.setClientConnection(netMessage.clientMessage.clientConnection);
 			clientMessage.addEntity(entity);
 			byte[] bytes = clientMessage.toByteArray();
 			udpServer.sendToClient(bytes, netMessage.host, netMessage.port, netMessage.ctx);
