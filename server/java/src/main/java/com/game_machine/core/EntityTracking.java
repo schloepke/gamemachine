@@ -44,7 +44,7 @@ public class EntityTracking extends UntypedActor {
 			if (entity.hasTrackEntity()) {
 				setEntityLocation(entity);
 			}
-			
+			MessageGateway.messageCount.incrementAndGet();
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent)message;
 			if (event.event.equals("disconnected")) {
@@ -86,7 +86,7 @@ public class EntityTracking extends UntypedActor {
 			y = 0f;
 		}
 		
-		MessageGateway.messageCount.incrementAndGet();
+		
 		ArrayList<GridValue> searchResults = grid.neighbors(x, y, entity.getNeighbors.neighborType);
 		System.out.println(searchResults.size());
 		ArrayList<Neighbors> neighbors = gridValuesToNeighbors(searchResults);
