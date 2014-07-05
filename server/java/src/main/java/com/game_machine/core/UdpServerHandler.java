@@ -74,7 +74,7 @@ public final class UdpServerHandler extends
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
 
-		ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
+		//ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
 		
 		NetMessage gameMessage = new NetMessage(null, NetMessage.UDP, bytes, m
 				.sender().getHostString(), m.sender().getPort(), ctx);
