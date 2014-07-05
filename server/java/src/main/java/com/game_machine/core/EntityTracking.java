@@ -62,6 +62,7 @@ public class EntityTracking extends UntypedActor {
 	
 	
 	private void testValues() {
+		System.out.println("testValues");
 		for(Integer i=1; i<50; i++){
 			Float id = randomInRange(1f,5000f);
 			grid.set(Float.toString(id), randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
