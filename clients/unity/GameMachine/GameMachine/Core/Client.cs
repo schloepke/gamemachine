@@ -94,6 +94,11 @@ namespace GameMachine.Core
 
 		public void SendEntity (Entity entity)
 		{
+			if (entity.fastpath) {
+				clientMessage.fastpath = true;
+			} else {
+				clientMessage.fastpath = false;
+			}
 			clientMessage.entity.Add (entity);
 			Send (Serialize (clientMessage));
 			clientMessage.entity.Clear ();

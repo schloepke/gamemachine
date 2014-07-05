@@ -53,6 +53,9 @@ namespace GameMachine.Core
 
 			entity.getNeighbors = CreateGetNeighbors (update.neighborEntityType, entity.vector3);
 
+			// stay on the fastpath server side (no crossing language boundaries)
+			entity.fastpath = true;
+
 			// Always regional
 			ActorSystem.Instance.FindRegional ("default").Tell (entity);
 		}

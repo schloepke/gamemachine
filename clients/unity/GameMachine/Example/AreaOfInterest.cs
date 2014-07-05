@@ -53,7 +53,9 @@ namespace GameMachine.Example
 			Vector3 position = this.gameObject.transform.position;
 
 			// Create object with our coordinates
+
 			TrackingUpdate update = new TrackingUpdate (User.Instance.username, position.x, position.z, position.y);
+
 
 			// Optional.  Tell the server to set our entity type to this value.  Searches
 			// can filter on this.
@@ -78,7 +80,7 @@ namespace GameMachine.Example
 		void OnUpdateReceived (List<TrackingUpdate> updates)
 		{
 			foreach (TrackingUpdate update in updates) {
-
+				Logger.Debug (update.x.ToString ());
 			}
 		}
 

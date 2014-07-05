@@ -25,8 +25,8 @@ namespace GameMachine
 		private GameMachine.Messages.Vector3 entityVector;
 		private List<double> times = new List<double> ();
 
-		public string udpHost;
-		public int udpPort;
+		public string udpHost = "192.168.1.8";
+		public int udpPort = 24130;
 		public int udpRegionPort;
         
 		public void Start (string username)

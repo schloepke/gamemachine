@@ -26,8 +26,8 @@ namespace GameMachine
 		private List<double> times = new List<double> ();
 		private string authUri;
 
-		public string udpHost;
-		public int udpPort;
+		public string udpHost = "192.168.1.8";
+		public int udpPort = 24130;
 		public int udpRegionPort;
 
 		void Start ()
@@ -44,10 +44,11 @@ namespace GameMachine
 			Logger.Debug (entityVector.x + " " + entityVector.y + " " + entityVector.z);
 
 			client = new Client (udpHost, udpPort, username, authtoken, true);
+			client.Start ();
 			this.username = username;
 			started = true;
 			SendTimed ();
-			InvokeRepeating ("UpdateMessage", 2, 0.06F);
+			InvokeRepeating ("UpdateMessage", 2, 1.05F);
 
 		}
 
@@ -105,6 +106,7 @@ namespace GameMachine
 			getNeighbors.vector3 = entity.vector3;
 
 			entity.getNeighbors = getNeighbors;
+			entity.fastpath = true;
 			client.SendEntity (entity); 
 		}
 		public void Devnull ()
