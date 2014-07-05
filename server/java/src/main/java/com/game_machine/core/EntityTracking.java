@@ -88,6 +88,7 @@ public class EntityTracking extends UntypedActor {
 		
 		MessageGateway.messageCount.incrementAndGet();
 		ArrayList<GridValue> searchResults = grid.neighbors(x, y, entity.getNeighbors.neighborType);
+		System.out.println(searchResults.size());
 		ArrayList<Neighbors> neighbors = gridValuesToNeighbors(searchResults);
 		
 		for (Neighbors neighbor : neighbors) {
