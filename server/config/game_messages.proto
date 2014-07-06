@@ -1,9 +1,9 @@
 
 // Used to by the entity tracking system to attack additional fields to your
-// tracking updates.  You can change any of the fields in TrackExtra to suit your
+// tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
-message TrackExtra {
+message TrackData {
   optional float speed = 1;
   optional float velocity = 2;
   optional Vector3 direction = 3;
