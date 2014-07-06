@@ -19,7 +19,7 @@ message MessageEnvelope {
 message TrackEntity {
   required bool value = 1;
   optional bool internal = 2;
-  optional TrackExtra trackExtra = 3;
+  optional TrackData trackData = 3;
 }
 
 message PlayerLogout {
@@ -240,14 +240,14 @@ message TestObject {
   repeated Corpus corpus2 = 11;
 }
   
-  
 message Neighbors {
-  repeated Entity entity = 1;
-  repeated float x = 2;
-  repeated float y = 3;
-  repeated float z = 4;
-  repeated string vector_id = 5;
-  repeated TrackExtra trackExtra = 6;
+  repeated Neighbor neighbor = 1;
+}
+
+message Neighbor {
+  optional TrackData trackData = 1;
+  required Vector3 location = 2;
+  required string id = 3;
 }
 
 message GetNeighbors {

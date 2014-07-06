@@ -55,12 +55,10 @@ public final class UdpServerHandler extends
 
 	public void send(byte[] bytes, String host, int port,
 			ChannelHandlerContext ctx) {
-			//log.info("send " + "host: " + host + " port: " + port + " bytes: "
-			//		+ bytes.toString()+" ctx: "+ctx);
-
+			
 			ByteBuf buf = Unpooled.copiedBuffer(bytes);
 			DatagramPacket packet = new DatagramPacket(buf,
-					InetSocketAddress.createUnresolved(host, port));
+					new InetSocketAddress(host, port));
 			ctx.writeAndFlush(packet);
 			countOut.incrementAndGet();
 	}
@@ -78,14 +76,11 @@ public final class UdpServerHandler extends
 			throws Exception {
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
-
-		//ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
 		
 		NetMessage gameMessage = new NetMessage(null, NetMessage.UDP, bytes, m
 				.sender().getHostString(), m.sender().getPort(), ctx);
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));
-		//MessageGateway.messageCount.getAndIncrement();
 		this.inbound.tell(gameMessage, null);
 		countIn.incrementAndGet();
 

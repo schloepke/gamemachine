@@ -36,7 +36,6 @@ module GameMachine
       end
 
       def find_or_create(name)
-        GameMachine.logger.info "CREATING GRID #{name}"
         grid_config = config.fetch(name)
         JavaLib::Grid.find_or_create(name,grid_config.fetch(:grid_size),
                                    grid_config.fetch(:cell_size))
