@@ -17,20 +17,18 @@ import akka.event.LoggingAdapter;
 public class EntityTracking extends UntypedActor {
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-	public static ConcurrentHashMap<String, TrackData> trackdatas = new ConcurrentHashMap<String, TrackData>();
 	public static String name = "fastpath_entity_tracking";
 	
 	private Grid aoeGrid;
 	private Grid grid;
 	private ActorSelection messageGateway;
-	private ArrayList<GridValue> testValues;
+	private ArrayList<TrackData> testValues;
 	
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
 		grid = Grid.find("default");
 		aoeGrid = Grid.find("aoe");
 		Commands.clientManagerRegister(name);
-		testValues = getTestValues();
 	}
 	
 	@Override
@@ -63,21 +61,11 @@ public class EntityTracking extends UntypedActor {
 		}
 	
 	
-	private ArrayList<GridValue> getTestValues() {
-		
-		ArrayList<GridValue> values = new ArrayList<GridValue>();
-		for(Integer i=1; i<100; i++){
-			Float id = randomInRange(1f,5000f);
-			GridValue v = new GridValue(Float.toString(id), 1,randomInRange(1f,2000f), randomInRange(1f,2000f), randomInRange(1f,2000f), "npc");
-			values.add(v);
-		}
-		return values;
-	}
+	
 	
 	private void removePlayerData(ClientManagerEvent event) {
 		grid.remove(event.player_id);
 		aoeGrid.remove(event.player_id);
-		trackdatas.remove(event.player_id);
 	}
 	
 	private void SendNeighbors(Entity entity) {
@@ -90,11 +78,10 @@ public class EntityTracking extends UntypedActor {
 			y = 0f;
 		}
 		
+		ArrayList<TrackData> trackDatas = grid.neighbors(x, y, entity.getNeighbors.neighborType);
 		
-		ArrayList<GridValue> searchResults = grid.neighbors(x, y, entity.getNeighbors.neighborType);
-		
-		if (searchResults.size() >= 1) {
-			gridValuesToNeighbors(entity.player,searchResults);
+		if (trackDatas.size() >= 1) {
+			gridValuesToNeighbors(entity.player,trackDatas);
 		}
 	}
 		
@@ -106,29 +93,21 @@ public class EntityTracking extends UntypedActor {
 		messageGateway.tell(playerMessage, getSelf());
 	}
 	
-	private void gridValuesToNeighbors(Player player,ArrayList<GridValue> searchResults) {
+	private void gridValuesToNeighbors(Player player,ArrayList<TrackData> trackDatas) {
 		int count = 0;
 		Neighbors neighbors = new Neighbors();
 		
-		for (GridValue gridvalue : searchResults) {
-			Neighbor neighbor = new Neighbor();
-			if (trackdatas.containsKey(gridvalue.id)) {
-				neighbor.trackData = trackdatas.get(gridvalue.id);
-			}
-			neighbor.id = gridvalue.id;
-			neighbor.location = new GameMachine.Messages.Vector3();
-			neighbor.location.x = gridvalue.x;
-			neighbor.location.y = gridvalue.y;
-			neighbor.location.z = gridvalue.z;
-			neighbors.addNeighbor(neighbor);
+		for (TrackData trackData : trackDatas) {
+			neighbors.addTrackData(trackData);
 			
 			count++;
-			if (count >= 20) {
+			if (count >= 30) {
 				SendToGateway(player,neighbors);
 				count = 0;
 				neighbors = new Neighbors();
 			}
 		}
+		SendToGateway(player,neighbors);
 	}
 	
 	private void setEntityLocation(Entity entity) {
@@ -149,7 +128,6 @@ public class EntityTracking extends UntypedActor {
 		
 		grid.set(entity.id, vector.x, vector.y, vector.z, entity.entityType);
 		aoeGrid.set(entity.id, vector.x, vector.y, vector.z, entity.entityType);
-		trackdatas.put(entity.id, entity.trackEntity.trackData);
 	}
 
 }

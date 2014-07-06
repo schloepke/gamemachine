@@ -29,6 +29,7 @@ public class MessageGateway extends UntypedActor {
 		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
 		messageCount = new AtomicInteger();
+		log.warning("Message Gateway Starting");
 	}
 	
 	@Override
@@ -60,6 +61,7 @@ public class MessageGateway extends UntypedActor {
 			udpServer.sendToClient(bytes, netMessage.host, netMessage.port, netMessage.ctx);
 			
 		} else if (message instanceof ClientManagerEvent) {
+			log.info("Message gateway got client manager event");
 			ClientManagerEvent event = (ClientManagerEvent)message;
 			if (event.event.equals("disconnected")) {
 				netMessages.remove(event.player_id);

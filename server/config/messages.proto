@@ -241,7 +241,7 @@ message TestObject {
 }
   
 message Neighbors {
-  repeated Neighbor neighbor = 1;
+  repeated TrackData trackData = 1;
 }
 
 message Neighbor {
