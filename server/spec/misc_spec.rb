@@ -13,6 +13,13 @@ module GameMachine
       entity
     end
 
+    it "should decode client message" do
+      message = MessageLib::ClientMessage.new.set_player(MessageLib::Player.new.set_id('1'))
+      sleep 2
+      client = GameMachine::Clients::TcpClient.new('192.168.1.8',8910)
+      client.send_message(message.to_prefixed_byte_array.to_s)
+    end
+
     xit "singleton manager" do
       ref = Akka.instance.actor_system.actor_selection('/user/region_manager_proxy')
       ref.tell('HELLO',nil)

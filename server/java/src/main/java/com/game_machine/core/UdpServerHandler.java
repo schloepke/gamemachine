@@ -77,8 +77,8 @@ public final class UdpServerHandler extends
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
 		
-		NetMessage gameMessage = new NetMessage(null, NetMessage.UDP, bytes, m
-				.sender().getHostString(), m.sender().getPort(), ctx);
+		NetMessage gameMessage = new NetMessage(NetMessage.UDP, m.sender().getHostString(), m.sender().getPort(), ctx);
+		gameMessage.bytes = bytes;
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));
 		this.inbound.tell(gameMessage, null);

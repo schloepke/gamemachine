@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import GameMachine.Messages.TrackData;
+
 public class Grid {
 
 	private float max;
@@ -15,9 +17,9 @@ public class Grid {
 
 	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
 	
-	public ConcurrentHashMap<String, GridValue> deltaIndex = new ConcurrentHashMap<String, GridValue>();
-	public ConcurrentHashMap<String, GridValue> objectIndex = new ConcurrentHashMap<String, GridValue>();
-	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, GridValue>>();
+	public ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
+	public ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
+	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 	public ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
 	public static void resetGrids()
@@ -25,7 +27,7 @@ public class Grid {
 		grids = new ConcurrentHashMap<String, Grid>();
 	}
 	
-	public static Grid findOrCreate(String name, int gridSize, int cellSize) {
+	public static synchronized Grid findOrCreate(String name, int gridSize, int cellSize) {
 		if (grids.containsKey(name)) {
 			return grids.get(name);
 		} else {
@@ -90,21 +92,21 @@ public class Grid {
 		return cells;
 	}
 
-	public ArrayList<GridValue> neighbors(float x, float y, String entityType) {
+	public ArrayList<TrackData> neighbors(float x, float y, String entityType) {
 		int myCell = hash(x, y);
 		return neighbors(myCell, x, y, entityType);
 	}
 
-	public ArrayList<GridValue> neighbors(int myCell, float x, float y, String entityType) {
-		ArrayList<GridValue> result;
+	public ArrayList<TrackData> neighbors(int myCell, float x, float y, String entityType) {
+		ArrayList<TrackData> result;
 
-		GridValue[] gridValues;
-		result = new ArrayList<GridValue>();
+		TrackData[] gridValues;
+		result = new ArrayList<TrackData>();
 		Set<Integer> cells = cellsWithinRadius(myCell, x, y);
 		for (int cell : cells) {
 			gridValues = gridValuesInCell(cell);
 			if (gridValues != null) {
-				for (GridValue gridValue : gridValues) {
+				for (TrackData gridValue : gridValues) {
 					if (gridValue != null) {
 						if (entityType == null) {
 							result.add(gridValue);
@@ -118,11 +120,11 @@ public class Grid {
 		return result;
 	}
 
-	public GridValue[] gridValuesInCell(int cell) {
-		ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(cell);
+	public TrackData[] gridValuesInCell(int cell) {
+		ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
 
 		if (cellGridValues != null) {
-			GridValue[] a = new GridValue[cellGridValues.size()];
+			TrackData[] a = new TrackData[cellGridValues.size()];
 			cellGridValues.values().toArray(a);
 			return a;
 			// return cellGridValues.values();
@@ -131,23 +133,23 @@ public class Grid {
 		}
 	}
 
-	public void updateFromDelta(GridValue[] gridValues) {
-		for (GridValue gridValue : gridValues) {
+	public void updateFromDelta(TrackData[] gridValues) {
+		for (TrackData gridValue : gridValues) {
 			if (gridValue != null) {
 				objectIndex.put(gridValue.id, gridValue);
 			}
 		}
 	}
 
-	public GridValue[] currentDelta() {
-		GridValue[] a = new GridValue[deltaIndex.size()];
+	public TrackData[] currentDelta() {
+		TrackData[] a = new TrackData[deltaIndex.size()];
 		deltaIndex.values().toArray(a);
 		deltaIndex.clear();
 		return a;
 	}
 
-	public ArrayList<GridValue> getNeighborsFor(String id, String entityType) {
-		GridValue gridValue = get(id);
+	public ArrayList<TrackData> getNeighborsFor(String id, String entityType) {
+		TrackData gridValue = get(id);
 		if (gridValue == null)
 		{
 			return null;
@@ -155,15 +157,15 @@ public class Grid {
 		return neighbors(gridValue.x, gridValue.y, entityType);
 	}
 	
-	public GridValue get(String id) {
+	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}
 
 	public void remove(String id) {
-		GridValue indexValue = objectIndex.get(id);
+		TrackData indexValue = objectIndex.get(id);
 		if (indexValue != null) {
 			int cell = indexValue.cell;
-			ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(cell);
+			ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
 			if (cellGridValues != null) {
 				cellGridValues.remove(id);
 			}
@@ -172,7 +174,7 @@ public class Grid {
 	}
 
 	public Boolean set(String id, float x, float y, float z, String entityType) {
-		GridValue oldValue = objectIndex.get(id);
+		TrackData oldValue = objectIndex.get(id);
 
 		if (oldValue != null) {
 			if (oldValue.x == x && oldValue.y == y) {
@@ -183,27 +185,32 @@ public class Grid {
 		int cell = hash(x, y);
 		
 
-		GridValue gridValue;
-		gridValue = new GridValue(id, cell, x, y, z, entityType);
+		TrackData trackData = new TrackData();
+		trackData.id = id;
+		trackData.cell = cell;
+		trackData.x = x;
+		trackData.y = y;
+		trackData.z = z;
+		trackData.entityType = entityType;
 
 		if (oldValue == null) {
-			objectIndex.put(id, gridValue);
+			objectIndex.put(id, trackData);
 		} else {
 			if (oldValue.cell != cell) {
-				ConcurrentHashMap<String, GridValue> cellGridValues = cells.get(oldValue.cell);
+				ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(oldValue.cell);
 				cellGridValues.remove(id);
 				if (cellGridValues.size() == 0) {
 					cells.remove(oldValue.cell);
 				}
 					
 			}
-			objectIndex.replace(id, gridValue);
+			objectIndex.replace(id, trackData);
 		}
 		
 		if (!cells.containsKey(cell)) {
-			cells.put(cell, new ConcurrentHashMap<String, GridValue>());
+			cells.put(cell, new ConcurrentHashMap<String, TrackData>());
 		}
-		cells.get(cell).put(id, gridValue);
+		cells.get(cell).put(id, trackData);
 
 		//deltaIndex.put(id, gridValue);
 
