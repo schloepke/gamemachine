@@ -1,4 +1,3 @@
-
 # Welcome to Game Machine
 
 Game Machine is a server side platform for creating real time multiplayer games.  It was designed to be simple
@@ -21,7 +20,7 @@ We strongly believe that core technology should be open source.  This benefits e
 Out of the box:
 
 * **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
-* **[Matchmaking & Teams](https://github.com/gamemachine/gamemachine/wiki/Matchmaking-&-Teams)**
+* **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Matchmaking-&-Teams)**
 * Login & Authentication
 * **[Distributed object store](https://github.com/gamemachine/gamemachine/wiki/Object-database-archtiecture)**
 * **[Locality (zones/regions)](https://github.com/gamemachine/gamemachine/wiki/Region-servers)**
@@ -31,16 +30,28 @@ Out of the box:
 
 ###Getting Started
 
-**[Play the public demo](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-public-demo)**
 
-**[Install the server](https://github.com/gamemachine/gamemachine/wiki/Installation)**
+####Server
+* [Install the server](https://github.com/gamemachine/gamemachine/wiki/Installation)
+* [Game Machine basics](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-basics)
 
-**[Download a Unity package](https://github.com/gamemachine/gamemachine/wiki/Unity-packages)**
+After that we suggest taking a look at the code in games/example which runs the world server, or looking at the matchmaking system.
 
-  
+####Client
+
+* [Play the public demo](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-public-demo)
+* [Download a Unity package](https://github.com/gamemachine/gamemachine/wiki/Unity-packages)
+
+
+
+####Architecture
+
+* [Client architecture](https://github.com/gamemachine/gamemachine/wiki/Client-Architecture)
+* [Server architecture](https://github.com/gamemachine/gamemachine/wiki/Server-architecture) 
  
 ###Support
 
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
+
