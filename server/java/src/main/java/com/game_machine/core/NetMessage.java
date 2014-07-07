@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
 import GameMachine.Messages.ClientMessage;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 public class NetMessage {
@@ -11,6 +12,7 @@ public class NetMessage {
 	public static final int TCP = 2;
 
 	public byte[] bytes;
+	public ByteBuf buf;
 	public ClientMessage clientMessage;
 	public final String host;
 	public final int port;

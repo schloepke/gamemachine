@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
 import io.netty.bootstrap.Bootstrap;
+import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -81,6 +82,10 @@ public final class UdpServer implements Runnable {
 
 	public void sendToClient(byte[] bytes, String host, int port, ChannelHandlerContext ctx) {
 		handler.send(bytes, host, port, ctx);
+	}
+	
+	public void sendToClient(ByteBuf buf, String host, int port, ChannelHandlerContext ctx) {
+		handler.send(buf, host, port, ctx);
 	}
 
 	
