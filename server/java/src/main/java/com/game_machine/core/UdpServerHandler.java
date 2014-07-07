@@ -81,7 +81,7 @@ public final class UdpServerHandler extends
 			clients.put(hashCode, address);
 		}
 
-		ByteBuf buf = Unpooled.copiedBuffer(bytes);
+		ByteBuf buf = Unpooled.wrappedBuffer(bytes);
 		DatagramPacket packet = new DatagramPacket(buf, address);
 		ctx.writeAndFlush(packet);
 		countOut.incrementAndGet();

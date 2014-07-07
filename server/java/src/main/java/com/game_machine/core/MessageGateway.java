@@ -60,8 +60,9 @@ public class MessageGateway extends UntypedActor {
 			ClientMessage clientMessage = new ClientMessage();
 			clientMessage.addEntity(entity);
 			byte[] bytes = clientMessage.toByteArray();
-			ByteBuf bb = clientMessage.toByteBuf();
-			udpServer.sendToClient(bb, netMessage.host, netMessage.port, netMessage.ctx);
+			udpServer.sendToClient(bytes, netMessage.host, netMessage.port, netMessage.ctx);
+			//ByteBuf bb = clientMessage.toByteBuf();
+			//udpServer.sendToClient(bb, netMessage.host, netMessage.port, netMessage.ctx);
 			
 		} else if (message instanceof ClientManagerEvent) {
 			log.info("Message gateway got client manager event");
