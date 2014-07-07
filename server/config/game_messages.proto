@@ -13,7 +13,6 @@ message TrackData {
   optional float y = 7;
   optional float z = 8;
   optional string entityType = 9;
-  optional int32 cell = 10;
 }
 
 message Health {

@@ -19,6 +19,7 @@ public class Grid {
 	
 	public ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
 	public ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
+	public ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 	public ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
@@ -164,47 +165,56 @@ public class Grid {
 	public void remove(String id) {
 		TrackData indexValue = objectIndex.get(id);
 		if (indexValue != null) {
-			int cell = indexValue.cell;
+			int cell = cellsIndex.get(id);
 			ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
 			if (cellGridValues != null) {
 				cellGridValues.remove(id);
 			}
 			objectIndex.remove(id);
+			cellsIndex.remove(id);
 		}
 	}
 
-	public Boolean set(String id, float x, float y, float z, String entityType) {
-		TrackData oldValue = objectIndex.get(id);
-
-		if (oldValue != null) {
-			if (oldValue.x == x && oldValue.y == y) {
+	public Boolean set(String id, Float x, Float y, Float z, String entityType) {
+		Boolean hasExisting = false;
+		TrackData trackData;
+		Integer oldCellValue = -1;
+		
+		if (objectIndex.containsKey(id)) {
+			hasExisting = true;
+			trackData = objectIndex.get(id);
+			if (trackData.x == x && trackData.y == y) {
 				return false;
 			}
+			
+			oldCellValue = cellsIndex.get(id);
+		} else {
+			trackData = new TrackData();
+			trackData.id = id;
+			trackData.entityType = entityType;
 		}
-
+		
 		int cell = hash(x, y);
 		
-
-		TrackData trackData = new TrackData();
-		trackData.id = id;
-		trackData.cell = cell;
 		trackData.x = x;
 		trackData.y = y;
 		trackData.z = z;
-		trackData.entityType = entityType;
+		
 
-		if (oldValue == null) {
-			objectIndex.put(id, trackData);
-		} else {
-			if (oldValue.cell != cell) {
-				ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(oldValue.cell);
+		if (hasExisting) {
+			if (oldCellValue != cell) {
+				ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(oldCellValue);
 				cellGridValues.remove(id);
 				if (cellGridValues.size() == 0) {
-					cells.remove(oldValue.cell);
+					cells.remove(oldCellValue);
 				}
 					
 			}
 			objectIndex.replace(id, trackData);
+			cellsIndex.replace(id, cell);
+		} else {
+			cellsIndex.put(id, cell);
+			objectIndex.put(id, trackData);
 		}
 		
 		if (!cells.containsKey(cell)) {

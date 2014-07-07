@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import GameMachine.Messages.Entity;
+import com.game_machine.core.LocalLinkedBuffer;
 
 import com.dyuproject.protostuff.Pipe;
 import com.dyuproject.protostuff.Schema;
@@ -380,7 +381,7 @@ public byte[] toPrefixedByteArray() {
 }
 
 public byte[] toProtobuf() {
-	LinkedBuffer buffer = LinkedBuffer.allocate(8024);
+	LinkedBuffer buffer = LocalLinkedBuffer.get();
 	byte[] bytes = null;
 
 	try {

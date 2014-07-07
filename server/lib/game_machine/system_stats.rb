@@ -8,7 +8,7 @@ module GameMachine
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
       end
-      #schedule_message('message_count',1,:seconds)
+      schedule_message('message_count',1,:seconds)
       #schedule_message('update',60,:seconds)
     end
 
