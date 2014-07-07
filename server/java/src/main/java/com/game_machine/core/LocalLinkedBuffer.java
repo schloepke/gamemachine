@@ -5,12 +5,11 @@ import com.dyuproject.protostuff.LinkedBuffer;
 
 public class LocalLinkedBuffer {
 
-	static int bufferSize = 8096;
+	static int bufferSize = 2048;
 
 	private static final ThreadLocal<LinkedBuffer> localBuffer = new ThreadLocal<LinkedBuffer>() {
 		@Override
 		protected LinkedBuffer initialValue() {
-			System.out.println("Allocate");
 			return allocate(bufferSize);
 		}
 	};
