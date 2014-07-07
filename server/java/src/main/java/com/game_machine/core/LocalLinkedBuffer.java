@@ -5,7 +5,7 @@ import com.dyuproject.protostuff.LinkedBuffer;
 
 public class LocalLinkedBuffer {
 
-	static int bufferSize = 512;
+	static int bufferSize = 8096;
 
 	private static final ThreadLocal<LinkedBuffer> localBuffer = new ThreadLocal<LinkedBuffer>() {
 		@Override
