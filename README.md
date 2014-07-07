@@ -19,13 +19,13 @@ We strongly believe that core technology should be open source.  This benefits e
 
 Out of the box:
 
-* **[Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)**
-* **[Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Matchmaking-&-Teams)**
+* [Area of interest](https://github.com/gamemachine/gamemachine/wiki/Area-of-Interest)
+* [Chat/Matchmaking/Grouping](https://github.com/gamemachine/gamemachine/wiki/Matchmaking-&-Teams)
 * Login & Authentication
-* **[Distributed object store](https://github.com/gamemachine/gamemachine/wiki/Object-database-archtiecture)**
-* **[Locality (zones/regions)](https://github.com/gamemachine/gamemachine/wiki/Region-servers)**
+* [Distributed object store](https://github.com/gamemachine/gamemachine/wiki/Object-database-archtiecture)
+* [Locality (zones/regions)](https://github.com/gamemachine/gamemachine/wiki/Region-servers)
 * Simple framework for writing server side logic
-* **[Fully distributed.  Easy to deploy and manage](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-Cluster)**
+* [Fully distributed.  Easy to deploy and manage](https://github.com/gamemachine/gamemachine/wiki/Game-Machine-Cluster)
 
 
 ###Getting Started
