@@ -22,17 +22,16 @@ public final class UdpServerHandler extends
 
 	public static AtomicInteger countIn = new AtomicInteger();
 	public static AtomicInteger countOut = new AtomicInteger();
-	
+
 	private static final Logger log = LoggerFactory
 			.getLogger(UdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 
-	private HashMap<String,String> clients = new HashMap<String,String>();
-	
+	private HashMap<Integer, InetSocketAddress> clients = new HashMap<Integer, InetSocketAddress>();
+
 	public UdpServerHandler() {
-		this.inbound = ActorUtil
-				.getSelectionByName("message_gateway");
+		this.inbound = ActorUtil.getSelectionByName("message_gateway");
 	}
 
 	@Override
@@ -55,29 +54,37 @@ public final class UdpServerHandler extends
 
 	public void send(byte[] bytes, String host, int port,
 			ChannelHandlerContext ctx) {
-			
-			ByteBuf buf = Unpooled.copiedBuffer(bytes);
-			DatagramPacket packet = new DatagramPacket(buf,
-					new InetSocketAddress(host, port));
-			ctx.writeAndFlush(packet);
-			countOut.incrementAndGet();
+		InetSocketAddress address;
+		int hashCode = ctx.hashCode();
+
+		if (clients.containsKey(hashCode)) {
+			address = clients.get(hashCode);
+		} else {
+			address = new InetSocketAddress(host, port);
+			clients.put(hashCode, address);
+		}
+
+		ByteBuf buf = Unpooled.copiedBuffer(bytes);
+		DatagramPacket packet = new DatagramPacket(buf, address);
+		ctx.writeAndFlush(packet);
+		countOut.incrementAndGet();
 	}
 
-	public void echo(ChannelHandlerContext ctx, DatagramPacket m, byte[] bytes)
-	{
+	public void echo(ChannelHandlerContext ctx, DatagramPacket m, byte[] bytes) {
 		ByteBuf buf = Unpooled.copiedBuffer(bytes);
-		DatagramPacket packet = new DatagramPacket(buf,
-				new InetSocketAddress(m.sender().getHostString(), m.sender().getPort()));
+		DatagramPacket packet = new DatagramPacket(buf, new InetSocketAddress(m
+				.sender().getHostString(), m.sender().getPort()));
 		ctx.writeAndFlush(packet);
 	}
-	
+
 	@Override
 	protected void channelRead0(ChannelHandlerContext ctx, DatagramPacket m)
 			throws Exception {
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
-		
-		NetMessage gameMessage = new NetMessage(NetMessage.UDP, m.sender().getHostString(), m.sender().getPort(), ctx);
+
+		NetMessage gameMessage = new NetMessage(NetMessage.UDP, m.sender()
+				.getHostString(), m.sender().getPort(), ctx);
 		gameMessage.bytes = bytes;
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));

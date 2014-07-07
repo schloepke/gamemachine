@@ -117,6 +117,7 @@ import java.util.Map;
 import com.game_machine.entity_system.Entity;
 import com.game_machine.entity_system.Entities;
 import com.game_machine.entity_system.Component;
+import com.game_machine.core.LocalLinkedBuffer;
 
 <if(options.generate_pipe_schema)>
 import com.dyuproject.protostuff.Pipe;
@@ -698,7 +699,7 @@ public byte[] toJson() {
 }
 		
 public byte[] toProtobuf() {
-	LinkedBuffer buffer = LinkedBuffer.allocate(1024);
+	LinkedBuffer buffer = LocalLinkedBuffer.get;
 	byte[] bytes = null;
 
 	try {
@@ -708,6 +709,7 @@ public byte[] toProtobuf() {
 		e.printStackTrace();
 		throw new RuntimeException("Protobuf encoding failed");
 	}
+	buffer.clear();
 	return bytes;
 }
 
