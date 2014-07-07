@@ -52,6 +52,23 @@ public final class UdpServerHandler extends
 		this.ctx = ctx;
 	}
 
+	public void send(ByteBuf buf, String host, int port,
+			ChannelHandlerContext ctx) {
+		InetSocketAddress address;
+		int hashCode = ctx.hashCode();
+
+		if (clients.containsKey(hashCode)) {
+			address = clients.get(hashCode);
+		} else {
+			address = new InetSocketAddress(host, port);
+			clients.put(hashCode, address);
+		}
+
+		DatagramPacket packet = new DatagramPacket(buf, address);
+		ctx.writeAndFlush(packet);
+		countOut.incrementAndGet();
+	}
+	
 	public void send(byte[] bytes, String host, int port,
 			ChannelHandlerContext ctx) {
 		InetSocketAddress address;

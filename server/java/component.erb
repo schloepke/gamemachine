@@ -1,6 +1,9 @@
 
 package GameMachine.Messages;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -392,6 +395,19 @@ public byte[] toProtobuf() {
 		throw new RuntimeException("Protobuf encoding failed");
 	}
 	return bytes;
+}
+
+public ByteBuf toByteBuf() {
+	ByteBuf bb = Unpooled.buffer(512, 2048);
+	LinkedBuffer buffer = LinkedBuffer.use(bb.array());
+
+	try {
+		ProtobufIOUtil.writeTo(buffer, this, RuntimeSchema.getSchema(<%=klass%>.class));
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException("Protobuf encoding failed");
+	}
+	return bb;
 }
 
 }
