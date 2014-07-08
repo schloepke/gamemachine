@@ -4,7 +4,7 @@ using  System.Collections.Generic;
 using GameMachine;
 using GameMachine.Core;
 using Entity = GameMachine.Messages.Entity;
-using TrackExtra = GameMachine.Messages.TrackExtra;
+using TrackData = GameMachine.Messages.TrackData;
 
 namespace GameMachine.World
 {
@@ -46,9 +46,9 @@ namespace GameMachine.World
 
 			TrackingUpdate update = new TrackingUpdate (User.Instance.username, position.x, position.z, position.y);
 			update.entityType = "player";
-			TrackExtra trackExtra = new TrackExtra ();
-			trackExtra.direction = directionVector;
-			update.trackExtra = trackExtra;
+			TrackData trackData = new TrackData ();
+			trackData.direction = directionVector;
+			update.trackData = trackData;
 			entityTracking.Update (update);
 		}
         

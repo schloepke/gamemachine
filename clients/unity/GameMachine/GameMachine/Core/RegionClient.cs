@@ -51,7 +51,7 @@ namespace GameMachine.Core
 			regionStartedCalled = false;
 			connected = false;
 			ActorSystem.Instance.SetRegionClient (null);
-			if (client != null && client.running) {
+			if (client != null && client.IsRunning ()) {
 				client.Stop ();
 			}
 		}
@@ -68,8 +68,14 @@ namespace GameMachine.Core
 			if (running) {
 				Disconnect ();
 			}
+
 			Logger.Debug ("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
-			client = new Client (host, port, username, authtoken);
+			if (App.protocol == "UDP") {
+				client = new AsyncUdpClient (host, port, username, authtoken);
+			} else {
+				client = new AsyncTcpClient (host, port, username, authtoken);
+			}
+
 			client.SetConnectionType (2);
 			client.Start ();
 			ActorSystem.Instance.SetRegionClient (client);

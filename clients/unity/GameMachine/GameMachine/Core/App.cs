@@ -9,27 +9,24 @@ namespace GameMachine.Core
 {
 	public class App : MonoBehaviour
 	{
-		public Client client;
-		public static RemoteEcho remoteEcho;
-
-		public bool running = false;
-		public bool connected = false;
-
-
-		private double lastEcho = 0;
-		private double echosPerSecond = 1;
+		private double lastEcho = -1000;
+		private double echosPerSecond = 1.0f;
 		private double echoInterval;
 		private double lastEchoReceived = 0;
+		private AppStarted appStarted;
+		private ConnectionTimeout connectionTimeout;
+		private bool appStartedCalled = false;
+
+		public Client client;
+		public static RemoteEcho remoteEcho;
+		public bool running = false;
+		public bool connected = false;
 		public double echoTimeout = 5.0f;
 		public float disconnectTime = 10f;
+		public static string protocol = "UDP";
 
 		public delegate void AppStarted ();
 		public delegate void ConnectionTimeout ();
-		private AppStarted appStarted;
-		private ConnectionTimeout connectionTimeout;
-
-		private bool appStartedCalled = false;
-
 
 		public void OnAppStarted (AppStarted callback)
 		{
@@ -47,15 +44,22 @@ namespace GameMachine.Core
 			StartCoroutine (auth.Authenticate (uri, username, password, success, error));
 		}
 
-		public void Run (string host, int port, string username, string authtoken)
+		public void Run (string protocol, string host, int port, string username, string authtoken)
 		{
+			App.protocol = protocol;
 			// Create client and start actor system
-			client = new Client (host, port, username, authtoken);
+			if (protocol == "UDP") {
+				client = new AsyncUdpClient (host, port, username, authtoken);
+			} else {
+				client = new AsyncTcpClient (host, port, username, authtoken);
+			}
+
 			client.Start ();
 			ActorSystem.Instance.Start (client);
 
 			// Now create the actors
 			StartCoreActors ();
+			remoteEcho.Echo ();
 		}
 
 		public void StartCoreActors ()
@@ -105,6 +109,10 @@ namespace GameMachine.Core
 			Logger.Debug ("App running - waiting to verify connection");
 		}
 
+		void SetEchoInterval ()
+		{
+			echoInterval = 0.60 / echosPerSecond;
+		}
 		void UpdateRegions ()
 		{
 			RegionHandler.SendRequest ();
@@ -119,6 +127,8 @@ namespace GameMachine.Core
 					appStarted ();
 					appStartedCalled = true;
 					InvokeRepeating ("UpdateRegions", 0.01f, 20.0F);
+					echosPerSecond = 0.20f; // lower this once connected
+					SetEchoInterval ();
 				}
 			}
 
@@ -128,7 +138,7 @@ namespace GameMachine.Core
 		void Start ()
 		{
 			Application.runInBackground = true;
-			echoInterval = 0.60 / echosPerSecond;
+			SetEchoInterval ();
 			lastEchoReceived = Time.time;
 			InvokeRepeating ("UpdateNetwork", 0.010f, 0.06F);
 		}
@@ -158,9 +168,9 @@ namespace GameMachine.Core
                     
 				if ((Time.time - lastEchoReceived) >= echoTimeout) {
 					connected = false;
-					Logger.Debug ("Echo timeout");
+					//Logger.Debug ("Echo timeout");
 					if ((Time.time - lastEchoReceived) >= disconnectTime) {
-						Logger.Debug ("Connection timeout");
+						//Logger.Debug ("Connection timeout");
 						connectionTimeout ();
 					}
 				}

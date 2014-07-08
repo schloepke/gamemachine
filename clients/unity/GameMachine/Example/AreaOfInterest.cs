@@ -4,7 +4,7 @@ using  System.Collections.Generic;
 using GameMachine;
 using GameMachine.Core;
 using Entity = GameMachine.Messages.Entity;
-using TrackExtra = GameMachine.Messages.TrackExtra;
+using TrackData = GameMachine.Messages.TrackData;
 
 // This is an example of how to track objects in the game that are near you.
 // The basic flow is that you send a message to the server at regular intervals with your position, and a request
@@ -66,13 +66,13 @@ namespace GameMachine.Example
 			//update.neighborEntityType = "npc";
 
 
-			// TrackExtra is a message you can customize any way you want and allows you to extend the fields that
+			// TrackData is a message you can customize any way you want and allows you to extend the fields that
 			// the tracking system stores. It will be saved on the server and returned in tracking updates to other clients.
-			// TrackExtra is located in config/game_messages.proto on the server, or you can edit it via the web ui.
-			TrackExtra trackExtra = new TrackExtra ();
-			trackExtra.speed = 1.0f;
-			trackExtra.velocity = 12.0f;
-			update.trackExtra = trackExtra;
+			// TrackData is located in config/game_messages.proto on the server, or you can edit it via the web ui.
+			TrackData trackData = new TrackData ();
+			trackData.speed = 1.0f;
+			trackData.velocity = 12.0f;
+			update.trackData = trackData;
                
 			entityTracking.Update (update);
 		}
@@ -80,7 +80,6 @@ namespace GameMachine.Example
 		void OnUpdateReceived (List<TrackingUpdate> updates)
 		{
 			foreach (TrackingUpdate update in updates) {
-				Logger.Debug (update.x.ToString ());
 			}
 		}
 

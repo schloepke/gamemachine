@@ -21,11 +21,13 @@ namespace GameMachine
 		private bool showLogin = true;
 		private Login login;
 
+		public string protocol = "UDP";
 		public string username = "player";
 		public string password = "pass";
-		public string udpHost = "127.0.0.1";
+		public string hostname = "127.0.0.1";
 		public int udpPort = 24130;
 		public int udpRegionPort = 24130;
+		public int tcpPort = 8910;
 		public bool useRegions = false;
 
 			
@@ -65,7 +67,7 @@ namespace GameMachine
 			
 			username = GUI.TextField (new Rect (125, 20, 200, 25), username);
 			password = GUI.PasswordField (new Rect (125, 60, 200, 25), password, "*" [0], 25);
-			udpHost = GUI.TextField (new Rect (125, 100, 200, 25), udpHost);
+			hostname = GUI.TextField (new Rect (125, 100, 200, 25), hostname);
 			
 			if (hasError) {
 				GUI.Label (new Rect (25, 150, 400, 60), "Login Failed: " + loginError);
@@ -74,8 +76,12 @@ namespace GameMachine
 			
 			if (GUI.Button (new Rect (200, 200, 100, 30), "Login")) {
 				disableGui = true;
-				login.SetParameters (udpHost, udpPort, udpRegionPort, useRegions);
-				login.DoLogin (username, password);
+				if (protocol == "UDP") {
+					login.SetUdpParameters (hostname, udpPort, udpRegionPort, useRegions);
+				} else {
+					login.SetTcpParameters (hostname, tcpPort, useRegions);
+				}
+				login.DoLogin (protocol, username, password);
 			}
 		}
 		
