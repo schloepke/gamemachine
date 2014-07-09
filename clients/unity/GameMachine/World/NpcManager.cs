@@ -5,7 +5,7 @@ using System.Linq;
 using  System.Text.RegularExpressions;
 using GameMachine.World;
 using GameMachine.Core;
-using TrackExtra = GameMachine.Messages.TrackExtra;
+using TrackData = GameMachine.Messages.TrackData;
 
 namespace GameMachine.World
 {
@@ -56,10 +56,10 @@ namespace GameMachine.World
 					// Update existing npc
 					Npc npc = npcs [update.entityId];
 
-					if (update.trackExtra == null) {
+					if (update.trackData.direction == null) {
 						npc.UpdateTarget (new Vector3 (update.x, update.z, update.y));
 					} else {
-						TrackExtra extra = update.trackExtra;
+						TrackData extra = update.trackData;
 						Vector3 target = new Vector3 (update.x, update.z, update.y);
 						Vector3 direction = new Vector3 (extra.direction.x, extra.direction.y, extra.direction.z);
 						npc.UpdatePlayer (target, direction, extra.speed);

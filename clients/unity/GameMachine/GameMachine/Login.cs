@@ -12,8 +12,9 @@ namespace GameMachine
 		private GameMachine.Core.App app;
 		public static GameMachine.Core.RegionClient regionClient;
 		private string authUri;
-		private int udpPort = 24130;
-		private string udpHost;
+		private string protocol = "UDP";
+		private int port = 0;
+		private string hostname;
 		private int udpRegionPort = 24130;
 		public bool useRegions = false;
 		private ILoginUi loginUi;
@@ -29,22 +30,30 @@ namespace GameMachine
 			this.loginUi = loginUi;
 		}
 
-		public void SetParameters (string udpHost, int udpPort, int udpRegionPort, bool useRegions)
+		public void SetUdpParameters (string hostname, int udpPort, int udpRegionPort, bool useRegions)
 		{
-			this.udpHost = udpHost;
-			this.udpPort = udpPort;
+			this.hostname = hostname;
+			this.port = udpPort;
 			this.udpRegionPort = udpRegionPort;
 			this.useRegions = useRegions;
 		}
 
-		public void DoLogin (string username, string password)
+		public void SetTcpParameters (string hostname, int tcpPort, bool useRegions)
 		{
+			this.hostname = hostname;
+			this.port = tcpPort;
+			this.useRegions = useRegions;
+		}
+
+		public void DoLogin (string protocol, string username, string password)
+		{
+			this.protocol = protocol;
 			User user = User.Instance;
 			user.SetUser (username.ToString (), password.ToString ());
 			GameMachine.Core.Authentication.Success success = OnAuthenticationSuccess;
 			GameMachine.Core.Authentication.Error error = OnAuthenticationError;
 			
-			authUri = "http://" + udpHost + ":3000/auth";
+			authUri = "http://" + hostname + ":3000/auth";
 			app = this.gameObject.AddComponent (Type.GetType ("GameMachine.Core.App")) as GameMachine.Core.App;
 			app.Login (authUri, user.username, user.password, success, error);
 		}
@@ -63,8 +72,9 @@ namespace GameMachine
 			
 			GameMachine.Core.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
 			app.OnConnectionTimeout (connectionCallback);
-			
-			app.Run (udpHost, udpPort, User.Instance.username, authtoken);
+
+			app.Run (protocol, hostname, port, User.Instance.username, authtoken);
+
 			StartRegionClient (authtoken);
 		}
 
@@ -98,7 +108,7 @@ namespace GameMachine
 			RegionClient.RegionClientStarted callback = OnRegionClientStarted;
 			regionClient.OnRegionClientStarted (callback);
 			
-			regionClient.Init (udpRegionPort, User.Instance.username, authtoken);
+			regionClient.Init (port, User.Instance.username, authtoken);
 		}
 
 		void Start ()

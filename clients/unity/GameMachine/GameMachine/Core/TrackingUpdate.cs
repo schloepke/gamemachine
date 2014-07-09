@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameMachine;
-using TrackExtra = GameMachine.Messages.TrackExtra;
+using TrackData = GameMachine.Messages.TrackData;
 
 namespace GameMachine.Core
 {
@@ -13,7 +13,7 @@ namespace GameMachine.Core
 		public float z;
 		public string entityType;
 		public string neighborEntityType;
-		public TrackExtra trackExtra;
+		public TrackData trackData;
 
 		public TrackingUpdate (string entityId, float x, float y, float z)
 		{

@@ -44,6 +44,7 @@ namespace GameMachine.Example
 			// Start sending/receiving location updates
 			StartAreaOfInterest ();
 			Logger.Debug ("AreaOfInterest started");
+			//Login.regionClient.Connect ("zone", "192.168.1.8");
 
 		}
 
