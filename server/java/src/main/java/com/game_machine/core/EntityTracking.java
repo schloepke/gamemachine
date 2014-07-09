@@ -81,7 +81,7 @@ public class EntityTracking extends UntypedActor {
 		ArrayList<TrackData> trackDatas = grid.neighbors(x, y, entity.getNeighbors.neighborType);
 		
 		if (trackDatas.size() >= 1) {
-			gridValuesToNeighbors(entity.player,trackDatas);
+			toNeighbors(entity.player,trackDatas);
 		}
 	}
 		
@@ -93,7 +93,7 @@ public class EntityTracking extends UntypedActor {
 		messageGateway.tell(playerMessage, getSelf());
 	}
 	
-	private void gridValuesToNeighbors(Player player,ArrayList<TrackData> trackDatas) {
+	private void toNeighbors(Player player,ArrayList<TrackData> trackDatas) {
 		int count = 0;
 		Neighbors neighbors = new Neighbors();
 		

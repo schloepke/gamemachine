@@ -98,6 +98,12 @@ public class Grid {
 		return neighbors(myCell, x, y, entityType);
 	}
 
+	// This could be optimized more (and gridValuesInCell), but it's simply dwarfed by
+	// the overhead of serialization that at this point it's not really worth it.
+	// - entityType should be an integer
+	// - where we call gridValuesInCell, filter out by entity type there.
+	// - and then just concat the return values of gridValuesInCell instead of building
+	//   result one item at a time
 	public ArrayList<TrackData> neighbors(int myCell, float x, float y, String entityType) {
 		ArrayList<TrackData> result;
 

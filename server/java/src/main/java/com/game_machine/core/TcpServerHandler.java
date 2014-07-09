@@ -12,7 +12,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage> {
 	
 	private ActorSelection inbound;
-	private ChannelHandlerContext ctx;
 	
 	private static final Logger log = LoggerFactory
 			.getLogger(TcpServerHandler.class);
@@ -22,24 +21,22 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage>
 				.getSelectionByName("message_gateway");
 	}
 	
-	public void sendClientMessage(ClientMessage clientMessage) {
+	public static void sendClientMessage(ClientMessage clientMessage,ChannelHandlerContext ctx) {
 		ctx.write(clientMessage);
 	}
+	
 	@Override
     public void channelRead0(ChannelHandlerContext ctx, ClientMessage clientMessage) throws Exception {
-        
 		InetSocketAddress address = (InetSocketAddress)ctx.channel().remoteAddress();
 		
 		NetMessage netMessage = new NetMessage(NetMessage.TCP, address.getHostString(), address.getPort(), ctx);
 		netMessage.clientMessage = clientMessage;
 		this.inbound.tell(netMessage, null);
-        //ctx.write(builder.build());
     }
 
 	@Override
 	public void channelActive(final ChannelHandlerContext ctx) {
 		log.info("Tcp server active");
-		this.ctx = ctx;
 	}
 	
     @Override

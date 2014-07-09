@@ -9,11 +9,9 @@ import io.netty.handler.ssl.SslContext;
 
 public class TcpServerInitializer  extends ChannelInitializer<SocketChannel> {
 	private final SslContext sslCtx;
-	private TcpServerHandler tcpServerHandler;
 	
-    public TcpServerInitializer(TcpServerHandler handler, SslContext sslCtx) {
+    public TcpServerInitializer(SslContext sslCtx) {
         this.sslCtx = sslCtx;
-        this.tcpServerHandler = handler;
     }
 
     @Override
@@ -26,9 +24,9 @@ public class TcpServerInitializer  extends ChannelInitializer<SocketChannel> {
         p.addLast(new ProtobufVarint32FrameDecoder());
         p.addLast(new ClientMessageDecoder());
 
-        p.addLast(new ProtobufVarint32LengthFieldPrepender());
-        p.addLast(new ProtobufEncoder());
+        //p.addLast(new ProtobufVarint32LengthFieldPrepender());
+        p.addLast(new ClientMessageEncoder());
 
-        p.addLast(tcpServerHandler);
+        p.addLast(new TcpServerHandler());
     }
 }

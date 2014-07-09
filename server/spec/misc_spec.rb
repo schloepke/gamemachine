@@ -13,11 +13,30 @@ module GameMachine
       entity
     end
 
-    it "should decode client message" do
-      message = MessageLib::ClientMessage.new.set_player(MessageLib::Player.new.set_id('1'))
-      sleep 2
-      client = GameMachine::Clients::TcpClient.new('192.168.1.8',8910)
-      client.send_message(message.to_prefixed_byte_array.to_s)
+    xit "constantize java classname" do
+      'GameMachine::MessageLib::Entity'.constantize.new
+    end
+
+    xit "trackdata test" do
+       neighbors = MessageLib::Neighbors.new
+       trackdata = MessageLib::TrackData.new
+       trackdata.x = 100.0
+       trackdata.y = 100.0
+       trackdata.z = 100.0
+       200.times do
+         neighbors.add_track_data(trackdata)
+       end
+
+       tracktest = MessageLib::TrackTest.new
+       200.times do
+         tracktest.add_x(100.0)
+         tracktest.add_y(100.0)
+         tracktest.add_z(100.0)
+       end
+       100000000.times do
+         tracktest.to_byte_array
+         #neighbors.to_byte_array
+       end
     end
 
     xit "singleton manager" do

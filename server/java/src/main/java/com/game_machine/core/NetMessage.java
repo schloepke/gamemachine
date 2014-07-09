@@ -1,5 +1,7 @@
 package com.game_machine.core;
 
+import java.net.InetSocketAddress;
+
 import GameMachine.Messages.ClientMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -18,6 +20,7 @@ public class NetMessage {
 	public final int port;
 	public final int protocol;
 	public final ChannelHandlerContext ctx;
+	public InetSocketAddress address;
 
 	public NetMessage(int protocol, String host, int port, ChannelHandlerContext ctx) {
 		this.host = host;

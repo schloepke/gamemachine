@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -26,13 +27,7 @@ public class TcpServer implements Runnable {
 
 	private final String hostname;
 	private final int port;
-	private TcpServerHandler tcpServerHandler;
 
-
-	public TcpServerHandler getTcpServerHandler() {
-		return this.tcpServerHandler;
-	}
-	
 	public static TcpServer getTcpServer() {
 		return tcpServer;
 	}
@@ -61,7 +56,6 @@ public class TcpServer implements Runnable {
 	public TcpServer(final String hostname, final int port) {
 		this.port = port;
 		this.hostname = hostname;
-		this.tcpServerHandler = new TcpServerHandler();
 	}
 	
 	@Override
@@ -87,8 +81,10 @@ public class TcpServer implements Runnable {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
+             .childOption(ChannelOption.TCP_NODELAY, true)
+             .childOption(ChannelOption.SO_REUSEADDR, true)
              .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new TcpServerInitializer(tcpServerHandler,sslCtx));
+             .childHandler(new TcpServerInitializer(sslCtx));
 
             b.bind(this.port).sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {

@@ -1,7 +1,5 @@
 package com.game_machine.core;
 
-import io.netty.buffer.ByteBuf;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -41,8 +39,17 @@ public class MessageGateway extends UntypedActor {
 		if (message instanceof NetMessage) {
 			messageCount.incrementAndGet();
 			NetMessage netMessage = (NetMessage)message;
+			ClientMessage clientMessage;
 			
-			ClientMessage clientMessage = ClientMessage.parseFrom(netMessage.bytes);
+			if (netMessage.protocol == NetMessage.UDP) {
+				clientMessage = ClientMessage.parseFrom(netMessage.bytes);
+			} else if (netMessage.protocol == NetMessage.TCP) {
+				clientMessage = netMessage.clientMessage;
+			} else {
+				clientMessage = null;
+			}
+			
+			 
 			if (clientMessage.fastpath != null) {
 				
 				if (!netMessages.containsKey(clientMessage.player.id)) {
@@ -59,10 +66,18 @@ public class MessageGateway extends UntypedActor {
 			NetMessage netMessage = netMessages.get(entity.player.id);
 			ClientMessage clientMessage = new ClientMessage();
 			clientMessage.addEntity(entity);
-			byte[] bytes = clientMessage.toByteArray();
-			udpServer.sendToClient(bytes, netMessage.host, netMessage.port, netMessage.ctx);
-			//ByteBuf bb = clientMessage.toByteBuf();
-			//udpServer.sendToClient(bb, netMessage.host, netMessage.port, netMessage.ctx);
+			
+			if (netMessage.protocol == NetMessage.UDP) {
+				//ByteBuf bb = clientMessage.toByteBuf();
+				//udpServer.sendToClient(bb, netMessage.host, netMessage.port, netMessage.ctx);
+				
+				byte[] bytes = clientMessage.toByteArray();
+				udpServer.sendToClient(netMessage.address, bytes, netMessage.ctx);
+			} else if (netMessage.protocol == NetMessage.TCP) {
+				netMessage.ctx.write(clientMessage);
+				UdpServerHandler.countOut.getAndIncrement();
+			}
+			
 			
 		} else if (message instanceof ClientManagerEvent) {
 			log.info("Message gateway got client manager event");

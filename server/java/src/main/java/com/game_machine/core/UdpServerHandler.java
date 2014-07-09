@@ -28,7 +28,6 @@ public final class UdpServerHandler extends
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 
-	private HashMap<Integer, InetSocketAddress> clients = new HashMap<Integer, InetSocketAddress>();
 
 	public UdpServerHandler() {
 		this.inbound = ActorUtil.getSelectionByName("message_gateway");
@@ -52,34 +51,8 @@ public final class UdpServerHandler extends
 		this.ctx = ctx;
 	}
 
-	public void send(ByteBuf buf, String host, int port,
-			ChannelHandlerContext ctx) {
-		InetSocketAddress address;
-		int hashCode = ctx.hashCode();
-
-		if (clients.containsKey(hashCode)) {
-			address = clients.get(hashCode);
-		} else {
-			address = new InetSocketAddress(host, port);
-			clients.put(hashCode, address);
-		}
-
-		DatagramPacket packet = new DatagramPacket(buf, address);
-		ctx.writeAndFlush(packet);
-		countOut.incrementAndGet();
-	}
-	
-	public void send(byte[] bytes, String host, int port,
-			ChannelHandlerContext ctx) {
-		InetSocketAddress address;
-		int hashCode = ctx.hashCode();
-
-		if (clients.containsKey(hashCode)) {
-			address = clients.get(hashCode);
-		} else {
-			address = new InetSocketAddress(host, port);
-			clients.put(hashCode, address);
-		}
+		
+	public void send(InetSocketAddress address, byte[] bytes, ChannelHandlerContext ctx) {
 
 		ByteBuf buf = Unpooled.wrappedBuffer(bytes);
 		DatagramPacket packet = new DatagramPacket(buf, address);
@@ -100,12 +73,13 @@ public final class UdpServerHandler extends
 		byte[] bytes = new byte[m.content().readableBytes()];
 		m.content().readBytes(bytes);
 
-		NetMessage gameMessage = new NetMessage(NetMessage.UDP, m.sender()
+		NetMessage netMessage = new NetMessage(NetMessage.UDP, m.sender()
 				.getHostString(), m.sender().getPort(), ctx);
-		gameMessage.bytes = bytes;
+		netMessage.bytes = bytes;
+		netMessage.address = m.sender();
 		log.debug("MessageReceived length" + bytes.length + " "
 				+ new String(bytes));
-		this.inbound.tell(gameMessage, null);
+		this.inbound.tell(netMessage, null);
 		countIn.incrementAndGet();
 
 	}

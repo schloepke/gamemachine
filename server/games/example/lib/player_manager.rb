@@ -9,7 +9,7 @@ module Example
     def post_init(*args)
       @player_ids = []
       update_player_ids
-      schedule_message('update',5,:seconds)
+      #schedule_message('update',5,:seconds)
     end
 
     # All players currently logged into this node

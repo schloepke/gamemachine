@@ -30,7 +30,14 @@ module GameMachine
 
       def handle_incoming(message)
         client_id = client_id_from_message(message)
-        client_message = MessageLib::ClientMessage.parse_from(message.bytes)
+        if message.protocol == 0
+          client_message = MessageLib::ClientMessage.parse_from(message.bytes)
+        elsif message.protocol == 2
+          client_message = message.clientMessage
+        else
+          raise "Unknown protocol"
+        end
+
         client_connection = create_client_connection(
           client_id,client_message.connection_type
         )
@@ -57,11 +64,12 @@ module GameMachine
               client = {
                 :host => message.host,
                 :port => message.port,
+                :address => message.address,
                 :ctx => message.ctx,
                 :client_connection => client_connection
               }
               self.class.clients[client_message.player.id] = client
-              create_child(client_connection,client,@server,client_message.player.id)
+              create_child(message.protocol,client_connection,client,@server,client_message.player.id)
             end
           end
         end
@@ -73,8 +81,8 @@ module GameMachine
         GameMachine.logger.error "#{self.class.name} #{e.to_s}"
       end
 
-      def create_child(client_connection,client,server,player_id)
-        builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id)
+      def create_child(protocol,client_connection,client,server,player_id)
+        builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id,protocol)
         builder.with_name(player_id).start
       end
 

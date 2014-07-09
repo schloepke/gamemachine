@@ -2,12 +2,13 @@ module GameMachine
   module Endpoints
     class UdpOutgoing < Actor::Base
 
-      attr_reader :client_connection, :client, :server, :player_id
+      attr_reader :protocol, :client_connection, :client, :server, :player_id
       def post_init(*args)
         @client_connection = args[0]
         @client = args[1]
         @server = args[2]
         @player_id = args[3]
+        @protocol = args[4]
         send_connected_message
         GameMachine.logger.info "Player gateway created #{player_id}"
       end
@@ -24,14 +25,18 @@ module GameMachine
       end
 
       def send_to_client(message)
-        bytes = message.to_byte_array
-        server.sendToClient(
-          bytes,
-          client[:host],
-          client[:port],
-          client[:ctx]
-        )
-
+        #GameMachine.logger.info("Sending #{message} out via #{protocol}")
+        if protocol == 0
+          bytes = message.to_byte_array
+          server.sendToClient(
+            client[:address],
+            bytes,
+            client[:ctx]
+          )
+        else
+          client[:ctx].write(message)
+          JavaLib::UdpServerHandler.countOut.incrementAndGet
+        end
       end
 
       def on_receive(message)

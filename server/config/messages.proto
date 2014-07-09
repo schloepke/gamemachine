@@ -264,7 +264,8 @@ message MessageRouting {
 }
 
 message NativeBytes {
-  required bytes bytes = 1;
+  optional bytes bytes = 1;
+  repeated bytes byteArray = 2;
 }
 
 message JsonEntity {
