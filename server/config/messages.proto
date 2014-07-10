@@ -273,6 +273,10 @@ message UnityGameObject {
   repeated bytes byteArray = 2;
 }
 
+message UnityGameObjects {
+  repeated UnityGameObject unityGameObject = 1;
+}
+
 message JsonEntity {
   required string json = 1;
   optional string klass = 2;
