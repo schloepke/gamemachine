@@ -18,11 +18,11 @@ namespace GameMachine
 		private int udpRegionPort = 24130;
 		public bool useRegions = false;
 		private ILoginUi loginUi;
-		private GameMachineApp userApp;
+		public static GameMachineApp userApp;
 
-		public void SetGameMachineApp (GameMachineApp userApp)
+		public static void SetGameMachineApp (GameMachineApp userApp)
 		{
-			this.userApp = userApp;
+			Login.userApp = userApp;
 		}
 
 		public void SetLoginUi (ILoginUi loginUi)
@@ -60,8 +60,10 @@ namespace GameMachine
 
 		void OnAuthenticationError (string error)
 		{
-			Logger.Debug ("Authentication Failed: " + error);
-			loginUi.SetError (error.Replace (System.Environment.NewLine, ""));
+			if (loginUi != null) {
+				loginUi.SetError (error.Replace (System.Environment.NewLine, ""));
+			}
+			Login.userApp.OnLoginFailure (error);
 		}
 
 
@@ -86,7 +88,7 @@ namespace GameMachine
 
 		public void OnConnectionTimeout ()
 		{
-			userApp.ConnectionTimeout ();
+			Login.userApp.ConnectionTimeout ();
 		}
 
 		public void OnRegionConnectionTimeout ()

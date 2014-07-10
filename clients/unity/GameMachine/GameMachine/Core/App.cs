@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using  System.Collections.Generic;
 using GameMachine;
 using Entity = GameMachine.Messages.Entity;
 using GameMachine.Models.Team;
@@ -9,6 +10,8 @@ namespace GameMachine.Core
 {
 	public class App : MonoBehaviour
 	{
+		private static Dictionary<object, string> onRunningCallbacks = new Dictionary<object, string> ();
+
 		private double lastEcho = -1000;
 		private double echosPerSecond = 1.0f;
 		private double echoInterval;
@@ -27,6 +30,19 @@ namespace GameMachine.Core
 
 		public delegate void AppStarted ();
 		public delegate void ConnectionTimeout ();
+
+		public static void onRunning (object caller, string methodName)
+		{
+			onRunningCallbacks [caller] = methodName;
+		}
+
+		private void RunOnRunningCallbacks ()
+		{
+			foreach (object caller in onRunningCallbacks.Keys) {
+				string methodName = onRunningCallbacks [caller];
+				caller.GetType ().GetMethod (methodName).Invoke (caller, null);
+			}
+		}
 
 		public void OnAppStarted (AppStarted callback)
 		{
@@ -106,6 +122,7 @@ namespace GameMachine.Core
 			JsonModel.Register (typeof(EchoTest), "GameMachine::Models::EchoTest");
 
 			running = true;
+			RunOnRunningCallbacks ();
 			Logger.Debug ("App running - waiting to verify connection");
 		}
 
@@ -122,12 +139,17 @@ namespace GameMachine.Core
 		{
 			if (!connected) {
 				connected = true;
-				Logger.Debug ("App connected");
+				GameMachine.Login.userApp.ConnectionEstablished ();
 				if (!appStartedCalled) {
 					appStarted ();
 					appStartedCalled = true;
 					InvokeRepeating ("UpdateRegions", 0.01f, 20.0F);
-					echosPerSecond = 0.20f; // lower this once connected
+
+					// The server on initial connect has to setup
+					// a child actor for routing outgoing messages, so the first
+					// echo or two can be lost.  We set the pre connect echo's to go
+					// at a faster rate, then throttle them down after we connect
+					echosPerSecond = 0.20f;
 					SetEchoInterval ();
 				}
 			}

@@ -20,6 +20,11 @@ namespace GameMachine.World
 			Invoke ("WaitForPlayerVitals", 0.05f);
 		}
 	
+		public void ConnectionEstablished ()
+		{
+			Logger.Debug ("Connection established");
+		}
+
 		public void ConnectionTimeout ()
 		{
 			Application.LoadLevel ("world_disconnected");
@@ -34,26 +39,20 @@ namespace GameMachine.World
 			}
 		}
 	
+		public void OnLoginFailure (string error)
+		{
+			Logger.Debug ("Authentication Failed: " + error);
+		}
+
 		public void OnPlayerVitalsReceived ()
 		{
 			Destroy (GameObject.Find ("Main Camera"));
 			Application.LoadLevelAdditive ("world_main");
 		}
 
-		void LoadLogin ()
-		{
-			login = this.gameObject.GetComponent<Login> () as Login;
-			if (login == null) {
-				Invoke ("LoadLogin", 0.05f);
-			} else {
-				login.SetGameMachineApp (this);
-			}
-
-		}
-
 		void Start ()
 		{
-			LoadLogin ();
+			Login.SetGameMachineApp (this);
 		}
 
 		void Update ()

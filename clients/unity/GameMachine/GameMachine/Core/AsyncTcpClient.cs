@@ -196,6 +196,10 @@ namespace GameMachine.Core
 				return;
 			}
 
+			// This might look strange but it works well.  We enter here
+			// once and then just forever loop on reading the network stream, which
+			// blocks until it can read a full protobuf message.  So basically every
+			// iteration either has a complete message, or it's blocking, never a busy loop
 			ClientMessage clientMessage;
 
 			while (true) {

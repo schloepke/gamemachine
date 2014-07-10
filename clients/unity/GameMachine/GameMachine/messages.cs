@@ -87,6 +87,14 @@ namespace GameMachine.Messages
       get { return _entityType; }
       set { _entityType = value; }
     }
+    private GameMachine.Messages.UnityGameObjects _unityGameObjects = null;
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"unityGameObjects", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.UnityGameObjects unityGameObjects
+    {
+      get { return _unityGameObjects; }
+      set { _unityGameObjects = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1644,13 +1652,62 @@ namespace GameMachine.Messages
   {
     public NativeBytes() {}
     
-    private byte[] _bytes;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"bytes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private byte[] _bytes = null;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"bytes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
     public byte[] bytes
     {
       get { return _bytes; }
       set { _bytes = value; }
     }
+    private readonly global::System.Collections.Generic.List<byte[]> _byteArray = new global::System.Collections.Generic.List<byte[]>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"byteArray", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<byte[]> byteArray
+    {
+      get { return _byteArray; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnityGameObject")]
+  public partial class UnityGameObject : global::ProtoBuf.IExtensible
+  {
+    public UnityGameObject() {}
+    
+    private int _scope;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"scope", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int scope
+    {
+      get { return _scope; }
+      set { _scope = value; }
+    }
+    private readonly global::System.Collections.Generic.List<byte[]> _byteArray = new global::System.Collections.Generic.List<byte[]>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"byteArray", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<byte[]> byteArray
+    {
+      get { return _byteArray; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnityGameObjects")]
+  public partial class UnityGameObjects : global::ProtoBuf.IExtensible
+  {
+    public UnityGameObjects() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.UnityGameObject> _unityGameObject = new global::System.Collections.Generic.List<GameMachine.Messages.UnityGameObject>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"unityGameObject", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.UnityGameObject> unityGameObject
+    {
+      get { return _unityGameObject; }
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2110,6 +2167,14 @@ namespace GameMachine.Messages
     {
       get { return _fastpath; }
       set { _fastpath = value; }
+    }
+    private GameMachine.Messages.UnityGameObjects _unityGameObjects = null;
+    [global::ProtoBuf.ProtoMember(62, IsRequired = false, Name=@"unityGameObjects", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.UnityGameObjects unityGameObjects
+    {
+      get { return _unityGameObjects; }
+      set { _unityGameObjects = value; }
     }
     private GameMachine.Messages.TrackData _trackData = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
