@@ -340,6 +340,7 @@ message Entity {
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
   optional bool fastpath = 61;
+  optional UnityGameObjects unityGameObjects = 62;
   //GAME_ENTITY_MESSAGES
 }
 

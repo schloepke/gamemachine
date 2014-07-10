@@ -13,6 +13,7 @@ message TrackData {
   optional float y = 7;
   optional float z = 8;
   optional string entityType = 9;
+  optional UnityGameObjects unityGameObjects = 10;
 }
 
 message Health {
