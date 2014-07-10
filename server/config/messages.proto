@@ -269,8 +269,8 @@ message NativeBytes {
 }
 
 message UnityGameObject {
-  repeated NativeBytes nativeBytes = 1;
-  required string id = 2;
+  required string id = 1;
+  repeated bytes byteArray = 2;
 }
 
 message JsonEntity {
