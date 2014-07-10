@@ -269,7 +269,7 @@ message NativeBytes {
 }
 
 message UnityGameObject {
-  required string id = 1;
+  required int32 scope = 1;
   repeated bytes byteArray = 2;
 }
 
