@@ -21,7 +21,9 @@ end
 require 'java'
 
 jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
-jars.each {|jar| require jar}
+jars.each do |jar|
+  require jar
+end
 
 #java_import 'com.game_machine.core.net.client.UdtClient'
 #java_import 'com.game_machine.core.net.client.UdtClientHandler'
@@ -80,6 +82,6 @@ end
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-
+GameMachine::JavaLib::AdminUi.main([])
 
 

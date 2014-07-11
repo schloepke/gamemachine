@@ -22,6 +22,7 @@ module GameMachine
       end
 
       def build_code
+        system("cd #{java_root} && #{gradlew} clean")
         system("cd #{java_root} && #{gradlew} build")
       end
 
@@ -51,7 +52,8 @@ module GameMachine
       end
 
       def install_libs
-        system("cd #{java_root} && #{gradlew} install_libs")
+        system("cd #{java_root} && #{gradlew} shadowJar")
+        FileUtils.cp(File.join(java_root,'build','libs','game_machine-0.0.1-all.jar'), File.join(java_root,'lib'))
       end
 
       def run!

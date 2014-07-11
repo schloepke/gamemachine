@@ -14,6 +14,7 @@ public class GameMachineLoader {
 	private static final Logger log = Logger.getLogger(GameMachineLoader.class.getName());
 	private static ActorSystem actorSystem;
 
+	
 	public static ActorSystem getActorSystem() {
 		return actorSystem;
 	}

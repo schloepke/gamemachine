@@ -1,8 +1,17 @@
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
-apply plugin:'application'
+//apply plugin:'application'
 apply plugin:'scala'
+
+
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
+  }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'game_machine'
   version = '0.0.1'
@@ -14,10 +23,9 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-  flatDir(dirs: 'third_party') 
-  mavenRepo url: "http://repo.typesafe.com/typesafe/releases/"
-  mavenRepo url: "http://files.couchbase.com/maven2/"
-  mavenRepo url: "http://repo.maven.apache.org/maven2"
+  flatDir(dirs: 'third_party')
+  mavenCentral()
+  
 }
 
 dependencies {
@@ -49,12 +57,22 @@ dependencies {
   compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:1.0.3'
   compile 'io.netty:netty-all:4.0.21.Final'
-  
+  compile 'org.eclipse.swt:jmx:1.0.0-v20070510'
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
+shadowJar {
+  transform(AppendingTransformer) {
+    resource = 'reference.conf'
+  }
 }
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '1.7'
+  gradleVersion = '2.0'
 }
+
+
 task uberjar(type: Jar) {
   from files(sourceSets.main.output.classesDir)
   from configurations.runtime.asFileTree.files.collect { zipTree(it) }
@@ -81,7 +99,8 @@ test {
   
 task install_libs(type: Copy) {
   into "$buildDir/../lib"
-  from configurations.runtime
+    
+  //from configurations.runtime
   from "$buildDir/libs"
 }
 
