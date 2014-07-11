@@ -82,6 +82,8 @@ end
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-GameMachine::JavaLib::AdminUi.main([])
+if ENV['ADMIN_UI']
+  GameMachine::JavaLib::AdminUi.main([])
+end
 
 
