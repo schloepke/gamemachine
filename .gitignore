@@ -30,3 +30,4 @@ server/java/src/main/java/GameMachine/Messages/*.java
 /_yardoc/
 /doc/
 /rdoc/
+/server/java/.nb-gradle/private/
