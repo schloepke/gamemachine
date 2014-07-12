@@ -3,10 +3,11 @@ using System.Collections;
 
 using GameMachine.Core;
 
-public class SampleNetworkObject : MonoBehaviour
+public class SampleComponent : MonoBehaviour
 {
 	public string test = "one";
 	public string id { get; set; }
+	public string playerName = "default";
 
 	public Vector3	v { get; set; }
 
