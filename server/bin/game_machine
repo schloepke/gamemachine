@@ -75,5 +75,3 @@ puts <<EOF
     
 EOF
 end
-
-

@@ -12,7 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary     = %q{Game Machine}
   gem.description = %q{game server}
 
-  gem.files         = `git ls-files`.split($/).reject { |f| f =~ /^(games\/physics_experiments)/ } + ["lib/game_machine-0.0.1-all.jar"]
+  gem.files         = `git ls-files`.split($/).reject { |f| f =~ /^(games\/physics_experiments)/ }
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features|integration_tests)/})
   gem.require_paths = ["lib"]
