@@ -14,6 +14,7 @@ message TrackData {
   optional float z = 8;
   optional string entityType = 9;
   optional UnityGameObjects unityGameObjects = 10;
+  optional string neighborEntityType = 11;
 }
 
 message Health {
