@@ -57,7 +57,6 @@ dependencies {
   compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:1.0.3'
   compile 'io.netty:netty-all:4.0.21.Final'
-  compile 'org.eclipse.swt:jmx:1.0.0-v20070510'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

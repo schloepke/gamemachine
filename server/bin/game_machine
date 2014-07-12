@@ -1,5 +1,16 @@
 #!/usr/bin/env jruby
 
+ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
+ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
+ENV['GAME_ENV'] = 'development'
+
+# with the ui stdout/stderr are hidden, so redirect them to the log
+if ENV['ADMIN_UI']
+  logfile = File.join(ENV['APP_ROOT'], 'log',"#{ENV['GAME_ENV']}.log")
+  $stdout.reopen logfile
+  $stderr.reopen logfile
+end
+
 require 'rubygems'
 require 'fileutils'
 
@@ -23,9 +34,6 @@ aliases = {
 command = ARGV.shift
 command = aliases[command] || command
 
-ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
-ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
-ENV['GAME_ENV'] = 'development'
 
 require_relative '../lib/game_machine/console'
 

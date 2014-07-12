@@ -25,10 +25,11 @@ jars.each do |jar|
   require jar
 end
 
-#java_import 'com.game_machine.core.net.client.UdtClient'
-#java_import 'com.game_machine.core.net.client.UdtClientHandler'
-
 require_relative 'game_machine/java_lib'
+if ENV['ADMIN_UI']
+  GameMachine::JavaLib::AdminUi.main([])
+end
+
 
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
@@ -78,12 +79,8 @@ else
   GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"
 end
 
-
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-if ENV['ADMIN_UI']
-  GameMachine::JavaLib::AdminUi.main([])
-end
 
 

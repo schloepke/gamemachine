@@ -341,6 +341,7 @@ message Entity {
   optional Regions regions = 60;
   optional bool fastpath = 61;
   optional UnityGameObjects unityGameObjects = 62;
+  optional TrackData trackData = 63;
   //GAME_ENTITY_MESSAGES
 }
 

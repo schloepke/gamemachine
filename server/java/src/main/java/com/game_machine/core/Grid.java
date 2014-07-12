@@ -181,31 +181,23 @@ public class Grid {
 		}
 	}
 
-	public Boolean set(String id, Float x, Float y, Float z, String entityType) {
+	public Boolean set(TrackData trackData) {
 		Boolean hasExisting = false;
-		TrackData trackData;
 		Integer oldCellValue = -1;
+		String id = trackData.id;
 		
 		if (objectIndex.containsKey(id)) {
 			hasExisting = true;
-			trackData = objectIndex.get(id);
-			if (trackData.x == x && trackData.y == y) {
+			TrackData lastTrackData = objectIndex.get(id);
+			if (trackData.x == lastTrackData.x && trackData.y == lastTrackData.y) {
 				return false;
 			}
 			
 			oldCellValue = cellsIndex.get(id);
-		} else {
-			trackData = new TrackData();
-			trackData.id = id;
-			trackData.entityType = entityType;
 		}
 		
-		int cell = hash(x, y);
-		
-		trackData.x = x;
-		trackData.y = y;
-		trackData.z = z;
-		
+		int cell = hash(trackData.x, trackData.y);
+	
 
 		if (hasExisting) {
 			if (oldCellValue != cell) {
