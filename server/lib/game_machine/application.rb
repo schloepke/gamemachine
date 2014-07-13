@@ -9,6 +9,14 @@ module GameMachine
         akka.initialize!
       end
 
+      def game_message_handler(handler)
+        @game_message_handler = handler
+      end
+
+      def game_message_handler
+        @game_message_handler
+      end
+
       def auth_handler
         AuthHandlers::Base.instance
       end

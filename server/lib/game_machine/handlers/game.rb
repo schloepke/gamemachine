@@ -27,6 +27,12 @@ module GameMachine
             entity = GameSystems::ObjectDbProxy.save_entity(entity)
           end
 
+          if entity.has_game_messages
+            if GameMachine::Application.game_message_handler
+              GameMachine::Application.game_message_handler.find.tell(entity)
+            end
+          end
+
           if entity.has_destination
             unless actor_ref = destinations.fetch(entity.destination,nil)
               destination = entity.destination.gsub('/','::')

@@ -15,11 +15,10 @@ message TrackData {
   optional string entityType = 9;
   optional UnityGameObjects unityGameObjects = 10;
   optional string neighborEntityType = 11;
-  optional Components components = 12;
 }
 
 
-message Components {
+message GameMessages {
   optional Attack attack = 1;
 }
 
