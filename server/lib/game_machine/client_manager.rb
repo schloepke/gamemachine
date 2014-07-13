@@ -165,6 +165,7 @@ module GameMachine
         GameMachine.logger.info("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
+        GameMachine.logger.info "#{self.class.name} Actor #{name} registered"
         local_actors[name] = events
       end
     end
@@ -174,6 +175,7 @@ module GameMachine
       local_actors.each do |name,events|
         client_manager_event = create_client_manager_event(client_id,player_id,event)
         Actor::Base.find(name).tell(client_manager_event)
+        GameMachine.logger.info "#{self.class.name} Send #{event} to #{name}"
       end
     end
 

@@ -80,7 +80,7 @@ public class MessageGateway extends UntypedActor {
 			
 			
 		} else if (message instanceof ClientManagerEvent) {
-			log.info("Message gateway got client manager event");
+			log.warning("Message gateway got client manager event");
 			ClientManagerEvent event = (ClientManagerEvent)message;
 			if (event.event.equals("disconnected")) {
 				netMessages.remove(event.player_id);
@@ -92,7 +92,7 @@ public class MessageGateway extends UntypedActor {
 	private void routeFastpath(ClientMessage clientMessage) {
 		for(Entity entity : clientMessage.getEntityList()) {
 			entity.setPlayer(clientMessage.player);
-			if (entity.hasTrackEntity() || entity.hasGetNeighbors()) {
+			if (entity.hasTrackData()) {
 				entityTracking.tell(entity, getSelf());
 			} else {
 				log.warning("Unable to find destination for entity id "+entity.id);

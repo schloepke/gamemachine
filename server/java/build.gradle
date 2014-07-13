@@ -41,10 +41,10 @@ dependencies {
   compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
   //compile group: 'com.typesafe.akka', name: "akka-zeromq_$scala_version", version:"$akka_version"
   
-  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.7'
-  compile 'com.dyuproject.protostuff:protostuff:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff:1.0.8'
   //compile 'com.dyuproject.protostuff:protostuff-compiler:1.0.7'
-  compile 'com.dyuproject.protostuff:protostuff-json:1.0.7'
+  compile 'com.dyuproject.protostuff:protostuff-json:1.0.8'
   //compile 'com.dyuproject.protostuff:protostuff-yaml:1.0.7'
   //compile 'com.dyuproject.protostuff:protostuff-xml:1.0.7'
   
@@ -84,7 +84,7 @@ task codegen(type: Exec) {
 
 task protogen(type: Exec)  {
   File configFile = file('src/main/resources/protostuff.properties')
-  File jar = file('protostuff-compiler-1.0.7-jarjar.jar')
+  File jar = file('protostuff-compiler-1.0.8-jarjar.jar')
   commandLine 'java','-jar',jar,configFile
 }
 

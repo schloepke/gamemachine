@@ -18,35 +18,30 @@ public class EntityTracking extends UntypedActor {
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	public static String name = "fastpath_entity_tracking";
-	
+
 	private Grid aoeGrid;
 	private Grid grid;
 	private ActorSelection messageGateway;
 	private ArrayList<TrackData> testValues;
-	
+
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
 		grid = Grid.find("default");
 		aoeGrid = Grid.find("aoe");
 		Commands.clientManagerRegister(name);
 	}
-	
+
 	@Override
 	public void onReceive(Object message) throws Exception {
-		
+
 		if (message instanceof Entity) {
-			Entity entity = (Entity)message;
-			
-			if (entity.hasGetNeighbors()) {
-				SendNeighbors(entity);
-			}
-			
-			if (entity.hasTrackEntity()) {
-				setEntityLocation(entity);
-			}
-			
+			Entity entity = (Entity) message;
+
+			SendNeighbors(entity);
+			setEntityLocation(entity.trackData);
+
 		} else if (message instanceof ClientManagerEvent) {
-			ClientManagerEvent event = (ClientManagerEvent)message;
+			ClientManagerEvent event = (ClientManagerEvent) message;
 			if (event.event.equals("disconnected")) {
 				removePlayerData(event);
 			}
@@ -55,79 +50,77 @@ public class EntityTracking extends UntypedActor {
 		}
 
 	}
-	
+
 	private float randomInRange(float min, float max) {
-		  return (float) (Math.random() < 0.5 ? ((1-Math.random()) * (max-min) + min) : (Math.random() * (max-min) + min));
-		}
-	
-	
-	
-	
+		return (float) (Math.random() < 0.5 ? ((1 - Math.random())
+				* (max - min) + min) : (Math.random() * (max - min) + min));
+	}
+
 	private void removePlayerData(ClientManagerEvent event) {
 		grid.remove(event.player_id);
 		aoeGrid.remove(event.player_id);
 	}
-	
+
 	private void SendNeighbors(Entity entity) {
-		Float x = entity.getNeighbors.vector3.x;
-		Float y = entity.getNeighbors.vector3.y;
+		Float x = entity.trackData.x;
+		Float y = entity.trackData.y;
 		if (x == null) {
 			x = 0f;
 		}
 		if (y == null) {
 			y = 0f;
 		}
-		
-		ArrayList<TrackData> trackDatas = grid.neighbors(x, y, entity.getNeighbors.neighborType);
-		
+
+		ArrayList<TrackData> trackDatas = grid.neighbors(x, y,
+				entity.trackData.neighborEntityType);
+
 		if (trackDatas.size() >= 1) {
-			toNeighbors(entity.player,trackDatas);
+			toNeighbors(entity.player, trackDatas);
 		}
 	}
-		
-	private void SendToGateway(Player player,Neighbors neighbors) {
+
+	private void SendToGateway(Player player, Neighbors neighbors) {
 		Entity playerMessage = new Entity();
 		playerMessage.setNeighbors(neighbors);
 		playerMessage.setPlayer(player);
 		playerMessage.setId(player.id);
 		messageGateway.tell(playerMessage, getSelf());
 	}
-	
-	private void toNeighbors(Player player,ArrayList<TrackData> trackDatas) {
+
+	private void toNeighbors(Player player, ArrayList<TrackData> trackDatas) {
 		int count = 0;
 		Neighbors neighbors = new Neighbors();
-		
+
 		for (TrackData trackData : trackDatas) {
 			neighbors.addTrackData(trackData);
-			
+
 			count++;
 			if (count >= 30) {
-				SendToGateway(player,neighbors);
+				SendToGateway(player, neighbors);
 				count = 0;
 				neighbors = new Neighbors();
 			}
 		}
-		SendToGateway(player,neighbors);
+		SendToGateway(player, neighbors);
 	}
-	
-	private void setEntityLocation(Entity entity) {
+
+	private void setEntityLocation(TrackData trackData) {
 		
-		GameMachine.Messages.Vector3 vector = entity.vector3;
-		
-		// So either protostuff or protobuf-net has a bug where 0 floats come through as null
+		// So either protostuff or protobuf-net has a bug where 0 floats come
+		// through as null
 		// This is *really* annoying must track down
-		if (vector.x == null) {
-			vector.x = 0f;
+		if (trackData.x == null) {
+			trackData.x = 0f;
 		}
-		if (vector.y == null) {
-			vector.y = 0f;
+		if (trackData.y == null) {
+			trackData.y = 0f;
 		}
-		if (vector.z == null) {
-			vector.z = 0f;
+		if (trackData.z == null) {
+			trackData.z = 0f;
 		}
-		
-		grid.set(entity.id, vector.x, vector.y, vector.z, entity.entityType);
-		aoeGrid.set(entity.id, vector.x, vector.y, vector.z, entity.entityType);
+
+		grid.set(trackData);
+		aoeGrid.set(trackData);
 	}
 
 }

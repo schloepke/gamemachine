@@ -181,6 +181,16 @@ public class Grid {
 		}
 	}
 
+	public Boolean set(String id, float x, float y, float z, String entityType) {
+		TrackData trackData = new TrackData();
+		trackData.id = id;
+		trackData.x = x;
+		trackData.y = y;
+		trackData.z = z;
+		trackData.entityType = entityType;
+		return set(trackData);
+	}
+	
 	public Boolean set(TrackData trackData) {
 		Boolean hasExisting = false;
 		Integer oldCellValue = -1;
