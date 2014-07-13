@@ -268,15 +268,6 @@ message NativeBytes {
   repeated bytes byteArray = 2;
 }
 
-message UnityGameObject {
-  required int32 entityType = 1;
-  repeated bytes byteArray = 2;
-}
-
-message UnityGameObjects {
-  repeated UnityGameObject unityGameObject = 1;
-}
-
 message JsonEntity {
   required string json = 1;
   optional string klass = 2;
@@ -340,7 +331,6 @@ message Entity {
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
   optional bool fastpath = 61;
-  optional UnityGameObjects unityGameObjects = 62;
   //GAME_ENTITY_MESSAGES
 }
 
