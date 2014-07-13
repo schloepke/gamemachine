@@ -30,7 +30,7 @@ module GameMachine
         protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','csharp','protogen_csharp.exe')
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
         messages_out_file =  File.join(ENV['APP_ROOT'],'messages.cs')
-        cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
+        cmd = "#{protogen_path} -p:detectMissing -i:#{proto_file} -o:#{messages_out_file}"
         puts "Running #{cmd}"
         system(cmd)
       end
