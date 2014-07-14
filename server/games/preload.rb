@@ -11,3 +11,4 @@ require_relative 'plugins'
 
 # This needs to be loaded before the entity tracking system starts
 require_relative 'example/lib/tracking_handler'
+

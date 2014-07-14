@@ -18,7 +18,7 @@ message TrackData {
 }
 
 
-message GameMessages {
+message GameMessage {
   optional Attack attack = 1;
 }
 
