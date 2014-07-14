@@ -20,6 +20,8 @@ message TrackData {
 
 message GameMessage {
   optional Attack attack = 1;
+  optional Health health = 2;
+  optional bool hasComponents = 3;
 }
 
 message GameMessages {

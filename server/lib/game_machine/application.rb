@@ -9,7 +9,7 @@ module GameMachine
         akka.initialize!
       end
 
-      def game_message_handler(handler)
+      def game_message_handler=(handler)
         @game_message_handler = handler
       end
 

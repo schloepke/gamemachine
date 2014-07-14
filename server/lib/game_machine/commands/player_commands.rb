@@ -3,6 +3,14 @@ module GameMachine
     class PlayerCommands
       include MessageHelper
 
+      def send_game_message(game_message,player_id)
+        entity = MessageLib::Entity.new.set_id('0')
+        game_messages = MessageLib::GameMessages.new
+        game_messages.add_game_message(game_message)
+        entity.set_game_messages(game_messages)
+        send_message(entity,player_id)
+      end
+
       def send_message(message,player_id)
         if player_id.nil?
           raise "player id cannot be nil"
