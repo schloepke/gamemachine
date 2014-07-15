@@ -15,7 +15,7 @@ message TrackData {
   optional string entityType = 9;
   optional UnityGameObjects unityGameObjects = 10;
   optional string neighborEntityType = 11;
-  optional int32 animation = 12;
+  optional int32 action = 12;
 }
 
 
