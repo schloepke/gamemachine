@@ -55,7 +55,6 @@ public class MessageGateway extends UntypedActor {
 			if (!netMessages.containsKey(clientMessage.player.id)) {
 				netMessages.put(clientMessage.player.id, netMessage);
 			}
-
 			
 			
 			List<Entity> entities = clientMessage.getEntityList();
