@@ -15,13 +15,13 @@ message TrackData {
   optional string entityType = 9;
   optional UnityGameObjects unityGameObjects = 10;
   optional string neighborEntityType = 11;
+  optional int32 animation = 12;
 }
 
 
 message GameMessage {
   optional Attack attack = 1;
   optional Health health = 2;
-  optional string message = 3;
 }
 
 message GameMessages {
