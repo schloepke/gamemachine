@@ -1,6 +1,7 @@
 nbproject
 *.log
 dist
+server/games/moba
 .settings
 .classpath
 *.class

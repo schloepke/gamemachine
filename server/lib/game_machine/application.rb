@@ -90,6 +90,7 @@ module GameMachine
         end
       end
 
+
       def create_grids
         Grid.load_from_config
       end

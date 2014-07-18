@@ -198,16 +198,10 @@ public class Grid {
 		
 		if (objectIndex.containsKey(id)) {
 			hasExisting = true;
-			TrackData lastTrackData = objectIndex.get(id);
-			if (trackData.x == lastTrackData.x && trackData.y == lastTrackData.y) {
-				return false;
-			}
-			
 			oldCellValue = cellsIndex.get(id);
 		}
 		
 		int cell = hash(trackData.x, trackData.y);
-	
 
 		if (hasExisting) {
 			if (oldCellValue != cell) {

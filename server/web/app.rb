@@ -1,5 +1,6 @@
 require 'json'
 require 'sinatra/base'
+require 'rack-flash'
 require 'sinatra/multi_route'
 
 require_relative 'controllers/base_controller'
@@ -19,6 +20,8 @@ class WebApp < Sinatra::Base
   mime_type :proto, 'application/octet-stream'
 
   register Sinatra::MultiRoute
+  enable :sessions
+  use Rack::Flash
 
   def base_uri
     host =  GameMachine::Application.config.http_host
@@ -41,6 +44,13 @@ class WebApp < Sinatra::Base
     end
   end
 
+  set :views, ['web/views', 'games/moba/web/views']
+
+  helpers do
+    def find_template(views, name, engine, &block)
+      Array(views).each { |v| super(v, name, engine, &block) }
+    end
+  end
 
   get '/player_register' do
     @content = {}
@@ -125,7 +135,8 @@ class WebApp < Sinatra::Base
       res
     end
   end
+
+  Moba::Web::App.configure(self)
 end
 
 WebApp.run!
-

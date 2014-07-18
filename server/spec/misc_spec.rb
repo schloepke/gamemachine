@@ -13,10 +13,6 @@ module GameMachine
       entity
     end
 
-    xit "constantize java classname" do
-      'GameMachine::MessageLib::Entity'.constantize.new
-    end
-
     xit "trackdata test" do
        neighbors = MessageLib::Neighbors.new
        trackdata = MessageLib::TrackData.new

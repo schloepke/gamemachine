@@ -57,6 +57,9 @@ dependencies {
   compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:1.0.3'
   compile 'io.netty:netty-all:4.0.21.Final'
+  compile 'com.badlogicgames.gdx:gdx:1.2.0'
+  compile 'com.jolbox:bonecp:0.8.0.RELEASE'
+  compile 'mysql:mysql-connector-java:5.1.31'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
