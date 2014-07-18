@@ -136,7 +136,9 @@ class WebApp < Sinatra::Base
     end
   end
 
-  Moba::Web::App.configure(self)
+  if ENV['MOBA_GAME']
+    Moba::Web::App.configure(self)
+  end
 end
 
 WebApp.run!
