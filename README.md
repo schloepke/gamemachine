@@ -7,10 +7,11 @@ to use while also being performant and inherently scalable.
 Game Machine provides higher level abstractions for tough problems like concurrency, persistence, and locality.  We use the actor model built on Akka to provide low latency concurrency, a distributed object store for fast data access, and distributed region management for locality and zones.
 
 ###Resilient and scalable by design
-Scalable systems must be built around the premise that failure is natural and common.  A failure in one part of your system should not interrupt users.  With Game Machine we write resilient systems using actors and supervisors that monitor and react when something fails.  You can build hierarchies of control and management that can restart failed system, move them to another node, or simply let them fail and notify someone.
+Game Machine takes a very different approach to scaling then traditional game servers.  Our system is fully distributed and we have no single points of failure or single server bottlenecks.  The architecture is incredibly simple for what it does, and can support tens of thousands of concurrent users and hundreds of thousands of state updates per second, all within the same virtual world without zones.
 
 ### Productve development environment
-We leverage the power of the JVM to allow developers to build game logic quickly in jruby, and easily move that logic to scala or java if and when performance dictates. In Game Machine regardless of language all actors inherit from a single base class, and they all work the same way.  Migrating code to another JVM language is a matter of syntax, not structural change.
+Game Machine is a polyglot architecture.  We use the languages and tools that are the best at what they do. The core of Game Machine is written in the JVM, and we provide support for extensions in C/C++ as well as .NET.  Please see our [language guide](https://github.com/gamemachine/gamemachine/wiki/Language-guide) for more information.
+
 
 ###Open source
 We strongly believe that core technology should be open source.  This benefits everyone and allows more resource and time to be spent making games instead of architecture.  Our goal is to lower the cost of multiplayer games industry wide by providing a robust open source solution.
@@ -54,4 +55,3 @@ After that we suggest taking a look at the code in games/example which runs the 
 Support is provided on our [gamemachine-users](https://groups.google.com/forum/#!forum/gamemachine-users) google group.
 
 If you run into any bugs please file an issue and we will look into it asap.
-
