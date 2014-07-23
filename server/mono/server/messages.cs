@@ -2525,6 +2525,30 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"MonoMessage")]
+  public partial class MonoMessage : global::ProtoBuf.IExtensible
+  {
+    public MonoMessage() {}
+    
+    private string _methodName;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"methodName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string methodName
+    {
+      get { return _methodName; }
+      set { _methodName = value; }
+    }
+    private GameMachine.Messages.GameMessage _gameMessage;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public GameMachine.Messages.GameMessage gameMessage
+    {
+      get { return _gameMessage; }
+      set { _gameMessage = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Entity")]
   public partial class Entity : global::ProtoBuf.IExtensible
   {

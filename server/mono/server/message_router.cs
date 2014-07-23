@@ -15,22 +15,16 @@ namespace GameMachine
 {
     public class MessageRouter
     {
-        public static ConcurrentDictionary<string,IActor> actors = new ConcurrentDictionary<string,IActor>();
-		public static Logger logger = LogManager.GetLogger("GameMachine");
+        public static ConcurrentDictionary<string,Callable> callables = new ConcurrentDictionary<string,IActor>();
+        public static Logger logger = LogManager.GetLogger("GameMachine");
 		
-        public static void Route(byte[] bytes, ProxyClient proxyClient)
+        public GameMessage Route(GameMessage message)
         {
             try
             {
 				
-                IActor actor;
-                Entity entity = MessageUtil.ByteArrayToEntity(bytes);
-
-                if (entity.id == "ping")
-                {
-                    return;
-                }
-
+                Callable callable;
+               
                 string typeName = entity.destination;
                 string threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
                 string id = typeName + threadId;

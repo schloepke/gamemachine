@@ -282,7 +282,7 @@ message Regions {
 }
 
 message MonoMessage {
-  required string methodName = 1;
+  required string klass = 1;
   required GameMessage gameMessage = 2;
 }
 

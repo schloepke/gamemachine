@@ -9,7 +9,7 @@ using System.IO;
 using  ProtoBuf;
 using GameMachine;
 using NLog;
-using GameMessage = GameMachine.Messages.GameMessage;
+using MonoMessage = GameMachine.Messages.MonoMessage;
 
 namespace GameMachine
 {
@@ -35,12 +35,9 @@ namespace GameMachine
 
         static void Main(string[] args)
         {
-           
+            MessageRouter router = new MessageRouter();
             ProxyServer server = new ProxyServer();
             server.Run();
-
-            //ProxyClient proxyClient = new ProxyClient(Int32.Parse(args [0]));
-            //proxyClient.Start();
 			
             ProxyServer.logger.Info("Proxy Starting");
             Console.WriteLine("Press any key to exit.");
@@ -77,7 +74,7 @@ namespace GameMachine
 
                 server.BeginReceiveFrom(packet.buf, 0, packet.buf.Length, SocketFlags.None, ref packet.ep, new AsyncCallback(Received), packet);
 
-                //GameMessage gameMessage = ByteArrayToGameMessage(localMsg);
+                MonoMessage monoMessage = ByteArrayToMonoMessage(localMsg);
                 server.BeginSendTo(localMsg, 0, localMsg.Length, SocketFlags.None, packet.ep, new AsyncCallback(Sent), packet.ep);
 
             } catch (ObjectDisposedException e)
@@ -97,19 +94,19 @@ namespace GameMachine
             }
         }
 
-        public static GameMessage ByteArrayToGameMessage(byte[] bytes)
+        public static MonoMessage ByteArrayToMonoMessage(byte[] bytes)
         {
-            GameMessage gameMessage;
+            MonoMessage monoMessage;
             MemoryStream stream = new MemoryStream(bytes);
-            gameMessage = Serializer.Deserialize<GameMessage>(stream);
-            return gameMessage;
+            monoMessage = Serializer.Deserialize<MonoMessage>(stream);
+            return monoMessage;
         }
         
-        public static byte[] GameMessageToByteArray(GameMessage gameMessage)
+        public static byte[] MonoMessageToByteArray(MonoMessage monoMessage)
         {
             byte[] data;
             MemoryStream stream = new MemoryStream();
-            Serializer.Serialize(stream, gameMessage);
+            Serializer.Serialize(stream, monoMessage);
             data = stream.ToArray();
             return data;
         }
