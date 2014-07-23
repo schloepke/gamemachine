@@ -3,64 +3,64 @@ guid: 2b6e541d3f04e8b4faac59b69a74ed62
 ModelImporter:
   serializedVersion: 16
   fileIDToRecycleName:
-    100000: Axe
-    100002: BaseHuman
-    100004: CATRigHub001
-    100006: CATRigHub002
-    100008: CATRigHub003
-    100010: CATRigLArm1
+    100000: CATRigHub002
+    100002: CATRigRLeg1
+    100004: CATRigRLeg2
+    100006: CATRigLLeg2
+    100008: CATRigSpine2
+    100010: Shield
     100012: CATRigLArm2
-    100014: CATRigLArmCollarbone
-    100016: CATRigLArmPalm
-    100018: CATRigLLeg1
-    100020: CATRigLLeg2
-    100022: CATRigLLegAnkle
-    100024: CATRigLLegPlatform
-    100026: CATRigRArm1
-    100028: CATRigRArm2
-    100030: CATRigRArmCollarbone
-    100032: CATRigRArmPalm
-    100034: CATRigRLeg1
-    100036: CATRigRLeg2
-    100038: CATRigRLegAnkle
-    100040: CATRigRLegPlatform
-    100042: CATRigSpine
-    100044: CATRigSpine2
+    100014: CATRigLLeg1
+    100016: CATRigSpine
+    100018: CATRigHub003
+    100020: //RootNode
+    100022: CATRigLArmPalm
+    100024: Axe
+    100026: BaseHuman
+    100028: CATRigLLegAnkle
+    100030: CATRigLArm1
+    100032: Character001
+    100034: CATRigRLegAnkle
+    100036: CATRigHub001
+    100038: CATRigRArm1
+    100040: CATRigRArmPalm
+    100042: CATRigRArm2
+    100044: CATRigLLegPlatform
     100046: CATRigSpineCATRigSpine1
-    100048: Character001
-    100050: Shield
-    100052: //RootNode
-    400000: Axe
-    400002: BaseHuman
-    400004: CATRigHub001
-    400006: CATRigHub002
-    400008: CATRigHub003
-    400010: CATRigLArm1
+    100048: CATRigLArmCollarbone
+    100050: CATRigRLegPlatform
+    100052: CATRigRArmCollarbone
+    400000: CATRigHub002
+    400002: CATRigRLeg1
+    400004: CATRigRLeg2
+    400006: CATRigLLeg2
+    400008: CATRigSpine2
+    400010: Shield
     400012: CATRigLArm2
-    400014: CATRigLArmCollarbone
-    400016: CATRigLArmPalm
-    400018: CATRigLLeg1
-    400020: CATRigLLeg2
-    400022: CATRigLLegAnkle
-    400024: CATRigLLegPlatform
-    400026: CATRigRArm1
-    400028: CATRigRArm2
-    400030: CATRigRArmCollarbone
-    400032: CATRigRArmPalm
-    400034: CATRigRLeg1
-    400036: CATRigRLeg2
-    400038: CATRigRLegAnkle
-    400040: CATRigRLegPlatform
-    400042: CATRigSpine
-    400044: CATRigSpine2
+    400014: CATRigLLeg1
+    400016: CATRigSpine
+    400018: CATRigHub003
+    400020: //RootNode
+    400022: CATRigLArmPalm
+    400024: Axe
+    400026: BaseHuman
+    400028: CATRigLLegAnkle
+    400030: CATRigLArm1
+    400032: Character001
+    400034: CATRigRLegAnkle
+    400036: CATRigHub001
+    400038: CATRigRArm1
+    400040: CATRigRArmPalm
+    400042: CATRigRArm2
+    400044: CATRigLLegPlatform
     400046: CATRigSpineCATRigSpine1
-    400048: Character001
-    400050: Shield
-    400052: //RootNode
-    2300000: Axe
-    2300002: Shield
-    3300000: Axe
-    3300002: Shield
+    400048: CATRigLArmCollarbone
+    400050: CATRigRLegPlatform
+    400052: CATRigRArmCollarbone
+    2300000: Shield
+    2300002: Axe
+    3300000: Shield
+    3300002: Axe
     4300000: BaseHuman
     4300002: Axe
     4300004: Shield
@@ -75,6 +75,7 @@ ModelImporter:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
     optimizeGameObjects: 0
+    motionNodeName: 
     animationCompression: 1
     animationRotationError: .5
     animationPositionError: .5
@@ -118,5 +119,5 @@ ModelImporter:
     rootMotionBoneName: 
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 1
-  additionalBone: 1
+  additionalBone: 0
   userData: 

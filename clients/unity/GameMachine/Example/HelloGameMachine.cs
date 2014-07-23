@@ -18,14 +18,12 @@ namespace GameMachine.Example
 	public class HelloGameMachine : MonoBehaviour, GameMachineApp
 	{
 
-
 		public string
 			foo;
 
 		void Start ()
 		{
 			Login.SetGameMachineApp (this);
-			UpdateState ();
 		}
 
 		public void OnLoginFailure (string error)
@@ -43,38 +41,6 @@ namespace GameMachine.Example
 			Logger.Debug ("Connection timed out");
 		}
 
-		public void UpdateState ()
-		{
-			Entity entity = new Entity ();
-
-			GameMachine.Messages.NativeBytes b = new GameMachine.Messages.NativeBytes ();
-			string schema = RuntimeTypeModel.Default.GetSchema (typeof(HelloGameMachine));
-
-
-			//System.Attribute[] attrs = System.Attribute.GetCustomAttributes (typeof(HelloGameMachine));
-			Type t = this.GetType ();
-			foreach (FieldInfo field in t.GetFields()) {
-				foreach (Attribute attr in field.GetCustomAttributes(true)) {
-					if (attr is ProtoMemberAttribute) {
-						ProtoMemberAttribute a = (ProtoMemberAttribute)attr;
-						Debug.Log (a.Tag);
-					}
-				}
-			}
-
-//			foreach (System.Attribute attr in attrs) {
-//				Debug.Log (attr.GetType ());
-//				if (attr is ProtoMemberAttribute) {
-//					ProtoMemberAttribute a = (ProtoMemberAttribute)attr;
-//					Debug.Log (a.Name);
-//				}
-//			}
-
-			//Debug.Log (schema);
-			//entity.id = id;
-			//entity.nativeBytes = new GameMachine.Messages.NativeBytes();
-			//entity.nativeBytes.bytes = "";
-		}
 
 		// This is called once we have a connection and everything is started
 		public void OnLoggedIn ()
