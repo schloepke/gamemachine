@@ -281,6 +281,11 @@ message Regions {
   required string regions = 1;
 }
 
+message MonoMessage {
+  required string methodName = 1;
+  required GameMessage gameMessage = 2;
+}
+
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;

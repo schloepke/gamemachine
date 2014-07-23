@@ -169,6 +169,7 @@ module GameMachine
         Actor::Builder.new(ClientManager).start
         Actor::Builder.new(GameSystems::EntityLoader).start
         Actor::Builder.new(SystemStats).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
 
         # Our cluster singleton for managing regions
         Actor::Builder.new(GameSystems::RegionManager).singleton
@@ -189,7 +190,6 @@ module GameMachine
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,10).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).start
