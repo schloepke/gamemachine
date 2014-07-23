@@ -32,7 +32,7 @@ namespace GameMachine.World
 			GameObject camera = GameObject.Find ("KAM3RA");
 			cameraUser = camera.GetComponent<KAM3RA.User> ();
 
-			InvokeRepeating ("UpdateTracking", 0.010f, 0.08F);
+			ActorSystem.Instance.InvokeRepeating (this, "UpdateTracking");
 		}
         
 		void UpdateTracking ()
@@ -43,13 +43,14 @@ namespace GameMachine.World
 
 			directionVector.x = direction.x;
 			directionVector.z = direction.z;
-
-			TrackingUpdate update = new TrackingUpdate (User.Instance.username, position.x, position.z, position.y);
-			update.entityType = "player";
 			TrackData trackData = new TrackData ();
+			trackData.x = position.x;
+			trackData.y = position.z;
+			trackData.z = position.y;
+			trackData.id = User.Instance.username;
+			trackData.entityType = "player";
 			trackData.direction = directionVector;
-			update.trackData = trackData;
-			entityTracking.Update (update);
+			entityTracking.Update (trackData);
 		}
         
 		void OnUpdateReceived (List<TrackingUpdate> updates)

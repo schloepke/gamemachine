@@ -18,6 +18,10 @@ namespace GameMachine.Core
 		private Client regionClient;
 		private Dictionary<string, UntypedActor> actors = new Dictionary<string, UntypedActor> ();
 		private Dictionary<string, MethodInfo> methods = new Dictionary<string, MethodInfo> ();
+		private Dictionary<object, MethodInfo> invokeRepeatingMethods = new Dictionary<object, MethodInfo> ();
+		private List<Entity> entities = new List<Entity> ();
+		private List<Entity> regionEntities = new List<Entity> ();
+
 		public bool Running = false;
 
 		static readonly ActorSystem _instance = new ActorSystem ();
@@ -29,6 +33,14 @@ namespace GameMachine.Core
 
 		ActorSystem ()
 		{
+		}
+
+		public void InvokeRepeating (object target, string methodName)
+		{
+			Type t = target.GetType ();
+			MethodInfo m = t.GetMethod (methodName);
+			invokeRepeatingMethods [target] = m;
+
 		}
 
 		public void Start (Client _client)
@@ -88,7 +100,7 @@ namespace GameMachine.Core
 
 		public void TellRemote (Entity entity)
 		{
-			client.SendEntity (entity);
+			entities.Add (entity);
 		}
 
 		public void TellRemoteRegion (Entity entity)
@@ -96,7 +108,7 @@ namespace GameMachine.Core
 			if (regionClient == null) {
 				Logger.Debug ("No region client set!");
 			} else {
-				regionClient.SendEntity (entity);
+				regionEntities.Add (entity);
 			}
 		}
 
@@ -110,9 +122,20 @@ namespace GameMachine.Core
 			}
 		}
 
-		public void Update ()
+		public void Update (bool connected)
 		{
-			DeliverQueuedMessages ();
+			foreach (object target in invokeRepeatingMethods.Keys) {
+				invokeRepeatingMethods [target].Invoke (target, null);
+			}
+				
+			if (regionEntities.Count >= 1) {
+				regionClient.SendEntities (regionEntities);
+				regionEntities.Clear ();
+			}
+			if (entities.Count >= 1) {
+				client.SendEntities (entities);
+				entities.Clear ();
+			}
 		}
 
 		public void DeliverQueuedMessages ()
@@ -121,6 +144,10 @@ namespace GameMachine.Core
             
 			for (int i = 0; i < 10; i++) {
 				if (ClientMessageQueue.entityQueue.TryDequeue (out entity)) {
+					if (entity.gameMessages != null) {
+						MessageSystem.Instance.DeliverMessages (entity.gameMessages);
+						continue;
+					}
 					if (entity.neighbors != null) {
 						EntityTracking entityTracking = actors ["EntityTracking"] as EntityTracking;
 						entityTracking.OnReceive (entity);

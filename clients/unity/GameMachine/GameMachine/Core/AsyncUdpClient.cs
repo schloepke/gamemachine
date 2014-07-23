@@ -7,6 +7,7 @@ using System.Threading;
 using System.IO;
 using ProtoBuf;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using GameMachine;
 using ClientMessage = GameMachine.Messages.ClientMessage;
 using Entity = GameMachine.Messages.Entity;
@@ -98,12 +99,17 @@ namespace GameMachine.Core
 
 		public void SendEntity (Entity entity)
 		{
-			if (entity.fastpath) {
-				clientMessage.fastpath = true;
-			} else {
-				clientMessage.fastpath = false;
+			List<Entity> entities = new List<Entity> ();
+			entities.Add (entity);
+			SendEntities (entities);
+		}
+
+		public void SendEntities (List<Entity> entities)
+		{
+			foreach (Entity entity in entities) {
+				clientMessage.entity.Add (entity);
 			}
-			clientMessage.entity.Add (entity);
+
 			Send (Serialize (clientMessage));
 			clientMessage.entity.Clear ();
 		}

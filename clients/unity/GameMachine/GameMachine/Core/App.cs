@@ -123,6 +123,7 @@ namespace GameMachine.Core
 
 			running = true;
 			RunOnRunningCallbacks ();
+			InvokeRepeating ("DeliverQueuedMessages", 0.005f, 0.005f);
 			Logger.Debug ("App running - waiting to verify connection");
 		}
 
@@ -162,7 +163,7 @@ namespace GameMachine.Core
 			Application.runInBackground = true;
 			SetEchoInterval ();
 			lastEchoReceived = Time.time;
-			InvokeRepeating ("UpdateNetwork", 0.010f, 0.06F);
+			InvokeRepeating ("UpdateNetwork", 0.010f, 0.066F);
 		}
 
 		void OnApplicationQuit ()
@@ -174,6 +175,11 @@ namespace GameMachine.Core
 		}
 
 
+		void DeliverQueuedMessages ()
+		{
+			ActorSystem.Instance.DeliverQueuedMessages ();
+		}
+
 		void UpdateNetwork ()
 		{
 			if (!running) {
@@ -182,7 +188,7 @@ namespace GameMachine.Core
             
            
 			if (running && ActorSystem.Instance.Running) {
-				ActorSystem.Instance.Update ();
+				ActorSystem.Instance.Update (connected);
 			}
                 
 			if (Time.time > (lastEcho + echoInterval)) {

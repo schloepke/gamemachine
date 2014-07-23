@@ -82,7 +82,6 @@ namespace GameMachine
 
 		public void OnAppStarted ()
 		{
-			this.gameObject.AddComponent (Type.GetType ("GameMachine.Core.NetworkObjectManager"));
 			userApp.OnLoggedIn ();
 			loginUi.DisableLogin ();
 		}

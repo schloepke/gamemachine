@@ -45,36 +45,21 @@ namespace GameMachine.Example
 
 			EntityTracking.UpdateReceived callback = OnUpdateReceived;
 			entityTracking.OnUpdateReceived (callback);
-			InvokeRepeating ("UpdateTracking", 0.010f, 0.06F);
+			ActorSystem.Instance.InvokeRepeating (this, "UpdateTracking");
 		}
 	
 		void UpdateTracking ()
 		{
 			Vector3 position = this.gameObject.transform.position;
 
-			// Create object with our coordinates
-
-			TrackingUpdate update = new TrackingUpdate (User.Instance.username, position.x, position.z, position.y);
-
-
-			// Optional.  Tell the server to set our entity type to this value.  Searches
-			// can filter on this.
-			update.entityType = "player";
-
-			// Optional, tell the server to filter on this type of entity in the search, and only
-			// return entities that match this type.  A null value means return anything within radius.
-			//update.neighborEntityType = "npc";
-
-
-			// TrackData is a message you can customize any way you want and allows you to extend the fields that
-			// the tracking system stores. It will be saved on the server and returned in tracking updates to other clients.
-			// TrackData is located in config/game_messages.proto on the server, or you can edit it via the web ui.
 			TrackData trackData = new TrackData ();
-			trackData.speed = 1.0f;
-			trackData.velocity = 12.0f;
-			update.trackData = trackData;
-               
-			entityTracking.Update (update);
+			trackData.x = position.x;
+			trackData.y = position.z;
+			trackData.z = position.y;
+			trackData.id = User.Instance.username;
+			trackData.entityType = "player";
+			entityTracking.Update (trackData);
+            
 		}
 
 		void OnUpdateReceived (List<TrackingUpdate> updates)

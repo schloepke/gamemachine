@@ -1,6 +1,8 @@
 ﻿using GameMachine;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System;
 using System.Runtime.Serialization.Formatters.Binary;
 using Entity = GameMachine.Messages.Entity;
 using TrackEntity = GameMachine.Messages.TrackEntity;
@@ -15,15 +17,29 @@ namespace GameMachine.Core
 	public class EntityTracking : UntypedActor
 	{
         
+		public Trackable trackable;
+
 		public delegate void UpdateReceived (List<TrackingUpdate> updates);
 		private UpdateReceived updateReceived;
 
+
+		public static void Register (Trackable component)
+		{
+			EntityTracking entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
+			entityTracking.trackable = component;
+			ActorSystem.Instance.InvokeRepeating (entityTracking, "UpdateTracking");
+		}
 
 		public void OnUpdateReceived (UpdateReceived callback)
 		{
 			updateReceived = callback;
 		}
 
+		public void UpdateTracking ()
+		{
+			TrackData trackData = trackable.UpdateTracking ();
+			Update (trackData);
+		}
 
 		private GetNeighbors CreateGetNeighbors (string neighborType, Vector3 vector)
 		{
@@ -33,26 +49,14 @@ namespace GameMachine.Core
 			return getNeighbors;
 		}
 
-		public void Update (TrackingUpdate update)
+		public void Update (TrackData trackData)
 		{
-           
+			trackData.id = GameMachine.Core.User.Instance.username;
+			trackData.entityType = "player";
+
 			Entity entity = new Entity ();
-			entity.id = update.entityId;
-			entity.entityType = update.entityType;
-
-			entity.vector3 = new Vector3 ();
-			entity.vector3.x = update.x;
-			entity.vector3.y = update.y;
-			entity.vector3.z = update.z;
-
-			TrackEntity trackEntity = new TrackEntity ();
-			trackEntity.value = true;
-			if (update.trackData != null) {
-				trackEntity.trackData = update.trackData; 
-			}
-			entity.trackEntity = trackEntity;
-
-			entity.getNeighbors = CreateGetNeighbors (update.neighborEntityType, entity.vector3);
+			entity.id = "0";
+			entity.trackData = trackData;
 
 			// stay on the fastpath server side (no crossing language boundaries)
 			entity.fastpath = true;
@@ -71,6 +75,10 @@ namespace GameMachine.Core
 				update.trackData = trackData;
 				updates.Add (update);
 				i++;
+			}
+
+			if (trackable != null) {
+				trackable.TrackDataReceived (entity.neighbors.trackData);
 			}
 
 			if (updateReceived != null) {
