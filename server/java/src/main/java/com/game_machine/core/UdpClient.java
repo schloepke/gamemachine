@@ -45,7 +45,7 @@ public class UdpClient {
 		try {
 
 			int retryCount = 0;
-			int retryLimit = 2;
+			int retryLimit = 3;
 
 			DatagramPacket out = new DatagramPacket(bytes, bytes.length,
 					hostAddress, port);
@@ -61,7 +61,7 @@ public class UdpClient {
 				} catch (SocketTimeoutException e) {
 					retryCount++;
 					try {
-						Thread.sleep(this.timeout, 0);
+						Thread.sleep(retryCount + 1, 0);
 					} catch (InterruptedException e1) {
 						e1.printStackTrace();
 					}

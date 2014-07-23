@@ -2530,12 +2530,12 @@ namespace GameMachine.Messages
   {
     public MonoMessage() {}
     
-    private string _methodName;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"methodName", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string methodName
+    private string _klass;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"klass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string klass
     {
-      get { return _methodName; }
-      set { _methodName = value; }
+      get { return _klass; }
+      set { _klass = value; }
     }
     private GameMachine.Messages.GameMessage _gameMessage;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]

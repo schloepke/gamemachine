@@ -14,9 +14,9 @@ public class MonoProxy {
 		}
 	}
 	
-	public GameMessage call(String methodName, GameMessage gameMessage) {
+	public GameMessage call(String klass, GameMessage gameMessage) {
 		MonoMessage message = new MonoMessage();
-		message.setMethodName(methodName);
+		message.setKlass(klass);
 		message.setGameMessage(gameMessage);
 		byte[] bytes = call(message.toByteArray());
 		if (bytes == null) {

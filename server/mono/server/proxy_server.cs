@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -10,6 +9,7 @@ using  ProtoBuf;
 using GameMachine;
 using NLog;
 using MonoMessage = GameMachine.Messages.MonoMessage;
+using GameMessage = GameMachine.Messages.GameMessage;
 
 namespace GameMachine
 {
@@ -32,10 +32,11 @@ namespace GameMachine
 
         public static Logger logger = LogManager.GetLogger("GameMachine");
         private Socket server;
+        private MessageRouter router;
 
         static void Main(string[] args)
         {
-            MessageRouter router = new MessageRouter();
+
             ProxyServer server = new ProxyServer();
             server.Run();
 			
@@ -46,6 +47,7 @@ namespace GameMachine
 		
         public void Run()
         {
+            router = new MessageRouter();
             server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             server.Bind(new IPEndPoint(IPAddress.Loopback, 4000));
 
@@ -57,7 +59,7 @@ namespace GameMachine
 
         private void BeginReceive()
         {
-            byte[] buffer = new byte[8096];
+            byte[] buffer = new byte[4096];
             EndPoint ep = (EndPoint)new IPEndPoint(IPAddress.Loopback, 0);
             DataPacket packet = new DataPacket(server, buffer, ep);
             server.BeginReceiveFrom(packet.buf, 0, packet.buf.Length, SocketFlags.None, ref packet.ep, new AsyncCallback(Received), packet);
@@ -74,8 +76,12 @@ namespace GameMachine
 
                 server.BeginReceiveFrom(packet.buf, 0, packet.buf.Length, SocketFlags.None, ref packet.ep, new AsyncCallback(Received), packet);
 
-                MonoMessage monoMessage = ByteArrayToMonoMessage(localMsg);
-                server.BeginSendTo(localMsg, 0, localMsg.Length, SocketFlags.None, packet.ep, new AsyncCallback(Sent), packet.ep);
+                Task.Factory.StartNew(() => {
+                    MonoMessage monoMessage = ByteArrayToMonoMessage(localMsg);
+                    monoMessage.gameMessage = router.Route(monoMessage.klass, monoMessage.gameMessage);
+                    byte[] bytes = MonoMessageToByteArray(monoMessage);
+                    server.BeginSendTo(bytes, 0, bytes.Length, SocketFlags.None, packet.ep, new AsyncCallback(Sent), packet.ep);
+                });
 
             } catch (ObjectDisposedException e)
             {

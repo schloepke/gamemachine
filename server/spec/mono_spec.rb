@@ -23,19 +23,23 @@ module GameMachine
     it "udp gateway" do
       host = '127.0.0.1'
       port = 4000
-      message = MessageLib::Entity.new.set_id(STR)
+      message = MessageLib::GameMessage.new
 
       threads = []
       1.times do
         threads <<  Thread.new do
           results = []
-          client = JavaLib::UdpClient.new(port,1)
+          errors = 0
+          proxy = JavaLib::MonoProxy.new(port,1)
             100000.times do
               results << Benchmark.realtime {
-                client.send(message)
+                response = proxy.call('MyGame.TestCallable',message)
+                if response.nil?
+                  errors += 1
+                end
               }
             end
-            puts "Number = #{results.number} Average #{results.mean * 1000000} Standard deviation #{results.standard_deviation}"
+            puts "Number = #{results.number} Errors = #{errors} Average #{results.mean * 1000000} Standard deviation #{results.standard_deviation * 1000000}"
 
         end
       end
