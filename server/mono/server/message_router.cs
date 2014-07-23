@@ -6,7 +6,7 @@ using System.Text;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
-using GameMessage = GameMachine.Messages.GameMessage;
+using Entity = GameMachine.Messages.Entity;
 using GameMachine;
 using System.Collections.Concurrent;
 using NLog;
@@ -18,7 +18,7 @@ namespace GameMachine
         public ConcurrentDictionary<string,Callable> callables = new ConcurrentDictionary<string,Callable>();
         public static Logger logger = LogManager.GetLogger("GameMachine");
 		
-        public GameMessage Route(string klass, GameMessage message)
+        public Entity Route(string klass, Entity message)
         {
             try
             {

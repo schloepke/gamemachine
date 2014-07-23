@@ -1,9 +1,9 @@
 using GameMachine;
-using GameMessage = GameMachine.Messages.GameMessage;
+using Entity = GameMachine.Messages.Entity;
 namespace GameMachine
 {
     public interface Callable
     {
-        GameMessage call(GameMessage message);
+        Entity call(Entity entity);
     }
 }

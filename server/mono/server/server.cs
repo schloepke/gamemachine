@@ -9,7 +9,7 @@ using  ProtoBuf;
 using GameMachine;
 using NLog;
 using MonoMessage = GameMachine.Messages.MonoMessage;
-using GameMessage = GameMachine.Messages.GameMessage;
+using Entity = GameMachine.Messages.Entity;
 
 namespace GameMachine
 {
@@ -79,7 +79,7 @@ namespace GameMachine
 
                 Task.Factory.StartNew(() => {
                     MonoMessage monoMessage = ByteArrayToMonoMessage(localMsg);
-                    monoMessage.gameMessage = router.Route(monoMessage.klass, monoMessage.gameMessage);
+                    monoMessage.entity = router.Route(monoMessage.klass, monoMessage.entity);
                     byte[] bytes = MonoMessageToByteArray(monoMessage);
                     server.BeginSendTo(bytes, 0, bytes.Length, SocketFlags.None, packet.ep, new AsyncCallback(Sent), packet.ep);
                 });
