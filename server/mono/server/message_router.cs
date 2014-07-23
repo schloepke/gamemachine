@@ -51,7 +51,7 @@ namespace GameMachine
                 }
             } catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                MessageRouter.logger.Info(ex.Message);
                 return null;
             }
         }

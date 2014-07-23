@@ -26,15 +26,16 @@ module GameMachine
       message = MessageLib::GameMessage.new
 
       threads = []
+      proxy = JavaLib::MonoProxy.getInstance
       1.times do
         threads <<  Thread.new do
           results = []
           errors = 0
-          proxy = JavaLib::MonoProxy.new(port,1)
-            100000.times do
+            10000.times do
               results << Benchmark.realtime {
-                response = proxy.call('MyGame.TestCallable',message)
+                response = proxy.call('MyGame.Echo',message)
                 if response.nil?
+                  puts 'error'
                   errors += 1
                 end
               }

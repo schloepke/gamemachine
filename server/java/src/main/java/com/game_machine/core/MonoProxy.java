@@ -1,34 +1,40 @@
 package com.game_machine.core;
 
+import GameMachine.Messages.Entity;
 import GameMachine.Messages.GameMessage;
 import GameMachine.Messages.MonoMessage;
 
 public class MonoProxy {
-
-	private UdpClient udpClient;
+	 
+    private static class LazyHolder {
+        private static final MonoProxy INSTANCE = new MonoProxy();
+    }
+ 
+    public static MonoProxy getInstance() {
+        return LazyHolder.INSTANCE;
+    }
 	
-	public MonoProxy(int port, int timeout) {
-		udpClient = new UdpClient(port,timeout);
+    private MonoProxy() {
+		udpClient = new UdpClient(24320,1);
 		if (!udpClient.connect()) {
 			throw new RuntimeException("Unable to connect to mono");
 		}
 	}
+    
+	private UdpClient udpClient;
 	
-	public GameMessage call(String klass, GameMessage gameMessage) {
+	
+	public Entity call(String klass, Entity entity) {
 		MonoMessage message = new MonoMessage();
 		message.setKlass(klass);
-		message.setGameMessage(gameMessage);
-		byte[] bytes = call(message.toByteArray());
+		message.setEntity(entity);
+		byte[] bytes = udpClient.send(message.toByteArray());
 		if (bytes == null) {
 			return null;
 		} else {
 			message = MonoMessage.parseFrom(bytes);
-			return message.gameMessage;
+			return message.entity;
 		}
 	}
-	
-	public byte[] call(byte[] bytes) {
-		return udpClient.send(bytes);
-	}
-	
+		
 }

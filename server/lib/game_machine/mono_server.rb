@@ -11,7 +11,7 @@ module GameMachine
       # it will just get restarted
       Thread.new do
         loop do
-          system("cd #{mono_path} && mono server.exe #{Application.config.mono_gateway_port}")
+          system("cd #{mono_path} && mono server.exe")
           sleep 10
         end
       end

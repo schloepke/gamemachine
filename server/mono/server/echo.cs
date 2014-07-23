@@ -7,13 +7,8 @@ using GameMachine;
 
 namespace MyGame
 {
-    public class TestCallable : GameMachine.Callable
+    public class Echo : GameMachine.Callable
     {
-			
-        public TestCallable()
-        {
-        }
-		
         public GameMessage call(GameMessage message)
         {
             return message;

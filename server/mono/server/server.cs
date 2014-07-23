@@ -27,9 +27,10 @@ namespace GameMachine
         }
     }
 
-    public class ProxyServer
+    public class Server
     {
 
+        public static int port = 24320;
         public static Logger logger = LogManager.GetLogger("GameMachine");
         private Socket server;
         private MessageRouter router;
@@ -37,10 +38,10 @@ namespace GameMachine
         static void Main(string[] args)
         {
 
-            ProxyServer server = new ProxyServer();
+            Server server = new Server();
             server.Run();
 			
-            ProxyServer.logger.Info("Proxy Starting");
+            Server.logger.Info("Server Starting");
             Console.WriteLine("Press any key to exit.");
             Console.ReadLine();
         }
@@ -49,7 +50,7 @@ namespace GameMachine
         {
             router = new MessageRouter();
             server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-            server.Bind(new IPEndPoint(IPAddress.Loopback, 4000));
+            server.Bind(new IPEndPoint(IPAddress.Loopback, port));
 
             for (int i=0; i<5; i++)
             {

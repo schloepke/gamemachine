@@ -25,7 +25,7 @@ public class UdpClient {
 		this.timeout = timeout;
 
 		hostAddress = InetAddress.getLoopbackAddress();
-		byte[] in = new byte[1000];
+		byte[] in = new byte[2048];
 		dp = new DatagramPacket(in, in.length);
 	}
 
@@ -50,6 +50,7 @@ public class UdpClient {
 			DatagramPacket out = new DatagramPacket(bytes, bytes.length,
 					hostAddress, port);
 
+			
 			while (true) {
 				s.send(out);
 
@@ -59,7 +60,6 @@ public class UdpClient {
 							dp.getOffset(), dp.getOffset() + dp.getLength());
 					return received;
 				} catch (SocketTimeoutException e) {
-					retryCount++;
 					try {
 						Thread.sleep(retryCount + 1, 0);
 					} catch (InterruptedException e1) {
@@ -70,6 +70,7 @@ public class UdpClient {
 								+ retryCount);
 						return null;
 					}
+					retryCount++;
 				}
 			}
 

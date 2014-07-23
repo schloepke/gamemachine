@@ -283,7 +283,7 @@ message Regions {
 
 message MonoMessage {
   required string klass = 1;
-  required GameMessage gameMessage = 2;
+  required Entity entity = 2;
 }
 
 message Entity {
