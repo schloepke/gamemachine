@@ -11,7 +11,12 @@ module GameMachine
       # it will just get restarted
       Thread.new do
         loop do
-          system("cd #{mono_path} && mono server.exe")
+          case RbConfig::CONFIG['host_os']
+          when /mswin|windows/i
+            system("cd #{mono_path} && server.exe")
+          else
+            system("cd #{mono_path} && mono server.exe")
+          end
           sleep 10
         end
       end

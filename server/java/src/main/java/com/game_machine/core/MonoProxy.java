@@ -1,7 +1,6 @@
 package com.game_machine.core;
 
 import GameMachine.Messages.Entity;
-import GameMachine.Messages.GameMessage;
 import GameMachine.Messages.MonoMessage;
 
 public class MonoProxy {

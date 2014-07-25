@@ -115,14 +115,8 @@ module GameMachine
       end
 
       def start_endpoints
-        if config.mono_enabled
-          Actor::Builder.new(Endpoints::MonoGateway).start
-          GameMachine.stdout(
-            "MonoGateway starting on #{config.mono_gateway_host}:#{config.mono_gateway_port}"
-          )
-        end
         if config.tcp_enabled
-          Actor::Builder.new(Endpoints::Tcp).start
+          JavaLib::TcpServer.start(config.tcp_host, config.tcp_port);
           GameMachine.stdout(
             "Tcp starting on #{config.tcp_host}:#{config.tcp_port}"
           )
@@ -132,15 +126,7 @@ module GameMachine
           JavaLib::UdpServer.start(config.udp_host,config.udp_port)
           Actor::Builder.new(Endpoints::UdpIncoming).with_router(
             JavaLib::RoundRobinRouter,10).start
-
-          # Built in Akka udp. Performed badly we have more control by working
-          # directly with Netty
-          #Actor::Builder.new(Endpoints::Udp).start
-          #GameMachine.stdout(
-          #  "UDP starting on #{config.udp_host}:#{config.udp_port}"
-          #)
         end
-
       end
 
       def start_handlers

@@ -31,6 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'bcrypt'
   gem.add_dependency 'activerecord' 
   gem.add_dependency 'activerecord-jdbcmysql-adapter' 
+  gem.add_dependency 'wavefront'
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'rspec'

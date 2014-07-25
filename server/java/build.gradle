@@ -60,6 +60,8 @@ dependencies {
   compile 'com.badlogicgames.gdx:gdx:1.2.0'
   compile 'com.jolbox:bonecp:0.8.0.RELEASE'
   compile 'mysql:mysql-connector-java:5.1.31'
+  compile 'com.vividsolutions:jts:1.13'
+  
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

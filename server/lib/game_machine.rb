@@ -72,8 +72,9 @@ require_relative 'game_machine/clients'
 require_relative 'game_machine/mono_server'
 require_relative 'game_machine/restart_watcher'
 require_relative 'game_machine/uniqueid'
+require_relative 'game_machine/wavefront_ext'
 
-if Config::CONFIG['target_os'] == 'linux'
+if RbConfig::CONFIG['host_os'].match(/linux/i)
   require_relative 'game_machine/navigation'
 else
   GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"

@@ -9,12 +9,18 @@ module GameMachine
       attr_reader :player_id
 
       def awake(args)
+      end
 
+      def on_player_disconnect(player_id)
       end
 
       def post_init(*args)
         awake(args)
         commands.misc.client_manager_register(self.class.name)
+      end
+
+      def call_mono(klass,message)
+        commands.misc.call_mono(klass,message)
       end
 
       def send_game_message(game_message,playerid=player_id)
@@ -29,9 +35,7 @@ module GameMachine
           game_messages(message).each {|m| on_game_message(m)}
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
-            if self.respond_to?(:on_player_disconnect)
-              on_player_disconnect(message.player_id)
-            end
+            on_player_disconnect(message.player_id)
           end
         end
       end

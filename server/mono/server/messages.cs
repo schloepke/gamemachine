@@ -2537,12 +2537,12 @@ namespace GameMachine.Messages
       get { return _klass; }
       set { _klass = value; }
     }
-    private GameMachine.Messages.GameMessage _gameMessage;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.GameMessage gameMessage
+    private GameMachine.Messages.Entity _entity;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public GameMachine.Messages.Entity entity
     {
-      get { return _gameMessage; }
-      set { _gameMessage = value; }
+      get { return _entity; }
+      set { _entity = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

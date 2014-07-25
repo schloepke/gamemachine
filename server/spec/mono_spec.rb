@@ -20,10 +20,10 @@ STR2 = Array.new(1000) {|i| CHARS.sample}.join
 module GameMachine
   describe 'mono' do
 
-    it "udp gateway" do
+    xit "udp gateway" do
       host = '127.0.0.1'
       port = 4000
-      message = MessageLib::GameMessage.new
+      message = MessageLib::Entity.new.set_id(STR)
 
       threads = []
       proxy = JavaLib::MonoProxy.getInstance
@@ -41,11 +41,9 @@ module GameMachine
               }
             end
             puts "Number = #{results.number} Errors = #{errors} Average #{results.mean * 1000000} Standard deviation #{results.standard_deviation * 1000000}"
-
         end
       end
       threads.map(&:join)
-
     end
 
     xit "calls mono method" do
@@ -73,7 +71,7 @@ module GameMachine
       str = Array.new(1000) {|i| CHARS.sample}.join
       message = MessageLib::Entity.new.set_id(STR)
       message.set_destination('GameMachine.TestActor')
-      puts timed = Benchmark.realtime {
+      puts  Benchmark.realtime {
         10.times do
           Endpoints::MonoGateway.find.tell(message)
         end

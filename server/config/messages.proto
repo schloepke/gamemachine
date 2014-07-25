@@ -197,6 +197,14 @@ message Vector3 {
   optional int32 zi = 6;
 }
 
+message Polygon {
+  repeated Vector3 vertex = 1;
+}
+
+message Mesh {
+  repeated Polygon polygon = 1;
+}
+
 message Quaternion {
   optional float w = 1;
   optional float x = 2;

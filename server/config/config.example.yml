@@ -37,6 +37,11 @@ development:
         default: 4000, 50, 1
         aoe: 4000, 5, 1
         local_chat: 4000, 10, 10
+      # Mysql config
+      mysql_url: jdbc:mysql://localhost:3306/game_machine
+      mysql_driver: com.mysql.jdbc.Driver
+      mysql_username: root
+      mysql_password:
       # Couchbase config
       couchbase_bucket: default
       couchbase_password:
@@ -57,9 +62,6 @@ development:
       seeds: [default,seed01]
       # Mono server settings
       mono_enabled: false
-      mono_dll: test_actor.dll
-      mono_gateway_host: 127.0.0.1
-      mono_gateway_port: 8800
     seed01:
       environment: development
       team_handler: Plugins::TeamHandler
@@ -78,6 +80,10 @@ development:
         default: 4000, 50, 1
         aoe: 4000, 5, 1
         local_chat: 4000, 10, 10
+      mysql_url: jdbc:mysql://localhost:3306/game_machine
+      mysql_driver: com.mysql.jdbc.Driver
+      mysql_username: root
+      mysql_password:
       couchbase_bucket: default
       couchbase_password:
       couchbase_servers:
@@ -95,6 +101,3 @@ development:
       akka_port: 2551
       seeds: [default,seed01]
       mono_enabled: false
-      mono_dll: test_actor.dll
-      mono_gateway_host: 127.0.0.1
-      mono_gateway_port: 8800
