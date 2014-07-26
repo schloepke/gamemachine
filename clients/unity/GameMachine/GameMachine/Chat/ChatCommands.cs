@@ -59,7 +59,7 @@ namespace GameMachine.Chat
 				return;
 			} else if (command.StartsWith ("/group")) {
 				string msg = command.Replace ("/group", "");
-				messenger.SendText (senderId, Chat.currentGroup, msg, "group");
+				messenger.SendText (senderId, ChatManager.currentGroup, msg, "group");
 				return;
 			} else if (command.StartsWith ("/invite")) {
 				command = command.Replace ("/invite", "");

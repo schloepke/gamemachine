@@ -25,6 +25,55 @@ extern "C" void EXPORT_API freeQuery(dtNavMeshQuery* query) {
   dtFreeNavMeshQuery(query);
 }
 
+static int fixupShortcuts(dtPolyRef* path, int npath, dtNavMeshQuery* navQuery)
+{
+  if (npath < 3)
+    return npath;
+
+  // Get connected polygons
+  static const int maxNeis = 16;
+  dtPolyRef neis[maxNeis];
+  int nneis = 0;
+
+  const dtMeshTile* tile = 0;
+  const dtPoly* poly = 0;
+  if (dtStatusFailed(navQuery->getAttachedNavMesh()->getTileAndPolyByRef(path[0], &tile, &poly)))
+    return npath;
+  
+  for (unsigned int k = poly->firstLink; k != DT_NULL_LINK; k = tile->links[k].next)
+  {
+    const dtLink* link = &tile->links[k];
+    if (link->ref != 0)
+    {
+      if (nneis < maxNeis)
+        neis[nneis++] = link->ref;
+    }
+  }
+
+  // If any of the neighbour polygons is within the next few polygons
+  // in the path, short cut to that polygon directly.
+  static const int maxLookAhead = 6;
+  int cut = 0;
+  for (int i = dtMin(maxLookAhead, npath) - 1; i > 1 && cut == 0; i--) {
+    for (int j = 0; j < nneis; j++)
+    {
+      if (path[i] == neis[j]) {
+        cut = i;
+        break;
+      }
+    }
+  }
+  if (cut > 1)
+  {
+    int offset = cut-1;
+    npath -= offset;
+    for (int i = 1; i < npath; i++)
+      path[i] = path[i+offset];
+  }
+
+  return npath;
+}
+
 extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float starty,
     float startz, float endx, float endy, float endz, int find_straight_path,
     float* resultPath) {
@@ -129,6 +178,8 @@ extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float st
       query->moveAlongSurface(polys[0], iterPos, moveTgt, &m_filter, result, visited, &nvisited, 16);
 
       npolys = fixupCorridor(polys, npolys, MAX_POLYS, visited, nvisited);
+      npolys = fixupShortcuts(polys, npolys, query);
+      
       float h = 0;
       query->getPolyHeight(polys[0], result, &h);
       result[1] = h;

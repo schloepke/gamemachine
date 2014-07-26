@@ -41,7 +41,7 @@ using GameMachine.Core;
 
 namespace GameMachine.Chat
 {
-	public class Chat : MonoBehaviour
+	public class ChatManager : MonoBehaviour
 	{
 		private Chatbox chatbox;
 		private Messenger messenger;

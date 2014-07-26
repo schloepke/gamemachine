@@ -1873,6 +1873,40 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Polygon")]
+  public partial class Polygon : global::ProtoBuf.IExtensible
+  {
+    public Polygon() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Vector3> _vertex = new global::System.Collections.Generic.List<GameMachine.Messages.Vector3>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"vertex", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.Vector3> vertex
+    {
+      get { return _vertex; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Mesh")]
+  public partial class Mesh : global::ProtoBuf.IExtensible
+  {
+    public Mesh() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Polygon> _polygon = new global::System.Collections.Generic.List<GameMachine.Messages.Polygon>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"polygon", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.Polygon> polygon
+    {
+      get { return _polygon; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Quaternion")]
   public partial class Quaternion : global::ProtoBuf.IExtensible
   {
@@ -2519,6 +2553,30 @@ namespace GameMachine.Messages
     {
       get { return _regions; }
       set { _regions = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"MonoMessage")]
+  public partial class MonoMessage : global::ProtoBuf.IExtensible
+  {
+    public MonoMessage() {}
+    
+    private string _klass;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"klass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string klass
+    {
+      get { return _klass; }
+      set { _klass = value; }
+    }
+    private GameMachine.Messages.Entity _entity;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public GameMachine.Messages.Entity entity
+    {
+      get { return _entity; }
+      set { _entity = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

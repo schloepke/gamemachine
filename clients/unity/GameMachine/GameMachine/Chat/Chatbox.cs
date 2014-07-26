@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System;
 using System.Collections;
 using  System.Collections.Generic;
@@ -109,7 +109,7 @@ public class Chatbox : MonoBehaviour
 		msg = msg.Replace ("\n", "");
 		inputField = "";
 		lastUnfocus = Time.time;
-		this.gameObject.GetComponent<GameMachine.Chat.Chat> ().SendChatMessage (msg);
+		this.gameObject.GetComponent<GameMachine.Chat.ChatManager> ().SendChatMessage (msg);
 	}
 
 	public void  AddMessage (string color, string msg)

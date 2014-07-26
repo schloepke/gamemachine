@@ -28,9 +28,9 @@ static const int P_QUERY_NOT_FOUND = -6;
 
 static dtNavMesh* meshes[1024];
 static dtNavMeshQuery* queries[4096];
-static const int MAX_POLYS = 256;
+static const int MAX_POLYS = 512;
 static const int MAX_STEER_POINTS = 10;
-static const int MAX_SMOOTH = 256;
+static const int MAX_SMOOTH = 2048;
 static const float STEP_SIZE = 0.5f;
 static const float SLOP = 0.01f;
 
