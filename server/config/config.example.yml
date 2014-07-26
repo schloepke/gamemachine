@@ -26,7 +26,7 @@ development:
       # router size for the udp actor that handles all incoming upd messages
       udp_routers: 10
       # What data store the object database will use (one of memory, mapdb, or couchbase)
-      data_store: mapdb
+      data_store: memory
       # Advanced settings for write behind cache.  -1 disables.  This is fine for
       # all but large games with high traffic (hundreds of writes per second)
       cache_write_interval: -1
