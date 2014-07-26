@@ -18,12 +18,6 @@ using System.IO;
 using System.Text;
 using System;
 
-struct ObjMaterial
-{
-    public string name;
-    public string textureName;
-}
-
 public class SceneExporter : ScriptableObject
 {
     private static int vertexOffset = 0;
@@ -55,8 +49,7 @@ public class SceneExporter : ScriptableObject
         // Build vertices
         for (int y = 0; y < h; y++) {
             for (int x = 0; x < w; x++) {
-                tVertices [y * w + x] =
-                    Vector3.Scale (meshScale, new Vector3 (x, tData [x * tRes, y * tRes], y)) + terrainPos;
+                tVertices [y * w + x] = Vector3.Scale (meshScale, new Vector3 (x, tData [x * tRes, y * tRes], y)) + terrainPos;
             }
         }
 		
