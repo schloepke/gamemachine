@@ -24,17 +24,21 @@ module Wavefront
 
     def self.to_protobuf(wavefront_object)
       proto_mesh = GameMachine::MessageLib::Mesh.new
-      group =  wavefront_object.groups.first
-      group.triangles.each do |triangle|
-        proto_poly = GameMachine::MessageLib::Polygon.new
-        triangle.vertices.each do |vertice|
-          proto_vector3 = GameMachine::MessageLib::Vector3.new
-          proto_vector3.set_x(vertice.position.x)
-          proto_vector3.set_y(vertice.position.y)
-          proto_vector3.set_z(vertice.position.z)
-          proto_poly.add_vertex(proto_vector3)
+      wavefront_object.groups.each do |group|
+        group.triangles.each do |triangle|
+          proto_poly = GameMachine::MessageLib::Polygon.new
+          if triangle.vertices.size != 3
+            puts "Invalid vert count #{triangle.vertices.size}"
+          end
+          triangle.vertices.each do |vertice|
+            proto_vector3 = GameMachine::MessageLib::Vector3.new
+            proto_vector3.set_x(vertice.position.x)
+            proto_vector3.set_y(vertice.position.y)
+            proto_vector3.set_z(vertice.position.z)
+            proto_poly.add_vertex(proto_vector3)
+          end
+          proto_mesh.add_polygon(proto_poly)
         end
-        proto_mesh.add_polygon(proto_poly)
       end
       proto_mesh
     end
