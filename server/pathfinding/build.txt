@@ -13,4 +13,4 @@ The dll provides simple functionality for loading navigation meshes and performi
 
 In ruby the Navigation module has several classes for working with navigation meshes and doing queries.  It uses the ruby FFI to call the library.
 
-Also, the Unity client has an ExportScene.cs editor file for exporting terrains + other geometries to a single obj file that recastdemo can create a navmesh from.
+Also, look at clients/unity/GameMachine/Editor/ExportScene.cs which is an obj file exporter that can export terrain + object meshes to a single obj file that recastdemo can use.
