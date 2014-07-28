@@ -1,7 +1,6 @@
 #include "pathfind.h"
 
-int main (int argc, char* argv[]) {
-
+void testnavmesh() {
   int find_straight_path = 1;
   float *newPath;
   newPath = getPathPtr(MAX_SMOOTH);
@@ -35,5 +34,10 @@ int main (int argc, char* argv[]) {
   fprintf (stderr, "freePath\n");
   freeQuery(query);
   fprintf (stderr, "freeQuery\n");
+}
+
+int main (int argc, char* argv[]) {
+
+  
   return 1;
 }
