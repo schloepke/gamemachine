@@ -91,7 +91,7 @@ extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float st
   dtQueryFilter m_filter;
   float straight[MAX_POLYS*3];
   int straightPathCount = 0;
-  float polyPickExt[3] = {40,40,40};
+  float polyPickExt[3] = {2,4,2};
   int m_npolys = 0;
 
   float m_steerPoints[MAX_STEER_POINTS*3];
