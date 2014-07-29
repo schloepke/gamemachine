@@ -1,4 +1,5 @@
 #include "pathfind.h"
+#include "astar.h"
 
 void testnavmesh() {
   int find_straight_path = 1;
@@ -38,6 +39,15 @@ void testnavmesh() {
 
 int main (int argc, char* argv[]) {
 
-  
+  addPathfinder(1,500,500);
+  for (int j = 0; j < 500; ++j) {
+      for (int i = 0; i < 500; ++i) {
+        //setPassable(1,j,i);
+      }
+  }
+fprintf (stderr, "grid created\n");
+
+  int res = findpath2d(1,0,0,100,100);
+  fprintf (stderr, "findpath2d returned %d\n", res);
   return 1;
 }

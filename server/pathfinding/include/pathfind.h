@@ -8,13 +8,9 @@
 #include "DetourNavMesh.h"
 #include "DetourNavMeshBuilder.h"
 #include "DetourNavMeshQuery.h"
-#include "mesh_loader.h"
 
-#if _MSC_VER    // TRUE for Microsoft compiler.
-#define EXPORT_API __declspec(dllexport) // Required for VC++
-#else
-#define EXPORT_API // Otherwise don't define.
-#endif
+#include "common.h"
+#include "mesh_loader.h"
 
 #define VERTEX_SIZE       3
 #define INVALID_POLYREF   0

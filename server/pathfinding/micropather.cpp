@@ -94,6 +94,7 @@ void OpenQueue::Push( PathNode* pNode )
 	PathNode* iter = sentinel->next;
 	while ( true )
 	{
+
 		if ( pNode->totalCost < iter->totalCost ) {
 			iter->AddBefore( pNode );
 			pNode->inOpen = 1;
@@ -777,6 +778,7 @@ void PathCache::AddItem( const Item& item )
 	MPASSERT( allocated );
 	unsigned index = item.Hash() % allocated;
 	while( true ) {
+
 		if ( mem[index].Empty() ) {
 			mem[index] = item;
 			++nItems;
@@ -887,6 +889,7 @@ int MicroPather::Solve( void* startNode, void* endNode, MP_VECTOR< void* >* path
 
 	while ( !open.Empty() )
 	{
+
 		PathNode* node = open.Pop();
 		
 		if ( node->state == endNode )
@@ -901,7 +904,6 @@ int MicroPather::Solve( void* startNode, void* endNode, MP_VECTOR< void* >* path
 		else
 		{
 			closed.Add( node );
-
 			// We have not reached the goal - add the neighbors.
 			GetNodeNeighbors( node, &nodeCostVec );
 
@@ -913,14 +915,12 @@ int MicroPather::Solve( void* startNode, void* endNode, MP_VECTOR< void* >* path
 				}
 				PathNode* child = nodeCostVec[i].node;
 				float newCost = node->costFromStart + nodeCostVec[i].cost;
-
 				PathNode* inOpen   = child->inOpen ? child : 0;
 				PathNode* inClosed = child->inClosed ? child : 0;
 				PathNode* inEither = (PathNode*)( ((MP_UPTR)inOpen) | ((MP_UPTR)inClosed) );
 
 				MPASSERT( inEither != node );
 				MPASSERT( !( inOpen && inClosed ) );
-
 				if ( inEither ) {
 					if ( newCost < child->costFromStart ) {
 						child->parent = node;
@@ -937,7 +937,6 @@ int MicroPather::Solve( void* startNode, void* endNode, MP_VECTOR< void* >* path
 					child->costFromStart = newCost;
 					child->estToGoal = graph->LeastCostEstimate( child->state, endNode ),
 					child->CalcTotalCost();
-					
 					MPASSERT( !child->inOpen && !child->inClosed );
 					open.Push( child );
 				}
