@@ -22,7 +22,7 @@ namespace pathfinder
 
 		public Pathfinder (int width, int height)
 		{
-			addPathfinder(1);
+			addPathfinder(1,width,height);
 		}
 
 		public Point[] FindPath (Point start, Point end, bool straight = false)
