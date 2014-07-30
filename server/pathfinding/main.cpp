@@ -1,3 +1,5 @@
+#if _MSC_VER    // TRUE for Microsoft compiler.
+#else
 #include "pathfind.h"
 #include "astar.h"
 #include <cstdlib>
@@ -5,6 +7,7 @@
 #include <float.h>
 #include <time.h>
 #include <stdint.h>
+
 
 #include <sys/time.h>
 #include <ctime>
@@ -18,9 +21,6 @@ using namespace std;
       gettimeofday (&now, NULL);
       return  now.tv_usec + (timestamp_t)now.tv_sec * 1000000;
     }
-
-
-    
 
 void testnavmesh() {
   int find_straight_path = 1;
@@ -76,7 +76,11 @@ void testnavmesh() {
   fprintf (stderr, "freeQuery\n");
 }
 
+#endif
+
 int main (int argc, char* argv[]) {
+  #if _MSC_VER
+  #else
   testnavmesh();
   return 1;
 
@@ -86,9 +90,12 @@ int main (int argc, char* argv[]) {
         //setPassable(1,j,i);
       }
   }
-fprintf (stderr, "grid created\n");
+  fprintf (stderr, "grid created\n");
 
   int res = findpath2d(1,0,0,100,100);
   fprintf (stderr, "findpath2d returned %d\n", res);
+  
+  #endif
+
   return 1;
 }
