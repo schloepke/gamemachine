@@ -43,7 +43,7 @@ class Astar : public Graph {
 
 		void setPassable(int x, int y)
 		{
-			gmap[ y*width + x] = ' ';
+			gmap[ y*width + x] = '\0';
 		}
 
 		void setBlocked(int x, int y)

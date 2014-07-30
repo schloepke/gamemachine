@@ -1,6 +1,74 @@
 #include "pathfind.h"
 
 
+ myQueryFilter::myQueryFilter() :
+  m_includeFlags(0xffff),
+  m_excludeFlags(0)
+  
+  {
+    for (int i = 0; i < DT_MAX_AREAS; ++i)
+      m_areaCost[i] = 1.0f;
+  }
+
+  myQueryFilter::~myQueryFilter() { }
+
+  bool myQueryFilter::passFilter(const dtPolyRef /*ref*/,
+                 const dtMeshTile* /*tile*/,
+                 const dtPoly* poly) const
+  {
+    return (poly->flags & m_includeFlags) != 0 && (poly->flags & m_excludeFlags) == 0;
+  }
+
+  bool myQueryFilter::isPassable(const float* pa, const float* pb) const
+  {
+      int x = int(pb[0]);
+      int y = int(pb[2]);
+
+      int index = y*gwidth+x;
+      int c = gmap[ index ];
+
+      if (c > 0)
+      {
+        fprintf (stderr, "isPassable false %f %f %f -> %f %f %f\n", pa[0], pa[1], pa[2],pb[0], pb[1], pb[2]);
+        return false;
+      }
+      
+      return true;
+  }
+
+  float myQueryFilter::getCost(const float* pa, const float* pb,
+             const dtPolyRef /*prevRef*/, const dtMeshTile* /*prevTile*/, const dtPoly* /*prevPoly*/,
+             const dtPolyRef /*curRef*/, const dtMeshTile* /*curTile*/, const dtPoly* curPoly,
+             const dtPolyRef /*nextRef*/, const dtMeshTile* /*nextTile*/, const dtPoly* /*nextPoly*/) const
+  {
+   
+    return dtVdist(pa, pb) * m_areaCost[curPoly->getArea()];
+  }
+
+
+extern "C" EXPORT_API void gmapSetPassable(int a, int b, int radius)
+  {
+    for(int x = a - radius; x <= a + radius; x++)
+    {
+        for(int y = b - radius; y <= b + radius; y++)
+        {
+                gmap[ y*gwidth + x] = 0;
+        }
+    }
+  }
+
+  extern "C" EXPORT_API void gmapSetBlocked(int a, int b, int radius)
+  {
+    for(int x = a - radius; x <= a + radius; x++)
+    {
+        for(int y = b - radius; y <= b + radius; y++)
+        {
+                gmap[ y*gwidth + x] = radius;
+        }
+    }
+  }
+
+
 inline bool inRange(const float* v1, const float* v2, const float r, const float h)
 {
   const float dx = v2[0] - v1[0];
@@ -191,7 +259,8 @@ extern "C" EXPORT_API int findPath(dtNavMeshQuery* query, float startx, float st
 
   dtPolyRef m_polys[MAX_POLYS];
 
-  dtQueryFilter m_filter;
+  //dtQueryFilter m_filter;
+  myQueryFilter m_filter;
   float straight[MAX_POLYS*3];
   int straightPathCount = 0;
   float polyPickExt[3] = {2,4,2};
