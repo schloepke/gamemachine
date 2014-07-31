@@ -47,8 +47,8 @@ public:
 	static const int MAX_POLYS = 512;
 	static const int MAX_STEER_POINTS = 10;
 	static const int MAX_SMOOTH = 2048;
-	static const float STEP_SIZE = 0.5f;
-	static const float SLOP = 0.01f;
+	static float const STEP_SIZE;
+	static float const SLOP;
 
 	enum SamplePolyFlags
 	{

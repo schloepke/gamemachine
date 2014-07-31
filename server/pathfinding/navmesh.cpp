@@ -52,6 +52,9 @@ myQueryFilter::myQueryFilter() :
   }
 
 
+float const Navmesh::STEP_SIZE = 0.5f;
+float const Navmesh::SLOP = 0.01f;
+
 void Navmesh::gmapSetPassable(int a, int b, int radius)
   {
     for(int x = a - radius; x <= a + radius; x++)
