@@ -47,11 +47,14 @@ solution "pathfinding"
 	language "C++"
 	kind "StaticLib"
 	includedirs { 
-		"recastnavigation/Detour/Include" 
+		"recastnavigation/Detour/Include",
+		"recastnavigation/DetourCrowd/Include"
 	}
 	files { 
 		"recastnavigation/Detour/Include/*.h", 
-		"recastnavigation/Detour/Source/*.cpp" 
+		"recastnavigation/Detour/Source/*.cpp",
+		"recastnavigation/DetourCrowd/Include/*.h", 
+		"recastnavigation/DetourCrowd/Source/*.cpp" 
 	}
 	targetdir (todir .. "/lib")
   configuration "not windows"
@@ -63,6 +66,7 @@ project "detour_path"
 	includedirs { 
 		"recastnavigation/Detour/Include",
 		"recastnavigation/Recast/Include",
+		"recastnavigation/DetourCrowd/Include", 
 		"include"
 	}
 
@@ -71,6 +75,8 @@ project "detour_path"
 		"recastnavigation/Detour/Include/*.h", 
 		"recastnavigation/Recast/Include/Recast.h", 
 		"recastnavigation/Detour/Source/*.cpp",
+		"recastnavigation/DetourCrowd/Include/*.h", 
+		"recastnavigation/DetourCrowd/Source/*.cpp",
 		"include/*.h",
 		"*.cpp"
 	}
@@ -88,7 +94,8 @@ project "pathfind_test"
 	kind "ConsoleApp"
 	includedirs { 
 		"recastnavigation/Detour/Include",
-		"recastnavigation/Recast/Include", 
+		"recastnavigation/Recast/Include",
+		"recastnavigation/DetourCrowd/Include",
 		"include"
 	}
   libdirs {todir .. "lib" }
@@ -96,6 +103,8 @@ project "pathfind_test"
 		"recastnavigation/Detour/Include/*.h", 
 		"recastnavigation/Recast/Include/Recast.h", 
 		"recastnavigation/Detour/Source/*.cpp",
+		"recastnavigation/DetourCrowd/Include/*.h", 
+		"recastnavigation/DetourCrowd/Source/*.cpp",
 		"include/*.h",
 		"*.cpp"
 	}

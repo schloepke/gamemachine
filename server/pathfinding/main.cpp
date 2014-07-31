@@ -1,6 +1,6 @@
-#if _MSC_VER    // TRUE for Microsoft compiler.
+#if _MSC_VER
 #else
-#include "pathfind.h"
+#include "crowd.h"
 #include "astar.h"
 #include <cstdlib>
 #include <stdio.h>
@@ -23,35 +23,30 @@ using namespace std;
     }
 
 void testnavmesh() {
+  const char *file = "/home/chris/game_machine/server/pathfinding/all_tiles_navmesh.bin";
+  Navmesh* navmesh = new Navmesh(1,file);
+
   int find_straight_path = 1;
   float *newPath;
-  newPath = getPathPtr(MAX_SMOOTH);
+  newPath = navmesh->getPathPtr(Navmesh::MAX_SMOOTH);
   timestamp_t t0;
   timestamp_t t1;
   double secs;
 
   t0 = get_timestamp();
   for (int j = 0; j < 15; ++j) {
-    gmapSetPassable(200,200,3);
-    gmapSetBlocked(130,95,3);
+    navmesh->gmapSetPassable(200,200,3);
+    //gmapSetBlocked(130,95,3);
   }
   t1 = get_timestamp();
   secs = (t1 - t0) / 1000000.0L;
   fprintf (stderr, "setPassable %f\n", secs);
 
-  //const char *file = "/home2/chris/game_machine/server/detour/meshes/terrain.bin";
-  const char *file = "/home/chris/game_machine/server/pathfinding/all_tiles_navmesh.bin";
-
-
-  int loadRes = loadNavMesh(1,file);
-  fprintf (stderr, "loadNavMesh returned %d\n", loadRes);
-  dtNavMeshQuery* query = getQuery(1);
-  
-  if (loadRes == 1) {
+  if (navmesh->meshLoaded()) {
     for (int j = 0; j < 1; ++j) {
       for (int i = 0; i < 1; ++i) {
         t0 = get_timestamp();
-        int res = findPath(query, 10.0f, 0.2f, 10.0f, 300.0f, 0.2f, 300.0f,
+        int res = navmesh->findPath(10.0f, 0.2f, 10.0f, 300.0f, 0.2f, 300.0f,
             find_straight_path, newPath);
         t1 = get_timestamp();
         secs = (t1 - t0) / 1000000.0L;
@@ -70,10 +65,31 @@ void testnavmesh() {
   
 
   fprintf (stderr, "endLoop\n");
-  freePath(newPath);
+  navmesh->freePath(newPath);
   fprintf (stderr, "freePath\n");
-  freeQuery(query);
-  fprintf (stderr, "freeQuery\n");
+  
+
+  return;
+
+  Crowd* crowd = new Crowd(1,navmesh);
+  float delta = 100.0f;
+  float agentPos[3] = {10.0f,0.0f,10.0f};
+  float targetPos[3] = {300.0f,0.0f,300.0f};
+  const float* ap = &agentPos[0];
+  const float* tp = &targetPos[0];
+  fprintf (stderr, "createCrowd\n");
+
+  
+  crowd->setMoveTarget(tp, false, -1);
+  fprintf (stderr, "setMoveTarget\n");
+
+  crowd->addAgent(ap);
+  fprintf (stderr, "addAgent\n");
+
+  crowd->updateTick(delta);
+  fprintf (stderr, "updateTick\n");
+
+  
 }
 
 #endif

@@ -1037,7 +1037,6 @@ dtStatus dtNavMeshQuery::findPath(dtPolyRef startRef, dtPolyRef endRef,
 								neighbourNode->pos);
 			}
 
-			// arbitrary filter, since you cannot use costs to actually block a node
 			const bool passable = filter->isPassable(bestNode->pos, neighbourNode->pos);
 			if (!passable)
 				continue;
