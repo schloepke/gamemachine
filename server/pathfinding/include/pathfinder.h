@@ -1,8 +1,16 @@
 
 #include "crowd.h"
+#include "astar.h"
+
+extern "C" EXPORT_API void addPathfinder(int i, int width, int height);
+extern "C" EXPORT_API void setPassable(int pathfinder, int x, int y);
+extern "C" EXPORT_API void setBlocked(int pathfinder, int x, int y);
+extern "C" EXPORT_API int getXAt(int pathfinder, int index);
+extern "C" EXPORT_API int getYAt(int pathfinder, int index);
+extern "C" EXPORT_API int findpath2d(int pathfinder, int startx, int starty, int endx, int endy);
 
 extern "C" EXPORT_API void addCrowd(int id, int navmeshid);
-extern "C" EXPORT_API int addAgent(int crowdId, const float* p);
+extern "C" EXPORT_API int addAgent(int crowdId, const float* p, float accel, float speed);
 extern "C" EXPORT_API void removeAgent(int crowdId, const int idx);
 extern "C" EXPORT_API void setMoveTarget(int crowdId, const float* p, bool adjust, int agentIdx);
 extern "C" EXPORT_API void updateTick(int crowdId, const float dt);

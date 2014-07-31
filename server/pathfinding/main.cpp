@@ -1,7 +1,6 @@
 #if _MSC_VER
 #else
-#include "crowd.h"
-#include "astar.h"
+#include "pathfinder.h"
 #include <cstdlib>
 #include <stdio.h>
 #include <float.h>
@@ -84,7 +83,7 @@ void testnavmesh() {
   fprintf (stderr, "setMoveTarget\n");
 
   for (int j = 0; j < 100; ++j) {
-    crowd->addAgent(ap);
+    crowd->addAgent(ap, 8.0f, 3.5f);
   }
   
   fprintf (stderr, "addAgent\n");

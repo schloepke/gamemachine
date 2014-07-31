@@ -13,13 +13,6 @@
 using namespace micropather;
 using namespace std;
 
-extern "C" EXPORT_API void addPathfinder(int i, int width, int height);
-extern "C" EXPORT_API void setPassable(int pathfinder, int x, int y);
-extern "C" EXPORT_API void setBlocked(int pathfinder, int x, int y);
-extern "C" EXPORT_API int getXAt(int pathfinder, int index);
-extern "C" EXPORT_API int getYAt(int pathfinder, int index);
-extern "C" EXPORT_API int findpath2d(int pathfinder, int startx, int starty, int endx, int endy);
-
 
 class Astar : public Graph {
 	int width, height;

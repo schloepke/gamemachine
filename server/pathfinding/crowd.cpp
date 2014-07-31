@@ -59,14 +59,14 @@ Crowd::Crowd(Navmesh* n)
 	fprintf (stderr, "Crowd initialized\n");
 }
 
-int Crowd::addAgent(const float* p)
+int Crowd::addAgent(const float* p, float accel, float speed)
 {
 	dtCrowdAgentParams ap;
 	memset(&ap, 0, sizeof(ap));
 	ap.radius = 0.6f;
 	ap.height = 2.0f;
-	ap.maxAcceleration = 8.0f;
-	ap.maxSpeed = 3.5f;
+	ap.maxAcceleration = accel;
+	ap.maxSpeed = speed;
 	ap.collisionQueryRange = ap.radius * 12.0f;
 	ap.pathOptimizationRange = ap.radius * 30.0f;
 	ap.updateFlags = 0; 
