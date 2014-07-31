@@ -1,6 +1,7 @@
 #include "crowd.h"
+using namespace std;
 
-Crowd::Crowd(int mi, Navmesh* n) : meshindex(mi)
+Crowd::Crowd(Navmesh* n)
 
 {
 	navmesh = n;
@@ -58,7 +59,7 @@ Crowd::Crowd(int mi, Navmesh* n) : meshindex(mi)
 	fprintf (stderr, "Crowd initialized\n");
 }
 
-void Crowd::addAgent(const float* p)
+int Crowd::addAgent(const float* p)
 {
 	dtCrowdAgentParams ap;
 	memset(&ap, 0, sizeof(ap));
@@ -89,6 +90,7 @@ void Crowd::addAgent(const float* p)
 			dtVcopy(&trail->trail[i*3], p);
 		trail->htrail = 0;
 	}
+	return idx;
 }
 
 void Crowd::removeAgent(const int idx)
@@ -102,6 +104,11 @@ static void calcVel(float* vel, const float* pos, const float* tgt, const float 
 	vel[1] = 0.0;
 	dtVnormalize(vel);
 	dtVscale(vel, vel, speed);
+}
+
+dtCrowd* Crowd::getCrowd()
+{
+	return crowd;
 }
 
 void Crowd::setMoveTarget(const float* p, bool adjust, int agentIdx)
@@ -181,3 +188,7 @@ void Crowd::updateTick(const float dt)
 		dtVcopy(&trail->trail[trail->htrail*3], ag->npos);
 	}
 }
+
+
+
+

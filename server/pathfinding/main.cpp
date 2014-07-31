@@ -36,7 +36,7 @@ void testnavmesh() {
   t0 = get_timestamp();
   for (int j = 0; j < 15; ++j) {
     navmesh->gmapSetPassable(200,200,3);
-    //gmapSetBlocked(130,95,3);
+    navmesh->gmapSetBlocked(130,95,3);
   }
   t1 = get_timestamp();
   secs = (t1 - t0) / 1000000.0L;
@@ -69,10 +69,10 @@ void testnavmesh() {
   fprintf (stderr, "freePath\n");
   
 
-  return;
+  
 
-  Crowd* crowd = new Crowd(1,navmesh);
-  float delta = 100.0f;
+  Crowd* crowd = new Crowd(navmesh);
+  float delta = 1.01f;
   float agentPos[3] = {10.0f,0.0f,10.0f};
   float targetPos[3] = {300.0f,0.0f,300.0f};
   const float* ap = &agentPos[0];
@@ -83,10 +83,24 @@ void testnavmesh() {
   crowd->setMoveTarget(tp, false, -1);
   fprintf (stderr, "setMoveTarget\n");
 
-  crowd->addAgent(ap);
+  for (int j = 0; j < 100; ++j) {
+    crowd->addAgent(ap);
+  }
+  
   fprintf (stderr, "addAgent\n");
 
-  crowd->updateTick(delta);
+  for (int j = 0; j < 900; ++j) {
+    crowd->updateTick(delta);
+    for (int i = 0; i < crowd->getCrowd()->getAgentCount(); ++i)
+    {
+      const dtCrowdAgent* ag = crowd->getCrowd()->getAgent(i);
+      if (!ag->active)
+        continue;
+      const float* v = ag->npos;
+      fprintf (stderr, "%d = %f %f %f\n", i, v[0], v[1], v[2]);
+    }
+
+  }
   fprintf (stderr, "updateTick\n");
 
   

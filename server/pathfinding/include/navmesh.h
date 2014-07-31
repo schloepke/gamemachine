@@ -22,25 +22,14 @@
 
 #define VERTEX_SIZE       3
 #define INVALID_POLYREF   0
+
 using namespace std;
-
-extern "C" EXPORT_API void gmapSetPassable(int a, int b, int radius);
-extern "C" EXPORT_API void gmapSetBlocked(int a, int b, int radius);
-extern "C" EXPORT_API dtNavMeshQuery* getQuery();
-extern "C" void EXPORT_API freeQuery(dtNavMeshQuery* query);
-extern "C" EXPORT_API int findPath(float startx,
-    float starty, float startz, float endx, float endy, float endz,
-    int find_straight_path, float* resultPath);
-extern "C" EXPORT_API float* getPathPtr(int max_paths);
-extern "C" EXPORT_API void freePath(float* path);
-
-
 
 class Navmesh {
 	int meshId;
 	dtNavMesh* mesh;
 	dtNavMeshQuery* query;
-	
+
 public:
 	int gwidth;
 	int gheight;
@@ -122,3 +111,4 @@ public:
 	
 
 };
+

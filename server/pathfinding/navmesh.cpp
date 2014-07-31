@@ -1,5 +1,6 @@
 
 #include "navmesh.h"
+using namespace std;
 
 myQueryFilter::myQueryFilter() :
   m_includeFlags(0xffff),
