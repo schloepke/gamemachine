@@ -46,10 +46,11 @@ extern "C" EXPORT_API void addCrowd(int id, int navmeshid) {
 	}
 }
 
-extern "C" EXPORT_API int addAgent(int crowdId, const float* p, float accel, float speed)
+extern "C" EXPORT_API int addAgent(int crowdId, const float* p, float accel,
+ float speed, float radius, float height, int optflag, float sepWeight)
 {
 	Crowd* crowd = crowds[crowdId];
-	return crowd->addAgent(p, accel, speed);
+	return crowd->addAgent(p, accel, speed, radius, height, optflag, sepWeight);
 }
 
 extern "C" EXPORT_API void removeAgent(int crowdId, const int idx)

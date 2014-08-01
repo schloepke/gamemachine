@@ -10,7 +10,8 @@ extern "C" EXPORT_API int getYAt(int pathfinder, int index);
 extern "C" EXPORT_API int findpath2d(int pathfinder, int startx, int starty, int endx, int endy);
 
 extern "C" EXPORT_API void addCrowd(int id, int navmeshid);
-extern "C" EXPORT_API int addAgent(int crowdId, const float* p, float accel, float speed);
+extern "C" EXPORT_API int addAgent(int crowdId, const float* p, float accel, float speed, float radius,
+ float height, int optflag, float sepWeight);
 extern "C" EXPORT_API void removeAgent(int crowdId, const int idx);
 extern "C" EXPORT_API void setMoveTarget(int crowdId, const float* p, bool adjust, int agentIdx);
 extern "C" EXPORT_API void updateTick(int crowdId, const float dt);

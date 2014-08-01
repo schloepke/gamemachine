@@ -83,7 +83,7 @@ void testnavmesh() {
   fprintf (stderr, "setMoveTarget\n");
 
   for (int j = 0; j < 100; ++j) {
-    crowd->addAgent(ap, 8.0f, 3.5f);
+    crowd->addAgent(ap, 8.0f, 3.5f, 0.6f, 2.0f,5,2.0f);
   }
   
   fprintf (stderr, "addAgent\n");

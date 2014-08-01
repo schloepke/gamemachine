@@ -35,7 +35,7 @@ class Crowd {
 
 public:
 	Crowd(Navmesh* n);
-	int addAgent(const float* p, float accel, float speed);
+	int addAgent(const float* p, float accel, float speed, float radius, float height, int optflag, float sepWeight);
 	void removeAgent(const int idx);
 	void setMoveTarget(const float* p, bool adjust, int agentIdx);
 	void updateTick(const float dt);

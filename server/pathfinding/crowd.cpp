@@ -59,24 +59,31 @@ Crowd::Crowd(Navmesh* n)
 	fprintf (stderr, "Crowd initialized\n");
 }
 
-int Crowd::addAgent(const float* p, float accel, float speed)
+int Crowd::addAgent(const float* p, float accel, float speed, float radius, float height, int optflag, float sepWeight)
 {
 	dtCrowdAgentParams ap;
 	memset(&ap, 0, sizeof(ap));
-	ap.radius = 0.6f;
-	ap.height = 2.0f;
+	ap.radius = radius;
+	ap.height = height;
 	ap.maxAcceleration = accel;
 	ap.maxSpeed = speed;
 	ap.collisionQueryRange = ap.radius * 12.0f;
 	ap.pathOptimizationRange = ap.radius * 30.0f;
-	ap.updateFlags = 0; 
-	ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
-	ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
-	ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
-	ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
-	ap.updateFlags |= DT_CROWD_SEPARATION;
+	ap.updateFlags = 0;
+	if (optflag == 1) {
+		ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
+	} else if (optflag == 2) {
+		ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
+	} else if (optflag == 3) {
+		ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
+	} else if (optflag == 4) {
+		ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
+	} else if (optflag == 5) {
+		ap.updateFlags |= DT_CROWD_SEPARATION;
+	}
+	
 	ap.obstacleAvoidanceType = (unsigned char)3.0f;
-	ap.separationWeight = 2.0f;
+	ap.separationWeight = sepWeight;
 
 	int idx = crowd->addAgent(p, &ap);
 	if (idx != -1)
