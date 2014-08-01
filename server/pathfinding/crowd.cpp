@@ -70,17 +70,11 @@ int Crowd::addAgent(const float* p, float accel, float speed, float radius, floa
 	ap.collisionQueryRange = ap.radius * 12.0f;
 	ap.pathOptimizationRange = ap.radius * 30.0f;
 	ap.updateFlags = 0;
-	if (optflag == 1) {
-		ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
-	} else if (optflag == 2) {
-		ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
-	} else if (optflag == 3) {
-		ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
-	} else if (optflag == 4) {
-		ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
-	} else if (optflag == 5) {
-		ap.updateFlags |= DT_CROWD_SEPARATION;
-	}
+	ap.updateFlags |= DT_CROWD_ANTICIPATE_TURNS;
+	ap.updateFlags |= DT_CROWD_OPTIMIZE_VIS;
+	ap.updateFlags |= DT_CROWD_OPTIMIZE_TOPO;
+	ap.updateFlags |= DT_CROWD_OBSTACLE_AVOIDANCE;
+	ap.updateFlags |= DT_CROWD_SEPARATION;
 	
 	ap.obstacleAvoidanceType = (unsigned char)3.0f;
 	ap.separationWeight = sepWeight;
@@ -117,6 +111,7 @@ dtCrowd* Crowd::getCrowd()
 {
 	return crowd;
 }
+
 
 void Crowd::setMoveTarget(const float* p, bool adjust, int agentIdx)
 {
@@ -157,9 +152,7 @@ void Crowd::setMoveTarget(const float* p, bool adjust, int agentIdx)
 	}
 	else
 	{
-		fprintf (stderr, "one\n");
 		navquery->findNearestPoly(p, ext, &filter, &m_targetRef, m_targetPos);
-		fprintf (stderr, "two\n");
 
 		if (agentIdx != -1)
 		{
