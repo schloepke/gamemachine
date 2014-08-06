@@ -27,6 +27,14 @@ module GameMachine
         File.join(app_root,'java','component.erb')
       end
 
+      def model_template
+        File.join(app_root,'java','model.erb')
+      end
+
+      def model_src
+        File.join(app_root,'java','src','main','java','com', 'game_machine','orm','models')
+      end
+
       def java_src
         File.join(app_root,'java','src','main','java','GameMachine', 'Messages')
       end
@@ -35,19 +43,35 @@ module GameMachine
         File.join(app_root,'config')
       end
 
-      def write_components(proto)
+      def write_components(proto,persistent_messages)
         messages = proto.getMessages.reject {|message| message.getName == 'Components'}
         FileUtils.mkdir_p(java_src)
+        FileUtils.mkdir_p(model_src)
         proto.getMessages.each do |message|
           klass = message.getName
+          persistent = persistent_messages.include?(klass)
           #puts "Message: #{message.getName}"
-          out = ERB.new(File.read(erb_template),nil,'-').result(binding)
+          out = ERB.new(File.read(erb_template),0,'>').result(binding)
           src_file = File.join(java_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
+
+          if persistent
+            out = ERB.new(File.read(model_template),0,'>').result(binding)
+            src_file = File.join(model_src,"#{message.getName}.java")
+            File.open(src_file,'w') {|f| f.write out}
+          end
           #message.getFields.each do |field|
           #  puts field.getJavaType
           #  puts field.toString
           #end
+        end
+      end
+
+      def simple_value?(field)
+        if ['boolean','double','float','long','int','String'].include?(field.getJavaType.to_s)
+          true
+        else
+          false
         end
       end
 
@@ -75,12 +99,15 @@ module GameMachine
 
         if File.exists?(game_protofile)
           game_messages = File.read(game_protofile)
+          game_messages = game_messages.gsub('persistent_message','message')
           gm = Protobuf::GameMessages.new(game_protofile)
+          persistent_messages = gm.persistent_messages
           entity_fields = gm.create_entity_fields
           game_entity_fields = entity_fields.join("\n")
         else
           game_messages = ''
           game_entity_fields = ''
+          persistent_messages = []
         end
         messages = File.read(protofile)
 
@@ -102,7 +129,7 @@ module GameMachine
         # throw an exception
         proto = self.class.compile(combined_messages_protofile)
 
-        write_components(proto)
+        write_components(proto,persistent_messages)
         #FileUtils.rm(combined_messages_protofile)
         combined_messages
       end

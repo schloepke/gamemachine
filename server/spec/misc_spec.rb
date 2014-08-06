@@ -13,6 +13,25 @@ module GameMachine
       entity
     end
 
+    it "finds model" do
+      GameMachine::Application.orm_connect
+      MessageLib::TestObject.delete_async('player1')
+      if message = MessageLib::TestObject.find_by_player_id("player1")
+        message.set_fvalue(1.9)
+        message.save_async('player1')
+      else
+        message = MessageLib::TestObject.new
+        message.set_required_string('testing')
+        message.set_fvalue(1.9)
+        message.set_bvalue(true)
+        message.set_dvalue(3.4)
+        message.set_numbers64(555)
+        message.save_async('player1')
+      end
+      
+      sleep 2
+    end
+
     xit "trackdata test" do
        neighbors = MessageLib::Neighbors.new
        trackdata = MessageLib::TrackData.new

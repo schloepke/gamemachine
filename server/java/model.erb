@@ -1,0 +1,18 @@
+package com.game_machine.orm.models;
+
+import org.javalite.activejdbc.DB;
+import org.javalite.activejdbc.Model;
+
+import com.game_machine.core.DbConnectionPool;
+import com.jolbox.bonecp.BoneCPDataSource;
+
+public class <%= klass %> extends Model {
+	
+	public static void close() {
+		new DB("default").close();
+	}
+	public static void open() {
+		BoneCPDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine");
+		new DB("default").open(ds);
+	}
+}

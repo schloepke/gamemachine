@@ -65,6 +65,7 @@ module GameMachine
 
         start_actor_system
         data_store
+        orm_connect
         start_endpoints
         start_core_systems
         start_handlers
@@ -90,6 +91,21 @@ module GameMachine
         end
       end
 
+      def orm_connect
+        if config.orm
+          pool = GameMachine::JavaLib::DbConnectionPool.getInstance
+          unless pool.connect(
+            'game_machine',
+            config.mysql_url,
+            config.mysql_driver,
+            config.mysql_username,
+            config.mysql_password || ''
+          )
+            GameMachine.logger.error "Unable to establish database connection, exiting"
+            System.exit 0
+          end
+        end
+      end
 
       def create_grids
         Grid.load_from_config

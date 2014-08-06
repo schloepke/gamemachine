@@ -37,6 +37,9 @@ public class GameMachineLoader {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
+		
+		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessagePersister.class)), 
+			    MessagePersister.name);
 	}
 
 }

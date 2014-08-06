@@ -18,6 +18,10 @@ module GameMachine
     include_package 'com.dyuproject.protostuff'
   end
 
+  module ModelLib
+    include_package 'com.game_machine.orm.models'
+  end
+
   module JavaLib
     java_import 'akka.cluster.ClusterEvent'
     java_import 'akka.contrib.pattern.ClusterSingletonManager'
@@ -38,6 +42,7 @@ module GameMachine
     include_package 'akka.camel'
     java_import 'com.game_machine.core.Grid'
     include_package 'com.game_machine.core'
+    include_package 'com.game_machine.orm'
     include_package 'com.game_machine.ui'
     include_package 'java.net'
     include_package 'java.util.concurrent.atomic'

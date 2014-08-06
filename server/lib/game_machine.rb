@@ -1,4 +1,4 @@
-
+require 'rjack-logback'
 require 'rbconfig'
 
 require_relative 'game_machine/ruby_extensions/nilclass'
@@ -75,7 +75,7 @@ require_relative 'game_machine/uniqueid'
 require_relative 'game_machine/wavefront_ext'
 
 if RbConfig::CONFIG['host_os'].match(/linux/i)
-  require_relative 'game_machine/navigation'
+  #require_relative 'game_machine/navigation'
 else
   GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"
 end
