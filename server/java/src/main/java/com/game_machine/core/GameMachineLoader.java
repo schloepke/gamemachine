@@ -20,12 +20,8 @@ public class GameMachineLoader {
 	}
 	
 	public static void StartMessageGateway() {
-		//TcpServer.start("192.168.1.8", 8910);
-		//TcpServer server = TcpServer.getTcpServer();
-		
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessageGateway.class)), 
 			    MessageGateway.name);
-		
 	}
 	
 	public static void StartEntityTracking() {

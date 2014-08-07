@@ -14,7 +14,6 @@ module GameMachine
     end
 
     it "finds model" do
-      JavaLib::Hashring.dump
       GameMachine::Application.orm_connect
       MessageLib::TestObject.delete_async('player1')
       if message = MessageLib::TestObject.find_by_player_id("player1")

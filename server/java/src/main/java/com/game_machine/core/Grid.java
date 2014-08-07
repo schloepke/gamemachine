@@ -15,13 +15,15 @@ public class Grid {
 	private int width;
 	private int cellCount;
 
+	private MovementVerifier movementVerifier;
+	
 	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
 	
-	public ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
-	public ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
-	public ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
-	public ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
-	public ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
+	private ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
+	private ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
+	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
+	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
+	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
 	public static void resetGrids()
 	{
@@ -54,6 +56,10 @@ public class Grid {
 		this.cellCount = this.width * this.width;
 	}
 
+	public void setMovementVerifier(MovementVerifier movementVerifier) {
+		this.movementVerifier = movementVerifier;
+	}
+	
 	public int getWidth() {
 		return this.width;
 	}
@@ -192,6 +198,16 @@ public class Grid {
 	}
 	
 	public Boolean set(TrackData trackData) {
+		
+		if (trackData.entityType.equals("player")) {
+			if (movementVerifier != null) {
+				if (!movementVerifier.verify(trackData)) {
+					return false;
+				}
+			}
+		}
+		
+		
 		Boolean hasExisting = false;
 		Integer oldCellValue = -1;
 		String id = trackData.id;

@@ -63,12 +63,13 @@ module GameMachine
           install_libs
         elsif command == 'messages'
           generate_code
-        else
+        elsif command == 'clean'
           generate_code
           remove_libs
+          system("cd #{java_root} && #{gradlew} clean build install_libs")
+        else
+          generate_code
           system("cd #{java_root} && #{gradlew} build install_libs")
-          
-          #install_libs
         end
       end
 

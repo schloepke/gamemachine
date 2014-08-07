@@ -18,10 +18,8 @@ public class MessagePersister extends UntypedActor {
 			String action = persistentMessage.getPersistAction();
 			if (action.equals("save")) {
 				persistentMessage.save(persistentMessage.getPersistPlayerId());
-				log.warning("message saved");
 			} else if (action.equals("delete")) {
 				persistentMessage.delete(persistentMessage.getPersistPlayerId());
-				log.warning("message deleted");
 			}
 		}
 	}

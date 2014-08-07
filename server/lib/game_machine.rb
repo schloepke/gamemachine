@@ -30,7 +30,6 @@ if ENV['ADMIN_UI']
   GameMachine::JavaLib::AdminUi.main([])
 end
 
-
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
 require_relative 'game_machine/grid'

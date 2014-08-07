@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'i18n'
   gem.add_dependency 'rjack-logback'
   gem.add_dependency 'settingslogic'
-  gem.add_dependency 'consistent-hashing'
+  #gem.add_dependency 'consistent-hashing'
   gem.add_dependency  'json'
   gem.add_dependency 'ffi'
   gem.add_dependency 'sinatra'
