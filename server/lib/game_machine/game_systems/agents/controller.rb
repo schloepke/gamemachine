@@ -103,8 +103,8 @@ module GameMachine
         def local_agents
           {}.tap do |agents|
             agent_config.agent_names.each do |name|
-              bucket = Akka.instance.hashring.bucket_for(name)
-              if bucket == address
+              node = Akka.instance.hashring.node_for(name)
+              if node == address
                 agents[name] = agent_config.klass_for_name(name)
               end
             end

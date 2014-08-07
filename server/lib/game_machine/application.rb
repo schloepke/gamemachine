@@ -84,7 +84,7 @@ module GameMachine
         start_mono
 
         GameMachine.stdout("Game Machine start successful")
-
+        
         # This call blocks, make it the last thing we do
         if config.http_enabled
           start_http

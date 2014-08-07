@@ -1,59 +1,37 @@
 require 'spec_helper'
 
 module GameMachine
-  describe Hashring do
+  describe 'JavaLib::Hashring' do
 
-    let(:buckets) {['server1','server2']}
-    let(:bucket_name) {'test_bucket'}
+    let(:nodes) {['server1','server2']}
+    let(:node_name) {'test_node'}
 
     subject do
-      Hashring.new(buckets)
+      JavaLib::Hashring.new('test',nodes,3)
     end
 
-    describe "#nodes" do
-      it "nodes should equal buckets" do
-        expect(subject.nodes.sort).to eq(buckets.sort)
+    describe "#node_for" do
+      it "returns node for value" do
+        expect(nodes.to_a.include?(subject.node_for('test'))).to be_truthy
       end
     end
 
-    describe "#points" do
-      it "should be number of points equal to REPLICAS * buckets.size " do
-        expect(subject.points.size).to eq(subject.buckets.size * Hashring::REPLICAS)
-      end
-    end
-
-    describe "#bucket_for" do
-      it "returns bucket for value" do
-        expect(buckets.include?(subject.bucket_for('test'))).to be_truthy
-      end
-    end
-
-    describe "#remove_bucket" do
-      it "removes the bucket from buckets array" do
-        subject.remove_bucket('server1')
-        expect(subject.buckets.size).to eq(1)
-        expect(subject.buckets.first).to eq('server2')
-      end
-
+    describe "#remove_node" do
+      
       it "removes node from ring" do
-        subject.remove_bucket('server1')
-        expect(subject.nodes.size).to eq(1)
-        expect(subject.buckets.first).to eq('server2')
+        subject.remove_node('server1')
+        expect(subject.nodes.to_a.size).to eq(1)
+        expect(subject.nodes.to_a.first).to eq('server2')
       end
     end
 
-    describe "#add_bucket" do
-      it "adds new bucket to buckets array" do
-        subject.add_bucket('blah')
-        expect(subject.buckets.size).to eq(3)
-        expect(subject.buckets.sort.first).to eq('blah')
+    describe "#add_node" do
+      it "adds new node to nodes array" do
+        subject.add_node('blah')
+        expect(subject.nodes.to_a.size).to eq(3)
+        expect(subject.nodes.to_a.sort.first).to eq('blah')
       end
 
-      it "adds node to ring" do
-        subject.add_bucket('blah')
-        expect(subject.nodes.size).to eq(3)
-        expect(subject.nodes.sort.first).to eq('blah')
-      end
     end
   end
 end

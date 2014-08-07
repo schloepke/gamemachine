@@ -28,9 +28,9 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'haml'
   gem.add_dependency 'webrick'
   gem.add_dependency 'rack-flash3'
-  gem.add_dependency 'bcrypt'
-  gem.add_dependency 'activerecord' 
-  gem.add_dependency 'activerecord-jdbcmysql-adapter' 
+  #gem.add_dependency 'bcrypt'
+  #gem.add_dependency 'activerecord' 
+  #gem.add_dependency 'activerecord-jdbcmysql-adapter' 
   gem.add_dependency 'wavefront'
 
   gem.add_development_dependency 'rake'

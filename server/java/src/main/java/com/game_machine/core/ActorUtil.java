@@ -13,6 +13,12 @@ public class ActorUtil {
 		return GameMachineLoader.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());
 	}
 	
+	public static ActorSelection findDistributed(String name, String id) {
+		String server = Hashring.getHashring("servers").nodeFor(id);
+		String actorName = Hashring.getHashring(name).nodeFor(id);
+		return GameMachineLoader.getActorSystem().actorSelection(server+"/user/"+ actorName);
+	}
+	
 	public static ActorSelection getSelectionByName(String name) {
 		return GameMachineLoader.getActorSystem().actorSelection("/user/"+ name);
 	}
