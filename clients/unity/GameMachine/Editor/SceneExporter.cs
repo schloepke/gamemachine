@@ -106,10 +106,10 @@ public class SceneExporter : ScriptableObject
             Vector3 wv = mf.transform.TransformPoint (lv);
             sb.Append (string.Format ("v {0} {1} {2}\n", wv.z, wv.y, wv.x));
         }
-        sb.Append ("\n");
+        //sb.Append ("\n");
 				
         for (int material=0; material < m.subMeshCount; material ++) {
-            sb.Append ("\n");
+            //sb.Append ("\n");
 						
             int[] triangles = m.GetTriangles (material);
             for (int i=0; i<triangles.Length; i+=3) {
@@ -142,8 +142,8 @@ public class SceneExporter : ScriptableObject
                 sw.Write (MeshToString (mf [i]));
             }
 
-            string meshstr = TerrainToString (vertexOffset, normalOffset, uvOffset);
-            sw.Write (meshstr);
+            //string meshstr = TerrainToString (vertexOffset, normalOffset, uvOffset);
+            //sw.Write (meshstr);
         }
 
     }

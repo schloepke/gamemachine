@@ -24,13 +24,13 @@ namespace GameMachine.Pathfinding
             updateTick (id, step);
         }
 
-        public int AddAgent (Vector3 position, float accel, float speed)
+        public int AddAgent (Vector3 position, float accel, float speed, float radius, float height, int optflag, float separationWeight)
         {
             float[] p = new float[3];
             p [0] = position.z;
             p [1] = position.y;
             p [2] = position.x;
-            return addAgent (id, p, accel, speed);
+            return addAgent (id, p, accel, speed, radius, height, optflag, separationWeight);
         }
         
         public void RemoveAgent (int agentIdx)
@@ -38,9 +38,13 @@ namespace GameMachine.Pathfinding
             removeAgent (id, agentIdx);
         }
         
-        public void SetMoveTarget (float position, bool adjust, int agentIdx = -1)
+        public void SetMoveTarget (Vector3 position, bool adjust, int agentIdx = -1)
         {
-            setMoveTarget (id, position, adjust, agentIdx);
+            float[] p = new float[3];
+            p [0] = position.z;
+            p [1] = position.y;
+            p [2] = position.x;
+            setMoveTarget (id, p, adjust, agentIdx);
         }
         
         public Vector3 GetAgentPosition (int agentIdx)
@@ -55,13 +59,14 @@ namespace GameMachine.Pathfinding
         public static extern void updateTick (int id, float step);
         
         [DllImport("detour_path")]
-        public static extern int addAgent (int id, [In] float[] position, float accel, float speed);
+        public static extern int addAgent (int id, [In] float[] position, float accel, float speed,
+                                           float radius, float height, int optflag, float separationWeight);
         
         [DllImport("detour_path")]
         public static extern void removeAgent (int id, int agentIdx);
         
         [DllImport("detour_path")]
-        public static extern void setMoveTarget (int id, float position, bool adjust, int agentIdx);
+        public static extern void setMoveTarget (int id, [In] float[] position, bool adjust, int agentIdx);
         
         [DllImport("detour_path")]
         public static extern void getAgentPosition (int id, int agentIdx, [In, Out]  float[] resultPath);

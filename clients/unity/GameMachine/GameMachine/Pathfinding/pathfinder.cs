@@ -13,16 +13,28 @@ namespace GameMachine.Pathfinding
         public static int maxPaths = 2056;
         
         public int navmeshId;
-        
+        private Dictionary<string,Crowd> crowds = new Dictionary<string,Crowd> ();
+
         public Pathfinder (int navmeshId, string navmeshPath)
         {
             this.navmeshId = navmeshId;
             addNavmesh (navmeshId, navmeshPath);
         }
-        
-        public Crowd createCrowd (int id)
+
+        public void TickCrowds (float step)
         {
-            return new Crowd (id, navmeshId);
+            foreach (Crowd crowd in crowds.Values) {
+                crowd.UpdateTick (step);
+            }
+        }
+
+        public Crowd getCrowd (string name)
+        {
+            if (!crowds.ContainsKey (name)) {
+                int id = crowds.Count;
+                crowds [name] = new Crowd (id, navmeshId);
+            }
+            return crowds [name];
         }
         
         public ResultPath FindPath (Vector3 start, Vector3 end, bool straight = false)
@@ -46,7 +58,17 @@ namespace GameMachine.Pathfinding
             path.pathCount = numPaths;
             return path;
         }
-        
+
+        public void SetBlocked (int a, int b, int radius)
+        {
+            gmapSetBlocked (navmeshId, b, a, radius);
+        }
+
+        public void SetPassable (int a, int b, int radius)
+        {
+            gmapSetPassable (navmeshId, b, a, radius);
+        }
+
         [DllImport("detour_path")]
         public static extern void gmapSetPassable (int navmeshId, int a, int b, int radius);
         
