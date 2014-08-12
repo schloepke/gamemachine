@@ -1,6 +1,7 @@
 package com.game_machine.core;
 import GameMachine.Messages.ClientManagerRegister;
 import GameMachine.Messages.Entity;
+import GameMachine.Messages.Player;
 import akka.actor.ActorSelection;
 
 public class Commands {

@@ -60,6 +60,7 @@ dependencies {
   compile 'mysql:mysql-connector-java:5.1.31'
   compile 'org.javalite:activejdbc:1.4.9'
   compile 'org.javalite:activejdbc-instrumentation:1.4.9'
+  compile 'com.google.guava:guava:17.0'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

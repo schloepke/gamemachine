@@ -32,7 +32,7 @@ public class EventStreamHandler extends UntypedActor {
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof DeadLetter) {
 			DeadLetter letter = (DeadLetter) message;
-			log.info("DeadLetter " + letter.message());
+			log.warning("DeadLetter " + letter.message() + " " + letter.sender().toString() + " " + letter.recipient().toString());
 			// Scala creates bad class names that blow up in jruby and show up in dead letters.
 			//ActorSelection sel = ActorUtil
 			//		.getSelectionByName("GameMachine::SystemMonitor");

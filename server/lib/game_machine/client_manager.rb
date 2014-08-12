@@ -40,7 +40,7 @@ module GameMachine
       @players = {}
       @client_to_player = {}
       subscribe(channel)
-      ClusterMonitor.find.tell('notify_on_up')
+      ClusterMonitor.find.tell('notify_on_up',get_self)
       @cluster = JavaLib::Cluster.get(getContext.system)
     end
 
@@ -50,7 +50,11 @@ module GameMachine
 
         # Outgoing message to player
         if message.send_to_player
-          send_to_remote_player(message)
+          if self.class.local_players.has_key?(message.player.id)
+            Actor::Base.find(message.player.id).tell(message)
+          else
+           send_to_remote_player(message)
+          end
 
         # client events come from other client managers
         elsif message.has_client_event
@@ -107,13 +111,13 @@ module GameMachine
         remote_clients.delete(client_event.client_id)
         client_to_player.delete(client_event.client_id)
         players.delete(client_event.player_id)
-        GameMachine.logger.info("#{self.class.name} client #{client_event.client_id} disconnected")
+        GameMachine.logger.debug("#{self.class.name} client #{client_event.client_id} disconnected")
       elsif client_event.event == 'connected'
         remote_ref = sender_id_to_actor_ref(client_event.sender_id)
         remote_clients[client_event.client_id] = remote_ref
         players[client_event.player_id] = client_event.client_id
         client_to_player[client_event.client_id] = client_event.player_id
-        GameMachine.logger.info("#{self.class.name} #{Application.config.name} client #{client_event.client_id} connected")
+        GameMachine.logger.debug("#{self.class.name} #{Application.config.name} client #{client_event.client_id} connected")
       end
     end
 
@@ -143,7 +147,7 @@ module GameMachine
         local_clients.delete(name)
         players.delete(message.player.id)
         self.class.local_players.delete(message.player.id)
-        GameMachine.logger.info("#{self.class.name} client #{name} unregistered")
+        GameMachine.logger.debug("#{self.class.name} client #{name} unregistered")
       end
     end
 
@@ -162,10 +166,10 @@ module GameMachine
         players[message.player.id] = name
         self.class.local_players[message.player.id] = message.client_connection.type
         get_sender.tell(message,get_self)
-        GameMachine.logger.info("#{self.class.name} client #{name} registered")
+        GameMachine.logger.debug("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
-        GameMachine.logger.info "#{self.class.name} Actor #{name} registered"
+        GameMachine.logger.debug "#{self.class.name} Actor #{name} registered"
         local_actors[name] = events
       end
     end

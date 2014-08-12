@@ -29,7 +29,7 @@ public class GameMachineLoader {
 			    EntityTracking.name);
 	}
 	
-	public void run(ActorSystem newActorSystem, String gameHandler) {
+	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());

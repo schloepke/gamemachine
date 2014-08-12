@@ -52,6 +52,6 @@ module GameMachine
     include_package 'java.util'
     include_package 'java.io'
     include_package 'com.couchbase.client'
-    include_package 'io.netty.channel'
+    #include_package 'io.netty.channel'
   end
 end

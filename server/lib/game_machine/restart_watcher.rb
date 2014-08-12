@@ -2,7 +2,7 @@ module GameMachine
   class RestartWatcher < Actor::Base
 
     def post_init(*args)
-      schedule_message('check_restart',1000)
+      schedule_message('check_restart',2000)
     end
 
     def on_receive(message)

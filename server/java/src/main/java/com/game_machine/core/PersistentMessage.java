@@ -1,9 +1,9 @@
 package com.game_machine.core;
 
 public interface PersistentMessage {
-	void saveAsync(String playerId);
-	Boolean save(String playerId);
-	Boolean delete(String playerId);
+	void ormSaveAsync(String playerId);
+	Boolean ormSave(String playerId);
+	Boolean ormDelete(String playerId);
 	String getPersistPlayerId();
 	String getPersistAction();
 }

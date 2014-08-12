@@ -5,7 +5,7 @@ module GameMachine
     class MissingHashringError < StandardError;end
 
     # @abstract All game actors inherit fromm this class
-    class Base < JavaLib::UntypedActor
+    class Base < JavaLib::GameActor
   
       ON_RECEIVE_HOOKS = {}
 

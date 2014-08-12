@@ -2,6 +2,7 @@ require 'java'
 require 'pathname'
 require 'erb'
 require 'fileutils'
+require 'active_support/inflector'
 
 java_import java.lang.System
 java_import com.dyuproject.protostuff.compiler.CachingProtoLoader
@@ -52,11 +53,14 @@ module GameMachine
           persistent = persistent_messages.include?(klass)
           #puts "Message: #{message.getName}"
           out = ERB.new(File.read(erb_template),0,'>').result(binding)
+          out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
           src_file = File.join(java_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
 
           if persistent
             out = ERB.new(File.read(model_template),0,'>').result(binding)
+            out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
+            out = out.gsub(/^(\s*\n){2,}/,"\n")
             src_file = File.join(model_src,"#{message.getName}.java")
             File.open(src_file,'w') {|f| f.write out}
           end
@@ -67,6 +71,23 @@ module GameMachine
         end
       end
 
+      def sql_field(field)
+        case field.getJavaType.to_s
+        when 'boolean'
+          "`#{field.name}` tinyint(4) DEFAULT NULL,"
+        when 'double'
+          "`#{field.name}` double DEFAULT NULL,"
+        when 'float'
+          "`#{field.name}` float DEFAULT NULL,"
+        when 'long'
+          "`#{field.name}` int(11) DEFAULT NULL,"
+        when 'int'
+          "`#{field.name}` int(11) DEFAULT NULL,"
+        when 'String'
+          "`#{field.name}` text DEFAULT NULL,"
+        end
+      end
+          
       def simple_value?(field)
         if ['boolean','double','float','long','int','String'].include?(field.getJavaType.to_s)
           true

@@ -111,6 +111,7 @@ public class EntityTracking extends UntypedActor {
 			trackData.z = 0f;
 		}
 
+		// TODO.  If set returns false send message to the client letting them know their movement was not allowed
 		grid.set(trackData);
 		aoeGrid.set(trackData);
 	}

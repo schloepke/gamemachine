@@ -48,7 +48,12 @@ module GameMachine
         end
 
         RJack::Logback.root.add_appender( file )
-        RJack::Logback.root.level = RJack::Logback::INFO
+        if ENV['GAME_ENV'] == 'development'
+          RJack::Logback.root.level = RJack::Logback::DEBUG
+        else
+          RJack::Logback.root.level = RJack::Logback::INFO
+        end
+        
       end
     end
 

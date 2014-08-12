@@ -42,7 +42,7 @@ module GameMachine
     def start
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
-      JavaLib::GameMachineLoader.new.run(actor_system,Application.config.game_handler)
+      JavaLib::GameMachineLoader.new.run(actor_system)
       #start_camel_extension
     end
 
