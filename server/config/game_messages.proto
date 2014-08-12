@@ -22,6 +22,7 @@ message TrackData {
 message GameMessage {
   optional Attack attack = 1;
   optional Health health = 2;
+  optional string messageId = 3;
 }
 
 message GameMessages {

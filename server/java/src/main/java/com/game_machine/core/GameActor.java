@@ -4,54 +4,63 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import GameMachine.Messages.DeliveryConfirmation;
 import GameMachine.Messages.Entity;
+import GameMachine.Messages.GameMessage;
 import akka.actor.UntypedActor;
 
 public class GameActor extends UntypedActor {
 
-	private static ConcurrentHashMap<String, Boolean> reliableMessages = new ConcurrentHashMap<String, Boolean>();
-	
+	private static ConcurrentHashMap<String, GameMessage> reliableMessages = new ConcurrentHashMap<String, GameMessage>();
+	private static ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
+
+	private String playerId;
+
+	public void setPlayerId(String playerId) {
+		this.playerId = playerId;
+	}
+
 	@Override
 	public void onReceive(Object message) throws Exception {
-		
+
 	}
-	
+
 	public static void removeReliableMessage(String id) {
 		if (reliableMessages.containsKey(id)) {
 			reliableMessages.remove(id);
 		}
+		
+		if (reliableMessageStatus.containsKey(id)) {
+			reliableMessageStatus.remove(id);
+		}
 	}
-	
-	public boolean confirmDelivery(Entity entity) {
-		if (reliableMessages.containsKey(entity.id)) {
-			reliableMessages.replace(entity.id, true);
-			sendDeliveryConfirmation(entity.id,entity.getPlayer().id);
+
+	public boolean setReply(GameMessage gameMessage) {
+		if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
+			reliableMessages.put(gameMessage.messageId, gameMessage);
+			reliableMessageStatus.replace(gameMessage.messageId,1);
+			sendReply(gameMessage.messageId);
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
-	public void sendDeliveryConfirmation(String entityId, String playerId) {
+
+	private void sendReply(String messageId) {
+		GameMessage gameMessage = reliableMessages.get(messageId);
 		Entity entity = new Entity();
-		DeliveryConfirmation deliveryConfirmation = new DeliveryConfirmation();
-		deliveryConfirmation.messageId = entityId;
-		entity.setDeliveryConfirmation(deliveryConfirmation);
+		entity.setGameMessage(gameMessage);
 		PlayerCommands.sendToPlayer(entity, playerId);
 	}
-	
-	public boolean exactlyOnce(Object message) {
-		if (message instanceof Entity) {
-			Entity entity = (Entity)message;
-			if (entity.hasReliable()) {
-				if (reliableMessages.containsKey(entity.id)) {
-					Boolean confirmed = reliableMessages.get(entity.id);
-					if (confirmed) {
-						sendDeliveryConfirmation(entity.id,entity.getPlayer().id);
-					}
-				} else {
-					reliableMessages.put(entity.id, false);
-					return true;
+
+	public boolean exactlyOnce(GameMessage gameMessage) {
+		if (gameMessage.hasMessageId()) {
+			if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
+				int status = reliableMessageStatus.get(gameMessage.messageId);
+				if (status == 1) {
+					sendReply(gameMessage.messageId);
 				}
+			} else {
+				reliableMessageStatus.put(gameMessage.messageId, 0);
+				return true;
 			}
 		}
 		return false;

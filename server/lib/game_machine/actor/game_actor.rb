@@ -32,6 +32,7 @@ module GameMachine
 
         if has_game_messages?(message)
           @player_id = message.player.id
+          set_player_id(message.player.id)
           game_messages(message).each {|m| on_game_message(m)}
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
