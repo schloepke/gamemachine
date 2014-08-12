@@ -15,7 +15,6 @@ module GameMachine
               commands.misc.player_status_change(message.player.id,:unregistered)
             end
           elsif message.has_player
-            update_entities(message)
             if Authentication.authenticated?(message.player)
               game_handler.tell(message)
             else
@@ -69,14 +68,6 @@ module GameMachine
 
       def game_handler
         @game_handler ||= Handlers::Game.find
-      end
-
-      def update_entities(message)
-        if message.get_entity_list
-          message.get_entity_list.each do |entity|
-            entity.set_player(message.player)
-          end
-        end
       end
 
     end

@@ -15,12 +15,12 @@ module GameMachine
     def initialize!
       @app_config = AppConfig.instance
       @address = self.class.address_for(app_config.config.name)
-      @hashring = Hashring.new([@address])
+      @hashring = JavaLib::Hashring.new('servers',[@address],3)
     end
 
     def init_cluster!(address)
       @address = address
-      @hashring = Hashring.new([address])
+      @hashring = JavaLib::Hashring.new('servers',[address],3)
     end
 
     def cluster?
@@ -42,13 +42,12 @@ module GameMachine
     def start
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
-      JavaLib::GameMachineLoader.new.run(actor_system,Application.config.game_handler)
+      JavaLib::GameMachineLoader.new.run(actor_system)
       #start_camel_extension
     end
 
     def stop
       @actor_system.shutdown!
-      Actor::Base.reset_hashrings
     end
 
     private

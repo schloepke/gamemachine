@@ -60,13 +60,6 @@ module GameMachine
         end
       end
 
-      describe "#add_hashring" do
-        it "adds the hashring and returns it" do
-          expect(Actor::Base.add_hashring('test','ring')).to eq(Actor::Base.hashring('test'))
-          expect(Actor::Base.hashring('test')).to eq('ring')
-        end
-      end
-
     end
   end
 end

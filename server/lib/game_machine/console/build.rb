@@ -29,8 +29,18 @@ module GameMachine
       def generate_csharp_code
         protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','csharp','protogen_csharp.exe')
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
+        proto_path = File.join(ENV['APP_ROOT'],'config')
         messages_out_file =  File.join(ENV['APP_ROOT'],'messages.cs')
-        cmd = "#{protogen_path} -p:detectMissing -i:#{proto_file} -o:#{messages_out_file}"
+        
+        # Yet another .NET tool that assumes the whole world is windows.  In this case it embeds a 
+        # windows protoc.exe, so we have to compile differently on non windows platforms
+        if Config::CONFIG['target_os'].match(/mswin/)
+          cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
+        else
+          bin_out_file =  File.join(ENV['APP_ROOT'],'messages.bin')
+          cmd = "protoc -I#{proto_path} #{proto_file} -o#{bin_out_file}; #{protogen_path} -i:#{bin_out_file} -o:#{messages_out_file};rm -f #{bin_out_file}"
+        end
+        
         puts "Running #{cmd}"
         system(cmd)
       end
@@ -42,9 +52,7 @@ module GameMachine
 
       def generate_code
         generate_java_code
-        if Config::CONFIG['target_os'].match(/mswin/)
-          generate_csharp_code
-        end
+        generate_csharp_code
       end
 
       def remove_libs
@@ -52,8 +60,12 @@ module GameMachine
       end
 
       def install_libs
-        system("cd #{java_root} && #{gradlew} shadowJar")
-        FileUtils.cp(File.join(java_root,'build','libs','game_machine-0.0.1-all.jar'), File.join(java_root,'lib'))
+        #system("cd #{java_root} && #{gradlew} shadowJar")
+        FileUtils.cp_r(File.join(java_root,'build','libs','.'), File.join(java_root,'lib'))
+      end
+
+      def build
+        system("cd #{java_root} && #{gradlew} build install_libs")
       end
 
       def run!
@@ -63,11 +75,13 @@ module GameMachine
           install_libs
         elsif command == 'messages'
           generate_code
+        elsif command == 'clean'
+          generate_code
+          remove_libs
+          system("cd #{java_root} && #{gradlew} clean build install_libs")
         else
           generate_code
-          build_code
-          remove_libs
-          install_libs
+          build
         end
       end
 

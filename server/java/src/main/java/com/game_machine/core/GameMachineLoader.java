@@ -20,12 +20,8 @@ public class GameMachineLoader {
 	}
 	
 	public static void StartMessageGateway() {
-		//TcpServer.start("192.168.1.8", 8910);
-		//TcpServer server = TcpServer.getTcpServer();
-		
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessageGateway.class)), 
 			    MessageGateway.name);
-		
 	}
 	
 	public static void StartEntityTracking() {
@@ -33,10 +29,13 @@ public class GameMachineLoader {
 			    EntityTracking.name);
 	}
 	
-	public void run(ActorSystem newActorSystem, String gameHandler) {
+	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
+		
+		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessagePersister.class)), 
+			    MessagePersister.name);
 	}
 
 }

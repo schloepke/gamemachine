@@ -1,0 +1,38 @@
+package com.game_machine.orm.models;
+
+import org.javalite.activejdbc.DB;
+import org.javalite.activejdbc.Model;
+
+import com.game_machine.core.DbConnectionPool;
+import com.jolbox.bonecp.BoneCPDataSource;
+
+/*
+CREATE TABLE `<%= klass.underscore.pluralize %>` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  <% message.getFields.each do |field| %>
+  <%= sql_field(field) %>
+
+  <% end %>
+  `player_id` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `player_id_UNIQUE` (`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+*/
+
+public class <%= klass %> extends Model {
+	
+	public static void close() {
+		DB db = new DB("default");
+		if(db.hasConnection()) {
+			db.close();
+		}
+	}
+	
+	public static void open() {
+		DB db = new DB("default");
+		if(!db.hasConnection()) {
+			BoneCPDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine");
+			db.open(ds);
+		}
+	}
+}

@@ -3,17 +3,8 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
-message Rpc {
-  required string method = 1;
-  repeated string arguments = 2;
-  optional bool returnValue = 3;
-}
-
-message MessageEnvelope {
-  required string name = 1;
-  optional string server = 2;
-  optional string id = 3;
-  required string type = 4;
+message DeliveryConfirmation {
+  required string messageId = 1;
 }
 
 message TrackEntity {
@@ -176,10 +167,6 @@ message Name {
   required string value = 1;
 }
 
-message IsNpc {
-  required bool enabled = 1;
-}
-
 message Player {
   required string id = 1;
   optional string name = 2;
@@ -224,29 +211,6 @@ message Transform {
 message EchoTest {
   required string message = 1;
 }
-
-message TestObject {
-  optional string optionalString = 1;
-  required string requiredString = 2;
-  repeated int32 numbers = 3;
-  optional bytes bstring = 4;
-  optional bool bvalue = 5;
-  optional double dvalue = 6;
-  optional float fvalue = 7;
-  optional int64 numbers64 = 8;
-  repeated Player player = 9;
-  enum Corpus {
-    UNIVERSAL = 0;
-    WEB = 1;
-    IMAGES = 2;
-    LOCAL = 3;
-    NEWS = 4;
-    PRODUCTS = 5;
-    VIDEO = 6;
-  }
-  optional Corpus corpus = 10;
-  repeated Corpus corpus2 = 11;
-}
   
 message Neighbors {
   repeated TrackData trackData = 1;
@@ -263,12 +227,6 @@ message GetNeighbors {
   required Vector3 vector3 = 3;
   optional string neighborType = 4;
   optional string gridName = 5;
-}
-
-message MessageRouting {
-  optional string destination = 1;
-  optional string senderId = 2;
-  optional string id = 3;
 }
 
 message NativeBytes {
@@ -289,15 +247,9 @@ message Regions {
   required string regions = 1;
 }
 
-message MonoMessage {
-  required string klass = 1;
-  required Entity entity = 2;
-}
-
 message Entity {
   optional Player player = 1;
   optional Neighbors neighbors = 2;
-  optional MessageEnvelope messageEnvelope = 3;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;
   optional EchoTest echoTest = 6;
@@ -314,7 +266,6 @@ message Entity {
   optional GetNeighbors getNeighbors = 21;
   optional TrackEntity trackEntity = 22;
   optional Transform transform = 23;
-  optional IsNpc isNpc = 24;
   optional Vector3 vector3 = 25;
   optional EntityList entityList = 27;
   optional bool  published = 29;
@@ -322,10 +273,8 @@ message Entity {
   optional PlayerAuthenticated playerAuthenticated = 37;
   optional PlayerLogout playerLogout = 38;
   optional bool sendToPlayer = 39;
-  optional Rpc rpc = 40;
   optional Subscribers subscribers = 41;
   optional bool save = 42;
-  optional MessageRouting messageRouting = 43;
   optional ObjectdbGetResponse objectdbGetResponse = 44;
   optional NativeBytes nativeBytes = 45;
   optional ObjectdbGet objectdbGet = 46;
@@ -344,6 +293,8 @@ message Entity {
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
   optional bool fastpath = 61;
+  optional int32 reliable = 62;
+  optional DeliveryConfirmation deliveryConfirmation = 63;
   //GAME_ENTITY_MESSAGES
 }
 

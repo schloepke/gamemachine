@@ -3,9 +3,12 @@ module GameMachine
     class Game < Actor::Base 
       include Commands
 
-      attr_reader :destinations
+      attr_reader :destinations, :game_message_handler
       def post_init(*args)
         @destinations = {}
+        if Application.config.game_message_handler
+          @game_message_handler = Actor::Base.find(Application.config.game_message_handler)
+        end
       end
 
 
@@ -28,8 +31,8 @@ module GameMachine
           end
 
           if entity.has_game_messages
-            if GameMachine::Application.game_message_handler
-              GameMachine::Application.game_message_handler.find.tell(entity)
+            if game_message_handler
+              game_message_handler.tell(entity)
             end
           end
 

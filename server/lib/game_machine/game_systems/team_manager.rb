@@ -309,7 +309,7 @@ module GameMachine
           return
         end
 
-        server = Akka.instance.hashring.bucket_for(match_id)
+        server = Akka.instance.hashring.node_for(match_id)
         server = server.sub('akka.tcp://cluster@','').split(':').first
 
         match = Match.new(

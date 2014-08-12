@@ -12,7 +12,7 @@ module GameMachine
 
       attr_reader :game_handler, :server, :clients
       def post_init(*args)
-        @game_handler = Actor::Base.find(Application.config.game_handler)
+        @game_handler = GameMachine::Handlers::Request.find
         @server = JavaLib::UdpServer.getUdpServer
         @server_handler = @server.getHandler
         @auth_handler = Handlers::Authentication.new

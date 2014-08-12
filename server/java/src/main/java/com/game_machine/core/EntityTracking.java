@@ -1,11 +1,9 @@
 package com.game_machine.core;
 
 import java.util.ArrayList;
-import java.util.concurrent.ConcurrentHashMap;
 
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.Entity;
-import GameMachine.Messages.Neighbor;
 import GameMachine.Messages.Neighbors;
 import GameMachine.Messages.Player;
 import GameMachine.Messages.TrackData;
@@ -22,7 +20,6 @@ public class EntityTracking extends UntypedActor {
 	private Grid aoeGrid;
 	private Grid grid;
 	private ActorSelection messageGateway;
-	private ArrayList<TrackData> testValues;
 
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
@@ -49,11 +46,6 @@ public class EntityTracking extends UntypedActor {
 			unhandled(message);
 		}
 
-	}
-
-	private float randomInRange(float min, float max) {
-		return (float) (Math.random() < 0.5 ? ((1 - Math.random())
-				* (max - min) + min) : (Math.random() * (max - min) + min));
 	}
 
 	private void removePlayerData(ClientManagerEvent event) {
@@ -119,6 +111,7 @@ public class EntityTracking extends UntypedActor {
 			trackData.z = 0f;
 		}
 
+		// TODO.  If set returns false send message to the client letting them know their movement was not allowed
 		grid.set(trackData);
 		aoeGrid.set(trackData);
 	}

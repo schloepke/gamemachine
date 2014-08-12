@@ -86,8 +86,8 @@ module GameMachine
         GameMachine.logger.debug "Game actor #{@name} starting"
         if @create_hashring
           hashring = create_hashring(@hashring_size)
-          hashring.buckets.map do |bucket_name|
-            @actor_system.actor_of(@props, bucket_name)
+          hashring.nodes.to_a.each do |node_name|
+            @actor_system.actor_of(@props, node_name)
           end
         else
           @actor_system.actor_of(@props, @name)
@@ -97,10 +97,9 @@ module GameMachine
 
       private
 
-      def create_hashring(bucket_count)
-        hashring = Hashring.create_actor_ring(@name,bucket_count)
-        @klass.add_hashring(@name,hashring)
-        hashring
+      def create_hashring(node_count)
+        node_names = (0..node_count).map {|r| "#{@name}#{r}"}
+        JavaLib::Hashring.new(@name,node_names,3)
       end
 
     end

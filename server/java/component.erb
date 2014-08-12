@@ -22,28 +22,39 @@ import java.io.ByteArrayOutputStream;
 import com.dyuproject.protostuff.JsonIOUtil;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import GameMachine.Messages.Entity;
 import com.game_machine.core.LocalLinkedBuffer;
 
-import com.dyuproject.protostuff.Pipe;
+<% if klass == 'Entity' %>
+import com.game_machine.core.DatastoreCommands;
+<% end %>
+
+<% if persistent %>
+import com.game_machine.core.PersistentMessage;
+import com.game_machine.core.ActorUtil;
+import akka.actor.ActorSelection;
+<% end %>
+
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
+import org.javalite.activejdbc.Model;
 
+<% if persistent %>
+public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>, PersistentMessage
+<% else %>
 public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
+<% end %>
+
 {
 
-<%- message.nestedEnumGroups.each do |group| -%>
+<% message.nestedEnumGroups.each do |group| %>
 	public enum <%=group.name %> implements com.dyuproject.protostuff.EnumLite<<%=group.name %>>
     {
-    	<%- group.values.each do |value| -%>
+    	<% group.values.each do |value| %>
     	<%= "#{value.getName}(#{value.getNumber})" %><%= value.getNumber == (group.values.length - 1) ? ";" : "," %>
-    	<%- end -%>
+    	<% end %>
         
         public final int number;
         
@@ -61,14 +72,14 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         {
             switch(number) 
             {
-            	<%- group.values.each do |value| -%>
+            	<% group.values.each do |value| %>
     			case <%= "#{value.getNumber}: return (#{value.getName})" %>;
-    			<%- end -%>
+    			<% end %>
                 default: return null;
             }
         }
     }
-<%- end -%>
+<% end %>
 
 
     public static Schema<<%=klass%>> getSchema()
@@ -83,13 +94,25 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
 
-<%- message.getFields.each do |field| -%>
-    <%- if field.isRepeated -%>
-    public List<<%=get_type(field)%>> <%=field.name -%>;
-	<%- else -%>
-    public <%=get_type(field)%> <%=field.name -%>;
-    <%- end -%>
-<%- end -%>
+<% if persistent %>
+	public String persistPlayerId;
+	public String getPersistPlayerId() {
+		return persistPlayerId;
+	}
+	
+	public String persistAction;
+	public String getPersistAction() {
+		return persistAction;
+	}
+<% end %>
+
+<% message.getFields.each do |field| %>
+    <% if field.isRepeated %>
+    public List<<%=get_type(field)%>> <%=field.name %>;
+	<% else %>
+    public <%=get_type(field)%> <%=field.name %>;
+    <% end %>
+<% end %>
     
 
 
@@ -98,26 +121,136 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         
     }
 
+<% if klass == 'Entity' %>
+	public void dbPut() {
+		DatastoreCommands.put(this);
+	}
+	
+	public static void dbDelete(String entityId) {
+		DatastoreCommands.delete(entityId);
+	}
+		
+	public static Entity dbGet(String entityId, int timeout) {
+		return DatastoreCommands.get(entityId, timeout);
+	}
+<% end %>
+	
+<% if persistent %>
+	public void ormSaveAsync(String playerId) {
+		persistPlayerId = playerId;
+		persistAction = "save";
+		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
+		sel.tell(this, null);
+    }
+    
+    public Boolean ormSave(String playerId) {
+    com.game_machine.orm.models.<%=klass%>.open();
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	if (model == null) {
+    		model = new com.game_machine.orm.models.<%=klass%>();
+    		toModel(model,playerId);
+    	} else {
+    		toModel(model,null);
+    	}
+    	Boolean res = model.save();
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return res;
+    }
+    
+    public static void ormDeleteAsync(String playerId) {
+    	<%=klass%> message = new <%=klass%>();
+		message.persistPlayerId = playerId;
+		message.persistAction = "delete";
+		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
+		sel.tell(message, null);
+    }
+    
+    public Boolean ormDelete(String playerId) {
+    	Boolean result;
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	if (model != null) {
+    		result = model.delete();
+    	} else {
+    		result = false;
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return result;
+    }
+    
+    public static <%=klass%> ormFind(String playerId) {
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	if (model == null) {
+    		return null;
+    	} else {
+    		return fromModel(model);
+    	}
+    }
+    
+    public static List<<%=klass%>> ormWhere(String query, Object ... params) {
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
+    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+    		messages.add(fromModel(model));
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return messages;
+    }
+    
+    
+<% end %>
 
-<%- if klass == 'Entity' -%>
+<% unless klass == 'Entity' %>
+	public void toModel(Model model, String playerId) {
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	if (<%= field.name %> != null) {
+    		model.set<%=get_type(field) %>("<%= field.name %>",<%= field.name %>);
+    	}
+    	<% end %>
+    	
+    	if (playerId != null) {
+    		model.set("player_id",playerId);
+    	}
+    }
+    
+	public static <%=klass%> fromModel(Model model) {
+    	<%=klass%> message = new <%=klass%>();
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	
+    	message.set<%= field_name %>(model.get<%=get_type(field) %>("<%= field.name %>"));
+    	<% end %>
+    	return message;
+    }
+<% end %>
+
+<% if klass == 'Entity' %>
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
-	<%- messages.each do |m| -%>
-	  <%- if message.getFields.collect {|f| f.name}.include?(varname(m.getName)) -%>
+	<% messages.each do |m| %>
+	  <% if message.getFields.collect {|f| f.name}.include?(varname(m.getName)) %>
 		if (this.has<%=m.getName%>()) {
 			names.add(this.<%=varname(m.getName)%>.getClass().getSimpleName());
 		}
-	  <%- end -%>
-	<%- end -%>
+	  <% end %>
+	<% end %>
 		return names;
 	}
-<%- end -%>
+<% end %>
 
-<%- message.getFields.each do |field| -%>
-	<%- field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) -%>
+<% message.getFields.each do |field| %>
+	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     
-	<%- if field.isRepeated -%>
-	public List<<%=get_type(field)%>> get<%=field_name -%>List() {
+	<% if field.isRepeated %>
+	public List<<%=get_type(field)%>> get<%=field_name %>List() {
 		return <%= field.name %>;
 	}
 
@@ -141,8 +274,8 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         return this;
     }
     
-	<%- else -%>
-	public <%=get_type(field)%> get<%=field_name -%>() {
+	<% else %>
+	public <%=get_type(field)%> get<%=field_name %>() {
 		return <%= field.name %>;
 	}
 	
@@ -154,8 +287,8 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 	public Boolean has<%=field_name %>()  {
         return <%=field.name%> == null ? false : true;
     }
-	<%- end -%>
-<%- end -%>
+	<% end %>
+<% end %>
 
   
     // java serialization
@@ -212,33 +345,33 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
             {
                 case 0:
                     return;
-                <%- message.getFields.each do |field| -%>
+                <% message.getFields.each do |field| %>
             	case <%=field.number%>:
-            	<%- if field.isRepeated -%>
+            	<% if field.isRepeated %>
             		if(message.<%=field.name%> == null)
                         message.<%=field.name%> = new ArrayList<<%=get_type(field)%>>();
-                    <%- if field.isMessageField -%>
+                    <% if field.isMessageField %>
                     message.<%=field.name%>.add(input.mergeObject(null, <%=get_type(field)%>.getSchema()));
-                    <%- elsif field.enumField -%>
+                    <% elsif field.enumField %>
                     message.<%=field.name%>.add(<%=get_type(field)%>.valueOf(input.readEnum()));
-                    <%- else -%>
+                    <% else %>
                 	message.<%=field.name%>.add(input.read<%=field.getClass.getSimpleName%>());
-                	<%- end -%>
+                	<% end %>
                     break;
-                <%- else -%>
-                	<%- if field.isMessageField -%>
+                <% else %>
+                	<% if field.isMessageField %>
                 	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
                     break;
-                    <%- elsif field.enumField -%>
+                    <% elsif field.enumField %>
                     message.<%=field.name%> = <%=classname(field.name)%>.valueOf(input.readEnum());
                     break;
-                	<%- else -%>
+                	<% else %>
                 	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
                 	break;
-                	<%- end -%>
+                	<% end %>
                 	
-                <%- end -%>
-            	<%- end -%>
+                <% end %>
+            	<% end %>
             
                 default:
                     input.handleUnknownField(number, this);
@@ -249,42 +382,42 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 
     public void writeTo(Output output, <%=klass%> message) throws IOException
     {
-    	<%- message.getFields.each do |field| -%>
+    	<% message.getFields.each do |field| %>
     	
-    	<%- if field.isRequired -%>
+    	<% if field.isRequired %>
     	if(message.<%=field.name%> == null)
             throw new UninitializedMessageException(message);
-    	<%- end %>
+    	<% end %>
     	
-    	<%- if field.isRepeated -%>
+    	<% if field.isRepeated %>
     	if(message.<%=field.name%> != null)
         {
             for(<%=get_type(field)%> <%=field.name%> : message.<%=field.name%>)
             {
                 if(<%=field.name%> != null) {
-                   	<%- if field.isMessageField -%>
+                   	<% if field.isMessageField %>
     				output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
-    				<%- elsif field.enumField -%>
+    				<% elsif field.enumField %>
     				output.writeEnum(<%=field.number%>, <%=field.name%>.number, true);
-    				<%- else -%>
+    				<% else %>
             		output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, <%=field.name%>, true);
-    				<%- end -%>
+    				<% end %>
     			}
             }
         }
-    	<%- else -%>
-    	<%- if field.isMessageField -%>
+    	<% else %>
+    	<% if field.isMessageField %>
     	if(message.<%=field.name%> != null)
     		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
-    	<%- elsif field.enumField -%>
+    	<% elsif field.enumField %>
     	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
-    	<%- else -%>
+    	<% else %>
     	if(message.<%=field.name%> != null)
             output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
-    	<%- end -%>
+    	<% end %>
     	
-    	<%- end -%>
-        <%- end -%>
+    	<% end %>
+        <% end %>
     	
     }
 
@@ -292,9 +425,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     {
         switch(number)
         {
-        	<%- message.getFields.each do |field| -%>
+        	<% message.getFields.each do |field| %>
         	case <%=field.number%>: return "<%=field.name%>";
-        	<%- end -%>
+        	<% end %>
             default: return null;
         }
     }
@@ -308,9 +441,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-    	<%- message.getFields.each do |field| -%>
+    	<% message.getFields.each do |field| %>
     	__fieldMap.put("<%=field.name%>", <%=field.number%>);
-    	<%- end -%>
+    	<% end %>
     }
    
    public static List<String> getFields() {

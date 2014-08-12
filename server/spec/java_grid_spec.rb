@@ -26,7 +26,6 @@ module GameMachine
         grid_value = subject.get('blah')
 
         expect(grid_value.id).to eq('blah')
-        expect(grid_value.cell).to eq(0)
         expect(grid_value.x).to eq(0)
         expect(grid_value.y).to eq(0)
         expect(grid_value.z).to eq(3)
@@ -65,7 +64,6 @@ module GameMachine
         subject.set('blah',0,0,0,'player')
         points = subject.neighbors(0,0,25,'player')
         expect(points.first.cell).to eq(0)
-
       end
 
       it "does not return cells out of range" do

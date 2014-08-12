@@ -67,6 +67,7 @@ public class MessageGateway extends UntypedActor {
 					if (entity.hasFastpath()) {
 						routeFastpath(clientMessage.player, entity);
 					} else {
+						entity.setPlayer(clientMessage.player);
 						fastpathOnly = false;
 					}
 				}
@@ -107,7 +108,7 @@ public class MessageGateway extends UntypedActor {
 		}
 
 	}
-
+	
 	private void routeFastpath(Player player, Entity entity) {
 		entity.setPlayer(player);
 		if (entity.hasTrackData()) {

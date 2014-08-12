@@ -18,9 +18,6 @@ module GameMachine
       attr_reader :grid, :extra_params, :aoe_grid
 
       def post_init
-        if handler_klass = Application.config.entity_tracking_handler
-         @tracking_handler = handler_klass.constantize.new
-        end
         @entity_updates = []
         @grid = Grid.find_or_create('default')
         @aoe_grid = Grid.find_or_create('aoe')

@@ -15,7 +15,7 @@ module GameMachine
     def on_receive(message)
       if message == 'every_10_seconds'
         #GameMachine.logger.debug "Cluster members #{ClusterMonitor.cluster_members.keys.to_a.inspect}"
-        #GameMachine.logger.debug "Hashrings #{Akka.instance.hashring.buckets.inspect}"
+        #GameMachine.logger.debug "Hashrings #{Akka.instance.hashring.nodes.inspect}"
       end
     end
   end

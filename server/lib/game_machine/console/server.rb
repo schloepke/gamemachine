@@ -67,6 +67,10 @@ module GameMachine
       def run!
         check_start_dir
 
+        if options[:build_on_start]
+          GameMachine::Console::Build.new([]).build
+        end
+
         GameMachine.logger.info "Starting with options = #{options.inspect}"
         GameMachine::Application.initialize!(options[:server],true)
         GameMachine::Application.start
@@ -87,6 +91,7 @@ module GameMachine
         OptionParser.new do |opt|
           opt.banner = "Usage: game_machine server [options]"
           opt.on('-r', '--restartable', 'If tmp/gm_restart.txt should trigger a restart') { |v| options[:restartable] = v }
+          opt.on('-b', '--build_on_start', 'build before start') { |v| options[:build_on_start] = v }
           opt.on('-s', '--server=name', String, 'Server name') { |v| options[:server] = v.strip }
           opt.on('-c', '--config=name', String, 'Configuration file') { |v| options[:config] = v.strip }
           opt.on("-e", "--environment=name", String,
@@ -101,6 +106,10 @@ module GameMachine
 
         unless options.has_key?(:environment)
           options[:environment] = 'development'
+        end
+
+        if options.has_key?(:build_on_start)
+          options[:build_on_start] = true
         end
 
         unless options.has_key?(:server)

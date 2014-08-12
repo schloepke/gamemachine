@@ -1,4 +1,4 @@
-
+require 'rjack-logback'
 require 'rbconfig'
 
 require_relative 'game_machine/ruby_extensions/nilclass'
@@ -30,7 +30,6 @@ if ENV['ADMIN_UI']
   GameMachine::JavaLib::AdminUi.main([])
 end
 
-
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
 require_relative 'game_machine/grid'
@@ -45,7 +44,6 @@ require_relative 'game_machine/commands'
 require_relative 'game_machine/model'
 require_relative 'game_machine/models'
 require_relative 'game_machine/handlers/authentication'
-require_relative 'game_machine/hashring'
 require_relative 'game_machine/application'
 require_relative 'game_machine/game_systems'
 require_relative 'game_machine/handlers/request'
@@ -75,7 +73,7 @@ require_relative 'game_machine/uniqueid'
 require_relative 'game_machine/wavefront_ext'
 
 if RbConfig::CONFIG['host_os'].match(/linux/i)
-  require_relative 'game_machine/navigation'
+  #require_relative 'game_machine/navigation'
 else
   GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"
 end

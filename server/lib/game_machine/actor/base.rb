@@ -5,7 +5,7 @@ module GameMachine
     class MissingHashringError < StandardError;end
 
     # @abstract All game actors inherit fromm this class
-    class Base < JavaLib::UntypedActor
+    class Base < JavaLib::GameActor
   
       ON_RECEIVE_HOOKS = {}
 
@@ -49,23 +49,8 @@ module GameMachine
           end
         end
 
-        def reset_hashrings
-          @@hashrings = nil
-        end
-
-        def hashrings
-          @@hashrings ||= java.util.concurrent.ConcurrentHashMap.new
-        end
-
         def hashring(name)
-          hashrings.fetch(name,nil)
-        end
-
-        def add_hashring(name,hashring)
-          if hashring(name)
-            raise DuplicateHashringError, "name=#{name}"
-          end
-          hashrings[name] = hashring
+          JavaLib::Hashring.get_hashring(name)
         end
 
         # Find a local actor by name
@@ -90,7 +75,6 @@ module GameMachine
         # on a consistent hashing of the id.
         # @return [Actor::Ref]
         def find_distributed_local(id,name=self.name)
-          ensure_hashring(name)
           Actor::Ref.new(local_distributed_path(id, name),name)
         end
 
@@ -99,7 +83,6 @@ module GameMachine
         # any server in the cluster
         # @return [Actor::Ref]
         def find_distributed(id,name=self.name)
-          ensure_hashring(name)
           Actor::Ref.new(distributed_path(id, name),name)
         end
 
@@ -125,25 +108,19 @@ module GameMachine
 
         private
 
-        def ensure_hashring(name)
-          unless hashring(name)
-            raise MissingHashringError
-          end
-        end
-
         def remote_path(server,name)
           "#{Akka.address_for(server)}/user/#{name}"
         end
 
         def local_distributed_path(id,name)
-          bucket = hashring(name).bucket_for(id)
-          "/user/#{bucket}"
+          node = hashring(name).node_for(id)
+          "/user/#{node}"
         end
 
         def distributed_path(id,name)
-          server = Akka.instance.hashring.bucket_for(id)
-          bucket = hashring(name).bucket_for(id)
-          "#{server}/user/#{bucket}"
+          server = Akka.instance.hashring.node_for(id)
+          node = hashring(name).node_for(id)
+          "#{server}/user/#{node}"
         end
 
       end

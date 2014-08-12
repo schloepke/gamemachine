@@ -16,11 +16,11 @@ module GameMachine
       let(:invite_id) {'invite'}
 
       let(:team) do
-        Team.new(:owner => player_id, :name => team_name, :access => 'public', :members => team_members)
+        Team.new(:id => team_name, :owner => player_id, :name => team_name, :access => 'public', :members => team_members)
       end
 
       let(:team_two_members) do
-        Team.new(:owner => player_id, :name => team_name2, :access => 'public', :members => [player_id,player2])
+        Team.new(:id => team_name2, :owner => player_id, :name => team_name2, :access => 'public', :members => [player_id,player2])
       end
 
       let(:team_invite) do
