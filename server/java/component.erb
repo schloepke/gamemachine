@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.dyuproject.protostuff.ByteString;
@@ -284,6 +285,20 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         this.<%=field.name%>.add(<%=field.name%>);
         return this;
     }
+    public <%=klass%> remove<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
+        if(this.<%=field.name%> == null)
+            return this;
+            
+        Iterator<<%=get_type(field) %>> itr = this.<%=field.name%>.iterator();
+        while (itr.hasNext()) {
+    		<%=get_type(field) %> obj = itr.next();
+       		if (<%=field.name%> == obj) {
+       			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
     
 	<% else %>
 	public <%=get_type(field)%> get<%=field_name %>() {

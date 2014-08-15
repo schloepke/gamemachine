@@ -30,11 +30,11 @@ message GameMessages {
 }
 
 // Inventory demo messages
+
 message GetPlayerItems {}
 
 message PlayerItems {
-  required string playerId = 1;
-  repeated PlayerItem playerItem = 2;
+  repeated PlayerItem playerItem = 1;
 }
 
 message AddPlayerItem {
