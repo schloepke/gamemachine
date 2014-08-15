@@ -23,14 +23,22 @@ message GameMessage {
   optional AddPlayerItem addPlayerItem = 5;
   optional RemovePlayerItem removePlayerItem = 6;
   optional GetPlayerItems getPlayerItems = 7;
+  optional GetPlayerItemCatalog getPlayerItemCatalog = 8;
 }
 
 message GameMessages {
   repeated GameMessage gameMessage = 1;
 }
 
-// Inventory demo messages
+// Inventory messages
 
+persistent_message PlayerItemCatalog {
+  required string id = 1;
+  required string name = 2;
+  required int32 maxQuantity = 3;
+}
+
+message GetPlayerItemCatalog {}
 message GetPlayerItems {}
 
 message PlayerItems {
