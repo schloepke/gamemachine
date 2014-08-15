@@ -2,6 +2,7 @@ package com.game_machine.orm.models;
 
 import org.javalite.activejdbc.DB;
 import org.javalite.activejdbc.Model;
+import org.javalite.activejdbc.annotations.IdName;
 
 import com.game_machine.core.DbConnectionPool;
 import com.jolbox.bonecp.BoneCPDataSource;
@@ -10,6 +11,7 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 Mysql
 CREATE TABLE `<%= klass.underscore.pluralize %>` (
+  `<%= klass.underscore %>_id` int(11) NOT NULL AUTO_INCREMENT,
   `id` varchar(128) NOT NULL,
   <% message.getFields.each do |field| %>
   <% unless field.name == 'id' %>
@@ -18,10 +20,12 @@ CREATE TABLE `<%= klass.underscore.pluralize %>` (
   <% end %>
   <% end %>
   `player_id` varchar(128) NOT NULL,
+  PRIMARY KEY(`<%= klass.underscore %>_id`),
   UNIQUE KEY `id_player_id_idx` (`id`,`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
+@IdName("<%= klass.underscore %>_id")
 public class <%= klass %> extends Model {
 	
 	public static void close() {
@@ -34,7 +38,7 @@ public class <%= klass %> extends Model {
 	public static void open() {
 		DB db = new DB("default");
 		if(!db.hasConnection()) {
-			BoneCPDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine");
+			BoneCPDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine_orm");
 			db.open(ds);
 		}
 	}

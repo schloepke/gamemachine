@@ -36,11 +36,13 @@ import com.game_machine.core.DatastoreCommands;
 import com.game_machine.core.PersistentMessage;
 import com.game_machine.core.ActorUtil;
 import akka.actor.ActorSelection;
+import org.javalite.activejdbc.Errors;
 <% end %>
 
+import org.javalite.activejdbc.Model;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
-import org.javalite.activejdbc.Model;
+
 
 <% if persistent %>
 public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>, PersistentMessage
@@ -96,6 +98,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
 
 <% if persistent %>
+	public Errors ormErrors;
 	public String persistPlayerId;
 	public String getPersistPlayerId() {
 		return persistPlayerId;
@@ -154,6 +157,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     		toModel(model,null);
     	}
     	Boolean res = model.save();
+    	if (!res) {
+    		ormErrors = model.errors();
+    	}
     	com.game_machine.orm.models.<%=klass%>.close();
     	return res;
     }

@@ -95,7 +95,7 @@ module GameMachine
         if config.orm
           pool = GameMachine::JavaLib::DbConnectionPool.getInstance
           unless pool.connect(
-            'game_machine',
+            'game_machine_orm',
             config.jdbc_url,
             config.jdbc_driver,
             config.jdbc_username,
