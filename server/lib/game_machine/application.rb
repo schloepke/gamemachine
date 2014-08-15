@@ -96,10 +96,10 @@ module GameMachine
           pool = GameMachine::JavaLib::DbConnectionPool.getInstance
           unless pool.connect(
             'game_machine',
-            config.mysql_url,
-            config.mysql_driver,
-            config.mysql_username,
-            config.mysql_password || ''
+            config.jdbc_url,
+            config.jdbc_driver,
+            config.jdbc_username,
+            config.jdbc_password || ''
           )
             GameMachine.logger.error "Unable to establish database connection, exiting"
             System.exit 0

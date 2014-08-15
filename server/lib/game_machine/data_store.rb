@@ -3,7 +3,7 @@ require_relative 'data_stores/memory'
 require_relative 'data_stores/couchbase'
 require_relative 'data_stores/mapdb'
 require_relative 'data_stores/redis'
-require_relative 'data_stores/mysql'
+require_relative 'data_stores/jdbc'
 
 module GameMachine
   class DataStore
@@ -52,8 +52,8 @@ module GameMachine
       send("connect_#{@store_name}")
     end
 
-    def connect_mysql
-      @store = DataStores::Mysql.new
+    def connect_jdbc
+      @store = DataStores::Jdbc.new
       @store.connect
     end
 

@@ -2,9 +2,9 @@ package com.game_machine.core;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import GameMachine.Messages.DeliveryConfirmation;
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.GameMessage;
+import GameMachine.Messages.GameMessages;
 import akka.actor.UntypedActor;
 
 public class GameActor extends UntypedActor {
@@ -47,7 +47,9 @@ public class GameActor extends UntypedActor {
 	private void sendReply(String messageId) {
 		GameMessage gameMessage = reliableMessages.get(messageId);
 		Entity entity = new Entity();
-		entity.setGameMessage(gameMessage);
+		entity.setId(messageId);
+		entity.setGameMessages(new GameMessages());
+		entity.gameMessages.addGameMessage(gameMessage);
 		PlayerCommands.sendToPlayer(entity, playerId);
 	}
 

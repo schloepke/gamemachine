@@ -67,7 +67,6 @@ public class MessageGateway extends UntypedActor {
 					if (entity.hasFastpath()) {
 						routeFastpath(clientMessage.player, entity);
 					} else {
-						entity.setPlayer(clientMessage.player);
 						fastpathOnly = false;
 					}
 				}

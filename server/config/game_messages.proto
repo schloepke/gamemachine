@@ -13,68 +13,45 @@ message TrackData {
   optional float y = 7;
   optional float z = 8;
   optional string entityType = 9;
-  optional UnityGameObjects unityGameObjects = 10;
   optional string neighborEntityType = 11;
   optional int32 action = 12;
 }
 
-
 message GameMessage {
-  optional Attack attack = 1;
-  optional Health health = 2;
   optional string messageId = 3;
+  optional PlayerItems playerItems = 4;
+  optional AddPlayerItem addPlayerItem = 5;
+  optional RemovePlayerItem removePlayerItem = 6;
+  optional GetPlayerItems getPlayerItems = 7;
 }
 
 message GameMessages {
   repeated GameMessage gameMessage = 1;
 }
 
-message UnityGameObject {
-  required int32 entityType = 1;
-  repeated bytes byteArray = 2;
+// Inventory demo messages
+message GetPlayerItems {}
+
+message PlayerItems {
+  required string playerId = 1;
+  repeated PlayerItem playerItem = 2;
 }
 
-message UnityGameObjects {
-  repeated UnityGameObject unityGameObject = 1;
+message AddPlayerItem {
+  required PlayerItem playerItem = 1;
 }
 
-message Health {
-  required  int32  health = 1;
+message RemovePlayerItem {
+  required string id = 1;
 }
 
-message Effect {
-  optional  int32  length = 1;
-  optional  string  name = 2;
-  optional  int32  healthDiff = 3;
-  optional  int32  damageDiff = 4;
-  optional  int32  timePeriod = 5;
-  optional  string  type = 6;
-}
-
-message EffectList {
-  repeated  Effect  effect = 1;
-}
-
-message CombatAbility {
-  required  string  name = 1;
-  required  int32  damage = 2;
-  optional  int32  hitChance = 3;
-  required  int32  range = 4;
-  optional  string  type = 5;
-}
-
-message Attack {
-  required  string  attacker = 1;
-  required  string  target = 2;
-  optional  int32  combatAbilityId = 3;
-  optional int32 damage = 4;
-}
-
-message IsPlayer {
-  optional  bool  enabled = 1;
+persistent_message PlayerItem {
+  required string id = 1;
+  required int32 quantity = 2;
 }
 
 persistent_message TestObject {
+  required string id = 12;
   optional string optionalString = 1;
   required string requiredString = 2;
   repeated int32 numbers = 3;

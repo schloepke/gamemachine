@@ -1,6 +1,6 @@
 module GameMachine
   module DataStores
-    class Mysql
+    class Jdbc
 
       def dbname
         'game_machine'
@@ -10,10 +10,10 @@ module GameMachine
         @pool ||= GameMachine::JavaLib::DbConnectionPool.getInstance
         unless @pool.connect(
           dbname,
-          Application.config.mysql_url,
-          Application.config.mysql_driver,
-          Application.config.mysql_username,
-          Application.config.mysql_password || ''
+          Application.config.jdbc_url,
+          Application.config.jdbc_driver,
+          Application.config.jdbc_username,
+          Application.config.jdbc_password || ''
         )
           GameMachine.logger.error "Unable to establish database connection, exiting"
           System.exit 0

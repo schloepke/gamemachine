@@ -145,7 +145,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     
     public Boolean ormSave(String playerId) {
     com.game_machine.orm.models.<%=klass%>.open();
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ? and player_id = ?", this.id, playerId);
     	if (model == null) {
     		model = new com.game_machine.orm.models.<%=klass%>();
     		toModel(model,playerId);
@@ -168,7 +168,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     public Boolean ormDelete(String playerId) {
     	Boolean result;
     	com.game_machine.orm.models.<%=klass%>.open();
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ? and player_id = ?", this.id, playerId);
     	if (model != null) {
     		result = model.delete();
     	} else {
@@ -178,15 +178,26 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	return result;
     }
     
-    public static <%=klass%> ormFind(String playerId) {
+    public static <%=klass%> ormFind(String id, String playerId) {
     	com.game_machine.orm.models.<%=klass%>.open();
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("player_id = ?", playerId);
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ? and player_id = ?", id, playerId);
     	com.game_machine.orm.models.<%=klass%>.close();
     	if (model == null) {
     		return null;
     	} else {
     		return fromModel(model);
     	}
+    }
+    
+    public static List<<%=klass%>> ormFindAll(String playerId) {
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
+    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+    		messages.add(fromModel(model));
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return messages;
     }
     
     public static List<<%=klass%>> ormWhere(String query, Object ... params) {

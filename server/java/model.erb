@@ -7,16 +7,19 @@ import com.game_machine.core.DbConnectionPool;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 /*
-CREATE TABLE `<%= klass.underscore.pluralize %>` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  <% message.getFields.each do |field| %>
-  <%= sql_field(field) %>
 
+Mysql
+CREATE TABLE `<%= klass.underscore.pluralize %>` (
+  `id` varchar(128) NOT NULL,
+  <% message.getFields.each do |field| %>
+  <% unless field.name == 'id' %>
+  <%= sql_field(field) %>
+  
   <% end %>
-  `player_id` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `player_id_UNIQUE` (`player_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  <% end %>
+  `player_id` varchar(128) NOT NULL,
+  UNIQUE KEY `id_player_id_idx` (`id`,`player_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
 public class <%= klass %> extends Model {
