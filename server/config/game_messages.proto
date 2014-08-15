@@ -24,6 +24,7 @@ message GameMessage {
   optional RemovePlayerItem removePlayerItem = 6;
   optional GetPlayerItems getPlayerItems = 7;
   optional GetPlayerItemCatalog getPlayerItemCatalog = 8;
+  optional PlayerItemCatalog playerItemCatalog = 9;
 }
 
 message GameMessages {
@@ -32,10 +33,14 @@ message GameMessages {
 
 // Inventory messages
 
-persistent_message PlayerItemCatalog {
+persistent_message PlayerItemDefinition {
   required string id = 1;
   required string name = 2;
   required int32 maxQuantity = 3;
+}
+
+message PlayerItemCatalog {
+  repeated PlayerItemDefinition playerItemDefinition = 1;
 }
 
 message GetPlayerItemCatalog {}
