@@ -28,6 +28,9 @@ targetCompatibility = 1.7
 repositories {
   flatDir(dirs: 'third_party')
   mavenCentral()
+  maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
   
 }
 
@@ -54,8 +57,8 @@ dependencies {
   compile 'io.netty:netty-all:4.0.21.Final'
   compile 'com.jolbox:bonecp:0.8.0.RELEASE'
   compile 'mysql:mysql-connector-java:5.1.31'
-  compile 'org.javalite:activejdbc:1.4.9'
-  compile 'org.javalite:activejdbc-instrumentation:1.4.9'
+  compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
+  compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
   compile 'com.google.guava:guava:17.0'
 }
 

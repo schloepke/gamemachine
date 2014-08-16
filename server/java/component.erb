@@ -164,8 +164,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	return res;
     }
     
-    public static void ormDeleteAsync(String playerId) {
+    public static void ormDeleteAsync(String id, String playerId) {
     	<%=klass%> message = new <%=klass%>();
+    	message.setId(id);
 		message.persistPlayerId = playerId;
 		message.persistAction = "delete";
 		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
