@@ -33,33 +33,47 @@ message GameMessages {
 
 // Inventory messages
 
-persistent_message PlayerItemDefinition {
+local_persistent_message PlayerItemDefinition {
   required string id = 1;
   required string name = 2;
   required int32 maxQuantity = 3;
+  optional string color = 4;
+  optional WeaponAttributes weaponAttributes = 5;
+  optional Consumable consumable = 6;
 }
 
-message PlayerItemCatalog {
+local_message Consumable {
+  required string type = 1;
+  required string size = 2;
+}
+
+local_message WeaponAttributes {
+  required int32 attack = 1;
+  required int32 delay = 2;
+}
+
+
+local_message PlayerItemCatalog {
   repeated PlayerItemDefinition playerItemDefinition = 1;
 }
 
-message GetPlayerItemCatalog {}
-message GetPlayerItems {}
+local_message GetPlayerItemCatalog {}
+local_message GetPlayerItems {}
 
-message PlayerItems {
+local_message PlayerItems {
   repeated PlayerItem playerItem = 1;
 }
 
-message AddPlayerItem {
+local_message AddPlayerItem {
   required PlayerItem playerItem = 1;
 }
 
-message RemovePlayerItem {
+local_message RemovePlayerItem {
   required string id = 1;
   required int32 quantity = 2;
 }
 
-persistent_message PlayerItem {
+local_persistent_message PlayerItem {
   required string id = 1;
   required int32 quantity = 2;
 }

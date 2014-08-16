@@ -3,6 +3,11 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message MonoMessage {
+  optional Entity entity = 1;
+  optional string klass = 2;
+}
+
 message DeliveryConfirmation {
   required string messageId = 1;
 }

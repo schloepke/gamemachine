@@ -65,6 +65,7 @@ module GameMachine
             File.open(src_file,'w') {|f| f.write out}
           end
           #message.getFields.each do |field|
+          #  puts field.default_value_set
           #  puts field.getJavaType
           #  puts field.toString
           #end
@@ -120,6 +121,8 @@ module GameMachine
 
         if File.exists?(game_protofile)
           game_messages = File.read(game_protofile)
+          game_messages = game_messages.gsub('local_persistent_message','message')
+          game_messages = game_messages.gsub('local_message','message')
           game_messages = game_messages.gsub('persistent_message','message')
           gm = Protobuf::GameMessages.new(game_protofile)
           persistent_messages = gm.persistent_messages
