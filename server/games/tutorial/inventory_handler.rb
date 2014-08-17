@@ -68,6 +68,7 @@ module Tutorial
 
         if game_message.get_player_items.catalog
           player_items_message.set_player_item_list(player_items_catalog)
+          player_items_message.catalog = true
         else
           player_items.values.each {|pi| player_items_message.add_player_item(pi)}
         end
