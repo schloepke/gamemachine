@@ -62,17 +62,20 @@ module Tutorial
         send_game_message(game_message)
       end
 
+      if game_message.has_get_player_items_catalog
+        GameMachine.logger.info("get_player_items_catalog")
+        player_items_message = MessageLib::PlayerItems.new
+        player_items_message.set_player_item_list(player_items_catalog)
+        player_items_message.catalog = true
+        player_message = MessageLib::GameMessage.new
+        player_message.set_player_items(player_items_message)
+        send_game_message(player_message)
+      end
+
       if game_message.has_get_player_items
         GameMachine.logger.info("get_player_items")
         player_items_message = MessageLib::PlayerItems.new
-
-        if game_message.get_player_items.catalog
-          player_items_message.set_player_item_list(player_items_catalog)
-          player_items_message.catalog = true
-        else
-          player_items.values.each {|pi| player_items_message.add_player_item(pi)}
-        end
-        
+        player_items.values.each {|pi| player_items_message.add_player_item(pi)}
         player_message = MessageLib::GameMessage.new
         player_message.set_player_items(player_items_message)
         send_game_message(player_message)
