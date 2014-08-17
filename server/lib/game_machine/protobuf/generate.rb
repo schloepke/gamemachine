@@ -89,24 +89,32 @@ module GameMachine
         "#{klass.underscore}_#{field.name.underscore}"
       end
 
-      def sql_field(klass,field)
-        case field.getJavaType.to_s
+      def sql_field(klass,field,force_null=false)
+        txt = case field.getJavaType.to_s
         when 'boolean'
-          "`#{sql_column_name(klass,field)}` tinyint(4) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` tinyint(4)"
         when 'double'
-          "`#{sql_column_name(klass,field)}` double DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` double"
         when 'float'
-          "`#{sql_column_name(klass,field)}` float DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` float"
         when 'long'
-          "`#{sql_column_name(klass,field)}` int(11) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` int(11)"
         when 'int'
-          "`#{sql_column_name(klass,field)}` int(11) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` int(11)"
         when 'String'
-          if field.name == 'id'
-            "`#{sql_column_name(klass,field)}` varchar(128) NOT NULL,"
-          else
-            "`#{sql_column_name(klass,field)}` varchar(128) DEFAULT NULL,"
-          end
+          "`#{sql_column_name(klass,field)}` varchar(128)"
+        end
+
+        return nil if txt.nil?
+
+        if force_null
+          return "#{txt} DEFAULT NULL,"
+        end
+
+        if field.is_required
+          txt = "#{txt} NOT NULL,"
+        else
+          txt = "#{txt} DEFAULT NULL,"
         end
       end
       
@@ -137,6 +145,7 @@ module GameMachine
       end
 
       def generate
+        FileUtils.rm Dir.glob(File.join(java_src,'*.java'))
         game_protofile = File.join(config_path,'game_messages.proto')
         protofile = File.join(config_path,'messages.proto')
 

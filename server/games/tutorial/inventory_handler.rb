@@ -1,11 +1,11 @@
 module Tutorial
   class InventoryHandler < GameMachine::Actor::GameActor
     include GameMachine
-    attr_reader :player_items_cache, :player_item_catalog
+    attr_reader :player_items_cache, :player_items_catalog
 
     def awake(args)
       @player_items_cache = {}
-      @player_item_catalog = MessageLib::PlayerItem.orm_find_all('global')
+      @player_items_catalog = MessageLib::PlayerItem.orm_find_all('global')
     end
 
     def on_player_disconnect(player_id)
@@ -29,7 +29,6 @@ module Tutorial
         current_player_item = player_item
         player_items[current_player_item.id] = current_player_item
       end
-      
       current_player_item.orm_save_async(player_id)
       current_player_item
     end
@@ -50,20 +49,20 @@ module Tutorial
     def on_game_message(game_message)
 
       if game_message.has_add_player_item
-        GameMachine.logger.info("add_player_item #{game_message.add_player_item.player_item.id}")
         player_item = add_player_item(game_message.add_player_item.player_item)
         game_message.add_player_item.set_player_item(player_item)
         send_game_message(game_message)
       end
 
       if game_message.has_remove_player_item
-        GameMachine.logger.info("remove_player_item #{game_message.remove_player_item.id}")
-        remove_player_item(game_message.remove_player_item.id, game_message.remove_player_item.quantity)
+        remove_player_item(
+          game_message.remove_player_item.id,
+          game_message.remove_player_item.quantity
+        )
         send_game_message(game_message)
       end
 
       if game_message.has_get_player_items_catalog
-        GameMachine.logger.info("get_player_items_catalog")
         player_items_message = MessageLib::PlayerItems.new
         player_items_message.set_player_item_list(player_items_catalog)
         player_items_message.catalog = true
@@ -73,7 +72,6 @@ module Tutorial
       end
 
       if game_message.has_get_player_items
-        GameMachine.logger.info("get_player_items")
         player_items_message = MessageLib::PlayerItems.new
         player_items.values.each {|pi| player_items_message.add_player_item(pi)}
         player_message = MessageLib::GameMessage.new

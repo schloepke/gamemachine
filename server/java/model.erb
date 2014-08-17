@@ -19,7 +19,7 @@ CREATE TABLE `<%= klass.underscore.pluralize %>` (
   <% message_fields.each do |message_field| %>
   	<% klass_message = messages_index[message_field] %>
   	<% klass_message.getFields.each do |field| %>
-  <%= sql_field(message_field,field) %>
+  <%= sql_field(message_field,field,true) %>
   	<% end %>
   <% end %>
   

@@ -22,8 +22,7 @@ message GameMessage {
   optional PlayerItems playerItems = 4;
   optional AddPlayerItem addPlayerItem = 5;
   optional RemovePlayerItem removePlayerItem = 6;
-  optional GetPlayerItemsCatalog getPlayerItemsCatalog = 7;
-  optional GetPlayerItems getPlayerItems = 8;
+  optional RequestPlayerItems requestPlayerItems = 7;
 }
 
 message GameMessages {
@@ -51,8 +50,9 @@ local_message Weapon {
   required int32 delay = 2;
 }
 
-local_message GetPlayerItemsCatalog {}
-local_message GetPlayerItems {}
+local_message RequestPlayerItems {
+  optional bool catalog = 1;
+}
 
 local_message PlayerItems {
   optional bool catalog = 1;
