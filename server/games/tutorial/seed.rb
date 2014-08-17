@@ -4,31 +4,43 @@ if GameMachine::Application.config.orm
     {
       'id' => 'hp',
       'name' => 'Healing Potion',
-      'max_quantity' => 1,
+      'quantity' => 100,
       'consumable' => GameMachine::MessageLib::Consumable.new.set_type('health').set_size('small')
     },
+
     {
       'id' => 'sw',
       'name' => 'Sword',
-      'max_quantity' => 1,
-      'offensive_stats' => GameMachine::MessageLib::WeaponAttributes.new.set_attack(5).set_delay(3)
+      'quantity' => 100,
+      'weapon' => GameMachine::MessageLib::Weapon.new.set_attack(5).set_delay(3)
     },
+
     {
       'id' => 'helm',
       'name' => 'Helm',
-      'max_quantity' => 1
+      'quantity' => 100
     },
+
     {
       'id' => 'shoes',
       'name' => 'Shoes',
-      'max_quantity' => 1
+      'quantity' => 100
     }
   ]
 
   items.each do |item|
-    player_item_definition = GameMachine::MessageLib::PlayerItemDefinition.new
-    player_item_definition.set_id(item['id'])
-    player_item_definition.set_name(item['name'])
-    player_item_definition.set_max_quantity(item['max_quantity'])
+    player_item = GameMachine::MessageLib::PlayerItem.new
+    player_item.set_id(item['id'])
+    player_item.set_name(item['name'])
+    player_item.set_quantity(item['quantity'])
+    if item['consumable']
+      player_item.set_consumable(item['consumable'])
+    end
+    if item['weapon']
+      player_item.set_weapon(item['weapon'])
+    end
+    unless player_item.orm_save('global')
+      puts player_item.ormErrors.inspect
+    end
   end
 end

@@ -5,9 +5,7 @@ module Tutorial
 
     def awake(args)
       @player_items_cache = {}
-      player_item_definitions = MessageLib::PlayerItemDefinition.orm_find_all('global')
-      @player_item_catalog = MessageLib::PlayerItemCatalog.new
-      player_item_catalog.set_player_item_definition_list(player_item_definitions)
+      @player_item_catalog = MessageLib::PlayerItem.orm_find_all('global')
     end
 
     def on_player_disconnect(player_id)
@@ -64,17 +62,16 @@ module Tutorial
         send_game_message(game_message)
       end
 
-      if game_message.has_get_player_item_catalog
-        GameMachine.logger.info("get_player_item_catalog")
-        player_message = MessageLib::GameMessage.new
-        player_message.set_player_item_catalog(player_item_catalog)
-        send_game_message(player_message)
-      end
-
       if game_message.has_get_player_items
         GameMachine.logger.info("get_player_items")
         player_items_message = MessageLib::PlayerItems.new
-        player_items.values.each {|pi| player_items_message.add_player_item(pi)}
+
+        if game_message.get_player_items.catalog
+          player_items_message.set_player_item_list(player_items_catalog)
+        else
+          player_items.values.each {|pi| player_items_message.add_player_item(pi)}
+        end
+        
         player_message = MessageLib::GameMessage.new
         player_message.set_player_items(player_items_message)
         send_game_message(player_message)

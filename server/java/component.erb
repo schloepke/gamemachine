@@ -161,15 +161,16 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	} else {
     		toModel(model,null);
     	}
-    	Boolean res = model.save();
-    	if (!res) {
-    		ormErrors = model.errors();
-    	}
     	<% message_fields.each do |message_field| %>
     	if (this.has<%= message_field %>()) {
     		this.<%= varname(message_field) %>.toModel(model,null);
     	}
     	<% end %>
+    	
+    	Boolean res = model.save();
+    	if (!res) {
+    		ormErrors = model.errors();
+    	}
     	com.game_machine.orm.models.<%=klass%>.close();
     	return res;
     }
@@ -216,7 +217,11 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
     	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
     	for (com.game_machine.orm.models.<%=klass%> model : models) {
-    		messages.add(fromModel(model));
+    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+    		<% message_fields.each do |message_field| %>
+    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+    		<% end %>
+    		messages.add(<%= varname(klass) %>);
     	}
     	com.game_machine.orm.models.<%=klass%>.close();
     	return messages;
@@ -227,7 +232,11 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
     	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
     	for (com.game_machine.orm.models.<%=klass%> model : models) {
-    		messages.add(fromModel(model));
+    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+    		<% message_fields.each do |message_field| %>
+    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+    		<% end %>
+    		messages.add(<%= varname(klass) %>);
     	}
     	com.game_machine.orm.models.<%=klass%>.close();
     	return messages;
