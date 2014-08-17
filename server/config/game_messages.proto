@@ -55,7 +55,8 @@ local_message GetPlayerItems {
 }
 
 local_message PlayerItems {
-  repeated PlayerItem playerItem = 1;
+  optional bool catalog = 1;
+  repeated PlayerItem playerItem = 2;
 }
 
 local_message AddPlayerItem {
