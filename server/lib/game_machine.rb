@@ -71,6 +71,7 @@ require_relative 'game_machine/mono_server'
 require_relative 'game_machine/restart_watcher'
 require_relative 'game_machine/uniqueid'
 require_relative 'game_machine/wavefront_ext'
+require_relative 'game_machine/routes'
 
 if RbConfig::CONFIG['host_os'].match(/linux/i)
   #require_relative 'game_machine/navigation'

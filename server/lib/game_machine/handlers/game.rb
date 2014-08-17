@@ -3,8 +3,9 @@ module GameMachine
     class Game < Actor::Base 
       include Commands
 
-      attr_reader :destinations, :game_message_handler
+      attr_reader :destinations, :game_message_handler, :game_message_routes
       def post_init(*args)
+        @game_message_routes = Routes.instance.game_message_routes
         @destinations = {}
         if Application.config.game_message_handler
           @game_message_handler = Actor::Base.find(Application.config.game_message_handler)
@@ -31,6 +32,20 @@ module GameMachine
           end
 
           if entity.has_game_messages
+            entity.game_messages.get_game_message_list.each do |game_message|
+              game_message_routes.each do |key,value|
+                puts "Checking #{game_message} for #{key}"
+                if game_message.send(key)
+                  puts "Found #{key} #{value.inspect}"
+                  if value[:distributed]
+                    value[:to].find_distributed(entity.player.id).tell(game_message)
+                  else
+                    value[:to].find.tell(game_message)
+                  end
+                end
+              end
+            end
+
             if game_message_handler
               game_message_handler.tell(entity)
             end

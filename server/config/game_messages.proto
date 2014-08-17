@@ -18,11 +18,17 @@ message TrackData {
 }
 
 message GameMessage {
-  optional string messageId = 3;
-  optional PlayerItems playerItems = 4;
-  optional AddPlayerItem addPlayerItem = 5;
-  optional RemovePlayerItem removePlayerItem = 6;
-  optional RequestPlayerItems requestPlayerItems = 7;
+  // Used internally, do not change
+  optional string playerId = 1;
+  optional string messageId = 2;
+  optional int32 destinationId = 3;
+  optional string destination = 4;
+
+  // User modifiable
+  optional PlayerItems playerItems = 10;
+  optional AddPlayerItem addPlayerItem = 11;
+  optional RemovePlayerItem removePlayerItem = 12;
+  optional RequestPlayerItems requestPlayerItems = 13;
 }
 
 message GameMessages {
