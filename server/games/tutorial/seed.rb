@@ -4,13 +4,14 @@ if GameMachine::Application.config.orm
     {
       'id' => 'hp',
       'name' => 'Healing Potion',
-      'max_quantity' => 1
+      'max_quantity' => 1,
+      'consumable' => GameMachine::MessageLib::Consumable.new.set_type('health').set_size('small')
     },
     {
       'id' => 'sw',
       'name' => 'Sword',
       'max_quantity' => 1,
-      'offensive_stats' => GameMachine::MessageLib::OffensiveStats.new
+      'offensive_stats' => GameMachine::MessageLib::WeaponAttributes.new.set_attack(5).set_delay(3)
     },
     {
       'id' => 'helm',

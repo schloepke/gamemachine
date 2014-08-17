@@ -48,7 +48,20 @@ module GameMachine
         messages = proto.getMessages.reject {|message| message.getName == 'Components'}
         FileUtils.mkdir_p(java_src)
         FileUtils.mkdir_p(model_src)
+        message_names = proto.getMessages.map {|m| m.get_name}
+        messages_index = proto.getMessages.each_with_object({}) {|v,res| res[v.getName] = v}
+
         proto.getMessages.each do |message|
+          message_fields = []
+          message.get_fields.each do |field|
+            if message_names.include?(field.getJavaType.to_s) && !field.is_repeated
+              message_fields << field.get_java_type.to_s
+            end
+          end
+          unless message_fields.empty?
+            puts "#{message.getName} #{message_fields.inspect}"
+          end
+
           klass = message.getName
           persistent = persistent_messages.include?(klass)
           #puts "Message: #{message.getName}"
@@ -58,7 +71,7 @@ module GameMachine
           File.open(src_file,'w') {|f| f.write out}
 
           if persistent
-            out = ERB.new(File.read(model_template),0,'>').result(binding)
+            out = ERB.new(File.read(model_template),0,'<>').result(binding)
             out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
             out = out.gsub(/^(\s*\n){2,}/,"\n")
             src_file = File.join(model_src,"#{message.getName}.java")
@@ -72,23 +85,31 @@ module GameMachine
         end
       end
 
-      def sql_field(field)
+      def sql_column_name(klass,field)
+        "#{klass.underscore}_#{field.name.underscore}"
+      end
+
+      def sql_field(klass,field)
         case field.getJavaType.to_s
         when 'boolean'
-          "`#{field.name}` tinyint(4) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` tinyint(4) DEFAULT NULL,"
         when 'double'
-          "`#{field.name}` double DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` double DEFAULT NULL,"
         when 'float'
-          "`#{field.name}` float DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` float DEFAULT NULL,"
         when 'long'
-          "`#{field.name}` int(11) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` int(11) DEFAULT NULL,"
         when 'int'
-          "`#{field.name}` int(11) DEFAULT NULL,"
+          "`#{sql_column_name(klass,field)}` int(11) DEFAULT NULL,"
         when 'String'
-          "`#{field.name}` text DEFAULT NULL,"
+          if field.name == 'id'
+            "`#{sql_column_name(klass,field)}` varchar(128) NOT NULL,"
+          else
+            "`#{sql_column_name(klass,field)}` varchar(128) DEFAULT NULL,"
+          end
         end
       end
-          
+      
       def simple_value?(field)
         if ['boolean','double','float','long','int','String'].include?(field.getJavaType.to_s)
           true

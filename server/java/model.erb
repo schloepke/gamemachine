@@ -11,17 +11,21 @@ import com.jolbox.bonecp.BoneCPDataSource;
 
 Mysql
 CREATE TABLE `<%= klass.underscore.pluralize %>` (
-  `<%= klass.underscore %>_id` int(11) NOT NULL AUTO_INCREMENT,
-  `id` varchar(128) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT,
   <% message.getFields.each do |field| %>
-  <% unless field.name == 'id' %>
-  <%= sql_field(field) %>
+  <%= sql_field(klass,field) %>
+  <% end %>
   
+  <% message_fields.each do |message_field| %>
+  	<% klass_message = messages_index[message_field] %>
+  	<% klass_message.getFields.each do |field| %>
+  <%= sql_field(message_field,field) %>
+  	<% end %>
   <% end %>
-  <% end %>
+  
   `player_id` varchar(128) NOT NULL,
-  PRIMARY KEY(`<%= klass.underscore %>_id`),
-  UNIQUE KEY `id_player_id_idx` (`id`,`player_id`)
+  PRIMARY KEY(`id`),
+  UNIQUE KEY `<%=klass.underscore%>_id_player_id_idx` (`<%=klass.underscore%>_id`,`player_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
