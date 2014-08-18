@@ -17,6 +17,7 @@ module Tutorial
     end
 
     def on_game_message(game_message)
+      GameMachine.logger.info "Inventory handler got message"
       if exactly_once(game_message)
         if game_message.has_add_player_item
           if player_item = add_player_item(game_message.add_player_item.player_item)
