@@ -2,7 +2,6 @@ using UnityEngine;
 using System;
 using GameMachine;
 using GameMachine.Core;
-using GameMachine.Tutorials.GameMessages;
 
 
 namespace GameMachine.Tutorial

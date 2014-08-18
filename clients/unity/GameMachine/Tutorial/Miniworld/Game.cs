@@ -3,7 +3,6 @@ using System;
 using GameMachine;
 using GameMachine.Core;
 using GameMachine.Chat;
-using GameMachine.Tutorials.GameMessages;
 
 
 namespace GameMachine.Tutorials.Miniworld
