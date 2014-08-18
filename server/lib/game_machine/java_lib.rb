@@ -18,6 +18,10 @@ module GameMachine
     include_package 'com.dyuproject.protostuff'
   end
 
+  module TutorialLib
+    include_package 'com.game_machine.examples'
+  end
+
   module ModelLib
     include_package 'com.game_machine.orm.models'
   end

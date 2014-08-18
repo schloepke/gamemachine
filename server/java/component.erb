@@ -164,6 +164,8 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	<% message_fields.each do |message_field| %>
     	if (this.has<%= message_field %>()) {
     		this.<%= varname(message_field) %>.toModel(model,null);
+    	} else {
+    		<%= message_field %>.clearModel(model);
     	}
     	<% end %>
     	
@@ -246,6 +248,16 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 <% end %>
 
 <% unless klass == 'Entity' %>
+
+	public static void clearModel(Model model) {
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	model.set("<%=sql_column_name(klass,field)%>",null);
+    	<% end %>
+    }
+    
 	public void toModel(Model model, String playerId) {
     	<% message.getFields.each do |field| %>
     	<% next unless simple_value?(field) %>
@@ -324,19 +336,35 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         this.<%=field.name%>.add(<%=field.name%>);
         return this;
     }
-    public <%=klass%> remove<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
-        if(this.<%=field.name%> == null)
-            return this;
+    <% if messages_index.has_key?(get_type(field)) %>
+    <% messages_index[get_type(field)].getFields.each do |simple_field| %>
+    	<% next unless simple_value?(simple_field) %>
+    	<% next if simple_field.isRepeated %>
+    	<% simple_field_name = simple_field.name.slice(0,1).capitalize + simple_field.name.slice(1..-1) %>
+    	
+    public <%=klass%> remove<%=field_name %>By<%=simple_field_name %>(<%=get_type(field) %> <%=field.name%>)  {
+    	if(this.<%=field.name%> == null)
+           return this;
             
-        Iterator<<%=get_type(field) %>> itr = this.<%=field.name%>.iterator();
-        while (itr.hasNext()) {
-    		<%=get_type(field) %> obj = itr.next();
-       		if (<%=field.name%> == obj) {
-       			itr.remove();
+       	Iterator<<%=get_type(field) %>> itr = this.<%=field.name%>.iterator();
+       	while (itr.hasNext()) {
+    	<%=get_type(field) %> obj = itr.next();
+    	
+    	<% if simple_field.getJavaType.to_s == 'String' %>
+    		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
+    	<% else %>
+    		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
+    	<% end %>
+      			itr.remove();
     		}
 		}
         return this;
     }
+    
+    <% end %>
+    <% end %>
+    	
+    
     
     
 	<% else %>

@@ -30,23 +30,15 @@ module GameMachine
       def on_receive(message)
         @player_id = nil
 
-        if has_game_messages?(message)
-          @player_id = message.player.id
-          set_player_id(message.player.id)
-          game_messages(message).each {|m| on_game_message(m)}
+        if message.is_a?(MessageLib::GameMessage)
+          @player_id = message.player_id
+          set_player_id(message.player_id)
+          on_game_message(message)
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
             on_player_disconnect(message.player_id)
           end
         end
-      end
-
-      def has_game_messages?(message)
-        message.is_a?(MessageLib::Entity) && message.has_game_messages
-      end
-      
-      def game_messages(message)
-        message.game_messages.get_game_message_list
       end
 
     end

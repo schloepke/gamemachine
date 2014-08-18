@@ -46,6 +46,7 @@ local_persistent_message PlayerItem {
   optional Consumable consumable = 6;
 }
 
+
 local_message Consumable {
   required string type = 1;
   required string size = 2;
@@ -60,7 +61,7 @@ local_message RequestPlayerItems {
   optional bool catalog = 1;
 }
 
-local_message PlayerItems {
+message PlayerItems {
   optional bool catalog = 1;
   repeated PlayerItem playerItem = 2;
 }
