@@ -10,7 +10,7 @@ module Tutorial
     end
 
     def all_for_player(player_id)
-      if entity = commands.datastore.get!(player_items_key(player_id))
+      if entity = MessageLib::Entity.db_get(player_items_key(player_id),5000)
         player_items_cache[player_id] = entity.get_player_items
       else
         player_items_cache[player_id] = MessageLib::PlayerItems.new
@@ -47,7 +47,7 @@ module Tutorial
       entity = MessageLib::Entity.new
       entity.set_player_items(player_items)
       entity.set_id(player_items_key(player_id))
-      commands.datastore.put(entity)
+      entity.db_put
     end
 
     def player_items_key(player_id)

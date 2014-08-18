@@ -39,7 +39,7 @@ module GameMachine
         connection.close
       end
 
-      def remove(key)
+      def delete(id)
         connection = @pool.get_connection(dbname)
         s = connection.prepare_statement("DELETE from entities where id = ?")
         s.setString(1,id.to_java_string)
