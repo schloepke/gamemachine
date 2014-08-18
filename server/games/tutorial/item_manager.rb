@@ -2,7 +2,7 @@ require_relative 'object_store'
 require_relative 'sql_store'
 
 module Tutorial
-  class InventoryHandler < GameMachine::Actor::GameActor
+  class ItemManager < GameMachine::Actor::GameActor
     include GameMachine
     attr_reader :player_item_cache, :catalog_list, :catalog_map, :object_store, :sql_store
 
@@ -17,12 +17,15 @@ module Tutorial
     end
 
     def on_game_message(game_message)
-      GameMachine.logger.info "Inventory handler got message"
+
+      # exactly_once returns true of the message is a reliable message, and it is the first time we have seen
+      # the message.  Use set_reply to set the reply to the client instead of using send_game_message. 
       if exactly_once(game_message)
         if game_message.has_add_player_item
           if player_item = add_player_item(game_message.add_player_item.player_item)
-            game_message.add_player_item.set_player_item(player_item)
-            set_reply(game_message)
+            reply = new_game_message.set_add_player_item(MessageLib::AddPlayerItem.new)
+            reply.add_player_item.set_player_item(player_item)
+            set_reply(reply)
           end
         end
 
@@ -31,12 +34,11 @@ module Tutorial
             game_message.remove_player_item.id,
             game_message.remove_player_item.quantity
           )
-          set_reply(game_message)
+          reply = new_game_message.set_remove_player_item(game_message.remove_player_item)
+          set_reply(reply)
         end
-      end
-    
 
-      if game_message.has_request_player_items
+      elsif game_message.has_request_player_items
         player_items_message = MessageLib::PlayerItems.new
 
         if game_message.request_player_items.catalog
@@ -48,7 +50,9 @@ module Tutorial
         
         player_message = MessageLib::GameMessage.new
         player_message.set_player_items(player_items_message)
-        send_game_message(player_message)
+        tell_player(player_message)
+      else
+        unhandled(game_message)
       end
     end
 
@@ -101,8 +105,13 @@ module Tutorial
 
     private
 
+    # Consumable items use the object store.
+    def use_object_store?(player_item)
+      player_item.has_consumable
+    end
+
     def store_save_player_item(player_item)
-      if player_item.has_consumable
+      if use_object_store?(player_item)
         object_store.save_player_item(player_item,player_id)
       else
         sql_store.save_player_item(player_item,player_id)
@@ -110,7 +119,7 @@ module Tutorial
     end
 
     def store_delete_player_item(player_item)
-      if player_item.has_consumable
+      if use_object_store?(player_item)
         object_store.delete_player_item(player_item.id,player_id)
       else
         sql_store.delete_player_item(player_item.id,player_id)

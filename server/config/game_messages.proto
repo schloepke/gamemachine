@@ -44,8 +44,14 @@ local_persistent_message PlayerItem {
   optional string color = 4;
   optional Weapon weapon = 5;
   optional Consumable consumable = 6;
+  optional Cost cost = 8;
 }
 
+
+local_message Cost {
+  required float amount = 1;
+  required string currency = 2;
+}
 
 local_message Consumable {
   required string type = 1;

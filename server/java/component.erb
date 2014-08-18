@@ -117,7 +117,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 	<% if field.default_value.nil? %>
 		public <%=get_type(field)%> <%=field.name %>;
 	<% else %>
-		public <%=get_type(field)%> <%=field.name %>;
+		public <%=get_type(field)%> <%=field.name %>; // = <%= field.default_value %>;
 	<% end %>
     
     <% end %>

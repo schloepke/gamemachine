@@ -23,6 +23,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage>
 	
 	public static void sendClientMessage(ClientMessage clientMessage,ChannelHandlerContext ctx) {
 		ctx.write(clientMessage);
+		ctx.flush();
 	}
 	
 	@Override

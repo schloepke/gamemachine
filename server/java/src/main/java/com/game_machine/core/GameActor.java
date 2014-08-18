@@ -13,7 +13,8 @@ public class GameActor extends UntypedActor {
 	private static ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
 
 	public String playerId;
-
+	public String messageId;
+	
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
 	}
@@ -34,6 +35,7 @@ public class GameActor extends UntypedActor {
 	}
 
 	public boolean setReply(GameMessage gameMessage) {
+		gameMessage.messageId = this.messageId;
 		if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
 			reliableMessages.put(gameMessage.messageId, gameMessage);
 			reliableMessageStatus.replace(gameMessage.messageId,1);
@@ -62,6 +64,7 @@ public class GameActor extends UntypedActor {
 				}
 			} else {
 				reliableMessageStatus.put(gameMessage.messageId, 0);
+				this.messageId = gameMessage.messageId;
 				return true;
 			}
 		}

@@ -14,6 +14,10 @@ module GameMachine
       def on_player_disconnect(player_id)
       end
 
+      def new_game_message
+        MessageLib::GameMessage.new
+      end
+      
       def post_init(*args)
         awake(args)
         commands.misc.client_manager_register(self.class.name)
@@ -23,8 +27,13 @@ module GameMachine
         commands.misc.call_mono(klass,message)
       end
 
-      def send_game_message(game_message,playerid=player_id)
-        commands.player.send_game_message(game_message,playerid)
+      def tell_player(game_message,target=player_id)
+        commands.player.send_game_message(game_message,target)
+      end
+
+      def tell_game_actor(game_message,target)
+        game_message.player_id = player_id
+        Actor::Base.find(target.name).tell(game_message)
       end
 
       def on_receive(message)

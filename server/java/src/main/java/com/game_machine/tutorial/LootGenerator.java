@@ -7,8 +7,8 @@ import akka.event.LoggingAdapter;
 import com.game_machine.core.Commands;
 import com.game_machine.core.GameMessageActor;
 
-public class ExampleGameMessageActor extends GameMessageActor {
-	public static String name = "example_game_message_actor";
+public class LootGenerator extends GameMessageActor {
+	public static String name = "tutorial_loot_generator";
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	
 	public void awake() {

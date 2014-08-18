@@ -35,6 +35,7 @@ module GameMachine
           )
         else
           client[:ctx].write(message)
+          client[:ctx].flush
           JavaLib::UdpServerHandler.countOut.incrementAndGet
         end
       end
