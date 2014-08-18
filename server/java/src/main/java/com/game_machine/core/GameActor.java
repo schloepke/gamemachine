@@ -12,7 +12,7 @@ public class GameActor extends UntypedActor {
 	private static ConcurrentHashMap<String, GameMessage> reliableMessages = new ConcurrentHashMap<String, GameMessage>();
 	private static ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
 
-	private String playerId;
+	public String playerId;
 
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;

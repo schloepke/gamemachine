@@ -4,9 +4,11 @@ module GameMachine
   describe "entity persistence" do
 
     let(:player_id) {'player'}
+    let(:id) {'one'}
 
     let(:test_object) do
       message = MessageLib::TestObject.new
+      message.set_id(id)
       message.set_required_string('testing')
       message.set_fvalue(1.9)
       message.set_bvalue(true)
@@ -58,7 +60,7 @@ module GameMachine
       describe "#ormFind" do
         it "should return test object with correct values" do
           test_object.orm_save(player_id)
-          obj = subject.orm_find(player_id)
+          obj = subject.orm_find(id,player_id)
           expect(obj.required_string).to eql(test_object.required_string)
           expect(obj.fvalue).to eql(test_object.fvalue)
           expect(obj.bvalue).to eql(test_object.bvalue)
@@ -70,7 +72,7 @@ module GameMachine
       describe "#ormWhere" do
         it "should return list with one test object" do
           test_object.orm_save(player_id)
-          list = subject.orm_where('dvalue = ?',3.4)
+          list = subject.orm_where('test_object_dvalue = ?',3.4)
           expect(list.to_a.size).to eql(1)
         end
       end
