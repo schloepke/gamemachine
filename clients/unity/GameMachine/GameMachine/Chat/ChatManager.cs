@@ -41,152 +41,144 @@ using GameMachine.Core;
 
 namespace GameMachine.Chat
 {
-	public class ChatManager : MonoBehaviour
-	{
-		private Chatbox chatbox;
-		private Messenger messenger;
-		private ChatCommands chatCommands;
+    public class ChatManager : MonoBehaviour
+    {
+        private Chatbox chatbox;
+        private Messenger messenger;
+        private ChatCommands chatCommands;
 
-		public static string currentGroup;
-		public static string currentTeam;
+        public static string currentGroup;
+        public static string currentTeam;
 
-		void Start ()
-		{
-			// Gui component.
-			chatbox = this.gameObject.AddComponent<Chatbox> () as Chatbox;
+        void Start ()
+        {
+            // Gui component.
+            chatbox = this.gameObject.AddComponent<Chatbox> () as Chatbox;
 
-			// The messaging actor
-			messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
+            // The messaging actor
+            messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
 
-			// Parses the chat language used by the gui and calls messenger
-			// Feel free to provide your own implementation, this is mostly a starting point.
-			// Supported syntax is documented in the source
-			chatCommands = new ChatCommands (messenger);
+            // Parses the chat language used by the gui and calls messenger
+            // Feel free to provide your own implementation, this is mostly a starting point.
+            // Supported syntax is documented in the source
+            chatCommands = new ChatCommands (messenger, chatbox);
 
-			// Setup callacks so we get notified when we join/leave channels and receive messages
-			Messenger.ChannelJoined channelCallback = ChannelJoined;
-			messenger.OnChannelJoined (channelCallback);
+            // Setup callacks so we get notified when we join/leave channels and receive messages
+            Messenger.ChannelJoined channelCallback = ChannelJoined;
+            messenger.OnChannelJoined (channelCallback);
 
-			Messenger.ChannelLeft channelLeftCallback = ChannelLeft;
-			messenger.OnChannelLeft (channelLeftCallback);
+            Messenger.ChannelLeft channelLeftCallback = ChannelLeft;
+            messenger.OnChannelLeft (channelLeftCallback);
         
-			Messenger.MessageReceived messageCallback = MessageReceived;
-			messenger.OnMessageReceived (messageCallback);
+            Messenger.MessageReceived messageCallback = MessageReceived;
+            messenger.OnMessageReceived (messageCallback);
 
-			Messenger.InviteReceived inviteCallback = InviteReceived;
-			messenger.OnInviteReceived (inviteCallback);
+            Messenger.InviteReceived inviteCallback = InviteReceived;
+            messenger.OnInviteReceived (inviteCallback);
 
-			// Send this whenever you want a list of subscribed channels, and the optional
-			// subscriber list if you have set the subscribers flag.  We do it on an interval
-			// so that you get notified when new players join a group you are in.
-			// For matchmaking you probably want this value lower so it appears more
-			// responsive.  For mmo type games it could be somewhat higher.
-			InvokeRepeating ("UpdateChatStatus", 0.01f, 1.0F);
+            // Send this whenever you want a list of subscribed channels, and the optional
+            // subscriber list if you have set the subscribers flag.  We do it on an interval
+            // so that you get notified when new players join a group you are in.
+            // For matchmaking you probably want this value lower so it appears more
+            // responsive.  For mmo type games it could be somewhat higher.
+            InvokeRepeating ("UpdateChatStatus", 0.01f, 1.0F);
 
-		}
+        }
 	
-		private void UpdateChatStatus ()
-		{
-			messenger.ChatStatus ();
-			EchoTest test = new EchoTest ();
-			test.test = "test";
-			test.id = "test1";
-			messenger.SendJsonModel (User.Instance.username, "Lobby", test, "group");
-			test.id = "test2";
-			test.Save ();
-			JsonModel.Find ("test2", typeof(EchoTest));
-		}
+        private void UpdateChatStatus ()
+        {
+            messenger.ChatStatus ();
+        }
 
-		public void InviteReceived (object message)
-		{
-			ChatInvite chatInvite = message as ChatInvite;
-			messenger.JoinChannel (chatInvite.channelName, chatInvite.invite_id);
-		}
+        public void InviteReceived (object message)
+        {
+            ChatInvite chatInvite = message as ChatInvite;
+            messenger.JoinChannel (chatInvite.channelName, chatInvite.invite_id);
+        }
 
-		public void ChannelLeft (string channelName)
-		{
-			Logger.Debug ("Left " + channelName);
+        public void ChannelLeft (string channelName)
+        {
+            if (channelName.StartsWith ("priv_")) {
+                if (channelName.EndsWith ("group")) {
+                    LeaveGroup (channelName);
+                }
+            } else {
+                chatbox.AddMessage ("yellow", "You have left " + channelName);
+            }
+        }
 
-			if (channelName.StartsWith ("priv_")) {
-				if (channelName.EndsWith ("group")) {
-					LeaveGroup (channelName);
-				}
-			} else {
-				chatbox.AddMessage ("yellow", "You have left " + channelName);
-			}
-		}
-
-		public void LeaveGroup (string channelName)
-		{
-			chatbox.AddMessage ("yellow", "You have left your group");
-		}
+        public void LeaveGroup (string channelName)
+        {
+            chatbox.AddMessage ("yellow", "You have left your group");
+        }
 
 
-		public void CreateGroup (string channelName)
-		{
-			ChannelUi.DestroyChannelUi (channelName);
-			ChannelUi.CreateChannelUi (this.gameObject, channelName, "Group");
-			currentGroup = channelName;
-			chatbox.AddMessage ("yellow", "You have joined a group");
-		}
+        public void CreateGroup (string channelName)
+        {
+            ChannelUi.DestroyChannelUi (channelName);
+            ChannelUi.CreateChannelUi (this.gameObject, channelName, "Group");
+            currentGroup = channelName;
+            chatbox.AddMessage ("yellow", "You have joined a group");
+        }
 
-		public void ChannelJoined (string channelName)
-		{
-			// private message
-			if (channelName.StartsWith ("priv_")) {
-				// private group
-				if (channelName.EndsWith ("group")) {
-					CreateGroup (channelName);
-				}
-			} else {
-				chatbox.AddMessage ("yellow", "You have joined " + channelName);
-			}
+        public void ChannelJoined (string channelName)
+        {
+            // private message
+            if (channelName.StartsWith ("priv_")) {
+                // private group
+                if (channelName.EndsWith ("group")) {
+                    CreateGroup (channelName);
+                }
+            } else {
+                chatbox.AddMessage ("yellow", "You have joined " + channelName);
+            }
 
-		}
+        }
 
-		// This is our callback function.  Messenger will send us
-		// ChatMessage objects.  We also use this for our chat commands
-		// handler, that will send error messages to this function to 
-		// be send to the gui.
-		public void MessageReceived (object message)
-		{
-			string text;
-			string color = "white";
-			string channel = "local";
-			string name = message.GetType ().Name;
-			if (name == "String") {
-				text = message as string;
-			} else {
-				ChatMessage chatMessage = message as ChatMessage;
-				string channelName = chatMessage.chatChannel.name;
-				text = chatMessage.senderId + ": " + chatMessage.message;
+        // This is our callback function.  Messenger will send us
+        // ChatMessage objects.  We also use this for our chat commands
+        // handler, that will send error messages to this function to 
+        // be send to the gui.
+        public void MessageReceived (object message)
+        {
+            string text;
+            string color = "white";
+            string channel = "local";
+            string name = message.GetType ().Name;
+            if (name == "String") {
+                text = message as string;
+            } else {
+                ChatMessage chatMessage = message as ChatMessage;
+                string channelName = chatMessage.chatChannel.name;
+                text = chatMessage.senderId + ": " + chatMessage.message;
 
-				if (chatMessage.type == "group") {
-					if (chatMessage.chatChannel.name.StartsWith ("priv_")) {
-						color = "magenta";
-						channel = "group";
-					} else {
-						color = "green";
-						channel = channelName;
-					}
+                if (chatMessage.type == "group") {
+                    if (chatMessage.chatChannel.name.StartsWith ("priv_")) {
+                        color = "magenta";
+                        channel = "group";
+                    } else {
+                        color = "green";
+                        channel = channelName;
+                    }
 
-				} else {
-					color = "white";
-				}
-				text = "|" + "[" + channel + "] " + text;
-			}
+                } else {
+                    color = "white";
+                }
+                text = "|" + "[" + channel + "] " + text;
+            }
 
-			chatbox.AddMessage (color, text);
-		}
+            Logger.Debug ("color: " + color + " text: " + text);
+            chatbox.AddMessage (color, text);
+        }
 
-		public void SendChatMessage (string message)
-		{
-			chatCommands.process (User.Instance.username, message);
-		}
+        public void SendChatMessage (string message)
+        {
+            chatCommands.process (User.Instance.username, message);
+        }
 
-		void Update ()
-		{
+        void Update ()
+        {
         
-		}
-	}
+        }
+    }
 }
