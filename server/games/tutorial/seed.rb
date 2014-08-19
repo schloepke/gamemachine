@@ -13,7 +13,7 @@ if GameMachine::Application.config.orm
       'name' => 'Sword',
       'quantity' => 100,
       'weapon' => GameMachine::MessageLib::Weapon.new.set_attack(5).set_delay(3),
-      'cost' => GameMachine::MessageLib::Cost.new.set_amount(50).set_currency('gold')
+      'cost' => GameMachine::MessageLib::Cost.new.set_amount(5).set_currency('gold')
     },
 
     {

@@ -25,6 +25,7 @@ module Tutorial
       player_items = player_items_cache[player_id]
       player_item = MessageLib::PlayerItem.new.set_id(id)
       player_items.remove_player_item_by_id(player_item)
+      save_player_items(player_items,player_id)
     end
 
     def save_player_item(player_item,player_id)

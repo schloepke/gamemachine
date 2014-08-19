@@ -6,8 +6,20 @@ module Tutorial
       MessageLib::PlayerItem.orm_find_all(player_id)
     end
 
-    def save_player_item(player_item,player_id)
-      player_item.orm_save_async(player_id)
+    def find_by_id(id,player_id,in_transaction=false)
+      if in_transaction
+        MessageLib::PlayerItem.orm_find(id,player_id,true)
+      else
+        MessageLib::PlayerItem.orm_find(id,player_id)
+      end
+    end
+
+    def save_player_item(player_item,player_id,in_transaction=false)
+      if in_transaction
+        player_item.orm_save(player_id,true)
+      else
+        player_item.orm_save_async(player_id)
+      end
     end
 
     def delete_player_item(id,player_id)

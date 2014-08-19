@@ -145,15 +145,23 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 <% end %>
 	
 <% if persistent %>
+
 	public void ormSaveAsync(String playerId) {
 		persistPlayerId = playerId;
 		persistAction = "save";
 		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
 		sel.tell(this, null);
     }
-    
+        
     public Boolean ormSave(String playerId) {
-    com.game_machine.orm.models.<%=klass%>.open();
+    	return ormSave(playerId,false);
+    }
+        
+    public Boolean ormSave(String playerId, boolean inTransaction) {
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.open();
+    	}
+    	
     	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
     	if (model == null) {
     		model = new com.game_machine.orm.models.<%=klass%>();
@@ -173,7 +181,9 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	if (!res) {
     		ormErrors = model.errors();
     	}
-    	com.game_machine.orm.models.<%=klass%>.close();
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.close();
+    	}
     	return res;
     }
     
@@ -200,9 +210,20 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     }
     
     public static <%=klass%> ormFind(String id, String playerId) {
-    	com.game_machine.orm.models.<%=klass%>.open();
+    	return ormFind(id, playerId, false);
+    }
+    
+    public static <%=klass%> ormFind(String id, String playerId, boolean inTransaction) {
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.open();
+    	}
+    	
     	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
-    	com.game_machine.orm.models.<%=klass%>.close();
+    	
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.close();
+    	}
+    	
     	if (model == null) {
     		return null;
     	} else {

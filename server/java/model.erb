@@ -31,6 +31,24 @@ CREATE TABLE `<%= klass.underscore.pluralize %>` (
 
 public class <%= klass %> extends Model {
 	
+	public static void openTransaction() {
+		open();
+		DB db = new DB("default");
+		db.openTransaction();
+	}
+	
+	public static void commitTransaction() {
+		DB db = new DB("default");
+		db.commitTransaction();
+		close();
+	}
+	
+	public static void rollbackTransaction() {
+		DB db = new DB("default");
+		db.rollbackTransaction();
+		close();
+	}
+	
 	public static void close() {
 		DB db = new DB("default");
 		if(db.hasConnection()) {
