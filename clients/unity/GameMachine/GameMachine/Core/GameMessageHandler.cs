@@ -131,10 +131,16 @@ namespace GameMachine.Core
             PropertyInfo prop;
             foreach (string componentName in behaviorGameMessages.Keys) {
                 foreach (GameMessage gameMessage in gameMessages.gameMessage) {
-                    if (gameMessage.messageId.Length != 0 && reliableMessages.ContainsKey (gameMessage.messageId)) {
-                        reliableMessages.Remove (gameMessage.messageId);
-                        Logger.Debug ("Reliable message received " + gameMessage.messageId);
+                    if (gameMessage.messageId.Length != 0) {
+                        if (reliableMessages.ContainsKey (gameMessage.messageId)) {
+                            reliableMessages.Remove (gameMessage.messageId);
+                            Logger.Debug ("Reliable message received " + gameMessage.messageId);
+                        } else {
+                            Logger.Debug ("Duplicate Reliable message " + gameMessage.messageId);
+                            continue;
+                        }
                     }
+
                     prop = GameMessageProp (componentName);
                     object component = prop.GetValue (gameMessage, null);
                     if (component != null) {

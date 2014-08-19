@@ -6,16 +6,14 @@ namespace GameMachine.Tutorial
 {
     public class TutorialSelect : MonoBehaviour
     {
-        Listbox menu = new Listbox (110, 10, 400, 150);
+        Listbox menu = new Listbox (Screen.width - 350, 10, 400, 150);
 
         private void Start ()
         {
             menu.itemWidth = 400f;
-            menu.AddItem ("tutorial_inventory", "Persistence - inventory system");
-            menu.AddItem ("tutorial_none", "None");
-            menu.AddItem ("tutorial_mmo", "Area of interest - Mmo demo");
-            menu.AddItem ("tutorial_messaging", "Messaging, Chat & Groups");
-            menu.AddItem ("tutorial_teams", "Teams & Matchmaking");
+            menu.AddItem ("item_management_demo", "Persistence - Item management");
+            menu.AddItem ("chat_demo", "Chat & Groups");
+            menu.AddItem ("team_demo", "Teams & Matchmaking");
         }
     
         private void OnGUI ()

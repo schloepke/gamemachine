@@ -4,7 +4,7 @@ using GameMachine.Core;
 
 namespace GameMachine.Tutorial
 {
-    public class Messaging : MonoBehaviour
+    public class ChatDemo : MonoBehaviour
     {
 
         // Use this for initialization

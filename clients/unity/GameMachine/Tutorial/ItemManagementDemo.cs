@@ -9,9 +9,9 @@ using PlayerItem = GameMachine.Messages.PlayerItem;
 using AddPlayerItem = GameMachine.Messages.AddPlayerItem;
 using RemovePlayerItem = GameMachine.Messages.RemovePlayerItem;
 
-namespace GameMachine.Tutorial.Inventory
+namespace GameMachine.Tutorial
 {
-    public class InventoryManager : MonoBehaviour, GameMachine.Core.Behavior
+    public class ItemManagementDemo : MonoBehaviour, GameMachine.Core.Behavior
     {
         private Dictionary<string, PlayerItem> playerItems = new Dictionary<string, PlayerItem> ();
         private Dictionary<string, PlayerItem> catalog = new Dictionary<string, PlayerItem> ();
@@ -22,7 +22,7 @@ namespace GameMachine.Tutorial.Inventory
 
         private void Start ()
         {
-            messageHandler.Register (this, "PlayerItems", "AddPlayerItem", "RemovePlayerItem");
+            messageHandler.Register (this, "PlayerItems");
 
             RequestPlayerItems requestPlayerItems = new RequestPlayerItems ();
             requestPlayerItems.catalog = true;
@@ -48,27 +48,15 @@ namespace GameMachine.Tutorial.Inventory
 
                 } else {
                     foreach (PlayerItem playerItem in playerItems.playerItem) {
-                        this.playerItems [playerItem.id] = playerItem;
+                        if (playerItem.quantity <= 0) {
+                            this.playerItems.Remove (playerItem.id);
+                        } else {
+                            this.playerItems [playerItem.id] = playerItem;
+                        }
+
                     }
                     UpdateInventory ();
                 }
-            }
-
-            if (message is AddPlayerItem) {
-                AddPlayerItem addPlayerItem = (AddPlayerItem)message;
-                PlayerItem playerItem = addPlayerItem.playerItem;
-                this.playerItems [playerItem.id] = playerItem;
-                UpdateInventory ();
-            }
-
-            if (message is RemovePlayerItem) {
-                RemovePlayerItem removePlayerItem = (RemovePlayerItem)message;
-                PlayerItem playerItem = this.playerItems [removePlayerItem.id];
-                playerItem.quantity -= removePlayerItem.quantity;
-                if (playerItem.quantity <= 0) {
-                    this.playerItems.Remove (removePlayerItem.id);
-                }
-                UpdateInventory (); 
             }
         }
          
