@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'benchmark'
 require 'jruby/core_ext'
 module GameMachine
 
@@ -13,7 +14,22 @@ module GameMachine
       entity
     end
 
-    it "finds model" do
+    it "msyql ogbject store stress" do
+      GameMachine::Application.orm_connect
+      ds = Commands::DatastoreCommands.new
+      count = 0
+      puts Benchmark.realtime {
+        10000.times do
+          entity.id = count.to_s
+          entity.db_put
+          count += 1
+          sleep 0.002
+        end
+      }
+      sleep 5
+    end
+
+    xit "finds model" do
       GameMachine::Application.orm_connect
       MessageLib::TestObject.delete_async('player1')
       if message = MessageLib::TestObject.find_by_player_id("player1")

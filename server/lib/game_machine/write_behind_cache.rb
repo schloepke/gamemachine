@@ -1,6 +1,8 @@
 module GameMachine
   class WriteBehindCache < Actor::Base
 
+    WRITE_COUNT = java.util.concurrent.atomic.AtomicInteger.new
+
     def self.max_writes_per_second
       if @max_writes_per_second
         @max_writes_per_second
@@ -64,7 +66,9 @@ module GameMachine
 
     def eligible_for_write?(message)
       return true if write_interval == -1
-      (current_time - last_updated(message)) > write_interval
+      message_last_write = last_updated(message)
+      return true if message_last_write.nil?
+      (current_time - message_last_write) > write_interval
     end
 
     def min_time_between_writes
@@ -76,15 +80,22 @@ module GameMachine
     end
 
     def queue_stats
+      GameMachine.logger.debug "#{self.class.name} write count #{WRITE_COUNT.incrementAndGet}"
       if @queue.size > 10
-        GameMachine.logger.warn "Queued messages size = #{@queue.size}"
+        GameMachine.logger.info "Queued messages size = #{@queue.size}"
       end
     end
 
     def check_queue
       return if @queue.empty?
-      if message = get_message(dequeue)
-        write(message)
+      @queue.size.times do
+        if message = get_message(dequeue)
+          if eligible_for_write?(message)
+            write(message)
+          else
+            enqueue(message)
+          end
+        end
       end
     end
 
@@ -137,6 +148,7 @@ module GameMachine
         enqueue(message.id)
       else
         message = swap_if_queued_exists(message)
+        WRITE_COUNT.incrementAndGet
         @store.set(message.id, message)
         @last_write = current_time
         set_updated_at(message)
