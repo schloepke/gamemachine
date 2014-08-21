@@ -48,7 +48,7 @@ module GameMachine
       end
 
       def start
-        load_plugins
+        load_default_handlers
         create_grids
 
         unless GameMachine.env == 'test'
@@ -110,11 +110,14 @@ module GameMachine
         end
       end
 
-      def load_plugins
+      def load_default_handlers
         begin
-          require_relative '../../plugins/team_handler.rb'
+          require_relative '../../default_handlers/team_handler'
+          require_relative '../../default_handlers/zone_manager'
+          require_relative '../../default_handlers/authentication/object_store'
+          require_relative '../../default_handlers/authentication/player_register'
         rescue LoadError => e
-          GameMachine.logger.info "plugin  not found"
+          GameMachine.logger.info "default handler not found #{e}"
         end
       end
 

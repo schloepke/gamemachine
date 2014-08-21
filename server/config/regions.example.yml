@@ -1,9 +1,9 @@
 ---
 development:
   regions:
-    zone1: Example::ZoneManager
-    zone2: Example::ZoneManager
+    zone1: GameMachine::DefaultHandlers::ZoneManager
+    zone2: GameMachine::DefaultHandlers::ZoneManager
 test:
   regions:
-    zone1: GameMachine::GameSystems::Zone1Manager
-    zone2: GameMachine::GameSystems::Zone2Manager
+    zone1: GameMachine::DefaultHandlers::ZoneManager
+    zone2: GameMachine::DefaultHandlers::ZoneManager

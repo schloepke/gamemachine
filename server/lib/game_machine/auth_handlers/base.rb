@@ -1,7 +1,5 @@
 require 'forwardable'
-require_relative 'object_store'
 require_relative 'public'
-require_relative 'player_register'
 
 module GameMachine
   module AuthHandlers

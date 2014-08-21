@@ -64,7 +64,7 @@ module GameMachine
             next
           end
 
-          # TODO: Optimize this
+          # DEPRECATED - convert to named routes as we do for game messages
           component_names = entity.component_names
           GameMachine.logger.debug("Dispatch: #{entity} #{component_names.to_a.inspect}")
           next if component_names.empty?
