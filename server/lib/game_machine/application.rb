@@ -9,14 +9,6 @@ module GameMachine
         akka.initialize!
       end
 
-      def game_message_handler=(handler)
-        @game_message_handler = handler
-      end
-
-      def game_message_handler
-        @game_message_handler
-      end
-
       def auth_handler
         AuthHandlers::Base.instance
       end
@@ -56,10 +48,10 @@ module GameMachine
       end
 
       def start
+        load_plugins
         create_grids
 
         unless GameMachine.env == 'test'
-          game_preload
           GameMachine::Actor::Reloadable.update_paths(true)
         end
 
@@ -76,10 +68,8 @@ module GameMachine
 
         start_game_systems
 
-        unless GameMachine.env == 'test'
-          GameLoader.new.load_all
-        end
-
+        load_games
+        
         auth_handler
         start_mono
 
@@ -111,11 +101,20 @@ module GameMachine
         Grid.load_from_config
       end
 
-      def game_preload
+      def load_games
         begin
-          require_relative '../../games/preload.rb'
+          require_relative '../../games/routes.rb'
+          require_relative '../../games/boot.rb'
         rescue LoadError => e
-          GameMachine.logger.info "preload.rb not found"
+          GameMachine.logger.info "Unable to load game files"
+        end
+      end
+
+      def load_plugins
+        begin
+          require_relative '../../plugins/team_handler.rb'
+        rescue LoadError => e
+          GameMachine.logger.info "plugin  not found"
         end
       end
 
@@ -173,12 +172,13 @@ module GameMachine
         Actor::Builder.new(SystemStats).start
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
 
-        # Our cluster singleton for managing regions
-        Actor::Builder.new(GameSystems::RegionManager).singleton
+        if config.use_regions
+          # Our cluster singleton for managing regions
+          Actor::Builder.new(GameSystems::RegionManager).singleton
 
-        # Hands out current region info to clients/other actors
-        Actor::Builder.new(GameSystems::RegionService).start
-
+          # Hands out current region info to clients/other actors
+          Actor::Builder.new(GameSystems::RegionService).start
+        end
 
         if ENV.has_key?('RESTARTABLE')
           GameMachine.logger.info "restartable=true.  Will respond to tmp/gm_restart.txt"

@@ -14,10 +14,6 @@ module GameMachine
     end
 
     def route(id, params)
-      unless params[:to].is_a?(String)
-        params[:to] = params[:to].name
-      end
-      
       game_message_routes[id] = params
       if params[:name]
         game_message_routes[params[:name]] = params

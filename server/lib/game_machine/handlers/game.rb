@@ -3,13 +3,10 @@ module GameMachine
     class Game < Actor::Base 
       include Commands
 
-      attr_reader :destinations, :game_message_handler, :game_message_routes
+      attr_reader :destinations, :game_message_routes
       def post_init(*args)
         @game_message_routes = Routes.instance.game_message_routes
         @destinations = {}
-        if Application.config.game_message_handler
-          @game_message_handler = Actor::Base.find(Application.config.game_message_handler)
-        end
       end
 
 

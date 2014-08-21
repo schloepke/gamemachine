@@ -21,6 +21,11 @@ module GameMachine
           end
         end
 
+        def games_root
+          File.join(GameMachine.app_root,'/games')
+        end
+
+        
         def register(name)
           registered_actors[File.basename(name.underscore)] = name
         end
@@ -32,7 +37,7 @@ module GameMachine
         end
 
         def update_paths(first_run=false)
-          Dir.glob(File.join(GameLoader.games_root,'**','*.rb')).each do |file|
+          Dir.glob(File.join(games_root,'**','*.rb')).each do |file|
             mtime = File.mtime(file)
             basename = File.basename(file,'.rb')
 

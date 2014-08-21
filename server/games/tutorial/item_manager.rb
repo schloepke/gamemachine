@@ -4,12 +4,17 @@ require_relative 'sql_store'
 module Tutorial
 
   # Provides item persistence and management.  Choice of using object store or sql on a per item basis.
-  # The choice of what store you use is up to you.  Adding sql items can be expensive, especially for limited
-  # quantity or items that have a cost, as we use synchronous queries and transactions.  Sql delets are asynchronous,
-  # as are all object store operations.
+  # Items that have a limited quantity or a cost involve updating multiple records.  These items will benefit from
+  # using sql as the item manager wraps those updates in a transaction to ensure the updates are atomic.  But that comes
+  # at a cost.  Do not use sql for items just because you prefer sql.
+
+  # Items that are not limited quantity or have a cost, only require updating the item itself.  These items are ideal for
+  # the object store.  Because we use a distributed router for the item manager, even object store items are saved atomically.
+  # The limitation of the object store is that we cannot save multiple items atomically, but are limited to just one.
 
   # This demo is designed to show the full persistence api and reliable messaging in a common use case.  It should work
   # fine as a starting point for your own item management.
+
 
   # Design notes:
   # - Item definitions are just items assigned to the 'global' user.  Player items are created by cloning one of the global items.
@@ -159,6 +164,7 @@ module Tutorial
 
     def add_sql_item(player_item,catalog_item)
       state = OpenStruct.new
+      changed_items = []
       state.player_item = player_item(player_item.id,catalog_item).clone
 
       begin
@@ -174,7 +180,7 @@ module Tutorial
           else
             ModelLib::PlayerItem.rollback_transaction
             GameMachine.logger.info "Insufficient quantity (#{current_catalog_item.quantity}) for #{player_item.id}"
-            return []
+            return changed_items
           end
         end
 
@@ -183,7 +189,7 @@ module Tutorial
           if state.player_currency.nil?
             ModelLib::PlayerItem.rollback_transaction
             GameMachine.logger.info "cost deduction failed #{player_item.id}"
-            return []
+            return changed_items
           end
         end
 
@@ -193,6 +199,7 @@ module Tutorial
         ModelLib::PlayerItem.commit_transaction
 
         player_items[state.player_item.id] = state.player_item
+        changed_items << state.player_item
         
         if state.catalog_item
           catalog_item = state.catalog_item
@@ -200,9 +207,10 @@ module Tutorial
 
         if state.player_currency
           player_items[state.player_currency.id] = state.player_currency
+          changed_items << state.player_currency
         end
 
-        return [state.player_item,state.player_currency].compact
+        return changed_items
       rescue Exception => e
         GameMachine.logger.error "Error adding sql item #{player_item.id} #{e.to_s} \n #{e.backtrace.join("\n")}"
         ModelLib::PlayerItem.rollback_transaction
@@ -213,6 +221,8 @@ module Tutorial
     # - item is not currency
     # - item is not limited quantity
     # - item does not have a cost
+
+    # Note that cost handling is not implemented for object store items.
     def object_store_item?(player_item)
       catalog_item = catalog_map.fetch(player_item.id)
       if catalog_item.has_cost

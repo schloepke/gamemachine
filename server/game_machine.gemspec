@@ -31,6 +31,8 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'wavefront'
 
   gem.add_development_dependency 'rake'
+  gem.add_development_dependency 'nanoc'
+  gem.add_development_dependency 'kramdown'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'rspec-mocks'
   gem.add_development_dependency 'rspec-expectations'
