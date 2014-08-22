@@ -5,7 +5,6 @@ apply plugin: 'eclipse'
 apply plugin:'scala'
 
 
-
 buildscript {
   repositories { jcenter() }
   dependencies {
@@ -64,6 +63,8 @@ dependencies {
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
 import org.javalite.instrumentation.Instrumentation
+
+
 
 shadowJar {
   transform(AppendingTransformer) {

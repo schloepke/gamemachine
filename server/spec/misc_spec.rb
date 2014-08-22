@@ -14,7 +14,7 @@ module GameMachine
       entity
     end
 
-    it "msyql ogbject store stress" do
+    xit "msyql ogbject store stress" do
       GameMachine::Application.orm_connect
       ds = Commands::DatastoreCommands.new
       count = 0
@@ -26,7 +26,6 @@ module GameMachine
           sleep 0.002
         end
       }
-      sleep 5
     end
 
     xit "finds model" do
