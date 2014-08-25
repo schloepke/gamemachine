@@ -18,13 +18,13 @@ server/tmp
 server/config/config.yml
 server/config/combined_messages.proto
 server/lib/bin
-server/java/bin
-server/java/build
-server/java/lib
+server/java/project/bin
+server/java/project/build
+server/java/project/lib
 server/log
 server/tmp
 server/pathfinding/build
-server/java/src/main/java/GameMachine/Messages/*.java
+server/java/project/src/main/java/GameMachine/Messages/*.java
 
 
 ## Documentation cache and generated files:
@@ -32,4 +32,4 @@ server/java/src/main/java/GameMachine/Messages/*.java
 /_yardoc/
 /doc/
 /rdoc/
-/server/java/.nb-gradle/private/
+/server/java/project/.nb-gradle/private/
