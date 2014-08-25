@@ -18,6 +18,10 @@ module GameMachine
         @app_root = app_root
       end
 
+      def java_root
+        ENV['JAVA_ROOT']
+      end
+      
       def self.compile(path)
         loader = CachingProtoLoader.new
         file = java.io.File.new(path)
@@ -25,19 +29,19 @@ module GameMachine
       end
 
       def erb_template
-        File.join(app_root,'java','component.erb')
+        File.join(java_root,'component.erb')
       end
 
       def model_template
-        File.join(app_root,'java','model.erb')
+        File.join(java_root,'model.erb')
       end
 
       def model_src
-        File.join(app_root,'java','src','main','java','com', 'game_machine','orm','models')
+        File.join(java_root,'src','main','java','com', 'game_machine','orm','models')
       end
 
       def java_src
-        File.join(app_root,'java','src','main','java','GameMachine', 'Messages')
+        File.join(java_root,'src','main','java','GameMachine', 'Messages')
       end
 
       def config_path

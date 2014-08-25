@@ -19,6 +19,7 @@ class WebApp < Sinatra::Base
   set :root, File.expand_path(File.dirname(__FILE__))
   set :environment, :production
   mime_type :proto, 'application/octet-stream'
+  set :server, :puma
 
   register Sinatra::MultiRoute
   enable :sessions

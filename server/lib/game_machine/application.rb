@@ -63,7 +63,7 @@ module GameMachine
         start_handlers
 
         if GameMachine.env == 'development'
-          start_development_systems
+          #start_development_systems
         end
 
         start_game_systems
@@ -169,11 +169,9 @@ module GameMachine
         Actor::Builder.new(ReloadableMonitor).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(WriteBehindCache).distributed(2).start
-        Actor::Builder.new(GridReplicator).start
         Actor::Builder.new(ClientManager).start
-        Actor::Builder.new(GameSystems::EntityLoader).start
         Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,5).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -191,11 +189,11 @@ module GameMachine
 
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,4).start
+        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,2).start
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
-        Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,5).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).start
         Actor::Builder.new(GameSystems::JsonModelPersistence).start

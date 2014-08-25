@@ -20,7 +20,7 @@ module GameMachine
 end
 require 'java'
 
-jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
+jars = Dir[File.join(GameMachine.java_root, 'lib', '*.jar')]
 jars.each do |jar|
   require jar
 end
@@ -62,7 +62,6 @@ require_relative 'game_machine/scheduler'
 require_relative 'game_machine/endpoints'
 require_relative 'game_machine/protobuf_extensions/entity_helper'
 require_relative 'game_machine/helpers/game_message'
-require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
 require_relative 'game_machine/mono_server'

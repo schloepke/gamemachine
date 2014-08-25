@@ -1,7 +1,7 @@
 #!/usr/bin/env jruby
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
-ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java')
+ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
 ENV['GAME_ENV'] = 'development'
 
 # with the ui stdout/stderr are hidden, so redirect them to the log
@@ -45,7 +45,7 @@ if command == 'new'
   GameMachine::Console::Install.new(ARGV,install_source_path).run!
 
 elsif command == 'build'
-  require_relative  '../java/local_lib/protostuff-compiler-1.0.8-jarjar.jar'
+  require_relative  '../java/project/local_lib/protostuff-compiler-1.0.8-jarjar.jar'
   require_relative '../lib/game_machine/protobuf/game_messages.rb'
   require_relative '../lib/game_machine/protobuf/generate.rb'
   GameMachine::Console::Build.new(ARGV).run!

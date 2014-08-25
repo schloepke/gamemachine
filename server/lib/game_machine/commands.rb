@@ -7,7 +7,7 @@ require_relative 'commands/misc_commands'
 require_relative 'commands/proxy'
 require_relative 'commands/base'
 
-if Config::CONFIG['target_os'] == 'linux'
+if RbConfig::CONFIG['host_os'].match(/linux/i)
   require_relative 'commands/navigation_commands'
 end
 
