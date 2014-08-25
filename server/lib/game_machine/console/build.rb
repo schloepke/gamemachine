@@ -38,7 +38,7 @@ module GameMachine
           cmd = "#{protogen_path} -i:#{proto_file} -o:#{messages_out_file}"
         else
           bin_out_file =  File.join(ENV['APP_ROOT'],'messages.bin')
-          cmd = "protoc -I#{proto_path} #{proto_file} -o#{bin_out_file}; #{protogen_path} -i:#{bin_out_file} -o:#{messages_out_file};rm -f #{bin_out_file}"
+          cmd = "protoc -I#{proto_path} #{proto_file} -o#{bin_out_file}; mono #{protogen_path} -i:#{bin_out_file} -o:#{messages_out_file};rm -f #{bin_out_file}"
         end
         
         puts "Running #{cmd}"
