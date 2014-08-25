@@ -13,6 +13,7 @@ server/games/moba
 *.swp
 .gradle
 .vagrant
+*.cache
 /pkg/
 server/tmp
 server/config/config.yml
