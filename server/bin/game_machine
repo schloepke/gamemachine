@@ -4,13 +4,6 @@ ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
 ENV['GAME_ENV'] = 'development'
 
-# with the ui stdout/stderr are hidden, so redirect them to the log
-if ENV['ADMIN_UI']
-  logfile = File.join(ENV['APP_ROOT'], 'log',"#{ENV['GAME_ENV']}.log")
-  $stdout.reopen logfile
-  $stderr.reopen logfile
-end
-
 require 'rubygems'
 require 'fileutils'
 
@@ -37,7 +30,10 @@ command = aliases[command] || command
 
 require_relative '../lib/game_machine/console'
 
-if command == 'new'
+if command == 'service'
+  GameMachine::Console::Service.new(ARGV).run!
+
+elsif command == 'new'
   bin_path = File.dirname(__FILE__)
   install_source_path = File.expand_path(
     File.join(bin_path,'../')
@@ -59,22 +55,16 @@ elsif command == 'server'
   # Run the server
   server.run!
 
-elsif command == 'server_loop'
-  GameMachine::Console::Server.run_in_loop
 else
 
 puts <<EOF
   Usage:
   
   game_machine server [options]      Start the server
-    -r, --restartable                If tmp/gm_restart.txt should trigger a restart
     -s, --server=name                Server name
     -c, --config=name                Configuration file
     -e, --environment=name           Specifies the environment to run under (development/production).
                                      Default: development
-
-  game_machine server_loop           Runs server in loop that restarts when tmp/gm_restart.txt
-                                     is present. On restart it will run build then server -r.
 
   game_machine build                 Generate and compile protobuf messages
 
@@ -82,4 +72,6 @@ puts <<EOF
                                      specified path
     
 EOF
+
+exit 1
 end

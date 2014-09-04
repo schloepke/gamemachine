@@ -12,7 +12,7 @@ module GameMachine
         java_dir = File.join(File.expand_path(Dir.pwd),'java')
         unless File.directory?(java_dir)
           puts "Please run game_machine from your game directory"
-          exit 0
+          exit 1
         end
       end
 
@@ -68,7 +68,7 @@ module GameMachine
         check_start_dir
 
         if options[:build_on_start]
-          GameMachine::Console::Build.new([]).build
+          GameMachine::Console::Build.new([]).run!
         end
 
         GameMachine.logger.info "Starting with options = #{options.inspect}"

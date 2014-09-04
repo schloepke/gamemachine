@@ -28,9 +28,7 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import GameMachine.Messages.Entity;
 import com.game_machine.core.LocalLinkedBuffer;
 
-<% if klass == 'Entity' %>
 import com.game_machine.core.DatastoreCommands;
-<% end %>
 
 <% if persistent %>
 import com.game_machine.core.PersistentMessage;
@@ -98,7 +96,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
 
 <% if persistent %>
-	public Errors ormErrors;
+	public Errors dbErrors;
 	public String persistPlayerId;
 	public String getPersistPlayerId() {
 		return persistPlayerId;
@@ -131,33 +129,83 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     }
 
 <% if klass == 'Entity' %>
-	public void dbPut() {
+
+	public static String scopeId(String playerId, String id) {
+    	return playerId + "##" + id;
+    }
+    
+    public static String unscopeId(String id) {
+    	if (id.contains("##")) {
+    		String[] parts = id.split("##");
+        	return parts[1];
+    	} else {
+    		throw new RuntimeException("Expected "+id+" to contain ##");
+    	}
+    }
+    
+	public void osPut(String playerId) {
+		this.id = scopeId(playerId,this.id);
 		DatastoreCommands.put(this);
 	}
-	
-	public static void dbDelete(String entityId) {
-		DatastoreCommands.delete(entityId);
+		
+	public static void osDelete(String playerId, String id) {
+		String scopedId = scopeId(playerId,id);
+		DatastoreCommands.delete(scopedId);
 	}
 		
-	public static Entity dbGet(String entityId, int timeout) {
-		return DatastoreCommands.get(entityId, timeout);
+	public static Entity osGet(String playerId, String id, int timeout) {
+		String scopedId = scopeId(playerId,id);
+		Entity entity = DatastoreCommands.get(scopedId, timeout);
+		if (entity == null) {
+			return null;
+		} else {
+			entity.id = unscopeId(entity.id);
+			return entity;
+		}
 	}
+<% else %>
+	<% message.getFields.each do |field| %>
+		<% if field.name == 'id' %>
+	public void osPut(String playerId) {
+		Entity entity = new Entity();
+		entity.setId(this.id);
+		NativeBytes nativeBytes = new NativeBytes();
+		nativeBytes.bytes = ByteString.copyFrom(this.toByteArray());
+		entity.setNativeBytes(nativeBytes);
+		entity.osPut(playerId);
+	}
+	
+	public static void osDelete(String playerId, String id) {
+		Entity.osDelete(playerId,id);
+	}
+		
+	public static <%=klass%> osGet(String playerId, String id, int timeout) {
+		Entity entity = Entity.osGet(playerId,id, timeout);
+		if (entity == null) {
+			return null;
+		} else {
+			return <%=klass%>.parseFrom(entity.nativeBytes.bytes.toByteArray());
+		}
+	}
+		<% end %>
+	<% end %>
+
 <% end %>
 	
 <% if persistent %>
 
-	public void ormSaveAsync(String playerId) {
+	public void dbSaveAsync(String playerId) {
 		persistPlayerId = playerId;
 		persistAction = "save";
 		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
 		sel.tell(this, null);
     }
         
-    public Boolean ormSave(String playerId) {
-    	return ormSave(playerId,false);
+    public Boolean dbSave(String playerId) {
+    	return dbSave(playerId,false);
     }
         
-    public Boolean ormSave(String playerId, boolean inTransaction) {
+    public Boolean dbSave(String playerId, boolean inTransaction) {
     	if (!inTransaction) {
     		com.game_machine.orm.models.<%=klass%>.open();
     	}
@@ -179,7 +227,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	
     	Boolean res = model.save();
     	if (!res) {
-    		ormErrors = model.errors();
+    		dbErrors = model.errors();
     	}
     	if (!inTransaction) {
     		com.game_machine.orm.models.<%=klass%>.close();
@@ -187,7 +235,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	return res;
     }
     
-    public static void ormDeleteAsync(String id, String playerId) {
+    public static void dbDeleteAsync(String id, String playerId) {
     	<%=klass%> message = new <%=klass%>();
     	message.setId(id);
 		message.persistPlayerId = playerId;
@@ -196,7 +244,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 		sel.tell(message, null);
     }
     
-    public Boolean ormDelete(String playerId) {
+    public Boolean dbDelete(String playerId) {
     	Boolean result;
     	com.game_machine.orm.models.<%=klass%>.open();
     	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
@@ -209,11 +257,11 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	return result;
     }
     
-    public static <%=klass%> ormFind(String id, String playerId) {
-    	return ormFind(id, playerId, false);
+    public static <%=klass%> dbFind(String id, String playerId) {
+    	return dbFind(id, playerId, false);
     }
     
-    public static <%=klass%> ormFind(String id, String playerId, boolean inTransaction) {
+    public static <%=klass%> dbFind(String id, String playerId, boolean inTransaction) {
     	if (!inTransaction) {
     		com.game_machine.orm.models.<%=klass%>.open();
     	}
@@ -235,7 +283,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	}
     }
     
-    public static List<<%=klass%>> ormFindAll(String playerId) {
+    public static List<<%=klass%>> dbFindAll(String playerId) {
     	com.game_machine.orm.models.<%=klass%>.open();
     	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
     	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
@@ -250,7 +298,7 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	return messages;
     }
     
-    public static List<<%=klass%>> ormWhere(String query, Object ... params) {
+    public static List<<%=klass%>> dbWhere(String query, Object ... params) {
     	com.game_machine.orm.models.<%=klass%>.open();
     	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
     	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();

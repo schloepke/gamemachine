@@ -35,7 +35,7 @@ module Tutorial
 
       @player_item_cache = {}
 
-      @catalog_list = MessageLib::PlayerItem.orm_find_all(catalog_user)
+      @catalog_list = MessageLib::PlayerItem.db_find_all(catalog_user)
       @catalog_map = catalog_list.each_with_object({}) {|v,res| res[v.id] = v}
     end
 

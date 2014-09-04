@@ -17,9 +17,9 @@ public class MessagePersister extends UntypedActor {
 			PersistentMessage persistentMessage = (PersistentMessage)message;
 			String action = persistentMessage.getPersistAction();
 			if (action.equals("save")) {
-				persistentMessage.ormSave(persistentMessage.getPersistPlayerId());
+				persistentMessage.dbSave(persistentMessage.getPersistPlayerId());
 			} else if (action.equals("delete")) {
-				persistentMessage.ormDelete(persistentMessage.getPersistPlayerId());
+				persistentMessage.dbDelete(persistentMessage.getPersistPlayerId());
 			}
 		}
 	}

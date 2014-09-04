@@ -3,33 +3,31 @@ development:
   servers:
     default:
       environment: development
-      # Handles requests for matchmaking and custom filtering for teams.
-      # If no team handler is defined defaults are used
-      team_handler: Plugins::TeamHandler
+      use_regions: true
+      team_handler: GameMachine::DefaultHandlers::TeamHandler
       # Authorization handler.  Public allows any authtoken to be used and
       # does not check username/password
-      auth_handler: Example::AuthenticationHandler
-      #auth_handler: GameMachine::AuthHandlers::Public
+      #auth_handler: GameMachine::DefaultHandlers::Authentication::ObjectStore
+      auth_handler: GameMachine::AuthHandlers::Public
       # Class that handles user registration via web page
-      player_register_handler: Example::PlayerRegister
-      # Player manager.  Receives player status updates
-      player_manager: Example::PlayerManager
-      # Top level actor that handles game messages. Don't change this 
-      game_handler: GameMachine::Handlers::Request
-      # Hook for accessing location updates from players (cheat prevention)
-      entity_tracking_handler: Example::TrackingHandler
+      player_register_handler: GameMachine::DefaultHandlers::Authentication::PlayerRegister
+      #player_register_handler: Example::PlayerRegister
       # Size of the router for incoming message from all clients
-      game_handler_routers: 10
+      game_handler_routers: 20
       # Also in the pipeline for all incoming requests, should be set the same as
       # game_handler_routers
-      request_handler_routers: 10
+      request_handler_routers: 20
       # router size for the udp actor that handles all incoming upd messages
       udp_routers: 10
       # What data store the object database will use (one of memory, mapdb, or couchbase)
       data_store: memory
-      # Advanced settings for write behind cache.  -1 disables.  This is fine for
-      # all but large games with high traffic (hundreds of writes per second)
+      # minimum time in milliseconds between writes to the backing store of the same key.  When a message
+      # exceeds the limit it is either enqueued, or if already enqueued, it's value is updated, it's
+      # value is updated. -1 disables caching.  Default 1000
       cache_write_interval: -1
+      # Total writes per second to the backing store that an actor will allow, across all keys.  Note this is on a per actor
+      # basis.  If you want to limit total writes per second to your database, this value should be a multiple of the number
+      # of write behind cache actors that are started.  -1 disables caching. Default 100
       cache_writes_per_second: -1
       # Spatial grids.  default, aoe, and local_chat are required.
       # value is grid size, cell size, and update frequency
@@ -37,14 +35,19 @@ development:
         default: 4000, 50, 1
         aoe: 4000, 5, 1
         local_chat: 4000, 10, 10
-      # Mysql config
-      mysql_url: jdbc:mysql://localhost:3306/game_machine
-      mysql_driver: com.mysql.jdbc.Driver
-      mysql_username: root
-      mysql_password:
+      orm: false
+      # JDBC
+      #
+      # Mysql
+      jdbc_hostname: 127.0.0.1
+      jdbc_database: game_machine
+      jdbc_url: jdbc:mysql://127.0.0.1:3306/game_machine
+      jdbc_driver: com.mysql.jdbc.Driver
+      jdbc_username: root
+      jdbc_password: mysql
       # Couchbase config
-      couchbase_bucket: default
-      couchbase_password:
+      couchbase_bucket: gamemachine
+      couchbase_password: pass
       couchbase_servers:
         - http://127.0.0.1:8091/pools
       http_enabled: true
@@ -55,49 +58,10 @@ development:
       udp_port: 24130
       tcp_enabled: true
       tcp_host: 0.0.0.0
-      tcp_port: 8700
-      akka_host: 127.0.0.1
+      tcp_port: 8910
+      akka_host: 0.0.0.0
       akka_port: 2551
       # array of seed servers.  Required if node is in a cluster
-      seeds: [default,seed01]
+      seeds: [default]
       # Mono server settings
-      mono_enabled: false
-    seed01:
-      environment: development
-      team_handler: Plugins::TeamHandler
-      auth_handler: Example::AuthenticationHandler
-      player_register_handler: Example::PlayerRegister
-      player_manager: Example::PlayerManager
-      game_handler: GameMachine::Handlers::Request
-      entity_tracking_handler: Example::TrackingHandler
-      game_handler_routers: 10
-      request_handler_routers: 10
-      udp_routers: 10
-      data_store: mapdb
-      cache_write_interval: -1
-      cache_writes_per_second: -1
-      grids:
-        default: 4000, 50, 1
-        aoe: 4000, 5, 1
-        local_chat: 4000, 10, 10
-      mysql_url: jdbc:mysql://localhost:3306/game_machine
-      mysql_driver: com.mysql.jdbc.Driver
-      mysql_username: root
-      mysql_password:
-      couchbase_bucket: default
-      couchbase_password:
-      couchbase_servers:
-        - http://127.0.0.1:8091/pools
-      http_enabled: false
-      http_host: 127.0.0.1
-      http_port: 3000
-      udp_enabled: true
-      udp_host: 0.0.0.0
-      udp_port: 24130
-      tcp_enabled: false
-      tcp_host: 0.0.0.0
-      tcp_port: 8700
-      akka_host: 127.0.0.1
-      akka_port: 2551
-      seeds: [default,seed01]
       mono_enabled: false

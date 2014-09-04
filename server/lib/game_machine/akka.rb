@@ -39,11 +39,17 @@ module GameMachine
       cluster? ? akka_cluster_config : akka_server_config
     end
 
+    def join_self?
+      ENV.has_key?('AKKA_JOIN_SELF') || app_config.config.seeds.empty?
+    end
+
     def start
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system)
-      #start_camel_extension
+      if join_self?
+        JavaLib::ActorUtil.joinCluster("akka.tcp", "cluster", app_config.config.akka_host, app_config.config.akka_port)
+      end
     end
 
     def stop

@@ -10,7 +10,7 @@ module Tutorial
     end
 
     def all_for_player(player_id)
-      if entity = MessageLib::Entity.db_get(player_items_key(player_id),5000)
+      if entity = MessageLib::Entity.os_get(player_id,'player_items',5000)
         player_items_cache[player_id] = entity.get_player_items
       else
         player_items_cache[player_id] = MessageLib::PlayerItems.new
@@ -47,12 +47,8 @@ module Tutorial
     def save_player_items(player_items,player_id)
       entity = MessageLib::Entity.new
       entity.set_player_items(player_items)
-      entity.set_id(player_items_key(player_id))
-      entity.db_put
-    end
-
-    def player_items_key(player_id)
-      "player_items_#{player_id}"
+      entity.set_id('player_items')
+      entity.os_put(player_id)
     end
 
   end

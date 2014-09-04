@@ -2,12 +2,19 @@ package com.game_machine.core;
 
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
+import akka.actor.Address;
+import akka.cluster.Cluster;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 public class ActorUtil {
 
+	public static void joinCluster(String protocol, String name, String host, int port) {
+		ActorSystem system = GameMachineLoader.getActorSystem();
+		Address address = new Address(protocol,name,host,port);
+		Cluster.get(system).join(address);
+	}
 	
 	public static ActorSelection getSelectionByClass(Class<?> klass) {
 		return GameMachineLoader.getActorSystem().actorSelection("/user/"+ klass.getSimpleName());

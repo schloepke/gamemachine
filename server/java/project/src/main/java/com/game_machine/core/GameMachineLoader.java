@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -11,7 +12,8 @@ public class GameMachineLoader {
 	
 
 	@SuppressWarnings("unused")
-	private static final Logger log = Logger.getLogger(GameMachineLoader.class.getName());
+	private static final Logger log = LoggerFactory.getLogger(GameMachineLoader.class);
+	public static final Logger logger = LoggerFactory.getLogger("game_machine");
 	private static ActorSystem actorSystem;
 
 	

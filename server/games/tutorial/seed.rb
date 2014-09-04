@@ -46,7 +46,7 @@ items.each do |item|
     end
   end
 
-  unless player_item.orm_save('global')
-    puts player_item.ormErrors.inspect
+  unless player_item.db_save('global')
+    puts player_item.dbErrors.inspect
   end
 end

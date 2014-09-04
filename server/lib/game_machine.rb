@@ -1,4 +1,3 @@
-require 'rjack-logback'
 require 'rbconfig'
 
 require_relative 'game_machine/ruby_extensions/nilclass'
@@ -18,6 +17,7 @@ module GameMachine
     ENV.fetch('JAVA_ROOT')
   end
 end
+
 require 'java'
 
 jars = Dir[File.join(GameMachine.java_root, 'lib', '*.jar')]
@@ -26,9 +26,6 @@ jars.each do |jar|
 end
 
 require_relative 'game_machine/java_lib'
-if ENV['ADMIN_UI']
-  GameMachine::JavaLib::AdminUi.main([])
-end
 
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
@@ -79,5 +76,10 @@ end
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
+
+Signal.trap("TERM") {
+  puts "Caught SIGTERM, exiting"
+  System.exit(0)
+}
 
 

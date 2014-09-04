@@ -16,7 +16,7 @@ module GameMachine
           Application.config.jdbc_password || ''
         )
           GameMachine.logger.error "Unable to establish database connection, exiting"
-          System.exit 0
+          System.exit 1
         end
         @pool
       end

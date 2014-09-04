@@ -63,7 +63,7 @@ module GameMachine
             end
           end
           unless message_fields.empty?
-            puts "#{message.getName} #{message_fields.inspect}"
+            #puts "#{message.getName} #{message_fields.inspect}"
           end
 
           klass = message.getName

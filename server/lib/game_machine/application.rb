@@ -48,7 +48,6 @@ module GameMachine
       end
 
       def start
-        load_default_handlers
         create_grids
 
         unless GameMachine.env == 'test'
@@ -63,7 +62,7 @@ module GameMachine
         start_handlers
 
         if GameMachine.env == 'development'
-          #start_development_systems
+          start_development_systems
         end
 
         start_game_systems
@@ -73,11 +72,13 @@ module GameMachine
         auth_handler
         start_mono
 
-        GameMachine.stdout("Game Machine start successful")
+        GameMachine.logger.info("Game Machine start successful")
         
         # This call blocks, make it the last thing we do
         if config.http_enabled
-          start_http
+          Thread.new do
+            start_http
+          end
         end
       end
 
@@ -92,7 +93,7 @@ module GameMachine
             config.jdbc_password || ''
           )
             GameMachine.logger.error "Unable to establish database connection, exiting"
-            System.exit 0
+            System.exit 1
           end
         end
       end
@@ -110,17 +111,6 @@ module GameMachine
         end
       end
 
-      def load_default_handlers
-        begin
-          require_relative '../../default_handlers/team_handler'
-          require_relative '../../default_handlers/zone_manager'
-          require_relative '../../default_handlers/authentication/object_store'
-          require_relative '../../default_handlers/authentication/player_register'
-        rescue LoadError => e
-          GameMachine.logger.info "default handler not found #{e}"
-        end
-      end
-
       def start_http
         require_relative '../../web/app'
       end
@@ -135,7 +125,7 @@ module GameMachine
       def start_endpoints
         if config.tcp_enabled
           JavaLib::TcpServer.start(config.tcp_host, config.tcp_port);
-          GameMachine.stdout(
+          GameMachine.logger.info(
             "Tcp starting on #{config.tcp_host}:#{config.tcp_port}"
           )
         end
@@ -163,15 +153,15 @@ module GameMachine
       def start_core_systems
         JavaLib::GameMachineLoader.StartMessageGateway
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(ObjectDb).distributed(2).start
+        Actor::Builder.new(ObjectDb).distributed(10).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(ReloadableMonitor).start
         Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(2).start
+        Actor::Builder.new(WriteBehindCache).distributed(10).start
         Actor::Builder.new(ClientManager).start
         Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,5).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -189,7 +179,7 @@ module GameMachine
 
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,2).start
+        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,10).start
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
