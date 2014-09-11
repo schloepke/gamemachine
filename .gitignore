@@ -25,6 +25,8 @@ server/java/project/lib
 server/log
 server/tmp
 server/pathfinding/build
+server/java/project/bin
+server/java/project/.cache
 server/java/project/src/main/java/GameMachine/Messages/*.java
 
 
