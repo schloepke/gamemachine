@@ -71,7 +71,8 @@ public final class UdpServer implements Runnable {
 			boot.option(ChannelOption.SO_BROADCAST, false);
 			boot.handler(new UdpServerHandler());
 
-			boot.bind(this.port).sync().channel().closeFuture().await();
+			InetSocketAddress address = new InetSocketAddress(hostname,port);
+			boot.bind(address).sync().channel().closeFuture().await();
 
 		} catch (InterruptedException e) {
 			e.printStackTrace();

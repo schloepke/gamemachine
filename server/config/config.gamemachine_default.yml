@@ -2,8 +2,6 @@
 development:
   servers:
     default:
-      gamecloud_api_key: 1a77d75e32767f89b0710311be1fd8a5
-      gamecloud_username: chris
       environment: development
       use_regions: true
       team_handler: GameMachine::DefaultHandlers::TeamHandler
@@ -15,14 +13,14 @@ development:
       player_register_handler: GameMachine::DefaultHandlers::Authentication::PlayerRegister
       #player_register_handler: Example::PlayerRegister
       # Size of the router for incoming message from all clients
-      game_handler_routers: 20
+      game_handler_routers: 5
       # Also in the pipeline for all incoming requests, should be set the same as
       # game_handler_routers
-      request_handler_routers: 20
+      request_handler_routers: 5
       # router size for the udp actor that handles all incoming upd messages
-      udp_routers: 10
+      udp_routers: 5
       # What data store the object database will use (one of memory, mapdb, or couchbase)
-      data_store: memory
+      data_store: jdbc
       # minimum time in milliseconds between writes to the backing store of the same key.  When a message
       # exceeds the limit it is either enqueued, or if already enqueued, it's value is updated, it's
       # value is updated. -1 disables caching.  Default 1000
@@ -39,14 +37,20 @@ development:
         local_chat: 4000, 10, 10
       orm: false
       # JDBC
-      #
-      # Mysql
+      # Postgresql
       jdbc_hostname: 127.0.0.1
       jdbc_database: game_machine
-      jdbc_url: jdbc:mysql://127.0.0.1:3306/game_machine
-      jdbc_driver: com.mysql.jdbc.Driver
+      jdbc_url: jdbc:postgresql://127.0.0.1:5432/game_machine
+      jdbc_driver: org.postgresql.Driver
       jdbc_username: root
-      jdbc_password: mysql
+      jdbc_password: postgresql
+      # Mysql
+      #jdbc_hostname: 127.0.0.1
+      #jdbc_database: game_machine
+      #jdbc_url: jdbc:mysql://127.0.0.1:3306/game_machine
+      #jdbc_driver: com.mysql.jdbc.Driver
+      #jdbc_username: root
+      #jdbc_password: mysql
       # Couchbase config
       couchbase_bucket: gamemachine
       couchbase_password: pass

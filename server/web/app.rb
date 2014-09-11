@@ -84,6 +84,18 @@ class WebApp < Sinatra::Base
     JSON.generate({})
   end
 
+  get '/clusterinfo' do
+    info = {}
+    info[:members] = {}
+    GameMachine::ClusterMonitor.cluster_members.keys.each do |key|
+      member = GameMachine::ClusterMonitor.cluster_members[key]
+      info[:members][key] = {:address => member.address, :status => member.status}
+    end
+    info[:self_address] = GameMachine::Akka.instance.address
+
+    JSON.generate(info)
+  end
+
   get '/restart' do
     haml :restart
   end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_minimal'
 require 'benchmark'
 require 'jruby/core_ext'
 module GameMachine
@@ -12,6 +12,28 @@ module GameMachine
       player.id = '2'
       entity.player = player
       entity
+    end
+
+    it "couch http client" do
+      entity = MessageLib::Entity.new.set_id('3')
+      client = JavaLib::Couchclient.get_instance
+      10.times do |i|
+        id = "TESTING#{i}"
+        response = client.put(id,entity.to_byte_array)
+        puts response.status
+        #puts response.body
+
+        response = client.get(id)
+        puts response.status
+        if response.status == 200
+          puts MessageLib::Entity.parse_from(response.body)
+        end
+        
+
+        response = client.delete(id)
+        puts response.status
+        #puts response.body
+      end
     end
 
     xit "msyql ogbject store stress" do

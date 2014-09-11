@@ -1,4 +1,5 @@
 package com.game_machine.core;
+import java.net.InetSocketAddress;
 import java.security.cert.CertificateException;
 
 import javax.net.ssl.SSLException;
@@ -86,7 +87,8 @@ public class TcpServer implements Runnable {
              .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(new TcpServerInitializer(sslCtx));
 
-            b.bind(this.port).sync().channel().closeFuture().sync();
+            InetSocketAddress address = new InetSocketAddress(hostname,port);
+            b.bind(address).sync().channel().closeFuture().sync();
         } catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {

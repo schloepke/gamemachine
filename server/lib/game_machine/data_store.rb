@@ -4,6 +4,7 @@ require_relative 'data_stores/couchbase'
 require_relative 'data_stores/mapdb'
 require_relative 'data_stores/redis'
 require_relative 'data_stores/jdbc'
+require_relative 'data_stores/gamecloud'
 
 module GameMachine
   class DataStore
@@ -28,21 +29,11 @@ module GameMachine
     def get(key)
       value = @store.get(key)
       return nil if value.nil?
-      if value.is_a?(String)
-        MessageLib::Entity.new.set_id(key).set_json_storage(
-          MessageLib::JsonStorage.new.set_json(value)
-        )
-      else
-        MessageLib::Entity.parse_from(value)
-      end
+      MessageLib::Entity.parse_from(value)
     end
 
     def set(key,value)
-      if value.has_json_storage
-        @store.set(key,value.json_storage.json)
-      else
-        @store.set(key,value.to_byte_array)
-      end
+      @store.set(key,value.to_byte_array)
     end
 
     private
@@ -50,6 +41,11 @@ module GameMachine
     def connect
       raise "already connected" if @store
       send("connect_#{@store_name}")
+    end
+
+    def connect_gamecloud
+      @store = DataStores::Gamecloud.new
+      @store.connect
     end
 
     def connect_jdbc

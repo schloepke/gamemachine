@@ -53,12 +53,14 @@ dependencies {
   //compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
   compile 'com.couchbase.client:couchbase-client:1.4.2'
   //compile 'redis.clients:jedis:2.2.1'
-  compile 'org.mapdb:mapdb:1.0.3'
+  //compile 'org.mapdb:mapdb:1.0.3'
+  compile 'org.postgresql:postgresql:9.3-1102-jdbc41'
   compile 'io.netty:netty-all:4.0.21.Final'
   compile 'com.jolbox:bonecp:0.8.0.RELEASE'
   compile 'mysql:mysql-connector-java:5.1.32'
   compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
   compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
+  compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
   //compile 'com.google.guava:guava:17.0'
 }
 

@@ -31,6 +31,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'puma'
   gem.add_dependency 'highline'
   gem.add_dependency 'faraday'
+  
 
 
   gem.add_development_dependency 'rake'

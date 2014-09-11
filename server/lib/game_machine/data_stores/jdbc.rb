@@ -6,6 +6,17 @@ module GameMachine
         'game_machine'
       end
 
+      def dbtype
+        @dbtype ||= case Application.config.jdbc_driver
+          when 'org.postgresql.Driver'
+            :postgres
+          when 'com.mysql.jdbc.Driver'
+            :mysql
+          else
+            raise "Unknown JDBC driver #{Application.config.jdbc_driver}"
+          end
+      end
+        
       def connect
         @pool ||= GameMachine::JavaLib::DbConnectionPool.getInstance
         unless @pool.connect(
@@ -30,7 +41,13 @@ module GameMachine
         else
           type = 1
         end
-        s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?) ON DUPLICATE KEY UPDATE value=VALUES(value)")
+
+        if dbtype == :mysql
+          s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?) ON DUPLICATE KEY UPDATE value=VALUES(value)")
+        else
+          s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?)")
+        end
+        
         s.setString(1,id.to_java_string)
         s.setBytes(2,value)
         s.setInt(3,type)
@@ -54,7 +71,7 @@ module GameMachine
         connection = @pool.get_connection(dbname)
         s = connection.create_statement
         res = s.execute_query("SELECT value,datatype from entities where id = '#{key}' LIMIT 1")
-        if res.first
+        if res.next
           value = res.get_bytes('value')
           type = res.get_int("datatype")
         end

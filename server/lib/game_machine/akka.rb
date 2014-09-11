@@ -39,8 +39,12 @@ module GameMachine
       cluster? ? akka_cluster_config : akka_server_config
     end
 
+    def join_remote?
+      ENV.has_key?('AKKA_SEED_HOST') && ENV.has_key?('AKKA_SEED_PORT')
+    end
+
     def join_self?
-      ENV.has_key?('AKKA_JOIN_SELF') || app_config.config.seeds.empty?
+      ENV.has_key?('AKKA_JOIN_SELF')
     end
 
     def start
@@ -48,7 +52,11 @@ module GameMachine
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system)
       if join_self?
+        GameMachine.logger.info "JOINING SELF"
         JavaLib::ActorUtil.joinCluster("akka.tcp", "cluster", app_config.config.akka_host, app_config.config.akka_port)
+      elsif join_remote?
+        GameMachine.logger.info "JOINING REMOTE #{ENV['AKKA_SEED_HOST']} #{ENV['AKKA_SEED_PORT']}"
+        JavaLib::ActorUtil.joinCluster("akka.tcp", "cluster", ENV['AKKA_SEED_HOST'], ENV['AKKA_SEED_PORT'].to_i)
       end
     end
 
