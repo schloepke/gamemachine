@@ -18,5 +18,4 @@ require_relative 'models/find_match'
 require_relative 'models/match'
 require_relative 'models/start_match'
 require_relative 'models/end_match'
-require_relative 'models/user'
 

@@ -13,10 +13,23 @@ module GameMachine
 
     def_delegators :@store, :delete, :delete_all, :shutdown, :keys, :dump, :load
 
-    attr_reader :store
+    attr_reader :store, :serialization, :classmap
     def initialize
-      @store_name = Application.config.data_store
+      @store_name = Application.config.datastore.store
+      @serialization = Application.config.datastore.serialization
+      @classmap = {}
       connect
+    end
+
+    def class_cache(classname)
+      return MessageLib::Entity if classname.nil?
+
+      if cached = classmap.fetch(classname,nil)
+        return cached
+      else
+        classmap[classname] = "GameMachine::MessageLib::#{classname}".constantize
+        classmap[classname]
+      end
     end
 
     def set_store(store_name)
@@ -26,14 +39,24 @@ module GameMachine
     end
 
 
-    def get(key)
+    def get(key,classname='MessageLib::Entity')
       value = @store.get(key)
       return nil if value.nil?
-      MessageLib::Entity.parse_from(value)
+      klass = class_cache(classname)
+
+      if serialization == 'json'
+        klass.parse_from_json(value)
+      else
+        klass.parse_from(value)
+      end
     end
 
     def set(key,value)
-      @store.set(key,value.to_byte_array)
+      if serialization == 'json'
+        @store.set(key,value.to_json)
+      else
+        @store.set(key,value.to_byte_array)
+      end
     end
 
     private
@@ -44,17 +67,17 @@ module GameMachine
     end
 
     def connect_gamecloud
-      @store = DataStores::Gamecloud.new
+      @store = DataStores::Gamecloud.new(serialization)
       @store.connect
     end
 
     def connect_jdbc
-      @store = DataStores::Jdbc.new
+      @store = DataStores::Jdbc.new(serialization)
       @store.connect
     end
 
     def connect_couchbase
-      @store = DataStores::Couchbase.new
+      @store = DataStores::Couchbase.new(serialization)
       @store.connect
     end
 

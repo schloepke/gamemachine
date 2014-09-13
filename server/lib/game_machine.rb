@@ -25,6 +25,7 @@ jars.each do |jar|
   require jar
 end
 
+
 require_relative 'game_machine/java_lib'
 
 require_relative 'game_machine/protobuf'
@@ -33,6 +34,7 @@ require_relative 'game_machine/grid'
 require_relative 'game_machine/message_buffer'
 require_relative 'game_machine/vector'
 require_relative 'game_machine/logger'
+require_relative 'game_machine/hocon_config'
 require_relative 'game_machine/app_config'
 require_relative 'game_machine/helpers/state_machine'
 require_relative 'game_machine/actor'
@@ -81,5 +83,3 @@ Signal.trap("TERM") {
   puts "Caught SIGTERM, exiting"
   System.exit(0)
 }
-
-

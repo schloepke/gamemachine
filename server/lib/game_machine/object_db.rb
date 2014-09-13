@@ -32,10 +32,10 @@ module GameMachine
       WriteBehindCache.find_distributed(entity.id).tell(entity)
     end
 
-    def get_entity(entity_id)
+    def get_entity(entity_id,klass)
       entity = entities.fetch(entity_id,nil)
       if entity.nil?
-        entity = store.get(entity_id)
+        entity = store.get(entity_id,klass)
       end
       entity
     end
@@ -59,11 +59,16 @@ module GameMachine
 
       elsif message.is_a?(MessageLib::ObjectdbPut)
         set_entity(message.get_entity)
-        sender.tell(true)
+        get_sender.tell(true,nil)
       elsif message.is_a?(MessageLib::ObjectdbGet)
-        sender.tell(get_entity(message.get_entity_id) || false)
+        if entity = get_entity(message.get_entity_id,message.get_klass)
+          get_sender.tell(entity,nil)
+        end
       elsif message.is_a?(MessageLib::ObjectdbDel)
         delete_entity(message.get_entity_id)
+      elsif message.respond_to?(:get_id)
+        set_entity(message)
+        get_sender.tell(true,nil)
       else
         unhandled(message)
       end

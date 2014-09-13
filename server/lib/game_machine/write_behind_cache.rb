@@ -7,7 +7,7 @@ module GameMachine
       if @max_writes_per_second
         @max_writes_per_second
       else
-        @max_writes_per_second = Application.config.cache_writes_per_second
+        @max_writes_per_second = Application.config.datastore.cache_writes_per_second
       end
     end
 
@@ -15,7 +15,7 @@ module GameMachine
       if @write_interval
         @write_interval
       else
-        @write_interval = Application.config.cache_write_interval
+        @write_interval = Application.config.datastore.cache_write_interval
       end
     end
 

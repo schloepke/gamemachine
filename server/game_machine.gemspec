@@ -23,14 +23,14 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'ffi'
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-contrib'
-  gem.add_dependency 'haml'
-  gem.add_dependency 'webrick'
   gem.add_dependency 'rack-flash3'
   gem.add_dependency 'activesupport'
   gem.add_dependency 'wavefront'
   gem.add_dependency 'puma'
   gem.add_dependency 'highline'
   gem.add_dependency 'faraday'
+  gem.add_dependency 'bcrypt'
+  gem.add_dependency 'pry'
   
 
 

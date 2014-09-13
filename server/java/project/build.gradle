@@ -61,7 +61,7 @@ dependencies {
   compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
   compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
   compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
-  //compile 'com.google.guava:guava:17.0'
+  compile 'org.mindrot:jbcrypt:0.3m'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

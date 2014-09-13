@@ -12,7 +12,7 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) do
-    GameMachine::Application.initialize!('default',true)
+    GameMachine::Application.initialize!()
   end
 
   config.before(:each) do

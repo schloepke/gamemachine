@@ -14,7 +14,7 @@ import akka.pattern.AskableActorSelection;
 import akka.util.Timeout;
 
 public class DatastoreCommands {
-
+	
 	public static void put(Entity entity) {
 		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", entity.id);
 		ObjectdbPut put = new ObjectdbPut().setEntity(entity);

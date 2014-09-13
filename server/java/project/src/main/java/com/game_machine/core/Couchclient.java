@@ -3,6 +3,7 @@ package com.game_machine.core;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,6 +16,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -30,7 +32,7 @@ public class Couchclient {
 	private String gamecloudApiKey;
 	private String gamecloudUser;
 	private String host;
-	private static final Logger log = LoggerFactory.getLogger(Couchclient.class);
+	private static final Logger logger = LoggerFactory.getLogger(Couchclient.class);
 
 	public class CouchResponse {
 		public int status;
@@ -110,36 +112,39 @@ public class Couchclient {
 	    return result;
 	}
 	
-	public String urlFrom(String id) throws UnsupportedEncodingException {
-		return "http://"+host+"/db/" + gamecloudUser + "/" + encodeURIComponent(id);
+	public String urlFrom(String id, String format) throws UnsupportedEncodingException {
+		if (format == null) {
+			return "http://"+host+"/db/" + gamecloudUser + "/" + encodeURIComponent(id);
+		} else {
+			return "http://"+host+"/db/" + gamecloudUser + "/" + encodeURIComponent(id) + "/" + format;
+		}
+		
 	}
 	
 	public void putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
-		String url = urlFrom(id);
+		String url = urlFrom(id,"bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpPut request = new HttpPut(url);
-		ByteArrayEntity input = new ByteArrayEntity(bytes);
+		ByteArrayEntity input = new ByteArrayEntity(bytes, ContentType.APPLICATION_OCTET_STREAM);
 		request.setEntity(input);
-		input.setContentType("application/octet-stream");
 		request.setHeader("X-Auth", token);
 		httpClient.execute(request, new ByteArrayResponseHandler());
 	}
 	
 	public void putString(String id, String value) throws ClientProtocolException, IOException {
-		String url = urlFrom(id);
+		String url = urlFrom(id,"json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpPut request = new HttpPut(url);
-		StringEntity input = new StringEntity(value);
+		StringEntity input = new StringEntity(value,ContentType.TEXT_PLAIN);
 		request.setEntity(input);
-		input.setContentType("application/octet-stream");
 		request.setHeader("X-Auth", token);
 		httpClient.execute(request, new StringResponseHandler());
 	}
 
 	public void delete(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id);
+		String url = urlFrom(id,null);
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpDelete request = new HttpDelete(url);
@@ -148,7 +153,7 @@ public class Couchclient {
 	}
 
 	public byte[] getBytes(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id);
+		String url = urlFrom(id, "bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpGet request = new HttpGet(url);
@@ -157,7 +162,7 @@ public class Couchclient {
 	}
 	
 	public String getString(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id);
+		String url = urlFrom(id, "json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpGet request = new HttpGet(url);

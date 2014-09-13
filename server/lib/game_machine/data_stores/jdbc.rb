@@ -2,6 +2,11 @@ module GameMachine
   module DataStores
     class Jdbc
 
+      attr_reader :serialization
+      def initialize(serialization)
+        @serialization = serialization
+      end
+      
       def dbname
         'game_machine'
       end
@@ -21,10 +26,10 @@ module GameMachine
         @pool ||= GameMachine::JavaLib::DbConnectionPool.getInstance
         unless @pool.connect(
           dbname,
-          Application.config.jdbc_url,
-          Application.config.jdbc_driver,
-          Application.config.jdbc_username,
-          Application.config.jdbc_password || ''
+          Application.config.jdbc.url,
+          Application.config.jdbc.driver,
+          Application.config.jdbc.username,
+          Application.config.jdbc.password || ''
         )
           GameMachine.logger.error "Unable to establish database connection, exiting"
           System.exit 1

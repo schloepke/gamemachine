@@ -16,7 +16,8 @@ module GameMachine
       end
 
       def load_from_config
-        Application.config.grids.each do |name,value|
+        ['default','local_chat','aoe'].each do |name|
+           value = Application.config.grids.send(name.to_sym)
           grid_size,cell_size,update_frequency = value.split(',')
           config[name] = {
             :grid_size => grid_size.to_i,

@@ -26,6 +26,10 @@ module GameMachine
     include_package 'com.game_machine.orm.models'
   end
 
+  module EntityLib
+    include_package 'com.game_machine.entities'
+  end
+
   module JavaLib
     java_import 'akka.cluster.ClusterEvent'
     java_import 'akka.contrib.pattern.ClusterSingletonManager'

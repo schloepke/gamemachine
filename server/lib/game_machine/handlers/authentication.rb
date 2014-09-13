@@ -32,7 +32,7 @@ module GameMachine
       end
 
       def public?
-        Application.config.auth_handler == 'GameMachine::AuthHandlers::Public'
+        Application.config.handlers.auth == 'GameMachine::AuthHandlers::Public'
       end
 
       def authenticate!(player)

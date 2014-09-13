@@ -6,16 +6,16 @@ module GameMachine
 
     attr_reader :hashring, :address, :app_config
 
-    def self.address_for(server)
-      host = AppConfig.instance.server_config(server).akka_host
-      port = AppConfig.instance.server_config(server).akka_port
+    def self.address
+      host = AppConfig.instance.config.akka.host
+      port = AppConfig.instance.config.akka.port
       "akka.tcp://#{Akka.instance.config_name}@#{host}:#{port}"
     end
 
     def initialize!
       @app_config = AppConfig.instance
-      @address = self.class.address_for(app_config.config.name)
-      @hashring = JavaLib::Hashring.new('servers',[@address],3)
+      @address = self.class.address
+      @hashring = JavaLib::Hashring.new('servers',[address],3)
     end
 
     def init_cluster!(address)
@@ -23,20 +23,18 @@ module GameMachine
       @hashring = JavaLib::Hashring.new('servers',[address],3)
     end
 
-    def cluster?
-      app_config.config.cluster ? true : false
-    end
-
     def actor_system
       @actor_system.actor_system
     end
 
     def config_name
-      cluster? ? 'cluster' : 'standalone'
+      'cluster'
     end
 
     def akka_config
-      cluster? ? akka_cluster_config : akka_server_config
+      config = load_akka_config(config_name)
+      config = set_address(config)
+      config = set_seeds(config)
     end
 
     def join_remote?
@@ -53,10 +51,10 @@ module GameMachine
       JavaLib::GameMachineLoader.new.run(actor_system)
       if join_self?
         GameMachine.logger.info "JOINING SELF"
-        JavaLib::ActorUtil.joinCluster("akka.tcp", "cluster", app_config.config.akka_host, app_config.config.akka_port)
+        JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, app_config.config.akka.host, app_config.config.akka.port)
       elsif join_remote?
         GameMachine.logger.info "JOINING REMOTE #{ENV['AKKA_SEED_HOST']} #{ENV['AKKA_SEED_PORT']}"
-        JavaLib::ActorUtil.joinCluster("akka.tcp", "cluster", ENV['AKKA_SEED_HOST'], ENV['AKKA_SEED_PORT'].to_i)
+        JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, ENV['AKKA_SEED_HOST'], ENV['AKKA_SEED_PORT'].to_i)
       end
     end
 
@@ -67,30 +65,18 @@ module GameMachine
     private
 
     def set_address(config)
-      config.sub!('HOST',app_config.config.akka_host)
-      config.sub!('PORT',app_config.config.akka_port.to_s)
+      config.sub!('HOST',app_config.config.akka.host)
+      config.sub!('PORT',app_config.config.akka.port.to_s)
       config
     end
 
     def set_seeds(config)
-      seeds = Application.config.seeds.map do |seed| 
-        seed_host = app_config.server_config(seed).akka_host
-        seed_port = app_config.server_config(seed).akka_port
-        "\"akka.tcp://cluster@#{seed_host}:#{seed_port}\""
+      seeds = Application.config.seeds.map do |seed|
+        host,port = seed.split(':')
+        "\"akka.tcp://cluster@#{host}:#{port}\""
       end
       config.sub!('SEEDS',seeds.join(','))
       config
-    end
-
-    def akka_cluster_config
-      config = load_akka_config('cluster')
-      config = set_address(config)
-      config = set_seeds(config)
-    end
-
-    def akka_server_config
-      config = load_akka_config('standalone')
-      config = set_address(config)
     end
 
     def load_akka_config(name)

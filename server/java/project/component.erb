@@ -1,6 +1,16 @@
 
 package GameMachine.Messages;
 
+import com.game_machine.core.GameMachineLoader;
+import com.game_machine.core.ActorUtil;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+import akka.actor.ActorSelection;
+import akka.pattern.AskableActorSelection;
+import akka.util.Timeout;
+import java.util.concurrent.TimeUnit;
+
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
@@ -11,6 +21,7 @@ import java.io.ObjectOutput;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.io.UnsupportedEncodingException;
 
 import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.GraphIOUtil;
@@ -27,6 +38,7 @@ import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
 import GameMachine.Messages.Entity;
 import com.game_machine.core.LocalLinkedBuffer;
+import java.nio.charset.Charset;
 
 import com.game_machine.core.DatastoreCommands;
 
@@ -128,8 +140,10 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
         
     }
 
-<% if klass == 'Entity' %>
-
+	
+ 
+<% message.getFields.each do |field| %>
+	<% if field.name == 'id' %>
 	public static String scopeId(String playerId, String id) {
     	return playerId + "##" + id;
     }
@@ -143,54 +157,42 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     	}
     }
     
-	public void osPut(String playerId) {
-		this.id = scopeId(playerId,this.id);
-		DatastoreCommands.put(this);
+    public void storeSet(String scope) {
+    	<%=klass%> clone = this.clone();
+		clone.id = scopeId(scope,this.id);
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", clone.id);
+		sel.tell(clone, null);
 	}
 		
-	public static void osDelete(String playerId, String id) {
-		String scopedId = scopeId(playerId,id);
-		DatastoreCommands.delete(scopedId);
+	public static void storeDelete(String scope, String id) {
+		String scopedId = scopeId(scope,id);
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+		ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
+		sel.tell(del, null);
 	}
 		
-	public static Entity osGet(String playerId, String id, int timeout) {
-		String scopedId = scopeId(playerId,id);
-		Entity entity = DatastoreCommands.get(scopedId, timeout);
-		if (entity == null) {
+	public static <%=klass%> storeGet(String scope, String id, int timeout) {
+		String scopedId = scopeId(scope,id);
+		ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("<%=klass%>");
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
+		AskableActorSelection askable = new AskableActorSelection(sel);
+		Future<Object> future = askable.ask(get,t);
+		try {
+			<%=klass%> message = (<%=klass%>) Await.result(future, t.duration());
+			if (message == null) {
+				return null;
+			}
+			message.id = unscopeId(message.id);
+			return message;
+		} catch (Exception e) {
 			return null;
-		} else {
-			entity.id = unscopeId(entity.id);
-			return entity;
 		}
 	}
-<% else %>
-	<% message.getFields.each do |field| %>
-		<% if field.name == 'id' %>
-	public void osPut(String playerId) {
-		Entity entity = new Entity();
-		entity.setId(this.id);
-		NativeBytes nativeBytes = new NativeBytes();
-		nativeBytes.bytes = ByteString.copyFrom(this.toByteArray());
-		entity.setNativeBytes(nativeBytes);
-		entity.osPut(playerId);
-	}
-	
-	public static void osDelete(String playerId, String id) {
-		Entity.osDelete(playerId,id);
-	}
-		
-	public static <%=klass%> osGet(String playerId, String id, int timeout) {
-		Entity entity = Entity.osGet(playerId,id, timeout);
-		if (entity == null) {
-			return null;
-		} else {
-			return <%=klass%>.parseFrom(entity.nativeBytes.bytes.toByteArray());
-		}
-	}
-		<% end %>
-	<% end %>
 
+	<% end %>
 <% end %>
+
 	
 <% if persistent %>
 
@@ -630,6 +632,13 @@ public static <%=klass%> parseFrom(byte[] bytes) {
 	return message;
 }
 
+public static <%=klass%> parseFromJson(String json) throws IOException {
+	byte[] bytes = json.getBytes(Charset.forName("UTF-8"));
+	<%=klass%> message = new <%=klass%>();
+	JsonIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class), false);
+	return message;
+}
+
 public <%=klass%> clone() {
 	byte[] bytes = this.toByteArray();
 	<%=klass%> <%=varname(klass)%> = <%=klass%>.parseFrom(bytes);
@@ -641,7 +650,7 @@ public byte[] toByteArray() {
 	//return toJson();
 }
 
-public byte[] toJson() {
+public String toJson() throws UnsupportedEncodingException {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {
@@ -650,7 +659,8 @@ public byte[] toJson() {
 		e.printStackTrace();
 		throw new RuntimeException("Json encoding failed");
 	}
-	return out.toByteArray();
+	String json = new String(out.toByteArray(), Charset.forName("UTF-8"));
+	return json;
 }
 
 public byte[] toPrefixedByteArray() {

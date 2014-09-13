@@ -14,7 +14,12 @@ module GameMachine
       entity
     end
 
-    it "couch http client" do
+    it "serialized to json" do
+      entity = MessageLib::Entity.new.set_id('player')
+      puts entity.to_json
+    end
+
+    xit "couch http client" do
       entity = MessageLib::Entity.new.set_id('3')
       client = JavaLib::Couchclient.get_instance
       10.times do |i|

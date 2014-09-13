@@ -20,20 +20,19 @@ module GameMachine
 
         # Returns true is authorized, false if not
         def authorize(username,password)
-          GameMachine.logger.info "authorize: #{username} #{password}"
-          if user = User.find(username,5000)
-            GameMachine.logger.info "user: #{user.id} #{user.password}"
-            if password == user.password
+          GameMachine.logger.info "authorize: #{username}"
+          if player_entity = EntityLib::PlayerEntity.find(username,2000)
+            if player_entity.password_is_valid(password)
               @sessions[username] = authtoken(username,password)
-              user.authtoken = @sessions[username]
-              user.save
+              player_entity.player.set_authtoken(@sessions[username])
+              player_entity.save
               return @sessions[username]
             else
-              GameMachine.logger.info "user: #{user.id} password does not match"
+              GameMachine.logger.info "player: #{player_entity.player.id} password does not match"
               false
             end
           else
-            GameMachine.logger.info "user: #{username} not found"
+            GameMachine.logger.info "player: #{username} not found"
             false
           end
           false
@@ -47,10 +46,10 @@ module GameMachine
 
           # user authenticated on different server, we have to look up their authtoken
           # and save it in the local sessions hash
-          elsif user = User.find(username)
-            if user.authtoken
+          elsif player_entity = EntityLib::PlayerEntity.find(username,2000)
+            if authtoken = player_entity.player.authtoken
               @sessions[username] = authtoken
-              return user.authtoken
+              return authtoken
             else
               GameMachine.logger.info "Authoken for #{username} is nil"
               nil

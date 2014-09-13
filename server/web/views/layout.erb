@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta content='IE=edge' http-equiv='X-UA-Compatible'>
+    <meta content='width=device-width, initial-scale=1' name='viewport'>
+    <title></title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class='container-fluid' style="height:100px">
+      <div class='row'>
+        <div class='col-md-12'></div>
+      </div>
+    </div>
+    <div class='container-fluid'>
+      <div class='row'>
+        <div class='col-md-2'></div>
+        <div class='col-md-2'>
+          <ul class="nav nav-pills nav-stacked">
+            <% if logged_in? %>
+            <li><a href="/add_player">Add Player</a></li>
+            <% end %>
+            
+          </ul>
+        </div>
+        <div class='col-md-6'>
+          <% if flash[:notice] %>
+          <p class="bg-success" style="padding:15px;"><%= flash[:notice] %>
+          <% end %>
+          <% if flash[:error] %>
+          <p class="bg-danger" style="padding:15px;"><%= flash[:error] %>
+          <% end %>
+          <div id="main">
+            <%= yield %>
+          </div>
+        </div>
+        <div class='col-md-2'></div>
+      </div>
+    </div>
+  </body>
+</html>

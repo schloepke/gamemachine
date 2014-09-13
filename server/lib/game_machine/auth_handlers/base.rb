@@ -10,7 +10,7 @@ module GameMachine
       def_delegators :@handler, :authorize, :authtoken_for
 
       def initialize
-        @handler = Application.config.auth_handler.constantize.new
+        @handler = Application.config.handlers.auth.constantize.new
       end
 
       def set_handler(handler_name)

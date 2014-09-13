@@ -3,9 +3,8 @@ module GameMachine
 
     class << self
 
-      def initialize!(name='default', cluster=false)
-        AppConfig.instance.load_config(name)
-        config.cluster = cluster
+      def initialize!()
+        AppConfig.instance.load_config
         akka.initialize!
       end
 
@@ -75,7 +74,8 @@ module GameMachine
         GameMachine.logger.info("Game Machine start successful")
         
         # This call blocks, make it the last thing we do
-        if config.http_enabled
+        if config.http.enabled
+          #Endpoints::Http::Server.start
           Thread.new do
             start_http
           end
@@ -87,10 +87,10 @@ module GameMachine
           pool = GameMachine::JavaLib::DbConnectionPool.getInstance
           unless pool.connect(
             'game_machine_orm',
-            config.jdbc_url,
-            config.jdbc_driver,
-            config.jdbc_username,
-            config.jdbc_password || ''
+            config.jdbc.url,
+            config.jdbc.driver,
+            config.jdbc.username,
+            config.jdbc.password || ''
           )
             GameMachine.logger.error "Unable to establish database connection, exiting"
             System.exit 1
@@ -123,26 +123,26 @@ module GameMachine
       end
 
       def start_endpoints
-        if config.tcp_enabled
-          JavaLib::TcpServer.start(config.tcp_host, config.tcp_port);
+        if config.tcp.enabled
+          JavaLib::TcpServer.start(config.tcp.host, config.tcp.port);
           GameMachine.logger.info(
-            "Tcp starting on #{config.tcp_host}:#{config.tcp_port}"
+            "Tcp starting on #{config.tcp.host}:#{config.tcp.port}"
           )
         end
 
-        if config.udp_enabled
-          JavaLib::UdpServer.start(config.udp_host,config.udp_port)
+        if config.udp.enabled
+          JavaLib::UdpServer.start(config.udp.host,config.udp.port)
           Actor::Builder.new(Endpoints::UdpIncoming).with_router(
-            JavaLib::RoundRobinRouter,10).start
+            JavaLib::RoundRobinRouter,config.routers.udp).start
         end
       end
 
       def start_handlers
         Actor::Builder.new(Handlers::Request).with_router(
-          JavaLib::RoundRobinRouter,config.request_handler_routers
+          JavaLib::RoundRobinRouter,config.routers.request_handler
         ).start
         Actor::Builder.new(Handlers::Game).with_router(
-          JavaLib::RoundRobinRouter,config.game_handler_routers
+          JavaLib::RoundRobinRouter,config.routers.game_handler
         ).start
       end
 
@@ -153,15 +153,15 @@ module GameMachine
       def start_core_systems
         JavaLib::GameMachineLoader.StartMessageGateway
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(ObjectDb).distributed(10).start
+        Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(ReloadableMonitor).start
         Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(10).start
+        Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
         Actor::Builder.new(ClientManager).start
         Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -179,11 +179,11 @@ module GameMachine
 
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,10).start
+        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,2).start
         JavaLib::GameMachineLoader.StartEntityTracking
-        Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,2).start
+        Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
-        Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,5).start
+        Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).start
         Actor::Builder.new(GameSystems::JsonModelPersistence).start

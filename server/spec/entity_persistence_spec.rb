@@ -16,7 +16,7 @@ module GameMachine
       message.set_numbers64(555)
     end
 
-    let(:entity) {MessageLib::Entity.new.set_id(player_id)}
+    let(:entity) {MessageLib::Entity.new.set_id(id)}
 
     subject do
       MessageLib::TestObject
@@ -26,24 +26,37 @@ module GameMachine
       
       describe "#dbDelete" do
         it "sends delete request to object store" do
-          MessageLib::Entity.os_delete(player_id)
+          MessageLib::Entity.store_delete(player_id,id)
         end
       end
 
       describe "#dbPut" do
         it "sends save request to object store" do
-          entity.os_put
+          entity.store_set(player_id)
         end
       end
 
       describe "#dbGet" do
         it "retrieves entity from the object store" do
-          entity = MessageLib::Entity.os_get(player_id,1)
+          entity.store_set(player_id)
+          sleep 1
+          entity = MessageLib::Entity.store_get(player_id,id,6000)
+          expect(entity.id).to eql id
+        end
+      end
+
+      describe "store any message that has id" do
+        it "stores and retrieves message having correct id" do
+          player = MessageLib::Player.new.set_id('player2').set_password_hash('blah')
+          player.store_set(player_id)
+          sleep 1
+          player = MessageLib::Player.store_get(player_id,'player2',2000)
+          expect(player.id).to eql('player2')
         end
       end
     end
 
-    describe "Orm persistence" do
+    describe "Orm persistence", :if => GameMachine::Application.config.orm do
     	before(:each) do
     	 GameMachine::Application.orm_connect
        ModelLib::TestObject.open
