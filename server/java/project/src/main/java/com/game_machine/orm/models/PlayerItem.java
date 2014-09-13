@@ -8,8 +8,50 @@ import com.game_machine.core.DbConnectionPool;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 /*
+Postgresql
+
+Database/user creation
+CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CREATEROLE;
+CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
+
+Table
+CREATE TABLE player_items (
+  id bigserial NOT NULL,
+  
+  player_item_id character varying(128) NOT NULL,
+  
+  player_item_name character varying(128) NOT NULL,
+  
+  player_item_quantity integer NOT NULL,
+  
+  player_item_color character varying(128) DEFAULT NULL,
+
+  weapon_attack integer DEFAULT NULL,
+  	
+  weapon_delay integer DEFAULT NULL,
+
+  consumable_type character varying(128) DEFAULT NULL,
+  	
+  consumable_size character varying(128) DEFAULT NULL,
+
+  cost_amount double precision DEFAULT NULL,
+  	
+  cost_currency character varying(128) DEFAULT NULL,
+
+  player_id character varying(128) NOT NULL,
+  CONSTRAINT player_item_pkey PRIMARY KEY (id),
+  CONSTRAINT player_item_id_player_id_idx UNIQUE (player_item_id,player_id)
+);
+alter table player_items owner to gamemachine;
 
 Mysql
+
+Database/user creation
+CREATE DATABASE IF NOT EXISTS gamemachine CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON gamemachine.* TO 'gamemachine'@'%' IDENTIFIED BY 'gamemachine' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+Table
 CREATE TABLE `player_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   

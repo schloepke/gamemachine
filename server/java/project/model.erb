@@ -8,18 +8,51 @@ import com.game_machine.core.DbConnectionPool;
 import com.jolbox.bonecp.BoneCPDataSource;
 
 /*
+Postgresql
 
-Mysql
-CREATE TABLE `<%= klass.underscore.pluralize %>` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+Database/user creation
+CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CREATEROLE;
+CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
+
+Table
+CREATE TABLE <%= klass.underscore.pluralize %> (
+  id bigserial NOT NULL,
   <% message.getFields.each do |field| %>
-  <%= sql_field(klass,field) %>
+  <%= sql_field(klass,field,'postgres') %>
   <% end %>
   
   <% message_fields.each do |message_field| %>
   	<% klass_message = messages_index[message_field] %>
   	<% klass_message.getFields.each do |field| %>
-  <%= sql_field(message_field,field,true) %>
+  <%= sql_field(message_field,field,'postgres',true) %>
+  	<% end %>
+  <% end %>
+  
+  player_id character varying(128) NOT NULL,
+  CONSTRAINT <%=klass.underscore%>_pkey PRIMARY KEY (id),
+  CONSTRAINT <%=klass.underscore%>_id_player_id_idx UNIQUE (<%=klass.underscore%>_id,player_id)
+);
+alter table <%= klass.underscore.pluralize %> owner to gamemachine;
+
+
+Mysql
+
+Database/user creation
+CREATE DATABASE IF NOT EXISTS gamemachine CHARACTER SET utf8 COLLATE utf8_general_ci;
+GRANT ALL PRIVILEGES ON gamemachine.* TO 'gamemachine'@'%' IDENTIFIED BY 'gamemachine' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+Table
+CREATE TABLE `<%= klass.underscore.pluralize %>` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  <% message.getFields.each do |field| %>
+  <%= sql_field(klass,field,'mysql') %>
+  <% end %>
+  
+  <% message_fields.each do |message_field| %>
+  	<% klass_message = messages_index[message_field] %>
+  	<% klass_message.getFields.each do |field| %>
+  <%= sql_field(message_field,field,'mysql',true) %>
   	<% end %>
   <% end %>
   

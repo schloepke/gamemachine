@@ -49,12 +49,12 @@ module GameMachine
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system)
-      if join_self?
-        GameMachine.logger.info "JOINING SELF"
-        JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, app_config.config.akka.host, app_config.config.akka.port)
-      elsif join_remote?
+      if join_remote?
         GameMachine.logger.info "JOINING REMOTE #{ENV['AKKA_SEED_HOST']} #{ENV['AKKA_SEED_PORT']}"
         JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, ENV['AKKA_SEED_HOST'], ENV['AKKA_SEED_PORT'].to_i)
+      else
+        GameMachine.logger.info "JOINING SELF"
+        JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, app_config.config.akka.host, app_config.config.akka.port)
       end
     end
 

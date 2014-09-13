@@ -93,20 +93,37 @@ module GameMachine
         "#{klass.underscore}_#{field.name.underscore}"
       end
 
-      def sql_field(klass,field,force_null=false)
-        txt = case field.getJavaType.to_s
-        when 'boolean'
-          "`#{sql_column_name(klass,field)}` tinyint(4)"
-        when 'double'
-          "`#{sql_column_name(klass,field)}` double"
-        when 'float'
-          "`#{sql_column_name(klass,field)}` float"
-        when 'long'
-          "`#{sql_column_name(klass,field)}` int(11)"
-        when 'int'
-          "`#{sql_column_name(klass,field)}` int(11)"
-        when 'String'
-          "`#{sql_column_name(klass,field)}` varchar(128)"
+      def sql_field(klass,field,dbtype,force_null=false)
+        if dbtype == 'mysql'
+          txt = case field.getJavaType.to_s
+          when 'boolean'
+            "`#{sql_column_name(klass,field)}` tinyint(4)"
+          when 'double'
+            "`#{sql_column_name(klass,field)}` double"
+          when 'float'
+            "`#{sql_column_name(klass,field)}` float"
+          when 'long'
+            "`#{sql_column_name(klass,field)}` int(11)"
+          when 'int'
+            "`#{sql_column_name(klass,field)}` int(11)"
+          when 'String'
+            "`#{sql_column_name(klass,field)}` varchar(128)"
+          end
+        elsif dbtype == 'postgres'
+          txt = case field.getJavaType.to_s
+          when 'boolean'
+            "#{sql_column_name(klass,field)} integer"
+          when 'double'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'float'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'long'
+            "#{sql_column_name(klass,field)} integer"
+          when 'int'
+            "#{sql_column_name(klass,field)} integer"
+          when 'String'
+            "#{sql_column_name(klass,field)} character varying(128)"
+          end
         end
 
         return nil if txt.nil?

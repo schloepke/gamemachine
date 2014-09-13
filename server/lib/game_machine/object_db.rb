@@ -45,7 +45,7 @@ module GameMachine
         procname = message.get_update_method.to_sym
         current_entity_id = message.get_current_entity_id
         update_entity = message.get_update_entity
-        current_entity = get_entity(current_entity_id)
+        current_entity = get_entity(current_entity_id,'Entity')
         if self.class.dbprocs.has_key?(procname)
           dbproc = self.class.dbprocs[procname]
           returned_entity = dbproc.call(

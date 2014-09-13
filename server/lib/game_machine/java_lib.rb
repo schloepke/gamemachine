@@ -31,6 +31,8 @@ module GameMachine
   end
 
   module JavaLib
+    java_import 'com.typesafe.config.Config'
+    java_import 'com.typesafe.config.ConfigFactory'
     java_import 'akka.cluster.ClusterEvent'
     java_import 'akka.contrib.pattern.ClusterSingletonManager'
     java_import 'akka.contrib.pattern.ClusterSingletonProxy'

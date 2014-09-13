@@ -1,14 +1,12 @@
 require 'java'
 require File.join(ENV['JAVA_ROOT'], 'lib', 'config-1.2.1.jar')
 
-java_import 'com.typesafe.config.Config'
-java_import 'com.typesafe.config.ConfigFactory'
-
 module GameMachine
   class HoconConfig
 
     def self.config
-      
+      java_import 'com.typesafe.config.Config'
+      java_import 'com.typesafe.config.ConfigFactory'
       file = File.join(ENV['APP_ROOT'],'config',"#{ENV['GAME_ENV']}.conf")
       data = File.read(file)
       config = ConfigFactory.parseString(data).getConfig('gamemachine')

@@ -39,7 +39,7 @@ module GameMachine
     end
 
 
-    def get(key,classname='MessageLib::Entity')
+    def get(key,classname='Entity')
       value = @store.get(key)
       return nil if value.nil?
       klass = class_cache(classname)
