@@ -1,5 +1,4 @@
 require 'singleton'
-require_relative 'settings'
 require_relative 'hocon_config'
 module GameMachine
   class AppConfig
