@@ -36,8 +36,8 @@ public class Couchclient {
 
 	public class CouchResponse {
 		public int status;
-		public byte[] body;
-		public String error;
+		public byte[] byteBody;
+		public String stringBody;
 	}
 
 	private Couchclient() {
@@ -94,65 +94,61 @@ public class Couchclient {
 		return result.toString();
 	}
 
-	public  String encodeURIComponent(String s) {
-	    String result;
+	public String encodeURIComponent(String s) {
+		String result;
 
-	    try {
-	        result = URLEncoder.encode(s, "UTF-8")
-	                .replaceAll("\\+", "%20")
-	                .replaceAll("\\%21", "!")
-	                .replaceAll("\\%27", "'")
-	                .replaceAll("\\%28", "(")
-	                .replaceAll("\\%29", ")")
-	                .replaceAll("\\%7E", "~");
-	    } catch (UnsupportedEncodingException e) {
-	        result = s;
-	    }
+		try {
+			result = URLEncoder.encode(s, "UTF-8").replaceAll("\\+", "%20").replaceAll("\\%21", "!")
+					.replaceAll("\\%27", "'").replaceAll("\\%28", "(").replaceAll("\\%29", ")")
+					.replaceAll("\\%7E", "~");
+		} catch (UnsupportedEncodingException e) {
+			result = s;
+		}
 
-	    return result;
+		return result;
 	}
-	
+
 	public String urlFrom(String id, String format) throws UnsupportedEncodingException {
 		if (format == null) {
-			return "http://"+host+"/db/" + gamecloudUser + "/" + encodeURIComponent(id);
+			return "http://" + host + "/db/" + gamecloudUser + "/" + encodeURIComponent(id);
 		} else {
-			return "http://"+host+"/db/" + gamecloudUser + "/" + encodeURIComponent(id) + "/" + format;
+			return "http://" + host + "/db/" + gamecloudUser + "/" + encodeURIComponent(id) + "/" + format;
 		}
-		
+
 	}
-	
-	public void putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
-		String url = urlFrom(id,"bytes");
+
+	public CouchResponse putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpPut request = new HttpPut(url);
 		ByteArrayEntity input = new ByteArrayEntity(bytes, ContentType.APPLICATION_OCTET_STREAM);
 		request.setEntity(input);
 		request.setHeader("X-Auth", token);
-		httpClient.execute(request, new ByteArrayResponseHandler());
+		return httpClient.execute(request, new StringResponseHandler());
 	}
-	
-	public void putString(String id, String value) throws ClientProtocolException, IOException {
-		String url = urlFrom(id,"json");
+
+	public CouchResponse putString(String id, String value) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpPut request = new HttpPut(url);
-		StringEntity input = new StringEntity(value,ContentType.TEXT_PLAIN);
+		StringEntity input = new StringEntity(value, ContentType.TEXT_PLAIN);
 		request.setEntity(input);
 		request.setHeader("X-Auth", token);
-		httpClient.execute(request, new StringResponseHandler());
+		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	public void delete(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id,null);
+	public CouchResponse delete(String id) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, null);
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpDelete request = new HttpDelete(url);
 		request.setHeader("X-Auth", token);
-		httpClient.execute(request, new ByteArrayResponseHandler());
+		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	public byte[] getBytes(String id) throws ClientProtocolException, IOException {
+	public CouchResponse getBytes(String id) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -160,8 +156,8 @@ public class Couchclient {
 		request.setHeader("X-Auth", token);
 		return httpClient.execute(request, new ByteArrayResponseHandler());
 	}
-	
-	public String getString(String id) throws ClientProtocolException, IOException {
+
+	public CouchResponse getString(String id) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -170,40 +166,30 @@ public class Couchclient {
 		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	private class StringResponseHandler implements ResponseHandler<String> {
-		public String handleResponse(final HttpResponse response) throws IOException {
+	private class StringResponseHandler implements ResponseHandler<CouchResponse> {
+		public CouchResponse handleResponse(final HttpResponse response) throws IOException {
+			CouchResponse couchResponse = new CouchResponse();
 			int status = response.getStatusLine().getStatusCode();
-			if (status == 200 || status == 204) {
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					return EntityUtils.toString(entity);
-				} else {
-					return null;
-				}
-			} else if (status == 404) {
-				return null;
-			} else {
-				throw new RuntimeException("Unexpected response status: " + status);
+			couchResponse.status = status;
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				couchResponse.stringBody = EntityUtils.toString(entity);
 			}
+			return couchResponse;
 		}
 	}
-	
-	private class ByteArrayResponseHandler implements ResponseHandler<byte[]> {
-		public byte[] handleResponse(final HttpResponse response) throws IOException {
+
+	private class ByteArrayResponseHandler implements ResponseHandler<CouchResponse> {
+		public CouchResponse handleResponse(final HttpResponse response) throws IOException {
 			int status = response.getStatusLine().getStatusCode();
-			if (status == 200 || status == 204) {
-				HttpEntity entity = response.getEntity();
-				if (entity != null) {
-					return EntityUtils.toByteArray(entity);
-				} else {
-					return null;
-				}
-			} else if (status == 404) {
-				return null;
-			} else {
-				throw new RuntimeException("Unexpected response status: " + status);
+			CouchResponse couchResponse = new CouchResponse();
+			couchResponse.status = status;
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				couchResponse.byteBody = EntityUtils.toByteArray(entity);
 			}
+			return couchResponse;
 		}
 	}
-	
+
 }

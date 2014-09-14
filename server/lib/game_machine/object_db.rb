@@ -36,8 +36,9 @@ module GameMachine
       entity = entities.fetch(entity_id,nil)
       if entity.nil?
         entity = store.get(entity_id,klass)
+      else
+        entity.clone
       end
-      entity
     end
 
     def on_receive(message)

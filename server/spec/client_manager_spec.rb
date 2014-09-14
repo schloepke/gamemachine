@@ -80,7 +80,7 @@ module GameMachine
     describe "#on_receive" do
 
       it "should not process client even if message is from self" do
-        client_connected_event.client_event.set_sender_id("default|me")
+        client_connected_event.client_event.set_sender_id("#{Akka.instance.address}|me")
         expect(subject).to_not receive(:process_client_event)
         subject.on_receive(client_connected_event)
       end

@@ -15,6 +15,10 @@ def load_game_machine
   end
 end
 
+def load_config
+  require_relative '../lib/game_machine/app_config'
+  GameMachine::AppConfig.instance.load_config
+end
 
 ARGV << '--help' if ARGV.empty?
 
@@ -27,12 +31,11 @@ aliases = {
 command = ARGV.shift
 command = aliases[command] || command
 
-
 require_relative '../lib/game_machine/console'
-require_relative '../lib/game_machine/app_config'
-GameMachine::AppConfig.instance.load_config
+
 
 if command == 'bundle'
+  load_config
   GameMachine::Console::Bundle.new(ARGV).run!
 
 elsif command == 'new'
@@ -49,6 +52,7 @@ elsif command == 'build'
   GameMachine::Console::Build.new(ARGV).run!
 
 elsif command == 'server'
+  load_config
   # Need to set environment vars before loading everything.
   server = GameMachine::Console::Server.new(ARGV)
   server.set_environment

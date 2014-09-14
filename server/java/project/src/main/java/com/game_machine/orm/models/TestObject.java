@@ -5,7 +5,7 @@ import org.javalite.activejdbc.Model;
 import org.javalite.activejdbc.annotations.IdName;
 
 import com.game_machine.core.DbConnectionPool;
-import com.jolbox.bonecp.BoneCPDataSource;
+import com.zaxxer.hikari.HikariDataSource;
 
 /*
 Postgresql
@@ -103,7 +103,7 @@ public class TestObject extends Model {
 	public static void open() {
 		DB db = new DB("default");
 		if(!db.hasConnection()) {
-			BoneCPDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine_orm");
+			HikariDataSource ds = DbConnectionPool.getInstance().getDataSource("game_machine_orm");
 			db.open(ds);
 		}
 	}

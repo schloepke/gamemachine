@@ -149,9 +149,12 @@ module GameMachine
       else
         message = swap_if_queued_exists(message)
         WRITE_COUNT.incrementAndGet
-        @store.set(message.id, message)
-        @last_write = current_time
-        set_updated_at(message)
+        if @store.set(message.id, message)
+          @last_write = current_time
+          set_updated_at(message)
+        else
+          enqueue(message.id)
+        end
       end
     end
 

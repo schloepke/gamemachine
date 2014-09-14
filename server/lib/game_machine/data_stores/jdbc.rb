@@ -26,8 +26,10 @@ module GameMachine
         @pool ||= GameMachine::JavaLib::DbConnectionPool.getInstance
         unless @pool.connect(
           dbname,
-          Application.config.jdbc.url,
-          Application.config.jdbc.driver,
+          Application.config.jdbc.hostname,
+          Application.config.jdbc.port,
+          Application.config.jdbc.database,
+          Application.config.jdbc.ds,
           Application.config.jdbc.username,
           Application.config.jdbc.password || ''
         )

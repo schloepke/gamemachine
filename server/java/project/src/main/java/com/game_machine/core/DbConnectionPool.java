@@ -3,19 +3,19 @@ package com.game_machine.core;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
+
 import com.mysql.jdbc.Driver;
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.jolbox.bonecp.BoneCP;
-import com.jolbox.bonecp.BoneCPConfig;
-import com.jolbox.bonecp.BoneCPDataSource;
 
 public class DbConnectionPool {
-	private static final Logger log = LoggerFactory.getLogger(DbConnectionPool.class);
+	private static final Logger logger = LoggerFactory.getLogger(DbConnectionPool.class);
 
-	public ConcurrentHashMap<String, BoneCP> pools = new ConcurrentHashMap<String, BoneCP>();
-	public ConcurrentHashMap<String, BoneCPDataSource> datasources = new ConcurrentHashMap<String, BoneCPDataSource>();
+	public ConcurrentHashMap<String, HikariDataSource> datasources = new ConcurrentHashMap<String, HikariDataSource>();
 
 	private DbConnectionPool() {
 	}
@@ -28,45 +28,29 @@ public class DbConnectionPool {
 		return LazyHolder.INSTANCE;
 	}
 
-	private BoneCPConfig getConfig(String url, String username, String password) {
-		BoneCPConfig config = new BoneCPConfig();
-		config.setJdbcUrl(url);
-		config.setUsername(username);
-		config.setPassword(password);
-		config.setMinConnectionsPerPartition(10);
-		config.setMaxConnectionsPerPartition(20);
-		config.setPartitionCount(1);
-		return config;
-	}
-
-	public Boolean connect(String id, String url, String driver, String username, String password) throws SQLException {
-		if (pools.containsKey(id)) {
+	public Boolean connect(String id, String hostname, int port, String dbname, String ds, String username, String password) throws SQLException {
+		if (datasources.containsKey(id)) {
 			return true;
 		}
+		
+		logger.warn("JDBC "+ "id " + id + "hostname " +hostname + "port " +port + "dbname " +dbname + "ds " +ds + "username " +username + "password " +password);
+		HikariConfig config = new HikariConfig();
+		config.setDataSourceClassName(ds);
+		config.addDataSourceProperty("serverName", hostname);
+		config.addDataSourceProperty("portNumber", port);
+		config.addDataSourceProperty("databaseName", dbname);
+		config.addDataSourceProperty("user", username);
+		config.addDataSourceProperty("password", password);
+		config.setMaximumPoolSize(10);
 
-		log.warn("JDBC id:" + id + " url:" + url + " driver:" + driver + " username:" + username + " password:"
-				+ password);
-		try {
-			Class.forName(driver);
-		} catch (ClassNotFoundException e1) {
-			e1.printStackTrace();
-			log.warn(e1.getMessage());
-			return false;
-		}
-
-		BoneCPConfig config = getConfig(url, username, password);
-		BoneCPConfig config2 = getConfig(url, username, password);
-		BoneCP pool;
-
-		BoneCPDataSource ds = new BoneCPDataSource(config2);
-		datasources.put(id, ds);
-		pool = new BoneCP(config);
-		pools.put(id, pool);
+		HikariDataSource datasource = new HikariDataSource(config);
+		
+		datasources.put(id, datasource);
 		return true;
 
 	}
 
-	public BoneCPDataSource getDataSource(String id) {
+	public HikariDataSource getDataSource(String id) {
 		if (datasources.containsKey(id)) {
 			return datasources.get(id);
 		} else {
@@ -75,8 +59,8 @@ public class DbConnectionPool {
 	}
 
 	public Connection getConnection(String id) throws SQLException {
-		if (pools.containsKey(id)) {
-			return pools.get(id).getConnection();
+		if (datasources.containsKey(id)) {
+			return datasources.get(id).getConnection();
 		} else {
 			return null;
 		}

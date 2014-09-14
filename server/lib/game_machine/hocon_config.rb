@@ -10,7 +10,7 @@ module GameMachine
       file = File.join(ENV['APP_ROOT'],'config',"#{ENV['GAME_ENV']}.conf")
       data = File.read(file)
       config = ConfigFactory.parseString(data).getConfig('gamemachine')
-      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin]
+      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :regions]
       conf = OpenStruct.new
       top.each {|t| conf.send("#{t}=",OpenStruct.new)}
 
@@ -19,6 +19,8 @@ module GameMachine
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')
       conf.seeds = config.get_string_list('seeds')
+
+      conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}
 
       conf.handlers.team = config.get_string('handlers.team')
       conf.handlers.auth = config.get_string('handlers.auth')
@@ -47,8 +49,10 @@ module GameMachine
       conf.couchbase.servers = config.get_string_list('couchbase.servers').to_a
 
       conf.jdbc.hostname = config.get_string('jdbc.hostname')
+      conf.jdbc.port = config.get_int('jdbc.port')
       conf.jdbc.database = config.get_string('jdbc.database')
       conf.jdbc.url = config.get_string('jdbc.url')
+      conf.jdbc.ds = config.get_string('jdbc.ds')
       conf.jdbc.driver = config.get_string('jdbc.driver')
       conf.jdbc.username = config.get_string('jdbc.username')
       conf.jdbc.password = config.get_string('jdbc.password')

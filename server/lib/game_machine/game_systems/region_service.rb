@@ -51,8 +51,8 @@ module GameMachine
       end
 
       def load_from_config
-        RegionSettings.regions.each do |name,manager|
-
+        Application.config.regions.each do |entry|
+          name = entry[0]
           # Make sure we set some value here, it will get updated with a valid
           # region in update_regions
           if region = Region.find!(name)

@@ -87,8 +87,10 @@ module GameMachine
           pool = GameMachine::JavaLib::DbConnectionPool.getInstance
           unless pool.connect(
             'game_machine_orm',
-            config.jdbc.url,
-            config.jdbc.driver,
+            config.jdbc.hostname,
+            config.jdbc.port,
+            config.jdbc.database,
+            config.jdbc.ds,
             config.jdbc.username,
             config.jdbc.password || ''
           )

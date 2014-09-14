@@ -11,7 +11,7 @@ module GameMachine
     include Singleton
     extend Forwardable
 
-    def_delegators :@store, :delete, :delete_all, :shutdown, :keys, :dump, :load
+    def_delegators :@store, :delete_all, :shutdown, :keys, :dump, :load
 
     attr_reader :store, :serialization, :classmap
     def initialize
@@ -39,8 +39,20 @@ module GameMachine
     end
 
 
+    # for get/set/delete, backend stores return a value or nil, and raise on any underlying error
+    # Propogating the error could mess up actor states so we don't do that.  
+    # Callers should treat nil/false as a failure.  We log errors so they
+    # can be dealt with
+    
     def get(key,classname='Entity')
-      value = @store.get(key)
+      value = nil
+      begin
+        value = @store.get(key)
+      rescue Exception => e
+         GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
+        return nil
+      end
+
       return nil if value.nil?
       klass = class_cache(classname)
 
@@ -52,10 +64,24 @@ module GameMachine
     end
 
     def set(key,value)
-      if serialization == 'json'
-        @store.set(key,value.to_json)
-      else
-        @store.set(key,value.to_byte_array)
+      begin
+        if serialization == 'json'
+          @store.set(key,value.to_json)
+        else
+          @store.set(key,value.to_byte_array)
+        end
+      rescue Exception => e
+        GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
+        return false
+      end
+    end
+
+    def delete(key)
+      begin
+        @store.delete(key)
+      rescue Exception => e
+        GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
+        return false
       end
     end
 

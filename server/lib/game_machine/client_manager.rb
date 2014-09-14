@@ -32,7 +32,7 @@ module GameMachine
     end
 
     def post_init(*args)
-      @server = Application.config.name
+      @server = Akka.instance.address
       @channel = 'client_events'
       @local_actors = {}
       @remote_clients = {}

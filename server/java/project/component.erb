@@ -177,17 +177,18 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
 		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
 		AskableActorSelection askable = new AskableActorSelection(sel);
+		<%=klass%> message;
 		Future<Object> future = askable.ask(get,t);
 		try {
-			<%=klass%> message = (<%=klass%>) Await.result(future, t.duration());
-			if (message == null) {
-				return null;
-			}
-			message.id = unscopeId(message.id);
-			return message;
+			message = (<%=klass%>) Await.result(future, t.duration());
 		} catch (Exception e) {
 			return null;
 		}
+		if (message == null) {
+			return null;
+		}
+		message.id = unscopeId(message.id);
+		return message;
 	}
 
 	<% end %>
