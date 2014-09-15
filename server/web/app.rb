@@ -16,26 +16,52 @@ class WebApp < Sinatra::Base
   use Rack::Flash
 
   helpers do
+
+    def config
+      GameMachine::Application.config
+    end
+
     def logged_in?
       session['user']
     end
 
     def admin_user
-      GameMachine::Application.config.admin.user
+      config.admin.user
     end
 
     def admin_pass
-      GameMachine::Application.config.admin.pass
+      config.admin.pass
+    end
+
+    def auth_response(token)
+      response = {
+        :authtoken => token,
+        :protocol => config.client.protocol
+      }
+
+      if config.client.protocol == 'TCP'
+        response['tcp_host'] = config.tcp.host
+        response['tcp_port'] = config.tcp.port
+      elsif config.client.protocol == 'UDP'
+        response['udp_host'] = config.udp.host
+        response['udp_port'] = config.udp.port
+      end
+      response
     end
 
   end
 
   before do
-    public = ['/auth','/login','/clusterinfo']
-    unless public.include?(request.path_info)
-      unless logged_in?
-        redirect to('/login')
+    allow = false
+    public = ['/client','/login','/clusterinfo']
+    public.each do |path|
+      if request.path_info.match(path)
+        allow = true
       end
+    end
+
+    if !allow && !logged_in?
+      redirect to('/login')
     end
   end
 
@@ -83,9 +109,10 @@ class WebApp < Sinatra::Base
     JSON.generate(info)
   end
 
-  post '/auth' do
+  post '/client/login/:public_cluster_name' do
     if authtoken = GameMachine::Application.auth_handler.authorize(params['username'],params['password'])
-      authtoken
+      content_type 'text/plain'
+      JSON.generate(auth_response(authtoken))
     else
       status 403
       'error'

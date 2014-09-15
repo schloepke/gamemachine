@@ -37,24 +37,12 @@ module GameMachine
       config = set_seeds(config)
     end
 
-    def join_remote?
-      !seeds.empty? || env_seeds?
-    end
-
-    def env_seeds?
-      ENV.has_key?('AKKA_SEED_HOST') && ENV.has_key?('AKKA_SEED_PORT')
-    end
-
-    def join_self?
-      ENV.has_key?('AKKA_JOIN_SELF')
-    end
-
     def start
       @actor_system = Actor::System.new(config_name,akka_config)
       @actor_system.create!
       JavaLib::GameMachineLoader.new.run(actor_system)
-      if join_remote?
-        seeds.each do |seed|
+      if Application.config.seeds.size >= 1
+        Application.config.seeds.each do |seed|
           host,port = seed.split(':')
           GameMachine.logger.info "JOINING REMOTE #{host} #{port}"
           JavaLib::ActorUtil.joinCluster("akka.tcp", config_name, host, port.to_i)
@@ -71,14 +59,6 @@ module GameMachine
 
     private
 
-    def seeds
-      if env_seeds?
-        Application.config.seeds + ["#{ENV['AKKA_SEED_HOST']}:#{ENV['AKKA_SEED_PORT']}"]
-      else
-        Application.config.seeds
-      end
-    end
-
     def set_address(config)
       config.sub!('HOST',app_config.config.akka.host)
       config.sub!('PORT',app_config.config.akka.port.to_s)
@@ -86,11 +66,11 @@ module GameMachine
     end
 
     def set_seeds(config)
-      all_seeds = seeds.map do |seed|
+      seeds = Application.config.seeds.map do |seed|
         host,port = seed.split(':')
         "\"akka.tcp://cluster@#{host}:#{port}\""
       end
-      config.sub!('SEEDS',all_seeds.join(','))
+      config.sub!('SEEDS',seeds.join(','))
       config
     end
 

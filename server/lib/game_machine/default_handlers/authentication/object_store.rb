@@ -18,7 +18,7 @@ module GameMachine
           @sessions = {}
         end
 
-        # Returns true is authorized, false if not
+        # Returns true if authorized, false if not
         def authorize(username,password)
           GameMachine.logger.info "authorize: #{username}"
           if player_entity = EntityLib::PlayerEntity.find(username,2000)

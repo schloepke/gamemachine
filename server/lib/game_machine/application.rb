@@ -154,6 +154,7 @@ module GameMachine
       # TODO configurize router sizes
       def start_core_systems
         JavaLib::GameMachineLoader.StartMessageGateway
+        Actor::Builder.new(CloudUpdater).start
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
         Actor::Builder.new(MessageQueue).start

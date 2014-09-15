@@ -52,7 +52,6 @@ elsif command == 'build'
   GameMachine::Console::Build.new(ARGV).run!
 
 elsif command == 'server'
-  load_config
   # Need to set environment vars before loading everything.
   server = GameMachine::Console::Server.new(ARGV)
   server.set_environment

@@ -34,22 +34,25 @@ module GameMachine
       config.akka.host = ENV['NODE_HOST']
       config.akka.port = ENV['AKKA_PORT'].to_i
 
-      if ENV['DB_HOST'] && ENV['DB_NAME'] && ENV['DB_USER'] && ENV['DB_PASS']
+      if ENV['CLOUD_HOST'] && ENV['CLOUD_USER'] && ENV['API_KEY']
+        GameMachine.logger.info "Found gamecloud config in ENV"
+        config.gamecloud.host = ENV['CLOUD_HOST']
+        config.gamecloud.user = ENV['CLOUD_USER']
+        config.gamecloud.api_key = ENV['API_KEY']
+      end
+
+      if ENV['DB_HOST'] && ENV['DB_PORT']  && ENV['DB_NAME'] && ENV['DB_USER'] && ENV['DB_PASS']
         GameMachine.logger.info "Found database config in ENV"
+        config.jdbc.hostname =  ENV['DB_HOST']
+        config.jdbc.port =      ENV['DB_PORT']
+        config.jdbc.database =  ENV['DB_NAME']
+        config.jdbc.username =  ENV['DB_USER']
+        config.jdbc.password =  ENV['DB_PASS']
+      end
 
-        config.jdbc.hostname = ENV['DB_HOST']
-        config.jdbc.database = ENV['DB_NAME']
-        config.jdbc.username = ENV['DB_USER']
-        config.jdbc.password = ENV['DB_PASS']
-
-        jdbc_url = "#{ENV['DB_HOST']}:#{ENV['DB_PORT']}/#{ENV['DB_NAME']}"
-        if config.jdbc.url.match(/mysql/)
-          GameMachine.logger.info "Database is Mysql"
-          config.jdbc.url = "jdbc:mysql://#{jdbc_url}"
-        elsif config.jdbc_url.match(/postgres/)
-          GameMachine.logger.info "Database is Postgresql"
-          config.jdbc.url = "jdbc:postgresql://#{jdbc_url}"
-        end
+      if ENV['AKKA_SEED_HOST'] && ENV['AKKA_SEED_PORT']
+        GameMachine.logger.info "Found Seed in ENV"
+        Application.config.seeds << "#{ENV['AKKA_SEED_HOST']}:#{ENV['AKKA_SEED_PORT']}"
       end
 
     end

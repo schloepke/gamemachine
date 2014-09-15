@@ -1,5 +1,7 @@
 require 'spec_helper_minimal'
 require 'benchmark'
+require "net/http"
+require "uri"
 require 'jruby/core_ext'
 module GameMachine
 
@@ -14,7 +16,17 @@ module GameMachine
       entity
     end
 
-    it "serialized to json" do
+    it "authorizes with cloudclient" do
+      url = "http://localhost:9000/client/login/test"
+      uri = URI.parse(url)
+
+      response = Net::HTTP.post_form(uri, {'username' => 'chris', 'password' => 'pass'})
+      puts response.inspect
+      puts response.body
+
+    end
+
+    xit "serialized to json" do
       entity = MessageLib::Entity.new.set_id('player')
       puts entity.to_json
     end

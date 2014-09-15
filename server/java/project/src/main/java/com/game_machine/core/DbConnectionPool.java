@@ -42,6 +42,8 @@ public class DbConnectionPool {
 		config.addDataSourceProperty("user", username);
 		config.addDataSourceProperty("password", password);
 		config.setMaximumPoolSize(10);
+		config.setIdleTimeout(0);
+		config.setLeakDetectionThreshold(5);
 
 		HikariDataSource datasource = new HikariDataSource(config);
 		

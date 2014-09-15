@@ -37,7 +37,7 @@ module GameMachine
         api_key = AppConfig.instance.config.gamecloud.api_key
         host = AppConfig.instance.config.gamecloud.host
 
-        url = "http://#{host}/bundle/#{username}/upload"
+        url = "http://#{host}/api/bundle/#{username}/upload"
         token = Digest::SHA256.hexdigest("#{username}#{name}#{api_key}")
         file = Faraday::UploadIO.new(bundle_file, 'application/octet-stream')
         body = { :file => file, :name => name }
@@ -85,6 +85,7 @@ module GameMachine
         if response.status == 204
           puts "Push Successful"
         else
+          puts response.body
           puts "Push failed, server returned #{response.status}"
         end
       end

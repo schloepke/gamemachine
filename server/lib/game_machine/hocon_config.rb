@@ -10,7 +10,7 @@ module GameMachine
       file = File.join(ENV['APP_ROOT'],'config',"#{ENV['GAME_ENV']}.conf")
       data = File.read(file)
       config = ConfigFactory.parseString(data).getConfig('gamemachine')
-      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :regions]
+      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :regions, :client]
       conf = OpenStruct.new
       top.each {|t| conf.send("#{t}=",OpenStruct.new)}
 
@@ -21,6 +21,8 @@ module GameMachine
       conf.seeds = config.get_string_list('seeds')
 
       conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}
+
+      conf.client.protocol = config.get_string('client.protocol')
 
       conf.handlers.team = config.get_string('handlers.team')
       conf.handlers.auth = config.get_string('handlers.auth')

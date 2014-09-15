@@ -61,7 +61,8 @@ dependencies {
   compile 'mysql:mysql-connector-java:5.1.32'
   compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
   compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
-  compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
+  //compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
+  compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'org.mindrot:jbcrypt:0.3m'
 }
 

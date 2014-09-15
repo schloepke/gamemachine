@@ -3,6 +3,13 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message NodeStatus {
+  required string id = 1;
+  required int32 lastUpdated = 2;
+  required string hostname = 3;
+  required int32 port = 4;
+}
+
 message MonoMessage {
   optional Entity entity = 1;
   optional string klass = 2;
