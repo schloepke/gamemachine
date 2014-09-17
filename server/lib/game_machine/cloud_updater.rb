@@ -1,10 +1,11 @@
 module GameMachine
   class CloudUpdater < Actor::Base
 
-    attr_reader :node_status, :stats
+    attr_reader :node_status, :stats, :windows
     def post_init(*args)
 
       @stats = {}
+      @windows = Config::CONFIG['target_os'].match(/mswin/)
 
       if ENV['CONTAINER_ID'] && ENV['CLUSTER_NAME']
         @node_status = MessageLib::NodeStatus.new.
@@ -27,10 +28,12 @@ module GameMachine
         message.get_node_metrics.each do |node_metric|
           heap = JavaLib::StandardMetrics.extract_heap_memory(node_metric)
           stats[:heap] = heap.used / 1024 / 1024
-          cpu = JavaLib::StandardMetrics.extract_cpu(node_metric)
-          if cpu.respond_to?(:systemLoadAverage)
-            stats[:load_average] = cpu.systemLoadAverage.get
-            stats[:processor_count] = cpu.processors
+          unless windows
+            cpu = JavaLib::StandardMetrics.extract_cpu(node_metric)
+            if cpu.respond_to?(:systemLoadAverage)
+              stats[:load_average] = cpu.systemLoadAverage.get
+              stats[:processor_count] = cpu.processors
+            end
           end
         end
       end

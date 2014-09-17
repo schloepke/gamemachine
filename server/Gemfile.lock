@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    game_machine (0.0.11)
+    game_machine (0.0.12)
       activesupport
       bcrypt
       faraday

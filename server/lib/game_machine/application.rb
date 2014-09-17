@@ -97,12 +97,8 @@ module GameMachine
       end
 
       def load_games
-        begin
-          require_relative '../../games/routes.rb'
-          require_relative '../../games/boot.rb'
-        rescue LoadError => e
-          GameMachine.logger.info "Unable to load game files"
-        end
+        require_relative '../../games/routes.rb'
+        require_relative '../../games/boot.rb'
       end
 
       def start_http

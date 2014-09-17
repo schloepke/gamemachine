@@ -60,8 +60,9 @@ module GameMachine
       end
 
       def run_commands(commands)
-        command_str = commands.join(';')
-        system(command_str)
+        commands.each do |command|
+          system(command)
+        end
       end
 
       def run!
