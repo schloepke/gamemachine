@@ -33,7 +33,6 @@ public class DbConnectionPool {
 			return true;
 		}
 		
-		logger.warn("JDBC "+ "id " + id + "hostname " +hostname + "port " +port + "dbname " +dbname + "ds " +ds + "username " +username + "password " +password);
 		HikariConfig config = new HikariConfig();
 		config.setDataSourceClassName(ds);
 		config.addDataSourceProperty("serverName", hostname);
@@ -43,7 +42,9 @@ public class DbConnectionPool {
 		config.addDataSourceProperty("password", password);
 		config.setMaximumPoolSize(10);
 		config.setIdleTimeout(0);
-		config.setLeakDetectionThreshold(5);
+		config.setLeakDetectionThreshold(10000);
+		//config.setAutoCommit(false);
+		
 
 		HikariDataSource datasource = new HikariDataSource(config);
 		

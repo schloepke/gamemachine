@@ -89,10 +89,13 @@ class WebApp < Sinatra::Base
   end
 
   post '/add_player' do
-    if player = GameMachine::EntityLib::PlayerEntity.create(params['username'],params['password'])
-      flash[:notice] = "Player created"
-    else
+    if player = GameMachine::MessageLib::Player.store_get('players',params['username'],2000)
       flash[:error] = "Error creating player (already exists?)"
+    else
+      player = GameMachine::MessageLib::Player.new.set_id(params['username'])
+      authenticator = GameMachine::JavaLib::DefaultAuthenticator.new(player)
+      authenticator.set_password(params['password'])
+      flash[:notice] = "Player created"
     end
     redirect to('/')
   end
@@ -109,8 +112,8 @@ class WebApp < Sinatra::Base
     JSON.generate(info)
   end
 
-  post '/client/login/:public_cluster_name' do
-    if authtoken = GameMachine::Application.auth_handler.authorize(params['username'],params['password'])
+  post '/api/client/login/:game_id' do
+    if authtoken = GameMachine::Handlers::PlayerAuthentication.instance.authorize(params['username'],params['password'])
       content_type 'text/plain'
       JSON.generate(auth_response(authtoken))
     else
@@ -119,6 +122,12 @@ class WebApp < Sinatra::Base
     end
   end
 
+  get '/stats' do
+    @stats = {}
+    @stats[:local_player_count] = GameMachine::ClientManager.local_players.size
+    @stats[:local_players] = GameMachine::ClientManager.local_players
+  end
+  
 end
 
 WebApp.run!

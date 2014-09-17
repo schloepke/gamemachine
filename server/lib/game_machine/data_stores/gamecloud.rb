@@ -8,7 +8,7 @@ module GameMachine
       end
 
       def connect
-        JavaLib::Couchclient.get_instance.set_credentials(
+        JavaLib::CloudClient.get_instance.set_credentials(
           Application.config.gamecloud.host,
           Application.config.gamecloud.user,
           Application.config.gamecloud.api_key
@@ -37,23 +37,23 @@ module GameMachine
 
       def get(id)
         if serialization == 'json'
-          response = JavaLib::Couchclient.get_instance.getString(id)
+          response = JavaLib::CloudClient.get_instance.getString(id)
         else
-          response = JavaLib::Couchclient.get_instance.getBytes(id)
+          response = JavaLib::CloudClient.get_instance.getBytes(id)
         end
         handle_entity_response(response)
       end
 
       def delete(id)
-        response = JavaLib::Couchclient.get_instance.delete(id)
+        response = JavaLib::CloudClient.get_instance.delete(id)
         handle_response(response)
       end
 
       def set(id,value)
         if serialization == 'json'
-          response = JavaLib::Couchclient.get_instance.putString(id,value)
+          response = JavaLib::CloudClient.get_instance.putString(id,value)
         else
-          response = JavaLib::Couchclient.get_instance.putBytes(id,value)
+          response = JavaLib::CloudClient.get_instance.putBytes(id,value)
         end
         handle_response(response)
       end

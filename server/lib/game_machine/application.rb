@@ -8,10 +8,6 @@ module GameMachine
         akka.initialize!
       end
 
-      def auth_handler
-        AuthHandlers::Base.instance
-      end
-
       def data_store
         DataStore.instance
       end
@@ -65,10 +61,7 @@ module GameMachine
         end
 
         start_game_systems
-
         load_games
-        
-        auth_handler
         start_mono
 
         GameMachine.logger.info("Game Machine start successful")

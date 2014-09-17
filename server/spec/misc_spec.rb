@@ -1,4 +1,4 @@
-require 'spec_helper_minimal'
+require 'spec_helper'
 require 'benchmark'
 require "net/http"
 require "uri"
@@ -16,7 +16,23 @@ module GameMachine
       entity
     end
 
-    it "authorizes with cloudclient" do
+    it "ebean test" do
+      config = AppConfig.instance.config
+      pool = GameMachine::JavaLib::DbConnectionPool.getInstance
+      pool.connect(
+        'test',
+        config.jdbc.hostname,
+        config.jdbc.port,
+        config.jdbc.database,
+        config.jdbc.ds,
+        config.jdbc.username,
+        config.jdbc.password || ''
+      )
+      BeanLib::TestModel.set_ds
+      BeanLib::TestModel.test
+    end
+
+    xit "authorizes with cloudclient" do
       url = "http://localhost:9000/client/login/test"
       uri = URI.parse(url)
 

@@ -14,6 +14,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.ContentType;
@@ -25,22 +26,28 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Couchclient {
+import GameMachine.Messages.NodeStatus;
+
+public class CloudClient {
 
 	public ConcurrentHashMap<String, CloseableHttpClient> clients = new ConcurrentHashMap<String, CloseableHttpClient>();
 	private PoolingHttpClientConnectionManager cm;
 	private String gamecloudApiKey;
 	private String gamecloudUser;
 	private String host;
-	private static final Logger logger = LoggerFactory.getLogger(Couchclient.class);
+	private static final Logger logger = LoggerFactory.getLogger(CloudClient.class);
 
-	public class CouchResponse {
+	public class CloudResponse {
 		public int status;
 		public byte[] byteBody;
 		public String stringBody;
 	}
 
-	private Couchclient() {
+	private CloudClient() {
+		// Some freaking moron at apache.org decided it was a good idea to ignore log level and force WIRE
+		// level whenever Hyperic sigar is detected.
+		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
+		
 		cm = new PoolingHttpClientConnectionManager();
 		cm.setMaxTotal(10);
 		// Increase default max connection per route to 20
@@ -51,10 +58,10 @@ public class Couchclient {
 	}
 
 	private static class LazyHolder {
-		private static final Couchclient INSTANCE = new Couchclient();
+		private static final CloudClient INSTANCE = new CloudClient();
 	}
 
-	public static Couchclient getInstance() {
+	public static CloudClient getInstance() {
 		return LazyHolder.INSTANCE;
 	}
 
@@ -110,14 +117,23 @@ public class Couchclient {
 
 	public String urlFrom(String id, String format) throws UnsupportedEncodingException {
 		if (format == null) {
-			return "http://" + host + "/db/" + gamecloudUser + "/" + encodeURIComponent(id);
+			return "http://" + host + "/api/db/" + gamecloudUser + "/" + encodeURIComponent(id);
 		} else {
-			return "http://" + host + "/db/" + gamecloudUser + "/" + encodeURIComponent(id) + "/" + format;
+			return "http://" + host + "/api/db/" + gamecloudUser + "/" + encodeURIComponent(id) + "/" + format;
 		}
 
 	}
 
-	public CouchResponse putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
+	public CloudResponse updateNodeStatus(NodeStatus nodeStatus) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/update_node_status";
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpPost request = new HttpPost(url);
+		ByteArrayEntity input = new ByteArrayEntity(nodeStatus.toByteArray(), ContentType.APPLICATION_OCTET_STREAM);
+		request.setEntity(input);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+	
+	public CloudResponse putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -128,7 +144,7 @@ public class Couchclient {
 		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	public CouchResponse putString(String id, String value) throws ClientProtocolException, IOException {
+	public CloudResponse putString(String id, String value) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -139,7 +155,7 @@ public class Couchclient {
 		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	public CouchResponse delete(String id) throws ClientProtocolException, IOException {
+	public CloudResponse delete(String id) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, null);
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -148,7 +164,7 @@ public class Couchclient {
 		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	public CouchResponse getBytes(String id) throws ClientProtocolException, IOException {
+	public CloudResponse getBytes(String id) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "bytes");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -157,7 +173,7 @@ public class Couchclient {
 		return httpClient.execute(request, new ByteArrayResponseHandler());
 	}
 
-	public CouchResponse getString(String id) throws ClientProtocolException, IOException {
+	public CloudResponse getString(String id) throws ClientProtocolException, IOException {
 		String url = urlFrom(id, "json");
 		String token = hash256(gamecloudUser + id + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
@@ -166,9 +182,9 @@ public class Couchclient {
 		return httpClient.execute(request, new StringResponseHandler());
 	}
 
-	private class StringResponseHandler implements ResponseHandler<CouchResponse> {
-		public CouchResponse handleResponse(final HttpResponse response) throws IOException {
-			CouchResponse couchResponse = new CouchResponse();
+	private class StringResponseHandler implements ResponseHandler<CloudResponse> {
+		public CloudResponse handleResponse(final HttpResponse response) throws IOException {
+			CloudResponse couchResponse = new CloudResponse();
 			int status = response.getStatusLine().getStatusCode();
 			couchResponse.status = status;
 			HttpEntity entity = response.getEntity();
@@ -179,10 +195,10 @@ public class Couchclient {
 		}
 	}
 
-	private class ByteArrayResponseHandler implements ResponseHandler<CouchResponse> {
-		public CouchResponse handleResponse(final HttpResponse response) throws IOException {
+	private class ByteArrayResponseHandler implements ResponseHandler<CloudResponse> {
+		public CloudResponse handleResponse(final HttpResponse response) throws IOException {
 			int status = response.getStatusLine().getStatusCode();
-			CouchResponse couchResponse = new CouchResponse();
+			CloudResponse couchResponse = new CloudResponse();
 			couchResponse.status = status;
 			HttpEntity entity = response.getEntity();
 			if (entity != null) {

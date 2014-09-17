@@ -37,7 +37,7 @@ module GameMachine
         api_key = AppConfig.instance.config.gamecloud.api_key
         host = AppConfig.instance.config.gamecloud.host
 
-        url = "http://#{host}/api/bundle/#{username}/upload"
+        url = "http://#{host}/bundle/#{username}/upload"
         token = Digest::SHA256.hexdigest("#{username}#{name}#{api_key}")
         file = Faraday::UploadIO.new(bundle_file, 'application/octet-stream')
         body = { :file => file, :name => name }
@@ -65,7 +65,7 @@ module GameMachine
       def create_bundle
         FileUtils.mkdir_p(bundle_dir)
         FileUtils.rm_f(bundle_file)
-        system("cd #{ENV['APP_ROOT']} && bundle install --path=.game_machine/vendor/bundle >> /dev/null")
+        system("cd #{ENV['APP_ROOT']} && bundle install --path=.game_machine/vendor/bundle >> /dev/null && rm -rf #{ENV['APP_ROOT']}/.bundle")
         system("cd #{ENV['APP_ROOT']} && zip -r .game_machine/bundle.zip games config db lib java bin script web .game_machine/vendor mono >> /dev/null")
       end
 

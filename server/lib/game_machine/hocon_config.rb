@@ -26,7 +26,6 @@ module GameMachine
 
       conf.handlers.team = config.get_string('handlers.team')
       conf.handlers.auth = config.get_string('handlers.auth')
-      conf.handlers.player_register = config.get_string('handlers.player_register')
 
       conf.routers.game_handler = config.get_int('routers.game_handler')
       conf.routers.request_handler = config.get_int('routers.request_handler')

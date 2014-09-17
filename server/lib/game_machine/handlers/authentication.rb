@@ -23,23 +23,15 @@ module GameMachine
       end
 
       def authtoken_for_player(player_id)
-        Application.auth_handler.authtoken_for(player_id)
+        Handlers::PlayerAuthentication.instance.authtoken_for(player_id)
       end
 
       def valid_authtoken?(player)
-        return true if public?
         player.authtoken == authtoken_for_player(player.id)
       end
 
-      def public?
-        Application.config.handlers.auth == 'GameMachine::AuthHandlers::Public'
-      end
 
       def authenticate!(player)
-        if public?
-          AUTHENTICATED_USERS[player.id] = player.authtoken
-          return true
-        end
         @player = player
         if valid_authtoken?(player)
           register_player(player.id)
