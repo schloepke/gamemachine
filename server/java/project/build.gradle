@@ -94,12 +94,13 @@ test {
   //dependsOn cleanTest
   //testLogging { exceptionFormat "full" }
 }
-  
+ 
 task install_libs(type: Copy) {
   into "$buildDir/../lib"
     
   from configurations.runtime
   from "$buildDir/libs"
+  from "$buildDir/../local_lib/sigar"
 }
 
 def addUrlIfNotPresent( to, what ) {

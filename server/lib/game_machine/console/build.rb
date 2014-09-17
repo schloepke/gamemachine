@@ -51,14 +51,6 @@ module GameMachine
         FileUtils.rm Dir.glob(File.join(java_lib,'*.jar'))
       end
 
-      def install_libs
-        #system("cd #{java_root} && #{gradlew} shadowJar")
-        FileUtils.cp_r(File.join(java_root,'build','libs','.'), File.join(java_root,'lib'))
-
-        # Hyperic sigar for extra stats
-        FileUtils.cp(File.join(java_root,'local_lib','sigar','libsigar-amd64-linux.so'), File.join(java_root,'lib','libsigar-amd64-linux.so'))
-      end
-
       def build(clean=false)
         if clean
           cmd = "cd #{java_root} && #{gradlew} clean build install_libs"

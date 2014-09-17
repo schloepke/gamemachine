@@ -25,7 +25,7 @@ module GameMachine
   module ModelLib
     include_package 'com.game_machine.orm.models'
   end
-
+  
   module JavaLib
     java_import 'com.typesafe.config.Config'
     java_import 'com.typesafe.config.ConfigFactory'
