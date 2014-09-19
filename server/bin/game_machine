@@ -23,7 +23,6 @@ end
 ARGV << '--help' if ARGV.empty?
 
 aliases = {
-  "n"  => "new",
   "b"  => "build",
   "s"  => "server"
 }
@@ -34,22 +33,23 @@ command = aliases[command] || command
 require_relative '../lib/game_machine/console'
 
 
-if command == 'bundle'
-  load_config
-  GameMachine::Console::Bundle.new(ARGV).run!
-
-elsif command == 'new'
+if command == 'install' || command == 'upgrade'
   bin_path = File.dirname(__FILE__)
   install_source_path = File.expand_path(
     File.join(bin_path,'../')
   )
-  GameMachine::Console::Install.new(ARGV,install_source_path).run!
+  GameMachine::Console::Install.new(command,ARGV,install_source_path).run!
 
-elsif command == 'build'
+elsif command == 'build' || command == 'bundle'
   require_relative  '../java/project/local_lib/protostuff-compiler-1.0.8-jarjar.jar'
   require_relative '../lib/game_machine/protobuf/game_messages.rb'
   require_relative '../lib/game_machine/protobuf/generate.rb'
-  GameMachine::Console::Build.new(ARGV).run!
+  if command == 'bundle'
+    GameMachine::Console::Build.new(ARGV,true).run!
+  else
+    GameMachine::Console::Build.new(ARGV).run!
+  end
+  
 
 elsif command == 'server'
   # Need to set environment vars before loading everything.
@@ -65,16 +65,15 @@ else
 puts <<EOF
   Usage:
   
-  game_machine server [options]      Start the server
-    -s, --server=name                Server name
-    -c, --config=name                Configuration file
-    -e, --environment=name           Specifies the environment to run under (development/production).
-                                     Default: development
+  game_machine server               Start the server
 
-  game_machine build                 Generate and compile protobuf messages
+  game_machine build  [clean]       Build java and protobuf messages
 
-  game_machine new [path]            Create a new Game Machine application at the
-                                     specified path
+  game_machine bundle               Build and bundle gems for deployment
+
+  game_machine install [path]       Install Game Machine to [path]
+
+  game_machine upgrade [path]       Upgrade the Game Machine installation at [path]
     
 EOF
 

@@ -69,7 +69,7 @@ module GameMachine
         # This call blocks, make it the last thing we do
         if config.http.enabled
           Thread.new do
-            #start_http
+            start_http
           end
         end
       end

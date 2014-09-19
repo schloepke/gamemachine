@@ -28,6 +28,7 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'puma'
   gem.add_dependency 'faraday'
   gem.add_dependency 'bcrypt'
+  gem.add_dependency 'bundler'
 
 
   gem.add_development_dependency 'rake'

@@ -3,8 +3,9 @@ module GameMachine
   module Console
     class Build
 
-      attr_reader :command
-      def initialize(argv)
+      attr_reader :command, :bundle
+      def initialize(argv,bundle=false)
+        @bundle = bundle
         @command = argv.shift || ''
       end
 
@@ -59,6 +60,13 @@ module GameMachine
         end
       end
 
+      def bundle
+        gm_path = File.join(ENV['APP_ROOT'],'.game_machine')
+        FileUtils.mkdir_p(gm_path)
+        vendor_path = File.join(gm_path,'vendor','bundle')
+        cmd = "cd #{ENV['APP_ROOT']} && bundle install --path=#{vendor_path}"
+      end
+
       def run_commands(commands)
         commands.each do |command|
           system(command)
@@ -67,19 +75,30 @@ module GameMachine
 
       def run!
         commands = []
-        if command == 'messages'
-          commands << generate_code
-          commands << build(false)
-          run_commands(commands)
-        elsif command == 'clean'
+
+        if bundle
           commands << generate_code
           remove_libs
           commands << build(true)
+          commands << bundle
           run_commands(commands)
+          bundler_path = File.join(ENV['APP_ROOT'],'.bundle')
+          FileUtils.rm_rf(bundler_path)
         else
-          commands << generate_code
-          commands << build(false)
-          run_commands(commands)
+          if command == 'messages'
+            commands << generate_code
+            commands << build(false)
+            run_commands(commands)
+          elsif command == 'clean'
+            commands << generate_code
+            remove_libs
+            commands << build(true)
+            run_commands(commands)
+          else
+            commands << generate_code
+            commands << build(false)
+            run_commands(commands)
+          end
         end
       end
 

@@ -1,4 +1,15 @@
 # A sample Gemfile
 source "https://rubygems.org"
 
-gemspec
+gem 'i18n'
+gem 'json'
+gem 'ffi'
+gem 'sinatra'
+gem 'sinatra-contrib'
+gem 'rack-flash3'
+gem 'activesupport'
+gem 'wavefront'
+gem 'puma'
+gem 'faraday'
+gem 'bcrypt'
+gem 'bundler'
