@@ -40,7 +40,6 @@ namespace GameMachine.Core
             Type t = target.GetType ();
             MethodInfo m = t.GetMethod (methodName);
             invokeRepeatingMethods [target] = m;
-
         }
 
         public void Start (Client _client)

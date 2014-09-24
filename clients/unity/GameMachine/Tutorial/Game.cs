@@ -2,6 +2,8 @@ using UnityEngine;
 using System;
 using GameMachine;
 using GameMachine.Core;
+using Entity = GameMachine.Messages.Entity;
+using EchoTest = GameMachine.Messages.EchoTest;
 
 
 namespace GameMachine.Tutorial

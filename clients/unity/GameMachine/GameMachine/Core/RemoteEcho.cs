@@ -8,64 +8,63 @@ using Newtonsoft;
 
 namespace GameMachine.Core
 {
-	public class RemoteEcho : UntypedActor
-	{
+    public class RemoteEcho : UntypedActor
+    {
         
-		public delegate void EchoReceived ();
-		private EchoReceived echoReceived;
-		public delegate void RegionEchoReceived ();
-		private RegionEchoReceived regionEchoReceived;
+        public delegate void EchoReceived ();
+        private EchoReceived echoReceived;
+        public delegate void RegionEchoReceived ();
+        private RegionEchoReceived regionEchoReceived;
 
-		private string playerId;
+        private string playerId;
         
-		public void OnEchoReceived (EchoReceived callback)
-		{
-			echoReceived = callback;
-		}
+        public void OnEchoReceived (EchoReceived callback)
+        {
+            echoReceived = callback;
+        }
 
-		public void OnRegionEchoReceived (RegionEchoReceived callback)
-		{
-			regionEchoReceived = callback;
-		}
+        public void OnRegionEchoReceived (RegionEchoReceived callback)
+        {
+            regionEchoReceived = callback;
+        }
 
-		public Entity EchoMessage (string id)
-		{
-			Entity entity = new Entity ();
-			entity.id = id;
-			EchoTest echoTest = new EchoTest ();
-			echoTest.message = id;
-			entity.echoTest = echoTest;
-			return entity;
-		}
+        public Entity EchoMessage (string id)
+        {
+            Entity entity = new Entity ();
+            entity.id = id;
+            EchoTest echoTest = new EchoTest ();
+            echoTest.message = id;
+            entity.echoTest = echoTest;
+            return entity;
+        }
 
-		public void Echo ()
-		{
-
-			ActorSystem.Instance.FindRemote ("GameMachine/GameSystems/RemoteEcho").Tell (EchoMessage ("cluster"));
-		}
+        public void Echo ()
+        {
+            ActorSystem.Instance.FindRemote ("GameMachine/GameSystems/RemoteEcho").Tell (EchoMessage ("cluster"));
+        }
        
-		public void RegionEcho ()
-		{
-			// We dont' use FindRegional here because it falls back to FindRemote, which in this specific case
-			// we don't want
-			ActorSystem.Instance.Find ("GameMachine/GameSystems/RemoteEcho", true, true).Tell (EchoMessage ("region"));
-		}
+        public void RegionEcho ()
+        {
+            // We dont' use FindRegional here because it falls back to FindRemote, which in this specific case
+            // we don't want
+            ActorSystem.Instance.Find ("GameMachine/GameSystems/RemoteEcho", true, true).Tell (EchoMessage ("region"));
+        }
 
-		public override void OnReceive (object message)
-		{
-			Entity entity = message as Entity;
-			if (entity.echoTest != null) {
-				if (entity.id == "cluster") {
-					if (echoReceived != null) {
-						echoReceived ();
-					}
-				} else if (entity.id == "region") {
-					if (regionEchoReceived != null) {
-						regionEchoReceived ();
-					}
-				}
+        public override void OnReceive (object message)
+        {
+            Entity entity = message as Entity;
+            if (entity.echoTest != null) {
+                if (entity.id == "cluster") {
+                    if (echoReceived != null) {
+                        echoReceived ();
+                    }
+                } else if (entity.id == "region") {
+                    if (regionEchoReceived != null) {
+                        regionEchoReceived ();
+                    }
+                }
 
-			}
-		}
-	}
+            }
+        }
+    }
 }
