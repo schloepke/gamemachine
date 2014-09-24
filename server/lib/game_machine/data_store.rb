@@ -63,6 +63,46 @@ module GameMachine
       end
     end
 
+    def query(scope,query_string,limit,classname)
+      query_string = scope + "##" + query_string
+      value = nil
+      begin
+        value = @store.query(query_string,limit)
+      rescue Exception => e
+         GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
+        return nil
+      end
+
+      return nil if value.nil?
+      klass = class_cache(classname)
+
+      response = MessageLib::CloudQueryResponse.parse_from(value)
+
+      if serialization == 'json'
+        if response.getJsonMessageList.nil?
+          messages = []
+        else
+          messages = response.getJsonMessageList.map do |r|
+            message = klass.parse_from_json(r)
+            message.setId(klass.unscopeId(message.id))
+            message
+          end
+        end
+      else
+        if response.getByteMessageList.nil?
+          messages = []
+        else
+          messages = response.getByteMessageList.map do |r|
+            message = klass.parse_from(r.to_byte_array)
+            message.setId(klass.unscopeId(message.id))
+            message
+          end
+        end
+      end
+
+      messages
+    end
+
     def set(key,value)
       begin
         if serialization == 'json'
@@ -79,6 +119,16 @@ module GameMachine
     def delete(key)
       begin
         @store.delete(key)
+      rescue Exception => e
+        GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
+        return false
+      end
+    end
+
+    def delete_matching(scope,query_string)
+      query_string = scope + "##" + query_string
+      begin
+        @store.delete_matching(query_string)
       rescue Exception => e
         GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
         return false

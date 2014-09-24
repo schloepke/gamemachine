@@ -24,6 +24,29 @@ module GameMachine
 
     describe "objectdb persistence" do
       
+      describe "#query" do
+        it "performs a query on the gamecloud" do
+          GameMachine::DataStore.instance.delete_matching("players",'')
+          player = MessageLib::Player.new.set_id('player2').set_password_hash('blah')
+          GameMachine::DataStore.instance.set("players##player2",player)
+          messages = GameMachine::DataStore.instance.query("players",'',200,'Player')
+          expect(messages.size).to eq(1)
+          expect(messages.first.id).to eq('player2')
+        end
+
+        it "should return players with matching ids" do
+          100.times do |i|
+            player = MessageLib::Player.new.set_id("player#{i}").set_password_hash('blah')
+            GameMachine::DataStore.instance.set("players##player#{i}",player)
+          end
+          messages = GameMachine::DataStore.instance.query("players",'',200,'Player')
+          expect(messages.size).to eq(100)
+
+          messages2 = GameMachine::DataStore.instance.query("players",'player95',200,'Player')
+          expect(messages2.size).to eq(1)
+        end
+      end
+
       describe "#dbDelete" do
         it "sends delete request to object store" do
           MessageLib::Entity.store_delete(player_id,id)

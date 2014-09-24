@@ -65,13 +65,158 @@ public class CloudClient {
 		return LazyHolder.INSTANCE;
 	}
 
+	/**
+	 * Sets the credentials for the gamecloud that are used in all requests
+	 * 
+	 * @param host
+	 * @param username
+	 * @param apiKey
+	 */
 	public void setCredentials(String host, String username, String apiKey) {
 		gamecloudApiKey = apiKey;
 		gamecloudUser = username;
 		this.host = host;
 	}
 
-	public CloseableHttpClient getClient(String id) {
+	/**
+	 * Performs a left anchored fuzzy search by id
+	 * 
+	 * @param query
+	 * @param limit
+	 * @param format
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse query(String query, int limit, String format) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/db-query/" + gamecloudUser + "/" + encodeURIComponent(query) + "/" + limit + "/" + format;
+		String token = hash256(gamecloudUser + query + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new ByteArrayResponseHandler());
+	}
+	
+	/**
+	 * Performs mass delete based on a left anchored fuzzy search by id
+	 * 
+	 * @param query
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse deleteMatching(String query) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/db-delete-matching/" + gamecloudUser + "/" + encodeURIComponent(query);
+		String token = hash256(gamecloudUser + query + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpDelete request = new HttpDelete(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+	
+	/**
+	 * 
+	 * @param nodeStatus
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse updateNodeStatus(NodeStatus nodeStatus) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/update_node_status";
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpPost request = new HttpPost(url);
+		ByteArrayEntity input = new ByteArrayEntity(nodeStatus.toByteArray(), ContentType.APPLICATION_OCTET_STREAM);
+		request.setEntity(input);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param bytes
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "bytes");
+		String token = hash256(gamecloudUser + id + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpPut request = new HttpPut(url);
+		ByteArrayEntity input = new ByteArrayEntity(bytes, ContentType.APPLICATION_OCTET_STREAM);
+		request.setEntity(input);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @param value
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse putString(String id, String value) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "json");
+		String token = hash256(gamecloudUser + id + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpPut request = new HttpPut(url);
+		StringEntity input = new StringEntity(value, ContentType.TEXT_PLAIN);
+		request.setEntity(input);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse delete(String id) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, null);
+		String token = hash256(gamecloudUser + id + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpDelete request = new HttpDelete(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse getBytes(String id) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "bytes");
+		String token = hash256(gamecloudUser + id + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new ByteArrayResponseHandler());
+	}
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * @throws ClientProtocolException
+	 * @throws IOException
+	 */
+	public CloudResponse getString(String id) throws ClientProtocolException, IOException {
+		String url = urlFrom(id, "json");
+		String token = hash256(gamecloudUser + id + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+
+	private CloseableHttpClient getClient(String id) {
 		CloseableHttpClient httpClient;
 		if (clients.containsKey(id)) {
 			httpClient = clients.get(id);
@@ -82,7 +227,7 @@ public class CloudClient {
 		return httpClient;
 	}
 
-	public static String hash256(String data) {
+	private String hash256(String data) {
 		try {
 			MessageDigest md;
 			md = MessageDigest.getInstance("SHA-256");
@@ -94,14 +239,14 @@ public class CloudClient {
 		}
 	}
 
-	public static String bytesToHex(byte[] bytes) {
+	private String bytesToHex(byte[] bytes) {
 		StringBuffer result = new StringBuffer();
 		for (byte byt : bytes)
 			result.append(Integer.toString((byt & 0xff) + 0x100, 16).substring(1));
 		return result.toString();
 	}
 
-	public String encodeURIComponent(String s) {
+	private String encodeURIComponent(String s) {
 		String result;
 
 		try {
@@ -115,7 +260,7 @@ public class CloudClient {
 		return result;
 	}
 
-	public String urlFrom(String id, String format) throws UnsupportedEncodingException {
+	private String urlFrom(String id, String format) throws UnsupportedEncodingException {
 		if (format == null) {
 			return "http://" + host + "/api/db/" + gamecloudUser + "/" + encodeURIComponent(id);
 		} else {
@@ -123,65 +268,7 @@ public class CloudClient {
 		}
 
 	}
-
-	public CloudResponse updateNodeStatus(NodeStatus nodeStatus) throws ClientProtocolException, IOException {
-		String url = "http://" + host + "/api/update_node_status";
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpPost request = new HttpPost(url);
-		ByteArrayEntity input = new ByteArrayEntity(nodeStatus.toByteArray(), ContentType.APPLICATION_OCTET_STREAM);
-		request.setEntity(input);
-		return httpClient.execute(request, new StringResponseHandler());
-	}
 	
-	public CloudResponse putBytes(String id, byte[] bytes) throws ClientProtocolException, IOException {
-		String url = urlFrom(id, "bytes");
-		String token = hash256(gamecloudUser + id + gamecloudApiKey);
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpPut request = new HttpPut(url);
-		ByteArrayEntity input = new ByteArrayEntity(bytes, ContentType.APPLICATION_OCTET_STREAM);
-		request.setEntity(input);
-		request.setHeader("X-Auth", token);
-		return httpClient.execute(request, new StringResponseHandler());
-	}
-
-	public CloudResponse putString(String id, String value) throws ClientProtocolException, IOException {
-		String url = urlFrom(id, "json");
-		String token = hash256(gamecloudUser + id + gamecloudApiKey);
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpPut request = new HttpPut(url);
-		StringEntity input = new StringEntity(value, ContentType.TEXT_PLAIN);
-		request.setEntity(input);
-		request.setHeader("X-Auth", token);
-		return httpClient.execute(request, new StringResponseHandler());
-	}
-
-	public CloudResponse delete(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id, null);
-		String token = hash256(gamecloudUser + id + gamecloudApiKey);
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpDelete request = new HttpDelete(url);
-		request.setHeader("X-Auth", token);
-		return httpClient.execute(request, new StringResponseHandler());
-	}
-
-	public CloudResponse getBytes(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id, "bytes");
-		String token = hash256(gamecloudUser + id + gamecloudApiKey);
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpGet request = new HttpGet(url);
-		request.setHeader("X-Auth", token);
-		return httpClient.execute(request, new ByteArrayResponseHandler());
-	}
-
-	public CloudResponse getString(String id) throws ClientProtocolException, IOException {
-		String url = urlFrom(id, "json");
-		String token = hash256(gamecloudUser + id + gamecloudApiKey);
-		CloseableHttpClient httpClient = getClient("gamemachine");
-		HttpGet request = new HttpGet(url);
-		request.setHeader("X-Auth", token);
-		return httpClient.execute(request, new StringResponseHandler());
-	}
-
 	private class StringResponseHandler implements ResponseHandler<CloudResponse> {
 		public CloudResponse handleResponse(final HttpResponse response) throws IOException {
 			CloudResponse couchResponse = new CloudResponse();

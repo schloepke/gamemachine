@@ -250,6 +250,13 @@ message NativeBytes {
   repeated bytes byteArray = 2;
 }
 
+message CloudQueryResponse {
+  required string format = 1;
+  repeated string messageId = 2;
+  repeated bytes byteMessage = 3;
+  repeated string jsonMessage = 4;
+}
+
 message JsonEntity {
   required string json = 1;
   optional string klass = 2;

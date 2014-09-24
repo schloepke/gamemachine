@@ -3,7 +3,7 @@ module GameMachine
 
     class << self
 
-      def initialize!()
+      def initialize!
         AppConfig.instance.load_config
         akka.initialize!
       end
@@ -17,7 +17,7 @@ module GameMachine
       end
 
       def config
-        @config ||= AppConfig.instance.config
+        AppConfig.instance.config
       end
 
       def registered

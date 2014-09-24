@@ -12,12 +12,11 @@ end
 
 RSpec.configure do |config|
   config.before(:suite) do
-    GameMachine::Application.initialize!()
+    GameMachine::Application.initialize!
   end
 
   config.before(:each) do
-    GameMachine::AuthHandlers::Base.instance
-    
+    GameMachine::AppConfig.instance.load_config
     GameMachine::Application.create_grids
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems

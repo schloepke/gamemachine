@@ -60,7 +60,7 @@ module GameMachine
         end
       end
 
-      def bundle
+      def bundle_commands
         gm_path = File.join(ENV['APP_ROOT'],'.game_machine')
         FileUtils.mkdir_p(gm_path)
         vendor_path = File.join(gm_path,'vendor','bundle')
@@ -80,7 +80,7 @@ module GameMachine
           commands << generate_code
           remove_libs
           commands << build(true)
-          commands << bundle
+          commands << bundle_commands
           run_commands(commands)
           bundler_path = File.join(ENV['APP_ROOT'],'.bundle')
           FileUtils.rm_rf(bundler_path)

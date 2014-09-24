@@ -1,0 +1,15 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th></th>
+    </tr>
+  </thead>
+  <% @players.each do |player| %>
+  <tr>
+    <td><%= player.id %></td>
+    <td>
+    <a href="/players/<%= player.id %>/delete">Delete</a>
+  </tr>
+  <% end %>
+</table>

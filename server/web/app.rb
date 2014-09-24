@@ -84,12 +84,22 @@ class WebApp < Sinatra::Base
     end
   end
 
+  get '/players/:id/delete' do
+    GameMachine::MessageLib::Player.store_delete('players',params['id'])
+    redirect to('/players')
+  end
+
+  get '/players' do
+    @players = GameMachine::DataStore.instance.query("players",'',200,'Player')
+    erb :players
+  end
+
   get '/add_player' do
     erb :add_player
   end
 
   post '/add_player' do
-    if player = GameMachine::MessageLib::Player.store_get('players',params['username'],2000)
+    if player = GameMachine::MessageLib::Player.store_get('players',params['username'],500)
       flash[:error] = "Error creating player (already exists?)"
     else
       player = GameMachine::MessageLib::Player.new.set_id(params['username'])

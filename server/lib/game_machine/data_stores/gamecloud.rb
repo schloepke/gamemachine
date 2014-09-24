@@ -35,6 +35,17 @@ module GameMachine
         end
       end
 
+      def query(query,limit)
+        response = JavaLib::CloudClient.get_instance.query(query,limit,serialization)
+        if response.status == 200
+          response.byteBody
+        elsif response.status == 404
+          nil
+        else
+          raise "Gamecloud.get returned status: #{response.status}"
+        end
+      end
+
       def get(id)
         if serialization == 'json'
           response = JavaLib::CloudClient.get_instance.getString(id)
@@ -46,6 +57,11 @@ module GameMachine
 
       def delete(id)
         response = JavaLib::CloudClient.get_instance.delete(id)
+        handle_response(response)
+      end
+
+      def delete_matching(query_string)
+        response = JavaLib::CloudClient.get_instance.delete_matching(query_string)
         handle_response(response)
       end
 

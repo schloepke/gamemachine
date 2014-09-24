@@ -12,7 +12,6 @@ module GameMachine
     end
 
     def load_config
-      return if loaded
       @config = HoconConfig.config
       if ENV['NODE_HOST']
         set_config_from_env
