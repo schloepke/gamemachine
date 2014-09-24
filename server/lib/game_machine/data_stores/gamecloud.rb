@@ -38,9 +38,24 @@ module GameMachine
       def query(query,limit)
         response = JavaLib::CloudClient.get_instance.query(query,limit,serialization)
         if response.status == 200
-          response.byteBody
+          query_response = MessageLib::CloudQueryResponse.parse_from(response.byteBody)
+
+          if serialization == 'json'
+            if query_response.getJsonMessageList.nil?
+              messages = []
+            else
+              messages = query_response.getJsonMessageList
+            end
+          else
+            if query_response.getByteMessageList.nil?
+              messages = []
+            else
+              messages = query_response.getByteMessageList
+            end
+          end
+          messages
         elsif response.status == 404
-          nil
+          []
         else
           raise "Gamecloud.get returned status: #{response.status}"
         end

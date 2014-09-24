@@ -89,6 +89,16 @@ class WebApp < Sinatra::Base
     redirect to('/players')
   end
 
+  post '/players' do
+    scope,query_string = params['query_string'].split('##')
+    if query_string.nil?
+      query_string = ''
+    end
+    @players = GameMachine::DataStore.instance.query(scope,query_string,200,'Player')
+    @form_query = scope + '##' + query_string
+    erb :players
+  end
+
   get '/players' do
     @players = GameMachine::DataStore.instance.query("players",'',200,'Player')
     erb :players

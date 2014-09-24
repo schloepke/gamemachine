@@ -65,38 +65,33 @@ module GameMachine
 
     def query(scope,query_string,limit,classname)
       query_string = scope + "##" + query_string
-      value = nil
+      values = []
       begin
-        value = @store.query(query_string,limit)
+        # Returns an array
+        values = @store.query(query_string,limit)
       rescue Exception => e
          GameMachine.logger.error(e.message+"\n"+e.backtrace.join("\n"))
-        return nil
+        return values
       end
 
-      return nil if value.nil?
+      return values if values.empty?
       klass = class_cache(classname)
 
-      response = MessageLib::CloudQueryResponse.parse_from(value)
-
       if serialization == 'json'
-        if response.getJsonMessageList.nil?
-          messages = []
-        else
-          messages = response.getJsonMessageList.map do |r|
-            message = klass.parse_from_json(r)
+        messages = values.map do |r|
+          message = klass.parse_from_json(r)
+          if message.id.match(/##/)
             message.setId(klass.unscopeId(message.id))
-            message
           end
+          message
         end
       else
-        if response.getByteMessageList.nil?
-          messages = []
-        else
-          messages = response.getByteMessageList.map do |r|
-            message = klass.parse_from(r.to_byte_array)
+        messages = values.map do |r|
+          message = klass.parse_from(r.to_byte_array)
+          if message.id.match(/##/)
             message.setId(klass.unscopeId(message.id))
-            message
           end
+          message
         end
       end
 
