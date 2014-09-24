@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-// Generated from: config/combined_messages.proto
+// Generated from: combined_messages.proto
 namespace GameMachine.Messages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TrackData")]
@@ -248,6 +248,38 @@ namespace GameMachine.Messages
     {
       get { return _consumable; }
       set { _consumable = value; }
+    }
+    private GameMachine.Messages.Cost _cost = null;
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"cost", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.Cost cost
+    {
+      get { return _cost; }
+      set { _cost = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Cost")]
+  public partial class Cost : global::ProtoBuf.IExtensible
+  {
+    public Cost() {}
+    
+    private float _amount;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"amount", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    public float amount
+    {
+      get { return _amount; }
+      set { _amount = value; }
+    }
+    private string _currency;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"currency", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string currency
+    {
+      get { return _currency; }
+      set { _currency = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -508,6 +540,72 @@ namespace GameMachine.Messages
       VIDEO = 6
     }
   
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"NodeStatus")]
+  public partial class NodeStatus : global::ProtoBuf.IExtensible
+  {
+    public NodeStatus() {}
+    
+    private int _containerId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"containerId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int containerId
+    {
+      get { return _containerId; }
+      set { _containerId = value; }
+    }
+    private string _clusterName;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"clusterName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string clusterName
+    {
+      get { return _clusterName; }
+      set { _clusterName = value; }
+    }
+    private int _lastUpdated;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"lastUpdated", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int lastUpdated
+    {
+      get { return _lastUpdated; }
+      set { _lastUpdated = value; }
+    }
+    private string _hostname;
+    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"hostname", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string hostname
+    {
+      get { return _hostname; }
+      set { _hostname = value; }
+    }
+    private int _port;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = true, Name=@"port", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int port
+    {
+      get { return _port; }
+      set { _port = value; }
+    }
+    private int _clientCount;
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"clientCount", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int clientCount
+    {
+      get { return _clientCount; }
+      set { _clientCount = value; }
+    }
+    private double _loadAverage;
+    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"loadAverage", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public double loadAverage
+    {
+      get { return _loadAverage; }
+      set { _loadAverage = value; }
+    }
+    private int _heapUsed;
+    [global::ProtoBuf.ProtoMember(8, IsRequired = true, Name=@"heapUsed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int heapUsed
+    {
+      get { return _heapUsed; }
+      set { _heapUsed = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1221,6 +1319,14 @@ namespace GameMachine.Messages
       get { return _playerId; }
       set { _playerId = value; }
     }
+    private string _klass = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"klass", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string klass
+    {
+      get { return _klass; }
+      set { _klass = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1369,16 +1475,8 @@ namespace GameMachine.Messages
       get { return _id; }
       set { _id = value; }
     }
-    private string _name = "";
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string name
-    {
-      get { return _name; }
-      set { _name = value; }
-    }
     private bool _authenticated = default(bool);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"authenticated", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"authenticated", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
     public bool authenticated
     {
@@ -1386,20 +1484,20 @@ namespace GameMachine.Messages
       set { _authenticated = value; }
     }
     private string _authtoken = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
     public string authtoken
     {
       get { return _authtoken; }
       set { _authtoken = value; }
     }
-    private GameMachine.Messages.Transform _transform = null;
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"transform", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Transform transform
+    private string _passwordHash = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"passwordHash", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string passwordHash
     {
-      get { return _transform; }
-      set { _transform = value; }
+      get { return _passwordHash; }
+      set { _passwordHash = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -2177,8 +2275,16 @@ namespace GameMachine.Messages
       get { return _gameMessages; }
       set { _gameMessages = value; }
     }
+    private GameMachine.Messages.PlayerItems _playerItems = null;
+    [global::ProtoBuf.ProtoMember(1003, IsRequired = false, Name=@"playerItems", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.PlayerItems playerItems
+    {
+      get { return _playerItems; }
+      set { _playerItems = value; }
+    }
     private GameMachine.Messages.TestObject _testObject = null;
-    [global::ProtoBuf.ProtoMember(1003, IsRequired = false, Name=@"testObject", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1004, IsRequired = false, Name=@"testObject", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public GameMachine.Messages.TestObject testObject
     {
