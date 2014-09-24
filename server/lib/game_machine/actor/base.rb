@@ -109,7 +109,7 @@ module GameMachine
         private
 
         def remote_path(server,name)
-          "#{Akka.address_for(server)}/user/#{name}"
+          "#{server}/user/#{name}"
         end
 
         def local_distributed_path(id,name)

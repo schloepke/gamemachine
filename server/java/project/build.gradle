@@ -1,0 +1,134 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin:'scala'
+
+
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
+    classpath group: 'org.javalite', name: 'activejdbc', version: '1.4.9'
+    classpath group: 'org.javalite', name: 'activejdbc-instrumentation', version: '1.4.9'
+  }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'game_machine'
+  version = '0.0.1'
+  
+
+description = """"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+  flatDir(dirs: 'third_party')
+  mavenCentral()
+  maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+  
+}
+
+dependencies {
+  compile 'org.slf4j:slf4j-api:1.7.7'
+  compile 'ch.qos.logback:logback-classic:1.1.2'
+  compile 'ch.qos.logback:logback-core:1.1.2'
+  compile 'org.codehaus.janino:janino:2.7.5'
+  compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-remote_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-testkit_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
+  
+  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-json:1.0.8'
+  
+  //compile group: 'com.google.code.findbugs', name: 'jsr305', version:'2.0.1'
+  //compile group: 'org.javassist', name: 'javassist', version:'3.17.1-GA'
+  compile 'com.couchbase.client:couchbase-client:1.4.2'
+  //compile 'redis.clients:jedis:2.2.1'
+  //compile 'org.mapdb:mapdb:1.0.3'
+  compile 'org.postgresql:postgresql:9.3-1102-jdbc41'
+  compile 'io.netty:netty-all:4.0.21.Final'
+  //compile 'com.jolbox:bonecp:0.8.0.RELEASE'
+  compile 'com.zaxxer:HikariCP-java6:2.0.1'
+  compile 'mysql:mysql-connector-java:5.1.32'
+  compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
+  compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
+  //compile 'org.apache.httpcomponents:httpclient:4.4-alpha1'
+  compile 'org.apache.httpcomponents:httpclient:4.3.5'
+  compile 'org.mindrot:jbcrypt:0.3m'
+  compile 'org.fusesource:sigar:1.6.4'
+}
+
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+import org.javalite.instrumentation.Instrumentation
+
+sourceSets {
+    main {
+        java.srcDirs = ['src/main/java', '../src/main/java'] 
+    }
+}
+
+
+shadowJar {
+  transform(AppendingTransformer) {
+    resource = 'reference.conf'
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}
+
+test {
+  //useTestNG()
+  //outputs.upToDateWhen { false }
+  //testLogging.showStandardStreams = true
+  //dependsOn cleanTest
+  //testLogging { exceptionFormat "full" }
+}
+ 
+task install_libs(type: Copy) {
+  into "$buildDir/../lib"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+  from "$buildDir/../local_lib/sigar"
+}
+
+def addUrlIfNotPresent( to, what ) {
+    if ( !to || !what ) { return } 
+    def urls = to.URLs.toList()
+    switch( what.class ) { 
+      case URL: what = new File( what.toURI() ); break
+      case String: what = new File( what ); break
+      case GString: what = new File( what.toString() ); break
+      case File: break; // ok
+      default:
+        println "Don't know how to deal with $what as it is not an URL nor a File"
+        System.exit( 1 )
+    }
+
+    if ( what.directory && !what.exists() ) { what.mkdirs() }
+    def url = what.toURI().toURL()
+    if ( !urls.contains( url ) && ( what.directory || !urls.find{ it.path.endsWith( what.name ) } ) ) { 
+        to.addURL( url )
+    }
+}
+
+compileJava.doLast {
+    Instrumentation instrumentation = new Instrumentation()
+    
+    instrumentation.outputDirectory = sourceSets.main.output.classesDir.getPath()
+    addUrlIfNotPresent this.class.classLoader.rootLoader, sourceSets.main.output.classesDir.getPath()
+    addUrlIfNotPresent Instrumentation.class.classLoader, sourceSets.main.output.classesDir.getPath()
+    instrumentation.instrument()
+}
+

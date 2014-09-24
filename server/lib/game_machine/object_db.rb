@@ -32,12 +32,13 @@ module GameMachine
       WriteBehindCache.find_distributed(entity.id).tell(entity)
     end
 
-    def get_entity(entity_id)
+    def get_entity(entity_id,klass)
       entity = entities.fetch(entity_id,nil)
       if entity.nil?
-        entity = store.get(entity_id)
+        entity = store.get(entity_id,klass)
+      else
+        entity.clone
       end
-      entity
     end
 
     def on_receive(message)
@@ -45,7 +46,7 @@ module GameMachine
         procname = message.get_update_method.to_sym
         current_entity_id = message.get_current_entity_id
         update_entity = message.get_update_entity
-        current_entity = get_entity(current_entity_id)
+        current_entity = get_entity(current_entity_id,'Entity')
         if self.class.dbprocs.has_key?(procname)
           dbproc = self.class.dbprocs[procname]
           returned_entity = dbproc.call(
@@ -59,11 +60,16 @@ module GameMachine
 
       elsif message.is_a?(MessageLib::ObjectdbPut)
         set_entity(message.get_entity)
-        sender.tell(true)
+        get_sender.tell(true,nil)
       elsif message.is_a?(MessageLib::ObjectdbGet)
-        sender.tell(get_entity(message.get_entity_id) || false)
+        if entity = get_entity(message.get_entity_id,message.get_klass)
+          get_sender.tell(entity,nil)
+        end
       elsif message.is_a?(MessageLib::ObjectdbDel)
         delete_entity(message.get_entity_id)
+      elsif message.respond_to?(:get_id)
+        set_entity(message)
+        get_sender.tell(true,nil)
       else
         unhandled(message)
       end

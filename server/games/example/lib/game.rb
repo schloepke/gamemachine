@@ -14,6 +14,7 @@ require_relative 'aggressive_npc'
 require_relative 'npc_group'
 require_relative 'player_manager'
 require_relative 'zone_manager'
+require_relative 'player_register'
 
 module Example
   class Game

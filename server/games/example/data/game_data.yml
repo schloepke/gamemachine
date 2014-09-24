@@ -1,9 +1,9 @@
 ---
 zone1:
-  male: 00
-  viking: 00
-  golem: 00
-  worm: 00
+  male: 400
+  viking: 100
+  golem: 100
+  worm: 2000
 zone2:
   male: 100
   viking: 100

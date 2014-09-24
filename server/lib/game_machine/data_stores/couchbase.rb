@@ -6,16 +6,21 @@ module GameMachine
 
       def_delegators :@client, :get, :set, :delete, :shutdown
 
+      attr_reader :serialization
+      def initialize(serialization)
+        @serialization = serialization
+      end
+      
       def connect
         @client ||= JavaLib::CouchbaseClient.new(builder)
       end
 
       def bucket
-       Application.config.couchbase_bucket || 'default'
+       Application.config.couchbase.bucket || 'default'
       end
 
       def password
-       Application.config.couchbase_password || ''
+       Application.config.couchbase.password || ''
       end
 
       def builder
@@ -28,7 +33,7 @@ module GameMachine
       end
 
       def servers
-        Application.config.couchbase_servers.map {|server| java.net.URI.new(server)}
+        Application.config.couchbase.servers.map {|server| java.net.URI.new(server)}
       end
     end
   end

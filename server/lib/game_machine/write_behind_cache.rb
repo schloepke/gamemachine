@@ -7,7 +7,7 @@ module GameMachine
       if @max_writes_per_second
         @max_writes_per_second
       else
-        @max_writes_per_second = Application.config.cache_writes_per_second
+        @max_writes_per_second = Application.config.datastore.cache_writes_per_second
       end
     end
 
@@ -15,7 +15,7 @@ module GameMachine
       if @write_interval
         @write_interval
       else
-        @write_interval = Application.config.cache_write_interval
+        @write_interval = Application.config.datastore.cache_write_interval
       end
     end
 
@@ -149,9 +149,12 @@ module GameMachine
       else
         message = swap_if_queued_exists(message)
         WRITE_COUNT.incrementAndGet
-        @store.set(message.id, message)
-        @last_write = current_time
-        set_updated_at(message)
+        if @store.set(message.id, message)
+          @last_write = current_time
+          set_updated_at(message)
+        else
+          enqueue(message.id)
+        end
       end
     end
 

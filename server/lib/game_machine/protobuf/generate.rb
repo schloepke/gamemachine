@@ -18,6 +18,10 @@ module GameMachine
         @app_root = app_root
       end
 
+      def java_root
+        ENV['JAVA_ROOT']
+      end
+      
       def self.compile(path)
         loader = CachingProtoLoader.new
         file = java.io.File.new(path)
@@ -25,19 +29,19 @@ module GameMachine
       end
 
       def erb_template
-        File.join(app_root,'java','component.erb')
+        File.join(java_root,'component.erb')
       end
 
       def model_template
-        File.join(app_root,'java','model.erb')
+        File.join(java_root,'model.erb')
       end
 
       def model_src
-        File.join(app_root,'java','src','main','java','com', 'game_machine','orm','models')
+        File.join(java_root,'src','main','java','com', 'game_machine','orm','models')
       end
 
       def java_src
-        File.join(app_root,'java','src','main','java','GameMachine', 'Messages')
+        File.join(java_root,'src','main','java','GameMachine', 'Messages')
       end
 
       def config_path
@@ -59,7 +63,7 @@ module GameMachine
             end
           end
           unless message_fields.empty?
-            puts "#{message.getName} #{message_fields.inspect}"
+            #puts "#{message.getName} #{message_fields.inspect}"
           end
 
           klass = message.getName
@@ -89,20 +93,37 @@ module GameMachine
         "#{klass.underscore}_#{field.name.underscore}"
       end
 
-      def sql_field(klass,field,force_null=false)
-        txt = case field.getJavaType.to_s
-        when 'boolean'
-          "`#{sql_column_name(klass,field)}` tinyint(4)"
-        when 'double'
-          "`#{sql_column_name(klass,field)}` double"
-        when 'float'
-          "`#{sql_column_name(klass,field)}` float"
-        when 'long'
-          "`#{sql_column_name(klass,field)}` int(11)"
-        when 'int'
-          "`#{sql_column_name(klass,field)}` int(11)"
-        when 'String'
-          "`#{sql_column_name(klass,field)}` varchar(128)"
+      def sql_field(klass,field,dbtype,force_null=false)
+        if dbtype == 'mysql'
+          txt = case field.getJavaType.to_s
+          when 'boolean'
+            "`#{sql_column_name(klass,field)}` tinyint(4)"
+          when 'double'
+            "`#{sql_column_name(klass,field)}` double"
+          when 'float'
+            "`#{sql_column_name(klass,field)}` float"
+          when 'long'
+            "`#{sql_column_name(klass,field)}` int(11)"
+          when 'int'
+            "`#{sql_column_name(klass,field)}` int(11)"
+          when 'String'
+            "`#{sql_column_name(klass,field)}` varchar(128)"
+          end
+        elsif dbtype == 'postgres'
+          txt = case field.getJavaType.to_s
+          when 'boolean'
+            "#{sql_column_name(klass,field)} integer"
+          when 'double'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'float'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'long'
+            "#{sql_column_name(klass,field)} integer"
+          when 'int'
+            "#{sql_column_name(klass,field)} integer"
+          when 'String'
+            "#{sql_column_name(klass,field)} character varying(128)"
+          end
         end
 
         return nil if txt.nil?

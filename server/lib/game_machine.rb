@@ -1,4 +1,3 @@
-require 'rjack-logback'
 require 'rbconfig'
 
 require_relative 'game_machine/ruby_extensions/nilclass'
@@ -18,17 +17,16 @@ module GameMachine
     ENV.fetch('JAVA_ROOT')
   end
 end
+
 require 'java'
 
-jars = Dir[File.join(GameMachine.app_root, 'java/lib', '*.jar')]
+jars = Dir[File.join(GameMachine.java_root, 'lib', '*.jar')]
 jars.each do |jar|
   require jar
 end
 
+
 require_relative 'game_machine/java_lib'
-if ENV['ADMIN_UI']
-  GameMachine::JavaLib::AdminUi.main([])
-end
 
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
@@ -36,6 +34,7 @@ require_relative 'game_machine/grid'
 require_relative 'game_machine/message_buffer'
 require_relative 'game_machine/vector'
 require_relative 'game_machine/logger'
+require_relative 'game_machine/hocon_config'
 require_relative 'game_machine/app_config'
 require_relative 'game_machine/helpers/state_machine'
 require_relative 'game_machine/actor'
@@ -47,12 +46,12 @@ require_relative 'game_machine/application'
 require_relative 'game_machine/game_systems'
 require_relative 'game_machine/handlers/request'
 require_relative 'game_machine/handlers/game'
+require_relative 'game_machine/handlers/player_authentication'
 require_relative 'game_machine/actor/builder'
 require_relative 'game_machine/message_queue'
 require_relative 'game_machine/object_db'
 require_relative 'game_machine/write_behind_cache'
 require_relative 'game_machine/data_store'
-require_relative 'game_machine/auth_handlers/base'
 require_relative 'game_machine/system_monitor'
 require_relative 'game_machine/cluster_monitor'
 require_relative 'game_machine/system_stats'
@@ -62,7 +61,6 @@ require_relative 'game_machine/scheduler'
 require_relative 'game_machine/endpoints'
 require_relative 'game_machine/protobuf_extensions/entity_helper'
 require_relative 'game_machine/helpers/game_message'
-require_relative 'game_machine/grid_replicator'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
 require_relative 'game_machine/mono_server'
@@ -71,6 +69,7 @@ require_relative 'game_machine/uniqueid'
 require_relative 'game_machine/wavefront_ext'
 require_relative 'game_machine/routes'
 require_relative 'game_machine/default_handlers'
+require_relative 'game_machine/cloud_updater'
 
 if RbConfig::CONFIG['host_os'].match(/linux/i)
   #require_relative 'game_machine/navigation'
@@ -81,4 +80,7 @@ end
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS
 
-
+Signal.trap("TERM") {
+  puts "Caught SIGTERM, exiting"
+  System.exit(0)
+}

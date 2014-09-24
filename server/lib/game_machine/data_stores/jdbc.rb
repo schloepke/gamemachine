@@ -2,21 +2,39 @@ module GameMachine
   module DataStores
     class Jdbc
 
+      attr_reader :serialization
+      def initialize(serialization)
+        @serialization = serialization
+      end
+      
       def dbname
         'game_machine'
       end
 
+      def dbtype
+        @dbtype ||= case Application.config.jdbc_driver
+          when 'org.postgresql.Driver'
+            :postgres
+          when 'com.mysql.jdbc.Driver'
+            :mysql
+          else
+            raise "Unknown JDBC driver #{Application.config.jdbc_driver}"
+          end
+      end
+        
       def connect
         @pool ||= GameMachine::JavaLib::DbConnectionPool.getInstance
         unless @pool.connect(
           dbname,
-          Application.config.jdbc_url,
-          Application.config.jdbc_driver,
-          Application.config.jdbc_username,
-          Application.config.jdbc_password || ''
+          Application.config.jdbc.hostname,
+          Application.config.jdbc.port,
+          Application.config.jdbc.database,
+          Application.config.jdbc.ds,
+          Application.config.jdbc.username,
+          Application.config.jdbc.password || ''
         )
           GameMachine.logger.error "Unable to establish database connection, exiting"
-          System.exit 0
+          System.exit 1
         end
         @pool
       end
@@ -30,7 +48,13 @@ module GameMachine
         else
           type = 1
         end
-        s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?) ON DUPLICATE KEY UPDATE value=VALUES(value)")
+
+        if dbtype == :mysql
+          s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?) ON DUPLICATE KEY UPDATE value=VALUES(value)")
+        else
+          s = connection.prepare_statement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?)")
+        end
+        
         s.setString(1,id.to_java_string)
         s.setBytes(2,value)
         s.setInt(3,type)
@@ -54,7 +78,7 @@ module GameMachine
         connection = @pool.get_connection(dbname)
         s = connection.create_statement
         res = s.execute_query("SELECT value,datatype from entities where id = '#{key}' LIMIT 1")
-        if res.first
+        if res.next
           value = res.get_bytes('value')
           type = res.get_int("datatype")
         end

@@ -1,9 +1,0 @@
----
-development:
-  regions:
-    zone1: GameMachine::DefaultHandlers::ZoneManager
-    zone2: GameMachine::DefaultHandlers::ZoneManager
-test:
-  regions:
-    zone1: GameMachine::DefaultHandlers::ZoneManager
-    zone2: GameMachine::DefaultHandlers::ZoneManager

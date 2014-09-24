@@ -1,5 +1,7 @@
 require 'spec_helper'
 require 'benchmark'
+require "net/http"
+require "uri"
 require 'jruby/core_ext'
 module GameMachine
 
@@ -12,6 +14,59 @@ module GameMachine
       player.id = '2'
       entity.player = player
       entity
+    end
+
+    it "ebean test" do
+      config = AppConfig.instance.config
+      pool = GameMachine::JavaLib::DbConnectionPool.getInstance
+      pool.connect(
+        'test',
+        config.jdbc.hostname,
+        config.jdbc.port,
+        config.jdbc.database,
+        config.jdbc.ds,
+        config.jdbc.username,
+        config.jdbc.password || ''
+      )
+      BeanLib::TestModel.set_ds
+      BeanLib::TestModel.test
+    end
+
+    xit "authorizes with cloudclient" do
+      url = "http://localhost:9000/client/login/test"
+      uri = URI.parse(url)
+
+      response = Net::HTTP.post_form(uri, {'username' => 'chris', 'password' => 'pass'})
+      puts response.inspect
+      puts response.body
+
+    end
+
+    xit "serialized to json" do
+      entity = MessageLib::Entity.new.set_id('player')
+      puts entity.to_json
+    end
+
+    xit "couch http client" do
+      entity = MessageLib::Entity.new.set_id('3')
+      client = JavaLib::Couchclient.get_instance
+      10.times do |i|
+        id = "TESTING#{i}"
+        response = client.put(id,entity.to_byte_array)
+        puts response.status
+        #puts response.body
+
+        response = client.get(id)
+        puts response.status
+        if response.status == 200
+          puts MessageLib::Entity.parse_from(response.body)
+        end
+        
+
+        response = client.delete(id)
+        puts response.status
+        #puts response.body
+      end
     end
 
     xit "msyql ogbject store stress" do

@@ -49,7 +49,7 @@ module Example
         if position.distance(player[:vector]) <= @agro_radius
           movement.set_target(player[:vector])
           @target_id = player[:id]
-          #log("target chosen #{@target_id}")
+          log("target chosen #{@target_id}")
         end
       end
     end

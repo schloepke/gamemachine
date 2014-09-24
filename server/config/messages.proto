@@ -3,6 +3,17 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message NodeStatus {
+  required int32 containerId = 1;
+  required string clusterName = 2;
+  required int32 lastUpdated = 3;
+  required string hostname = 4;
+  required int32 port = 5;
+  required int32 clientCount = 6;
+  required double loadAverage = 7;
+  required int32 heapUsed = 8;
+}
+
 message MonoMessage {
   optional Entity entity = 1;
   optional string klass = 2;
@@ -144,6 +155,7 @@ message ObjectdbDel {
 message ObjectdbGet {
   required string entityId = 1;
   optional string playerId = 2;
+  optional string klass = 3;
 }
 
 message ObjectdbGetResponse {
@@ -174,10 +186,9 @@ message Name {
 
 message Player {
   required string id = 1;
-  optional string name = 2;
-  optional bool authenticated = 3;
-  optional string authtoken = 4;
-  optional Transform transform = 5;
+  optional bool authenticated = 2;
+  optional string authtoken = 3;
+  optional string passwordHash = 4;
 }
 
 message Vector3 {

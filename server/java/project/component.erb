@@ -1,0 +1,719 @@
+
+package GameMachine.Messages;
+
+import com.game_machine.core.GameMachineLoader;
+import com.game_machine.core.ActorUtil;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import scala.concurrent.duration.Duration;
+import akka.actor.ActorSelection;
+import akka.pattern.AskableActorSelection;
+import akka.util.Timeout;
+import java.util.concurrent.TimeUnit;
+
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.io.UnsupportedEncodingException;
+
+import com.dyuproject.protostuff.ByteString;
+import com.dyuproject.protostuff.GraphIOUtil;
+import com.dyuproject.protostuff.Input;
+import com.dyuproject.protostuff.Message;
+import com.dyuproject.protostuff.Output;
+import com.dyuproject.protostuff.ProtobufOutput;
+
+import java.io.ByteArrayOutputStream;
+import com.dyuproject.protostuff.JsonIOUtil;
+import com.dyuproject.protostuff.LinkedBuffer;
+import com.dyuproject.protostuff.ProtobufIOUtil;
+import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+import GameMachine.Messages.Entity;
+import com.game_machine.core.LocalLinkedBuffer;
+import java.nio.charset.Charset;
+
+import com.game_machine.core.DatastoreCommands;
+
+<% if persistent %>
+import com.game_machine.core.PersistentMessage;
+import com.game_machine.core.ActorUtil;
+import akka.actor.ActorSelection;
+import org.javalite.activejdbc.Errors;
+<% end %>
+
+import org.javalite.activejdbc.Model;
+import com.dyuproject.protostuff.Schema;
+import com.dyuproject.protostuff.UninitializedMessageException;
+
+
+<% if persistent %>
+public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>, PersistentMessage
+<% else %>
+public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
+<% end %>
+
+{
+
+<% message.nestedEnumGroups.each do |group| %>
+	public enum <%=group.name %> implements com.dyuproject.protostuff.EnumLite<<%=group.name %>>
+    {
+    	<% group.values.each do |value| %>
+    	<%= "#{value.getName}(#{value.getNumber})" %><%= value.getNumber == (group.values.length - 1) ? ";" : "," %>
+    	<% end %>
+        
+        public final int number;
+        
+        private Corpus (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Corpus valueOf(int number)
+        {
+            switch(number) 
+            {
+            	<% group.values.each do |value| %>
+    			case <%= "#{value.getNumber}: return (#{value.getName})" %>;
+    			<% end %>
+                default: return null;
+            }
+        }
+    }
+<% end %>
+
+
+    public static Schema<<%=klass%>> getSchema()
+    {
+        return DEFAULT_INSTANCE;
+    }
+
+    public static <%=klass%> getDefaultInstance()
+    {
+        return DEFAULT_INSTANCE;
+    }
+
+    static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
+
+<% if persistent %>
+	public Errors dbErrors;
+	public String persistPlayerId;
+	public String getPersistPlayerId() {
+		return persistPlayerId;
+	}
+	
+	public String persistAction;
+	public String getPersistAction() {
+		return persistAction;
+	}
+<% end %>
+
+<% message.getFields.each do |field| %>
+    <% if field.isRepeated %>
+    public List<<%=get_type(field)%>> <%=field.name %>;
+	<% else %>
+	<% if field.default_value.nil? %>
+		public <%=get_type(field)%> <%=field.name %>;
+	<% else %>
+		public <%=get_type(field)%> <%=field.name %>; // = <%= field.default_value %>;
+	<% end %>
+    
+    <% end %>
+<% end %>
+    
+
+
+    public <%=klass%>()
+    {
+        
+    }
+
+	
+ 
+<% message.getFields.each do |field| %>
+	<% if field.name == 'id' %>
+	public static String scopeId(String playerId, String id) {
+    	return playerId + "##" + id;
+    }
+    
+    public static String unscopeId(String id) {
+    	if (id.contains("##")) {
+    		String[] parts = id.split("##");
+        	return parts[1];
+    	} else {
+    		throw new RuntimeException("Expected "+id+" to contain ##");
+    	}
+    }
+    
+    public void storeSet(String scope) {
+    	<%=klass%> clone = this.clone();
+		clone.id = scopeId(scope,this.id);
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", clone.id);
+		sel.tell(clone, null);
+	}
+		
+	public static void storeDelete(String scope, String id) {
+		String scopedId = scopeId(scope,id);
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+		ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
+		sel.tell(del, null);
+	}
+		
+	public static <%=klass%> storeGet(String scope, String id, int timeout) {
+		String scopedId = scopeId(scope,id);
+		ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("<%=klass%>");
+		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
+		AskableActorSelection askable = new AskableActorSelection(sel);
+		<%=klass%> message;
+		Future<Object> future = askable.ask(get,t);
+		try {
+			message = (<%=klass%>) Await.result(future, t.duration());
+		} catch (Exception e) {
+			return null;
+		}
+		if (message == null) {
+			return null;
+		}
+		message.id = unscopeId(message.id);
+		return message;
+	}
+
+	<% end %>
+<% end %>
+
+	
+<% if persistent %>
+
+	public void dbSaveAsync(String playerId) {
+		persistPlayerId = playerId;
+		persistAction = "save";
+		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
+		sel.tell(this, null);
+    }
+        
+    public Boolean dbSave(String playerId) {
+    	return dbSave(playerId,false);
+    }
+        
+    public Boolean dbSave(String playerId, boolean inTransaction) {
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.open();
+    	}
+    	
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
+    	if (model == null) {
+    		model = new com.game_machine.orm.models.<%=klass%>();
+    		toModel(model,playerId);
+    	} else {
+    		toModel(model,null);
+    	}
+    	<% message_fields.each do |message_field| %>
+    	if (this.has<%= message_field %>()) {
+    		this.<%= varname(message_field) %>.toModel(model,null);
+    	} else {
+    		<%= message_field %>.clearModel(model);
+    	}
+    	<% end %>
+    	
+    	Boolean res = model.save();
+    	if (!res) {
+    		dbErrors = model.errors();
+    	}
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.close();
+    	}
+    	return res;
+    }
+    
+    public static void dbDeleteAsync(String id, String playerId) {
+    	<%=klass%> message = new <%=klass%>();
+    	message.setId(id);
+		message.persistPlayerId = playerId;
+		message.persistAction = "delete";
+		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
+		sel.tell(message, null);
+    }
+    
+    public Boolean dbDelete(String playerId) {
+    	Boolean result;
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
+    	if (model != null) {
+    		result = model.delete();
+    	} else {
+    		result = false;
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return result;
+    }
+    
+    public static <%=klass%> dbFind(String id, String playerId) {
+    	return dbFind(id, playerId, false);
+    }
+    
+    public static <%=klass%> dbFind(String id, String playerId, boolean inTransaction) {
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.open();
+    	}
+    	
+    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
+    	
+    	if (!inTransaction) {
+    		com.game_machine.orm.models.<%=klass%>.close();
+    	}
+    	
+    	if (model == null) {
+    		return null;
+    	} else {
+    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+    		<% message_fields.each do |message_field| %>
+    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+    		<% end %>
+    		return <%= varname(klass) %>;
+    	}
+    }
+    
+    public static List<<%=klass%>> dbFindAll(String playerId) {
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
+    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+    		<% message_fields.each do |message_field| %>
+    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+    		<% end %>
+    		messages.add(<%= varname(klass) %>);
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return messages;
+    }
+    
+    public static List<<%=klass%>> dbWhere(String query, Object ... params) {
+    	com.game_machine.orm.models.<%=klass%>.open();
+    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
+    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+    		<% message_fields.each do |message_field| %>
+    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+    		<% end %>
+    		messages.add(<%= varname(klass) %>);
+    	}
+    	com.game_machine.orm.models.<%=klass%>.close();
+    	return messages;
+    }
+    
+    
+<% end %>
+
+<% unless klass == 'Entity' %>
+
+	public static void clearModel(Model model) {
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	model.set("<%=sql_column_name(klass,field)%>",null);
+    	<% end %>
+    }
+    
+	public void toModel(Model model, String playerId) {
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	if (<%= field.name %> != null) {
+    		model.set<%=get_type(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
+    	}
+    	<% end %>
+    	
+    	if (playerId != null) {
+    		model.set("player_id",playerId);
+    	}
+    }
+    
+	public static <%=klass%> fromModel(Model model) {
+		boolean hasFields = false;
+    	<%=klass%> message = new <%=klass%>();
+    	<% message.getFields.each do |field| %>
+    	<% next unless simple_value?(field) %>
+    	<% next if field.isRepeated %>
+    	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	
+    	<%=get_type(field) %> <%= field.name %>Field = model.get<%=get_type(field) %>("<%=sql_column_name(klass,field)%>");
+    	if (<%= field.name %>Field != null) {
+    		message.set<%= field_name %>(<%= field.name %>Field);
+    		hasFields = true;
+    	}
+    	<% end %>
+    	if (hasFields) {
+    		return message;
+    	} else {
+    		return null;
+    	}
+    }
+<% end %>
+
+<% if klass == 'Entity' %>
+	public ArrayList<String> componentNames() {
+		ArrayList<String> names = new ArrayList<String>();
+	<% messages.each do |m| %>
+	  <% if message.getFields.collect {|f| f.name}.include?(varname(m.getName)) %>
+		if (this.has<%=m.getName%>()) {
+			names.add(this.<%=varname(m.getName)%>.getClass().getSimpleName());
+		}
+	  <% end %>
+	<% end %>
+		return names;
+	}
+<% end %>
+
+<% message.getFields.each do |field| %>
+	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    
+	<% if field.isRepeated %>
+	public List<<%=get_type(field)%>> get<%=field_name %>List() {
+		return <%= field.name %>;
+	}
+
+	public <%=klass%> set<%=field_name %>List(List<<%=get_type(field)%>> <%=field.name%>) {
+		this.<%=field.name%> = <%=field.name%>;
+		return this;
+	}
+
+	public <%=get_type(field) %> get<%=field_name %>(int index)  {
+        return <%=field.name%> == null ? null : <%=field.name%>.get(index);
+    }
+
+    public int get<%=field_name %>Count()  {
+        return <%=field.name%> == null ? 0 : <%=field.name%>.size();
+    }
+
+    public <%=klass%> add<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
+        if(this.<%=field.name%> == null)
+            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
+        this.<%=field.name%>.add(<%=field.name%>);
+        return this;
+    }
+    <% if messages_index.has_key?(get_type(field)) %>
+    <% messages_index[get_type(field)].getFields.each do |simple_field| %>
+    	<% next unless simple_value?(simple_field) %>
+    	<% next if simple_field.isRepeated %>
+    	<% simple_field_name = simple_field.name.slice(0,1).capitalize + simple_field.name.slice(1..-1) %>
+    	
+    public <%=klass%> remove<%=field_name %>By<%=simple_field_name %>(<%=get_type(field) %> <%=field.name%>)  {
+    	if(this.<%=field.name%> == null)
+           return this;
+            
+       	Iterator<<%=get_type(field) %>> itr = this.<%=field.name%>.iterator();
+       	while (itr.hasNext()) {
+    	<%=get_type(field) %> obj = itr.next();
+    	
+    	<% if simple_field.getJavaType.to_s == 'String' %>
+    		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
+    	<% else %>
+    		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
+    	<% end %>
+      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+    <% end %>
+    <% end %>
+    	
+    
+    
+    
+	<% else %>
+	public <%=get_type(field)%> get<%=field_name %>() {
+		return <%= field.name %>;
+	}
+	
+	public <%= field_name == '_EntityId' ? 'void' : klass%> set<%=field_name %>(<%=get_type(field)%> <%=field.name%>) {
+		this.<%=field.name%> = <%=field.name%>;
+		<%= field_name == '_EntityId' ? '' : 'return this;'%>
+	}
+	
+	public Boolean has<%=field_name %>()  {
+        return <%=field.name%> == null ? false : true;
+    }
+	<% end %>
+<% end %>
+
+  
+    // java serialization
+
+    public void readExternal(ObjectInput in) throws IOException
+    {
+        GraphIOUtil.mergeDelimitedFrom(in, this, this);
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        GraphIOUtil.writeDelimitedTo(out, this, this);
+    }
+
+    // message method
+
+    public Schema<<%=klass%>> cachedSchema()
+    {
+        return DEFAULT_INSTANCE;
+    }
+
+    // schema methods
+
+    public <%=klass%> newMessage()
+    {
+        return new <%=klass%>();
+    }
+
+    public Class<<%=klass%>> typeClass()
+    {
+        return <%=klass%>.class;
+    }
+
+    public String messageName()
+    {
+        return <%=klass%>.class.getSimpleName();
+    }
+
+    public String messageFullName()
+    {
+        return <%=klass%>.class.getName();
+    }
+
+    public boolean isInitialized(<%=klass%> message)
+    {
+        return true;
+    }
+
+    public void mergeFrom(Input input, <%=klass%> message) throws IOException
+    {
+        for(int number = input.readFieldNumber(this);; number = input.readFieldNumber(this))
+        {
+            switch(number)
+            {
+                case 0:
+                    return;
+                <% message.getFields.each do |field| %>
+            	case <%=field.number%>:
+            	<% if field.isRepeated %>
+            		if(message.<%=field.name%> == null)
+                        message.<%=field.name%> = new ArrayList<<%=get_type(field)%>>();
+                    <% if field.isMessageField %>
+                    message.<%=field.name%>.add(input.mergeObject(null, <%=get_type(field)%>.getSchema()));
+                    <% elsif field.enumField %>
+                    message.<%=field.name%>.add(<%=get_type(field)%>.valueOf(input.readEnum()));
+                    <% else %>
+                	message.<%=field.name%>.add(input.read<%=field.getClass.getSimpleName%>());
+                	<% end %>
+                    break;
+                <% else %>
+                	<% if field.isMessageField %>
+                	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
+                    break;
+                    <% elsif field.enumField %>
+                    message.<%=field.name%> = <%=classname(field.name)%>.valueOf(input.readEnum());
+                    break;
+                	<% else %>
+                	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
+                	break;
+                	<% end %>
+                	
+                <% end %>
+            	<% end %>
+            
+                default:
+                    input.handleUnknownField(number, this);
+            }   
+        }
+    }
+
+
+    public void writeTo(Output output, <%=klass%> message) throws IOException
+    {
+    	<% message.getFields.each do |field| %>
+    	
+    	<% if field.isRequired %>
+    	if(message.<%=field.name%> == null)
+            throw new UninitializedMessageException(message);
+    	<% end %>
+    	
+    	<% if field.isRepeated %>
+    	if(message.<%=field.name%> != null)
+        {
+            for(<%=get_type(field)%> <%=field.name%> : message.<%=field.name%>)
+            {
+                if(<%=field.name%> != null) {
+                   	<% if field.isMessageField %>
+    				output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
+    				<% elsif field.enumField %>
+    				output.writeEnum(<%=field.number%>, <%=field.name%>.number, true);
+    				<% else %>
+            		output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, <%=field.name%>, true);
+    				<% end %>
+    			}
+            }
+        }
+    	<% else %>
+    	<% if field.isMessageField %>
+    	if(message.<%=field.name%> != null)
+    		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
+    	<% elsif field.enumField %>
+    	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
+    	<% else %>
+    	if(message.<%=field.name%> != null)
+            output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+    	<% end %>
+    	
+    	<% end %>
+        <% end %>
+    	
+    }
+
+    public String getFieldName(int number)
+    {
+        switch(number)
+        {
+        	<% message.getFields.each do |field| %>
+        	case <%=field.number%>: return "<%=field.name%>";
+        	<% end %>
+            default: return null;
+        }
+    }
+
+    public int getFieldNumber(String name)
+    {
+        final Integer number = __fieldMap.get(name);
+        return number == null ? 0 : number.intValue();
+    }
+
+    private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
+    static
+    {
+    	<% message.getFields.each do |field| %>
+    	__fieldMap.put("<%=field.name%>", <%=field.number%>);
+    	<% end %>
+    }
+   
+   public static List<String> getFields() {
+	ArrayList<String> fieldNames = new ArrayList<String>();
+	String fieldName = null;
+	Integer i = 1;
+	
+    while(true) { 
+		fieldName = <%=klass%>.getSchema().getFieldName(i);
+		if (fieldName == null) {
+			break;
+		}
+		fieldNames.add(fieldName);
+		i++;
+	}
+	return fieldNames;
+}
+
+public static <%=klass%> parseFrom(byte[] bytes) {
+	<%=klass%> message = new <%=klass%>();
+	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class));
+	return message;
+}
+
+public static <%=klass%> parseFromJson(String json) throws IOException {
+	byte[] bytes = json.getBytes(Charset.forName("UTF-8"));
+	<%=klass%> message = new <%=klass%>();
+	JsonIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class), false);
+	return message;
+}
+
+public <%=klass%> clone() {
+	byte[] bytes = this.toByteArray();
+	<%=klass%> <%=varname(klass)%> = <%=klass%>.parseFrom(bytes);
+	return <%=varname(klass)%>;
+}
+	
+public byte[] toByteArray() {
+	return toProtobuf();
+	//return toJson();
+}
+
+public String toJson() throws UnsupportedEncodingException {
+	boolean numeric = false;
+	ByteArrayOutputStream out = new ByteArrayOutputStream();
+	try {
+		JsonIOUtil.writeTo(out, this, <%=klass%>.getSchema(), numeric);
+	} catch (IOException e) {
+		e.printStackTrace();
+		throw new RuntimeException("Json encoding failed");
+	}
+	String json = new String(out.toByteArray(), Charset.forName("UTF-8"));
+	return json;
+}
+
+public byte[] toPrefixedByteArray() {
+	LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+  Schema<<%=klass%>> schema = RuntimeSchema.getSchema(<%=klass%>.class);
+    
+	final ByteArrayOutputStream out = new ByteArrayOutputStream();
+    final ProtobufOutput output = new ProtobufOutput(buffer);
+    try
+    {
+    	schema.writeTo(output, this);
+        final int size = output.getSize();
+        ProtobufOutput.writeRawVarInt32Bytes(out, size);
+        final int msgSize = LinkedBuffer.writeTo(out, buffer);
+        assert size == msgSize;
+        
+        buffer.clear();
+        return out.toByteArray();
+    }
+    catch (IOException e)
+    {
+        throw new RuntimeException("Serializing to a byte array threw an IOException " + 
+                "(should never happen).", e);
+    }
+ 
+}
+
+public byte[] toProtobuf() {
+	LinkedBuffer buffer = LocalLinkedBuffer.get();
+	byte[] bytes = null;
+
+	try {
+		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(<%=klass%>.class), buffer);
+		buffer.clear();
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException("Protobuf encoding failed");
+	}
+	return bytes;
+}
+
+public ByteBuf toByteBuf() {
+	ByteBuf bb = Unpooled.buffer(512, 2048);
+	LinkedBuffer buffer = LinkedBuffer.use(bb.array());
+
+	try {
+		ProtobufIOUtil.writeTo(buffer, this, RuntimeSchema.getSchema(<%=klass%>.class));
+	} catch (Exception e) {
+		e.printStackTrace();
+		throw new RuntimeException("Protobuf encoding failed");
+	}
+	return bb;
+}
+
+}

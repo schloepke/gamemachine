@@ -32,7 +32,7 @@ module GameMachine
     end
 
     def post_init(*args)
-      @server = Application.config.name
+      @server = Akka.instance.address
       @channel = 'client_events'
       @local_actors = {}
       @remote_clients = {}
@@ -191,7 +191,7 @@ module GameMachine
     def create_client_event(client_id,player_id,event)
       client_event = MessageLib::ClientEvent.new.set_client_id(client_id).
         set_event(event).set_player_id(player_id)
-      client_event.set_sender_id(Application.config.name + '|' + self.class.name)
+      client_event.set_sender_id(Akka.instance.address + '|' + self.class.name)
     end
 
     def send_client_event(client_id,player_id,event)

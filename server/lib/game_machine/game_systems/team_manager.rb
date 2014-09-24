@@ -6,9 +6,7 @@ module GameMachine
 
       attr_reader :team_handler
       def post_init(*args)
-        if Application.config.team_handler
-          @team_handler = Application.config.team_handler.constantize.new
-        end
+        @team_handler = Application.config.handlers.team.constantize.new
         define_update_procs
         commands.misc.client_manager_register(self.class.name)
       end
@@ -85,37 +83,30 @@ module GameMachine
       end
 
       def can_add_member?(team_name,player_id)
-        return true unless team_handler
         team_handler.can_add_member?(team_name, player_id)
       end
 
       def can_create_team?(team_name,player_id)
-        return true unless team_handler
         team_handler.can_create_team?(team_name, player_id)
       end
 
       def handler_update_teams
-        return true unless team_handler
         team_handler.update_teams
       end
 
       def destroy_on_owner_leave?
-        return true unless team_handler
         team_handler.destroy_on_owner_leave?
       end
 
       def handler_teams_filter(teams,teams_request)
-        return teams unless team_handler
         team_handler.teams_filter(teams,teams_request)
       end
 
       def handler_find_match(team_name)
-        return true unless team_handler
         team_handler.match!(team_name)
       end
 
       def handler_match_started(match)
-        return true unless team_handler
         team_handler.match_started(match)
       end
 

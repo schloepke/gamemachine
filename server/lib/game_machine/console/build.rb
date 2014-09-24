@@ -1,11 +1,11 @@
 require 'fileutils'
-require_relative '../settings'
 module GameMachine
   module Console
     class Build
 
-      attr_reader :command
-      def initialize(argv)
+      attr_reader :command, :bundle
+      def initialize(argv,bundle=false)
+        @bundle = bundle
         @command = argv.shift || ''
       end
 
@@ -19,11 +19,6 @@ module GameMachine
 
       def gradlew
         File.join(java_root,'gradlew')
-      end
-
-      def build_code
-        system("cd #{java_root} && #{gradlew} clean")
-        system("cd #{java_root} && #{gradlew} build")
       end
 
       def generate_csharp_code
@@ -40,9 +35,7 @@ module GameMachine
           bin_out_file =  File.join(ENV['APP_ROOT'],'messages.bin')
           cmd = "protoc -I#{proto_path} #{proto_file} -o#{bin_out_file}; mono #{protogen_path} -i:#{bin_out_file} -o:#{messages_out_file};rm -f #{bin_out_file}"
         end
-        
-        puts "Running #{cmd}"
-        system(cmd)
+        return cmd
       end
 
       def generate_java_code
@@ -59,29 +52,53 @@ module GameMachine
         FileUtils.rm Dir.glob(File.join(java_lib,'*.jar'))
       end
 
-      def install_libs
-        #system("cd #{java_root} && #{gradlew} shadowJar")
-        FileUtils.cp_r(File.join(java_root,'build','libs','.'), File.join(java_root,'lib'))
+      def build(clean=false)
+        if clean
+          cmd = "cd #{java_root} && #{gradlew} clean build install_libs"
+        else
+          cmd = "cd #{java_root} && #{gradlew} build install_libs"
+        end
       end
 
-      def build
-        system("cd #{java_root} && #{gradlew} build install_libs")
+      def bundle
+        gm_path = File.join(ENV['APP_ROOT'],'.game_machine')
+        FileUtils.mkdir_p(gm_path)
+        vendor_path = File.join(gm_path,'vendor','bundle')
+        cmd = "cd #{ENV['APP_ROOT']} && bundle install --path=#{vendor_path}"
+      end
+
+      def run_commands(commands)
+        commands.each do |command|
+          system(command)
+        end
       end
 
       def run!
-        if command == 'code'
-          build_code
+        commands = []
+
+        if bundle
+          commands << generate_code
           remove_libs
-          install_libs
-        elsif command == 'messages'
-          generate_code
-        elsif command == 'clean'
-          generate_code
-          remove_libs
-          system("cd #{java_root} && #{gradlew} clean build install_libs")
+          commands << build(true)
+          commands << bundle
+          run_commands(commands)
+          bundler_path = File.join(ENV['APP_ROOT'],'.bundle')
+          FileUtils.rm_rf(bundler_path)
         else
-          generate_code
-          build
+          if command == 'messages'
+            commands << generate_code
+            commands << build(false)
+            run_commands(commands)
+          elsif command == 'clean'
+            commands << generate_code
+            remove_libs
+            commands << build(true)
+            run_commands(commands)
+          else
+            commands << generate_code
+            commands << build(false)
+            run_commands(commands)
+          end
         end
       end
 

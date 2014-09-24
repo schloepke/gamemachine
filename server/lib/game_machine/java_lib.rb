@@ -25,8 +25,10 @@ module GameMachine
   module ModelLib
     include_package 'com.game_machine.orm.models'
   end
-
+  
   module JavaLib
+    java_import 'com.typesafe.config.Config'
+    java_import 'com.typesafe.config.ConfigFactory'
     java_import 'akka.cluster.ClusterEvent'
     java_import 'akka.contrib.pattern.ClusterSingletonManager'
     java_import 'akka.contrib.pattern.ClusterSingletonProxy'
@@ -47,6 +49,7 @@ module GameMachine
     java_import 'com.game_machine.core.Grid'
     include_package 'com.game_machine.core'
     include_package 'com.game_machine.orm'
+    include_package 'com.game_machine.authentication'
     include_package 'com.game_machine.ui'
     include_package 'java.net'
     include_package 'java.util.concurrent.atomic'

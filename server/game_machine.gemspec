@@ -18,17 +18,18 @@ Gem::Specification.new do |gem|
   gem.require_paths = ["lib"]
 
   gem.add_dependency 'i18n'
-  gem.add_dependency 'rjack-logback'
-  gem.add_dependency 'settingslogic'
   gem.add_dependency  'json'
   gem.add_dependency 'ffi'
   gem.add_dependency 'sinatra'
   gem.add_dependency 'sinatra-contrib'
-  gem.add_dependency 'haml'
-  gem.add_dependency 'webrick'
   gem.add_dependency 'rack-flash3'
   gem.add_dependency 'activesupport'
   gem.add_dependency 'wavefront'
+  gem.add_dependency 'puma'
+  gem.add_dependency 'faraday'
+  gem.add_dependency 'bcrypt'
+  gem.add_dependency 'bundler'
+
 
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'nanoc'
