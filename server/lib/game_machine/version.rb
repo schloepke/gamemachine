@@ -1,3 +1,3 @@
 module GameMachine
-  VERSION = '0.0.13'
+  VERSION = '1.0.2'
 end
