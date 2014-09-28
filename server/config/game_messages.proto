@@ -29,6 +29,9 @@ message GameMessage {
   optional AddPlayerItem addPlayerItem = 11;
   optional RemovePlayerItem removePlayerItem = 12;
   optional RequestPlayerItems requestPlayerItems = 13;
+
+  // Tutorial echo
+  optional EchoTest echoTest = 14;
 }
 
 message GameMessages {
