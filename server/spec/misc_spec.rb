@@ -16,20 +16,45 @@ module GameMachine
       entity
     end
 
-    it "ebean test" do
-      config = AppConfig.instance.config
-      pool = GameMachine::JavaLib::DbConnectionPool.getInstance
-      pool.connect(
-        'test',
-        config.jdbc.hostname,
-        config.jdbc.port,
-        config.jdbc.database,
-        config.jdbc.ds,
-        config.jdbc.username,
-        config.jdbc.password || ''
-      )
-      BeanLib::TestModel.set_ds
-      BeanLib::TestModel.test
+    let(:player_id) {'player'}
+    let(:id) {'one'}
+
+    let(:test_object) do
+      message = MessageLib::TestObject.new
+      message.set_id(id)
+      message.set_required_string('testing')
+      message.set_fvalue(1.9)
+      message.set_bvalue(true)
+      message.set_dvalue(3.4)
+      message.set_numbers64(555)
+    end
+
+    it "cache test" do
+      MessageLib::TestObject.cacheInit(100,200000)
+      count = 100000
+
+      cache = MessageLib::TestObject.get_cache
+      cache.set(test_object.id,test_object)
+
+      count.times do |i|
+        obj = test_object.clone
+        obj.set_id(i.to_s)
+        cache.set(obj.id,obj)
+      end
+
+      puts Benchmark.realtime {
+      count.times do |i|
+        if obj = cache.get(i.to_s)
+          obj.cache_increment_field("numbers64",1,10)
+        end
+      end
+    }
+
+      #count.times do |i|
+      #   entity.set_id(i.to_s)
+      #  MessageLib::Entity.store_delete('testing',entity.id)
+      #end
+
     end
 
     xit "authorizes with cloudclient" do

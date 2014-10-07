@@ -97,15 +97,5 @@ persistent_message TestObject {
   optional float fvalue = 7;
   optional int64 numbers64 = 8;
   repeated Player player = 9;
-  enum Corpus {
-    UNIVERSAL = 0;
-    WEB = 1;
-    IMAGES = 2;
-    LOCAL = 3;
-    NEWS = 4;
-    PRODUCTS = 5;
-    VIDEO = 6;
-  }
-  optional Corpus corpus = 10;
-  repeated Corpus corpus2 = 11;
+  
 }

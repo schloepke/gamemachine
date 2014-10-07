@@ -11,34 +11,35 @@ module GameMachine
       end
     end
 
-    attr_accessor :entities, :store
+    attr_accessor :store, :cache
     def post_init(*args)
-      @entities = {}
       @store = DataStore.instance
+      @cache = GCache::Cache.create(
+        :expire_after_write_secs => 120,
+        :maximum_size => 10000,
+        :record_stats => true
+      )
     end
 
     def delete_entity(entity_id)
-      entities.delete(entity_id)
+      cache.invalidate(entity_id)
       @store.delete(entity_id)
     end
 
     def delete_all
-      entities = {}
       store.delete_all
     end
 
     def set_entity(entity)
-      entities[entity.id] = entity
+      cache.put(entity.id,entity)
       WriteBehindCache.find_distributed(entity.id).tell(entity)
     end
 
     def get_entity(entity_id,klass)
-      entity = entities.fetch(entity_id,nil)
-      if entity.nil?
-        entity = store.get(entity_id,klass)
-      else
-        entity.clone
+      entity = cache.get(entity_id) do
+        store.get(entity_id,klass)
       end
+      entity.nil? ? nil : entity.clone
     end
 
     def on_receive(message)

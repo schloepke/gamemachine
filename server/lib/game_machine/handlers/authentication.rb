@@ -16,25 +16,33 @@ module GameMachine
         AUTHENTICATED_USERS.delete(player_id)
       end
 
-      def register_player(player_id)
-        AUTHENTICATED_USERS[player_id] =
-          authtoken_for_player(player_id)
+      def register_player(player)
+        AUTHENTICATED_USERS[player.id] =
+          authtoken_for_player(player)
 
       end
 
-      def authtoken_for_player(player_id)
-        Handlers::PlayerAuthentication.instance.authtoken_for(player_id)
+      def authtoken_for_player(player)
+        if public?
+          player.authtoken
+        else
+          Handlers::PlayerAuthentication.instance.authtoken_for(player.id)
+        end
+      end
+
+      def public?
+        Handlers::PlayerAuthentication.instance.public?
       end
 
       def valid_authtoken?(player)
-        player.authtoken == authtoken_for_player(player.id)
+        public? || player.authtoken == authtoken_for_player(player.id)
       end
 
 
       def authenticate!(player)
         @player = player
         if valid_authtoken?(player)
-          register_player(player.id)
+          register_player(player)
           player.set_authenticated(true)
         else
           false

@@ -1,5 +1,7 @@
 package com.game_machine.core;
 
+import java.util.ArrayList;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,6 +33,17 @@ public class GameMachineLoader {
 			    EntityTracking.name);
 	}
 	
+	public static void startCacheUpdateHandler() {
+		ArrayList<String> nodes = new ArrayList<String>();
+		 for(int i=1; i<10; i++){
+             nodes.add("node"+i);
+        }
+		 Hashring ring = new Hashring("cacheUpdateHandler",nodes, 3);
+		 for (String node : ring.nodes) {
+			 actorSystem.actorOf(Props.create(CacheUpdateHandler.class), node); 
+		 }
+	}
+	
 	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
@@ -38,6 +51,8 @@ public class GameMachineLoader {
 		
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessagePersister.class)), 
 			    MessagePersister.name);
+		
+		startCacheUpdateHandler();
 	}
 
 }

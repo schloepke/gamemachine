@@ -27,7 +27,7 @@ end
 
 
 require_relative 'game_machine/java_lib'
-
+require_relative 'game_machine/gcache'
 require_relative 'game_machine/protobuf'
 require_relative 'game_machine/version'
 require_relative 'game_machine/grid'

@@ -22,9 +22,83 @@ module GameMachine
       MessageLib::TestObject
     end
 
+    describe "object cache" do
+
+      before(:each) do
+        [1,2,3,4,5,6,7,8,9,10].each do |i|
+          #test_object.add_numbers(i)
+        end
+        #MessageLib::TestObject.cacheInit(100,100)
+      end
+
+      describe "#cacheSetFromUpdate" do
+        
+        it "should set simple value field" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          cache_update = JavaLib::CacheUpdate.new(MessageLib::TestObject.java_class, test_object.id, "blah", "requiredString", JavaLib::CacheUpdate::SET)
+          MessageLib::TestObject.cache_set_from_update(cache_update)
+          obj = cache.get(test_object.id)
+          expect(obj.get_required_string).to eq("blah")
+        end
+
+        it "should set list values" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          cache_update = JavaLib::CacheUpdate.new(
+            MessageLib::TestObject.java_class,
+            test_object.id,
+            java.util.Arrays.asList([11,12].to_java('java.lang.Integer')),
+            "numbers",
+            JavaLib::CacheUpdate::SET
+          )
+          MessageLib::TestObject.cache_set_from_update(cache_update)
+          obj = cache.get(test_object.id)
+          expect(obj.get_numbers_list.to_a).to eq([11,12])
+        end
+      end
+
+      describe "#cacheSet" do
+        it "should set the field value" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          test_object.set_required_string('something')
+          obj = test_object.cache_set(1000)
+          expect(obj.get_required_string).to eq('something')
+        end
+      end
+
+      describe "#cacheSetField" do
+        it "should set the field value" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          obj = test_object.cache_set_field("numbers",java.util.Arrays.asList([0,1].to_java('java.lang.Integer')),1000)
+          expect(obj.get_numbers_list.to_a).to eq([0,1])
+        end
+      end
+
+      describe "#cacheIncrementField" do
+        it "should increment the field value" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          obj = test_object.cache_increment_field("numbers64",5,1000)
+          expect(obj.get_numbers64).to eq(560)
+        end
+      end
+
+      describe "#cacheDecrementField" do
+        it "should decrement the field value" do
+          cache = MessageLib::TestObject.get_cache
+          cache.set(test_object.id,test_object)
+          obj = test_object.cache_decrement_field("numbers64",5,1000)
+          expect(obj.get_numbers64).to eq(550)
+        end
+      end
+    end
+
     describe "objectdb persistence" do
       
-      describe "#query" do
+      describe "#query", :if => GameMachine::Application.config.store == 'gamecloud' do
         it "performs a query on the gamecloud" do
           GameMachine::DataStore.instance.delete_matching("players",'')
           player = MessageLib::Player.new.set_id('player2').set_password_hash('blah')
