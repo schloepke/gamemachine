@@ -60,8 +60,7 @@ public final class UdpServer implements Runnable {
 	}
 
 	public void run() {
-		log.info("Starting UdpServer port=" + this.port + " hostname="
-				+ this.hostname);
+		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
 		EventLoopGroup group = new NioEventLoopGroup();
 		try {
@@ -71,7 +70,7 @@ public final class UdpServer implements Runnable {
 			boot.option(ChannelOption.SO_BROADCAST, false);
 			boot.handler(new UdpServerHandler());
 
-			InetSocketAddress address = new InetSocketAddress(hostname,port);
+			InetSocketAddress address = new InetSocketAddress(hostname, port);
 			boot.bind(address).sync().channel().closeFuture().await();
 
 		} catch (InterruptedException e) {

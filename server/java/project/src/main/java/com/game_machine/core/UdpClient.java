@@ -30,7 +30,7 @@ public class UdpClient {
 	}
 
 	public Boolean connect() {
-		
+
 		try {
 			s = new DatagramSocket();
 			s.setSoTimeout(timeout);
@@ -40,24 +40,21 @@ public class UdpClient {
 			return false;
 		}
 	}
-	
+
 	public byte[] send(byte[] bytes) {
 		try {
 
 			int retryCount = 0;
 			int retryLimit = 3;
 
-			DatagramPacket out = new DatagramPacket(bytes, bytes.length,
-					hostAddress, port);
+			DatagramPacket out = new DatagramPacket(bytes, bytes.length, hostAddress, port);
 
-			
 			while (true) {
 				s.send(out);
 
 				try {
 					s.receive(dp);
-					byte[] received = Arrays.copyOfRange(dp.getData(),
-							dp.getOffset(), dp.getOffset() + dp.getLength());
+					byte[] received = Arrays.copyOfRange(dp.getData(), dp.getOffset(), dp.getOffset() + dp.getLength());
 					return received;
 				} catch (SocketTimeoutException e) {
 					try {
@@ -66,8 +63,7 @@ public class UdpClient {
 						e1.printStackTrace();
 					}
 					if (retryCount > retryLimit) {
-						log.warn("Timeout retry limit exceeded " + e + " "
-								+ retryCount);
+						log.warn("Timeout retry limit exceeded " + e + " " + retryCount);
 						return null;
 					}
 					retryCount++;

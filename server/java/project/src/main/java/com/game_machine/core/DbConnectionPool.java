@@ -4,13 +4,11 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.mysql.jdbc.Driver;
-import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
 
 public class DbConnectionPool {
 	private static final Logger logger = LoggerFactory.getLogger(DbConnectionPool.class);
@@ -28,11 +26,12 @@ public class DbConnectionPool {
 		return LazyHolder.INSTANCE;
 	}
 
-	public Boolean connect(String id, String hostname, int port, String dbname, String ds, String username, String password) throws SQLException {
+	public Boolean connect(String id, String hostname, int port, String dbname, String ds, String username,
+			String password) throws SQLException {
 		if (datasources.containsKey(id)) {
 			return true;
 		}
-		
+
 		HikariConfig config = new HikariConfig();
 		config.setDataSourceClassName(ds);
 		config.addDataSourceProperty("serverName", hostname);
@@ -43,11 +42,10 @@ public class DbConnectionPool {
 		config.setMaximumPoolSize(10);
 		config.setIdleTimeout(0);
 		config.setLeakDetectionThreshold(10000);
-		//config.setAutoCommit(false);
-		
+		// config.setAutoCommit(false);
 
 		HikariDataSource datasource = new HikariDataSource(config);
-		
+
 		datasources.put(id, datasource);
 		return true;
 

@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
 import static com.dyuproject.protostuff.LinkedBuffer.allocate;
+
 import com.dyuproject.protostuff.LinkedBuffer;
 
 public class LocalLinkedBuffer {
@@ -13,8 +14,8 @@ public class LocalLinkedBuffer {
 			return allocate(bufferSize);
 		}
 	};
-	
+
 	public static LinkedBuffer get() {
-        return localBuffer.get();
-    }
+		return localBuffer.get();
+	}
 }

@@ -14,25 +14,25 @@ import akka.pattern.AskableActorSelection;
 import akka.util.Timeout;
 
 public class DatastoreCommands {
-	
+
 	public static void put(Entity entity) {
 		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", entity.id);
 		ObjectdbPut put = new ObjectdbPut().setEntity(entity);
 		sel.tell(put, null);
 	}
-	
+
 	public static void delete(String id) {
 		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", id);
 		ObjectdbDel del = new ObjectdbDel().setEntityId(id);
 		sel.tell(del, null);
 	}
-	
+
 	public static Entity get(String id, int timeout) {
 		ObjectdbGet get = new ObjectdbGet().setEntityId(id);
 		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", id);
 		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
 		AskableActorSelection askable = new AskableActorSelection(sel);
-		Future<Object> future = askable.ask(get,t);
+		Future<Object> future = askable.ask(get, t);
 		try {
 			Entity result = (Entity) Await.result(future, t.duration());
 			return result;

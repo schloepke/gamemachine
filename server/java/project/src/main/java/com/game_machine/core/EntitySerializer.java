@@ -1,10 +1,5 @@
 package com.game_machine.core;
 
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import GameMachine.Messages.Entity;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.slf4j.Logger;
@@ -15,6 +10,7 @@ import akka.serialization.JSerializer;
 public class EntitySerializer extends JSerializer {
 
 	private static final Logger log = LoggerFactory.getLogger(EntitySerializer.class);
+
 	// This is whether "fromBinary" requires a "clazz" or not
 	@Override
 	public boolean includeManifest() {
@@ -49,18 +45,18 @@ public class EntitySerializer extends JSerializer {
 	// using the type hint (if any, see "includeManifest" above)
 	@Override
 	public Object fromBinaryJava(byte[] bytes, Class<?> clazz) {
-		//log.error("fromBinaryJava = " + clazz.getName());
+		// log.error("fromBinaryJava = " + clazz.getName());
 		Method m;
 		try {
 			m = clazz.getMethod("parseFrom", byte[].class);
-			return clazz.cast(m.invoke(clazz,bytes));
+			return clazz.cast(m.invoke(clazz, bytes));
 		} catch (Exception e) {
 			log.error("clazz = " + clazz);
 			log.error(e.getMessage());
 			e.printStackTrace();
 			return null;
 		}
-		//Entity entity = Entity.parseFrom(bytes);
-		//return entity;
+		// Entity entity = Entity.parseFrom(bytes);
+		// return entity;
 	}
 }

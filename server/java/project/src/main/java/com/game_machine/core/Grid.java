@@ -16,30 +16,29 @@ public class Grid {
 	private int cellCount;
 
 	private MovementVerifier movementVerifier;
-	
+
 	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
-	
+
 	private ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
 
-	public static void resetGrids()
-	{
+	public static void resetGrids() {
 		grids = new ConcurrentHashMap<String, Grid>();
 	}
-	
+
 	public static synchronized Grid findOrCreate(String name, int gridSize, int cellSize) {
 		if (grids.containsKey(name)) {
 			return grids.get(name);
 		} else {
-			Grid grid = new Grid(gridSize,cellSize);
+			Grid grid = new Grid(gridSize, cellSize);
 			grids.put(name, grid);
 			return grid;
 		}
 	}
-	
+
 	public static Grid find(String name) {
 		if (grids.containsKey(name)) {
 			return grids.get(name);
@@ -47,7 +46,7 @@ public class Grid {
 			return null;
 		}
 	}
-	
+
 	public Grid(int max, int cellSize) {
 		this.max = max;
 		this.cellSize = cellSize;
@@ -59,7 +58,7 @@ public class Grid {
 	public void setMovementVerifier(MovementVerifier movementVerifier) {
 		this.movementVerifier = movementVerifier;
 	}
-	
+
 	public int getWidth() {
 		return this.width;
 	}
@@ -104,12 +103,15 @@ public class Grid {
 		return neighbors(myCell, x, y, entityType);
 	}
 
-	// This could be optimized more (and gridValuesInCell), but it's simply dwarfed by
-	// the overhead of serialization that at this point it's not really worth it.
+	// This could be optimized more (and gridValuesInCell), but it's simply
+	// dwarfed by
+	// the overhead of serialization that at this point it's not really worth
+	// it.
 	// - entityType should be an integer
 	// - where we call gridValuesInCell, filter out by entity type there.
-	// - and then just concat the return values of gridValuesInCell instead of building
-	//   result one item at a time
+	// - and then just concat the return values of gridValuesInCell instead of
+	// building
+	// result one item at a time
 	public ArrayList<TrackData> neighbors(int myCell, float x, float y, String entityType) {
 		ArrayList<TrackData> result;
 
@@ -163,13 +165,12 @@ public class Grid {
 
 	public ArrayList<TrackData> getNeighborsFor(String id, String entityType) {
 		TrackData gridValue = get(id);
-		if (gridValue == null)
-		{
+		if (gridValue == null) {
 			return null;
 		}
 		return neighbors(gridValue.x, gridValue.y, entityType);
 	}
-	
+
 	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}
@@ -196,9 +197,9 @@ public class Grid {
 		trackData.entityType = entityType;
 		return set(trackData);
 	}
-	
+
 	public Boolean set(TrackData trackData) {
-		
+
 		if (trackData.entityType.equals("player")) {
 			if (movementVerifier != null) {
 				if (!movementVerifier.verify(trackData)) {
@@ -206,17 +207,16 @@ public class Grid {
 				}
 			}
 		}
-		
-		
+
 		Boolean hasExisting = false;
 		Integer oldCellValue = -1;
 		String id = trackData.id;
-		
+
 		if (objectIndex.containsKey(id)) {
 			hasExisting = true;
 			oldCellValue = cellsIndex.get(id);
 		}
-		
+
 		int cell = hash(trackData.x, trackData.y);
 
 		if (hasExisting) {
@@ -226,7 +226,7 @@ public class Grid {
 				if (cellGridValues.size() == 0) {
 					cells.remove(oldCellValue);
 				}
-					
+
 			}
 			objectIndex.replace(id, trackData);
 			cellsIndex.replace(id, cell);
@@ -234,13 +234,13 @@ public class Grid {
 			cellsIndex.put(id, cell);
 			objectIndex.put(id, trackData);
 		}
-		
+
 		if (!cells.containsKey(cell)) {
 			cells.put(cell, new ConcurrentHashMap<String, TrackData>());
 		}
 		cells.get(cell).put(id, trackData);
 
-		//deltaIndex.put(id, gridValue);
+		// deltaIndex.put(id, gridValue);
 
 		return true;
 	}

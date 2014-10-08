@@ -27,10 +27,8 @@ public class MessageGateway extends UntypedActor {
 
 	public MessageGateway() {
 		udpServer = UdpServer.getUdpServer();
-		udpIncoming = ActorUtil
-				.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
-		entityTracking = ActorUtil
-				.getSelectionByName("fastpath_entity_tracking");
+		udpIncoming = ActorUtil.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
+		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
 		messageCount = new AtomicInteger();
 	}
@@ -55,10 +53,9 @@ public class MessageGateway extends UntypedActor {
 			if (!netMessages.containsKey(clientMessage.player.id)) {
 				netMessages.put(clientMessage.player.id, netMessage);
 			}
-			
-			
+
 			List<Entity> entities = clientMessage.getEntityList();
-			
+
 			if (entities == null) {
 				udpIncoming.tell(message, null);
 			} else {
@@ -75,8 +72,6 @@ public class MessageGateway extends UntypedActor {
 					udpIncoming.tell(message, null);
 				}
 			}
-			
-			
 
 			// outgoing message
 		} else if (message instanceof Entity) {
@@ -91,8 +86,7 @@ public class MessageGateway extends UntypedActor {
 				// netMessage.ctx);
 
 				byte[] bytes = clientMessage.toByteArray();
-				udpServer.sendToClient(netMessage.address, bytes,
-						netMessage.ctx);
+				udpServer.sendToClient(netMessage.address, bytes, netMessage.ctx);
 			} else if (netMessage.protocol == NetMessage.TCP) {
 				netMessage.ctx.write(clientMessage);
 				UdpServerHandler.countOut.getAndIncrement();
@@ -100,15 +94,15 @@ public class MessageGateway extends UntypedActor {
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
-			log.warning("Message gateway got client manager event "+event.event);
+			log.warning("Message gateway got client manager event " + event.event);
 			if (event.event.equals("disconnected")) {
 				netMessages.remove(event.player_id);
-				log.warning("Player "+event.player_id+" removed from message gateway");
+				log.warning("Player " + event.player_id + " removed from message gateway");
 			}
 		}
 
 	}
-	
+
 	private void routeFastpath(Player player, Entity entity) {
 		entity.setPlayer(player);
 		if (entity.hasTrackData()) {

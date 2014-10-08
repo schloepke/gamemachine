@@ -14,7 +14,7 @@ public class GameActor extends UntypedActor {
 
 	public String playerId;
 	public String messageId;
-	
+
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
 	}
@@ -28,7 +28,7 @@ public class GameActor extends UntypedActor {
 		if (reliableMessages.containsKey(id)) {
 			reliableMessages.remove(id);
 		}
-		
+
 		if (reliableMessageStatus.containsKey(id)) {
 			reliableMessageStatus.remove(id);
 		}
@@ -38,7 +38,7 @@ public class GameActor extends UntypedActor {
 		gameMessage.messageId = this.messageId;
 		if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
 			reliableMessages.put(gameMessage.messageId, gameMessage);
-			reliableMessageStatus.replace(gameMessage.messageId,1);
+			reliableMessageStatus.replace(gameMessage.messageId, 1);
 			sendReply(gameMessage.messageId);
 			return true;
 		} else {

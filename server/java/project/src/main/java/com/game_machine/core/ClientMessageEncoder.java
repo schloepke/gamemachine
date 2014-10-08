@@ -10,10 +10,10 @@ import GameMachine.Messages.ClientMessage;
 
 public class ClientMessageEncoder extends MessageToMessageEncoder<ClientMessage> {
 	@Override
-    protected void encode(ChannelHandlerContext ctx, ClientMessage msg, List<Object> out) throws Exception {
-        if (msg instanceof ClientMessage) {
-            out.add(wrappedBuffer(msg.toPrefixedByteArray()));
-            return;
-        }
-    }
+	protected void encode(ChannelHandlerContext ctx, ClientMessage msg, List<Object> out) throws Exception {
+		if (msg instanceof ClientMessage) {
+			out.add(wrappedBuffer(msg.toPrefixedByteArray()));
+			return;
+		}
+	}
 }

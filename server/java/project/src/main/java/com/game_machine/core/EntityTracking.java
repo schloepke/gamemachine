@@ -63,8 +63,7 @@ public class EntityTracking extends UntypedActor {
 			y = 0f;
 		}
 
-		ArrayList<TrackData> trackDatas = grid.neighbors(x, y,
-				entity.trackData.neighborEntityType);
+		ArrayList<TrackData> trackDatas = grid.neighbors(x, y, entity.trackData.neighborEntityType);
 
 		if (trackDatas.size() >= 1) {
 			toNeighbors(entity.player, trackDatas);
@@ -97,7 +96,7 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void setEntityLocation(TrackData trackData) {
-		
+
 		// So either protostuff or protobuf-net has a bug where 0 floats come
 		// through as null
 		// This is *really* annoying must track down
@@ -111,7 +110,8 @@ public class EntityTracking extends UntypedActor {
 			trackData.z = 0f;
 		}
 
-		// TODO.  If set returns false send message to the client letting them know their movement was not allowed
+		// TODO. If set returns false send message to the client letting them
+		// know their movement was not allowed
 		grid.set(trackData);
 		aoeGrid.set(trackData);
 	}

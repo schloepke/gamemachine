@@ -3,7 +3,6 @@ package com.game_machine.core;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +43,11 @@ public class CloudClient {
 	}
 
 	private CloudClient() {
-		// Some freaking moron at apache.org decided it was a good idea to ignore log level and force WIRE
+		// Some freaking moron at apache.org decided it was a good idea to
+		// ignore log level and force WIRE
 		// level whenever Hyperic sigar is detected.
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-		
+
 		cm = new PoolingHttpClientConnectionManager();
 		cm.setMaxTotal(10);
 		// Increase default max connection per route to 20
@@ -89,14 +89,15 @@ public class CloudClient {
 	 * @throws IOException
 	 */
 	public CloudResponse query(String query, int limit, String format) throws ClientProtocolException, IOException {
-		String url = "http://" + host + "/api/db-query/" + gamecloudUser + "/" + encodeURIComponent(query) + "/" + limit + "/" + format;
+		String url = "http://" + host + "/api/db-query/" + gamecloudUser + "/" + encodeURIComponent(query) + "/"
+				+ limit + "/" + format;
 		String token = hash256(gamecloudUser + query + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpGet request = new HttpGet(url);
 		request.setHeader("X-Auth", token);
 		return httpClient.execute(request, new ByteArrayResponseHandler());
 	}
-	
+
 	/**
 	 * Performs mass delete based on a left anchored fuzzy search by id
 	 * 
@@ -113,7 +114,7 @@ public class CloudClient {
 		request.setHeader("X-Auth", token);
 		return httpClient.execute(request, new StringResponseHandler());
 	}
-	
+
 	/**
 	 * 
 	 * @param nodeStatus
@@ -129,7 +130,7 @@ public class CloudClient {
 		request.setEntity(input);
 		return httpClient.execute(request, new StringResponseHandler());
 	}
-	
+
 	/**
 	 * 
 	 * @param id
@@ -268,7 +269,7 @@ public class CloudClient {
 		}
 
 	}
-	
+
 	private class StringResponseHandler implements ResponseHandler<CloudResponse> {
 		public CloudResponse handleResponse(final HttpResponse response) throws IOException {
 			CloudResponse couchResponse = new CloudResponse();

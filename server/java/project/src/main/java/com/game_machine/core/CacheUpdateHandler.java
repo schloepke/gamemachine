@@ -8,12 +8,11 @@ import org.slf4j.LoggerFactory;
 
 import akka.actor.UntypedActor;
 
-
 public class CacheUpdateHandler extends UntypedActor {
 
 	private static HashMap<Class<?>, Method> methods = new HashMap<Class<?>, Method>();
 	private static final Logger log = LoggerFactory.getLogger(CacheUpdateHandler.class);
-	
+
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof CacheUpdate) {

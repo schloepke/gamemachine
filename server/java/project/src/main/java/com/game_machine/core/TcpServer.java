@@ -1,11 +1,4 @@
 package com.game_machine.core;
-import java.net.InetSocketAddress;
-import java.security.cert.CertificateException;
-
-import javax.net.ssl.SSLException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
@@ -17,11 +10,19 @@ import io.netty.handler.logging.LoggingHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 
+import java.net.InetSocketAddress;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TcpServer implements Runnable {
 	static final boolean SSL = System.getProperty("nossl") != null;
-    static final int PORT = Integer.parseInt(System.getProperty("port", "8463"));
+	static final int PORT = Integer.parseInt(System.getProperty("port", "8463"));
 
-    private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
+	private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
 	private static Thread serverThread;
 
 	private static TcpServer tcpServer;
@@ -58,13 +59,13 @@ public class TcpServer implements Runnable {
 		this.port = port;
 		this.hostname = hostname;
 	}
-	
+
 	@Override
-    public void run() {
-        // Configure SSL.
-        final SslContext sslCtx;
-        if (SSL) {
-            SelfSignedCertificate ssc;
+	public void run() {
+		// Configure SSL.
+		final SslContext sslCtx;
+		if (SSL) {
+			SelfSignedCertificate ssc;
 			try {
 				ssc = new SelfSignedCertificate();
 				sslCtx = SslContext.newServerContext(ssc.certificate(), ssc.privateKey());
@@ -72,29 +73,26 @@ public class TcpServer implements Runnable {
 				e.printStackTrace();
 				return;
 			}
-        } else {
-            sslCtx = null;
-        }
+		} else {
+			sslCtx = null;
+		}
 
-        EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        try {
-            ServerBootstrap b = new ServerBootstrap();
-            b.group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .childOption(ChannelOption.TCP_NODELAY, true)
-             .childOption(ChannelOption.SO_REUSEADDR, true)
-             .handler(new LoggingHandler(LogLevel.INFO))
-             .childHandler(new TcpServerInitializer(sslCtx));
+		EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+		EventLoopGroup workerGroup = new NioEventLoopGroup();
+		try {
+			ServerBootstrap b = new ServerBootstrap();
+			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
+					.childOption(ChannelOption.TCP_NODELAY, true).childOption(ChannelOption.SO_REUSEADDR, true)
+					.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new TcpServerInitializer(sslCtx));
 
-            InetSocketAddress address = new InetSocketAddress(hostname,port);
-            b.bind(address).sync().channel().closeFuture().sync();
-        } catch (InterruptedException e) {
+			InetSocketAddress address = new InetSocketAddress(hostname, port);
+			b.bind(address).sync().channel().closeFuture().sync();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-            bossGroup.shutdownGracefully();
-            workerGroup.shutdownGracefully();
-        }
-    }
-	
+			bossGroup.shutdownGracefully();
+			workerGroup.shutdownGracefully();
+		}
+	}
+
 }
