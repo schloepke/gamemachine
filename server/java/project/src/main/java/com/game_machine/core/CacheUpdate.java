@@ -1,5 +1,6 @@
 package com.game_machine.core;
 
+
 public class CacheUpdate {
 
 	public static final int SET = 0;
@@ -59,6 +60,15 @@ public class CacheUpdate {
 		this.id = id;
 	}
 
+	
+	public int getUpdateType() {
+		return updateType;
+	}
+
+	public void setUpdateType(int updateType) {
+		this.updateType = updateType;
+	}
+
 	public Object getMessage() {
 		return message;
 	}
@@ -67,11 +77,4 @@ public class CacheUpdate {
 		this.message = message;
 	}
 
-	public int getUpdateType() {
-		return updateType;
-	}
-
-	public void setUpdateType(int updateType) {
-		this.updateType = updateType;
-	}
 }

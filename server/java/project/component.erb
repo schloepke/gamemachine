@@ -1,13 +1,14 @@
 
 package GameMachine.Messages;
 
-import com.game_machine.core.GameMachineLoader;
+
 import com.game_machine.core.ActorUtil;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 import akka.actor.ActorSelection;
 import akka.pattern.AskableActorSelection;
+
 import akka.util.Timeout;
 import java.util.concurrent.TimeUnit;
 
@@ -37,41 +38,39 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-import GameMachine.Messages.Entity;
 import com.game_machine.core.LocalLinkedBuffer;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.lang.reflect.InvocationTargetException;
 import java.nio.charset.Charset;
 
-import com.game_machine.core.Cache;
-import com.game_machine.core.CacheUpdate;
-import com.game_machine.core.CacheUpdateHandler;
-import com.game_machine.core.DatastoreCommands;
+
 
 <% if persistent %>
-import com.game_machine.core.PersistentMessage;
+import com.game_machine.core.GameMachineLoader;
+import akka.actor.TypedActor;
+import akka.actor.TypedProps;
+import akka.actor.ActorSystem;
 import com.game_machine.core.ActorUtil;
-import akka.actor.ActorSelection;
 import org.javalite.activejdbc.Errors;
 <% end %>
 
 import org.javalite.activejdbc.Model;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-<% if persistent %>
-public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>, PersistentMessage
-<% else %>
-public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, Schema<<%=klass%>>
+<% has_id = message.getFields.select { |field| field.name == 'id' }.empty? ? false : true %>
+<% decl = "public final class #{klass} implements Externalizable, Message<#{klass}>, Schema<#{klass}>" %>
+
+
+<% if has_id %>
+import com.game_machine.api.Cache;
+import com.game_machine.core.CacheUpdate;
+import com.game_machine.core.DatastoreCommands;
 <% end %>
 
+<%= decl %>
 {
 
-	private static final Logger log = LoggerFactory.getLogger(<%=klass%>.class);
 <% message.nestedEnumGroups.each do |group| %>
 	public enum <%=group.name %> implements com.dyuproject.protostuff.EnumLite<<%=group.name %>>
     {
@@ -118,19 +117,6 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
 
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
 
-<% if persistent %>
-	public Errors dbErrors;
-	public String persistPlayerId;
-	public String getPersistPlayerId() {
-		return persistPlayerId;
-	}
-	
-	public String persistAction;
-	public String getPersistAction() {
-		return persistAction;
-	}
-<% end %>
-
 <% message.getFields.each do |field| %>
     <% if field.isRepeated %>
     public List<<%=get_type(field)%>> <%=field.name %>;
@@ -144,327 +130,431 @@ public final class <%=klass%>  implements Externalizable, Message<<%=klass%>>, S
     <% end %>
 <% end %>
     
-	private static Cache<String, <%=klass%>> cache = new Cache<String, <%=klass%>>(120, 5000);
-	private static HashMap<String, Field> cachefields = new HashMap<String, Field>();
+<% if has_id %>
+	public static <%=klass%>Cache cache() {
+		return <%=klass%>Cache.getInstance();
+	}
 	
+	public static <%=klass%>Store store() {
+		return <%=klass%>Store.getInstance();
+	}
+<% end %>
+
+
     public <%=klass%>()
     {
         
     }
 
+<% if has_id %>
+	static class CacheRef {
 	
- 
-<% message.getFields.each do |field| %>
-	<% if field.name == 'id' %>
-	public static String scopeId(String playerId, String id) {
-    	return playerId + "##" + id;
-    }
-    
-    public static String unscopeId(String id) {
-    	if (id.contains("##")) {
-    		String[] parts = id.split("##");
-        	return parts[1];
-    	} else {
-    		throw new RuntimeException("Expected "+id+" to contain ##");
-    	}
-    }
-    
-    public static String defaultScope() {
-    	return <%=klass%>.class.getSimpleName();
-    }
-    
-    public static void cacheInit(int expiration, int size) {
-		cache = new Cache<String, <%=klass%>>(expiration, size);
-	}
-
-	public static Cache<String, <%=klass%>> getCache() {
-		return cache;
-	}
-	
-	public <%=klass%> cacheSetField(String field, Object value, int timeout) {
-		return cacheUpdateField(field, value, CacheUpdate.SET, timeout);
-	}
-	
-	public <%=klass%> cacheIncrementField(String field, Object value, int timeout) {
-		return cacheUpdateField(field, value, CacheUpdate.INCREMENT, timeout);
-	}
-	
-	public <%=klass%> cacheDecrementField(String field, Object value, int timeout) {
-		return cacheUpdateField(field, value, CacheUpdate.DECREMENT, timeout);
-	}
-	
-	private <%=klass%> cacheUpdateField(String field, Object value, int updateType, int timeout) {
-		CacheUpdate cacheUpdate = new CacheUpdate(<%=klass%>.class, this.id, value, field, updateType);
-		return cacheSet(cacheUpdate,timeout);
-	}
-	
-	public <%=klass%> cacheSet(int timeout) {
-		CacheUpdate cacheUpdate = new CacheUpdate(<%=klass%>.class, this);
-		return cacheSet(cacheUpdate,timeout);
-	}
-
-	public <%=klass%> cacheSet(CacheUpdate cacheUpdate, int timeout) {
-		ActorSelection sel = ActorUtil.findLocalDistributed("cacheUpdateHandler", this.id);
-		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
-		AskableActorSelection askable = new AskableActorSelection(sel);
-		Future<Object> future = askable.ask(cacheUpdate, t);
-		try {
-			Await.result(future, t.duration());
-			return cache.get(this.id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
+		private final CacheUpdate cacheUpdate;
+		private final String id;
+		
+		public CacheRef(CacheUpdate cacheUpdate, String id) {
+			this.cacheUpdate = cacheUpdate;
+			this.id = id;
+		}
+		
+		public void send() {
+			ActorSelection sel = ActorUtil.findLocalDistributed("cacheUpdateHandler", id);
+			sel.tell(cacheUpdate,null);
+		}
+		
+		public <%=klass%> result(int timeout) {
+			ActorSelection sel = ActorUtil.findLocalDistributed("cacheUpdateHandler", id);
+			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
+			AskableActorSelection askable = new AskableActorSelection(sel);
+			Future<Object> future = askable.ask(cacheUpdate, t);
+			try {
+				Await.result(future, t.duration());
+				return cache().getCache().get(id);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 	}
+	
+	public static class <%=klass%>Cache {
 
-	public static void cacheSetFromUpdate(CacheUpdate cacheUpdate) throws IllegalArgumentException, IllegalAccessException  {
-		<%=klass%> message;
-		String field = cacheUpdate.getField();
-		if (field == null) {
-			message = (<%=klass%>) cacheUpdate.getMessage();
-			cache.set(message.id, message);
-			message.storeSet();
-		} else {
-			message = cacheGet(cacheUpdate.getId(), 10);
+		private static HashMap<String, Field> cachefields = new HashMap<String, Field>();
+		private static Cache<String, <%=klass%>> cache = new Cache<String, <%=klass%>>(120, 5000);
+		
+		private <%=klass%>Cache() {
+		}
+		
+		private static class LazyHolder {
+			private static final <%=klass%>Cache INSTANCE = new <%=klass%>Cache();
+		}
+	
+		public static <%=klass%>Cache getInstance() {
+			return LazyHolder.INSTANCE;
+		}
+		
+	    public void init(int expiration, int size) {
+			cache = new Cache<String, <%=klass%>>(expiration, size);
+		}
+	
+		public Cache<String, <%=klass%>> getCache() {
+			return cache;
+		}
+		
+		public CacheRef setField(String id, String field, Object value) {
+			return updateField(id, field, value, CacheUpdate.SET);
+		}
+		
+		public CacheRef incrementField(String id, String field, Object value) {
+			return updateField(id, field, value, CacheUpdate.INCREMENT);
+		}
+		
+		public CacheRef decrementField(String id, String field, Object value) {
+			return updateField(id, field, value, CacheUpdate.DECREMENT);
+		}
+		
+		private CacheRef updateField(String id, String field, Object value, int updateType) {
+			CacheUpdate cacheUpdate = new CacheUpdate(<%=klass%>Cache.class, id, value, field, updateType);
+			return new CacheRef(cacheUpdate,id);
+		}
+		
+		public CacheRef set(<%=klass%> message) {
+			CacheUpdate cacheUpdate = new CacheUpdate(<%=klass%>Cache.class, message);
+			return new CacheRef(cacheUpdate,message.id);
+		}
+	
+		public <%=klass%> get(String id, int timeout) {
+			<%=klass%> message = cache.get(id);
 			if (message == null) {
-				throw new RuntimeException("Cannot set field on null message");
+				message = <%=klass%>.store().get(id, timeout);
 			}
-			if (!cachefields.containsKey(field)) {
-            	try {
-					cachefields.put(field, TestObject.class.getField(field));
-				} catch (NoSuchFieldException e) {
-					throw new RuntimeException("No such field "+field);
-				} catch (SecurityException e) {
-					throw new RuntimeException("Security Exception accessing field "+field);
+			return message;
+		}
+			
+		public static <%=klass%> setFromUpdate(CacheUpdate cacheUpdate) throws IllegalArgumentException, IllegalAccessException  {
+			<%=klass%> message = null;
+			String field = cacheUpdate.getField();
+			if (field == null) {
+				message = (<%=klass%>) cacheUpdate.getMessage();
+				if (message == null) {
+					throw new RuntimeException("Attempt to store empty message in cache");
 				}
-        	}
-			Field f = cachefields.get(field);
-			Class<?> klass = f.getType();
-			if (cacheUpdate.getUpdateType() == CacheUpdate.SET) {
-				f.set(message, klass.cast(cacheUpdate.getFieldValue()));
+				cache.set(message.id, message);
+				<%=klass%>.store().set(message);
 			} else {
-				if (klass == Integer.TYPE || klass == Integer.class) {
-					Integer i;
-					if (cacheUpdate.getUpdateType() == CacheUpdate.INCREMENT) {
-						i = (Integer)f.get(message) + (Integer) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					} else if (cacheUpdate.getUpdateType() == CacheUpdate.DECREMENT) {
-						i = (Integer)f.get(message) - (Integer) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
+				message = <%=klass%>.cache().get(cacheUpdate.getId(), 10);
+				if (message == null) {
+					throw new RuntimeException("Cannot set field on null message");
+				}
+				if (!cachefields.containsKey(field)) {
+	            	try {
+						cachefields.put(field, <%=klass%>.class.getField(field));
+					} catch (NoSuchFieldException e) {
+						throw new RuntimeException("No such field "+field);
+					} catch (SecurityException e) {
+						throw new RuntimeException("Security Exception accessing field "+field);
 					}
-				} else if (klass == Long.TYPE || klass == Long.class) {
-					Long i;
-					if (cacheUpdate.getUpdateType() == CacheUpdate.INCREMENT) {
-						i = (Long)f.get(message) + (Long) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					} else if (cacheUpdate.getUpdateType() == CacheUpdate.DECREMENT) {
-						i = (Long)f.get(message) - (Long) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					}
-				} else if (klass == Double.TYPE || klass == Double.class) {
-					Double i;
-					if (cacheUpdate.getUpdateType() == CacheUpdate.INCREMENT) {
-						i = (Double)f.get(message) + (Double) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					} else if (cacheUpdate.getUpdateType() == CacheUpdate.DECREMENT) {
-						i = (Double)f.get(message) - (Double) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					}
-				} else if (klass == Float.TYPE || klass == Float.class) {
-					Float i;
-					if (cacheUpdate.getUpdateType() == CacheUpdate.INCREMENT) {
-						i = (Float)f.get(message) + (Float) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
-					} else if (cacheUpdate.getUpdateType() == CacheUpdate.DECREMENT) {
-						i = (Float)f.get(message) - (Float) cacheUpdate.getFieldValue();
-						f.set(message, klass.cast(i));
+	        	}
+				Field f = cachefields.get(field);
+				Class<?> klass = f.getType();
+				if (cacheUpdate.getUpdateType() == CacheUpdate.SET) {
+					f.set(message, klass.cast(cacheUpdate.getFieldValue()));
+				} else {
+					int updateType = cacheUpdate.getUpdateType();
+					Object value = cacheUpdate.getFieldValue();
+					if (klass == Integer.TYPE || klass == Integer.class) {
+						Integer i;
+						if (updateType == CacheUpdate.INCREMENT) {
+							i = (Integer)f.get(message) + (Integer) value;
+							f.set(message, klass.cast(i));
+						} else if (updateType == CacheUpdate.DECREMENT) {
+							i = (Integer)f.get(message) - (Integer) value;
+							f.set(message, klass.cast(i));
+						}
+					} else if (klass == Long.TYPE || klass == Long.class) {
+						Long i;
+						if (updateType == CacheUpdate.INCREMENT) {
+							i = (Long)f.get(message) + (Long) value;
+							f.set(message, klass.cast(i));
+						} else if (updateType == CacheUpdate.DECREMENT) {
+							i = (Long)f.get(message) - (Long) value;
+							f.set(message, klass.cast(i));
+						}
+					} else if (klass == Double.TYPE || klass == Double.class) {
+						Double i;
+						if (updateType == CacheUpdate.INCREMENT) {
+							i = (Double)f.get(message) + (Double) value;
+							f.set(message, klass.cast(i));
+						} else if (updateType == CacheUpdate.DECREMENT) {
+							i = (Double)f.get(message) - (Double) value;
+							f.set(message, klass.cast(i));
+						}
+					} else if (klass == Float.TYPE || klass == Float.class) {
+						Float i;
+						if (updateType == CacheUpdate.INCREMENT) {
+							i = (Float)f.get(message) + (Float) value;
+							f.set(message, klass.cast(i));
+						} else if (updateType == CacheUpdate.DECREMENT) {
+							i = (Float)f.get(message) - (Float) value;
+							f.set(message, klass.cast(i));
+						}
 					}
 				}
+				cache.set(message.id, message);
+				<%=klass%>.store().set(message);
 			}
-			cache.set(message.id, message);
-			message.storeSet();
+			return message;
 		}
+	
 	}
 	
-	public static <%=klass%> cacheGet(String id, int timeout) {
-		<%=klass%> message = cache.get(id);
-		if (message == null) {
-			message = storeGet(id, timeout);
+	public static class <%=klass%>Store {
+	
+		private <%=klass%>Store() {
 		}
-		return message;
+		
+		private static class LazyHolder {
+			private static final <%=klass%>Store INSTANCE = new <%=klass%>Store();
+		}
+	
+		public static <%=klass%>Store getInstance() {
+			return LazyHolder.INSTANCE;
+		}
+		
+		public static String scopeId(String playerId, String id) {
+    		return playerId + "##" + id;
+    	}
+    
+	    public static String unscopeId(String id) {
+	    	if (id.contains("##")) {
+	    		String[] parts = id.split("##");
+	        	return parts[1];
+	    	} else {
+	    		throw new RuntimeException("Expected "+id+" to contain ##");
+	    	}
+	    }
+	    
+	    public static String defaultScope() {
+	    	return <%=klass%>.class.getSimpleName();
+	    }
+		
+	    public void set(<%=klass%> message) {
+	    	set(defaultScope(),message);
+		}
+	    
+	    public void delete(String id) {
+	    	delete(defaultScope(),id);
+	    }
+	    
+	    public <%=klass%> get(String id, int timeout) {
+	    	return get(defaultScope(),id,timeout);
+	    }
+	    
+	    public void set(String scope, <%=klass%> message) {
+	    	<%=klass%> clone = message.clone();
+			clone.id = scopeId(scope,message.id);
+			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", clone.id);
+			sel.tell(clone, null);
+		}
+			
+		public void delete(String scope, String id) {
+			String scopedId = scopeId(scope,id);
+			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+			ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
+			sel.tell(del, null);
+		}
+			
+		public <%=klass%> get(String scope, String id, int timeout) {
+			String scopedId = scopeId(scope,id);
+			ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("<%=klass%>");
+			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
+			AskableActorSelection askable = new AskableActorSelection(sel);
+			<%=klass%> message;
+			Future<Object> future = askable.ask(get,t);
+			try {
+				message = (<%=klass%>) Await.result(future, t.duration());
+			} catch (Exception e) {
+				return null;
+			}
+			if (message == null) {
+				return null;
+			}
+			message.id = unscopeId(message.id);
+			return message;
+		}
+		
 	}
 	
-    public void storeSet() {
-    	storeSet(defaultScope());
-	}
-    
-    public static void storeDelete(String id) {
-    	storeDelete(defaultScope(),id);
-    }
-    
-    public static <%=klass%> storeGet(String id, int timeout) {
-    	return storeGet(defaultScope(),id,timeout);
-    }
-    
-    public void storeSet(String scope) {
-    	<%=klass%> clone = this.clone();
-		clone.id = scopeId(scope,this.id);
-		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", clone.id);
-		sel.tell(clone, null);
-	}
-		
-	public static void storeDelete(String scope, String id) {
-		String scopedId = scopeId(scope,id);
-		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
-		ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
-		sel.tell(del, null);
-	}
-		
-	public static <%=klass%> storeGet(String scope, String id, int timeout) {
-		String scopedId = scopeId(scope,id);
-		ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("<%=klass%>");
-		ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
-		Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
-		AskableActorSelection askable = new AskableActorSelection(sel);
-		<%=klass%> message;
-		Future<Object> future = askable.ask(get,t);
-		try {
-			message = (<%=klass%>) Await.result(future, t.duration());
-		} catch (Exception e) {
-			return null;
-		}
-		if (message == null) {
-			return null;
-		}
-		message.id = unscopeId(message.id);
-		return message;
-	}
-
-	<% end %>
 <% end %>
 
 	
 <% if persistent %>
 
-	public void dbSaveAsync(String playerId) {
-		persistPlayerId = playerId;
-		persistAction = "save";
-		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
-		sel.tell(this, null);
+	public static <%=klass%>Db db() {
+		return <%=klass%>Db.getInstance();
+	}
+	
+	public interface <%=klass%>AsyncDb {
+		void save(String playerId, <%=klass%> message);
+		void delete(String id, String playerId);
+	}
+	
+	public static class <%=klass%>AsyncDbImpl implements <%=klass%>AsyncDb {
+	
+		public void save(String playerId, <%=klass%> message) {
+			<%=klass%>.db().save(playerId, message, false);
+	    }
+	    
+	    public void delete(String id, String playerId) {
+	    	<%=klass%>.db().delete(id, playerId);
+	    }
+	    
+	}
+	
+	public static class <%=klass%>Db {
+	
+		public Errors dbErrors;
+		private <%=klass%>AsyncDb asyncDb = null;
+		
+		private <%=klass%>Db() {
+			start();
+		}
+		
+		public void start() {
+			if (asyncDb == null) {
+				ActorSystem system = GameMachineLoader.getActorSystem();
+				asyncDb = TypedActor.get(system).typedActorOf(new TypedProps<<%=klass%>AsyncDbImpl>(<%=klass%>AsyncDb.class, <%=klass%>AsyncDbImpl.class));
+			}
+		}
+		
+		public void stop() {
+			if (asyncDb != null) {
+				ActorSystem system = GameMachineLoader.getActorSystem();
+				TypedActor.get(system).stop(asyncDb);
+				asyncDb = null;
+			}
+		}
+		
+		private static class LazyHolder {
+			private static final <%=klass%>Db INSTANCE = new <%=klass%>Db();
+		}
+	
+		public static <%=klass%>Db getInstance() {
+			return LazyHolder.INSTANCE;
+		}
+		
+		public void saveAsync(String playerId, <%=klass%> message) {
+			asyncDb.save(playerId, message);
+	    }
+	    
+	    public void deleteAsync(String id, String playerId) {
+	    	asyncDb.delete(id, playerId);
+	    }
+	    		        
+	    public Boolean save(String playerId, <%=klass%> message) {
+	    	return save(playerId, message, false);
+	    }
+	        
+	    public Boolean save(String playerId, <%=klass%> message, boolean inTransaction) {
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.open();
+	    	}
+	    	
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", message.id, playerId);
+	    	if (model == null) {
+	    		model = new com.game_machine.orm.models.<%=klass%>();
+	    		message.toModel(model,playerId);
+	    	} else {
+	    		message.toModel(model,null);
+	    	}
+	    	<% message_fields.each do |message_field| %>
+	    	if (message.has<%= message_field %>()) {
+	    		message.<%= varname(message_field) %>.toModel(model,null);
+	    	} else {
+	    		<%= message_field %>.clearModel(model);
+	    	}
+	    	<% end %>
+	    	
+	    	Boolean res = model.save();
+	    	if (!res) {
+	    		dbErrors = model.errors();
+	    	}
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.close();
+	    	}
+	    	return res;
+	    }
+	    
+	    public Boolean delete(String id, String playerId) {
+	    	Boolean result;
+	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
+	    	if (model != null) {
+	    		result = model.delete();
+	    	} else {
+	    		result = false;
+	    	}
+	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	return result;
+	    }
+	    
+	    public <%=klass%> find(String id, String playerId) {
+	    	return find(id, playerId, false);
+	    }
+	    
+	    public <%=klass%> find(String id, String playerId, boolean inTransaction) {
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.open();
+	    	}
+	    	
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
+	    	
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.close();
+	    	}
+	    	
+	    	if (model == null) {
+	    		return null;
+	    	} else {
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+	    		<% message_fields.each do |message_field| %>
+	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<% end %>
+	    		return <%= varname(klass) %>;
+	    	}
+	    }
+	    
+	    public List<<%=klass%>> findAll(String playerId) {
+	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
+	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+	    		<% message_fields.each do |message_field| %>
+	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<% end %>
+	    		messages.add(<%= varname(klass) %>);
+	    	}
+	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	return messages;
+	    }
+	    
+	    public List<<%=klass%>> where(String query, Object ... params) {
+	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
+	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
+	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+	    		<% message_fields.each do |message_field| %>
+	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<% end %>
+	    		messages.add(<%= varname(klass) %>);
+	    	}
+	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	return messages;
+	    }
     }
-        
-    public Boolean dbSave(String playerId) {
-    	return dbSave(playerId,false);
-    }
-        
-    public Boolean dbSave(String playerId, boolean inTransaction) {
-    	if (!inTransaction) {
-    		com.game_machine.orm.models.<%=klass%>.open();
-    	}
-    	
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
-    	if (model == null) {
-    		model = new com.game_machine.orm.models.<%=klass%>();
-    		toModel(model,playerId);
-    	} else {
-    		toModel(model,null);
-    	}
-    	<% message_fields.each do |message_field| %>
-    	if (this.has<%= message_field %>()) {
-    		this.<%= varname(message_field) %>.toModel(model,null);
-    	} else {
-    		<%= message_field %>.clearModel(model);
-    	}
-    	<% end %>
-    	
-    	Boolean res = model.save();
-    	if (!res) {
-    		dbErrors = model.errors();
-    	}
-    	if (!inTransaction) {
-    		com.game_machine.orm.models.<%=klass%>.close();
-    	}
-    	return res;
-    }
-    
-    public static void dbDeleteAsync(String id, String playerId) {
-    	<%=klass%> message = new <%=klass%>();
-    	message.setId(id);
-		message.persistPlayerId = playerId;
-		message.persistAction = "delete";
-		ActorSelection sel = ActorUtil.getSelectionByName("message_persister");
-		sel.tell(message, null);
-    }
-    
-    public Boolean dbDelete(String playerId) {
-    	Boolean result;
-    	com.game_machine.orm.models.<%=klass%>.open();
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", this.id, playerId);
-    	if (model != null) {
-    		result = model.delete();
-    	} else {
-    		result = false;
-    	}
-    	com.game_machine.orm.models.<%=klass%>.close();
-    	return result;
-    }
-    
-    public static <%=klass%> dbFind(String id, String playerId) {
-    	return dbFind(id, playerId, false);
-    }
-    
-    public static <%=klass%> dbFind(String id, String playerId, boolean inTransaction) {
-    	if (!inTransaction) {
-    		com.game_machine.orm.models.<%=klass%>.open();
-    	}
-    	
-    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
-    	
-    	if (!inTransaction) {
-    		com.game_machine.orm.models.<%=klass%>.close();
-    	}
-    	
-    	if (model == null) {
-    		return null;
-    	} else {
-    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-    		<% message_fields.each do |message_field| %>
-    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
-    		<% end %>
-    		return <%= varname(klass) %>;
-    	}
-    }
-    
-    public static List<<%=klass%>> dbFindAll(String playerId) {
-    	com.game_machine.orm.models.<%=klass%>.open();
-    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
-    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
-    	for (com.game_machine.orm.models.<%=klass%> model : models) {
-    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-    		<% message_fields.each do |message_field| %>
-    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
-    		<% end %>
-    		messages.add(<%= varname(klass) %>);
-    	}
-    	com.game_machine.orm.models.<%=klass%>.close();
-    	return messages;
-    }
-    
-    public static List<<%=klass%>> dbWhere(String query, Object ... params) {
-    	com.game_machine.orm.models.<%=klass%>.open();
-    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
-    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
-    	for (com.game_machine.orm.models.<%=klass%> model : models) {
-    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-    		<% message_fields.each do |message_field| %>
-    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
-    		<% end %>
-    		messages.add(<%= varname(klass) %>);
-    	}
-    	com.game_machine.orm.models.<%=klass%>.close();
-    	return messages;
-    }
-    
     
 <% end %>
 

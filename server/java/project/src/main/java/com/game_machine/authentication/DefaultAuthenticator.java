@@ -15,7 +15,7 @@ public class DefaultAuthenticator implements PlayerAuthenticator {
 
 	public void setPassword(String password) {
 		player.setPasswordHash(BCrypt.hashpw(password, BCrypt.gensalt()));
-		player.storeSet(scope);
+		Player.store().set(scope,player);
 	}
 
 	public boolean authenticate(String password) {

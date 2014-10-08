@@ -37,16 +37,16 @@ module GameMachine
       def ask(message,timeout)
         message = convert_if_model(message)
         duration = duration_in_ms(timeout)
-        t = JavaLib::Timeout.new(duration)
+        t = Java::AkkaUtil.Timeout.new(duration)
         if actor.is_a?(JavaLib::ActorSelection)
-          sel = JavaLib::AskableActorSelection.new(actor)
+          sel = Java::AkkaPattern::AskableActorSelection.new(actor)
           future = sel.ask(message,t)
         else
-          future = JavaLib::Patterns::ask(actor,message,t)
+          future = Java::AkkaPattern.Patterns::ask(actor,message,t)
         end
-        JavaLib::Await.result(future, duration)
-      rescue Java::JavaUtilConcurrent::TimeoutException => e
-        GameMachine.logger.debug("TimeoutException caught in ask (timeout = #{timeout})")
+        Java::ScalaConcurrent.Await.result(future, duration)
+      rescue Exception => e #Java::JavaUtilConcurrent::TimeoutException => e
+        GameMachine.logger.info(e.message)
         false
       end
 

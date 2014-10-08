@@ -35,7 +35,7 @@ public class GameMachineLoader {
 	
 	public static void startCacheUpdateHandler() {
 		ArrayList<String> nodes = new ArrayList<String>();
-		 for(int i=1; i<10; i++){
+		 for(int i=1; i<50; i++){
              nodes.add("node"+i);
         }
 		 Hashring ring = new Hashring("cacheUpdateHandler",nodes, 3);

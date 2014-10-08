@@ -166,10 +166,10 @@ module GameMachine
         players[message.player.id] = name
         self.class.local_players[message.player.id] = message.client_connection.type
         get_sender.tell(message,get_self)
-        GameMachine.logger.debug("#{self.class.name} client #{name} registered")
+        GameMachine.logger.info("#{self.class.name} client #{name} registered")
       # Actor register
       elsif register_type == 'actor'
-        GameMachine.logger.debug "#{self.class.name} Actor #{name} registered"
+        GameMachine.logger.info "#{self.class.name} Actor #{name} registered"
         local_actors[name] = events
       end
     end

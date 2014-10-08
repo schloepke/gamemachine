@@ -1,4 +1,4 @@
-package com.game_machine.core;
+package com.game_machine.api;
 
 import java.util.concurrent.TimeUnit;
 

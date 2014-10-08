@@ -1,4 +1,5 @@
 require 'spec_helper'
+java.lang.System.setProperty("activejdbc.log","")
 module GameMachine
 
   describe "entity persistence" do
@@ -22,82 +23,12 @@ module GameMachine
       MessageLib::TestObject
     end
 
-    describe "object cache" do
-
-      before(:each) do
-        [1,2,3,4,5,6,7,8,9,10].each do |i|
-          #test_object.add_numbers(i)
-        end
-        #MessageLib::TestObject.cacheInit(100,100)
-      end
-
-      describe "#cacheSetFromUpdate" do
-        
-        it "should set simple value field" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          cache_update = JavaLib::CacheUpdate.new(MessageLib::TestObject.java_class, test_object.id, "blah", "requiredString", JavaLib::CacheUpdate::SET)
-          MessageLib::TestObject.cache_set_from_update(cache_update)
-          obj = cache.get(test_object.id)
-          expect(obj.get_required_string).to eq("blah")
-        end
-
-        it "should set list values" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          cache_update = JavaLib::CacheUpdate.new(
-            MessageLib::TestObject.java_class,
-            test_object.id,
-            java.util.Arrays.asList([11,12].to_java('java.lang.Integer')),
-            "numbers",
-            JavaLib::CacheUpdate::SET
-          )
-          MessageLib::TestObject.cache_set_from_update(cache_update)
-          obj = cache.get(test_object.id)
-          expect(obj.get_numbers_list.to_a).to eq([11,12])
-        end
-      end
-
-      describe "#cacheSet" do
-        it "should set the field value" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          test_object.set_required_string('something')
-          obj = test_object.cache_set(1000)
-          expect(obj.get_required_string).to eq('something')
-        end
-      end
-
-      describe "#cacheSetField" do
-        it "should set the field value" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          obj = test_object.cache_set_field("numbers",java.util.Arrays.asList([0,1].to_java('java.lang.Integer')),1000)
-          expect(obj.get_numbers_list.to_a).to eq([0,1])
-        end
-      end
-
-      describe "#cacheIncrementField" do
-        it "should increment the field value" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          obj = test_object.cache_increment_field("numbers64",5,1000)
-          expect(obj.get_numbers64).to eq(560)
-        end
-      end
-
-      describe "#cacheDecrementField" do
-        it "should decrement the field value" do
-          cache = MessageLib::TestObject.get_cache
-          cache.set(test_object.id,test_object)
-          obj = test_object.cache_decrement_field("numbers64",5,1000)
-          expect(obj.get_numbers64).to eq(550)
-        end
-      end
-    end
-
     describe "objectdb persistence" do
       
+      it "orm" do
+        expect(GameMachine::Application.config.orm).to be_truthy
+      end
+
       describe "#query", :if => GameMachine::Application.config.store == 'gamecloud' do
         it "performs a query on the gamecloud" do
           GameMachine::DataStore.instance.delete_matching("players",'')
@@ -109,7 +40,7 @@ module GameMachine
         end
 
         it "should return players with matching ids" do
-          100.times do |i|
+          10.times do |i|
             player = MessageLib::Player.new.set_id("player#{i}").set_password_hash('blah')
             GameMachine::DataStore.instance.set("players##player#{i}",player)
           end
@@ -121,23 +52,23 @@ module GameMachine
         end
       end
 
-      describe "#dbDelete" do
+      describe "#delete" do
         it "sends delete request to object store" do
-          MessageLib::Entity.store_delete(player_id,id)
+          MessageLib::Entity.store.delete(player_id,id)
         end
       end
 
-      describe "#dbPut" do
+      describe "#set" do
         it "sends save request to object store" do
-          entity.store_set(player_id)
+          MessageLib::Entity.store.set(player_id,entity)
         end
       end
 
-      describe "#dbGet" do
+      describe "#get" do
         it "retrieves entity from the object store" do
-          entity.store_set(player_id)
+          MessageLib::Entity.store.set(player_id,entity)
           sleep 1
-          entity = MessageLib::Entity.store_get(player_id,id,6000)
+          entity = MessageLib::Entity.store.get(player_id,id,6000)
           expect(entity.id).to eql id
         end
       end
@@ -145,32 +76,40 @@ module GameMachine
       describe "store any message that has id" do
         it "stores and retrieves message having correct id" do
           player = MessageLib::Player.new.set_id('player2').set_password_hash('blah')
-          player.store_set(player_id)
+          MessageLib::Player.store.set(player_id,player)
           sleep 1
-          player = MessageLib::Player.store_get(player_id,'player2',2000)
+          player = MessageLib::Player.store.get(player_id,'player2',2000)
           expect(player.id).to eql('player2')
         end
       end
     end
 
-    describe "Orm persistence", :if => GameMachine::Application.config.orm do
+    describe "Orm persistence" do
     	before(:each) do
-    	 GameMachine::Application.orm_connect
-       ModelLib::TestObject.open
-       ModelLib::TestObject.delete_all
-       ModelLib::TestObject.close
+        subject.db.stop
+        subject.db.start
+      	GameMachine::Application.orm_connect
+        ModelLib::TestObject.open
+        ModelLib::TestObject.delete_all
+        ModelLib::TestObject.close
     	end
 
-    	describe "#ormSave" do
+    	describe "#save" do
         it "should return true" do
-          expect(test_object.db_save(player_id)).to be_truthy
+          expect(MessageLib::TestObject.db.save(player_id,test_object)).to be_truthy
         end
     	end
 
-      describe "#ormFind" do
+      describe "#save_async" do
+        it "should return true" do
+          expect(MessageLib::TestObject.db.save_async(player_id,test_object)).to be_nil
+        end
+      end
+
+      describe "#find" do
         it "should return test object with correct values" do
-          test_object.db_save(player_id)
-          obj = subject.db_find(id,player_id)
+          subject.db.save(player_id,test_object)
+          obj = subject.db.find(id,player_id)
           expect(obj.required_string).to eql(test_object.required_string)
           expect(obj.fvalue).to eql(test_object.fvalue)
           expect(obj.bvalue).to eql(test_object.bvalue)
@@ -179,22 +118,32 @@ module GameMachine
         end
       end
 
-      describe "#ormWhere" do
+      describe "#where" do
         it "should return list with one test object" do
-          test_object.db_save(player_id)
-          list = subject.db_where('test_object_dvalue = ?',3.4)
+          subject.db.save(player_id,test_object)
+          list = subject.db.where('test_object_dvalue = ?',3.4)
           expect(list.to_a.size).to eql(1)
         end
       end
 
-      describe "#ormDelete" do
+      describe "#delete" do
         it "should return false if no record" do
-          expect(test_object.db_delete(player_id)).to be_falsy
+          expect(subject.db.delete(test_object.id,player_id)).to be_falsy
         end
 
         it "should return true" do
-          test_object.db_save(player_id)
-          expect(test_object.db_delete(player_id)).to be_truthy
+          subject.db.save(player_id,test_object)
+          expect(subject.db.delete(test_object.id,player_id)).to be_truthy
+        end
+      end
+
+      describe "#delete_async" do
+        it "should delete record" do
+          subject.db.save(player_id,test_object)
+          expect(subject.db.delete_async(test_object.id,player_id)).to be_nil
+          sleep 1
+          obj = subject.db.find(test_object.id,player_id)
+          expect(obj).to be_nil
         end
       end
     end

@@ -24,7 +24,7 @@ CREATE TABLE test_objects (
   
   test_object_numbers integer DEFAULT NULL,
 
-  test_object_bvalue integer DEFAULT NULL,
+  test_object_bvalue boolean DEFAULT NULL,
   
   test_object_dvalue double precision DEFAULT NULL,
   

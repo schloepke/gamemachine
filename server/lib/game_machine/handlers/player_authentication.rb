@@ -29,7 +29,7 @@ module GameMachine
         if public?
           MessageLib::Player.new.set_id(username)
         else
-          MessageLib::Player.store_get('players',username,2000)
+          MessageLib::Player.store.get('players',username,2000)
         end
       end
 
@@ -41,7 +41,7 @@ module GameMachine
           if authenticator.authenticate(password)
             @sessions[username] = authtoken(username,password)
             player.set_authtoken(@sessions[username])
-            player.store_set('players')
+            MessageLib::Player.store.set('players',player)
             return @sessions[username]
           else
             GameMachine.logger.info "player: #{player.id} password does not match"

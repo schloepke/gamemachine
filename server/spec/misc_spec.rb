@@ -29,6 +29,7 @@ module GameMachine
       message.set_numbers64(555)
     end
 
+
     it "cache test" do
       MessageLib::TestObject.cacheInit(100,200000)
       count = 100000

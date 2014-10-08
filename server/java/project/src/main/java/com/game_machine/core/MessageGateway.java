@@ -99,10 +99,11 @@ public class MessageGateway extends UntypedActor {
 			}
 
 		} else if (message instanceof ClientManagerEvent) {
-			// log.warning("Message gateway got client manager event");
 			ClientManagerEvent event = (ClientManagerEvent) message;
+			log.warning("Message gateway got client manager event "+event.event);
 			if (event.event.equals("disconnected")) {
 				netMessages.remove(event.player_id);
+				log.warning("Player "+event.player_id+" removed from message gateway");
 			}
 		}
 

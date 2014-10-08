@@ -112,7 +112,7 @@ module GameMachine
         elsif dbtype == 'postgres'
           txt = case field.getJavaType.to_s
           when 'boolean'
-            "#{sql_column_name(klass,field)} integer"
+            "#{sql_column_name(klass,field)} boolean"
           when 'double'
             "#{sql_column_name(klass,field)} double precision"
           when 'float'
