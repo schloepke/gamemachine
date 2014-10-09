@@ -49,7 +49,7 @@ module GameMachine
         regions.each do |name,region|
           if region.server
             unless ClusterMonitor.cluster_members.has_key?(region.server)
-              GameMachine.logger.warn "Node #{region.server} no longer in cluster, region #{region.name} dissasociated"
+              self.class.logger.warn "Node #{region.server} no longer in cluster, region #{region.name} dissasociated"
               servers.delete(region.server)
               region.server = nil
               region.save!
@@ -66,7 +66,7 @@ module GameMachine
                 region.server = address
                 servers[address] = name
                 region.save!
-                GameMachine.logger.warn "Region #{region.name} assigned to #{region.server}"
+                self.class.logger.warn "Region #{region.name} assigned to #{region.server}"
                 break
               end
             end

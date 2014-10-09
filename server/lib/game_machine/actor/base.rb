@@ -7,6 +7,9 @@ module GameMachine
     # @abstract All game actors inherit fromm this class
     class Base < JavaLib::GameActor
   
+      java_import 'org.slf4j.Logger'
+      java_import 'org.slf4j.LoggerFactory'
+
       ON_RECEIVE_HOOKS = {}
 
       @@player_controller = nil
@@ -14,6 +17,11 @@ module GameMachine
       class << self
         alias_method :apply, :new
         alias_method :create, :new
+
+
+        def logger
+          @logger ||= LoggerFactory.getLogger(self.name)
+        end
 
         # Sets the system wide player controller class.
         # When a player logs in, a player controller with this class

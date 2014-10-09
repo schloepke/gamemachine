@@ -141,18 +141,26 @@ module GameMachine
 
       # TODO configurize router sizes
       def start_core_systems
-        JavaLib::GameMachineLoader.StartMessageGateway
-        Actor::Builder.new(CloudUpdater).start
         Actor::Builder.new(ClusterMonitor).start
+        Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
         Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
         Actor::Builder.new(MessageQueue).start
+        Actor::Builder.new(ClientManager).start
+
+        # Client manager especially needs to be running now, so other actors can
+        # register to it to receive events
+        GameMachine.logger.info("Waiting 2 seconds for core actors to start")
+        sleep 2
+
+        JavaLib::GameMachineLoader.StartMessageGateway
+        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
+
+        # Mostly unused
+        Actor::Builder.new(CloudUpdater).start
+        Actor::Builder.new(SystemStats).start
+        Actor::Builder.new(Scheduler).start
         Actor::Builder.new(SystemMonitor).start
         Actor::Builder.new(ReloadableMonitor).start
-        Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
-        Actor::Builder.new(ClientManager).start
-        Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -162,10 +170,6 @@ module GameMachine
           Actor::Builder.new(GameSystems::RegionService).start
         end
 
-        if ENV.has_key?('RESTARTABLE')
-          GameMachine.logger.info "restartable=true.  Will respond to tmp/gm_restart.txt"
-          Actor::Builder.new(RestartWatcher).start
-        end
       end
 
       def start_game_systems

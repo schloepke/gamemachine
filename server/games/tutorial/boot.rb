@@ -10,7 +10,6 @@ if GameMachine::Application.config.orm
 end
 
 require_relative 'npc_controller'
-require_relative 'npc_updater'
 
 names = []
 500.times do |x|
@@ -19,7 +18,6 @@ names = []
   names << name
 end
 
-#GameMachine::Actor::Builder.new(Tutorial::NpcUpdater,names).start
 
 
 

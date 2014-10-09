@@ -49,9 +49,9 @@ module GameMachine
           # Ensure valid authtoken before doing anything
           unless @auth_handler.valid_authtoken?(client_message.player)
             if client_message.has_player_logout
-              GameMachine.logger.info "Unauthenticated client #{client_message.player.id} attempting to logout"
+              self.class.logger.info "Unauthenticated client #{client_message.player.id} attempting to logout"
             elsif client_message.has_player_connect
-              GameMachine.logger.info "Unauthenticated client #{client_message.player.id} attempting to login"
+              self.class.logger.info "Unauthenticated client #{client_message.player.id} attempting to login"
             end
             return
           end
@@ -78,18 +78,18 @@ module GameMachine
           client_message, :sender => get_self
         )
       rescue Exception => e
-        GameMachine.logger.error "#{self.class.name} #{e.to_s}"
+        self.class.logger.error "#{self.class.name} #{e.to_s}"
       end
 
       def create_child(protocol,client_connection,client,server,player_id)
         builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id,protocol)
         builder.with_name(player_id).start
-        GameMachine.logger.info "Starting UdpOutgoing actor #{player_id}"
+        self.class.logger.info "Starting UdpOutgoing actor #{player_id}"
       end
 
       def destroy_child(player_id)
         Actor::Base.find(player_id).tell(JavaLib::PoisonPill.get_instance)
-        GameMachine.logger.info "Player gateway sent poison pill to #{player_id}"
+        self.class.logger.info "Player gateway sent poison pill to #{player_id}"
       end
 
       # region and cluster connections are for when you have

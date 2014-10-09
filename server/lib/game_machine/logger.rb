@@ -2,9 +2,21 @@
 module GameMachine
   
   class JavaLogger
+    java_import 'org.slf4j.Logger'
+    java_import 'org.slf4j.LoggerFactory'
+
+    attr_reader :default_logger
+    def initialize
+      @default_logger = create('default')
+    end
+
+    def create(name)
+      LoggerFactory.getLogger(name)
+    end
+
     [:info, :error, :warn, :fatal, :debug].each do |name|
       define_method(name) do |msg|
-        JavaLib::GameMachineLoader.logger.send(name.to_sym,msg)
+        default_logger.send(name.to_sym,msg)
       end
     end
   end

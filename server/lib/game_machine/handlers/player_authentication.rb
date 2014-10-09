@@ -14,8 +14,9 @@ module GameMachine
       include Singleton
       include Models
 
-      attr_reader :authclass
+      attr_reader :authclass, :logger
       def initialize
+        @logger = GameMachine.logger.create(self.class.name)
         @sessions = {}
         java_import "#{AppConfig.instance.config.handlers.auth}"
         @authclass = AppConfig.instance.config.handlers.auth.split('.').last.constantize
@@ -35,7 +36,7 @@ module GameMachine
 
       # Returns true if authorized, false if not
       def authorize(username,password)
-        GameMachine.logger.info "authorize: #{username}"
+        logger.info "authorize: #{username}"
         if player = get_player(username)
           authenticator = authclass.new(player)
           if authenticator.authenticate(password)
@@ -44,11 +45,11 @@ module GameMachine
             MessageLib::Player.store.set('players',player)
             return @sessions[username]
           else
-            GameMachine.logger.info "player: #{player.id} password does not match"
+            logger.info "player: #{player.id} password does not match"
             false
           end
         else
-          GameMachine.logger.info "player: #{username} not found"
+          logger.info "player: #{username} not found"
           false
         end
         false
@@ -67,11 +68,11 @@ module GameMachine
             @sessions[username] = authtoken
             return authtoken
           else
-            GameMachine.logger.info "Authoken for #{username} is nil"
+            logger.info "Authoken for #{username} is nil"
             nil
           end
         else
-          GameMachine.logger.info "User #{username} not found"
+          logger.info "User #{username} not found"
           nil
         end
       end

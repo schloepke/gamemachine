@@ -40,7 +40,7 @@ module GameMachine
         @cluster.subscribe(getSelf,
                            JavaLib::ClusterEvent::MemberEvent.java_class,
                            JavaLib::ClusterEvent::UnreachableMember.java_class)
-        GameMachine.logger.info "Cluster address #{@cluster.self_address.to_string}"
+        self.class.logger.info "Cluster address #{@cluster.self_address.to_string}"
       end
       @observers = []
       @notify_on_up_observers = []
@@ -79,7 +79,7 @@ module GameMachine
         notify_observers
         notify_member_down
 
-        GameMachine.logger.info "MemberRemoved #{address}"
+        self.class.logger.info "MemberRemoved #{address}"
       elsif message.is_a?(JavaLib::ClusterEvent::MemberUp)
         address = message.member.address.to_string
         self.class.add_cluster_member(address,message.member)
@@ -91,7 +91,7 @@ module GameMachine
 
         notify_member_up
         notify_observers
-        GameMachine.logger.info "MemberUp #{address}"
+        self.class.logger.info "MemberUp #{address}"
       elsif message.is_a?(JavaLib::ClusterEvent::ClusterMetricsChanged)
 
       elsif message.is_a?(JavaLib::ClusterEvent::CurrentClusterState)

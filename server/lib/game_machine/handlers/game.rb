@@ -35,7 +35,7 @@ module GameMachine
               elsif game_message.has_destination
                 destination = game_message.destination
               else
-                GameMachine.logger.warn "Unable to find destination for game message, skipping"
+                self.class.logger.warn "Unable to find destination for game message, skipping"
                 next 
               end
 
@@ -47,7 +47,7 @@ module GameMachine
                   Actor::Base.find(route[:to]).tell(game_message)
                 end
               else
-                GameMachine.logger.warn "No route for destination #{destination}"
+                self.class.logger.warn "No route for destination #{destination}"
               end
             end
           end
@@ -60,7 +60,7 @@ module GameMachine
             end
             entity.set_destination(nil)
             actor_ref.tell(entity)
-            GameMachine.logger.debug("RouteToDestination: #{entity.id} #{destination}")
+            self.class.logger.debug("RouteToDestination: #{entity.id} #{destination}")
             next
           end
 
@@ -73,7 +73,7 @@ module GameMachine
             klass.aspects.each do |aspect|
               next if dispatched
               if (aspect & component_names).size == aspect.size
-                GameMachine.logger.debug "Routing #{entity} via #{aspect} #{component_names} to #{klass}"
+                self.class.logger.debug "Routing #{entity} via #{aspect} #{component_names} to #{klass}"
                 klass.find.tell(entity)
                 dispatched = true
               end
