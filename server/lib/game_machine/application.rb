@@ -149,8 +149,10 @@ module GameMachine
 
         # Client manager especially needs to be running now, so other actors can
         # register to it to receive events
-        GameMachine.logger.info("Waiting 2 seconds for core actors to start")
-        sleep 2
+        unless GameMachine.env == 'test'
+          GameMachine.logger.info("Waiting 2 seconds for core actors to start")
+          sleep 2
+        end
 
         JavaLib::GameMachineLoader.StartMessageGateway
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start

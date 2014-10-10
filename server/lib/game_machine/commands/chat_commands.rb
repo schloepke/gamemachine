@@ -37,8 +37,8 @@ module GameMachine
         GameSystems::ChatManager.find.tell(invite_message(inviter,invitee,topic))
       end
 
-      def subscribers(topic)
-        GameMachine::GameSystems::Chat.subscribers_for_topic(topic)
+      def subscribers(topic,game_id)
+        GameMachine::GameSystems::Chat.subscribers_for_topic(topic,game_id)
       end
 
       def invite_message(inviter,invitee,topic)

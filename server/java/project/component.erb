@@ -473,7 +473,11 @@ import com.game_machine.core.CacheUpdate;
 	    		com.game_machine.orm.models.<%=klass%>.open();
 	    	}
 	    	
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
+	    	com.game_machine.orm.models.<%=klass%> model = null;
+	    	if (message.hasRecordId()) {
+	    		model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
+	    	}
+	    	
 	    	if (model == null) {
 	    		model = new com.game_machine.orm.models.<%=klass%>();
 	    		message.toModel(model);
@@ -489,7 +493,9 @@ import com.game_machine.core.CacheUpdate;
 	    	<% end %>
 	    	
 	    	Boolean res = model.save();
-	    	if (!res) {
+	    	if (res) {
+	    		message.setRecordId(model.getInteger("id"));
+	    	} else {
 	    		dbErrors = model.errors();
 	    	}
 	    	if (!inTransaction) {

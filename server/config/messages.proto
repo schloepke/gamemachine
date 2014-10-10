@@ -136,16 +136,19 @@ message Subscribers {
 
 message Subscribe {
   optional string topic = 1;
+  required string gameId = 2;
 }
 
 message Unsubscribe {
   required string topic = 1;
+  required string gameId = 2;
 }
 
 message Publish {
   optional string topic = 1;
   required Entity message = 2;
   optional string path = 3;
+  required string gameId = 4;
 }
 
 message ObjectdbDel {
@@ -184,13 +187,7 @@ message Name {
   required string value = 1;
 }
 
-message Player {
-  required string id = 1;
-  optional bool authenticated = 2;
-  optional string authtoken = 3;
-  optional string passwordHash = 4;
-  optional string gameId = 5;
-}
+
 
 message Vector3 {
   optional float x = 1;
@@ -272,7 +269,6 @@ message Regions {
 }
 
 message Entity {
-  optional Player player = 1;
   optional Neighbors neighbors = 2;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;

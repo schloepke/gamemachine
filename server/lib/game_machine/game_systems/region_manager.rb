@@ -66,7 +66,7 @@ module GameMachine
                 region.server = address
                 servers[address] = name
                 region.save!
-                self.class.logger.warn "Region #{region.name} assigned to #{region.server}"
+                self.class.logger.info "Region #{region.name} assigned to #{region.server}"
                 break
               end
             end

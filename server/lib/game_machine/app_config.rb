@@ -16,7 +16,13 @@ module GameMachine
       if ENV['NODE_HOST']
         set_config_from_env
       end
+
+      set_java_config
       @loaded = true
+    end
+
+    def set_java_config
+      JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)
     end
 
     def set_config_from_env

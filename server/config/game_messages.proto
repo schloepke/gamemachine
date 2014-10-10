@@ -3,6 +3,15 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message Player {
+  required string id = 1;
+  optional bool authenticated = 2;
+  optional string authtoken = 3;
+  optional string passwordHash = 4;
+  optional string gameId = 5;
+  optional int32 recordId = 6;
+}
+
 message TrackData {
   optional float speed = 1;
   optional float velocity = 2;
@@ -29,9 +38,6 @@ message GameMessage {
   optional AddPlayerItem addPlayerItem = 11;
   optional RemovePlayerItem removePlayerItem = 12;
   optional RequestPlayerItems requestPlayerItems = 13;
-
-  // Tutorial echo
-  optional EchoTest echoTest = 14;
 }
 
 message GameMessages {
@@ -84,16 +90,6 @@ local_message AddPlayerItem {
 local_message RemovePlayerItem {
   required string id = 1;
   required int32 quantity = 2;
-}
-
-
-persistent_message PlayerAttributes {
-  required string id = 1;
-  optional bool authenticated = 2;
-  optional string authtoken = 3;
-  optional string passwordHash = 4;
-  optional string gameId = 5;
-  optional int32 recordId = 6;
 }
 
 // For testing

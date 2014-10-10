@@ -21,6 +21,8 @@ module GameMachine
               if @auth_handler.authenticate!(message.player)
                 register_client(message)
                 game_handler.tell(message)
+              else
+                self.class.logger.info("Authentication failed for #{message.player.id}.  authtoken=#{message.player.authtoken}")
               end
             end
           else
@@ -42,7 +44,7 @@ module GameMachine
       end
 
       def register_client(message)
-        GameMachine.logger.info "Register #{message.player.id}"
+        self.class.logger.debug "Register #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         #GameMachine.logger.info "player_id=#{message.player.id} client_id=#{client_id}"
@@ -57,7 +59,7 @@ module GameMachine
       end
 
       def unregister_client(message)
-        GameMachine.logger.info "Unregister #{message.player.id}"
+        self.class.logger.debug "Unregister #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         Authentication.unregister_player(player_id)

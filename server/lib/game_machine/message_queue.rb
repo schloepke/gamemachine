@@ -1,6 +1,13 @@
 module GameMachine
   class MessageQueue < Actor::Base
 
+    def preStart
+      # Ensure system mediator is running
+      if getContext.system.name == 'cluster'
+        JavaLib::ChatMediator.get_instance.get('system')
+      end
+    end
+
     def fetch_mediator(game_id)
       if getContext.system.name == 'cluster'
         JavaLib::ChatMediator.get_instance.get(game_id)
@@ -10,19 +17,14 @@ module GameMachine
     end
 
     def on_receive(message)
-      mediator = fetch_mediator('default')
-      
-      unless mediator
-        GameMachine.logger.info "Cluster mediator not found, message queue disabled!"
-        unhandled(message)
-        return
-      end
-
       if message.is_a?(MessageLib::Publish)
+        mediator = fetch_mediator(message.get_game_id)
         publish(mediator,message)
       elsif message.is_a?(MessageLib::Subscribe)
+        mediator = fetch_mediator(message.get_game_id)
         subscribe(mediator,message)
       elsif message.is_a?(MessageLib::Unsubscribe)
+        mediator = fetch_mediator(message.get_game_id)
         unsubscribe(mediator,message)
       elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
         GameMachine.logger.debug "Subscribed"

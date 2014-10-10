@@ -85,22 +85,20 @@ class WebApp < Sinatra::Base
   end
 
   get '/players/:id/delete' do
-    GameMachine::MessageLib::Player.store_delete('players',params['id'])
+    player_service = GameMachine::JavaLib::PlayerService.get_instance
+    player_service.delete(params['id'])
     redirect to('/players')
   end
 
   post '/players' do
-    scope,query_string = params['query_string'].split('##')
-    if query_string.nil?
-      query_string = ''
-    end
-    @players = GameMachine::DataStore.instance.query(scope,query_string,200,'Player')
-    @form_query = scope + '##' + query_string
+    player_service = GameMachine::JavaLib::PlayerService.get_instance
+    @players = player_service.search(params['query_string'])
     erb :players
   end
 
   get '/players' do
-    @players = GameMachine::DataStore.instance.query("players",'',200,'Player')
+    player_service = GameMachine::JavaLib::PlayerService.get_instance
+    @players = player_service.search('')
     erb :players
   end
 
@@ -109,12 +107,12 @@ class WebApp < Sinatra::Base
   end
 
   post '/add_player' do
-    if player = GameMachine::MessageLib::Player.store_get('players',params['username'],500)
+     player_service = GameMachine::JavaLib::PlayerService.get_instance
+    if player = player_service.find(params['username'])
       flash[:error] = "Error creating player (already exists?)"
     else
-      player = GameMachine::MessageLib::Player.new.set_id(params['username'])
-      authenticator = GameMachine::JavaLib::DefaultAuthenticator.new(player)
-      authenticator.set_password(params['password'])
+      player = player_service.create(params['username'],params['game_id'])
+      player_service.set_password(player.id, params['password'])
       flash[:notice] = "Player created"
     end
     redirect to('/')

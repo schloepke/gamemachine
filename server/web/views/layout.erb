@@ -22,9 +22,7 @@
         <div class='col-md-2'>
           <ul class="nav nav-pills nav-stacked">
             <% if logged_in? %>
-            <% if GameMachine::Application.config.datastore.store == 'gamecloud' %>
             <li><a href="/players">List Players</a></li>
-            <% end %>
             <li><a href="/add_player">Add Player</a></li>
             <% end %>
             

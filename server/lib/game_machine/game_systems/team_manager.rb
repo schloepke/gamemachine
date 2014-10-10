@@ -290,13 +290,13 @@ module GameMachine
 
         match_id = self.class.match_id_for(message.team_names)
         if match = Match.find!(match_id)
-          GameMachine.logger.warn "Match #{match_id} already created"
+          self.class.logger.info "Match #{match_id} already created"
           return
         end
 
         teams = message.team_names.collect {|name| Team.find!(name)}.compact
         if teams.size != message.team_names.size
-          GameMachne.logger.warn "#{self.class.name} Unable to find all teams for match"
+          self.class.logger.info "#{self.class.name} Unable to find all teams for match"
           return
         end
 
@@ -319,13 +319,13 @@ module GameMachine
 
         match.save
         handler_match_started(match)
-        GameMachine.logger.info "#{self.class.name} Match #{match} started"
+        self.class.logger.debug "#{self.class.name} Match #{match} started"
       end
 
       def find_match(message)
         if team = Team.find(message.team_name)
           if s = handler_find_match(message.team_name)
-            GameMachine.logger.info "Match found: #{s}"
+            self.class.logger.debug "Match found: #{s}"
             start_match(s)
           end
         end
@@ -357,7 +357,7 @@ module GameMachine
         elsif message.is_a?(MessageLib::ClientManagerEvent)
           if message.event == 'disconnected'
             member_disconnected(message)
-            GameMachine.logger.info "#{self.class.name} #{message.player_id} removed from team(disconnected)"
+            self.class.logger.debug "#{self.class.name} #{message.player_id} removed from team(disconnected)"
           end
         else
           unhandled(message)

@@ -96,20 +96,33 @@ module GameMachine
 
     	describe "#save" do
         it "should return true" do
-          expect(MessageLib::TestObject.db.save(test_object)).to be_truthy
+          expect(subject.db.save(test_object)).to be_truthy
+        end
+
+        it "should set record_id when saved" do
+          subject.db.save(test_object)
+          expect(test_object.get_record_id).to_not be_nil
+        end
+
+        it "existing record should save and set same record id" do
+          subject.db.save(test_object)
+          record_id = test_object.get_record_id
+          subject.db.save(test_object)
+          expect(test_object.get_record_id).to eql(record_id)
         end
     	end
 
       describe "#save_async" do
-        it "should return true" do
-          expect(MessageLib::TestObject.db.save_async(test_object)).to be_nil
+        it "should return nil (void)" do
+          expect(subject.db.save_async(test_object)).to be_nil
         end
       end
 
       describe "#find" do
-        it "should return test object with correct values" do
+        it "should return correct record" do
           subject.db.save(test_object)
-          obj = subject.db.find(id)
+          record_id = test_object.get_record_id
+          obj = subject.db.find(record_id)
           expect(obj.required_string).to eql(test_object.required_string)
           expect(obj.fvalue).to eql(test_object.fvalue)
           expect(obj.bvalue).to eql(test_object.bvalue)
@@ -128,21 +141,21 @@ module GameMachine
 
       describe "#delete" do
         it "should return false if no record" do
-          expect(subject.db.delete(test_object.id)).to be_falsy
+          expect(subject.db.delete(test_object.get_record_id)).to be_falsy
         end
 
         it "should return true" do
           subject.db.save(test_object)
-          expect(subject.db.delete(test_object.id)).to be_truthy
+          expect(subject.db.delete(test_object.get_record_id)).to be_truthy
         end
       end
 
       describe "#delete_async" do
         it "should delete record" do
           subject.db.save(test_object)
-          expect(subject.db.delete_async(test_object.id)).to be_nil
+          expect(subject.db.delete_async(test_object.get_record_id)).to be_nil
           sleep 1
-          obj = subject.db.find(test_object.id)
+          obj = subject.db.find(test_object.get_record_id)
           expect(obj).to be_nil
         end
       end

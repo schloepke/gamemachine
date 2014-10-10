@@ -15,7 +15,7 @@ module GameMachine
         if message.is_a?(String) && message == 'test'
           return
         end
-        #GameMachine.logger.info "#{self.class.name} #{message}"
+        #self.class.logger.info "#{message.player.id}"
         commands.player.send_message(message,message.player.id)
       end
     end

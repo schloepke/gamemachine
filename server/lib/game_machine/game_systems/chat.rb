@@ -4,19 +4,23 @@ module GameMachine
     class Chat < Actor::Base
       include GameMachine::Commands
 
-      def self.subscribers_for_topic(topic)
+      def self.subscribers_for_topic(topic,game_id)
         datastore = GameMachine::Commands::DatastoreCommands.new
-        if entity = datastore.get("chat_topic_#{topic}")
+        if entity = datastore.get("#{game_id}_chat_topic_#{topic}")
           entity.subscribers || MessageLib::Subscribers.new
         else
           MessageLib::Subscribers.new
         end
       end
 
-      attr_reader :chat_id, :registered_as
+      attr_reader :chat_id, :registered_as, :game_id
       def post_init(*args)
-        @chat_id = args.first
-        @registered_as = args.last
+        @chat_id = args[0]
+        @registered_as = args[1]
+
+        player_service = GameMachine::JavaLib::PlayerService.get_instance
+        @game_id = player_service.get_game_id(chat_id)
+
         @topic_handlers = {}
 
         # Update these values from the datastore, as this state needs to
@@ -67,7 +71,7 @@ module GameMachine
           flags = @channel_flags.fetch(name,[])
           channel = MessageLib::ChatChannel.new.set_name(name)
           if flags.include?('subscribers')
-            channel.set_subscribers(self.class.subscribers_for_topic(name))
+            channel.set_subscribers(self.class.subscribers_for_topic(name,game_id))
           end
           channels.add_chat_channel(channel)
         end
@@ -106,13 +110,13 @@ module GameMachine
       end
 
       def remove_subscriber(subscriber_id,topic)
-        stored_entity_id = "chat_topic_#{topic}"
+        stored_entity_id = "#{game_id}_chat_topic_#{topic}"
         entity = MessageLib::Entity.new.set_id(subscriber_id)
         commands.datastore.call_dbproc(:chat_remove_subscriber,stored_entity_id,entity,false)
       end
 
       def add_subscriber(subscriber_id,topic)
-        stored_entity_id = "chat_topic_#{topic}"
+        stored_entity_id = "#{game_id}_chat_topic_#{topic}"
         entity = MessageLib::Entity.new.set_id(subscriber_id)
         commands.datastore.call_dbproc(:chat_add_subscriber,stored_entity_id,entity,false)
       end
@@ -184,11 +188,11 @@ module GameMachine
       def join_channels(chat_channels)
         chat_channels.each do |channel|
           if @topic_handlers[channel.name]
-            GameMachine.logger.info "Topic handler exists for #{channel.name}, not creating"
+            self.class.logger.info "Topic handler exists for #{channel.name}, not creating"
             next
           end
 
-          GameMachine.logger.info "Join request #{channel.name}"
+          self.class.logger.debug "Join request #{channel.name}"
           # Private channels.  format priv_[chat_id]_[channel name]
           # Players can create private channels with their player id, other
           # players must have an invite to join someone elses private channel
@@ -199,7 +203,7 @@ module GameMachine
               if invite_exists?(channel.name,channel.invite_id)
                 join_channel(channel.name,channel.flags)
               else
-                GameMachine.logger.info "Invite id #{channel.invite_id} not found"
+                self.class.logger.info "Invite id #{channel.invite_id} not found"
               end
             end
           else
@@ -210,13 +214,13 @@ module GameMachine
 
       def join_channel(name,flags)
         create_topic_handler(name)
-        message = MessageLib::Subscribe.new.set_topic(name)
+        message = MessageLib::Subscribe.new.set_topic(name).set_game_id(game_id)
         message_queue.tell(message,topic_handler_for(name).actor)
         @subscriptions.add(name)
         save_subscriptions
         add_subscriber(chat_id,name)
         set_channel_flags(name,flags)
-        GameMachine.logger.info "Player #{chat_id} Joined channel #{name} with flags #{flags}"
+        self.class.logger.debug "Player #{chat_id} Joined channel #{name} with flags #{flags}"
       end
 
       def leave_channels(chat_channels)
@@ -227,7 +231,7 @@ module GameMachine
 
       def leave_channel(channel)
         if topic_handler = topic_handler_for(channel.name)
-          message = MessageLib::Unsubscribe.new.set_topic(channel.name)
+          message = MessageLib::Unsubscribe.new.set_topic(channel.name).set_game_id(game_id)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
           @subscriptions.delete_if {|sub| sub == channel.name}
           save_subscriptions
@@ -236,12 +240,12 @@ module GameMachine
           @topic_handlers.delete(channel.name)
           delete_channel_flags(channel.name)
         else
-          GameMachine.logger.info "leave_channel: no topic handler found for #{channel.name}"
+          self.class.logger.info "leave_channel: no topic handler found for #{channel.name}"
         end
       end
 
       def send_private_message(chat_message)
-        GameMachine.logger.info "Sending private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
+        self.class.logger.debug "Sending private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
         entity = MessageLib::Entity.new
         player = MessageLib::Player.new.set_id(chat_message.chat_channel.name)
         entity.set_id(player.id)
@@ -256,10 +260,10 @@ module GameMachine
         if topic_handler = topic_handler_for(topic)
           entity = MessageLib::Entity.new.set_id('0').set_chat_message(chat_message)
           publish = MessageLib::Publish.new
-          publish.set_topic(topic).set_message(entity)
+          publish.set_topic(topic).set_message(entity).set_game_id(game_id)
           message_queue.tell(publish,topic_handler_for(topic).actor)
         else
-          GameMachine.logger.info "send_message: no topic handler found for #{topic}"
+          self.class.logger.info "send_message: no topic handler found for #{topic}"
         end
       end
 

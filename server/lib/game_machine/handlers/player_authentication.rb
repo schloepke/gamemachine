@@ -30,19 +30,20 @@ module GameMachine
         if public?
           MessageLib::Player.new.set_id(username)
         else
-          MessageLib::Player.store.get('players',username,2000)
+          player_service = GameMachine::JavaLib::PlayerService.get_instance
+          player_service.find(username)
         end
       end
 
       # Returns true if authorized, false if not
       def authorize(username,password)
-        logger.info "authorize: #{username}"
+        logger.debug "authorize: #{username}"
         if player = get_player(username)
           authenticator = authclass.new(player)
           if authenticator.authenticate(password)
             @sessions[username] = authtoken(username,password)
-            player.set_authtoken(@sessions[username])
-            MessageLib::Player.store.set('players',player)
+            player_service = GameMachine::JavaLib::PlayerService.get_instance
+            player_service.set_authtoken(player.id,@sessions[username])
             return @sessions[username]
           else
             logger.info "player: #{player.id} password does not match"

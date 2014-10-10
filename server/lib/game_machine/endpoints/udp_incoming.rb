@@ -84,12 +84,12 @@ module GameMachine
       def create_child(protocol,client_connection,client,server,player_id)
         builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id,protocol)
         builder.with_name(player_id).start
-        self.class.logger.info "Starting UdpOutgoing actor #{player_id}"
+        self.class.logger.debug "Starting UdpOutgoing actor #{player_id}"
       end
 
       def destroy_child(player_id)
         Actor::Base.find(player_id).tell(JavaLib::PoisonPill.get_instance)
-        self.class.logger.info "Player gateway sent poison pill to #{player_id}"
+        self.class.logger.debug "Player gateway sent poison pill to #{player_id}"
       end
 
       # region and cluster connections are for when you have

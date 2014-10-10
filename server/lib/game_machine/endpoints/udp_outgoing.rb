@@ -10,7 +10,7 @@ module GameMachine
         @player_id = args[3]
         @protocol = args[4]
         send_connected_message
-        GameMachine.logger.info "Player gateway created #{player_id}"
+        self.class.logger.debug "Player gateway created #{player_id}"
       end
 
       def send_connected_message
@@ -25,7 +25,7 @@ module GameMachine
       end
 
       def send_to_client(message)
-        #GameMachine.logger.info("Sending #{message} out via #{protocol}")
+        #self.class.logger.info("Sending #{message} out via #{protocol}")
         if protocol == 0
           bytes = message.to_byte_array
           server.sendToClient(

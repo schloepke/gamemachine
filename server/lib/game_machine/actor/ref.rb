@@ -51,7 +51,7 @@ module GameMachine
         else
           logmsg = message
         end
-        GameMachine.logger.info("#{e.message} to=#{@path_or_actor_ref} message=#{logmsg}")
+        GameMachine.logger.debug("#{e.message} to=#{@path_or_actor_ref} message=#{logmsg}")
         false
       end
 

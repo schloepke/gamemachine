@@ -102,9 +102,9 @@ module GameMachine
         if @chat_actors.has_key?(chat_id)
           forward_chat_request(chat_id,JavaLib::PoisonPill.get_instance)
           @chat_actors.delete(chat_id)
-          GameMachine.logger.info "Chat child for #{chat_id} killed"
+          self.class.logger.debug "Chat child for #{chat_id} killed"
         else
-          GameMachine.logger.info "chat actor for chat_id #{chat_id} not found"
+          self.class.logger.debug "chat actor for chat_id #{chat_id} not found"
         end
       end
 
@@ -125,7 +125,7 @@ module GameMachine
         builder = Actor::Builder.new(GameSystems::Chat,chat_id,register_as)
         child = builder.with_parent(context).with_name(name).start
         @chat_actors[chat_id] = Actor::Ref.new(child,GameSystems::Chat.name)
-        GameMachine.logger.debug "Chat child for #{chat_id} created"
+        self.class.logger.debug "Chat child for #{chat_id} created"
       end
     end
   end

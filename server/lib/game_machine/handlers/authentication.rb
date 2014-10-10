@@ -35,7 +35,7 @@ module GameMachine
       end
 
       def valid_authtoken?(player)
-        public? || player.authtoken == authtoken_for_player(player.id)
+        public? || player.authtoken == authtoken_for_player(player)
       end
 
 
@@ -45,6 +45,7 @@ module GameMachine
           register_player(player)
           player.set_authenticated(true)
         else
+          GameMachine.logger.warn("Authentication for #{player.id} failed")
           false
         end
       end

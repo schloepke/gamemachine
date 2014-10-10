@@ -198,12 +198,12 @@ module GameMachine
       client_event = create_client_event(client_id,player_id,event)
       entity = MessageLib::Entity.new.set_id('0').set_client_event(client_event)
       publish = MessageLib::Publish.new
-      publish.set_topic(channel).set_message(entity)
+      publish.set_topic(channel).set_message(entity).set_game_id('system')
       MessageQueue.find.tell(publish,get_self)
     end
 
     def subscribe(topic)
-      message = MessageLib::Subscribe.new.set_topic(topic)
+      message = MessageLib::Subscribe.new.set_topic(topic).set_game_id('system')
       MessageQueue.find.tell(message,get_self)
     end
   end
