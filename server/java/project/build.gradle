@@ -15,7 +15,7 @@ buildscript {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'game_machine'
-  version = '0.0.1'
+  version = '1.0.4'
   
 
 description = """"""
@@ -59,8 +59,9 @@ dependencies {
   compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'org.mindrot:jbcrypt:0.3m'
-  //compile 'org.fusesource:sigar:1.6.4'
+  compile 'org.fusesource:sigar:1.6.4'
   compile 'com.google.guava:guava:18.0'
+  
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

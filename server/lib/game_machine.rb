@@ -70,6 +70,7 @@ require_relative 'game_machine/wavefront_ext'
 require_relative 'game_machine/routes'
 require_relative 'game_machine/default_handlers'
 require_relative 'game_machine/cloud_updater'
+require_relative 'game_machine/codeblocks'
 
 if RbConfig::CONFIG['host_os'].match(/linux/i)
   #require_relative 'game_machine/navigation'
