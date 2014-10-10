@@ -399,18 +399,23 @@ import com.game_machine.core.CacheUpdate;
 	}
 	
 	public interface <%=klass%>AsyncDb {
-		void save(String playerId, <%=klass%> message);
-		void delete(String id, String playerId);
+		void save(<%=klass%> message);
+		void delete(int recordId);
+		void deleteWhere(String query, Object ... params);
 	}
 	
 	public static class <%=klass%>AsyncDbImpl implements <%=klass%>AsyncDb {
 	
-		public void save(String playerId, <%=klass%> message) {
-			<%=klass%>.db().save(playerId, message, false);
+		public void save(<%=klass%> message) {
+			<%=klass%>.db().save(message, false);
 	    }
 	    
-	    public void delete(String id, String playerId) {
-	    	<%=klass%>.db().delete(id, playerId);
+	    public void delete(int recordId) {
+	    	<%=klass%>.db().delete(recordId);
+	    }
+	    
+	    public void deleteWhere(String query, Object ... params) {
+	    	<%=klass%>.db().deleteWhere(query,params);
 	    }
 	    
 	}
@@ -447,33 +452,37 @@ import com.game_machine.core.CacheUpdate;
 			return LazyHolder.INSTANCE;
 		}
 		
-		public void saveAsync(String playerId, <%=klass%> message) {
-			asyncDb.save(playerId, message);
+		public void saveAsync(<%=klass%> message) {
+			asyncDb.save(message);
 	    }
 	    
-	    public void deleteAsync(String id, String playerId) {
-	    	asyncDb.delete(id, playerId);
+	    public void deleteAsync(int recordId) {
+	    	asyncDb.delete(recordId);
+	    }
+	    
+	    public void deleteWhereAsync(String query, Object ... params) {
+	    	asyncDb.deleteWhere(query,params);
 	    }
 	    		        
-	    public Boolean save(String playerId, <%=klass%> message) {
-	    	return save(playerId, message, false);
+	    public Boolean save(<%=klass%> message) {
+	    	return save(message, false);
 	    }
 	        
-	    public Boolean save(String playerId, <%=klass%> message, boolean inTransaction) {
+	    public Boolean save(<%=klass%> message, boolean inTransaction) {
 	    	if (!inTransaction) {
 	    		com.game_machine.orm.models.<%=klass%>.open();
 	    	}
 	    	
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", message.id, playerId);
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
 	    	if (model == null) {
 	    		model = new com.game_machine.orm.models.<%=klass%>();
-	    		message.toModel(model,playerId);
+	    		message.toModel(model);
 	    	} else {
-	    		message.toModel(model,null);
+	    		message.toModel(model);
 	    	}
 	    	<% message_fields.each do |message_field| %>
 	    	if (message.has<%= message_field %>()) {
-	    		message.<%= varname(message_field) %>.toModel(model,null);
+	    		message.<%= varname(message_field) %>.toModel(model);
 	    	} else {
 	    		<%= message_field %>.clearModel(model);
 	    	}
@@ -489,12 +498,12 @@ import com.game_machine.core.CacheUpdate;
 	    	return res;
 	    }
 	    
-	    public Boolean delete(String id, String playerId) {
+	    public Boolean delete(int recordId) {
 	    	Boolean result;
 	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
-	    	if (model != null) {
-	    		result = model.delete();
+	    	int deleted = com.game_machine.orm.models.<%=klass%>.delete("id = ?", recordId);
+	    	if (deleted >= 1) {
+	    		result = true;
 	    	} else {
 	    		result = false;
 	    	}
@@ -502,16 +511,29 @@ import com.game_machine.core.CacheUpdate;
 	    	return result;
 	    }
 	    
-	    public <%=klass%> find(String id, String playerId) {
-	    	return find(id, playerId, false);
+	    public Boolean deleteWhere(String query, Object ... params) {
+	    	Boolean result;
+	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	int deleted = com.game_machine.orm.models.<%=klass%>.delete(query,params);
+	    	if (deleted >= 1) {
+	    		result = true;
+	    	} else {
+	    		result = false;
+	    	}
+	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	return result;
 	    }
 	    
-	    public <%=klass%> find(String id, String playerId, boolean inTransaction) {
+	    public <%=klass%> find(int recordId) {
+	    	return find(recordId, false);
+	    }
+	    
+	    public <%=klass%> find(int recordId, boolean inTransaction) {
 	    	if (!inTransaction) {
 	    		com.game_machine.orm.models.<%=klass%>.open();
 	    	}
 	    	
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("<%=klass.underscore%>_id = ? and player_id = ?", id, playerId);
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", recordId);
 	    	
 	    	if (!inTransaction) {
 	    		com.game_machine.orm.models.<%=klass%>.close();
@@ -528,9 +550,24 @@ import com.game_machine.core.CacheUpdate;
 	    	}
 	    }
 	    
-	    public List<<%=klass%>> findAll(String playerId) {
+	    public <%=klass%> findFirst(String query, Object ... params) {
 	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where("player_id = ?", playerId);
+	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst(query, params);
+	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	if (model == null) {
+	    		return null;
+	    	} else {
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
+	    		<% message_fields.each do |message_field| %>
+	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<% end %>
+	    		return <%= varname(klass) %>;
+	    	}
+	    }
+	    
+	    public List<<%=klass%>> findAll() {
+	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.findAll();
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
 	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
 	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
@@ -544,7 +581,13 @@ import com.game_machine.core.CacheUpdate;
 	    }
 	    
 	    public List<<%=klass%>> where(String query, Object ... params) {
-	    	com.game_machine.orm.models.<%=klass%>.open();
+	    	return where(false,query,params);
+	    }
+	    
+	    public List<<%=klass%>> where(boolean inTransaction, String query, Object ... params) {
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.open();
+	    	}
 	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
 	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
@@ -554,7 +597,9 @@ import com.game_machine.core.CacheUpdate;
 	    		<% end %>
 	    		messages.add(<%= varname(klass) %>);
 	    	}
-	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	if (!inTransaction) {
+	    		com.game_machine.orm.models.<%=klass%>.close();
+	    	}
 	    	return messages;
 	    }
     }
@@ -567,24 +612,26 @@ import com.game_machine.core.CacheUpdate;
     	<% message.getFields.each do |field| %>
     	<% next unless simple_value?(field) %>
     	<% next if field.isRepeated %>
+    	<% next if field.name == 'recordId' %>
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     	model.set("<%=sql_column_name(klass,field)%>",null);
     	<% end %>
     }
     
-	public void toModel(Model model, String playerId) {
+	public void toModel(Model model) {
     	<% message.getFields.each do |field| %>
     	<% next unless simple_value?(field) %>
     	<% next if field.isRepeated %>
+    	
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
+    	<% if field.name == 'recordId' %>
+    	model.setInteger("id",recordId);
+    	<% else %>
     	if (<%= field.name %> != null) {
     		model.set<%=get_type(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
     	}
     	<% end %>
-    	
-    	if (playerId != null) {
-    		model.set("player_id",playerId);
-    	}
+    	<% end %>
     }
     
 	public static <%=klass%> fromModel(Model model) {
@@ -595,11 +642,18 @@ import com.game_machine.core.CacheUpdate;
     	<% next if field.isRepeated %>
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     	
+    	<% if field.name == 'recordId' %>
+    	if (model.getInteger("id") != null) {
+    		message.setRecordId(model.getInteger("id"));
+    		hasFields = true;
+    	}
+    	<% else %>
     	<%=get_type(field) %> <%= field.name %>Field = model.get<%=get_type(field) %>("<%=sql_column_name(klass,field)%>");
     	if (<%= field.name %>Field != null) {
     		message.set<%= field_name %>(<%= field.name %>Field);
     		hasFields = true;
     	}
+    	<% end %>
     	<% end %>
     	if (hasFields) {
     		return message;

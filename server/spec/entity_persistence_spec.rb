@@ -96,20 +96,20 @@ module GameMachine
 
     	describe "#save" do
         it "should return true" do
-          expect(MessageLib::TestObject.db.save(player_id,test_object)).to be_truthy
+          expect(MessageLib::TestObject.db.save(test_object)).to be_truthy
         end
     	end
 
       describe "#save_async" do
         it "should return true" do
-          expect(MessageLib::TestObject.db.save_async(player_id,test_object)).to be_nil
+          expect(MessageLib::TestObject.db.save_async(test_object)).to be_nil
         end
       end
 
       describe "#find" do
         it "should return test object with correct values" do
-          subject.db.save(player_id,test_object)
-          obj = subject.db.find(id,player_id)
+          subject.db.save(test_object)
+          obj = subject.db.find(id)
           expect(obj.required_string).to eql(test_object.required_string)
           expect(obj.fvalue).to eql(test_object.fvalue)
           expect(obj.bvalue).to eql(test_object.bvalue)
@@ -120,7 +120,7 @@ module GameMachine
 
       describe "#where" do
         it "should return list with one test object" do
-          subject.db.save(player_id,test_object)
+          subject.db.save(test_object)
           list = subject.db.where('test_object_dvalue = ?',3.4)
           expect(list.to_a.size).to eql(1)
         end
@@ -128,21 +128,21 @@ module GameMachine
 
       describe "#delete" do
         it "should return false if no record" do
-          expect(subject.db.delete(test_object.id,player_id)).to be_falsy
+          expect(subject.db.delete(test_object.id)).to be_falsy
         end
 
         it "should return true" do
-          subject.db.save(player_id,test_object)
-          expect(subject.db.delete(test_object.id,player_id)).to be_truthy
+          subject.db.save(test_object)
+          expect(subject.db.delete(test_object.id)).to be_truthy
         end
       end
 
       describe "#delete_async" do
         it "should delete record" do
-          subject.db.save(player_id,test_object)
-          expect(subject.db.delete_async(test_object.id,player_id)).to be_nil
+          subject.db.save(test_object)
+          expect(subject.db.delete_async(test_object.id)).to be_nil
           sleep 1
-          obj = subject.db.find(test_object.id,player_id)
+          obj = subject.db.find(test_object.id)
           expect(obj).to be_nil
         end
       end

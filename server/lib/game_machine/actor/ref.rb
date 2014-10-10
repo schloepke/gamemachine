@@ -46,7 +46,12 @@ module GameMachine
         end
         Java::ScalaConcurrent.Await.result(future, duration)
       rescue Exception => e #Java::JavaUtilConcurrent::TimeoutException => e
-        GameMachine.logger.info(e.message)
+        if message.is_a?(MessageLib::ObjectdbGet)
+          logmsg = "ObjectDbGet entity_id=#{message.entity_id} klass=#{message.klass}"
+        else
+          logmsg = message
+        end
+        GameMachine.logger.info("#{e.message} to=#{@path_or_actor_ref} message=#{logmsg}")
         false
       end
 

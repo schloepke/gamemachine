@@ -48,6 +48,8 @@ local_persistent_message PlayerItem {
   optional Weapon weapon = 5;
   optional Consumable consumable = 6;
   optional Cost cost = 8;
+  optional string playerId = 9;
+  optional int32 recordId = 10;
 }
 
 
@@ -85,7 +87,16 @@ local_message RemovePlayerItem {
 }
 
 
+persistent_message PlayerAttributes {
+  required string id = 1;
+  optional bool authenticated = 2;
+  optional string authtoken = 3;
+  optional string passwordHash = 4;
+  optional string gameId = 5;
+  optional int32 recordId = 6;
+}
 
+// For testing
 persistent_message TestObject {
   required string id = 12;
   optional string optionalString = 1;
@@ -97,5 +108,6 @@ persistent_message TestObject {
   optional float fvalue = 7;
   optional int64 numbers64 = 8;
   repeated Player player = 9;
+  optional int32 recordId = 10;
   
 }

@@ -189,6 +189,7 @@ message Player {
   optional bool authenticated = 2;
   optional string authtoken = 3;
   optional string passwordHash = 4;
+  optional string gameId = 5;
 }
 
 message Vector3 {

@@ -13,7 +13,7 @@ module Tutorial
       #commands.misc.client_manager_register(name)
       game_message = MessageLib::GameMessage.new.set_player_id('update')
       schedule_message(game_message,30)
-      self.class.logger.info("Npc #{name} started")
+      #self.class.logger.info("Npc #{name} started")
     end
 
     def preStart
