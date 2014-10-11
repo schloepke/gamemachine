@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class LeaveTeam < Model
+    class LeaveTeam < TeamBase
       attribute :name, String
     end
   end

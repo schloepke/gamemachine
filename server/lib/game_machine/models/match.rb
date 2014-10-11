@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class Match < Model
+    class Match < TeamBase
       attribute :teams, String
       attribute :server, String
       attribute :game_handler, String

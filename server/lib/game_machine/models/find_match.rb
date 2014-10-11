@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class FindMatch < Model
+    class FindMatch < TeamBase
       attribute :team_name, String
     end
   end

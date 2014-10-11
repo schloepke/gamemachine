@@ -9,7 +9,7 @@ import GameMachine.Messages.TrackData;
 
 public class Grid {
 
-	private float max;
+	private int max;
 	private int cellSize = 0;
 	private float convFactor;
 	private int width;
@@ -59,6 +59,14 @@ public class Grid {
 		this.movementVerifier = movementVerifier;
 	}
 
+	public int getMax() {
+		return this.max;
+	}
+	
+	public int getCellSize() {
+		return this.cellSize;
+	}
+	
 	public int getWidth() {
 		return this.width;
 	}

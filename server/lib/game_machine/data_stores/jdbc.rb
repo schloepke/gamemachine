@@ -12,13 +12,13 @@ module GameMachine
       end
 
       def dbtype
-        @dbtype ||= case Application.config.jdbc_driver
+        @dbtype ||= case Application.config.jdbc.driver
           when 'org.postgresql.Driver'
             :postgres
           when 'com.mysql.jdbc.Driver'
             :mysql
           else
-            raise "Unknown JDBC driver #{Application.config.jdbc_driver}"
+            raise "Unknown JDBC driver #{Application.config.jdbc.driver}"
           end
       end
         

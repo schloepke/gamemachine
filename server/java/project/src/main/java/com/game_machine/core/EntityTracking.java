@@ -1,6 +1,7 @@
 package com.game_machine.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.Entity;
@@ -17,14 +18,12 @@ public class EntityTracking extends UntypedActor {
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
 	public static String name = "fastpath_entity_tracking";
 
-	private Grid aoeGrid;
-	private Grid grid;
+	private Grid defaultGrid;
 	private ActorSelection messageGateway;
 
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
-		grid = Grid.find("default");
-		aoeGrid = Grid.find("aoe");
+		defaultGrid = Grid.find("default");
 		Commands.clientManagerRegister(name);
 	}
 
@@ -33,9 +32,10 @@ public class EntityTracking extends UntypedActor {
 
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
-
-			SendNeighbors(entity);
-			setEntityLocation(entity.trackData);
+			
+			Grid grid = gameGrid(entity.player.id);
+			SendNeighbors(grid,entity);
+			setEntityLocation(grid,entity.trackData);
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
@@ -48,12 +48,21 @@ public class EntityTracking extends UntypedActor {
 
 	}
 
+	private Grid gameGrid(String playerId) {
+		String gameId = PlayerService.getInstance().getGameId(playerId);
+		Grid gameGrid = Grid.find(gameId);
+		if (gameGrid == null) {
+			gameGrid = Grid.findOrCreate(gameId, defaultGrid.getMax(), defaultGrid.getCellSize());
+		}
+		
+		return gameGrid;
+	}
+	
 	private void removePlayerData(ClientManagerEvent event) {
-		grid.remove(event.player_id);
-		aoeGrid.remove(event.player_id);
+		gameGrid(event.player_id).remove(event.player_id);
 	}
 
-	private void SendNeighbors(Entity entity) {
+	private void SendNeighbors(Grid grid, Entity entity) {
 		Float x = entity.trackData.x;
 		Float y = entity.trackData.y;
 		if (x == null) {
@@ -95,7 +104,7 @@ public class EntityTracking extends UntypedActor {
 		SendToGateway(player, neighbors);
 	}
 
-	private void setEntityLocation(TrackData trackData) {
+	private void setEntityLocation(Grid grid, TrackData trackData) {
 
 		// So either protostuff or protobuf-net has a bug where 0 floats come
 		// through as null
@@ -113,7 +122,6 @@ public class EntityTracking extends UntypedActor {
 		// TODO. If set returns false send message to the client letting them
 		// know their movement was not allowed
 		grid.set(trackData);
-		aoeGrid.set(trackData);
 	}
 
 }

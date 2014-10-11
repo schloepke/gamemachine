@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class TeamLeft < Model
+    class TeamLeft < TeamBase
       attribute :name, String
     end
   end

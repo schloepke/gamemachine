@@ -5,11 +5,10 @@ module GameMachine
 
       attr_reader :teams
       def initialize
-        update_teams
       end
 
-      def update_teams
-        @teams = GameMachine::Models::Teams.find('teams')
+      def update_teams(key)
+        @teams = GameMachine::Models::Teams.find(key)
       end
 
       # Should return a Match object if a match is found, otherwise nil

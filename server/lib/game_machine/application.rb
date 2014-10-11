@@ -45,10 +45,6 @@ module GameMachine
       def start
         create_grids
 
-        unless GameMachine.env == 'test'
-          GameMachine::Actor::Reloadable.update_paths(true)
-        end
-
         start_actor_system
         data_store
         orm_connect
@@ -162,7 +158,6 @@ module GameMachine
         Actor::Builder.new(SystemStats).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(SystemMonitor).start
-        Actor::Builder.new(ReloadableMonitor).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -176,14 +171,12 @@ module GameMachine
 
       def start_game_systems
         Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,2).start
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).start
-        Actor::Builder.new(GameSystems::JsonModelPersistence).start
       end
 
     end
