@@ -45,9 +45,18 @@ module GameMachine
 
         public class Myclass implements Codeblock {
 
+          public class MyInnerclass {
+            public void testit() {
+              System.out.println("MyInnerclass testit");
+            }
+          }
+
+          static class MyInnerStaticclass {}
+
           public void run(Object message) throws Exception {
             System.out.println("run Test");
             Test.sendMessage("testing");
+            new MyInnerclass().testit();
             System.setProperty("testing","true");
             File file = new File("/tmp/testfile");
             file.createNewFile();
@@ -73,6 +82,17 @@ EOF
       end
 
       def compile
+        java.lang.System.setProperty("java.class.path",classpath)
+        result = JavaLib::CodeblockCompiler.memory_compile(code,"#{package}.#{classname}")
+        if result.is_compiled
+          JavaLib::CodeblockCompiler.load_from_memory(result)
+        else
+          result.get_errors.each {|error| puts error}
+          nil
+        end
+      end
+
+      def compile_file
         java.lang.System.setProperty("java.class.path",classpath)
         FileUtils.mkdir_p outdir
         filename = File.join(outdir,"#{classname}.java")
