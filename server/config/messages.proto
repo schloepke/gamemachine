@@ -268,6 +268,8 @@ message Regions {
   required string regions = 1;
 }
 
+message PoisonPill {}
+
 message Entity {
   optional Neighbors neighbors = 2;
   optional ChatMessage chatMessage = 4;
@@ -313,6 +315,7 @@ message Entity {
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
   optional bool fastpath = 61;
+  optional PoisonPill poisonPill = 62;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -26,7 +26,7 @@ public class MonoProxy {
 		MonoMessage message = new MonoMessage();
 		message.setKlass(klass);
 		message.setEntity(entity);
-		byte[] bytes = udpClient.send(message.toByteArray());
+		byte[] bytes = udpClient.sendReceive(message.toByteArray());
 		if (bytes == null) {
 			return null;
 		} else {

@@ -40,20 +40,46 @@ module GameMachine
       @players = {}
       @client_to_player = {}
       subscribe(channel)
-      ClusterMonitor.find.tell('notify_on_up',get_self)
+
       @cluster = JavaLib::Cluster.get(getContext.system)
+      @cluster.subscribe(getSelf, JavaLib::ClusterEvent::MemberEvent.java_class)
+      schedule_message('update_remote_members',10 * 1000)
+    end
+
+    def show_stats
+      local_player_count = self.class.local_players.size
+      player_count = players.size
+      self.class.logger.debug "#{@server} stats: local_players=#{local_player_count} players=#{player_count}"
+    end
+
+    def cluster_event?(message)
+      message.is_a?(JavaLib::ClusterEvent::MemberUp) ||
+       message.is_a?(JavaLib::ClusterEvent::ReachableMember)
     end
 
     def on_receive(message)
 
-      if message.is_a?(MessageLib::Entity)
+      if message.is_a?(String)
+        if message == 'update_remote_members'
+          update_remote_members('update',true)
+
+          show_stats
+        end
+
+      # Currently this kind of hammers a new node in a large cluster.  We should just have an
+      # algorithm that picks 2-3 nodes to send out the player info.  Similar to how singleton actor
+      # is chosen (pick the oldest 2-3 nodes)
+      elsif cluster_event?(message)
+        update_remote_member(message.member,'update')
+
+      elsif message.is_a?(MessageLib::Entity)
 
         # Outgoing message to player
         if message.send_to_player
           if self.class.local_players.has_key?(message.player.id)
             Actor::Base.find(message.player.id).tell(message)
           else
-           send_to_remote_player(message)
+            send_to_remote_player(message)
           end
 
         # client events come from other client managers
@@ -73,29 +99,43 @@ module GameMachine
         else
           unhandled(message)
         end
-      elsif message.is_a?(JavaLib::ClusterEvent::MemberUp)
-        update_new_member(address)
       else
         unhandled(message)
       end
     end
 
-    # TODO have the remote ack this, and resend it periodically until we get ack
-    def update_new_member(message)
-      client_events = MessageLib::ClientEvents.new
-      client_to_player.each do |client_id,player_id|
-        client_events.add_client_event(
-          create_client_event(client_id,player_id,'connected')
-        )
+    # Ensures player info gets spread around the cluster even
+    # in the event of network issues/lost messages
+    def update_remote_members(event_type,sample)
+      begin
+        members = ClusterMonitor.remote_members.values.to_a
+        if sample
+          members = members.sample(50)
+        end
+        members.each {|member| update_remote_member(member,event_type) }
+      rescue Exception => e
+        self.class.logger.error "Error updating remote members #{e.message}"
       end
-      entity = MessageLib::Entity.new.set_id('0').set_client_events(client_events)
-      remote_ref = Actor::Base.find_remote(message.member.address.to_string,self.class.name)
-      remote_ref.tell(entity,get_self)
+    end
+
+    def update_remote_member(member,event_type)
+      self.class.logger.debug "Updating remote #{member.address.to_string}"
+      remote_ref = Actor::Base.find_remote(member.address.to_string,self.class.name)
+      
+      players.each do |player_id,client_id|
+        #send_client_event(client_id,player_id,event_type)
+        client_event = create_client_event(client_id,player_id,event_type)
+        entity = MessageLib::Entity.new.set_id('0').set_client_event(client_event)
+        remote_ref.tell(entity,get_self)
+        self.class.logger.debug "Sent #{event_type} for #{player_id}"
+      end
     end
 
     def send_to_remote_player(message)
+      self.class.logger.debug("Send to remote player #{message.player.id}")
       if client_id = players.fetch(message.player.id,nil)
         if remote_ref = remote_clients.fetch(client_id,nil)
+          self.class.logger.debug("Found remote client for #{message.player.id}")
           remote_ref.tell(message)
         end
       end
@@ -117,7 +157,13 @@ module GameMachine
         remote_clients[client_event.client_id] = remote_ref
         players[client_event.player_id] = client_event.client_id
         client_to_player[client_event.client_id] = client_event.player_id
-        self.class.logger.debug("#{Application.config.name} client #{client_event.client_id} connected")
+        self.class.logger.debug("client #{client_event.client_id} connected")
+      elsif client_event.event == 'update'
+        remote_ref = sender_id_to_actor_ref(client_event.sender_id)
+        remote_clients[client_event.client_id] = remote_ref
+        players[client_event.player_id] = client_event.client_id
+        client_to_player[client_event.client_id] = client_event.player_id
+        self.class.logger.debug("client #{client_event.client_id} update")
       end
     end
 

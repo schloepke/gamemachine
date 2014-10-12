@@ -13,7 +13,8 @@ module GameMachine
 
       def send_message(message,player_id)
         if player_id.nil?
-          raise "player id cannot be nil"
+          GameMachine.logger.error "PlayerCommands.send_message: player id cannot be nil"
+          return
         end
         if is_entity?(message)
           entity = message
@@ -28,7 +29,8 @@ module GameMachine
           if is_component?(message)
             entity.add_component(message)
           else
-            raise "#{message} is not a valid object to send to a player"
+            GameMachine.logger.error "PlayerCommands.send_message: #{message} is not a valid object to send to a player"
+            return
           end
         end
         entity.set_send_to_player(true)

@@ -3,6 +3,8 @@ package com.game_machine.core;
 
 public class AppConfig {
 	
+	private static String env;
+	
 	public static class Handlers {
 		
 		private static String auth;
@@ -22,5 +24,13 @@ public class AppConfig {
 		}
 		
 		
+	}
+
+	public static String getEnv() {
+		return env;
+	}
+
+	public static void setEnv(String env) {
+		AppConfig.env = env;
 	}
 }

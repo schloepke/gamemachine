@@ -80,6 +80,9 @@ module GameMachine
         else
           unless @chat_actors.has_key?(message.player.id)
             create_child(message.player.id)
+
+            # Give it a second or the message will be lost
+            sleep 1
           end
           forward_chat_request(message.player.id,message)
         end

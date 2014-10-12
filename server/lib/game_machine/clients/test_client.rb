@@ -1,151 +1,138 @@
+require_relative 'udp_client'
 module GameMachine
   module Clients
-    class TestClientProxy
+    class TestClient
+      include GameMachine
 
-      include RSpec::Matchers
-      attr_reader :config
-
-      def initialize(name,client)
-        @data = java.util.concurrent.ConcurrentHashMap.new
-        @data[:name] = name
-        @data[:client] = client
-        @data[:actual] = []
+      def self.nodes
+        akka_port = 2551
+        udp_port = 24130
+        tcp_port = 8910
+        www_port = 3001
+        nodes = {}
+        nodes[:seed] = {:host => host, :akka_port => akka_port, :udp_port => udp_port, :tcp_port => tcp_port, :www_port => www_port}
+        10.times do |i|
+          name = "node#{i+1}".to_sym
+          akka_port += 1
+          tcp_port += 1
+          udp_port += 1
+          www_port += 1
+          nodes[name] = {:host => host, :akka_port => akka_port, :udp_port => udp_port, :tcp_port => tcp_port, :www_port => www_port}
+        end
+        nodes
       end
 
-      def ctx=(ctx)
-        @data[:ctx] = ctx
+      def self.host
+        ENV['CLUSTER_TEST_HOST'] || '127.0.0.1'
       end
 
-      def ctx
-        @data[:ctx]
+      def self.node_for(name)
+        nodes.fetch(name.to_sym)
       end
 
-      def actual=(actual)
-        @data[:actual] = actual
-      end
-
-      def actual
-        @data[:actual]
-      end
-
-      def client
-        @data[:client]
-      end
-
-      def name
-        @data[:name]
-      end
-
-      def wait_for_ctx
-        loop do
-          @data[:ctx] = TestClient.find(name).ask('ctx',20)
-          return if @data[:ctx]
+      attr_reader :client, :username, :authtoken
+      def initialize(username,name)
+        @username = username
+        @authtoken = 'authtoken'
+        node = self.class.node_for(name)
+        @client = JavaLib::UdpClient.new(node[:udp_port].to_i,3000)
+        unless client.connect(node[:host],node[:udp_port].to_i)
+          raise "Unable to connect to #{node[:host]} #{node[:udp_port]}"
         end
       end
 
-      def ref
-        TestClient.find(name)
+      def send_message(message)
+        client.send(message.to_byte_array)
       end
 
-      def stop
-        ref.tell('stop')
-        client.shutdown
-      end
-
-      def send_to_server(client_message)
-        client.send_to_server(client_message.to_byte_array,ctx)
-      end
-
-      def do_expect(found,not_found,component)
-        unless found
-          found = not_found
-        end
-        expect(found).to eq(component)
-        actual.clear
-      end
-
-      def clear
-        actual.clear
-      end
-
-      def entity_with_component(component,wait=0.100,&blk)
-        found = false
-        10.times do
-          actual.each do |entity|
-            if entity.component_names.include?(component)
-              yield entity if block_given?
-              found = entity
-            end
+      def receive_message
+        if bytes = client.receive
+          client_message = MessageLib::ClientMessage.parse_from(bytes)
+          if client_message.get_entity_count >= 1
+            entity = client_message.get_entity(0)
+            puts "Received #{entity.component_names.to_a.inspect}"
+            entity
+          else
+            puts "Received message without entity"
           end
-          return found if found
-          sleep wait
-        end
-        found
-      end
-
-      def should_receive_component(component,wait=0.20, &blk)
-        actual ||= []
-        blk.call
-        called = false
-        found = nil
-        not_found = []
-        10.times do
-          not_found = []
-          actual.each do |entity|
-            if entity.component_names.include?(component)
-              called = true
-              found = component
-            else
-              not_found += entity.component_names
-            end
-          end
-          if called
-            do_expect(found,not_found,component)
-            return
-          end
-          sleep wait
-        end
-      end
-    end
-
-
-    class TestClient < Actor::Base
-
-      class << self
-        def start(name,port)
-          client = UdtClient.start(name,'localhost',port)
-          proxy = TestClientProxy.new(name,client)
-          Actor::Builder.new(self,name,port,proxy).with_name(name).start
-          proxy.wait_for_ctx
-          proxy
-        end
-      end
-
-
-      def post_init(*args)
-        @name = args[0]
-        @port = args[1]
-        @proxy = args[2]
-        @ctx = nil
-      end
-
-      def on_receive(message)
-        if message.is_a?(JavaLib::DefaultChannelHandlerContext)
-          @ctx = message
-        elsif message == 'ctx'
-          sender.tell(@ctx) if @ctx
-        elsif message == 'stop'
-          context.stop
         else
-          @proxy.actual ||= []
-          client_message = ClientMessage.parse_from(message.bytes)
-          client_message.get_entity_list.each do |entity|
-            GameMachine.logger.info "GOT #{entity.component_names.join(' | ')}"
-            @proxy.actual << entity
-          end
+          nil
         end
       end
-    end
 
+      def login
+        send_message(connect_message)
+        return true if receive_message
+        3.times do
+          return true if remote_echo
+        end
+        false
+      end
+
+      def logout
+        send_message(logout_message)
+      end
+
+      def remote_echo
+        entity = new_entity.set_echo_test(MessageLib::EchoTest.new.set_message('test'))
+        send_message(entity_message(entity))
+        receive_message
+      end
+
+      def kill_node
+        login
+        send_message(kill_message)
+      end
+
+      def kill_message
+        entity = new_entity.set_poison_pill(MessageLib::PoisonPill.new)
+        entity.set_destination("GameMachine/Killswitch")
+        message = entity_message(entity)
+      end
+
+      def new_entity
+        MessageLib::Entity.new.set_id('test')
+      end
+
+      def entity_message(entity)
+        client_message.add_entity(entity)
+      end
+
+      def logout_message
+        client_message.set_player_logout(
+          MessageLib::PlayerLogout.new.set_authtoken(authtoken).set_player_id(username)
+        )
+      end
+
+      def connect_message
+        client_message.set_player_connect(MessageLib::PlayerConnect.new)
+      end
+
+      def client_message
+        player = MessageLib::Player.new.set_id(username).set_authtoken(authtoken)
+        client_message = MessageLib::ClientMessage.new
+        client_message.set_connection_type(0)
+        client_message.set_player(player)
+      end
+
+      def send_chat_message(type,channel,message)
+        entity = new_entity
+        entity.set_id("chatmessage")
+                
+        chat_message = MessageLib::ChatMessage.new
+        chat_channel = MessageLib::ChatChannel.new
+
+        chat_channel.set_name(channel)
+        chat_message.set_chat_channel(chat_channel)
+        chat_message.set_message(message)
+
+        chat_message.set_type(type)
+
+        chat_message.set_sender_id(username)
+        entity.set_chat_message(chat_message)
+        send_message(entity_message(entity))
+      end
+
+    end
   end
 end

@@ -167,6 +167,10 @@ module GameMachine
           Actor::Builder.new(GameSystems::RegionService).start
         end
 
+        if ENV['CLUSTER_TEST']
+          Actor::Builder.new(Killswitch).start
+          GameMachine.logger.warn "Killswitch activated"
+        end
       end
 
       def start_game_systems

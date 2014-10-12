@@ -25,7 +25,6 @@ jars.each do |jar|
   require jar
 end
 
-
 require_relative 'game_machine/java_lib'
 require_relative 'game_machine/gcache'
 require_relative 'game_machine/protobuf'
@@ -64,7 +63,7 @@ require_relative 'game_machine/helpers/game_message'
 require_relative 'game_machine/akka'
 require_relative 'game_machine/clients'
 require_relative 'game_machine/mono_server'
-require_relative 'game_machine/restart_watcher'
+require_relative 'game_machine/killswitch'
 require_relative 'game_machine/uniqueid'
 require_relative 'game_machine/wavefront_ext'
 require_relative 'game_machine/routes'

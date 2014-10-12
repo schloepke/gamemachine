@@ -13,31 +13,42 @@ module GameMachine
 
     def load_config
       @config = HoconConfig.config
-      if ENV['NODE_HOST']
-        set_config_from_env
-      end
+      set_config_from_env
 
       set_java_config
       @loaded = true
     end
 
     def set_java_config
+      JavaLib::AppConfig.set_env(GameMachine.env)
       JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)
     end
 
     def set_config_from_env
       GameMachine.logger.info "Setting config from ENV"
-      config.http.host = ENV['NODE_HOST']
-      config.http.port = ENV['WWW_PORT'].to_i
 
-      config.tcp.host = ENV['NODE_HOST']
-      config.tcp.port = ENV['TCP_PORT'].to_i
+      if ENV['NODE_HOST']
+        config.http.host = ENV['NODE_HOST']
+        config.tcp.host = ENV['NODE_HOST']
+        config.udp.host = ENV['NODE_HOST']
+        config.akka.host = ENV['NODE_HOST']
+      end
 
-      config.udp.host = ENV['NODE_HOST']
-      config.udp.port = ENV['UDP_PORT'].to_i
+      if ENV['WWW_PORT']
+        config.http.port = ENV['WWW_PORT'].to_i
+      end
 
-      config.akka.host = ENV['NODE_HOST']
-      config.akka.port = ENV['AKKA_PORT'].to_i
+      if ENV['TCP_PORT']
+        config.tcp.port = ENV['TCP_PORT'].to_i
+      end
+
+      if ENV['UDP_PORT']
+        config.udp.port = ENV['UDP_PORT'].to_i
+      end
+
+      if ENV['AKKA_PORT']
+        config.akka.port = ENV['AKKA_PORT'].to_i
+      end
 
       if ENV['CLOUD_HOST'] && ENV['CLOUD_USER'] && ENV['API_KEY']
         GameMachine.logger.info "Found gamecloud config in ENV"

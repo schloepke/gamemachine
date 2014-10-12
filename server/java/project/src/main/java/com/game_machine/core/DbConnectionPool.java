@@ -32,6 +32,13 @@ public class DbConnectionPool {
 			return true;
 		}
 
+		try {
+			Class.forName(ds);
+			Class.forName("org.postgresql.Driver");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		HikariConfig config = new HikariConfig();
 		config.setDataSourceClassName(ds);
 		config.addDataSourceProperty("serverName", hostname);
@@ -40,7 +47,7 @@ public class DbConnectionPool {
 		config.addDataSourceProperty("user", username);
 		config.addDataSourceProperty("password", password);
 		config.setMaximumPoolSize(10);
-		config.setIdleTimeout(0);
+		config.setIdleTimeout(30000);
 		config.setLeakDetectionThreshold(10000);
 		// config.setAutoCommit(false);
 

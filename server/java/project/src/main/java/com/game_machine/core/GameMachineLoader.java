@@ -45,6 +45,7 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 
 		startCacheUpdateHandler();
+		
 	}
 
 }

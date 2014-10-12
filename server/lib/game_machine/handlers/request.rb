@@ -18,6 +18,12 @@ module GameMachine
             if Authentication.authenticated?(message.player)
               game_handler.tell(message)
             else
+              if ENV['CLUSTER_TEST']
+                player_service = GameMachine::JavaLib::PlayerService.get_instance
+                unless player = player_service.find(message.player.id)
+                  player_service.create(message.player.id,'cluster_test')
+                end
+              end
               if @auth_handler.authenticate!(message.player)
                 register_client(message)
                 game_handler.tell(message)
@@ -44,7 +50,7 @@ module GameMachine
       end
 
       def register_client(message)
-        self.class.logger.debug "Register #{message.player.id}"
+        self.class.logger.info "Register #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         #GameMachine.logger.info "player_id=#{message.player.id} client_id=#{client_id}"
@@ -59,7 +65,7 @@ module GameMachine
       end
 
       def unregister_client(message)
-        self.class.logger.debug "Unregister #{message.player.id}"
+        self.class.logger.info "Unregister #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         Authentication.unregister_player(player_id)

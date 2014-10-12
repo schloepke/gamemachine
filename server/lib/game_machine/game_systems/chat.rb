@@ -30,6 +30,7 @@ module GameMachine
 
         # Make sure we re-create our state from the persisted state if we died
         load_state
+        self.class.logger.debug "Chat child #{chat_id} started with game_id #{game_id}"
       end
 
       def load_state
@@ -40,21 +41,25 @@ module GameMachine
       end
 
       def on_receive(entity)
+        self.class.logger.debug "Received #{entity}"
         if entity.is_a?(MessageLib::ChatDestroy)
           leave_all_channels
           return
         end
 
         if entity.has_join_chat
+          self.class.logger.debug "Join chat"
           join_channels(entity.join_chat.get_chat_channel_list)
           send_status
         end
 
         if entity.has_chat_message
+          self.class.logger.debug "Chat message"
           send_message(entity.chat_message)
         end
 
         if entity.has_leave_chat
+          self.class.logger.debug "Leave chat"
           leave_channels(entity.leave_chat.get_chat_channel_list)
           send_status
         end
@@ -252,7 +257,8 @@ module GameMachine
         entity.set_player(player)
         entity.set_chat_message(chat_message)
         entity.set_send_to_player(true)
-        commands.player.send_message(entity)
+        commands.player.send_message(entity,player.id)
+        self.class.logger.debug "Sent private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
       end
 
       def send_group_message(chat_message)

@@ -4,8 +4,6 @@ ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
 ENV['GAME_ENV'] = 'development'
 
-
-
 require 'rubygems'
 require 'fileutils'
 
@@ -34,6 +32,28 @@ command = aliases[command] || command
 
 require_relative '../lib/game_machine/console'
 
+if command == 'start_testnode'
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.start_node(name)
+ exit
+end
+
+if command == 'ping_testnode'
+  load_game_machine
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.ping_node(name)
+ exit
+end
+
+if command == 'stop_testnode'
+  load_game_machine
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.stop_node(name)
+ exit
+end
 
 if command == 'install' || command == 'upgrade'
   bin_path = File.dirname(__FILE__)
