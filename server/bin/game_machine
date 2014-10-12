@@ -4,6 +4,30 @@ ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
 ENV['GAME_ENV'] = 'development'
 
+
+
+if ARGV.first == 'server' || ARGV.first == 's'
+  require 'java'
+  classpath = java.lang.System.get_property("java.class.path")
+  unless classpath.match(/game_machine/)
+    classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
+    cmd = "jruby -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
+    system(cmd)
+    exit
+  end
+end
+
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+  "b"  => "build",
+  "s"  => "server"
+}
+
+command = ARGV.shift
+command = aliases[command] || command
+
+
 require 'rubygems'
 require 'fileutils'
 
@@ -20,15 +44,7 @@ def load_config
   GameMachine::AppConfig.instance.load_config
 end
 
-ARGV << '--help' if ARGV.empty?
 
-aliases = {
-  "b"  => "build",
-  "s"  => "server"
-}
-
-command = ARGV.shift
-command = aliases[command] || command
 
 require_relative '../lib/game_machine/console'
 

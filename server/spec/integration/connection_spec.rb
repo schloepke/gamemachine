@@ -18,7 +18,7 @@ module GameMachine
         clients[i].login
       end
 
-      sleep 30
+      
       count.times do |i|
         clients[i].logout
       end
