@@ -141,8 +141,9 @@ module GameMachine
         Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
         Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
         Actor::Builder.new(MessageQueue).start
-        Actor::Builder.new(ClientManager).start
-
+        Actor::Builder.new(ClientManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler * 2).start
+        Actor::Builder.new(ClientManagerUpdater).start
+        
         # Client manager especially needs to be running now, so other actors can
         # register to it to receive events
         unless GameMachine.env == 'test'

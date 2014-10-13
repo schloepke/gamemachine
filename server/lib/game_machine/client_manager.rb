@@ -1,4 +1,6 @@
 
+require_relative 'client_manager_updater'
+
 module GameMachine
   class ClientManager < Actor::Base
     attr_reader :local_actors, :remote_clients, :local_clients, :channel, :players, :client_to_player
@@ -9,6 +11,16 @@ module GameMachine
       else
         @local_players = java.util.concurrent.ConcurrentHashMap.new
       end
+    end
+
+    def self.get_map(name)
+      unless @map
+        @map = java.util.concurrent.ConcurrentHashMap.new
+      end
+      unless @map[name]
+        @map[name] = java.util.concurrent.ConcurrentHashMap.new
+      end
+      @map[name]
     end
 
     # Includes region + combined.
@@ -34,45 +46,16 @@ module GameMachine
     def post_init(*args)
       @server = Akka.instance.address
       @channel = 'client_events'
-      @local_actors = {}
-      @remote_clients = {}
-      @local_clients = {}
-      @players = {}
-      @client_to_player = {}
+      @local_actors = self.class.get_map('local_actors')
+      @remote_clients = self.class.get_map('remote_clients')
+      @local_clients = self.class.get_map('local_clients')
+      @players = self.class.get_map('players')
+      @client_to_player = self.class.get_map('client_to_player')
       subscribe(channel)
-
-      @cluster = JavaLib::Cluster.get(getContext.system)
-      @cluster.subscribe(getSelf, JavaLib::ClusterEvent::MemberEvent.java_class)
-      schedule_message('update_remote_members',10 * 1000)
-    end
-
-    def show_stats
-      local_player_count = self.class.local_players.size
-      player_count = players.size
-      self.class.logger.debug "#{@server} stats: local_players=#{local_player_count} players=#{player_count}"
-    end
-
-    def cluster_event?(message)
-      message.is_a?(JavaLib::ClusterEvent::MemberUp) ||
-       message.is_a?(JavaLib::ClusterEvent::ReachableMember)
     end
 
     def on_receive(message)
-
-      if message.is_a?(String)
-        if message == 'update_remote_members'
-          update_remote_members('update',true)
-
-          show_stats
-        end
-
-      # Currently this kind of hammers a new node in a large cluster.  We should just have an
-      # algorithm that picks 2-3 nodes to send out the player info.  Similar to how singleton actor
-      # is chosen (pick the oldest 2-3 nodes)
-      elsif cluster_event?(message)
-        update_remote_member(message.member,'update')
-
-      elsif message.is_a?(MessageLib::Entity)
+      if message.is_a?(MessageLib::Entity)
 
         # Outgoing message to player
         if message.send_to_player
@@ -101,33 +84,6 @@ module GameMachine
         end
       else
         unhandled(message)
-      end
-    end
-
-    # Ensures player info gets spread around the cluster even
-    # in the event of network issues/lost messages
-    def update_remote_members(event_type,sample)
-      begin
-        members = ClusterMonitor.remote_members.values.to_a
-        if sample
-          members = members.sample(50)
-        end
-        members.each {|member| update_remote_member(member,event_type) }
-      rescue Exception => e
-        self.class.logger.error "Error updating remote members #{e.message}"
-      end
-    end
-
-    def update_remote_member(member,event_type)
-      self.class.logger.debug "Updating remote #{member.address.to_string}"
-      remote_ref = Actor::Base.find_remote(member.address.to_string,self.class.name)
-      
-      players.each do |player_id,client_id|
-        #send_client_event(client_id,player_id,event_type)
-        client_event = create_client_event(client_id,player_id,event_type)
-        entity = MessageLib::Entity.new.set_id('0').set_client_event(client_event)
-        remote_ref.tell(entity,get_self)
-        self.class.logger.debug "Sent #{event_type} for #{player_id}"
       end
     end
 

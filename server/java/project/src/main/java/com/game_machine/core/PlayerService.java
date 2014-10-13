@@ -112,7 +112,12 @@ public class PlayerService {
 
 	public String getGameId(String playerId) {
 		Player player = find(playerId);
-		return player.getGameId();
+		if (player == null) {
+			return null;
+		} else {
+			return player.getGameId();
+		}
+		
 	}
 	
 	

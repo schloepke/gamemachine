@@ -61,7 +61,7 @@ module GameMachine
           message.client_connection
         )
         entity.set_player(message.player)
-        ClientManager.find.ask(entity,5000)
+        ClientManager.find.ask(entity,50)
       end
 
       def self.unregister_client(message)

@@ -32,10 +32,15 @@ public class EntityTracking extends UntypedActor {
 
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
-			
+
 			Grid grid = gameGrid(entity.player.id);
-			SendNeighbors(grid,entity);
-			setEntityLocation(grid,entity.trackData);
+			if (grid == null) {
+				log.warning("No grid found for " + entity.player.id);
+				return;
+			}
+
+			SendNeighbors(grid, entity);
+			setEntityLocation(grid, entity.trackData);
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
@@ -50,16 +55,23 @@ public class EntityTracking extends UntypedActor {
 
 	private Grid gameGrid(String playerId) {
 		String gameId = PlayerService.getInstance().getGameId(playerId);
-		Grid gameGrid = Grid.find(gameId);
-		if (gameGrid == null) {
-			gameGrid = Grid.findOrCreate(gameId, defaultGrid.getMax(), defaultGrid.getCellSize());
+		if (gameId == null) {
+			return null;
+		} else {
+			Grid gameGrid = Grid.find(gameId);
+			if (gameGrid == null) {
+				gameGrid = Grid.findOrCreate(gameId, defaultGrid.getMax(), defaultGrid.getCellSize());
+			}
+
+			return gameGrid;
 		}
-		
-		return gameGrid;
 	}
-	
+
 	private void removePlayerData(ClientManagerEvent event) {
-		gameGrid(event.player_id).remove(event.player_id);
+		Grid grid = gameGrid(event.player_id);
+		if (grid != null) {
+			gameGrid(event.player_id).remove(event.player_id);
+		}
 	}
 
 	private void SendNeighbors(Grid grid, Entity entity) {

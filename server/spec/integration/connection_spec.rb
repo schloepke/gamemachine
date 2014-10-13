@@ -5,6 +5,9 @@ module GameMachine
 
   describe "connections" do
 
+    xit "entity tracking" do
+    end
+
     xit "logout all" do
       clients = {}
       count = 100
@@ -19,23 +22,23 @@ module GameMachine
       end
     end
 
-    it "login all" do
+    xit "login all" do
       clients = {}
-      count = 100
+      count = 500
 
       count.times do |i|
         name = "user#{i}"
         clients[i] = Clients::TestClient.new(name,'seed')
       end
       count.times do |i|
-        clients[i].login
-        sleep 0.002
+        clients[i].login_nowait
+        sleep 0.005
       end
     end
 
     xit "multiple client connections" do
       clients = {}
-      count = 1000
+      count = 100
 
       count.times do |i|
         name = "user#{i}"
@@ -55,7 +58,7 @@ module GameMachine
 
 
 
-    xit "private chat messages between nodes" do
+    it "private chat messages between nodes" do
       player1 = Clients::TestClient.new('player1','seed')
       player1.login
 
