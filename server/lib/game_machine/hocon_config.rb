@@ -23,6 +23,7 @@ module GameMachine
       conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}
 
       conf.client.protocol = config.get_string('client.protocol')
+      conf.client.idle_timeout = config.get_int('client.idle_timeout')
 
       conf.handlers.team = config.get_string('handlers.team')
       conf.handlers.auth = config.get_string('handlers.auth')

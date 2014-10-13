@@ -23,7 +23,8 @@ module GameMachine
         unless is_seed
           cmd << "AKKA_SEED_HOST=#{seed_node[:host]} AKKA_SEED_PORT=#{seed_node[:akka_port]} "
         end
-        cmd << "jruby bin/game_machine s &"
+        classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
+        cmd << "jruby -J-cp \"#{classpath}\" bin/game_machine s &"
         puts cmd
         system(cmd)
       end

@@ -11,7 +11,7 @@ module GameMachine
         if message.is_a?(MessageLib::ClientMessage)
           if message.has_player_logout
             if Authentication.authenticated?(message.player)
-              unregister_client(message)
+              self.class.unregister_client(message)
             end
           elsif message.has_player
              update_entities(message)
@@ -50,7 +50,7 @@ module GameMachine
       end
 
       def register_client(message)
-        self.class.logger.info "Register #{message.player.id}"
+        self.class.logger.debug "Register #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         #GameMachine.logger.info "player_id=#{message.player.id} client_id=#{client_id}"
@@ -64,8 +64,8 @@ module GameMachine
         ClientManager.find.ask(entity,5000)
       end
 
-      def unregister_client(message)
-        self.class.logger.info "Unregister #{message.player.id}"
+      def self.unregister_client(message)
+        logger.debug "Unregister #{message.player.id}"
         player_id = message.player.id
         client_id = message.client_connection.id
         Authentication.unregister_player(player_id)

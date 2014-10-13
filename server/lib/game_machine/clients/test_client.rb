@@ -69,6 +69,10 @@ module GameMachine
         false
       end
 
+      def login_nowait
+        send_message(connect_message)
+      end
+
       def logout
         send_message(logout_message)
       end
