@@ -32,6 +32,7 @@ message GameMessage {
   optional string messageId = 2;
   optional int32 destinationId = 3;
   optional string destination = 4;
+  optional string agentId = 5;
 
   // User modifiable
   optional PlayerItems playerItems = 10;

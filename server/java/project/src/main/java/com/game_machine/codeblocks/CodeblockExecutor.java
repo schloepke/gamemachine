@@ -14,6 +14,7 @@ public class CodeblockExecutor {
 
 	private AccessControlContext context; 
 	
+	// Default permissions
 	public void setPerms() {
 		Permissions permissions = new Permissions();
 		//permissions.add(new RuntimePermission("accessDeclaredMembers"));
@@ -23,18 +24,29 @@ public class CodeblockExecutor {
             new ProtectionDomain[] { protectionDomain });
 	}
 	
-	public boolean runUnrestricted(Codeblock codeblock, Object message) {
+	public void setPerms(Permissions permissions) {
+        ProtectionDomain protectionDomain =
+	    new ProtectionDomain(null, permissions);
+        context = new AccessControlContext(
+            new ProtectionDomain[] { protectionDomain });
+	}
+	
+	public boolean runUnrestricted(Codeblock codeblock, String method, Object message) {
 		try {
-			codeblock.run(message);
+			if (method.equals("run")) {
+	    		codeblock.run(message);
+	    	} else if (method.equals("awake")) {
+	    		codeblock.awake(message);
+	    	}
 			return true;
 		} catch (Exception e) {
 			return false;
 		}
 	}
 	
-	public boolean runRestricted(Codeblock codeblock, Object message) {
+	public boolean runRestricted(Codeblock codeblock, String method, Object message) {
 		try {
-			run(codeblock,message);
+			run(codeblock, method, message);
 			return true;
 		} catch (AccessControlException | PrivilegedActionException e) {
 			// Log this somewhere
@@ -44,10 +56,14 @@ public class CodeblockExecutor {
 		}
 	}
 	
-	public void run(final Codeblock codeblock, final Object message) throws PrivilegedActionException {
+	public void run(final Codeblock codeblock, final String method, final Object message) throws PrivilegedActionException {
 		AccessController.doPrivileged(new PrivilegedExceptionAction<Void> () {
 		    public Void run() throws Exception {
-		    	codeblock.run(message);
+		    	if (method.equals("run")) {
+		    		codeblock.run(message);
+		    	} else if (method.equals("awake")) {
+		    		codeblock.awake(message);
+		    	}
 				return null;
 		    }
 		}, context);

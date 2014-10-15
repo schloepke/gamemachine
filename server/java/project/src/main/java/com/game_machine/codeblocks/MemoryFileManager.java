@@ -20,7 +20,7 @@ public class MemoryFileManager extends ForwardingJavaFileManager<StandardJavaFil
 
 	@Override
 	public Output getJavaFileForOutput(Location location, String name, Kind kind, FileObject source) {
-		System.out.println("getJavaFileForOutput called with "+name);
+		//System.out.println("getJavaFileForOutput called with "+name);
 		Output mc = new Output(name, kind);
 		this.map.put(name, mc);
 		return mc;

@@ -21,6 +21,9 @@ public class ByteArrayClassLoader extends ClassLoader {
 			add("javax.crypto");
 			add("javax.xml");
 			add("com.game_machine.codeblocks.api");
+			add("com.game_machine.client.Api");
+			add("com.game_machine.client.agent.CodeblockEnv");
+			add("com.game_machine.client.agent.CodeblockRunner");
 		}
 	};
 

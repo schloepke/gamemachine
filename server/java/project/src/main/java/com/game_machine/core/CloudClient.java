@@ -78,6 +78,22 @@ public class CloudClient {
 		this.host = host;
 	}
 
+	public CloudResponse getAgents(String gameId) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/agents/" + gamecloudUser + "/" + gameId;
+		String token = hash256(gamecloudUser + gameId + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new ByteArrayResponseHandler());
+	}
+	
+	public CloudResponse login(String gameId, String username, String password) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/agent/login/" + gameId +"/"+ username +"/"+ password;
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+	
 	/**
 	 * Performs a left anchored fuzzy search by id
 	 * 

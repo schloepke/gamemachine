@@ -4,13 +4,28 @@ java_import 'javax.tools.JavaFileObject'
 java_import 'javax.tools.StandardJavaFileManager'
 java_import 'javax.tools.ToolProvider'
 
-require 'digest/md5'
+require 'digest'
 
 module GameMachine
   module Codeblocks
     class Compiler
 
       attr_reader :outdir, :package, :code, :username, :classname
+
+      class << self
+        def fixture_path
+          File.join(ENV['APP_ROOT'],'spec','fixtures')
+        end
+
+        def testcode_fail
+          File.read(File.join(fixture_path,'codeblocks_fail.java'))
+        end
+
+        def testcode_pass
+          File.read(File.join(fixture_path,'codeblocks_pass.java'))
+        end
+      end
+
       def initialize(username,code)
         @username = username
         @classname = extract_classname(code)
@@ -18,10 +33,11 @@ module GameMachine
           raise "classname is nil"
         end
 
-        package_part = 'A' + Digest::MD5.hexdigest(username + code + Time.now.to_i.to_s)
+        package_part = 'A' + Digest::SHA256.hexdigest(username + code + Time.now.to_i.to_s)
         @outdir = File.join(GameMachine.app_root,'tmp',package_part)
         @package = "user.codeblocks.#{package_part}"
-        @code = "package #{@package};\n\n#{code}"
+        @code = remove_package(code)
+        @code = "package #{@package};\n\n#{@code}"
       end
 
       def package_path
@@ -36,34 +52,8 @@ module GameMachine
         File.join(outdir,package_path)
       end
 
-      def self.testcode
-        code = <<EOF
-        
-        import java.io.File;
-        import java.io.IOException;
-        import com.game_machine.codeblocks.api.*;
-
-        public class Myclass implements Codeblock {
-
-          public class MyInnerclass {
-            public void testit() {
-              System.out.println("MyInnerclass testit");
-            }
-          }
-
-          static class MyInnerStaticclass {}
-
-          public void run(Object message) throws Exception {
-            System.out.println("run Test");
-            Test.sendMessage("testing");
-            new MyInnerclass().testit();
-            System.setProperty("testing","true");
-            File file = new File("/tmp/testfile");
-            file.createNewFile();
-          }
-        }
-EOF
-        
+      def remove_package(code)
+        code.lines.select {|line| !line.match(/^\s*?package/)}.join('')
       end
 
       def extract_classname(code)
@@ -82,8 +72,7 @@ EOF
       end
 
       def compile
-        java.lang.System.setProperty("java.class.path",classpath)
-        result = JavaLib::CodeblockCompiler.memory_compile(code,"#{package}.#{classname}")
+        result = JavaLib::CodeblockCompiler.memory_compile(classpath,code,"#{package}.#{classname}")
         if result.is_compiled
           JavaLib::CodeblockCompiler.load_from_memory(result)
         else

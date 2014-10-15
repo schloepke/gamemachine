@@ -1,3 +1,7 @@
+
+# This actor sends other nodes updates about local players.  All local players are sent when a node joins
+# or becomes reachable again.  We also periodically send out a random sample of players to all nodes.  This helps ensure
+# all nodes have all players over time even in the case where some updates might get lost due to network issues.
 module GameMachine
   class ClientManagerUpdater < Actor::Base
 

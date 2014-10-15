@@ -68,7 +68,7 @@ public class CodeblockCompiler {
 		}
 	}
 
-	public static CompileResult memoryCompile(String code, String classname) {
+	public static CompileResult memoryCompile(String classpath, String code, String classname) {
 
 		CompileResult result = new CompileResult(classname);
 		JavaFileObject file = new JavaSourceFromString(classname, code);
@@ -80,7 +80,9 @@ public class CodeblockCompiler {
 		MemoryFileManager fileManager = new MemoryFileManager(compiler);
 
 		List<String> options = new ArrayList<String>();
-
+		options.add("-classpath");
+		options.add(classpath);
+		
 		JavaCompiler.CompilationTask task = compiler.getTask(null, fileManager, diagnostics, options, null,
 				compilationUnits);
 		if (task.call()) {

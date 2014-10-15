@@ -3,6 +3,19 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message Agent {
+  required string id = 1;
+  required string code = 2;
+  required string classname = 3;
+  required string playerId = 4;
+  optional bool remove = 5;
+}
+
+message AgentUpdate {
+  repeated Agent agent = 1;
+  repeated string nodes = 2;
+}
+
 message NodeStatus {
   required int32 containerId = 1;
   required string clusterName = 2;
