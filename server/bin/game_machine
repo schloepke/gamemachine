@@ -12,7 +12,8 @@ if ARGV.first == 'server' || ARGV.first == 's'
   unless classpath.match(/game_machine/)
     classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
     cmd = "jruby -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
-    system(cmd)
+    puts "Classpath not set, run again using the following commmand:\n#{cmd}"
+    #system(cmd)
     exit
   end
 end

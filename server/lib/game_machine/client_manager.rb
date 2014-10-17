@@ -36,6 +36,7 @@ module GameMachine
     end
 
     def self.send_to_player(message)
+      logger.debug("Sending #{message} to player #{message.player.id}")
       if local_players.has_key?(message.player.id)
         Actor::Base.find(message.player.id).tell(message)
       else

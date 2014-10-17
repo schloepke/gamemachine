@@ -72,29 +72,12 @@ module GameMachine
       end
 
       def compile
-        result = JavaLib::CodeblockCompiler.memory_compile(classpath,code,"#{package}.#{classname}")
+        result = JavaLib::CodeblockCompiler.compile(classpath,code,"#{package}.#{classname}")
         if result.is_compiled
-          JavaLib::CodeblockCompiler.load_from_memory(result)
+          JavaLib::CodeblockCompiler.load(result)
         else
           result.get_errors.each {|error| puts error}
           nil
-        end
-      end
-
-      def compile_file
-        java.lang.System.setProperty("java.class.path",classpath)
-        FileUtils.mkdir_p outdir
-        filename = File.join(outdir,"#{classname}.java")
-        File.open(filename,'w') {|f| f.write(code)}
-        if JavaLib::CodeblockCompiler.compile(outdir,filename)
-          classfile = classfile_for(classname)
-          if File.exists?(classfile)
-            puts "#{classfile} generated"
-            JavaLib::CodeblockCompiler.tryload(outdir,"#{package}.#{classname}")
-          else
-            puts "#{classfile} not found"
-            nil
-          end
         end
       end
 

@@ -2,13 +2,11 @@ module GameMachine
   module Endpoints
     class UdpOutgoing < Actor::Base
 
-      attr_reader :protocol, :client_connection, :client, :server, :player_id, :idle_timeout
+      attr_reader :connection, :client_connection, :player_id, :idle_timeout
       def post_init(*args)
-        @client_connection = args[0]
-        @client = args[1]
-        @server = args[2]
-        @player_id = args[3]
-        @protocol = args[4]
+        @connection = args[0]
+        @player_id = connection.player_id
+        @client_connection = connection.client_connection
         send_connected_message
         self.class.logger.debug "Player gateway created #{player_id}"
 
@@ -29,19 +27,7 @@ module GameMachine
       end
 
       def send_to_client(message)
-        #self.class.logger.info("Sending #{message} out via #{protocol}")
-        if protocol == 0
-          bytes = message.to_byte_array
-          server.sendToClient(
-            client[:address],
-            bytes,
-            client[:ctx]
-          )
-        else
-          client[:ctx].write(message)
-          client[:ctx].flush
-          JavaLib::UdpServerHandler.countOut.incrementAndGet
-        end
+        connection.send_to_client(message)
       end
 
       def unregister_if_idle

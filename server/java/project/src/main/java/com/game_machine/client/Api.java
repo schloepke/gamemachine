@@ -1,20 +1,23 @@
 package com.game_machine.client;
 
-import com.game_machine.client.agent.CodeblockRunner;
-
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
+
+import com.game_machine.client.agent.Config;
 
 
 public class Api {
 
-	private MessageApi messageApi;
 	private static ActorSystem actorSystem;
 	private String playerId;
+	private String authtoken;
+	private NetworkClient networkClient;
+	private Config conf = Config.getInstance();
 	
 	public Api(String playerId, String authtoken, NetworkClient networkClient) {
 		this.playerId = playerId;
-		this.messageApi = new MessageApi(playerId, authtoken, networkClient);
+		this.authtoken = authtoken;
+		this.networkClient = networkClient;
 	}
 	
 	public static void setActorSystem(ActorSystem actorSystem) {
@@ -37,8 +40,16 @@ public class Api {
 		return this.playerId;
 	}
 	
-	public MessageApi messaging() {
-		return this.messageApi;
+	public String getGameid() {
+		return conf.getGameId();
+	}
+	
+	public String getApiKey() {
+		return conf.getCloudApiKey();
+	}
+	
+	public ApiMessage newMessage() {
+		return new ApiMessage(playerId, authtoken, networkClient);
 	}
 
 }

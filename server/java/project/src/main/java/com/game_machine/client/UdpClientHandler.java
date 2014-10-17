@@ -7,6 +7,7 @@ import io.netty.channel.socket.DatagramPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import GameMachine.Messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.NetMessage;
@@ -26,10 +27,8 @@ public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket
     	byte[] bytes = new byte[msg.content().readableBytes()];
 		msg.content().readBytes(bytes);
 
-		NetMessage netMessage = new NetMessage(NetMessage.UDP, msg.sender().getHostString(), msg.sender().getPort(), ctx);
-		netMessage.bytes = bytes;
-		netMessage.address = msg.sender();
-		this.inbound.tell(netMessage,null);
+		ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
+		this.inbound.tell(clientMessage,null);
     }
 
     @Override

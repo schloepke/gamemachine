@@ -40,6 +40,7 @@ public class CodeblockExecutor {
 	    	}
 			return true;
 		} catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}
@@ -49,9 +50,10 @@ public class CodeblockExecutor {
 			run(codeblock, method, message);
 			return true;
 		} catch (AccessControlException | PrivilegedActionException e) {
-			// Log this somewhere
+			e.printStackTrace();
 			return false;
 		}catch (Exception e) {
+			e.printStackTrace();
 			return false;
 		}
 	}

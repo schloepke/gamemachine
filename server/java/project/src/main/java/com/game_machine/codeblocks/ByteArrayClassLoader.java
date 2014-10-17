@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 public class ByteArrayClassLoader extends ClassLoader {
 
 	private Map<String, Output> classes;
@@ -22,8 +23,10 @@ public class ByteArrayClassLoader extends ClassLoader {
 			add("javax.xml");
 			add("com.game_machine.codeblocks.api");
 			add("com.game_machine.client.Api");
+			add("com.game_machine.client.ApiMessage");
 			add("com.game_machine.client.agent.CodeblockEnv");
 			add("com.game_machine.client.agent.CodeblockRunner");
+			add("GameMachine.Messages");
 		}
 	};
 
@@ -49,8 +52,14 @@ public class ByteArrayClassLoader extends ClassLoader {
 	}
 
 	@Override
+    protected void finalize() throws Throwable {
+        super.finalize();
+        System.out.println(this.toString() + " - CL Finalized.");
+    }
+	
+	@Override
 	public Class<?> loadClass(String name) throws ClassNotFoundException {
-		System.out.println("loadClass " + name);
+		//System.out.println("loadClass " + name);
 		if (classes.containsKey(name)) {
 			return getClass(name);
 		} else if (name.startsWith("user.codeblocks")) {

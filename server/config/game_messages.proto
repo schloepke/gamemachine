@@ -10,6 +10,7 @@ persistent_message Player {
   optional string passwordHash = 4;
   optional string gameId = 5;
   optional int32 recordId = 6;
+  optional string role = 7;
 }
 
 message TrackData {

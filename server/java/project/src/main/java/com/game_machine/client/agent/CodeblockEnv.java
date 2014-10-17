@@ -7,12 +7,18 @@ public class CodeblockEnv {
 	private Api api;
 	private CodeblockRunner runner;
 	private int reloadCount = 0;
+	private String agentId;
 	
-	public CodeblockEnv(Api api, CodeblockRunner runner) {
+	public CodeblockEnv(Api api, CodeblockRunner runner, String agentId) {
 		this.api = api;
 		this.runner = runner;
+		this.agentId = agentId;
 	}
 
+	public String getAgentId() {
+		return this.agentId;
+	}
+	
 	public Api getApi() {
 		return api;
 	}

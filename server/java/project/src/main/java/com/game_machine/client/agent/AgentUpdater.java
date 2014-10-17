@@ -8,12 +8,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import scala.concurrent.duration.Duration;
 import GameMachine.Messages.Agent;
-import GameMachine.Messages.AgentUpdate;
+import GameMachine.Messages.AgentController;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 
@@ -27,8 +24,6 @@ public class AgentUpdater extends UntypedActor {
 	
 	private HashMap<String, String> agents = new HashMap<String, String>();
 	private HashMap<String, PlayerManager> playerManagers = new HashMap<String, PlayerManager>();
-	private static final Logger logger = LoggerFactory.getLogger(AgentUpdater.class);
-
 	public AgentUpdater() {
 		conf = Config.getInstance();
 	}
@@ -50,24 +45,23 @@ public class AgentUpdater extends UntypedActor {
 		CloudClient.getInstance().setCredentials(conf.getCloudHost(), conf.getCloudUser(), conf.getCloudApiKey());
 		CloudResponse cloudResponse;
 		try {
-			cloudResponse = CloudClient.getInstance().getAgents(conf.getGameId());
-			AgentUpdate agentUpdate = AgentUpdate.parseFrom(cloudResponse.byteBody);
-
-			List<String> nodes = agentUpdate.getNodesList();
+			cloudResponse = CloudClient.getInstance().getAgents(conf.getPlayerId());
+			AgentController agentController = AgentController.parseFrom(cloudResponse.byteBody);
+			String playerId = agentController.getPlayer().getId();
+			String authtoken = agentController.getPlayer().getAuthtoken();
+			
+			if (!playerManagers.containsKey(playerId)) {
+				PlayerManager playerManager = new PlayerManager(conf.getDefaultHost(), conf.getDefaultPort(), conf.getGameId(), playerId, authtoken);
+				playerManager.start();
+				playerManagers.put(playerId, playerManager);
+			}
+			
 			List<String> agentIds = new ArrayList<String>();
-			// String node = nodes.get(0);
-			if (agentUpdate.getAgentCount() >= 1) {
-				PlayerManager playerManager;
-				
-				for (Agent a : agentUpdate.getAgentList()) {
-					if (!playerManagers.containsKey(a.playerId)) {
-						playerManager = new PlayerManager(conf.getDefaultHost(), conf.getDefaultPort(), a.playerId, conf.getCloudApiKey());
-						playerManager.start();
-						playerManagers.put(a.playerId, playerManager);
-					}
+			if (agentController.getAgentCount() >= 1) {
+				for (Agent a : agentController.getAgentList()) {
 					agentIds.add(a.id);
-					agents.put(a.id,a.playerId);
-					ActorSelection sel = Api.getActorByName(a.playerId);
+					agents.put(a.id,playerId);
+					ActorSelection sel = Api.getActorByName(playerId);
 					sel.tell(a, null);
 				}
 			} else {
@@ -75,7 +69,6 @@ public class AgentUpdater extends UntypedActor {
 			}
 			pruneAgents(agentIds);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

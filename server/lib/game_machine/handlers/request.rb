@@ -19,10 +19,7 @@ module GameMachine
               game_handler.tell(message)
             else
               if ENV['CLUSTER_TEST']
-                player_service = GameMachine::JavaLib::PlayerService.get_instance
-                unless player = player_service.find(message.player.id)
-                  player_service.create(message.player.id,'cluster_test')
-                end
+                ensure_test_user(message.player)
               end
               if @auth_handler.authenticate!(message.player)
                 register_client(message)
@@ -40,6 +37,13 @@ module GameMachine
       end
 
       private
+
+      def ensure_test_user(player)
+        player_service = GameMachine::JavaLib::PlayerService.get_instance
+        unless player = player_service.find(player.id)
+          player_service.create(player.id,'cluster_test')
+        end
+      end
 
       def update_entities(message)
         if message.get_entity_list

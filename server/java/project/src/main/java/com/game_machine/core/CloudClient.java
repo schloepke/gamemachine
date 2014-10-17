@@ -87,8 +87,8 @@ public class CloudClient {
 		return httpClient.execute(request, new ByteArrayResponseHandler());
 	}
 	
-	public CloudResponse login(String gameId, String username, String password) throws ClientProtocolException, IOException {
-		String url = "http://" + host + "/api/agent/login/" + gameId +"/"+ username +"/"+ password;
+	public CloudResponse getNode(String gameId) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/getnode/"+gameId;
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpGet request = new HttpGet(url);
 		return httpClient.execute(request, new StringResponseHandler());

@@ -250,7 +250,12 @@ module GameMachine
       end
 
       def send_private_message(chat_message)
-        self.class.logger.debug "Sending private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
+        self.class.logger.debug "Sending private chat message #{chat_message.message} from:#{chat_id} to:#{chat_message.chat_channel.name}"
+        unless can_send_to_player?(chat_id,chat_message.chat_channel.name)
+          self.class.logger.info "Private chat denied, mismatched game id"
+          return
+        end
+
         entity = MessageLib::Entity.new
         player = MessageLib::Player.new.set_id(chat_message.chat_channel.name)
         entity.set_id(player.id)
@@ -258,7 +263,17 @@ module GameMachine
         entity.set_chat_message(chat_message)
         entity.set_send_to_player(true)
         commands.player.send_message(entity,player.id)
-        self.class.logger.debug "Sent private chat message #{chat_message.message} to #{chat_message.chat_channel.name}"
+        self.class.logger.debug "Sent private chat message #{chat_message.message} from:#{chat_id} to:#{chat_message.chat_channel.name}"
+      end
+
+      def can_send_to_player?(sender_id,recipient_id)
+        player_service = JavaLib::PlayerService.get_instance
+        if recipient_player = player_service.find(recipient)
+          if recipient_player.get_game_id == game_id
+            return true
+          end
+        end
+        false
       end
 
       def send_group_message(chat_message)

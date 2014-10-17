@@ -1,5 +1,6 @@
 package com.game_machine.client.agent;
 
+import java.security.Permissions;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import com.game_machine.codeblocks.CodeblockCompiler;
 import com.game_machine.codeblocks.CodeblockExecutor;
 import com.game_machine.codeblocks.api.Codeblock;
 
+
 public class CodeblockRunner extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(CodeblockRunner.class);
@@ -25,21 +27,23 @@ public class CodeblockRunner extends UntypedActor {
 	private String agentId;
 
 	public CodeblockRunner(Api api, Agent agent) {
+		Permissions permissions = new Permissions();
+		permissions.add(new java.net.SocketPermission("*:24130", "connect,resolve"));
 		this.executor = new CodeblockExecutor();
-		this.executor.setPerms();
+		this.executor.setPerms(permissions);
 		this.code = agent.code;
 		this.classname = agent.classname;
 		this.agentId = agent.id;
-		this.codeblockEnv = new CodeblockEnv(api,this);
+		this.codeblockEnv = new CodeblockEnv(api,this,agent.id);
 		updateCodeblock();
 	}
 
 	private void updateCodeblock() {
 		String classpath = System.getProperty("java.class.path");
-		CodeblockCompiler.CompileResult compileResult = CodeblockCompiler.memoryCompile(classpath, this.code,
+		CodeblockCompiler.CompileResult compileResult = CodeblockCompiler.compile(classpath, this.code,
 				this.classname);
 		if (compileResult.isCompiled()) {
-			Codeblock codeblock = CodeblockCompiler.loadFromMemory(compileResult);
+			Codeblock codeblock = CodeblockCompiler.load(compileResult);
 			logger.info("New codeblock " + codeblock.toString());
 			if (codeblock != null) {
 				if (this.codeblock != null) {
@@ -100,7 +104,7 @@ public class CodeblockRunner extends UntypedActor {
 			return;
 		}
 
-		logger.debug("Agent "+agentId+": running codeblock");
+		logger.debug("Agent "+agentId+": running codeblock with "+message.toString());
 		this.executor.runRestricted(this.codeblock, "run", message);
 	}
 }

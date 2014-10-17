@@ -1,6 +1,7 @@
 package com.game_machine.client;
 
-import akka.actor.ActorSystem;
+import GameMachine.Messages.ChatChannel;
+import GameMachine.Messages.ChatMessage;
 import GameMachine.Messages.ClientMessage;
 import GameMachine.Messages.EchoTest;
 import GameMachine.Messages.Entity;
@@ -11,16 +12,15 @@ import GameMachine.Messages.PlayerConnect;
 import GameMachine.Messages.PlayerLogout;
 
 
-public class MessageApi {
+public class ApiMessage {
 
 	private String playerId;
 	private String authtoken;
 	private String defaultId = "0";
 	private ClientMessage currentMessage;
 	private NetworkClient networkClient;
-	private static ActorSystem actorSystem;
 	
-	public MessageApi(String playerId, String authtoken, NetworkClient networkClient) {
+	public ApiMessage(String playerId, String authtoken, NetworkClient networkClient) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.networkClient = networkClient;
@@ -35,13 +35,38 @@ public class MessageApi {
 		this.currentMessage = null;
 	}
 	
-	public MessageApi echoTest() {
+	public ApiMessage setGroupChatMessage(String channel, String message) {
+		return setChatMessage("group",channel,message);
+	}
+	
+	public ApiMessage setPrivateChatMessage(String recipientId, String message) {
+		return setChatMessage("private",recipientId,message);
+	}
+	
+	public ApiMessage setChatMessage(String type, String channel, String message) {
+		ChatMessage chatMessage = new ChatMessage();
+		ChatChannel chatChannel = new ChatChannel();
+		chatChannel.setName(channel);
+		chatMessage.setChatChannel(chatChannel);
+		chatMessage.setMessage(message);
+		chatMessage.setType(type);
+		chatMessage.setSenderId(playerId);
+		currentMessage = clientMessage().addEntity(entity().setChatMessage(chatMessage));
+		return this;
+	}
+	
+	public ApiMessage setDestination(String destination) {
+		currentMessage.getEntity(0).setDestination(destination);
+		return this;
+	}
+	
+	public ApiMessage setEchoTest() {
 		EchoTest echoTest = new EchoTest().setMessage("echo");
 		currentMessage = clientMessage().addEntity(entity().setEchoTest(echoTest));
 		return this;
 	}
 	
-	public MessageApi gameMessage(GameMessage gameMessage) {
+	public ApiMessage setGameMessage(GameMessage gameMessage) {
 		GameMessages gameMessages = new GameMessages();
 		gameMessages.addGameMessage(gameMessage);
 		Entity entity = entity();
@@ -63,23 +88,23 @@ public class MessageApi {
 		return clientMessage;
 	}
 	
-	public MessageApi connect() {
+	public ApiMessage setConnect() {
 		currentMessage =  clientMessage().setPlayerConnect(new PlayerConnect());
 		return this;
 	}
 	
-	public MessageApi logout() {
+	public ApiMessage setLogin(String password) {
+		PlayerConnect playerConnect = new PlayerConnect();
+		playerConnect.setPlayerId(this.playerId).setPassword(password);
+		currentMessage =  clientMessage().setPlayerConnect(new PlayerConnect());
+		return this;
+	}
+	
+	public ApiMessage setLogout() {
 		PlayerLogout playerLogout = new PlayerLogout();
 		playerLogout.setAuthtoken(authtoken).setPlayerId(playerId);
 		currentMessage = clientMessage().setPlayerLogout(playerLogout);
 		return this;
 	}
 
-	public static ActorSystem getActorSystem() {
-		return actorSystem;
-	}
-
-	public static void setActorSystem(ActorSystem actorSystem) {
-		MessageApi.actorSystem = actorSystem;
-	}
 }

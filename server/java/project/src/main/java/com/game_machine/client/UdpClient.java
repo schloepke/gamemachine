@@ -49,6 +49,11 @@ public final class UdpClient implements Runnable, NetworkClient {
     
     public void stop() {
     	channel.close();
+		try {
+			channel.closeFuture().await();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
     }
     
     public void start() {

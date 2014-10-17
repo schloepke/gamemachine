@@ -35,8 +35,10 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	public void setDisconnected() {
-		this.connected = false;
-		logger.warn("Disconnected");
+		if (isConnected()) {
+			this.connected = false;
+			logger.warn("Disconnected");
+		}
 	}
 
 	public boolean isConnected() {
@@ -44,25 +46,27 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	public void setConnected() {
+		if (!isConnected()) {
+			logger.info("Connected");
+		}
 		lastUpdate = System.currentTimeMillis();
 		this.connected = true;
-		logger.info("Connected");
+		
 	}
 
 	public void ping() {
-		api.messaging().echoTest().send();
+		api.newMessage().setEchoTest().send();
 	}
 
 	public void connect() {
-		api.messaging().connect().send();
+		api.newMessage().setConnect().send();
 	}
 
 	public void logout() {
-		api.messaging().logout().send();
+		api.newMessage().setLogout().send();
 	}
 
 	public void handleEntities(ClientMessage clientMessage, Player player) {
-
 		for (Entity entity : clientMessage.getEntityList()) {
 			if (entity.hasGameMessages()) {
 				for (GameMessage gameMessage : entity.getGameMessages().getGameMessageList()) {
@@ -129,9 +133,8 @@ public class PlayerActor extends UntypedActor {
 			return;
 		}
 
-		if (message instanceof NetMessage) {
-			NetMessage netMessage = (NetMessage) message;
-			ClientMessage clientMessage = ClientMessage.parseFrom(netMessage.bytes);
+		if (message instanceof ClientMessage) {
+			ClientMessage clientMessage = (ClientMessage)message;
 			Player player = clientMessage.player;
 
 			if (clientMessage.hasPlayerConnected()) {
@@ -143,10 +146,6 @@ public class PlayerActor extends UntypedActor {
 			if (clientMessage.getEntityCount() >= 1) {
 				handleEntities(clientMessage, player);
 			}
-
-		} else if (message instanceof ClientMessage) {
-			ClientMessage clientMessage = (ClientMessage) message;
-			api.messaging().sendBytes(clientMessage.toByteArray());
 		} else if (message instanceof String) {
 			String imsg = (String) message;
 			if (imsg.equals("check_connection")) {

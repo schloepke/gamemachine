@@ -43,9 +43,20 @@ module GameMachine
         )
         client_message.set_client_connection(client_connection)
 
+        # Login via player connect.  We send a response on success only
+        if client_message.has_player_connect
+          if client_message.get_player_connect.has_password
+            client = create_client(message,client_connection)
+            connection = create_connection(message.protocol,client_connection,client,@server,client_message.player.id)
+            if outgoing_client_message = login(client_message)
+              connection.send_to_client(outgoing_client_message)
+            end
+            return
+          end
+        end
+
         # Ensure we kill the player gateway actor on logout or on new connection
         if client_message.has_player_logout || client_message.has_player_connect
-
           # Ensure valid authtoken before doing anything
           unless @auth_handler.valid_authtoken?(client_message.player)
             if client_message.has_player_logout
@@ -61,15 +72,10 @@ module GameMachine
           
           if client_message.has_player_connect
             unless self.class.clients.has_key?(client_message.player.id)
-              client = {
-                :host => message.host,
-                :port => message.port,
-                :address => message.address,
-                :ctx => message.ctx,
-                :client_connection => client_connection
-              }
+              client = create_client(message,client_connection)
               self.class.clients[client_message.player.id] = client
-              create_child(message.protocol,client_connection,client,@server,client_message.player.id)
+              connection = create_connection(message.protocol,client_connection,client,@server,client_message.player.id)
+              create_child(connection)
             end
           end
         end
@@ -81,10 +87,36 @@ module GameMachine
         self.class.logger.error "#{self.class.name} #{e.to_s}"
       end
 
-      def create_child(protocol,client_connection,client,server,player_id)
-        builder = Actor::Builder.new(Endpoints::UdpOutgoing,client_connection,client,server,player_id,protocol)
-        builder.with_name(player_id).start
-        self.class.logger.debug "Starting UdpOutgoing actor #{player_id}"
+      def create_client(message,client_connection)
+        {
+          :host => message.host,
+          :port => message.port,
+          :address => message.address,
+          :ctx => message.ctx,
+          :client_connection => client_connection
+        }
+      end
+
+      def create_connection(protocol,client_connection,client,server,player_id)
+        Connection.new(client_connection,client,server,player_id,protocol)
+      end
+
+      def login(client_message)
+        client_message = client_message.clone
+        player_connect = client_message.get_player_connect
+        if authtoken = Handlers::PlayerAuthentication.instance.authorize(player_connect.get_player_id,player_connect.get_password)
+          player_authenticated = MessageLib::PlayerAuthenticated.new.set_player_id(player_connect.get_player_id).set_authtoken(authtoken)
+          client_message.set_player_connect(null)
+          client_message.set_player_authenticated(player_authenticated)
+          return client_message
+        end
+        nil
+      end
+
+      def create_child(connection)
+        builder = Actor::Builder.new(Endpoints::UdpOutgoing,connection)
+        builder.with_name(connection.player_id).start
+        self.class.logger.debug "Starting UdpOutgoing actor #{connection.player_id}"
       end
 
       def destroy_child(player_id)
