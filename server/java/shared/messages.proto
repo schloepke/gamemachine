@@ -1,0 +1,480 @@
+package Client.Messages;
+option optimize_for = SPEED;
+
+
+// Used to by the entity tracking system to attack additional fields to your
+// tracking updates.  You can change any of the fields in TrackData to suit your
+// needs, but do NOT remove the message definition!
+
+message Player {
+  required string id = 1;
+  optional bool authenticated = 2;
+  optional string authtoken = 3;
+  optional string passwordHash = 4;
+  optional string gameId = 5;
+  optional int32 recordId = 6;
+  optional string role = 7;
+}
+
+message TrackData {
+  optional float speed = 1;
+  optional float velocity = 2;
+  optional Vector3 direction = 3;
+  optional string json = 4;
+  optional string id = 5;
+  optional float x = 6;
+  optional float y = 7;
+  optional float z = 8;
+  optional string entityType = 9;
+  optional string neighborEntityType = 11;
+  optional int32 action = 12;
+}
+
+message GameMessage {
+  // Used internally, do not change
+  optional string playerId = 1;
+  optional string messageId = 2;
+  optional int32 destinationId = 3;
+  optional string destination = 4;
+  optional string agentId = 5;
+
+  // User modifiable
+  optional PlayerItems playerItems = 10;
+  optional AddPlayerItem addPlayerItem = 11;
+  optional RemovePlayerItem removePlayerItem = 12;
+  optional RequestPlayerItems requestPlayerItems = 13;
+}
+
+message GameMessages {
+  repeated GameMessage gameMessage = 1;
+}
+
+// Inventory messages
+
+message PlayerItem {
+  required string id = 1;
+  required string name = 2;
+  required int32 quantity = 3;
+  optional string color = 4;
+  optional Weapon weapon = 5;
+  optional Consumable consumable = 6;
+  optional Cost cost = 8;
+  optional string playerId = 9;
+  optional int32 recordId = 10;
+}
+
+
+message Cost {
+  required float amount = 1;
+  required string currency = 2;
+}
+
+message Consumable {
+  required string type = 1;
+  required string size = 2;
+}
+
+message Weapon {
+  required int32 attack = 1;
+  required int32 delay = 2;
+}
+
+message RequestPlayerItems {
+  optional bool catalog = 1;
+}
+
+message PlayerItems {
+  optional bool catalog = 1;
+  repeated PlayerItem playerItem = 2;
+}
+
+message AddPlayerItem {
+  required PlayerItem playerItem = 1;
+}
+
+message RemovePlayerItem {
+  required string id = 1;
+  required int32 quantity = 2;
+}
+
+// For testing
+message TestObject {
+  required string id = 12;
+  optional string optionalString = 1;
+  required string requiredString = 2;
+  repeated int32 numbers = 3;
+  optional bytes bstring = 4;
+  optional bool bvalue = 5;
+  optional double dvalue = 6;
+  optional float fvalue = 7;
+  optional int64 numbers64 = 8;
+  repeated Player player = 9;
+  optional int32 recordId = 10;
+  
+}
+
+message Agent {
+  required string id = 1;
+  required string code = 2;
+  required string classname = 3;
+  optional bool remove = 5;
+  required string compileResult = 6; 
+}
+
+message AgentController {
+  repeated Agent agent = 1;
+  required Player player = 2;
+  required string gameId = 3;
+}
+
+message NodeStatus {
+  required int32 containerId = 1;
+  required string clusterName = 2;
+  required int32 lastUpdated = 3;
+  required string hostname = 4;
+  required int32 port = 5;
+  required int32 clientCount = 6;
+  required double loadAverage = 7;
+  required int32 heapUsed = 8;
+}
+
+message NodeStatuses {
+  repeated NodeStatus nodeStatus = 1;
+}
+
+message MonoMessage {
+  optional Entity entity = 1;
+  optional string klass = 2;
+}
+
+message DeliveryConfirmation {
+  required string messageId = 1;
+}
+
+message TrackEntity {
+  required bool value = 1;
+  optional bool internal = 2;
+  optional TrackData trackData = 3;
+}
+
+message PlayerLogout {
+  required string playerId = 1;
+  optional string authtoken = 2;
+}
+
+message PlayerConnect {
+  optional string playerId = 1;
+  optional string password = 2; 
+}
+
+message PlayerConnected {
+  optional int32 notused = 1;
+}
+
+message PlayerAuthenticated {
+  required string playerId = 1;
+  required string authtoken = 2;
+}
+
+message ErrorMessage {
+  required string code = 1;
+  required string message = 2;
+}
+
+message ChatInvite {
+  required string invitee = 1;
+  required string inviter = 2;
+  required string channelName = 4;
+  required string invite_id = 5;
+}
+
+message ChatBanned {
+  required string banned_id = 1;
+  required string channelNname = 2;
+  optional string reason = 3;
+}
+
+message ChatBannedList {
+  repeated ChatBanned chatBanned = 1;
+}
+
+message ChatChannels {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message ChatChannel {
+  required string name = 1;
+  optional Subscribers subscribers = 2;
+  optional string flags = 3;
+  optional string invite_id = 5;
+}
+
+message ChatRegister {
+  required string chatId = 1;
+  required string registerAs = 2;
+}
+
+message JoinChat {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message LeaveChat {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message ChatMessage {
+  required ChatChannel chatChannel = 1;
+  required string message = 2;
+  required string type = 3;
+  optional string senderId = 4;
+  optional Entity entity = 5;
+}
+
+message ChatStatus {
+  optional int32 notused = 1;
+}
+
+message ChatDestroy {
+  required string playerId = 1;
+}
+
+message ClientEvent {
+  required string event = 1;
+  required string clientId = 2;
+  required string senderId = 3;
+  optional string playerId = 4;
+}
+
+message ClientEvents {
+  repeated ClientEvent clientEvent = 1;
+}
+
+message ClientManagerUnregister {
+  optional string registerType = 1;
+  optional string name = 2;
+}
+
+message ClientManagerRegister {
+  optional string events = 1;
+  optional string registerType = 2;
+  optional string name = 3;
+}
+
+message ClientManagerEvent {
+  required string client_id = 1;
+  required string player_id = 2;
+  required string event = 3;
+}
+
+message Subscribers {
+  repeated string subscriberId = 1;
+}
+
+message Subscribe {
+  optional string topic = 1;
+  required string gameId = 2;
+}
+
+message Unsubscribe {
+  required string topic = 1;
+  required string gameId = 2;
+}
+
+message Publish {
+  optional string topic = 1;
+  required Entity message = 2;
+  optional string path = 3;
+  required string gameId = 4;
+}
+
+message ObjectdbDel {
+  required string entityId = 1;
+}
+
+message ObjectdbGet {
+  required string entityId = 1;
+  optional string playerId = 2;
+  optional string klass = 3;
+}
+
+message ObjectdbGetResponse {
+  required bool entityFound = 1;
+}
+
+message ObjectdbPut {
+  required Entity entity = 1;
+}
+
+message ObjectdbUpdate {
+  required string currentEntityId = 1;
+  optional string updateClass = 2;
+  required string updateMethod = 3;
+  required Entity updateEntity = 4;
+}
+
+message ClientConnection {
+  required string id = 1;
+  optional string gateway = 2;
+  optional string server = 3;
+  optional string type = 4;
+}
+
+message Name {
+  required string value = 1;
+}
+
+
+
+message Vector3 {
+  optional float x = 1;
+  optional float y = 2;
+  optional float z = 3;
+  optional int32 xi = 4;
+  optional int32 yi = 5;
+  optional int32 zi = 6;
+}
+
+message Polygon {
+  repeated Vector3 vertex = 1;
+}
+
+message Mesh {
+  repeated Polygon polygon = 1;
+}
+
+message Quaternion {
+  optional float w = 1;
+  optional float x = 2;
+  optional float y = 3;
+  optional float z = 4;
+  optional int32 wi = 5;
+  optional int32 xi = 6;
+  optional int32 yi = 7;
+  optional int32 zi = 8;
+}
+
+message Transform {
+  optional Vector3 vector3 = 1;
+  optional Quaternion quaternion = 2;
+}
+
+message EchoTest {
+  required string message = 1;
+}
+  
+message Neighbors {
+  repeated TrackData trackData = 1;
+}
+
+message Neighbor {
+  optional TrackData trackData = 1;
+  required Vector3 location = 2;
+  required string id = 3;
+}
+
+message GetNeighbors {
+  optional uint32 search_radius = 2;
+  required Vector3 vector3 = 3;
+  optional string neighborType = 4;
+  optional string gridName = 5;
+}
+
+message NativeBytes {
+  optional bytes bytes = 1;
+  repeated bytes byteArray = 2;
+}
+
+message CloudQueryResponse {
+  required string format = 1;
+  repeated string messageId = 2;
+  repeated bytes byteMessage = 3;
+  repeated string jsonMessage = 4;
+}
+
+message JsonEntity {
+  required string json = 1;
+  optional string klass = 2;
+}
+
+message JsonStorage {
+  required string json = 1;
+}
+
+message Regions {
+  required string regions = 1;
+}
+
+message PoisonPill {
+  optional int32 notused = 1;
+}
+
+message Entity {
+  optional Neighbors neighbors = 2;
+  optional ChatMessage chatMessage = 4;
+  optional ClientConnection clientConnection = 5;
+  optional EchoTest echoTest = 6;
+  required string id = 7;
+  optional Subscribe subscribe = 9;
+  optional Publish publish = 10;
+  optional ChatChannel chatChannel = 11;
+  optional JoinChat joinChat = 12;
+  optional LeaveChat leaveChat = 13;
+  optional Unsubscribe unsubscribe = 14;
+  optional ChatRegister chatRegister = 15;
+  optional ChatChannels chatChannels = 16;
+  optional ErrorMessage errorMessage = 17;
+  optional GetNeighbors getNeighbors = 21;
+  optional TrackEntity trackEntity = 22;
+  optional Transform transform = 23;
+  optional Vector3 vector3 = 25;
+  optional EntityList entityList = 27;
+  optional bool  published = 29;
+  optional string entityType = 30;
+  optional PlayerAuthenticated playerAuthenticated = 37;
+  optional PlayerLogout playerLogout = 38;
+  optional bool sendToPlayer = 39;
+  optional Subscribers subscribers = 41;
+  optional bool save = 42;
+  optional ObjectdbGetResponse objectdbGetResponse = 44;
+  optional NativeBytes nativeBytes = 45;
+  optional ObjectdbGet objectdbGet = 46;
+  optional JsonEntity jsonEntity = 47;
+  optional string destination = 48;
+  optional bool json = 49;
+  optional string params = 50;
+  optional ChatStatus chatStatus = 51;
+  optional ChatBannedList chatBannedList = 52;
+  optional ChatInvite chatInvite = 53;
+  optional ClientManagerRegister clientManagerRegister = 54;
+  optional ClientManagerUnregister clientManagerUnregister = 55;
+  optional ClientEvent clientEvent = 56;
+  optional ClientEvents clientEvents = 57;
+  optional JsonStorage jsonStorage = 58;
+  optional ClientManagerEvent clientManagerEvent = 59;
+  optional Regions regions = 60;
+  optional bool fastpath = 61;
+  optional PoisonPill poisonPill = 62;
+  optional string senderId = 63;
+  optional Player player = 1000;
+optional TrackData trackData = 1001;
+optional GameMessage gameMessage = 1002;
+optional GameMessages gameMessages = 1003;
+optional PlayerItems playerItems = 1004;
+optional TestObject testObject = 1005;
+}
+
+message EntityList {
+  repeated Entity entity = 1;
+}
+
+message ClientMessage {
+  repeated Entity entity = 1;
+  optional Player player = 2;
+  optional ClientConnection clientConnection = 4;
+  optional PlayerLogout playerLogout = 5;
+  optional ErrorMessage errorMessage = 6;
+  optional PlayerConnect playerConnect = 7;
+  optional PlayerConnected playerConnected = 8;
+  optional int32 connection_type = 9;
+  optional bool fastpath = 10;
+}

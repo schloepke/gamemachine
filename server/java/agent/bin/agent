@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+declare quiet="false"
+
+while true; do
+  case "$1" in
+    -q | --quiet ) quiet="true"; shift ;;
+    * ) break ;;
+  esac
+done
+
+declare AKKA_HOME="$(cd "$(cd "$(dirname "$0")"; pwd -P)"/..; pwd)"
+
+[ -n "$JAVA_OPTS" ] || JAVA_OPTS="-Xmx30m  -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
+
+[ -n "$AKKA_CLASSPATH" ] || AKKA_CLASSPATH="$AKKA_HOME/config:$AKKA_HOME/lib/akka/*:$AKKA_HOME/deploy/*"
+
+java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Djava.security.policy="$AKKA_HOME/config/agent.policy" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet akka.kernel.Main com.game_machine.client.agent.Runner

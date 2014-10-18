@@ -62,7 +62,7 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'org.fusesource:sigar:1.6.4'
   compile 'com.google.guava:guava:18.0'
-  
+  compile project(':game_machine_shared')
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

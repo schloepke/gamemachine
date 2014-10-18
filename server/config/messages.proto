@@ -8,6 +8,7 @@ message Agent {
   required string code = 2;
   required string classname = 3;
   optional bool remove = 5;
+  required string compileResult = 6; 
 }
 
 message AgentController {
@@ -56,7 +57,9 @@ message PlayerConnect {
   optional string password = 2; 
 }
 
-message PlayerConnected {}
+message PlayerConnected {
+  optional int32 notused = 1;
+}
 
 message PlayerAuthenticated {
   required string playerId = 1;
@@ -118,6 +121,7 @@ message ChatMessage {
 }
 
 message ChatStatus {
+  optional int32 notused = 1;
 }
 
 message ChatDestroy {
@@ -290,7 +294,9 @@ message Regions {
   required string regions = 1;
 }
 
-message PoisonPill {}
+message PoisonPill {
+  optional int32 notused = 1;
+}
 
 message Entity {
   optional Neighbors neighbors = 2;

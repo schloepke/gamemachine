@@ -11,7 +11,8 @@ if ARGV.first == 'server' || ARGV.first == 's'
   classpath = java.lang.System.get_property("java.class.path")
   unless classpath.match(/game_machine/)
     classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
-    cmd = "jruby -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
+    gc_opts = "-J-XX:+UseParNewGC -J-XX:MaxTenuringThreshold=2 -J-XX:SurvivorRatio=8 -J-XX:+UnlockDiagnosticVMOptions -J-XX:ParGCCardsPerStrideChunk=32768 -J-XX:+UseConcMarkSweepGC -J-XX:+ParallelRefProcEnabled -J-XX:+CMSClassUnloadingEnabled  -J-XX:CMSInitiatingOccupancyFraction=80 -J-XX:+UseCMSInitiatingOccupancyOnly"
+    cmd = "jruby #{gc_opts} -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
     puts "Classpath not set, run again using the following commmand:\n#{cmd}"
     #system(cmd)
     exit
