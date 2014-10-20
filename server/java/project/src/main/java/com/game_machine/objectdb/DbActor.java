@@ -10,7 +10,9 @@ import GameMachine.Messages.ObjectdbDel;
 import GameMachine.Messages.ObjectdbGet;
 import GameMachine.Messages.ObjectdbPut;
 import GameMachine.Messages.ObjectdbUpdate;
+import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
+import akka.actor.Props;
 import akka.actor.UntypedActor;
 
 import com.game_machine.api.MemoryMap;
@@ -23,9 +25,14 @@ public class DbActor extends UntypedActor {
 	private static HashMap<Class<?>, Method> methods = new HashMap<Class<?>, Method>();
 	private static HTreeMap<String, byte[]> cache = new MemoryMap(0.100).getMap();
 	private Store store;
+	private ActorRef writeBehindCache;
+	private boolean cacheEnabled = false;
 
 	public DbActor() {
 		this.store = Store.getInstance();
+		if (store.getCacheWriteInterval() >= 1 || store.getCacheWritesPerSecond() >= 1) {
+			cacheEnabled = true;
+		}
 		// MemoryMap memoryMap = new MemoryMap(0.100);
 		// cache = memoryMap.getMap();
 	}
@@ -36,19 +43,20 @@ public class DbActor extends UntypedActor {
 
 	private void setMessage(String id, PersistableMessage message) {
 		cache.put(id, message.toByteArray());
-		store.set(id, message);
-		// ActorSelection sel =
-		// ActorUtil.findDistributed("GameMachine::WriteBehindCache", id);
-		// sel.tell(message, getSelf());
+		if (cacheEnabled) {
+			writeBehindCache.tell(message, getSelf());
+		} else {
+			store.set(id, message);
+		}
 	}
 
 	public void setEntity(Entity entity) {
 		cache.put(entity.getId(), entity.toByteArray());
-		store.set(entity.getId(), entity);
-		// ActorSelection sel =
-		// ActorUtil.findDistributed("GameMachine::WriteBehindCache",
-		// entity.getId());
-		// sel.tell(entity, getSelf());
+		if (cacheEnabled) {
+			writeBehindCache.tell(entity, getSelf());
+		} else {
+			store.set(entity.getId(), entity);
+		}
 	}
 
 	public void deleteEntity(String id) {
@@ -99,6 +107,18 @@ public class DbActor extends UntypedActor {
 			setMessage(persistable.getId(), persistable);
 			getSender().tell(true, getSelf());
 		}
+	}
+
+	@Override
+	public void preStart() {
+		if (cacheEnabled) {
+			createCacheChild();
+		}
+	}
+
+	private void createCacheChild() {
+		String name = "write_behind_cache_" + getSelf().path().name();
+		writeBehindCache = context().actorOf(Props.create(WriteBehindCache.class, store), name);
 	}
 
 }

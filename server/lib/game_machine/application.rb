@@ -10,9 +10,12 @@ module GameMachine
 
       def data_store
         store = DbLib::Store.get_instance
-        store_name = config.datastore.store
-        serialization = config.datastore.serialization
-        store.connect(store_name,serialization)
+        store.connect(
+          config.datastore.store,
+          config.datastore.serialization,
+          config.datastore.cache_writes_per_second,
+          config.datastore.cache_write_interval
+        )
       end
 
       def akka
@@ -162,7 +165,7 @@ module GameMachine
         if config.datastore.store == 'gamecloud'
           Actor::Builder.new(CloudUpdater).start
         end
-        
+
         Actor::Builder.new(SystemStats).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(SystemMonitor).start
