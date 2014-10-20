@@ -24,6 +24,7 @@ RSpec.configure do |config|
   config.before(:each) do
     GameMachine::AppConfig.instance.load_config
     GameMachine::Application.create_grids
+    GameMachine::Application.data_store
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers
@@ -33,6 +34,7 @@ RSpec.configure do |config|
 
   config.after(:each) do
     GameMachine::Application.stop_actor_system
+    GameMachine::DbLib::Store.get_instance.shutdown
   end
 
   config.after(:suite) do

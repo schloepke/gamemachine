@@ -22,6 +22,21 @@ module GameMachine
     def set_java_config
       JavaLib::AppConfig.set_env(GameMachine.env)
       JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)
+      JavaLib::AppConfig::Gamecloud.set_host(config.gamecloud.host)
+      JavaLib::AppConfig::Gamecloud.set_user(config.gamecloud.user)
+      JavaLib::AppConfig::Gamecloud.set_api_key(config.gamecloud.api_key)
+
+      JavaLib::AppConfig::Jdbc.set_hostname(config.jdbc.hostname)
+      JavaLib::AppConfig::Jdbc.set_port(config.jdbc.port)
+      JavaLib::AppConfig::Jdbc.set_database(config.jdbc.database)
+      JavaLib::AppConfig::Jdbc.set_username(config.jdbc.username)
+      JavaLib::AppConfig::Jdbc.set_password(config.jdbc.password)
+      JavaLib::AppConfig::Jdbc.set_ds(config.jdbc.ds)
+      JavaLib::AppConfig::Jdbc.set_driver(config.jdbc.driver)
+
+      JavaLib::AppConfig::Couchbase.set_bucket(config.couchbase.bucket)
+      JavaLib::AppConfig::Couchbase.set_password(config.couchbase.password)
+      JavaLib::AppConfig::Couchbase.set_servers(config.couchbase.servers)
     end
 
     def set_config_from_env

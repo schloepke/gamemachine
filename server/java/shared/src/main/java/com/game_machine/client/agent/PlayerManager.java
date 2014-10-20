@@ -7,9 +7,10 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 
-import com.game_machine.client.Api;
 import com.game_machine.client.NetworkClient;
 import com.game_machine.client.SimpleUdpClient;
+import com.game_machine.client.api.Api;
+import com.game_machine.client.api.Cloud;
 
 public class PlayerManager {
 
@@ -32,7 +33,7 @@ public class PlayerManager {
 	
 	public void start() {
 		Config conf = Runner.getConfig();
-		String nodeHost = CloudHttp.getNode(conf.getCloudHost(), this.gameId);
+		String nodeHost = new Cloud().getNode();
 		if (nodeHost != null) {
 			host = nodeHost;
 			logger.info("Node host="+host);

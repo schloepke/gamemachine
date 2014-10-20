@@ -39,9 +39,11 @@ module GameMachine
       private
 
       def ensure_test_user(player)
+        self.class.logger.info("entering ensure_test_user")
         player_service = GameMachine::JavaLib::PlayerService.get_instance
-        unless player = player_service.find(player.id)
+        if player_service.find(player.id)
           player_service.create(player.id,'cluster_test')
+          self.class.logger.info("Test user #{player.id} created")
         end
       end
 

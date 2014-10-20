@@ -1,4 +1,4 @@
-package com.game_machine.client;
+package com.game_machine.client.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
@@ -16,6 +16,8 @@ import java.util.concurrent.Executors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.game_machine.client.NetworkClient;
 
 public final class UdpClient implements Runnable, NetworkClient {
 

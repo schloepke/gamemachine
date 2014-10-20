@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.game_machine.objectdb.DbActor;
+
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
@@ -28,6 +30,18 @@ public class GameMachineLoader {
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(EntityTracking.class)), EntityTracking.name);
 	}
 
+	public static void startObjectDb(int nodeCount) {
+		
+		ArrayList<String> nodes = new ArrayList<String>();
+		for (int i = 1; i < nodeCount; i++) {
+			nodes.add("object_store" + i);
+		}
+		Hashring ring = new Hashring("object_store", nodes, 3);
+		for (String node : ring.nodes) {
+			actorSystem.actorOf(Props.create(DbActor.class), node);
+		}
+	}
+	
 	public static void startCacheUpdateHandler() {
 		ArrayList<String> nodes = new ArrayList<String>();
 		for (int i = 1; i < 50; i++) {

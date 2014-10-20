@@ -52,6 +52,7 @@ dependencies {
   
   compile 'com.couchbase.client:couchbase-client:1.4.2'
   //compile 'redis.clients:jedis:2.2.1'
+  compile 'org.mapdb:mapdb:1.0.6'
   compile 'org.postgresql:postgresql:9.3-1102-jdbc41'
   compile 'io.netty:netty-all:4.0.21.Final'
   compile 'com.zaxxer:HikariCP-java6:2.1.0'

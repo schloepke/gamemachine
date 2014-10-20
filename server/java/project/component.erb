@@ -62,9 +62,13 @@ import org.javalite.activejdbc.Model;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
+<% if has_id %>
+import com.game_machine.core.PersistableMessage;
 
+<% decl = "public final class #{klass} implements Externalizable, Message<#{klass}>, Schema<#{klass}>, PersistableMessage" %>
+<% else %>
 <% decl = "public final class #{klass} implements Externalizable, Message<#{klass}>, Schema<#{klass}>" %>
-
+<% end %>
 
 <% if has_id %>
 import com.game_machine.api.Cache;
@@ -356,13 +360,13 @@ import com.game_machine.core.CacheUpdate;
 	    public void set(String scope, <%=klass%> message) {
 	    	<%=klass%> clone = message.clone();
 			clone.id = scopeId(scope,message.id);
-			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", clone.id);
+			ActorSelection sel = ActorUtil.findDistributed("object_store", clone.id);
 			sel.tell(clone, null);
 		}
 			
 		public void delete(String scope, String id) {
 			String scopedId = scopeId(scope,id);
-			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+			ActorSelection sel = ActorUtil.findDistributed("object_store", scopedId);
 			ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
 			sel.tell(del, null);
 		}
@@ -370,7 +374,7 @@ import com.game_machine.core.CacheUpdate;
 		public <%=klass%> get(String scope, String id, int timeout) {
 			String scopedId = scopeId(scope,id);
 			ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("<%=klass%>");
-			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", scopedId);
+			ActorSelection sel = ActorUtil.findDistributed("object_store", scopedId);
 			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
 			AskableActorSelection askable = new AskableActorSelection(sel);
 			<%=klass%> message;
@@ -953,7 +957,7 @@ public byte[] toByteArray() {
 	//return toJson();
 }
 
-public String toJson() throws UnsupportedEncodingException {
+public String toJson() {
 	boolean numeric = false;
 	ByteArrayOutputStream out = new ByteArrayOutputStream();
 	try {

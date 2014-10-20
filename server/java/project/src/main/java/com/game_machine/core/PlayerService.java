@@ -25,6 +25,7 @@ public class PlayerService {
 		} else {
 			this.authType = 0;
 		}
+		logger.info("PlayerService starting authType="+authType);
 	}
 
 	private static class LazyHolder {

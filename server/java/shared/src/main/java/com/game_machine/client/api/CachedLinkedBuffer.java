@@ -1,4 +1,4 @@
-package com.game_machine.client;
+package com.game_machine.client.api;
 
 import static com.dyuproject.protostuff.LinkedBuffer.allocate;
 

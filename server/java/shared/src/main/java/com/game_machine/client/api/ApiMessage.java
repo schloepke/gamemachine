@@ -1,4 +1,4 @@
-package com.game_machine.client;
+package com.game_machine.client.api;
 
 import Client.Messages.ChatChannel;
 import Client.Messages.ChatMessage;
@@ -21,13 +21,13 @@ public class ApiMessage {
 	private String playerId;
 	private String authtoken;
 	private String defaultId = "0";
-	private NetworkClient networkClient;
+	private Api base;
 	private ClientMessage clientMessage;
 
-	public ApiMessage(String playerId, String authtoken, NetworkClient networkClient) {
+	public ApiMessage(String playerId, String authtoken, Api base) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
-		this.networkClient = networkClient;
+		this.base = base;
 		this.clientMessage = clientMessage();
 	}
 
@@ -51,13 +51,10 @@ public class ApiMessage {
 		return bytes;
 	}
 	
-	public void sendBytes(byte[] bytes) {
-		networkClient.sendMessage(bytes);
-	}
 
 	public void send() {
 		byte[] bytes = toByteArray(clientMessage);
-		networkClient.sendMessage(bytes);
+		base.send(bytes);
 		if (clientMessage.getEntityCount() >= 1) {
 			clientMessage.getEntityList().clear();
 		}

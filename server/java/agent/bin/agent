@@ -11,7 +11,7 @@ done
 
 declare AKKA_HOME="$(cd "$(cd "$(dirname "$0")"; pwd -P)"/..; pwd)"
 
-[ -n "$JAVA_OPTS" ] || JAVA_OPTS="-Xmx30m  -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+CMSClassUnloadingEnabled"
+[ -n "$JAVA_OPTS" ] || JAVA_OPTS="-Xmx40m -Xss512k -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops"
 
 [ -n "$AKKA_CLASSPATH" ] || AKKA_CLASSPATH="$AKKA_HOME/config:$AKKA_HOME/lib/akka/*:$AKKA_HOME/deploy/*"
 

@@ -1,8 +1,9 @@
-package com.game_machine.client;
+package com.game_machine.client.api;
 
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 
+import com.game_machine.client.NetworkClient;
 import com.game_machine.client.agent.Config;
 
 
@@ -13,11 +14,13 @@ public class Api {
 	private String authtoken;
 	private NetworkClient networkClient;
 	private Config conf = Config.getInstance();
+	private Cloud cloud;
 	
 	public Api(String playerId, String authtoken, NetworkClient networkClient) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.networkClient = networkClient;
+		this.cloud = new Cloud();
 	}
 	
 	public static void setActorSystem(ActorSystem actorSystem) {
@@ -48,8 +51,20 @@ public class Api {
 		return conf.getCloudApiKey();
 	}
 	
+	public String getCloudHost() {
+		return conf.getCloudHost();
+	}
+	
+	public void send(byte[] bytes) {
+		networkClient.sendMessage(bytes);
+	}
+	
+	public Cloud getCloud() {
+		return this.cloud;
+	}
+	
 	public ApiMessage newMessage() {
-		return new ApiMessage(playerId, authtoken, networkClient);
+		return new ApiMessage(playerId, authtoken, this);
 	}
 
 }

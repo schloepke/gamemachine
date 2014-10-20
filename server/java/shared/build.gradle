@@ -26,15 +26,28 @@ repositories {
   
 }
 
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            exclude 'com/game_machine/client/netty/**'
+       }
+   }
+}
+
 dependencies {
   compile 'org.slf4j:slf4j-api:1.7.7'
-  compile 'ch.qos.logback:logback-classic:1.1.2'
-  compile 'ch.qos.logback:logback-core:1.1.2'
-  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
-  compile 'com.dyuproject.protostuff:protostuff:1.0.8'
+  //compile 'org.slf4j:slf4j-simple:1.7.7'
+  //compile 'ch.qos.logback:logback-classic:1.1.2'
+  //compile 'ch.qos.logback:logback-core:1.1.2'
+  //compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-api:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-core:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-runtime:1.0.8'
   compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
-  compile 'io.netty:netty-all:4.0.21.Final'
+  compile 'org.json:json:20140107'
+  //compile 'io.netty:netty-all:4.0.23.Final'
 }
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
 

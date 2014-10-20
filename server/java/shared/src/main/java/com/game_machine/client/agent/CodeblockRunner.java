@@ -10,10 +10,10 @@ import scala.concurrent.duration.Duration;
 import Client.Messages.Agent;
 import akka.actor.UntypedActor;
 
-import com.game_machine.client.Api;
-import com.game_machine.shared.codeblocks.Codeblock;
-import com.game_machine.shared.codeblocks.CodeblockCompiler;
-import com.game_machine.shared.codeblocks.CodeblockExecutor;
+import com.game_machine.client.api.Api;
+import com.game_machine.codeblocks.Codeblock;
+import com.game_machine.codeblocks.CodeblockCompiler;
+import com.game_machine.codeblocks.CodeblockExecutor;
 
 
 public class CodeblockRunner extends UntypedActor {
@@ -29,6 +29,7 @@ public class CodeblockRunner extends UntypedActor {
 	public CodeblockRunner(Api api, Agent agent) {
 		Permissions permissions = new Permissions();
 		permissions.add(new java.net.SocketPermission("*:24130", "connect,resolve"));
+		permissions.add(new java.net.SocketPermission(api.getCloudHost(), "connect,resolve"));
 		this.executor = new CodeblockExecutor();
 		this.executor.setPerms(permissions);
 		this.classname = agent.getClassname();

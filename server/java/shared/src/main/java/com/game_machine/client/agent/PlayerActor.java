@@ -16,7 +16,7 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 
-import com.game_machine.client.Api;
+import com.game_machine.client.api.Api;
 
 public class PlayerActor extends UntypedActor {
 

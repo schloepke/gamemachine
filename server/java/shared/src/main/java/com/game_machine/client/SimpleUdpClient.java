@@ -10,6 +10,9 @@ import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import com.game_machine.client.api.Api;
+import com.game_machine.client.api.ApiMessage;
+
 import Client.Messages.ClientMessage;
 import akka.actor.ActorSelection;
 

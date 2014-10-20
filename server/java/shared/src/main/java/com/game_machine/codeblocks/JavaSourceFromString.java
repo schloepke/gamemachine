@@ -1,4 +1,4 @@
-package com.game_machine.shared.codeblocks;
+package com.game_machine.codeblocks;
 
 import java.net.URI;
 

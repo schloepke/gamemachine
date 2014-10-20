@@ -25,7 +25,7 @@ module GameMachine
     def post_init(*args)
       @write_interval = self.class.write_interval
       @max_writes_per_second = self.class.max_writes_per_second
-      @store = DataStore.instance
+      @store = DbLib::Store.get_instance
       @cache = {}
       @updates = {}
       @queue = []

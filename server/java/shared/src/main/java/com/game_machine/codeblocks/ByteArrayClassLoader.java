@@ -1,4 +1,4 @@
-package com.game_machine.shared.codeblocks;
+package com.game_machine.codeblocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +20,9 @@ public class ByteArrayClassLoader extends ClassLoader {
 			add("java.util");
 			add("javax.crypto");
 			add("javax.xml");
-			add("com.game_machine.shared.codeblocks.Codeblock");
-			add("com.game_machine.client.Api");
-			add("com.game_machine.client.ApiMessage");
+			add("java.nio");
+			add("com.game_machine.codeblocks.Codeblock");
+			add("com.game_machine.client.api");
 			add("com.game_machine.client.agent.CodeblockEnv");
 			add("com.game_machine.client.agent.CodeblockRunner");
 			add("Client.Messages");

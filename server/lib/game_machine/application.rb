@@ -9,7 +9,10 @@ module GameMachine
       end
 
       def data_store
-        DataStore.instance
+        store = DbLib::Store.get_instance
+        store_name = config.datastore.store
+        serialization = config.datastore.serialization
+        store.connect(store_name,serialization)
       end
 
       def akka
@@ -39,7 +42,7 @@ module GameMachine
 
       def stop
         stop_actor_system
-        DataStore.instance.shutdown
+        DbLib::Store.get_instance.shutdown
       end
 
       def start
@@ -140,6 +143,7 @@ module GameMachine
         Actor::Builder.new(ClusterMonitor).start
         Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
         Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
+        JavaLib::GameMachineLoader.startObjectDb(config.routers.objectdb)
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(ClientManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler * 2).start
         Actor::Builder.new(ClientManagerUpdater).start

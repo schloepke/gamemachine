@@ -4,8 +4,8 @@ import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.kernel.Bootable;
 
-import com.game_machine.client.Api;
-import com.game_machine.shared.codeblocks.CodeblockSecurityManager;
+import com.game_machine.client.api.Api;
+import com.game_machine.codeblocks.CodeblockSecurityManager;
 
 public class Runner implements Bootable {
 	
@@ -26,7 +26,7 @@ public class Runner implements Bootable {
 		system = ActorSystem.create(conf.getGameId());
 		Api.setActorSystem(system);
 
-		system.actorOf(Props.create(AgentUpdater.class), AgentUpdater.class.getSimpleName());
+		system.actorOf(Props.create(AgentUpdateActor.class), AgentUpdateActor.class.getSimpleName());
 	}
 
 	public void shutdown() {

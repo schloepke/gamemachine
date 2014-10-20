@@ -4,7 +4,7 @@ module GameMachine
 
       attr_reader :store
       def initialize
-        @store = DataStore.instance
+        @store = DbLib::Store.get_instance
       end
 
       def define_dbproc(name,&blk)
@@ -37,17 +37,17 @@ module GameMachine
       end
 
       def put(entity)
-        ref = ObjectDb.find_distributed(entity.get_id)
+        ref = Actor::Base.find_distributed(entity.get_id,'object_store')
         ref.tell(MessageLib::ObjectdbPut.new.set_entity(entity))
       end
 
       def get(entity_id,timeout=1000)
-        ref = ObjectDb.find_distributed(entity_id)
+        ref = Actor::Base.find_distributed(entity_id,'object_store')
         ref.ask(MessageLib::ObjectdbGet.new.set_entity_id(entity_id), timeout)
       end
 
       def delete(entity_id)
-        ref = ObjectDb.find_distributed(entity_id)
+        ref = Actor::Base.find_distributed(entity_id,'object_store')
         ref.tell(MessageLib::ObjectdbDel.new.set_entity_id(entity_id))
       end
 

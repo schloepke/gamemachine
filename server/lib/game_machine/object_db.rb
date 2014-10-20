@@ -11,35 +11,46 @@ module GameMachine
       end
     end
 
-    attr_accessor :store, :cache
+    attr_accessor :store, :cache, :classmap
     def post_init(*args)
-      @store = DataStore.instance
-      @cache = GCache::Cache.create(
-        :expire_after_write_secs => 120,
-        :maximum_size => 10000,
-        :record_stats => true
-      )
+      @store = DbLib::Store.get_instance
+      memory_map = ApiLib::MemoryMap.new(0.10)
+      @cache = memory_map.get_map
+      #@cache = GCache::Cache.create(
+      #  :expire_after_write_secs => 120,
+      #  :maximum_size => 10000,
+      #  :record_stats => true
+      #)
+      @classmap = {}
+    end
+
+    def class_cache(classname)
+      return MessageLib::Entity if classname.nil?
+
+      if cached = classmap.fetch(classname,nil)
+        return cached
+      else
+        classmap[classname] = "GameMachine::MessageLib::#{classname}".constantize
+        classmap[classname]
+      end
     end
 
     def delete_entity(entity_id)
-      cache.invalidate(entity_id)
-      @store.delete(entity_id)
-    end
-
-    def delete_all
-      store.delete_all
+      cache.delete(entity_id)
+      store.delete(entity_id)
     end
 
     def set_entity(entity)
-      cache.put(entity.id,entity)
+      cache.put(entity.id,entity.to_byte_array)
       WriteBehindCache.find_distributed(entity.id).tell(entity)
     end
 
     def get_entity(entity_id,klass)
-      entity = cache.get(entity_id) do
+      if bytes = cache.get(entity_id)
+        class_cache(klass).parse_from(bytes)
+      else
         store.get(entity_id,klass)
       end
-      entity.nil? ? nil : entity.clone
     end
 
     def on_receive(message)

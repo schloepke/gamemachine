@@ -5,28 +5,27 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import scala.concurrent.duration.Duration;
 import Client.Messages.Agent;
 import Client.Messages.AgentController;
-import Client.Messages.ClientMessage;
 import akka.actor.ActorSelection;
-import akka.actor.UntypedActor;
 
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import com.game_machine.client.Api;
+import com.game_machine.client.api.Api;
+import com.game_machine.client.api.Cloud;
 
-public class AgentUpdater extends UntypedActor {
+public class AgentUpdater {
 
 	private Config conf;
+	private Cloud cloud;
 
 	private HashMap<String, String> agents = new HashMap<String, String>();
 	private HashMap<String, PlayerManager> playerManagers = new HashMap<String, PlayerManager>();
 
 	public AgentUpdater() {
 		conf = Config.getInstance();
+		this.cloud = new Cloud();
 	}
 
 	private void pruneAgents(List<String> latest) {
@@ -43,9 +42,8 @@ public class AgentUpdater extends UntypedActor {
 		}
 	}
 
-	private void updateCodeblocks() {
-		byte[] bytes = CloudHttp.getAgents(conf.getCloudHost(), conf.getPlayerId(), conf.getCloudUser(),
-				conf.getCloudApiKey());
+	public void updateCodeblocks() {
+		byte[] bytes = cloud.getAgents(conf.getPlayerId());
 		if (bytes == null) {
 			return;
 		}
@@ -74,32 +72,6 @@ public class AgentUpdater extends UntypedActor {
 			System.out.println("No agents found");
 		}
 		pruneAgents(agentIds);
-	}
-
-	@Override
-	public void onReceive(Object message) throws Exception {
-		if (message instanceof String) {
-			String imsg = (String) message;
-			if (imsg.equals("update_codeblocks")) {
-				updateCodeblocks();
-				tick(5000, "update_codeblocks");
-			}
-		} else {
-			unhandled(message);
-		}
-	}
-
-	@Override
-	public void preStart() {
-		tick(5000, "update_codeblocks");
-	}
-
-	public void tick(int delay, String message) {
-		getContext()
-				.system()
-				.scheduler()
-				.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS), getSelf(), message,
-						getContext().dispatcher(), null);
 	}
 
 }
