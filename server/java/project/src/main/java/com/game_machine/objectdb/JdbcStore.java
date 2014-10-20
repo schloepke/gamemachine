@@ -42,28 +42,56 @@ public class JdbcStore implements Storable {
 		}
 	}
 
-	@Override
-	public boolean delete(String id) {
+	private void cleanup(Connection c, Statement s) {
+		try {
+			if (s != null) {
+				s.close();
+			}
+			if (c != null) {
+				c.close();
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private Connection getConnection() {
 		Connection connection;
 		try {
 			connection = pool.getConnection(connectionName);
-			PreparedStatement s = connection.prepareStatement("DELETE from entities where id = ?");
+			if (connection == null) {
+				throw new RuntimeException("Unable to obtain connection (pool full?)");
+			}
+			return connection;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Error obtaining connection "+e.getMessage());
+		}
+	}
+	
+	@Override
+	public boolean delete(String id) {
+		Connection connection = getConnection();
+		PreparedStatement s = null;
+		try {
+			s = connection.prepareStatement("DELETE from entities where id = ?");
 			s.setString(1, id);
 			s.executeUpdate();
-			s.close();
-			connection.close();
+			cleanup(connection, s);
 			return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
+			cleanup(connection, s);
 			return false;
+		} finally {
+
 		}
 	}
 
 	private boolean set(String id, byte[] value, int type) {
-		Connection connection;
-		PreparedStatement s;
+		Connection connection = getConnection();
+		PreparedStatement s = null;
 		try {
-			connection = pool.getConnection(connectionName);
 			if (dbtype == MYSQL) {
 				s = connection
 						.prepareStatement("INSERT INTO entities (id,value,datatype) VALUES (?,?,?) ON DUPLICATE KEY UPDATE value=VALUES(value)");
@@ -76,10 +104,10 @@ public class JdbcStore implements Storable {
 			s.setBytes(2, value);
 			s.setInt(3, type);
 			s.executeUpdate();
-			s.close();
-			connection.close();
+			cleanup(connection, s);
 			return true;
 		} catch (SQLException e) {
+			cleanup(connection, s);
 			e.printStackTrace();
 			return false;
 		}
@@ -97,23 +125,25 @@ public class JdbcStore implements Storable {
 	}
 
 	private byte[] get(String id) {
-		Connection connection;
+		Connection connection = getConnection();
+		Statement s = null;
+		
 		try {
-			connection = pool.getConnection(connectionName);
-			Statement s = connection.createStatement();
+			s = connection.createStatement();
 			ResultSet res = s.executeQuery("SELECT value,datatype from entities where id = '" + id + "' LIMIT 1");
+			byte[] value = null;
+			//int type;
 			if (res.next()) {
-				byte[] value = res.getBytes("value");
-				int type = res.getInt("datatype");
-				s.close();
-				connection.close();
-				return value;
+				value = res.getBytes("value");
+				//type = res.getInt("datatype");
 			}
+			cleanup(connection, s);
+			return value;
 		} catch (SQLException e) {
+			cleanup(connection, s);
 			e.printStackTrace();
 			throw new RuntimeException(e.getMessage());
 		}
-		return null;
 	}
 
 	@Override

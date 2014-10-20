@@ -29,8 +29,28 @@ module GameMachine
       message.set_numbers64(555)
     end
 
+    it "object store stress" do
+      count = 0
+      threads = []
+      10.times do |i|
+        threads << Thread.new do
+          base = i
+          puts Benchmark.realtime {
+            1000000.times do
+              id = "#{base}#{count.to_s}"
+              test_object.set_id(id)
+              MessageLib::TestObject.store.set(id,test_object)
+              MessageLib::TestObject.store.get(id,3)
+              count += 1
+              sleep 0.001
+            end
+          }
+        end
+      end
+      threads.map(&:join)
+    end
 
-    it "cache test" do
+    xit "cache test" do
       MessageLib::TestObject.cacheInit(100,200000)
       count = 100000
 
@@ -95,19 +115,7 @@ module GameMachine
       end
     end
 
-    xit "msyql ogbject store stress" do
-      GameMachine::Application.orm_connect
-      ds = Commands::DatastoreCommands.new
-      count = 0
-      puts Benchmark.realtime {
-        10000.times do
-          entity.id = count.to_s
-          entity.db_put
-          count += 1
-          sleep 0.002
-        end
-      }
-    end
+    
 
     xit "finds model" do
       GameMachine::Application.orm_connect

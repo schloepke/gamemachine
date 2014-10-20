@@ -14,13 +14,7 @@ module GameMachine
     attr_accessor :store, :cache, :classmap
     def post_init(*args)
       @store = DbLib::Store.get_instance
-      memory_map = ApiLib::MemoryMap.new(0.10)
-      @cache = memory_map.get_map
-      #@cache = GCache::Cache.create(
-      #  :expire_after_write_secs => 120,
-      #  :maximum_size => 10000,
-      #  :record_stats => true
-      #)
+      @cache = DbLib::DbActor.get_cache
       @classmap = {}
     end
 
@@ -33,11 +27,6 @@ module GameMachine
         classmap[classname] = "GameMachine::MessageLib::#{classname}".constantize
         classmap[classname]
       end
-    end
-
-    def delete_entity(entity_id)
-      cache.delete(entity_id)
-      store.delete(entity_id)
     end
 
     def set_entity(entity)
@@ -69,19 +58,6 @@ module GameMachine
         else
           GameMachine.logger.warn("Unable to find dbproc #{procname}")
         end
-
-      elsif message.is_a?(MessageLib::ObjectdbPut)
-        set_entity(message.get_entity)
-        get_sender.tell(true,nil)
-      elsif message.is_a?(MessageLib::ObjectdbGet)
-        if entity = get_entity(message.get_entity_id,message.get_klass)
-          get_sender.tell(entity,nil)
-        end
-      elsif message.is_a?(MessageLib::ObjectdbDel)
-        delete_entity(message.get_entity_id)
-      elsif message.respond_to?(:get_id)
-        set_entity(message)
-        get_sender.tell(true,nil)
       else
         unhandled(message)
       end

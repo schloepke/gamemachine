@@ -46,7 +46,7 @@ public class DbConnectionPool {
 		config.addDataSourceProperty("databaseName", dbname);
 		config.addDataSourceProperty("user", username);
 		config.addDataSourceProperty("password", password);
-		config.setMaximumPoolSize(10);
+		config.setMaximumPoolSize(20);
 		config.setIdleTimeout(30000);
 		config.setLeakDetectionThreshold(10000);
 		// config.setAutoCommit(false);
@@ -68,7 +68,9 @@ public class DbConnectionPool {
 
 	public Connection getConnection(String id) throws SQLException {
 		if (datasources.containsKey(id)) {
-			return datasources.get(id).getConnection();
+			HikariDataSource datasource = datasources.get(id);
+			Connection connection = datasource.getConnection();
+			return connection;
 		} else {
 			return null;
 		}

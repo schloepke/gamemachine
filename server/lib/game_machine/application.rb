@@ -159,7 +159,10 @@ module GameMachine
         Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
 
         # Mostly unused
-        Actor::Builder.new(CloudUpdater).start
+        if config.datastore.store == 'gamecloud'
+          Actor::Builder.new(CloudUpdater).start
+        end
+        
         Actor::Builder.new(SystemStats).start
         Actor::Builder.new(Scheduler).start
         Actor::Builder.new(SystemMonitor).start

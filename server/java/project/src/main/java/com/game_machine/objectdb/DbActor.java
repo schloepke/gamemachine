@@ -19,43 +19,52 @@ import com.game_machine.core.EntitySerializer;
 import com.game_machine.core.PersistableMessage;
 
 public class DbActor extends UntypedActor {
-	
+
 	private static HashMap<Class<?>, Method> methods = new HashMap<Class<?>, Method>();
-	private HTreeMap<String, byte[]> cache;
+	private static HTreeMap<String, byte[]> cache = new MemoryMap(0.100).getMap();
 	private Store store;
-	
+
 	public DbActor() {
 		this.store = Store.getInstance();
-		MemoryMap memoryMap = new MemoryMap(0.100);
-		this.cache = memoryMap.getMap();
+		// MemoryMap memoryMap = new MemoryMap(0.100);
+		// cache = memoryMap.getMap();
 	}
-	
+
+	public static HTreeMap<String, byte[]> getCache() {
+		return cache;
+	}
+
 	private void setMessage(String id, PersistableMessage message) {
 		cache.put(id, message.toByteArray());
-		ActorSelection sel = ActorUtil.findDistributed("GameMachine::WriteBehindCache", id);
-		sel.tell(message, getSelf());
+		store.set(id, message);
+		// ActorSelection sel =
+		// ActorUtil.findDistributed("GameMachine::WriteBehindCache", id);
+		// sel.tell(message, getSelf());
 	}
-	
+
 	public void setEntity(Entity entity) {
 		cache.put(entity.getId(), entity.toByteArray());
-		ActorSelection sel = ActorUtil.findDistributed("GameMachine::WriteBehindCache", entity.getId());
-		sel.tell(entity, getSelf());
+		store.set(entity.getId(), entity);
+		// ActorSelection sel =
+		// ActorUtil.findDistributed("GameMachine::WriteBehindCache",
+		// entity.getId());
+		// sel.tell(entity, getSelf());
 	}
-	
+
 	public void deleteEntity(String id) {
 		cache.remove(id);
 		store.delete(id);
 	}
-	
+
 	public Object getEntity(String id, String classname) throws ClassNotFoundException {
 		if (cache.containsKey(id)) {
-			Class<?> clazz = Class.forName("GameMachine.Messages."+classname);
+			Class<?> clazz = Class.forName("GameMachine.Messages." + classname);
 			return EntitySerializer.fromByteArray(cache.get(id), clazz);
 		} else {
 			return store.get(id, classname);
 		}
 	}
-	
+
 	private String getObjectId(Object object) throws Exception {
 		Class<?> klass = object.getClass();
 		if (!methods.containsKey(klass)) {
@@ -65,27 +74,29 @@ public class DbActor extends UntypedActor {
 		String id = (String) method.invoke(object);
 		return id;
 	}
-	
+
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof ObjectdbUpdate) {
-			ObjectdbUpdate update = (ObjectdbUpdate)message;
+			ObjectdbUpdate update = (ObjectdbUpdate) message;
 			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", update.getCurrentEntityId());
 			sel.tell(message, getSelf());
 		} else if (message instanceof ObjectdbPut) {
-			ObjectdbPut put = (ObjectdbPut)message;
+			ObjectdbPut put = (ObjectdbPut) message;
 			setEntity(put.getEntity());
 			getSender().tell(true, getSelf());
 		} else if (message instanceof ObjectdbGet) {
-			ObjectdbGet get = (ObjectdbGet)message;
-			Object obj = getEntity(get.getEntityId(),get.getKlass());
-			getSender().tell(obj, getSelf());
+			ObjectdbGet get = (ObjectdbGet) message;
+			Object obj = getEntity(get.getEntityId(), get.getKlass());
+			if (obj != null) {
+				getSender().tell(obj, getSelf());
+			}
 		} else if (message instanceof ObjectdbDel) {
-			ObjectdbDel del = (ObjectdbDel)message;
+			ObjectdbDel del = (ObjectdbDel) message;
 			deleteEntity(del.getEntityId());
 		} else {
-			PersistableMessage persistable = (PersistableMessage)message;
-			setMessage(persistable.getId(),persistable);
+			PersistableMessage persistable = (PersistableMessage) message;
+			setMessage(persistable.getId(), persistable);
 			getSender().tell(true, getSelf());
 		}
 	}

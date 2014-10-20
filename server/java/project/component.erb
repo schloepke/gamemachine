@@ -1003,6 +1003,7 @@ public byte[] toProtobuf() {
 		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(<%=klass%>.class), buffer);
 		buffer.clear();
 	} catch (Exception e) {
+		buffer.clear();
 		e.printStackTrace();
 		throw new RuntimeException("Protobuf encoding failed");
 	}

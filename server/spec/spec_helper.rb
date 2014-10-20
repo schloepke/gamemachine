@@ -33,8 +33,8 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
-    GameMachine::Application.stop_actor_system
     GameMachine::DbLib::Store.get_instance.shutdown
+    GameMachine::Application.stop_actor_system
   end
 
   config.after(:suite) do
