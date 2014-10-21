@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import consistent_hashing.KetamaNodeLocator;
+import com.game_machine.consistent_hashing.KetamaNodeLocator;
 
 public class Hashring {
 

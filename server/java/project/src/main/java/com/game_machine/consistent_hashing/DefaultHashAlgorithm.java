@@ -1,4 +1,4 @@
-package consistent_hashing;
+package com.game_machine.consistent_hashing;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

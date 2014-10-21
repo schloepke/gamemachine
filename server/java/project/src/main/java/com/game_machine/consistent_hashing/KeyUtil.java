@@ -1,4 +1,4 @@
-package consistent_hashing;
+package com.game_machine.consistent_hashing;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
