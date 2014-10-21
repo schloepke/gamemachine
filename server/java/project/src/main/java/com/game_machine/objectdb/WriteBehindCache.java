@@ -7,13 +7,18 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 
+import com.game_machine.core.AppConfig;
 import com.game_machine.core.PersistableMessage;
 
 public class WriteBehindCache extends UntypedActor {
 
+	private static final Logger logger = LoggerFactory.getLogger(WriteBehindCache.class);
 	private long cacheWritesPerSecond;
 	private long writeDelay;
 	private long cacheWriteInterval;
@@ -21,21 +26,31 @@ public class WriteBehindCache extends UntypedActor {
 	private Store store;
 	private BlockingQueue<DelayElement> queue = new DelayQueue<DelayElement>();
 	private HashMap<String, PersistableMessage> cache = new HashMap<String, PersistableMessage>();
-
+	final Collection<DelayElement> expired = new ArrayList<DelayElement>();
+	
 	public WriteBehindCache(Store store) {
 		this.store = store;
-		this.cacheWritesPerSecond = store.getCacheWritesPerSecond();
-		this.cacheWriteInterval = store.getCacheWriteInterval();
-		this.writeDelay = 1000l / cacheWritesPerSecond;
+		setConfig();
 		this.lastWrite = System.currentTimeMillis() - (120 * 1000);
 	}
-
+	
+	private void setConfig() {
+		this.cacheWritesPerSecond = AppConfig.Datastore.getCacheWritesPerSecond();
+		this.cacheWriteInterval = AppConfig.Datastore.getCacheWriteInterval();
+		this.writeDelay = 1000l / this.cacheWritesPerSecond;
+	}
+	
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
 			String msg = (String) message;
 			if (msg.equals("update")) {
 				runQueue();
+				tick(500l, "update");
+			} else if (msg.equals("maintenance")) {
+				stats();
+				setConfig();
+				tick(5000l, "maintenance");
 			}
 		} else {
 			PersistableMessage persistableMessage = (PersistableMessage) message;
@@ -45,13 +60,22 @@ public class WriteBehindCache extends UntypedActor {
 		}
 	}
 
+	private void stats() {
+		System.out.println("Queue size "+queue.size());
+	}
+	
 	private void runQueue() {
 		if (!canWrite()) {
 			return;
 		}
 		
-		int size = (int) ((System.currentTimeMillis() - lastWrite) / writeDelay);
-		final Collection<DelayElement> expired = new ArrayList<DelayElement>();
+		int elapsed = (int) (System.currentTimeMillis() - lastWrite);
+		if (elapsed < writeDelay) {
+			return;
+		}
+		
+		int size = (int) (elapsed / writeDelay);
+		expired.clear();
 		queue.drainTo(expired,size);
 		for (DelayElement element : expired) {
 			String id = element.getElement();
@@ -71,7 +95,7 @@ public class WriteBehindCache extends UntypedActor {
 	private void write(PersistableMessage message) {
 		store.set(message.getId(), message);
 		cache.remove(message.getId());
-		lastWrite = System.currentTimeMillis() / 1000l;
+		lastWrite = System.currentTimeMillis();
 	}
 
 	private void enqueue(PersistableMessage message) {
@@ -87,7 +111,11 @@ public class WriteBehindCache extends UntypedActor {
 
 	@Override
 	public void preStart() {
+		logger.info("cacheWritesPerSecond "+this.cacheWritesPerSecond);
+		logger.info("cacheWriteInterval "+this.cacheWriteInterval);
+		logger.info("writeDelay "+this.writeDelay);
 		tick(500l, "update");
+		tick(10000l, "maintenance");
 	}
 
 	public void tick(long delay, String message) {

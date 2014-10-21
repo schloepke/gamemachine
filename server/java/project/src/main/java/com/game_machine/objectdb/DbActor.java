@@ -17,6 +17,7 @@ import akka.actor.UntypedActor;
 
 import com.game_machine.api.MemoryMap;
 import com.game_machine.core.ActorUtil;
+import com.game_machine.core.AppConfig;
 import com.game_machine.core.EntitySerializer;
 import com.game_machine.core.PersistableMessage;
 
@@ -30,7 +31,7 @@ public class DbActor extends UntypedActor {
 
 	public DbActor() {
 		this.store = Store.getInstance();
-		if (store.getCacheWriteInterval() >= 1 || store.getCacheWritesPerSecond() >= 1) {
+		if (AppConfig.Datastore.getCacheWriteInterval() >= 1 || AppConfig.Datastore.getCacheWritesPerSecond() >= 1) {
 			cacheEnabled = true;
 		}
 		// MemoryMap memoryMap = new MemoryMap(0.100);

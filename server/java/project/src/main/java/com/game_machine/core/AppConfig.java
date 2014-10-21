@@ -7,6 +7,38 @@ public class AppConfig {
 	
 	private static String env;
 
+    public static class Datastore {
+    	private static String store;
+    	private static String serialization;
+    	private static long cacheWriteInterval;
+    	private static long cacheWritesPerSecond;
+    	
+		public static String getStore() {
+			return store;
+		}
+		public static void setStore(String store) {
+			Datastore.store = store;
+		}
+		public static String getSerialization() {
+			return serialization;
+		}
+		public static void setSerialization(String serialization) {
+			Datastore.serialization = serialization;
+		}
+		public static long getCacheWriteInterval() {
+			return cacheWriteInterval;
+		}
+		public static void setCacheWriteInterval(long cacheWriteInterval) {
+			Datastore.cacheWriteInterval = cacheWriteInterval;
+		}
+		public static long getCacheWritesPerSecond() {
+			return cacheWritesPerSecond;
+		}
+		public static void setCacheWritesPerSecond(long cacheWritesPerSecond) {
+			Datastore.cacheWritesPerSecond = cacheWritesPerSecond;
+		}
+		
+    }
     
 	public static class Couchbase {
 		private static String bucket;

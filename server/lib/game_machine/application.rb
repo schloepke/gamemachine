@@ -12,9 +12,7 @@ module GameMachine
         store = DbLib::Store.get_instance
         store.connect(
           config.datastore.store,
-          config.datastore.serialization,
-          config.datastore.cache_writes_per_second,
-          config.datastore.cache_write_interval
+          config.datastore.serialization
         )
       end
 
@@ -144,8 +142,7 @@ module GameMachine
       # TODO configurize router sizes
       def start_core_systems
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
-        Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
+        Actor::Builder.new(ObjectDb).distributed(1).start
         JavaLib::GameMachineLoader.startObjectDb(config.routers.objectdb)
         Actor::Builder.new(MessageQueue).start
         Actor::Builder.new(ClientManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler * 2).start

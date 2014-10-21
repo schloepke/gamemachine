@@ -10,8 +10,6 @@ public class Store {
 	private static HashMap<String, Class<?>> classCache = new HashMap<String, Class<?>>();
 	private Storable store;
 	private String serialization;
-	private long cacheWritesPerSecond = -1;
-	private long cacheWriteInterval = -1;
 
 	private Store() {
 
@@ -25,10 +23,8 @@ public class Store {
 		return LazyHolder.INSTANCE;
 	}
 	
-	public void connect(String storeName, String serialization, long cacheWritesPerSecond, long cacheWriteInterval) {
+	public void connect(String storeName, String serialization) {
 		this.serialization = serialization;
-		this.setCacheWriteInterval(cacheWriteInterval);
-		this.setCacheWritesPerSecond(cacheWritesPerSecond);
 		
 		if (storeName.equals("gamecloud")) {
 			this.store = (Storable) new CloudStore();
@@ -91,22 +87,5 @@ public class Store {
 	public void shutdown() {
 		this.store.shutdown();
 	}
-
-	public long getCacheWritesPerSecond() {
-		return cacheWritesPerSecond;
-	}
-
-	public void setCacheWritesPerSecond(long cacheWritesPerSecond) {
-		this.cacheWritesPerSecond = cacheWritesPerSecond;
-	}
-
-	public long getCacheWriteInterval() {
-		return cacheWriteInterval;
-	}
-
-	public void setCacheWriteInterval(long cacheWriteInterval) {
-		this.cacheWriteInterval = cacheWriteInterval;
-	}
-	
 	
 }

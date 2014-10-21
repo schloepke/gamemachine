@@ -3,6 +3,7 @@ require 'benchmark'
 require "net/http"
 require "uri"
 require 'jruby/core_ext'
+require 'digest'
 module GameMachine
 
   describe "misc" do 
@@ -30,24 +31,33 @@ module GameMachine
     end
 
     it "object store stress" do
+
       count = 0
       threads = []
-      10.times do |i|
+      4.times do
         threads << Thread.new do
-          base = i
+          keys = {}
+          tobj = test_object.clone
           puts Benchmark.realtime {
-            1000000.times do
-              id = "#{base}#{count.to_s}"
-              test_object.set_id(id)
-              MessageLib::TestObject.store.set(id,test_object)
-              MessageLib::TestObject.store.get(id,3)
-              count += 1
-              sleep 0.001
+            50.times do
+              10000.times do |i|
+                if keys[i]
+                  id = keys[i]
+                else
+                  id = Digest::MD5.hexdigest(rand(10000).to_s + i.to_s)
+                  keys[i] = id
+                end
+                tobj.set_id(id)
+                MessageLib::TestObject.store.set(id,tobj)
+                MessageLib::TestObject.store.get(id,3)
+                sleep 0.001
+              end
             end
           }
         end
       end
       threads.map(&:join)
+      sleep 60
     end
 
     xit "cache test" do

@@ -37,6 +37,10 @@ module GameMachine
       JavaLib::AppConfig::Couchbase.set_bucket(config.couchbase.bucket)
       JavaLib::AppConfig::Couchbase.set_password(config.couchbase.password)
       JavaLib::AppConfig::Couchbase.set_servers(config.couchbase.servers)
+      JavaLib::AppConfig::Datastore.set_store(config.datastore.store)
+      JavaLib::AppConfig::Datastore.set_serialization(config.datastore.serialization)
+      JavaLib::AppConfig::Datastore.set_cache_write_interval(config.datastore.cache_write_interval)
+      JavaLib::AppConfig::Datastore.set_cache_writes_per_second(config.datastore.cache_writes_per_second)
     end
 
     def set_config_from_env

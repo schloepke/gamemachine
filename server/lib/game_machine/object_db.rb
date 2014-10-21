@@ -31,7 +31,7 @@ module GameMachine
 
     def set_entity(entity)
       cache.put(entity.id,entity.to_byte_array)
-      WriteBehindCache.find_distributed(entity.id).tell(entity)
+      store.set(entity.id,entity)
     end
 
     def get_entity(entity_id,klass)

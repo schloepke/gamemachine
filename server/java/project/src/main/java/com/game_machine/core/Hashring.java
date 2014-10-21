@@ -7,14 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import akka.routing.ConsistentHash;
+import consistent_hashing.KetamaNodeLocator;
 
 public class Hashring {
 
 	private static final Logger log = LoggerFactory.getLogger(Hashring.class);
 	public static ConcurrentHashMap<String, Hashring> hashrings = new ConcurrentHashMap<String, Hashring>();
 
-	private ConsistentHash<String> hash;
+	private KetamaNodeLocator hash;
 	public String name;
 	public List<String> nodes = new ArrayList<String>();
 
@@ -45,22 +45,22 @@ public class Hashring {
 			this.nodes.add(node);
 		}
 		this.name = name;
-		hash = ConsistentHash.create(nodes, vnodes);
+		hash = new KetamaNodeLocator(nodes);
 		addHashring(name, this);
 	}
 
 	public void addNode(String node) {
-		hash = hash.add(node);
 		nodes.add(node);
+		hash.updateLocator(nodes);
 	}
 
 	public void removeNode(String node) {
-		hash = hash.remove(node);
 		nodes.remove(node);
+		hash.updateLocator(nodes);
 	}
 
 	public String nodeFor(String key) {
-		return hash.nodeFor(key);
+		return hash.getPrimary(key);
 	}
 
 }
