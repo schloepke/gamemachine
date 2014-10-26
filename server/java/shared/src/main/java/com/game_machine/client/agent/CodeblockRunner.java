@@ -15,7 +15,6 @@ import com.game_machine.codeblocks.Codeblock;
 import com.game_machine.codeblocks.CodeblockCompiler;
 import com.game_machine.codeblocks.CodeblockExecutor;
 
-
 public class CodeblockRunner extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(CodeblockRunner.class);
@@ -30,6 +29,7 @@ public class CodeblockRunner extends UntypedActor {
 		Permissions permissions = new Permissions();
 		permissions.add(new java.net.SocketPermission("*:24130", "connect,resolve"));
 		permissions.add(new java.net.SocketPermission(api.getCloudHost(), "connect,resolve"));
+		permissions.add(new java.lang.RuntimePermission("accessDeclaredMembers"));
 		this.executor = new CodeblockExecutor();
 		this.executor.setPerms(permissions);
 		this.classname = agent.getClassname();
@@ -73,7 +73,7 @@ public class CodeblockRunner extends UntypedActor {
 			logger.warn("Agent "+agentId+": Codeblock in prestart is null");
 			return;
 		}
-		this.executor.runRestricted(this.codeblock, "awake", codeblockEnv);
+		this.executor.runUnrestricted(this.codeblock, "awake", codeblockEnv);
 	}
 
 	public void tick(int delay, Object message) {
@@ -93,7 +93,7 @@ public class CodeblockRunner extends UntypedActor {
 				this.classname = agent.getClassname();
 				this.encodedCompileResult = agent.getCompileResult();
 				updateCodeblock();
-				this.executor.runRestricted(this.codeblock, "awake", codeblockEnv);
+				this.executor.runUnrestricted(this.codeblock, "awake", codeblockEnv);
 			}
 			return;
 		}
@@ -104,6 +104,6 @@ public class CodeblockRunner extends UntypedActor {
 		}
 
 		logger.debug("Agent "+agentId+": running codeblock with "+message.toString());
-		this.executor.runRestricted(this.codeblock, "run", message);
+		this.executor.runUnrestricted(this.codeblock, "run", message);
 	}
 }

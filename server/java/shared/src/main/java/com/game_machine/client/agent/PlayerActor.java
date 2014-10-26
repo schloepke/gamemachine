@@ -13,6 +13,7 @@ import Client.Messages.Entity;
 import Client.Messages.GameMessage;
 import Client.Messages.Player;
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 
@@ -22,7 +23,7 @@ public class PlayerActor extends UntypedActor {
 
 	private String playerId;
 	private boolean connected = false;
-	private double lastUpdate = System.currentTimeMillis();
+	private double lastUpdate = System.currentTimeMillis() + 5000;
 	private Api api;
 	private HashMap<String, ActorRef> runners = new HashMap<String, ActorRef>();
 	private static double connectionTimeout = 5000;
@@ -34,10 +35,10 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	public void setDisconnected() {
-		if (isConnected()) {
-			this.connected = false;
-			logger.warn("Disconnected");
-		}
+		this.connected = false;
+		logger.warn("Disconnected");
+		ActorSelection sel = Api.getActorByName(AgentUpdateActor.class.getSimpleName());
+		sel.tell("disconnected:" + playerId, getSelf());
 	}
 
 	public boolean isConnected() {
@@ -50,7 +51,7 @@ public class PlayerActor extends UntypedActor {
 		}
 		lastUpdate = System.currentTimeMillis();
 		this.connected = true;
-		
+
 	}
 
 	public void ping() {
@@ -66,24 +67,40 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	public void handleEntities(ClientMessage clientMessage, Player player) {
+		boolean hasGameMessage;
 		for (Entity entity : clientMessage.getEntityList()) {
+			hasGameMessage = false;
 			if (entity.getGameMessages() != null) {
 				for (GameMessage gameMessage : entity.getGameMessages().getGameMessageList()) {
+					hasGameMessage = true;
 					if (gameMessage.getAgentId() != null) {
-						ActorRef runner = getRunner(gameMessage.getAgentId());
-						if (runner != null) {
-							runner.tell(gameMessage, getSelf());
-						}
+						sendToAgent(gameMessage.getAgentId(),gameMessage);
+					} else {
+						sendToAgent("MessageRouter",gameMessage);
 					}
 				}
 			}
 
+			if (hasGameMessage) {
+				continue;
+			}
+			
 			if (entity.getEchoTest() != null) {
 				setConnected();
+				continue;
 			}
+			
+			sendToAgent("MessageRouter",entity);
 		}
 	}
 
+	private void sendToAgent(String name, Object message) {
+		ActorRef runner = getRunner(name);
+		if (runner != null) {
+			runner.tell(message, getSelf());
+		}
+	}
+	
 	private ActorRef startRunner(Agent agent) {
 		ActorRef runner = context().actorOf(Props.create(CodeblockRunner.class, api, agent), agent.getId());
 		runners.put(agent.getId(), runner);
@@ -133,7 +150,7 @@ public class PlayerActor extends UntypedActor {
 		}
 
 		if (message instanceof ClientMessage) {
-			ClientMessage clientMessage = (ClientMessage)message;
+			ClientMessage clientMessage = (ClientMessage) message;
 			Player player = clientMessage.getPlayer();
 
 			if (clientMessage.getPlayerConnected() != null) {

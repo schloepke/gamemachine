@@ -17,13 +17,12 @@ module GameMachine
       end
 
       def set_environment
-        ENV['GAME_ENV'] = options[:environment]
       end
 
       def run!
         check_start_dir
 
-        GameMachine.logger.info "Starting with options = #{options.inspect}"
+        GameMachine.logger.info "Starting game_env=#{ENV['GAME_ENV']}"
         GameMachine::Application.initialize!
         GameMachine::Application.start
       end
@@ -40,7 +39,6 @@ module GameMachine
           opt.parse!(arguments)
         end
         
-
         unless options.has_key?(:environment)
           options[:environment] = 'development'
         end

@@ -16,7 +16,7 @@ public class EntitySerializer extends JSerializer {
 	private static ConcurrentHashMap<Class<?>, Method> serializeJsonMethods = new ConcurrentHashMap<Class<?>, Method>();
 	private static ConcurrentHashMap<Class<?>, Method> deserializeJsonMethods = new ConcurrentHashMap<Class<?>, Method>();
 	private static final Logger logger = LoggerFactory.getLogger(EntitySerializer.class);
-
+	
 	public static String toJson(Object obj) {
 		String value = null;
 		Method m;

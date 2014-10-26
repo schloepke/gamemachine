@@ -7,7 +7,7 @@ class WebApp < Sinatra::Base
   set :bind, GameMachine::Application.config.http.host
   set :port, GameMachine::Application.config.http.port
   set :root, File.expand_path(File.dirname(__FILE__))
-  set :environment, :development
+  set :environment, :production
   mime_type :proto, 'application/octet-stream'
   set :server, :puma
 

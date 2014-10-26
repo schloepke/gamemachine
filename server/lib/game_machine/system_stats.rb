@@ -8,12 +8,27 @@ module GameMachine
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
       end
-      #schedule_message('message_count',1,:seconds)
+      schedule_message('message_count',5,:seconds)
       #schedule_message('update',60,:seconds)
     end
 
     def on_receive(message)
       if message.is_a?(String)
+        cache_hits = DbLib::DbActor.cacheHits.incrementAndGet
+        cache_hits = DbLib::DbActor.cacheHits.decrementAndGet
+        queue_size = DbLib::WriteBehindCache.queueSize.incrementAndGet
+        queue_size = DbLib::WriteBehindCache.queueSize.decrementAndGet
+        GameMachine.logger.info "Queue Size: #{queue_size}"
+        
+        set_count = DbLib::Store.setCount.incrementAndGet
+        get_count = DbLib::Store.getCount.incrementAndGet
+        delete_count = DbLib::Store.deleteCount.incrementAndGet
+
+        set_count = DbLib::Store.setCount.decrementAndGet
+        get_count = DbLib::Store.getCount.decrementAndGet
+        delete_count = DbLib::Store.deleteCount.decrementAndGet
+        GameMachine.logger.info "Store: set=#{set_count} get=#{get_count} delete=#{delete_count} cache_hits=#{cache_hits}"
+        return
         if message == 'message_count'
           current_count = JavaLib::MessageGateway.messageCount.incrementAndGet
           diff = current_count - @last_count

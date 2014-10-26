@@ -30,7 +30,7 @@ module GameMachine
 
       conf.routers.game_handler = config.get_int('routers.game_handler')
       conf.routers.request_handler = config.get_int('routers.request_handler')
-      conf.routers.udp = config.get_int('routers.udp')
+      conf.routers.incoming = config.get_int('routers.incoming')
       conf.routers.objectdb = config.get_int('routers.objectdb')
 
       conf.datastore.store = config.get_string('datastore.store')

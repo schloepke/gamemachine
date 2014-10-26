@@ -30,34 +30,32 @@ module GameMachine
       message.set_numbers64(555)
     end
 
-    it "object store stress" do
+    it "dynamic protobuf messages" do
+      JavaLib::MessageTest.test
+    end
+
+    xit "object store stress" do
 
       count = 0
       threads = []
-      4.times do
+      2.times do
         threads << Thread.new do
           keys = {}
           tobj = test_object.clone
           puts Benchmark.realtime {
-            50.times do
-              10000.times do |i|
-                if keys[i]
-                  id = keys[i]
-                else
-                  id = Digest::MD5.hexdigest(rand(10000).to_s + i.to_s)
-                  keys[i] = id
-                end
+            10000.times do
+              50000.times do |i|
+                id = i.to_s
                 tobj.set_id(id)
-                MessageLib::TestObject.store.set(id,tobj)
+                MessageLib::TestObject.store.set(tobj)
                 MessageLib::TestObject.store.get(id,3)
-                sleep 0.001
+                #sleep 0.001
               end
             end
           }
         end
       end
       threads.map(&:join)
-      sleep 60
     end
 
     xit "cache test" do

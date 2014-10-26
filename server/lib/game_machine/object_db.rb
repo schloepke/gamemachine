@@ -14,7 +14,7 @@ module GameMachine
     attr_accessor :store, :cache, :classmap
     def post_init(*args)
       @store = DbLib::Store.get_instance
-      @cache = DbLib::DbActor.get_cache
+      @cache = ApiLib::MemoryMap.get_instance.get_map
       @classmap = {}
     end
 

@@ -79,7 +79,7 @@ module GameMachine
       if ENV['DB_HOST'] && ENV['DB_PORT']  && ENV['DB_NAME'] && ENV['DB_USER'] && ENV['DB_PASS']
         GameMachine.logger.info "Found database config in ENV"
         config.jdbc.hostname =  ENV['DB_HOST']
-        config.jdbc.port =      ENV['DB_PORT']
+        config.jdbc.port =      ENV['DB_PORT'].to_i
         config.jdbc.database =  ENV['DB_NAME']
         config.jdbc.username =  ENV['DB_USER']
         config.jdbc.password =  ENV['DB_PASS']

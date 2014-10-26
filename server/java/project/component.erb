@@ -27,7 +27,7 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-import com.game_machine.core.LocalLinkedBuffer;
+import com.game_machine.util.LocalLinkedBuffer;
 
 
 import java.nio.charset.Charset;
@@ -123,6 +123,7 @@ import com.game_machine.core.CacheUpdate;
     }
 
     static final <%=klass%> DEFAULT_INSTANCE = new <%=klass%>();
+    static final String defaultScope = <%=klass%>.class.getSimpleName();
 
 <% message.getFields.each do |field| %>
     <% if field.isRepeated %>
@@ -342,7 +343,7 @@ import com.game_machine.core.CacheUpdate;
 	    }
 	    
 	    public static String defaultScope() {
-	    	return <%=klass%>.class.getSimpleName();
+	    	return defaultScope;
 	    }
 		
 	    public void set(<%=klass%> message) {
@@ -935,14 +936,14 @@ import com.game_machine.core.CacheUpdate;
 
 public static <%=klass%> parseFrom(byte[] bytes) {
 	<%=klass%> message = new <%=klass%>();
-	ProtobufIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class));
+	ProtobufIOUtil.mergeFrom(bytes, message, <%=klass%>.getSchema());
 	return message;
 }
 
 public static <%=klass%> parseFromJson(String json) throws IOException {
 	byte[] bytes = json.getBytes(Charset.forName("UTF-8"));
 	<%=klass%> message = new <%=klass%>();
-	JsonIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(<%=klass%>.class), false);
+	JsonIOUtil.mergeFrom(bytes, message, <%=klass%>.getSchema(), false);
 	return message;
 }
 
@@ -972,7 +973,7 @@ public String toJson() {
 
 public byte[] toPrefixedByteArray() {
 	LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
-  Schema<<%=klass%>> schema = RuntimeSchema.getSchema(<%=klass%>.class);
+  Schema<<%=klass%>> schema = <%=klass%>.getSchema();
     
 	final ByteArrayOutputStream out = new ByteArrayOutputStream();
     final ProtobufOutput output = new ProtobufOutput(buffer);
@@ -1000,7 +1001,7 @@ public byte[] toProtobuf() {
 	byte[] bytes = null;
 
 	try {
-		bytes = ProtobufIOUtil.toByteArray(this, RuntimeSchema.getSchema(<%=klass%>.class), buffer);
+		bytes = ProtobufIOUtil.toByteArray(this, <%=klass%>.getSchema(), buffer);
 		buffer.clear();
 	} catch (Exception e) {
 		buffer.clear();
@@ -1015,7 +1016,7 @@ public ByteBuf toByteBuf() {
 	LinkedBuffer buffer = LinkedBuffer.use(bb.array());
 
 	try {
-		ProtobufIOUtil.writeTo(buffer, this, RuntimeSchema.getSchema(<%=klass%>.class));
+		ProtobufIOUtil.writeTo(buffer, this, <%=klass%>.getSchema());
 	} catch (Exception e) {
 		e.printStackTrace();
 		throw new RuntimeException("Protobuf encoding failed");

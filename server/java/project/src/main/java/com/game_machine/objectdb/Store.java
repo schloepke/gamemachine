@@ -1,12 +1,21 @@
 package com.game_machine.objectdb;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.game_machine.core.EntitySerializer;
 import com.game_machine.core.PersistableMessage;
 
 public class Store {
 
+	private static final Logger logger = LoggerFactory.getLogger(Store.class);
+	
+	public static final AtomicInteger setCount = new AtomicInteger();
+	public static final AtomicInteger getCount = new AtomicInteger();
+	public static final AtomicInteger deleteCount = new AtomicInteger();
 	private static HashMap<String, Class<?>> classCache = new HashMap<String, Class<?>>();
 	private Storable store;
 	private String serialization;
@@ -56,6 +65,7 @@ public class Store {
 	}
 	
 	public Object get(String id, String classname) throws ClassNotFoundException {
+		getCount.incrementAndGet();
 		Class<?> clazz = getKlass(classname);
 		if (serialization.equals("json")) {
 			String stringValue = this.store.getString(id);
@@ -74,9 +84,11 @@ public class Store {
 
 	public void delete(String id) {
 		this.store.delete(id);
+		deleteCount.incrementAndGet();
 	}
 
 	public void set(String id, PersistableMessage message) {
+		setCount.incrementAndGet();
 		if (serialization.equals("json")) {
 			this.store.setString(id, message.toJson());
 		} else {

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +20,7 @@ import com.game_machine.core.PersistableMessage;
 public class WriteBehindCache extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(WriteBehindCache.class);
+	public static final AtomicInteger queueSize = new AtomicInteger();
 	private long cacheWritesPerSecond;
 	private long writeDelay;
 	private long cacheWriteInterval;
@@ -61,7 +63,7 @@ public class WriteBehindCache extends UntypedActor {
 	}
 
 	private void stats() {
-		System.out.println("Queue size "+queue.size());
+		//System.out.println("Queue size "+queue.size());
 	}
 	
 	private void runQueue() {
@@ -78,6 +80,7 @@ public class WriteBehindCache extends UntypedActor {
 		expired.clear();
 		queue.drainTo(expired,size);
 		for (DelayElement element : expired) {
+			queueSize.decrementAndGet();
 			String id = element.getElement();
 			PersistableMessage message = cache.get(id);
 			write(message);
@@ -102,6 +105,7 @@ public class WriteBehindCache extends UntypedActor {
 		DelayElement element = new DelayElement(message.getId(), cacheWriteInterval);
 		if (!queue.contains(element)) {
 			queue.add(element);
+			queueSize.incrementAndGet();
 		}
 	}
 
@@ -111,9 +115,9 @@ public class WriteBehindCache extends UntypedActor {
 
 	@Override
 	public void preStart() {
-		logger.info("cacheWritesPerSecond "+this.cacheWritesPerSecond);
-		logger.info("cacheWriteInterval "+this.cacheWriteInterval);
-		logger.info("writeDelay "+this.writeDelay);
+		logger.debug("cacheWritesPerSecond "+this.cacheWritesPerSecond);
+		logger.debug("cacheWriteInterval "+this.cacheWriteInterval);
+		logger.debug("writeDelay "+this.writeDelay);
 		tick(500l, "update");
 		tick(10000l, "maintenance");
 	}

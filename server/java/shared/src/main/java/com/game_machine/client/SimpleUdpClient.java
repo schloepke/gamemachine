@@ -43,6 +43,8 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 		
 		while (true) {
 			if (stop) {
+				s.disconnect();
+				s.close();
 				return;
 			}
 			

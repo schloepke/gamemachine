@@ -16,6 +16,9 @@ public class AgentUpdateActor extends UntypedActor {
 			if (imsg.equals("update_codeblocks")) {
 				updater.updateCodeblocks();
 				tick(5000, "update_codeblocks");
+			} else if (imsg.startsWith("disconnected")) {
+				String[] disconnected = imsg.split(":");
+				updater.playerDisconnected(disconnected[1]);
 			}
 		} else {
 			unhandled(message);

@@ -2,6 +2,7 @@ package com.game_machine.objectdb;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 import org.mapdb.HTreeMap;
 
@@ -9,11 +10,10 @@ import com.game_machine.api.MemoryMap;
 
 public class MemoryStore implements Storable {
 
-	private HTreeMap<String, byte[]> cache;
+	private Map<String, byte[]> cache;
 
 	public MemoryStore() {
-		MemoryMap memoryMap = new MemoryMap(0.100);
-		this.cache = memoryMap.getMap();
+		this.cache = MemoryMap.getInstance().getMap();
 	}
 
 	@Override

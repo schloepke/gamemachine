@@ -1,13 +1,13 @@
 package com.game_machine.core;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.Neighbors;
 import GameMachine.Messages.Player;
 import GameMachine.Messages.TrackData;
+import GameMachine.Messages.AgentTrackData;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
@@ -15,7 +15,7 @@ import akka.event.LoggingAdapter;
 
 public class EntityTracking extends UntypedActor {
 
-	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
+	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	public static String name = "fastpath_entity_tracking";
 
 	private Grid defaultGrid;
@@ -35,12 +35,26 @@ public class EntityTracking extends UntypedActor {
 
 			Grid grid = gameGrid(entity.player.id);
 			if (grid == null) {
-				log.warning("No grid found for " + entity.player.id);
+				logger.warning("No grid found for " + entity.player.id);
 				return;
 			}
-
-			SendNeighbors(grid, entity);
-			setEntityLocation(grid, entity.trackData);
+			
+			Player player = PlayerService.getInstance().find(entity.player.getId());
+			if (player == null) {
+				logger.warning("Player for "+entity.player.getId()+" is null");
+				return;
+			}
+			
+			SendNeighbors(grid, entity,player.getRole());
+			
+			if (entity.hasAgentTrackData() && entity.getAgentTrackData().getTrackDataCount() >= 1) {
+				for (TrackData trackData : entity.getAgentTrackData().getTrackDataList()) {
+					setEntityLocation(grid, trackData);
+				}
+			} else {
+				setEntityLocation(grid, entity.trackData);
+			}
+			
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
@@ -74,17 +88,25 @@ public class EntityTracking extends UntypedActor {
 		}
 	}
 
-	private void SendNeighbors(Grid grid, Entity entity) {
-		Float x = entity.trackData.x;
-		Float y = entity.trackData.y;
-		if (x == null) {
-			x = 0f;
+	private void SendNeighbors(Grid grid, Entity entity, String playerRole) {
+		List<TrackData> trackDatas;
+		if (entity.trackData.neighborEntityType != null && entity.trackData.neighborEntityType.equals("grid")) {
+			// Only agents have access to entire grid
+			if (!playerRole.equals("agent_controller")) {
+				return;
+			}
+			trackDatas = grid.getAll();
+		} else {
+			Float x = entity.trackData.x;
+			Float y = entity.trackData.y;
+			if (x == null) {
+				x = 0f;
+			}
+			if (y == null) {
+				y = 0f;
+			}
+			trackDatas = grid.neighbors(x, y, entity.trackData.neighborEntityType);
 		}
-		if (y == null) {
-			y = 0f;
-		}
-
-		ArrayList<TrackData> trackDatas = grid.neighbors(x, y, entity.trackData.neighborEntityType);
 
 		if (trackDatas.size() >= 1) {
 			toNeighbors(entity.player, trackDatas);
@@ -99,7 +121,7 @@ public class EntityTracking extends UntypedActor {
 		messageGateway.tell(playerMessage, getSelf());
 	}
 
-	private void toNeighbors(Player player, ArrayList<TrackData> trackDatas) {
+	private void toNeighbors(Player player, List<TrackData> trackDatas) {
 		int count = 0;
 		Neighbors neighbors = new Neighbors();
 

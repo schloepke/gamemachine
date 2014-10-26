@@ -15,6 +15,7 @@ public class Config {
 	private int defaultPort;
 	private String authtoken;
 	private String playerId;
+	private int rateLimit;
 
 	private static class LazyHolder {
 		private static final Config INSTANCE = new Config();
@@ -34,6 +35,7 @@ public class Config {
 		defaultPort = conf.getInt("game.port");
 		authtoken = conf.getString("game.authtoken");
 		playerId = conf.getString("game.player_id");
+		setRateLimit(conf.getInt("game.rate_limit"));
 		setFromEnv();
 	}
 
@@ -56,6 +58,9 @@ public class Config {
 		}
 		if (env.containsKey("CLOUD_HOST")) {
 			cloudHost = env.get("CLOUD_HOST");
+		}
+		if (env.containsKey("RATE_LIMIT")) {
+			rateLimit = Integer.parseInt(env.get("RATE_LIMIT"));
 		}
 	}
 
@@ -89,6 +94,14 @@ public class Config {
 
 	public String getPlayerId() {
 		return playerId;
+	}
+
+	public int getRateLimit() {
+		return rateLimit;
+	}
+
+	public void setRateLimit(int rateLimit) {
+		this.rateLimit = rateLimit;
 	}
 
 }

@@ -23,6 +23,12 @@ public class Api {
 		this.cloud = new Cloud();
 	}
 	
+	public static class RateLimitExceeded extends RuntimeException {
+		public RateLimitExceeded(String message){
+		      super(message);
+		   }
+	}
+	
 	public static void setActorSystem(ActorSystem actorSystem) {
 		Api.actorSystem = actorSystem;
 	}
@@ -55,7 +61,7 @@ public class Api {
 		return conf.getCloudHost();
 	}
 	
-	public void send(byte[] bytes) {
+	public void sendToNetwork(byte[] bytes) {
 		networkClient.sendMessage(bytes);
 	}
 	

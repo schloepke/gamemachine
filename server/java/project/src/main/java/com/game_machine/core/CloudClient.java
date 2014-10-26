@@ -2,7 +2,9 @@ package com.game_machine.core;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -75,7 +77,21 @@ public class CloudClient {
 	public void setCredentials(String host, String username, String apiKey) {
 		gamecloudApiKey = apiKey;
 		gamecloudUser = username;
-		this.host = host;
+		
+		String[] hostPort = host.split(":");
+		String port;
+		if (hostPort.length == 1) {
+			port = "80";
+		} else {
+			port = hostPort[1];
+		}
+		InetAddress address;
+		try {
+			address = InetAddress.getByName(hostPort[0]);
+			this.host = address.getHostAddress()+":"+port;
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
 	public CloudResponse getAgents(String gameId) throws ClientProtocolException, IOException {

@@ -1,9 +1,10 @@
 package com.game_machine.objectdb;
 
-import java.lang.reflect.Method;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
-import org.mapdb.HTreeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.ObjectdbDel;
@@ -23,23 +24,19 @@ import com.game_machine.core.PersistableMessage;
 
 public class DbActor extends UntypedActor {
 
-	private static HashMap<Class<?>, Method> methods = new HashMap<Class<?>, Method>();
-	private static HTreeMap<String, byte[]> cache = new MemoryMap(0.100).getMap();
+	private static final Logger logger = LoggerFactory.getLogger(DbActor.class);
+	public static final AtomicInteger cacheHits = new AtomicInteger();
+	private Map<String, byte[]> cache;
 	private Store store;
 	private ActorRef writeBehindCache;
 	private boolean cacheEnabled = false;
 
 	public DbActor() {
+		this.cache = MemoryMap.getInstance().getMap();
 		this.store = Store.getInstance();
 		if (AppConfig.Datastore.getCacheWriteInterval() >= 1 || AppConfig.Datastore.getCacheWritesPerSecond() >= 1) {
 			cacheEnabled = true;
 		}
-		// MemoryMap memoryMap = new MemoryMap(0.100);
-		// cache = memoryMap.getMap();
-	}
-
-	public static HTreeMap<String, byte[]> getCache() {
-		return cache;
 	}
 
 	private void setMessage(String id, PersistableMessage message) {
@@ -67,21 +64,12 @@ public class DbActor extends UntypedActor {
 
 	public Object getEntity(String id, String classname) throws ClassNotFoundException {
 		if (cache.containsKey(id)) {
+			cacheHits.incrementAndGet();
 			Class<?> clazz = Class.forName("GameMachine.Messages." + classname);
 			return EntitySerializer.fromByteArray(cache.get(id), clazz);
 		} else {
 			return store.get(id, classname);
 		}
-	}
-
-	private String getObjectId(Object object) throws Exception {
-		Class<?> klass = object.getClass();
-		if (!methods.containsKey(klass)) {
-			methods.put(klass, klass.getMethod("getId"));
-		}
-		Method method = methods.get(klass);
-		String id = (String) method.invoke(object);
-		return id;
 	}
 
 	@Override
@@ -96,7 +84,11 @@ public class DbActor extends UntypedActor {
 			getSender().tell(true, getSelf());
 		} else if (message instanceof ObjectdbGet) {
 			ObjectdbGet get = (ObjectdbGet) message;
-			Object obj = getEntity(get.getEntityId(), get.getKlass());
+			String classname = get.getKlass();
+			if (classname == null) {
+				classname = "Entity";
+			}
+			Object obj = getEntity(get.getEntityId(), classname);
 			if (obj != null) {
 				getSender().tell(obj, getSelf());
 			}

@@ -3,6 +3,10 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message AgentTrackData {
+  repeated TrackData trackData = 1;
+}
+
 message Agent {
   required string id = 1;
   required string code = 2;
@@ -345,6 +349,7 @@ message Entity {
   optional bool fastpath = 61;
   optional PoisonPill poisonPill = 62;
   optional string senderId = 63;
+  optional AgentTrackData agentTrackData = 64;
   //GAME_ENTITY_MESSAGES
 }
 

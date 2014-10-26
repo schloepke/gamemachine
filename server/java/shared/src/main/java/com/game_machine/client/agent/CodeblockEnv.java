@@ -1,5 +1,8 @@
 package com.game_machine.client.agent;
 
+import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
+
 import com.game_machine.client.api.Api;
 
 public class CodeblockEnv {
@@ -29,6 +32,15 @@ public class CodeblockEnv {
 		return api;
 	}
 
+	public void sendToAgent(String agentId, Object message) {
+		ActorSelection sel = Api.getActorByName(playerId+"/"+agentId);
+		sel.tell(message, runner.getSelf());
+	}
+	
+	public String getSender() {
+		return runner.getSender().path().name();
+	}
+	
 	public void tick(int delay, Object message) {
 		runner.tick(delay, message);
 	}

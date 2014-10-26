@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+wget --no-verbose --read-timeout=30 --no-check-certificate http://$CLOUD_HOST/api/agent_jarfile/$API_KEY/$PLAYER_ID
+
 declare quiet="false"
 
 while true; do
@@ -10,6 +12,12 @@ while true; do
 done
 
 declare AKKA_HOME="$(cd "$(cd "$(dirname "$0")"; pwd -P)"/..; pwd)"
+
+if [ -f "$PLAYER_ID" ]; then
+    echo "userjar copied to $AKKA_HOME/deploy/$PLAYER_ID.jar"
+    mv $PLAYER_ID $AKKA_HOME/deploy/$PLAYER_ID.jar
+fi
+
 
 [ -n "$JAVA_OPTS" ] || JAVA_OPTS="-Xmx40m -Xss512k -XX:+UseParNewGC -XX:+UseConcMarkSweepGC -XX:+UseCompressedOops"
 

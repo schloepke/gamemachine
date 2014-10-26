@@ -31,20 +31,22 @@ public class PlayerManager {
 		this.authtoken = authtoken;
 	}
 	
-	public void start() {
+	public boolean start() {
 		Config conf = Runner.getConfig();
 		String nodeHost = new Cloud().getNode();
 		if (nodeHost != null) {
 			host = nodeHost;
 			logger.info("Node host="+host);
 		} else {
-			logger.warn("Unable to get node host");
+			logger.error("Unable to get node host");
+			return false;
 		}
 				
 		networkClient = new SimpleUdpClient(host,port,playerId);
 		networkClient.start();
 		startPlayerActor();
 		System.gc();
+		return true;
 	}
 	
 	private void startPlayerActor() {

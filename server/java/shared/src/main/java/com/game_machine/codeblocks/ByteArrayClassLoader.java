@@ -21,11 +21,13 @@ public class ByteArrayClassLoader extends ClassLoader {
 			add("javax.crypto");
 			add("javax.xml");
 			add("java.nio");
+			add("com.google");
 			add("com.game_machine.codeblocks.Codeblock");
 			add("com.game_machine.client.api");
 			add("com.game_machine.client.agent.CodeblockEnv");
 			add("com.game_machine.client.agent.CodeblockRunner");
 			add("Client.Messages");
+			add("User.");
 		}
 	};
 

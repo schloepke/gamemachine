@@ -2,6 +2,7 @@ package com.game_machine.core;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -179,6 +180,10 @@ public class Grid {
 		return neighbors(gridValue.x, gridValue.y, entityType);
 	}
 
+	public List<TrackData> getAll() {
+		return new ArrayList<TrackData>(objectIndex.values());
+	}
+	
 	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}

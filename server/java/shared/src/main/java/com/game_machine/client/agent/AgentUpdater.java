@@ -6,6 +6,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import Client.Messages.Agent;
 import Client.Messages.AgentController;
 import akka.actor.ActorSelection;
@@ -17,6 +20,8 @@ import com.game_machine.client.api.Cloud;
 
 public class AgentUpdater {
 
+	private static final Logger logger = LoggerFactory.getLogger(AgentUpdater.class);
+	
 	private Config conf;
 	private Cloud cloud;
 
@@ -42,9 +47,19 @@ public class AgentUpdater {
 		}
 	}
 
+	public void playerDisconnected(String playerId) {
+		logger.warn("Stopping player manager for "+playerId);
+		if (playerManagers.containsKey(playerId)) {
+			PlayerManager playerManager = playerManagers.get(playerId);
+			playerManager.stop();
+			playerManagers.remove(playerId);
+		}
+	}
+	
 	public void updateCodeblocks() {
 		byte[] bytes = cloud.getAgents(conf.getPlayerId());
 		if (bytes == null) {
+			logger.error("cloud.getAgents returned null");
 			return;
 		}
 		AgentController agentController = new AgentController();
@@ -56,8 +71,12 @@ public class AgentUpdater {
 		if (!playerManagers.containsKey(playerId)) {
 			PlayerManager playerManager = new PlayerManager(conf.getDefaultHost(), conf.getDefaultPort(),
 					conf.getGameId(), playerId, authtoken);
-			playerManager.start();
-			playerManagers.put(playerId, playerManager);
+			if (playerManager.start()) {
+				playerManagers.put(playerId, playerManager);
+			} else {
+				logger.error("PlayerManager.start returned false");
+				return;
+			}
 		}
 
 		List<String> agentIds = new ArrayList<String>();
@@ -69,7 +88,7 @@ public class AgentUpdater {
 				sel.tell(a, null);
 			}
 		} else {
-			System.out.println("No agents found");
+			logger.warn("No agents found");
 		}
 		pruneAgents(agentIds);
 	}

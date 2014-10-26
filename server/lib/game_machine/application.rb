@@ -122,9 +122,9 @@ module GameMachine
 
         if config.udp.enabled
           JavaLib::UdpServer.start(config.udp.host,config.udp.port)
-          Actor::Builder.new(Endpoints::UdpIncoming).with_router(
-            JavaLib::RoundRobinRouter,config.routers.udp).start
         end
+
+        Actor::Builder.new(Endpoints::Incoming).with_router(JavaLib::RoundRobinRouter,config.routers.incoming).start
       end
 
       def start_handlers
@@ -189,6 +189,7 @@ module GameMachine
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
+        Actor::Builder.new(GameSystems::UserMessageTest).start
       end
 
     end

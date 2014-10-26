@@ -27,7 +27,7 @@ public class MessageGateway extends UntypedActor {
 
 	public MessageGateway() {
 		udpServer = UdpServer.getUdpServer();
-		udpIncoming = ActorUtil.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
+		udpIncoming = ActorUtil.getSelectionByName("GameMachine::Endpoints::Incoming");
 		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
 		messageCount = new AtomicInteger();

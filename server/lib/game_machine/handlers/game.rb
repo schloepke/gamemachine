@@ -40,22 +40,40 @@ module GameMachine
         dispatch_by_component(entity)
       end
 
+      def destination_to_player(destination,sender_id)
+        unless destination.match(/^player\//)
+          return false
+        end
+
+        player_service = JavaLib::PlayerService.get_instance
+        null,recipient,agent = destination.split('/')
+        if recipient_player = player_service.find(recipient)
+          player_game_id = player_service.get_game_id(sender_id)
+          if recipient_player.get_game_id == player_game_id
+            return {:recipient => recipient_player, :agent => agent}
+          else
+            self.class.logger.info("Destination player #{recipient_player.id} game id does not match sender")
+          end
+        end
+        return false
+      end
+
       def dispatch_by_destination(entity)
 
-        if entity.destination.match(/^player#/)
-          recipient = entity.destination.sub(/^player#/,'')
-          self.class.logger.debug("Destination player #{recipient}")
-          player_service = JavaLib::PlayerService.get_instance
-          if recipient_player = player_service.find(recipient)
-            if player_game_id = player_service.get_game_id(entity.player.id)
-              if recipient_player.get_game_id == player_game_id
-                recipient_player = MessageLib::Player.new.set_id(recipient_player.id)
-                entity.set_player(recipient_player).set_sender_id(player_game_id)
-                commands.player.send_message(entity,recipient_player.id)
-                self.class.logger.debug("Message sent to player destination #{recipient_player.id}")
-              end
-            end
-          end
+        if result = destination_to_player(entity.destination,entity.player.id)
+          recipient_player = result[:recipient]
+          player_id = entity.player.id
+          recipient_player = MessageLib::Player.new.set_id(recipient_player.id)
+          entity.set_player(recipient_player).set_sender_id(player_id)
+          commands.player.send_message(entity,recipient_player.id)
+          self.class.logger.debug("Message sent to player destination #{recipient_player.id}")
+          return
+        end
+
+        # Only allow direct routing to specific systems
+        unless entity.destination.match(/RemoteEcho/) || entity.destination.match(/Devnull/) ||
+          entity.destination.match(/TeamManager/) || entity.destination.match(/RegionService/)
+          self.class.logger.info("Bad destination #{entity.destination}")
           return
         end
 
@@ -75,12 +93,21 @@ module GameMachine
             destination = game_message.destination_id
           elsif game_message.has_destination
             destination = game_message.destination
+            if result = destination_to_player(destination,entity.player.id)
+              recipient_player = result.fetch(:recipient)
+              if agent = result.fetch(:agent,nil)
+                game_message.set_agent_id(agent)
+              end
+              commands.player.send_game_message(game_message,recipient_player.id)
+              self.class.logger.debug("GameMessage to player: #{recipient_player.id} agent: #{game_message.get_agent_id}")
+              next
+            end
           else
             self.class.logger.warn "Unable to find destination for game message, skipping"
             next 
           end
 
-          if route = game_message_routes.fetch(destination)
+          if route = game_message_routes.fetch(destination,nil)
             game_message.set_player_id(entity.player.id)
             if route[:distributed]
               Actor::Base.find_distributed(entity.player.id,route[:to]).tell(game_message)
