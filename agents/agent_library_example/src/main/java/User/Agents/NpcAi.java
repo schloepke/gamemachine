@@ -53,6 +53,9 @@ public class NpcAi implements Codeblock {
 		// Random player
 		List<TrackData> players = Globals.grid.neighbors(vitals.x, vitals.y, "player");
 		int playerIdx = (int) (Math.random() * players.size());
+		if (!players.contains(playerIdx)) {
+			return;
+		}
 		TrackData trackData = players.get(playerIdx);
 		
 		// Random chance to attack

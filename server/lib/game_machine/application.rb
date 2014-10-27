@@ -155,7 +155,6 @@ module GameMachine
         end
 
         JavaLib::GameMachineLoader.StartMessageGateway
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
 
         # Mostly unused
         if config.datastore.store == 'gamecloud'
@@ -181,14 +180,13 @@ module GameMachine
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
+        Actor::Builder.new(GameSystems::Devnull).start
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
         Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
-        Actor::Builder.new(GameSystems::UserMessageTest).start
       end
 
     end

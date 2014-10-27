@@ -1,6 +1,8 @@
 require 'spec_helper_minimal'
+
 require_relative '../../lib/game_machine/clients/test_client'
 require_relative '../../lib/game_machine/console'
+
 module GameMachine
 
   describe "connections" do
@@ -22,9 +24,9 @@ module GameMachine
       end
     end
 
-    xit "login all" do
+    it "login all" do
       clients = {}
-      count = 500
+      count = 10000
 
       count.times do |i|
         name = "user#{i}"
@@ -32,8 +34,23 @@ module GameMachine
       end
       count.times do |i|
         clients[i].login_nowait
-        sleep 0.005
+        sleep 0.001
       end
+      puts "clients connected"
+
+      1.times do |x|
+        puts x
+        c = 0
+        count.times do |i|
+          clients[i].send_remote_echo
+          c+= 1
+          if c > 10
+            sleep 0.001
+            c = 0
+          end
+        end
+      end
+
     end
 
     xit "multiple client connections" do
@@ -49,16 +66,13 @@ module GameMachine
         clients[i].login_nowait
       end
 
-      
       count.times do |i|
         clients[i].logout
       end
-      
+
     end
 
-
-
-    it "private chat messages between nodes" do
+    xit "private chat messages between nodes" do
       player1 = Clients::TestClient.new('player1','seed')
       player1.login
 

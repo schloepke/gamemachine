@@ -88,10 +88,8 @@ public class CombatManager implements Codeblock {
 
 	private void getNeighbors() {
 
-		// The server allows agents to be entities in the grid. In this case an
-		// 'agent' can be anything, it doesn't have to
-		// be an actual agent. You could have a single agent managing the ai for
-		// several 'mobs', and have a Vitals instance for each mob
+		// Send a TrackData for each ai.  Although the container is called AgentTrackData, the TrackData's it contains
+		// do not have to be agents, they can be anything they just need an id and coordinates.
 		AgentTrackData agentTrackData = new AgentTrackData();
 		for (Vitals vitals : Globals.getVitalsList()) {
 			TrackData trackData = new TrackData();
@@ -105,10 +103,12 @@ public class CombatManager implements Codeblock {
 		ApiMessage apiMessage = this.api.newMessage();
 		apiMessage.setAgentTrackData(agentTrackData);
 
-		// This trackdata tells the server what kind of grid query to perform.
-		// Players with
-		// the agent_controller role can specify 'grid' as the entity type to
-		// get all players regardless of location
+		// Trackdata for the player (controller).  We don't need to track the controller, but the server does it's neighbor
+		// query off of the entity type that trackdata contains.  Trackdata was designed for 'normal' clients, so if this seems a bit odd
+		// that is why.
+		
+		// Note: The entity type of 'grid' is specific to controllers (players with a role of agent_controller).  It tells the server to send us
+		// the entire grid not just entities within range.  Normal clients do not have access to this.
 		TrackData trackData = new TrackData();
 		trackData.setId(this.api.getPlayerId());
 		trackData.setEntityType("player");

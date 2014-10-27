@@ -25,8 +25,6 @@ public class RequestHandler extends UntypedActor {
 	private ActorSelection gameHandler;
 	public static String name = "request_handler";
 
-	private static Map<String, String> env = System.getenv();
-
 	public RequestHandler() {
 		this.authentication = new Authentication();
 		gameHandler = ActorUtil.getSelectionByName("game_handler");
@@ -45,11 +43,11 @@ public class RequestHandler extends UntypedActor {
 				if (Authentication.isAuthenticated(clientMessage.getPlayer())) {
 					gameHandler.tell(message, getSelf());
 				} else {
-					if (env.containsKey("CLUSTER_TEST")) {
-						ensureTestUser(clientMessage.getPlayer());
-					}
-
 					if (authentication.authenticate(clientMessage.getPlayer())) {
+						if (!Incoming.clients.containsKey(clientMessage.getPlayer().getId())) {
+							logger.info("No connection for "+clientMessage.getPlayer().getId());
+							return;
+						}
 						registerClient(clientMessage);
 						gameHandler.tell(message, getSelf());
 					} else {
@@ -70,14 +68,6 @@ public class RequestHandler extends UntypedActor {
 			for (Entity entity : clientMessage.getEntityList()) {
 				entity.setPlayer(clientMessage.getPlayer());
 			}
-		}
-	}
-
-	private void ensureTestUser(Player player) {
-		PlayerService playerService = PlayerService.getInstance();
-		Player p = playerService.find(player.getId());
-		if (p == null) {
-			playerService.create(player.getId(), "cluster_test");
 		}
 	}
 

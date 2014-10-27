@@ -81,10 +81,6 @@ public class MessageGateway extends UntypedActor {
 			clientMessage.addEntity(entity);
 
 			if (netMessage.protocol == NetMessage.UDP) {
-				// ByteBuf bb = clientMessage.toByteBuf();
-				// udpServer.sendToClient(bb, netMessage.host, netMessage.port,
-				// netMessage.ctx);
-
 				byte[] bytes = clientMessage.toByteArray();
 				udpServer.sendToClient(netMessage.address, bytes, netMessage.ctx);
 			} else if (netMessage.protocol == NetMessage.TCP) {

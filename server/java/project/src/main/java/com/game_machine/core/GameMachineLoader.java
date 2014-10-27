@@ -72,7 +72,7 @@ public class GameMachineLoader {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
-
+		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 		startCacheUpdateHandler();
 
 	}

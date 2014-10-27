@@ -3,6 +3,12 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message Statistic {
+  required string name = 1;
+  required float value = 2;
+  required string type = 3;
+}
+
 message AgentTrackData {
   repeated TrackData trackData = 1;
 }

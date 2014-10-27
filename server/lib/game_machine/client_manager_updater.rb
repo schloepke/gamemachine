@@ -22,7 +22,9 @@ module GameMachine
     def show_stats
       local_player_count = local_players.size
       player_count = players.size
-      self.class.logger.debug "#{Akka.instance.address} stats: local_players=#{local_player_count} players=#{player_count}"
+      SystemStats.log_statistic('local_players',local_player_count)
+      SystemStats.log_statistic('players',player_count)
+      #self.class.logger.info "#{Akka.instance.address} stats: local_players=#{local_player_count} players=#{player_count}"
     end
 
     def create_client_event(client_id,player_id,event)

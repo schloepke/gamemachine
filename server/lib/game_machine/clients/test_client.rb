@@ -77,6 +77,11 @@ module GameMachine
         send_message(logout_message)
       end
 
+      def send_remote_echo
+        entity = new_entity.set_echo_test(MessageLib::EchoTest.new.set_message('test'))
+        send_message(entity_message(entity))
+      end
+      
       def remote_echo
         entity = new_entity.set_echo_test(MessageLib::EchoTest.new.set_message('test'))
         send_message(entity_message(entity))

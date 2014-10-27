@@ -3,9 +3,6 @@ package com.game_machine.net;
 import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
-
-import com.game_machine.core.AppConfig;
-
 import GameMachine.Messages.ClientConnection;
 import GameMachine.Messages.ClientMessage;
 import GameMachine.Messages.Entity;
@@ -14,6 +11,8 @@ import GameMachine.Messages.PlayerConnected;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
+import com.game_machine.core.AppConfig;
 
 public class Outgoing extends UntypedActor {
 
@@ -29,7 +28,7 @@ public class Outgoing extends UntypedActor {
 		this.playerId = connection.getPlayerId();
 		this.clientConnection = connection.getClientConnection();
 		this.idleTimeout = AppConfig.Client.getIdleTimeout();
-		logger.info("Player idle timeout = "+this.idleTimeout);
+		logger.debug("Player idle timeout = "+this.idleTimeout);
 		this.lastActivity = System.currentTimeMillis() / 1000l;
 		tick(1000l,"idle_timeout");
 		
@@ -66,9 +65,11 @@ public class Outgoing extends UntypedActor {
 			logger.info("Player "+playerId+" timed out");
 			ClientMessage clientMessage = createClientMessage();
 			clientMessage.setPlayer(new Player().setId(playerId));
+			Incoming.clients.remove(playerId);
 			RequestHandler.unregisterClient(clientMessage);
 			getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
 		}
+		tick(1000l,"idle_timeout");
 	}
 	@Override
 	public void onReceive(Object message) throws Exception {
@@ -77,7 +78,7 @@ public class Outgoing extends UntypedActor {
 				unregisterIfIdle();
 			}
 		} else {
-			lastActivity = System.currentTimeMillis() * 1000l;
+			lastActivity = System.currentTimeMillis() / 1000l;
 			ClientMessage clientMessage = createClientMessage();
 			Entity entity = (Entity)message;
 			entity.setSendToPlayer(true);
