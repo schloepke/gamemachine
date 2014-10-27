@@ -19,8 +19,8 @@ message TrackData {
   optional Vector3 direction = 3;
   optional string json = 4;
   optional string id = 5;
-  optional float x = 6;
-  optional float y = 7;
+  required float x = 6;
+  required float y = 7;
   optional float z = 8;
   optional string entityType = 9;
   optional string neighborEntityType = 11;

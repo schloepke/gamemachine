@@ -99,12 +99,6 @@ public class EntityTracking extends UntypedActor {
 		} else {
 			Float x = entity.trackData.x;
 			Float y = entity.trackData.y;
-			if (x == null) {
-				x = 0f;
-			}
-			if (y == null) {
-				y = 0f;
-			}
 			trackDatas = grid.neighbors(x, y, entity.trackData.neighborEntityType);
 		}
 
