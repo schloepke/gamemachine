@@ -38,6 +38,10 @@ module GameMachine
         public? || player.authtoken == authtoken_for_player(player)
       end
 
+      # temporary bridge for java
+      def authtoken_is_valid(player)
+        public? || player.authtoken == authtoken_for_player(player)
+      end
 
       def authenticate!(player)
         @player = player

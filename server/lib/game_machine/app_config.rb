@@ -41,6 +41,8 @@ module GameMachine
       JavaLib::AppConfig::Datastore.set_serialization(config.datastore.serialization)
       JavaLib::AppConfig::Datastore.set_cache_write_interval(config.datastore.cache_write_interval)
       JavaLib::AppConfig::Datastore.set_cache_writes_per_second(config.datastore.cache_writes_per_second)
+      
+      JavaLib::AppConfig::Client.setIdleTimeout(config.client.idle_timeout)
     end
 
     def set_config_from_env

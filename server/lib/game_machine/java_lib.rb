@@ -54,6 +54,7 @@ module GameMachine
     include_package 'akka.camel'
     java_import 'com.game_machine.core.Grid'
     include_package 'com.game_machine.core'
+    include_package 'com.game_machine.net'
     include_package 'com.game_machine.codeblocks'
     include_package 'com.game_machine.shared.codeblocks'
     include_package 'com.game_machine.orm'

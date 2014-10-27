@@ -20,14 +20,14 @@ public class MessageGateway extends UntypedActor {
 	public static String name = "message_gateway";
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-	private ActorSelection udpIncoming;
+	private ActorSelection incoming;
 	private ActorSelection entityTracking;
 	private UdpServer udpServer;
 	private Boolean fastpathOnly;
 
 	public MessageGateway() {
 		udpServer = UdpServer.getUdpServer();
-		udpIncoming = ActorUtil.getSelectionByName("GameMachine::Endpoints::Incoming");
+		incoming = ActorUtil.getSelectionByName("incoming");
 		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
 		messageCount = new AtomicInteger();
@@ -57,7 +57,7 @@ public class MessageGateway extends UntypedActor {
 			List<Entity> entities = clientMessage.getEntityList();
 
 			if (entities == null) {
-				udpIncoming.tell(message, null);
+				incoming.tell(message, null);
 			} else {
 				fastpathOnly = true;
 				for (Entity entity : clientMessage.getEntityList()) {
@@ -69,7 +69,7 @@ public class MessageGateway extends UntypedActor {
 				}
 
 				if (!fastpathOnly) {
-					udpIncoming.tell(message, null);
+					incoming.tell(message, null);
 				}
 			}
 

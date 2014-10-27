@@ -47,6 +47,7 @@ module GameMachine
       end
 
       def start
+        JavaLib::AuthorizedPlayers.setPlayerAuthentication(Handlers::PlayerAuthentication.instance)
         create_grids
 
         start_actor_system
@@ -64,6 +65,7 @@ module GameMachine
         load_games
         start_mono
 
+        
         GameMachine.logger.info("Game Machine start successful")
         
         # This call blocks, make it the last thing we do
@@ -124,16 +126,13 @@ module GameMachine
           JavaLib::UdpServer.start(config.udp.host,config.udp.port)
         end
 
-        Actor::Builder.new(Endpoints::Incoming).with_router(JavaLib::RoundRobinRouter,config.routers.incoming).start
+        JavaLib::GameMachineLoader.start_incoming(config.routers.incoming)
       end
 
       def start_handlers
-        Actor::Builder.new(Handlers::Request).with_router(
-          JavaLib::RoundRobinRouter,config.routers.request_handler
-        ).start
-        Actor::Builder.new(Handlers::Game).with_router(
-          JavaLib::RoundRobinRouter,config.routers.game_handler
-        ).start
+        JavaLib::GameMachineLoader.start_request_handler(config.routers.request_handler)
+        JavaLib::GameMachineLoader.start_game_handler(config.routers.request_handler)
+        
       end
 
       def start_development_systems

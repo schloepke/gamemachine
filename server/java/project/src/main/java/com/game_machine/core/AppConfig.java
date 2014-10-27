@@ -7,6 +7,19 @@ public class AppConfig {
 	
 	private static String env;
 
+	public static class Client {
+		private static int idleTimeout;
+
+		public static int getIdleTimeout() {
+			return idleTimeout;
+		}
+
+		public static void setIdleTimeout(int idleTimeout) {
+			Client.idleTimeout = idleTimeout;
+		}
+
+	}
+	
     public static class Datastore {
     	private static String store;
     	private static String serialization;

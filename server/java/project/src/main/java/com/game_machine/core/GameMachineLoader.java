@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.game_machine.net.GameHandler;
+import com.game_machine.net.Incoming;
+import com.game_machine.net.RequestHandler;
 import com.game_machine.objectdb.DbActor;
 
 import akka.actor.ActorSystem;
@@ -31,7 +34,7 @@ public class GameMachineLoader {
 	}
 
 	public static void startObjectDb(int nodeCount) {
-		
+
 		ArrayList<String> nodes = new ArrayList<String>();
 		for (int i = 1; i < nodeCount; i++) {
 			nodes.add("object_store" + i);
@@ -41,7 +44,19 @@ public class GameMachineLoader {
 			actorSystem.actorOf(Props.create(DbActor.class), node);
 		}
 	}
+
+	public static void startRequestHandler(int nodeCount) {
+		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(RequestHandler.class)), RequestHandler.name);
+	}
 	
+	public static void startGameHandler(int nodeCount) {
+		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(GameHandler.class)), GameHandler.name);
+	}
+	
+	public static void startIncoming(int nodeCount) {
+		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(Incoming.class)), Incoming.name);
+	}
+
 	public static void startCacheUpdateHandler() {
 		ArrayList<String> nodes = new ArrayList<String>();
 		for (int i = 1; i < 50; i++) {
@@ -59,7 +74,7 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 
 		startCacheUpdateHandler();
-		
+
 	}
 
 }
