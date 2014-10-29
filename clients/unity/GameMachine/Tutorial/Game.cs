@@ -1,13 +1,15 @@
 using UnityEngine;
 using System;
+using  System.Collections.Generic;
 using GameMachine;
 using GameMachine.Core;
-using Entity = GameMachine.Messages.Entity;
-using EchoTest = GameMachine.Messages.EchoTest;
+using DynamicMessages;
+
 
 
 namespace GameMachine.Tutorial
 {
+
     public class Destination
     {
         public const int Inventory = 1;
@@ -15,7 +17,7 @@ namespace GameMachine.Tutorial
 
     public class Game : MonoBehaviour, GameMachineApp
     {
-
+        
         void Awake ()
         {
             DontDestroyOnLoad (transform.gameObject);
@@ -44,6 +46,8 @@ namespace GameMachine.Tutorial
         public void OnLoggedIn ()
         {
             this.gameObject.AddComponent<TutorialSelect> ();
+            Tracker tracker = this.gameObject.GetComponent<Tracker> () as Tracker;
+            EntityTracking.Register (tracker);
         }
 
     }

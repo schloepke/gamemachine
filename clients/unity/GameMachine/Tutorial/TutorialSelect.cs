@@ -12,6 +12,8 @@ namespace GameMachine.Tutorial
         {
             menu.itemWidth = 400f;
             menu.AddItem ("item_management_demo", "Persistence - Item management");
+            menu.AddItem("dynamic_chat_messages", "Dynamic messaging via chat");
+            menu.AddItem("dynamic_messaging", "Direct dynamic messaging");
             menu.AddItem ("chat_demo", "Chat & Groups");
             menu.AddItem ("team_demo", "Teams & Matchmaking");
         }

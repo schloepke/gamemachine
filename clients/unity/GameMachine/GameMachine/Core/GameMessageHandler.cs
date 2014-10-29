@@ -9,11 +9,13 @@ using System.Linq;
 using GameMessage = GameMachine.Messages.GameMessage;
 using GameMessages = GameMachine.Messages.GameMessages;
 using Entity = GameMachine.Messages.Entity;
+using DynamicMessage = GameMachine.Messages.DynamicMessage;
 
 namespace GameMachine.Core
 {
     public class GameMessageHandler
     {
+        private static string dynamicNamespace = "DynamicMessages";
         private Dictionary<string, GameMachine.Core.Behavior> behaviorGameMessages = new Dictionary<string, GameMachine.Core.Behavior> ();
         private Dictionary<string, PropertyInfo> gameMessageProps = new Dictionary<string, PropertyInfo> ();
         private Dictionary<string, ReliableMessage> reliableMessages = new Dictionary<string, ReliableMessage> ();
@@ -105,6 +107,38 @@ namespace GameMachine.Core
             Send (component, destination, false);
         }
 
+        public DynamicMessage toDynamicMessage (object component)
+        {
+            DynamicMessage wrapper = new DynamicMessage ();
+            Type t = component.GetType ();
+            wrapper.type = t.Name;
+            wrapper.message = Serialize (component);
+            return wrapper;
+        }
+
+        public void SendDynamicMessage (object component, object destination)
+        {
+            Send (toDynamicMessage (component), destination);
+        }
+
+        public void SendDynamicMessageReliable (object component, object destination)
+        {
+            SendReliable (toDynamicMessage (component), destination);
+        }
+
+        public object Deserialize (byte[] bytes, Type t)
+        {
+            MemoryStream stream = new MemoryStream (bytes);
+            return Serializer.NonGeneric.Deserialize (t, stream);
+        }
+        
+        public byte[] Serialize (object message)
+        {
+            MemoryStream stream = new MemoryStream ();
+            Serializer.Serialize (stream, message);
+            return stream.ToArray ();
+        }
+
         public void Register (GameMachine.Core.Behavior behavior, params string[] names)
         {
             for (int i = 0; i < names.Length; i++) {
@@ -129,22 +163,29 @@ namespace GameMachine.Core
         public void DeliverMessages (GameMessages gameMessages)
         {
             PropertyInfo prop;
-            foreach (string componentName in behaviorGameMessages.Keys) {
-                foreach (GameMessage gameMessage in gameMessages.gameMessage) {
-                    if (gameMessage.messageId.Length != 0) {
-                        if (reliableMessages.ContainsKey (gameMessage.messageId)) {
-                            reliableMessages.Remove (gameMessage.messageId);
-                            Logger.Debug ("Reliable message received " + gameMessage.messageId);
-                        } else {
-                            Logger.Debug ("Duplicate Reliable message " + gameMessage.messageId);
-                            continue;
-                        }
-                    }
 
+            foreach (GameMessage gameMessage in gameMessages.gameMessage) {
+                if (gameMessage.messageId.Length != 0) {
+                    if (reliableMessages.ContainsKey (gameMessage.messageId)) {
+                        reliableMessages.Remove (gameMessage.messageId);
+                        Logger.Debug ("Reliable message received " + gameMessage.messageId);
+                    } else {
+                        Logger.Debug ("Duplicate Reliable message " + gameMessage.messageId);
+                        continue;
+                    }
+                }
+                foreach (string componentName in behaviorGameMessages.Keys) {
                     prop = GameMessageProp (componentName);
                     object component = prop.GetValue (gameMessage, null);
                     if (component != null) {
-                        behaviorGameMessages [componentName].OnMessage (component);
+                        if (component is DynamicMessage) {
+                            DynamicMessage dynamicMessage = (DynamicMessage)component;
+                            Type t = Type.GetType (dynamicNamespace + "." + dynamicMessage.type);
+                            Object userObject = Deserialize (dynamicMessage.message, t);
+                            behaviorGameMessages [componentName].OnMessage (userObject);
+                        } else {
+                            behaviorGameMessages [componentName].OnMessage (component);
+                        }
                     }
                 }
 
