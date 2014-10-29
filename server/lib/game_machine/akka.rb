@@ -1,4 +1,5 @@
 require 'singleton'
+require 'forwardable'
 module GameMachine
   class Akka
     include Singleton

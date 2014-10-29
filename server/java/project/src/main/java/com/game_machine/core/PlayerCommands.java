@@ -1,10 +1,10 @@
 package com.game_machine.core;
 
-import akka.actor.ActorSelection;
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.GameMessage;
 import GameMachine.Messages.GameMessages;
 import GameMachine.Messages.Player;
+import akka.actor.ActorSelection;
 
 public class PlayerCommands {
 
@@ -16,7 +16,7 @@ public class PlayerCommands {
 		entity.setGameMessages(gameMessages);
 		PlayerCommands.sendToPlayer(entity, playerId);
 	}
-	
+
 	public static void sendToPlayer(Entity entity, String playerId) {
 		if (!entity.hasPlayer()) {
 			Player player = new Player();
@@ -24,7 +24,7 @@ public class PlayerCommands {
 			entity.setPlayer(player);
 		}
 		entity.setSendToPlayer(true);
-		
+
 		ActorSelection sel = ActorUtil.getSelectionByName("GameMachine::ClientManager");
 		sel.tell(entity, null);
 	}

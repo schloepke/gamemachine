@@ -8,14 +8,16 @@
 # block as it is only called once when the client first connects and is cached
 # internally after that. So you could make an external http call for example.
 require 'digest/md5'
+require 'json'
 module GameMachine
   module Handlers
     class PlayerAuthentication
       include Singleton
       include Models
 
-      attr_reader :authclass
+      attr_reader :authclass, :logger
       def initialize
+        @logger = GameMachine.logger.create(self.class.name)
         @sessions = {}
         java_import "#{AppConfig.instance.config.handlers.auth}"
         @authclass = AppConfig.instance.config.handlers.auth.split('.').last.constantize
@@ -29,29 +31,29 @@ module GameMachine
         if public?
           MessageLib::Player.new.set_id(username)
         else
-          MessageLib::Player.store_get('players',username,2000)
+          player_service = GameMachine::JavaLib::PlayerService.get_instance
+          player_service.find(username)
         end
       end
 
-      # Returns true if authorized, false if not
       def authorize(username,password)
-        GameMachine.logger.info "authorize: #{username}"
+        logger.debug "authorize: #{username}"
         if player = get_player(username)
           authenticator = authclass.new(player)
           if authenticator.authenticate(password)
             @sessions[username] = authtoken(username,password)
-            player.set_authtoken(@sessions[username])
-            player.store_set('players')
+            player_service = GameMachine::JavaLib::PlayerService.get_instance
+            player_service.set_authtoken(player.id,@sessions[username])
             return @sessions[username]
           else
-            GameMachine.logger.info "player: #{player.id} password does not match"
-            false
+            logger.info "player: #{player.id} password does not match"
+            nil
           end
         else
-          GameMachine.logger.info "player: #{username} not found"
-          false
+          logger.info "player: #{username} not found"
+          nil
         end
-        false
+        nil
       end
 
       # Returns a session token for a logged in user.  This must be a string and
@@ -67,11 +69,11 @@ module GameMachine
             @sessions[username] = authtoken
             return authtoken
           else
-            GameMachine.logger.info "Authoken for #{username} is nil"
+            logger.info "Authoken for #{username} is nil"
             nil
           end
         else
-          GameMachine.logger.info "User #{username} not found"
+          logger.info "User #{username} not found"
           nil
         end
       end

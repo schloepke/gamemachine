@@ -9,7 +9,11 @@ module GameMachine
       end
 
       def data_store
-        DataStore.instance
+        store = DbLib::Store.get_instance
+        store.connect(
+          config.datastore.store,
+          config.datastore.serialization
+        )
       end
 
       def akka
@@ -39,15 +43,12 @@ module GameMachine
 
       def stop
         stop_actor_system
-        DataStore.instance.shutdown
+        DbLib::Store.get_instance.shutdown
       end
 
       def start
+        JavaLib::AuthorizedPlayers.setPlayerAuthentication(Handlers::PlayerAuthentication.instance)
         create_grids
-
-        unless GameMachine.env == 'test'
-          GameMachine::Actor::Reloadable.update_paths(true)
-        end
 
         start_actor_system
         data_store
@@ -64,11 +65,18 @@ module GameMachine
         load_games
         start_mono
 
+        
         GameMachine.logger.info("Game Machine start successful")
         
-        # This call blocks, make it the last thing we do
+        # When admin is disabled we use a minimal netty http server for auth
+        #  This is desired for production deployments where we have a separate
+        # system for managing users
         if config.http.enabled
-          Thread.new do
+          if config.admin_enabled
+            Thread.new do
+              start_admin
+            end
+          else
             start_http
           end
         end
@@ -102,6 +110,11 @@ module GameMachine
       end
 
       def start_http
+        http = NetLib::HttpServer.new(config.http.host,config.http.port,'message_gateway', HttpHelper.new)
+        http.start
+      end
+
+      def start_admin
         require_relative '../../web/app'
       end
 
@@ -114,26 +127,23 @@ module GameMachine
 
       def start_endpoints
         if config.tcp.enabled
-          JavaLib::TcpServer.start(config.tcp.host, config.tcp.port);
+          NetLib::TcpServer.start(config.tcp.host, config.tcp.port);
           GameMachine.logger.info(
             "Tcp starting on #{config.tcp.host}:#{config.tcp.port}"
           )
         end
 
         if config.udp.enabled
-          JavaLib::UdpServer.start(config.udp.host,config.udp.port)
-          Actor::Builder.new(Endpoints::UdpIncoming).with_router(
-            JavaLib::RoundRobinRouter,config.routers.udp).start
+          NetLib::UdpServer.start(config.udp.host,config.udp.port)
         end
+
+        JavaLib::GameMachineLoader.start_incoming(config.routers.incoming)
       end
 
       def start_handlers
-        Actor::Builder.new(Handlers::Request).with_router(
-          JavaLib::RoundRobinRouter,config.routers.request_handler
-        ).start
-        Actor::Builder.new(Handlers::Game).with_router(
-          JavaLib::RoundRobinRouter,config.routers.game_handler
-        ).start
+        JavaLib::GameMachineLoader.start_request_handler(config.routers.request_handler)
+        JavaLib::GameMachineLoader.start_game_handler(config.routers.request_handler)
+        
       end
 
       def start_development_systems
@@ -141,18 +151,30 @@ module GameMachine
 
       # TODO configurize router sizes
       def start_core_systems
-        JavaLib::GameMachineLoader.StartMessageGateway
-        Actor::Builder.new(CloudUpdater).start
         Actor::Builder.new(ClusterMonitor).start
-        Actor::Builder.new(ObjectDb).distributed(config.routers.objectdb).start
+        Actor::Builder.new(ObjectDb).distributed(1).start
+        JavaLib::GameMachineLoader.startObjectDb(config.routers.objectdb)
         Actor::Builder.new(MessageQueue).start
-        Actor::Builder.new(SystemMonitor).start
-        Actor::Builder.new(ReloadableMonitor).start
-        Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(WriteBehindCache).distributed(config.routers.objectdb).start
-        Actor::Builder.new(ClientManager).start
+        Actor::Builder.new(ClientManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler * 2).start
+        Actor::Builder.new(ClientManagerUpdater).start
+        
+        # Client manager especially needs to be running now, so other actors can
+        # register to it to receive events
+        unless GameMachine.env == 'test'
+          GameMachine.logger.info("Waiting 2 seconds for core actors to start")
+          sleep 2
+        end
+
+        JavaLib::GameMachineLoader.StartMessageGateway
+
+        # Mostly unused
+        if config.datastore.store == 'gamecloud'
+          Actor::Builder.new(CloudUpdater).start
+        end
+
         Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(GameSystems::RemoteEcho).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
+        Actor::Builder.new(Scheduler).start
+        Actor::Builder.new(SystemMonitor).start
 
         if config.use_regions
           # Our cluster singleton for managing regions
@@ -162,22 +184,20 @@ module GameMachine
           Actor::Builder.new(GameSystems::RegionService).start
         end
 
-        if ENV.has_key?('RESTARTABLE')
-          GameMachine.logger.info "restartable=true.  Will respond to tmp/gm_restart.txt"
-          Actor::Builder.new(RestartWatcher).start
+        if ENV['CLUSTER_TEST']
+          Actor::Builder.new(Killswitch).start
+          GameMachine.logger.warn "Killswitch activated"
         end
       end
 
       def start_game_systems
-        Actor::Builder.new(GameSystems::Devnull).start#.with_router(JavaLib::RoundRobinRouter,4).start
-        Actor::Builder.new(GameSystems::ObjectDbProxy).with_router(JavaLib::RoundRobinRouter,2).start
+        Actor::Builder.new(GameSystems::Devnull).start
         JavaLib::GameMachineLoader.StartEntityTracking
         Actor::Builder.new(GameSystems::LocalEcho).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
-        Actor::Builder.new(GameSystems::TeamManager).start
-        Actor::Builder.new(GameSystems::JsonModelPersistence).start
+        Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
       end
 
     end

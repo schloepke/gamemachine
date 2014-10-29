@@ -3,6 +3,7 @@ require 'benchmark'
 require "net/http"
 require "uri"
 require 'jruby/core_ext'
+require 'digest'
 module GameMachine
 
   describe "misc" do 
@@ -16,20 +17,73 @@ module GameMachine
       entity
     end
 
-    it "ebean test" do
-      config = AppConfig.instance.config
-      pool = GameMachine::JavaLib::DbConnectionPool.getInstance
-      pool.connect(
-        'test',
-        config.jdbc.hostname,
-        config.jdbc.port,
-        config.jdbc.database,
-        config.jdbc.ds,
-        config.jdbc.username,
-        config.jdbc.password || ''
-      )
-      BeanLib::TestModel.set_ds
-      BeanLib::TestModel.test
+    let(:player_id) {'player'}
+    let(:id) {'one'}
+
+    let(:test_object) do
+      message = MessageLib::TestObject.new
+      message.set_id(id)
+      message.set_required_string('testing')
+      message.set_fvalue(1.9)
+      message.set_bvalue(true)
+      message.set_dvalue(3.4)
+      message.set_numbers64(555)
+    end
+
+    it "dynamic protobuf messages" do
+      JavaLib::MessageTest.test
+    end
+
+    xit "object store stress" do
+
+      count = 0
+      threads = []
+      2.times do
+        threads << Thread.new do
+          keys = {}
+          tobj = test_object.clone
+          puts Benchmark.realtime {
+            10000.times do
+              50000.times do |i|
+                id = i.to_s
+                tobj.set_id(id)
+                MessageLib::TestObject.store.set(tobj)
+                MessageLib::TestObject.store.get(id,3)
+                #sleep 0.001
+              end
+            end
+          }
+        end
+      end
+      threads.map(&:join)
+    end
+
+    xit "cache test" do
+      MessageLib::TestObject.cacheInit(100,200000)
+      count = 100000
+
+      cache = MessageLib::TestObject.get_cache
+      cache.set(test_object.id,test_object)
+
+      count.times do |i|
+        obj = test_object.clone
+        obj.set_id(i.to_s)
+        cache.set(obj.id,obj)
+      end
+
+      puts Benchmark.realtime {
+      count.times do |i|
+        if obj = cache.get(i.to_s)
+          obj.cache_increment_field("numbers64",1,10)
+        end
+      end
+    }
+
+      #count.times do |i|
+      #   entity.set_id(i.to_s)
+      #  MessageLib::Entity.store_delete('testing',entity.id)
+      #end
+
     end
 
     xit "authorizes with cloudclient" do
@@ -69,19 +123,7 @@ module GameMachine
       end
     end
 
-    xit "msyql ogbject store stress" do
-      GameMachine::Application.orm_connect
-      ds = Commands::DatastoreCommands.new
-      count = 0
-      puts Benchmark.realtime {
-        10000.times do
-          entity.id = count.to_s
-          entity.db_put
-          count += 1
-          sleep 0.002
-        end
-      }
-    end
+    
 
     xit "finds model" do
       GameMachine::Application.orm_connect

@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class Teams < Model
+    class Teams < TeamBase
       attribute :teams, Array
     end
   end

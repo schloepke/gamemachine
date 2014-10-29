@@ -1,2 +1,5 @@
 rootProject.name = 'game_machine'
 
+include 'game_machine_shared'
+project(':game_machine_shared').projectDir =  new File(settingsDir, '../shared')
+

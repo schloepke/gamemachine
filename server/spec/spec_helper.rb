@@ -4,11 +4,17 @@ ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
 ENV['GAME_ENV'] = 'test'
 require 'rubygems'
 
+require 'java'
+policyfile = File.join(ENV['APP_ROOT'],'config','app.policy')
+java.lang.System.setProperty("java.security.policy", policyfile)
+
 begin
   require 'game_machine'
 rescue LoadError
   require_relative '../lib/game_machine'
 end
+
+java.lang.System.setSecurityManager(GameMachine::JavaLib::CodeblockSecurityManager.new)
 
 RSpec.configure do |config|
   config.before(:suite) do
@@ -18,6 +24,7 @@ RSpec.configure do |config|
   config.before(:each) do
     GameMachine::AppConfig.instance.load_config
     GameMachine::Application.create_grids
+    GameMachine::Application.data_store
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems
     GameMachine::Application.start_handlers
@@ -26,6 +33,7 @@ RSpec.configure do |config|
   end
 
   config.after(:each) do
+    GameMachine::DbLib::Store.get_instance.shutdown
     GameMachine::Application.stop_actor_system
   end
 

@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class TeamInvite < Model
+    class TeamInvite < TeamBase
       attribute :name, String
       attribute :invite_id, String
     end

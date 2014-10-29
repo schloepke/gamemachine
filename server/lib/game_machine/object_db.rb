@@ -11,33 +11,34 @@ module GameMachine
       end
     end
 
-    attr_accessor :entities, :store
+    attr_accessor :store, :cache, :classmap
     def post_init(*args)
-      @entities = {}
-      @store = DataStore.instance
+      @store = DbLib::Store.get_instance
+      @cache = ApiLib::MemoryMap.get_instance.get_map
+      @classmap = {}
     end
 
-    def delete_entity(entity_id)
-      entities.delete(entity_id)
-      @store.delete(entity_id)
-    end
+    def class_cache(classname)
+      return MessageLib::Entity if classname.nil?
 
-    def delete_all
-      entities = {}
-      store.delete_all
+      if cached = classmap.fetch(classname,nil)
+        return cached
+      else
+        classmap[classname] = "GameMachine::MessageLib::#{classname}".constantize
+        classmap[classname]
+      end
     end
 
     def set_entity(entity)
-      entities[entity.id] = entity
-      WriteBehindCache.find_distributed(entity.id).tell(entity)
+      cache.put(entity.id,entity.to_byte_array)
+      store.set(entity.id,entity)
     end
 
     def get_entity(entity_id,klass)
-      entity = entities.fetch(entity_id,nil)
-      if entity.nil?
-        entity = store.get(entity_id,klass)
+      if bytes = cache.get(entity_id)
+        class_cache(klass).parse_from(bytes)
       else
-        entity.clone
+        store.get(entity_id,klass)
       end
     end
 
@@ -57,19 +58,6 @@ module GameMachine
         else
           GameMachine.logger.warn("Unable to find dbproc #{procname}")
         end
-
-      elsif message.is_a?(MessageLib::ObjectdbPut)
-        set_entity(message.get_entity)
-        get_sender.tell(true,nil)
-      elsif message.is_a?(MessageLib::ObjectdbGet)
-        if entity = get_entity(message.get_entity_id,message.get_klass)
-          get_sender.tell(entity,nil)
-        end
-      elsif message.is_a?(MessageLib::ObjectdbDel)
-        delete_entity(message.get_entity_id)
-      elsif message.respond_to?(:get_id)
-        set_entity(message)
-        get_sender.tell(true,nil)
       else
         unhandled(message)
       end

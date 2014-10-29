@@ -1,11 +1,7 @@
 package com.game_machine.core;
 
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import GameMachine.Messages.Entity;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,53 +10,105 @@ import akka.serialization.JSerializer;
 
 public class EntitySerializer extends JSerializer {
 
-	private static final Logger log = LoggerFactory.getLogger(EntitySerializer.class);
+	private static ConcurrentHashMap<Class<?>, Method> serializeMethods = new ConcurrentHashMap<Class<?>, Method>();
+	private static ConcurrentHashMap<Class<?>, Method> deserializeMethods = new ConcurrentHashMap<Class<?>, Method>();
+	
+	private static ConcurrentHashMap<Class<?>, Method> serializeJsonMethods = new ConcurrentHashMap<Class<?>, Method>();
+	private static ConcurrentHashMap<Class<?>, Method> deserializeJsonMethods = new ConcurrentHashMap<Class<?>, Method>();
+	private static final Logger logger = LoggerFactory.getLogger(EntitySerializer.class);
+	
+	public static String toJson(Object obj) {
+		String value = null;
+		Method m;
+		Class<?> clazz = obj.getClass();
+		try {
+			if (serializeJsonMethods.containsKey(clazz)) {
+				m = serializeJsonMethods.get(clazz);
+			} else {
+				m = obj.getClass().getMethod("toJson");
+				serializeJsonMethods.put(clazz, m);
+			}
+			value = (String) m.invoke(obj);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return value;
+	}
+	
+	public static byte[] toByteArray(Object obj) {
+		byte[] bytes = null;
+		Method m;
+		Class<?> clazz = obj.getClass();
+		try {
+			if (serializeMethods.containsKey(clazz)) {
+				m = serializeMethods.get(clazz);
+			} else {
+				m = obj.getClass().getMethod("toByteArray");
+				serializeMethods.put(clazz, m);
+			}
+			bytes = (byte[]) m.invoke(obj);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			e.printStackTrace();
+		}
+		return bytes;
+	}
+
+	public static Object fromJson(String value, Class<?> clazz) {
+		Method m;
+		try {
+			if (deserializeJsonMethods.containsKey(clazz)) {
+				m = deserializeJsonMethods.get(clazz);
+			} else {
+				m = clazz.getMethod("parseFromJson", String.class);
+				deserializeJsonMethods.put(clazz, m);
+			}
+			return clazz.cast(m.invoke(clazz, value));
+		} catch (Exception e) {
+			logger.error("clazz = " + clazz);
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Object fromByteArray(byte[] bytes, Class<?> clazz) {
+		Method m;
+		try {
+			if (deserializeMethods.containsKey(clazz)) {
+				m = deserializeMethods.get(clazz);
+			} else {
+				m = clazz.getMethod("parseFrom", byte[].class);
+				deserializeMethods.put(clazz, m);
+			}
+			return clazz.cast(m.invoke(clazz, bytes));
+		} catch (Exception e) {
+			logger.error("clazz = " + clazz);
+			logger.error(e.getMessage());
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	// This is whether "fromBinary" requires a "clazz" or not
 	@Override
 	public boolean includeManifest() {
 		return true;
 	}
 
-	// Pick a unique identifier for your Serializer,
-	// you've got a couple of billions to choose from,
-	// 0 - 16 is reserved by Akka itself
 	@Override
 	public int identifier() {
 		return 1234567;
 	}
 
-	// "toBinary" serializes the given object to an Array of Bytes
 	@Override
 	public byte[] toBinary(Object obj) {
-		// Entity entity = (Entity) obj;
-		// return entity.toByteArray();
-		byte[] bytes = null;
-		Method m;
-		try {
-			m = obj.getClass().getMethod("toByteArray");
-			bytes = (byte[]) m.invoke(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return bytes;
+		return toByteArray(obj);
 	}
 
-	// "fromBinary" deserializes the given array,
-	// using the type hint (if any, see "includeManifest" above)
 	@Override
 	public Object fromBinaryJava(byte[] bytes, Class<?> clazz) {
-		//log.error("fromBinaryJava = " + clazz.getName());
-		Method m;
-		try {
-			m = clazz.getMethod("parseFrom", byte[].class);
-			return clazz.cast(m.invoke(clazz,bytes));
-		} catch (Exception e) {
-			log.error("clazz = " + clazz);
-			log.error(e.getMessage());
-			e.printStackTrace();
-			return null;
-		}
-		//Entity entity = Entity.parseFrom(bytes);
-		//return entity;
+		return fromByteArray(bytes, clazz);
 	}
 }

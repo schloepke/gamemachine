@@ -1,7 +1,5 @@
-require_relative 'actor/reloadable'
 require_relative 'actor/system'
 require_relative 'actor/base'
 require_relative 'actor/factory'
 require_relative 'actor/ref'
-require_relative 'actor/development'
 require_relative 'actor/game_actor'

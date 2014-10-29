@@ -1,0 +1,85 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
+  }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'game_machine.shared'
+ version = '1.0'
+
+
+description = """"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+  mavenCentral()
+  maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+  
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/main/java'
+            exclude 'com/game_machine/client/netty/**'
+       }
+   }
+}
+
+dependencies {
+  compile 'org.slf4j:slf4j-api:1.7.7'
+  compile 'org.slf4j:slf4j-simple:1.7.7'
+  //compile 'ch.qos.logback:logback-classic:1.1.2'
+  //compile 'ch.qos.logback:logback-core:1.1.2'
+  //compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-api:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-core:1.0.8'
+  compile 'com.dyuproject.protostuff:protostuff-runtime:1.0.8'
+  compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
+  compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
+  //compile 'org.json:json:20140107'
+  compile 'com.google.code.gson:gson:2.3'
+  compile 'com.google.guava:guava:18.0'
+  //compile 'io.netty:netty-all:4.0.23.Final'
+}
+import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+
+shadowJar {
+  transform(AppendingTransformer) {
+    resource = 'reference.conf'
+  }
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}
+
+task agent(type: Copy) {
+  into "$buildDir/../../agent/deploy"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+}
+
+task example(type: Copy) {
+  into "$buildDir/../../../../agents/agent_library_example/game_machine_lib"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+}
+
+task install_libs(type: Copy) {
+  into "$buildDir/../lib"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+}

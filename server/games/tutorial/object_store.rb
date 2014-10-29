@@ -10,7 +10,7 @@ module Tutorial
     end
 
     def all_for_player(player_id)
-      if entity = MessageLib::Entity.store_get(player_id,'player_items',5000)
+      if entity = MessageLib::Entity.store.get(player_id,'player_items',5000)
         player_items_cache[player_id] = entity.get_player_items
       else
         player_items_cache[player_id] = MessageLib::PlayerItems.new
@@ -48,7 +48,7 @@ module Tutorial
       entity = MessageLib::Entity.new
       entity.set_player_items(player_items)
       entity.set_id('player_items')
-      entity.store_set(player_id)
+      MessageLib::Entity.store.set(player_id,entity)
     end
 
   end

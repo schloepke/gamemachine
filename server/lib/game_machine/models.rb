@@ -1,4 +1,5 @@
 
+require_relative 'models/team_base'
 require_relative 'models/region'
 require_relative 'models/player_status_update'
 require_relative 'models/create_team'

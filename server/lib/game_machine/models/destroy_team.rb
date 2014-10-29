@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class DestroyTeam < Model
+    class DestroyTeam < TeamBase
       attribute :name, String
       attribute :owner, String
     end

@@ -14,10 +14,16 @@ module GameMachine
           set_port(AppConfig.instance.config.http.port).
           set_cluster_name(ENV['CLUSTER_NAME']).
           set_client_count(ClientManager.local_players.size)
-
-        schedule_message('update',5,:seconds)
+      elsif
+        @node_status = MessageLib::NodeStatus.new.
+          set_container_id(0).
+          set_cluster_name("none").
+          set_hostname(AppConfig.instance.config.http.host).
+          set_port(AppConfig.instance.config.http.port).
+          set_client_count(ClientManager.local_players.size)
       end
 
+      schedule_message_once('update',5,:seconds)
       cluster = JavaLib::Cluster.get(getContext.system)
       cluster.subscribe(getSelf, JavaLib::ClusterEvent::ClusterMetricsChanged.java_class)
       
@@ -36,14 +42,17 @@ module GameMachine
             end
           end
         end
-      end
-      if message.is_a?(String)
+      elsif message.is_a?(String)
         if message == 'update'
           node_status.set_last_updated(Time.now.to_i)
           node_status.set_client_count(ClientManager.local_players.size)
           node_status.set_heap_used(stats[:heap])
           node_status.set_load_average(stats[:load_average])
-          JavaLib::CloudClient.get_instance.update_node_status(node_status)
+          cloud_response = JavaLib::CloudClient.get_instance.update_node_status(node_status)
+          if cloud_response.status != 200
+            self.class.logger.warn "Update node status returned #{cloud_response.status}"
+          end
+          schedule_message_once('update',5,:seconds)
         end
       end
     end

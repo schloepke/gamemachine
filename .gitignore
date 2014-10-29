@@ -37,3 +37,4 @@ server/java/project/src/main/java/GameMachine/Messages/*.java
 /doc/
 /rdoc/
 /server/java/project/.nb-gradle/private/
+server/java/shared/src/main/java/Client/Messages

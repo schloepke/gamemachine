@@ -35,7 +35,7 @@ module Tutorial
 
       @player_item_cache = {}
 
-      @catalog_list = MessageLib::PlayerItem.db_find_all(catalog_user)
+      @catalog_list = MessageLib::PlayerItem.db.where('player_item_player_id = ?',catalog_user)
       @catalog_map = catalog_list.each_with_object({}) {|v,res| res[v.id] = v}
     end
 
@@ -131,7 +131,9 @@ module Tutorial
         current_player_item
       else
         current_player_item = catalog_item.clone
-        current_player_item.quantity = 0
+        current_player_item.set_record_id(nil)
+        current_player_item.set_player_id(nil)
+        current_player_item.set_quantity(0)
         current_player_item.set_cost(nil)
         current_player_item
       end

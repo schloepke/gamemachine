@@ -2,7 +2,6 @@ package com.game_machine.core;
 
 import java.io.Serializable;
 
-
 public class GridValue implements Serializable {
 
 	/**
@@ -14,7 +13,7 @@ public class GridValue implements Serializable {
 	public final float x;
 	public final float y;
 	public final float z;
-	
+
 	public final String entityType;
 	public long createdAt;
 
@@ -25,6 +24,6 @@ public class GridValue implements Serializable {
 		this.y = y;
 		this.z = z;
 		this.entityType = entityType;
-		//this.createdAt = System.nanoTime();
+		// this.createdAt = System.nanoTime();
 	}
 }

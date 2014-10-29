@@ -3,18 +3,30 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message Player {
+  required string id = 1;
+  optional bool authenticated = 2;
+  optional string authtoken = 3;
+  optional string passwordHash = 4;
+  optional string gameId = 5;
+  optional int32 recordId = 6;
+  optional string role = 7;
+  optional bool locked = 8;
+}
+
 message TrackData {
   optional float speed = 1;
   optional float velocity = 2;
   optional Vector3 direction = 3;
   optional string json = 4;
   optional string id = 5;
-  optional float x = 6;
-  optional float y = 7;
+  required float x = 6;
+  required float y = 7;
   optional float z = 8;
   optional string entityType = 9;
   optional string neighborEntityType = 11;
   optional int32 action = 12;
+  optional DynamicMessage dynamicMessage = 13;
 }
 
 message GameMessage {
@@ -23,19 +35,23 @@ message GameMessage {
   optional string messageId = 2;
   optional int32 destinationId = 3;
   optional string destination = 4;
+  optional string agentId = 5;
+  optional DynamicMessage dynamicMessage = 6;
 
   // User modifiable
   optional PlayerItems playerItems = 10;
   optional AddPlayerItem addPlayerItem = 11;
   optional RemovePlayerItem removePlayerItem = 12;
   optional RequestPlayerItems requestPlayerItems = 13;
-
-  // Tutorial echo
-  optional EchoTest echoTest = 14;
 }
 
 message GameMessages {
   repeated GameMessage gameMessage = 1;
+}
+
+message DynamicMessage {
+  required string type = 1;
+  required bytes message = 2;
 }
 
 // Inventory messages
@@ -48,6 +64,8 @@ local_persistent_message PlayerItem {
   optional Weapon weapon = 5;
   optional Consumable consumable = 6;
   optional Cost cost = 8;
+  optional string playerId = 9;
+  optional int32 recordId = 10;
 }
 
 
@@ -84,8 +102,7 @@ local_message RemovePlayerItem {
   required int32 quantity = 2;
 }
 
-
-
+// For testing
 persistent_message TestObject {
   required string id = 12;
   optional string optionalString = 1;
@@ -97,15 +114,6 @@ persistent_message TestObject {
   optional float fvalue = 7;
   optional int64 numbers64 = 8;
   repeated Player player = 9;
-  enum Corpus {
-    UNIVERSAL = 0;
-    WEB = 1;
-    IMAGES = 2;
-    LOCAL = 3;
-    NEWS = 4;
-    PRODUCTS = 5;
-    VIDEO = 6;
-  }
-  optional Corpus corpus = 10;
-  repeated Corpus corpus2 = 11;
+  optional int32 recordId = 10;
+  
 }

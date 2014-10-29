@@ -1,28 +1,22 @@
 package com.game_machine.authentication;
 
-import org.mindrot.jbcrypt.BCrypt;
-
 import GameMachine.Messages.Player;
+
+import com.game_machine.core.PlayerService;
 
 public class DefaultAuthenticator implements PlayerAuthenticator {
 
-	private static String scope = "players";
-	public Player player;
+	private Player player;
 
 	public DefaultAuthenticator(Player player) {
 		this.player = player;
 	}
 
 	public void setPassword(String password) {
-		player.setPasswordHash(BCrypt.hashpw(password, BCrypt.gensalt()));
-		player.storeSet(scope);
+		PlayerService.getInstance().setPassword(player.id, password);
 	}
 
 	public boolean authenticate(String password) {
-		if (player.hasPasswordHash()) {
-			return BCrypt.checkpw(password, player.getPasswordHash());
-		} else {
-			return false;
-		}
+		return PlayerService.getInstance().authenticate(player.id, password);
 	}
 }

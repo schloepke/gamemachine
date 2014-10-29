@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class EndMatch < Model
+    class EndMatch < TeamBase
       attribute :match_id, Array
     end
   end

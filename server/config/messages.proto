@@ -3,6 +3,38 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message TeamRequest {
+  required string json = 1;
+}
+
+message TeamResponse {
+  required string json = 1;
+}
+
+message Statistic {
+  required string name = 1;
+  required float value = 2;
+  required string type = 3;
+}
+
+message AgentTrackData {
+  repeated TrackData trackData = 1;
+}
+
+message Agent {
+  required string id = 1;
+  required string code = 2;
+  required string classname = 3;
+  optional bool remove = 5;
+  required string compileResult = 6; 
+}
+
+message AgentController {
+  repeated Agent agent = 1;
+  required Player player = 2;
+  required string gameId = 3;
+}
+
 message NodeStatus {
   required int32 containerId = 1;
   required string clusterName = 2;
@@ -12,6 +44,10 @@ message NodeStatus {
   required int32 clientCount = 6;
   required double loadAverage = 7;
   required int32 heapUsed = 8;
+}
+
+message NodeStatuses {
+  repeated NodeStatus nodeStatus = 1;
 }
 
 message MonoMessage {
@@ -34,11 +70,18 @@ message PlayerLogout {
   optional string authtoken = 2;
 }
 
-message PlayerConnect {}
-message PlayerConnected {}
+message PlayerConnect {
+  optional string playerId = 1;
+  optional string password = 2; 
+}
+
+message PlayerConnected {
+  optional int32 notused = 1;
+}
 
 message PlayerAuthenticated {
   required string playerId = 1;
+  required string authtoken = 2;
 }
 
 message ErrorMessage {
@@ -93,9 +136,11 @@ message ChatMessage {
   required string type = 3;
   optional string senderId = 4;
   optional Entity entity = 5;
+  optional DynamicMessage dynamicMessage = 6;
 }
 
 message ChatStatus {
+  optional int32 notused = 1;
 }
 
 message ChatDestroy {
@@ -136,16 +181,19 @@ message Subscribers {
 
 message Subscribe {
   optional string topic = 1;
+  required string gameId = 2;
 }
 
 message Unsubscribe {
   required string topic = 1;
+  required string gameId = 2;
 }
 
 message Publish {
   optional string topic = 1;
   required Entity message = 2;
   optional string path = 3;
+  required string gameId = 4;
 }
 
 message ObjectdbDel {
@@ -184,12 +232,7 @@ message Name {
   required string value = 1;
 }
 
-message Player {
-  required string id = 1;
-  optional bool authenticated = 2;
-  optional string authtoken = 3;
-  optional string passwordHash = 4;
-}
+
 
 message Vector3 {
   optional float x = 1;
@@ -270,8 +313,11 @@ message Regions {
   required string regions = 1;
 }
 
+message PoisonPill {
+  optional int32 notused = 1;
+}
+
 message Entity {
-  optional Player player = 1;
   optional Neighbors neighbors = 2;
   optional ChatMessage chatMessage = 4;
   optional ClientConnection clientConnection = 5;
@@ -316,6 +362,11 @@ message Entity {
   optional ClientManagerEvent clientManagerEvent = 59;
   optional Regions regions = 60;
   optional bool fastpath = 61;
+  optional PoisonPill poisonPill = 62;
+  optional string senderId = 63;
+  optional AgentTrackData agentTrackData = 64;
+  optional TeamRequest teamRequest = 65;
+  optional TeamResponse teamResponse = 66;
   //GAME_ENTITY_MESSAGES
 }
 

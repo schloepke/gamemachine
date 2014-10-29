@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class JoinTeam < Model
+    class JoinTeam < TeamBase
       attribute :name, String
     end
   end

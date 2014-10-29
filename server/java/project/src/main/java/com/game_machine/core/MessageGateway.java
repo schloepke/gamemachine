@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.game_machine.net.udp.UdpServer;
+import com.game_machine.net.udp.UdpServerHandler;
+
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.ClientMessage;
 import GameMachine.Messages.Entity;
@@ -20,17 +23,15 @@ public class MessageGateway extends UntypedActor {
 	public static String name = "message_gateway";
 
 	LoggingAdapter log = Logging.getLogger(getContext().system(), this);
-	private ActorSelection udpIncoming;
+	private ActorSelection incoming;
 	private ActorSelection entityTracking;
 	private UdpServer udpServer;
 	private Boolean fastpathOnly;
 
 	public MessageGateway() {
 		udpServer = UdpServer.getUdpServer();
-		udpIncoming = ActorUtil
-				.getSelectionByName("GameMachine::Endpoints::UdpIncoming");
-		entityTracking = ActorUtil
-				.getSelectionByName("fastpath_entity_tracking");
+		incoming = ActorUtil.getSelectionByName("incoming");
+		entityTracking = ActorUtil.getSelectionByName("fastpath_entity_tracking");
 		Commands.clientManagerRegister(name);
 		messageCount = new AtomicInteger();
 	}
@@ -55,12 +56,11 @@ public class MessageGateway extends UntypedActor {
 			if (!netMessages.containsKey(clientMessage.player.id)) {
 				netMessages.put(clientMessage.player.id, netMessage);
 			}
-			
-			
+
 			List<Entity> entities = clientMessage.getEntityList();
-			
+
 			if (entities == null) {
-				udpIncoming.tell(message, null);
+				incoming.tell(message, null);
 			} else {
 				fastpathOnly = true;
 				for (Entity entity : clientMessage.getEntityList()) {
@@ -72,11 +72,9 @@ public class MessageGateway extends UntypedActor {
 				}
 
 				if (!fastpathOnly) {
-					udpIncoming.tell(message, null);
+					incoming.tell(message, null);
 				}
 			}
-			
-			
 
 			// outgoing message
 		} else if (message instanceof Entity) {
@@ -86,28 +84,24 @@ public class MessageGateway extends UntypedActor {
 			clientMessage.addEntity(entity);
 
 			if (netMessage.protocol == NetMessage.UDP) {
-				// ByteBuf bb = clientMessage.toByteBuf();
-				// udpServer.sendToClient(bb, netMessage.host, netMessage.port,
-				// netMessage.ctx);
-
 				byte[] bytes = clientMessage.toByteArray();
-				udpServer.sendToClient(netMessage.address, bytes,
-						netMessage.ctx);
+				udpServer.sendToClient(netMessage.address, bytes, netMessage.ctx);
 			} else if (netMessage.protocol == NetMessage.TCP) {
 				netMessage.ctx.write(clientMessage);
 				UdpServerHandler.countOut.getAndIncrement();
 			}
 
 		} else if (message instanceof ClientManagerEvent) {
-			// log.warning("Message gateway got client manager event");
 			ClientManagerEvent event = (ClientManagerEvent) message;
+			log.debug("Message gateway got client manager event " + event.event);
 			if (event.event.equals("disconnected")) {
 				netMessages.remove(event.player_id);
+				log.debug("Player " + event.player_id + " removed from message gateway");
 			}
 		}
 
 	}
-	
+
 	private void routeFastpath(Player player, Entity entity) {
 		entity.setPlayer(player);
 		if (entity.hasTrackData()) {

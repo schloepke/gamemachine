@@ -17,7 +17,7 @@ module GameMachine
           set_register_type('actor').set_name(name).set_events(events.join('|'))
         entity = MessageLib::Entity.new.set_id(name).
           set_client_manager_register(register)
-        ClientManager.find.ask(entity,5000)
+        ClientManager.find.tell(entity)
       end
 
     end

@@ -18,6 +18,14 @@ module GameMachine
     include_package 'com.dyuproject.protostuff'
   end
 
+  module ApiLib
+    include_package 'com.game_machine.api'
+  end
+
+  module DbLib
+    include_package 'com.game_machine.objectdb'
+  end
+
   module TutorialLib
     include_package 'com.game_machine.examples'
   end
@@ -26,6 +34,12 @@ module GameMachine
     include_package 'com.game_machine.orm.models'
   end
   
+  module NetLib
+    include_package 'com.game_machine.net.udp'
+    include_package 'com.game_machine.net.tcp'
+    include_package 'com.game_machine.net.http'
+  end
+
   module JavaLib
     java_import 'com.typesafe.config.Config'
     java_import 'com.typesafe.config.ConfigFactory'
@@ -36,8 +50,6 @@ module GameMachine
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
     include_package 'akka.io'
-    include_package 'akka.util'
-    include_package 'akka.pattern'
     include_package 'akka.testkit'
     include_package 'akka.cluster'
     include_package 'akka.routing'
@@ -48,17 +60,20 @@ module GameMachine
     include_package 'akka.camel'
     java_import 'com.game_machine.core.Grid'
     include_package 'com.game_machine.core'
+    include_package 'com.game_machine.net'
+    include_package 'com.game_machine.codeblocks'
+    include_package 'com.game_machine.shared.codeblocks'
     include_package 'com.game_machine.orm'
     include_package 'com.game_machine.authentication'
     include_package 'com.game_machine.ui'
     include_package 'java.net'
     include_package 'java.util.concurrent.atomic'
     include_package 'scala.concurrent.duration'
-    include_package 'scala.concurrent'
     include_package 'java.io.Serializable'
     include_package 'java.util'
     include_package 'java.io'
     include_package 'com.couchbase.client'
+    include_package 'com.google.common.cache'
     #include_package 'io.netty.channel'
   end
 end

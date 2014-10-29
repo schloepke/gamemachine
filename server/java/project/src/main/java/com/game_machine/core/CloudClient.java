@@ -2,8 +2,9 @@ package com.game_machine.core;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.net.UnknownHostException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,10 +45,11 @@ public class CloudClient {
 	}
 
 	private CloudClient() {
-		// Some freaking moron at apache.org decided it was a good idea to ignore log level and force WIRE
+		// Some freaking moron at apache.org decided it was a good idea to
+		// ignore log level and force WIRE
 		// level whenever Hyperic sigar is detected.
 		System.setProperty("org.apache.commons.logging.Log", "org.apache.commons.logging.impl.NoOpLog");
-		
+
 		cm = new PoolingHttpClientConnectionManager();
 		cm.setMaxTotal(10);
 		// Increase default max connection per route to 20
@@ -75,9 +77,39 @@ public class CloudClient {
 	public void setCredentials(String host, String username, String apiKey) {
 		gamecloudApiKey = apiKey;
 		gamecloudUser = username;
-		this.host = host;
+		
+		String[] hostPort = host.split(":");
+		String port;
+		if (hostPort.length == 1) {
+			port = "80";
+		} else {
+			port = hostPort[1];
+		}
+		InetAddress address;
+		try {
+			address = InetAddress.getByName(hostPort[0]);
+			this.host = address.getHostAddress()+":"+port;
+		} catch (UnknownHostException e) {
+			throw new RuntimeException(e.getMessage());
+		}
 	}
 
+	public CloudResponse getAgents(String gameId) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/agents/" + gamecloudUser + "/" + gameId;
+		String token = hash256(gamecloudUser + gameId + gamecloudApiKey);
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		request.setHeader("X-Auth", token);
+		return httpClient.execute(request, new ByteArrayResponseHandler());
+	}
+	
+	public CloudResponse getNode(String gameId) throws ClientProtocolException, IOException {
+		String url = "http://" + host + "/api/getnode/"+gameId;
+		CloseableHttpClient httpClient = getClient("gamemachine");
+		HttpGet request = new HttpGet(url);
+		return httpClient.execute(request, new StringResponseHandler());
+	}
+	
 	/**
 	 * Performs a left anchored fuzzy search by id
 	 * 
@@ -89,14 +121,15 @@ public class CloudClient {
 	 * @throws IOException
 	 */
 	public CloudResponse query(String query, int limit, String format) throws ClientProtocolException, IOException {
-		String url = "http://" + host + "/api/db-query/" + gamecloudUser + "/" + encodeURIComponent(query) + "/" + limit + "/" + format;
+		String url = "http://" + host + "/api/db-query/" + gamecloudUser + "/" + encodeURIComponent(query) + "/"
+				+ limit + "/" + format;
 		String token = hash256(gamecloudUser + query + gamecloudApiKey);
 		CloseableHttpClient httpClient = getClient("gamemachine");
 		HttpGet request = new HttpGet(url);
 		request.setHeader("X-Auth", token);
 		return httpClient.execute(request, new ByteArrayResponseHandler());
 	}
-	
+
 	/**
 	 * Performs mass delete based on a left anchored fuzzy search by id
 	 * 
@@ -113,7 +146,7 @@ public class CloudClient {
 		request.setHeader("X-Auth", token);
 		return httpClient.execute(request, new StringResponseHandler());
 	}
-	
+
 	/**
 	 * 
 	 * @param nodeStatus
@@ -129,7 +162,7 @@ public class CloudClient {
 		request.setEntity(input);
 		return httpClient.execute(request, new StringResponseHandler());
 	}
-	
+
 	/**
 	 * 
 	 * @param id
@@ -268,7 +301,7 @@ public class CloudClient {
 		}
 
 	}
-	
+
 	private class StringResponseHandler implements ResponseHandler<CloudResponse> {
 		public CloudResponse handleResponse(final HttpResponse response) throws IOException {
 			CloudResponse couchResponse = new CloudResponse();

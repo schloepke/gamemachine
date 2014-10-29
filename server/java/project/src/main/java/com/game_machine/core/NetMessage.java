@@ -1,10 +1,11 @@
 package com.game_machine.core;
 
+import io.netty.buffer.ByteBuf;
+import io.netty.channel.ChannelHandlerContext;
+
 import java.net.InetSocketAddress;
 
 import GameMachine.Messages.ClientMessage;
-import io.netty.buffer.ByteBuf;
-import io.netty.channel.ChannelHandlerContext;
 
 public class NetMessage {
 
@@ -28,5 +29,5 @@ public class NetMessage {
 		this.protocol = protocol;
 		this.ctx = ctx;
 	}
-	
+
 }

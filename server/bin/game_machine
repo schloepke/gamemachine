@@ -2,7 +2,35 @@
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
-ENV['GAME_ENV'] = 'development'
+ENV['GAME_ENV'] = 'development' unless ENV['GAME_ENV']
+
+
+
+if ARGV.first == 'server' || ARGV.first == 's'
+  require 'java'
+  classpath = java.lang.System.get_property("java.class.path")
+  unless classpath.match(/project/)
+    classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
+    #-J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC
+    #-J-XX:+UseG1GC
+    gc_opts = "-J-Xmx256m -J-Xss1024k -J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC -J-XX:+UseCompressedOops"
+    cmd = "jruby #{gc_opts} -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
+    puts "Classpath not set, run again using the following commmand:\n#{cmd}"
+    #system(cmd)
+    exit
+  end
+end
+
+ARGV << '--help' if ARGV.empty?
+
+aliases = {
+  "b"  => "build",
+  "s"  => "server"
+}
+
+command = ARGV.shift
+command = aliases[command] || command
+
 
 require 'rubygems'
 require 'fileutils'
@@ -20,18 +48,32 @@ def load_config
   GameMachine::AppConfig.instance.load_config
 end
 
-ARGV << '--help' if ARGV.empty?
 
-aliases = {
-  "b"  => "build",
-  "s"  => "server"
-}
-
-command = ARGV.shift
-command = aliases[command] || command
 
 require_relative '../lib/game_machine/console'
 
+if command == 'start_testnode'
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.start_node(name)
+ exit
+end
+
+if command == 'ping_testnode'
+  load_game_machine
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.ping_node(name)
+ exit
+end
+
+if command == 'stop_testnode'
+  load_game_machine
+  name = ARGV.shift
+  cluster = GameMachine::Console::TestCluster.new()
+  cluster.stop_node(name)
+ exit
+end
 
 if command == 'install' || command == 'upgrade'
   bin_path = File.dirname(__FILE__)
@@ -52,10 +94,15 @@ elsif command == 'build' || command == 'bundle'
   
 
 elsif command == 'server'
+  policyfile = File.join(ENV['APP_ROOT'],'config','app.policy')
+  java.lang.System.setProperty("java.security.policy", policyfile)
+
   # Need to set environment vars before loading everything.
   server = GameMachine::Console::Server.new(ARGV)
   server.set_environment
   load_game_machine
+
+  java.lang.System.setSecurityManager(GameMachine::JavaLib::CodeblockSecurityManager.new)
 
   # Run the server
   server.run!

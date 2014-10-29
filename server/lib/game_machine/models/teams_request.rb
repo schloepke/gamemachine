@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class TeamsRequest < Model
+    class TeamsRequest < TeamBase
     end
   end
 end

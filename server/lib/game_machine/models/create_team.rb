@@ -1,6 +1,6 @@
 module GameMachine
   module Models
-    class CreateTeam < Model
+    class CreateTeam < TeamBase
       attribute :name, String
       attribute :owner, String
       attribute :access, String

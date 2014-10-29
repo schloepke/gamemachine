@@ -18,18 +18,20 @@ module GameMachine
       conf.use_regions = config.get_boolean('use_regions')
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')
+      conf.admin_enabled = config.get_boolean('admin_enabled')
       conf.seeds = config.get_string_list('seeds')
 
       conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}
 
       conf.client.protocol = config.get_string('client.protocol')
+      conf.client.idle_timeout = config.get_int('client.idle_timeout')
 
       conf.handlers.team = config.get_string('handlers.team')
       conf.handlers.auth = config.get_string('handlers.auth')
 
       conf.routers.game_handler = config.get_int('routers.game_handler')
       conf.routers.request_handler = config.get_int('routers.request_handler')
-      conf.routers.udp = config.get_int('routers.udp')
+      conf.routers.incoming = config.get_int('routers.incoming')
       conf.routers.objectdb = config.get_int('routers.objectdb')
 
       conf.datastore.store = config.get_string('datastore.store')

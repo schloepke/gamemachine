@@ -7,6 +7,9 @@ module GameMachine
     # @abstract All game actors inherit fromm this class
     class Base < JavaLib::GameActor
   
+      java_import 'org.slf4j.Logger'
+      java_import 'org.slf4j.LoggerFactory'
+
       ON_RECEIVE_HOOKS = {}
 
       @@player_controller = nil
@@ -14,6 +17,11 @@ module GameMachine
       class << self
         alias_method :apply, :new
         alias_method :create, :new
+
+
+        def logger
+          @logger ||= LoggerFactory.getLogger(self.name)
+        end
 
         # Sets the system wide player controller class.
         # When a player logs in, a player controller with this class
@@ -160,6 +168,23 @@ module GameMachine
         dispatcher = get_context.system.dispatcher
         scheduler.schedule(duration, duration, get_self, message, dispatcher, nil)
       end
+
+      def schedule_message_once(message,update_interval,unit=:ms)
+        if unit == :seconds
+          unit = java.util.concurrent.TimeUnit::SECONDS
+        elsif unit == :ms
+          unit = java.util.concurrent.TimeUnit::MILLISECONDS
+        else
+          GameMachine.logger.error "Invalid unit argument for schedule_message (#{unit})"
+          return
+        end
+
+        duration = GameMachine::JavaLib::Duration.create(update_interval, unit)
+        scheduler = get_context.system.scheduler
+        dispatcher = get_context.system.dispatcher
+        scheduler.schedule_once(duration, get_self, message, dispatcher, nil)
+      end
+
     end
   end
 end
