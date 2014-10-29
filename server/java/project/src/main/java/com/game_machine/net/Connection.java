@@ -3,8 +3,8 @@ package com.game_machine.net;
 import GameMachine.Messages.ClientConnection;
 import GameMachine.Messages.ClientMessage;
 
-import com.game_machine.core.UdpServer;
-import com.game_machine.core.UdpServerHandler;
+import com.game_machine.net.udp.UdpServer;
+import com.game_machine.net.udp.UdpServerHandler;
 
 public class Connection {
 

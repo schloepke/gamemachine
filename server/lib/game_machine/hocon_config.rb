@@ -18,6 +18,7 @@ module GameMachine
       conf.use_regions = config.get_boolean('use_regions')
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')
+      conf.admin_enabled = config.get_boolean('admin_enabled')
       conf.seeds = config.get_string_list('seeds')
 
       conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}

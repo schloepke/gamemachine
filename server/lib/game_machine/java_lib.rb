@@ -34,6 +34,12 @@ module GameMachine
     include_package 'com.game_machine.orm.models'
   end
   
+  module NetLib
+    include_package 'com.game_machine.net.udp'
+    include_package 'com.game_machine.net.tcp'
+    include_package 'com.game_machine.net.http'
+  end
+
   module JavaLib
     java_import 'com.typesafe.config.Config'
     java_import 'com.typesafe.config.ConfigFactory'

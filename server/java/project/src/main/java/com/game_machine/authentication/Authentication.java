@@ -11,13 +11,13 @@ public class Authentication {
 
 	private static ConcurrentHashMap<String, String> authenticatedUsers = new ConcurrentHashMap<String, String>();
 	private static final Logger logger = LoggerFactory.getLogger(Authentication.class);
-	
+
 	private Authable playerAuth;
-	
+
 	public Authentication() {
 		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
 	}
-	
+
 	public static boolean isAuthenticated(Player player) {
 		if (authenticatedUsers.containsKey(player.getId())) {
 			String authtoken = authenticatedUsers.get(player.getId());
@@ -27,27 +27,27 @@ public class Authentication {
 		}
 		return false;
 	}
-	
+
 	public static void unregisterPlayer(String playerId) {
 		authenticatedUsers.remove(playerId);
 	}
-	
+
 	public void registerPlayer(Player player) {
 		authenticatedUsers.put(player.getId(), authtokenForPlayer(player));
 	}
-	
+
 	public String authtokenForPlayer(Player player) {
 		if (isPublic()) {
 			return player.getAuthtoken();
 		} else {
-		return playerAuth.authtoken_for(player.getId());
+			return playerAuth.authtoken_for(player.getId());
 		}
 	}
-	
+
 	public boolean isPublic() {
 		return playerAuth.isPublic();
 	}
-  
+
 	public boolean authtokenIsValid(Player player) {
 		if (isPublic() || player.authtoken.equals(authtokenForPlayer(player))) {
 			return true;
@@ -55,13 +55,14 @@ public class Authentication {
 			return false;
 		}
 	}
+
 	public boolean authenticate(Player player) {
 		if (authtokenIsValid(player)) {
 			registerPlayer(player);
 			player.setAuthenticated(true);
 			return true;
 		} else {
-			logger.warn("Authentication for "+player.getId()+" failed");
+			logger.warn("Authentication for " + player.getId() + " failed");
 			return false;
 		}
 	}

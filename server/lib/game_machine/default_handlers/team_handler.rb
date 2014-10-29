@@ -3,16 +3,16 @@ module GameMachine
   module DefaultHandlers
     class TeamHandler
 
-      attr_reader :teams
       def initialize
       end
 
       def update_teams(key)
-        @teams = GameMachine::Models::Teams.find(key)
       end
 
       # Should return a Match object if a match is found, otherwise nil
-      def match!(team_name)
+      def match!(key,team_name)
+        teams = GameMachine::Models::Teams.find(key)
+        
         GameMachine.logger.info "match! team_name:#{team_name} teams:#{teams}"
         if team = teams.teams.select {|team| team.name != team_name}.first
           return GameMachine::Models::StartMatch.new(:team_names => [team_name,team.name])

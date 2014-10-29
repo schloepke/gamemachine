@@ -11,6 +11,7 @@ persistent_message Player {
   optional string gameId = 5;
   optional int32 recordId = 6;
   optional string role = 7;
+  optional bool locked = 8;
 }
 
 message TrackData {
@@ -25,6 +26,7 @@ message TrackData {
   optional string entityType = 9;
   optional string neighborEntityType = 11;
   optional int32 action = 12;
+  optional DynamicMessage dynamicMessage = 13;
 }
 
 message GameMessage {

@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+rm -rf $PLAYER_ID
 wget --no-verbose --read-timeout=30 --no-check-certificate http://$CLOUD_HOST/api/agent_jarfile/$API_KEY/$PLAYER_ID
 
 declare quiet="false"

@@ -18,7 +18,7 @@ import com.game_machine.core.ActorUtil;
 import com.game_machine.core.GameMachineLoader;
 import com.game_machine.core.NetMessage;
 import com.game_machine.core.PlayerService;
-import com.game_machine.core.UdpServer;
+import com.game_machine.net.udp.UdpServer;
 
 public class Incoming extends UntypedActor {
 

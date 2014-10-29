@@ -8,6 +8,7 @@
 # block as it is only called once when the client first connects and is cached
 # internally after that. So you could make an external http call for example.
 require 'digest/md5'
+require 'json'
 module GameMachine
   module Handlers
     class PlayerAuthentication
@@ -35,7 +36,6 @@ module GameMachine
         end
       end
 
-      # Returns true if authorized, false if not
       def authorize(username,password)
         logger.debug "authorize: #{username}"
         if player = get_player(username)
@@ -47,13 +47,13 @@ module GameMachine
             return @sessions[username]
           else
             logger.info "player: #{player.id} password does not match"
-            false
+            nil
           end
         else
           logger.info "player: #{username} not found"
-          false
+          nil
         end
-        false
+        nil
       end
 
       # Returns a session token for a logged in user.  This must be a string and

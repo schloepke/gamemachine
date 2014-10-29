@@ -1,5 +1,7 @@
 package com.game_machine.core;
 
+import com.game_machine.net.udp.UdpClient;
+
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.MonoMessage;
 

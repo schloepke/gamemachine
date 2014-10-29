@@ -52,13 +52,13 @@ module GameMachine
           self.class.log_statistic('gateway_mps',diff)
           @last_count = current_count
 
-          current_count = JavaLib::UdpServerHandler.countIn.incrementAndGet
+          current_count = NetLib::UdpServerHandler.countIn.incrementAndGet
           diff = current_count - @last_in_count
           #GameMachine.logger.info "MessagesInPerSecond: #{diff}"
           self.class.log_statistic('messages_in_mps',diff)
           @last_in_count = current_count
 
-          current_count = JavaLib::UdpServerHandler.countOut.incrementAndGet
+          current_count = NetLib::UdpServerHandler.countOut.incrementAndGet
           diff = current_count - @last_out_count
           #GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
           self.class.log_statistic('messages_out_mps',diff)

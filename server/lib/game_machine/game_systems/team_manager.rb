@@ -105,7 +105,7 @@ module GameMachine
       end
 
       def handler_find_match(team_name)
-        team_handler.match!(team_name)
+        team_handler.match!(scope_key('teams'),team_name)
       end
 
       def handler_match_started(match)
@@ -329,7 +329,7 @@ module GameMachine
 
         match.save
         handler_match_started(match)
-        self.class.logger.debug "#{self.class.name} Match #{match} started"
+        self.class.logger.debug "Match #{match} started"
       end
 
       def find_match(message)
@@ -353,6 +353,7 @@ module GameMachine
 
       def unscope(model)
         model.id.sub!(/^#{game_id(@player_id)}\^\^/,'')
+        model
       end
 
       def game_id(player_id)

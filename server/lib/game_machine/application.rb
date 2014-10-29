@@ -68,9 +68,15 @@ module GameMachine
         
         GameMachine.logger.info("Game Machine start successful")
         
-        # This call blocks, make it the last thing we do
+        # When admin is disabled we use a minimal netty http server for auth
+        #  This is desired for production deployments where we have a separate
+        # system for managing users
         if config.http.enabled
-          Thread.new do
+          if config.admin_enabled
+            Thread.new do
+              start_admin
+            end
+          else
             start_http
           end
         end
@@ -104,6 +110,11 @@ module GameMachine
       end
 
       def start_http
+        http = NetLib::HttpServer.new(config.http.host,config.http.port,'message_gateway', HttpHelper.new)
+        http.start
+      end
+
+      def start_admin
         require_relative '../../web/app'
       end
 
@@ -116,14 +127,14 @@ module GameMachine
 
       def start_endpoints
         if config.tcp.enabled
-          JavaLib::TcpServer.start(config.tcp.host, config.tcp.port);
+          NetLib::TcpServer.start(config.tcp.host, config.tcp.port);
           GameMachine.logger.info(
             "Tcp starting on #{config.tcp.host}:#{config.tcp.port}"
           )
         end
 
         if config.udp.enabled
-          JavaLib::UdpServer.start(config.udp.host,config.udp.port)
+          NetLib::UdpServer.start(config.udp.host,config.udp.port)
         end
 
         JavaLib::GameMachineLoader.start_incoming(config.routers.incoming)

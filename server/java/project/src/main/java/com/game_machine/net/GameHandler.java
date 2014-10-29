@@ -82,10 +82,17 @@ public class GameHandler extends UntypedActor {
 		PlayerService playerService = PlayerService.getInstance();
 		String[] parts = destination.split("/");
 		Player recipientPlayer = playerService.find(parts[1]);
+		if (recipientPlayer == null) {
+			logger.debug("Destination player "+parts[1]+" not found");
+		}
 		if (recipientPlayer != null) {
 			String playerGameId = playerService.getGameId(senderId);
 			if (recipientPlayer.getGameId().equals(playerGameId)) {
-				PlayerDestination pd = new PlayerDestination(recipientPlayer, parts[2]);
+				String agentId = null;
+				if (parts.length == 3) {
+					agentId = parts[2]; 
+				}
+				PlayerDestination pd = new PlayerDestination(recipientPlayer, agentId);
 				return pd;
 			} else {
 				logger.info("Destination player " + recipientPlayer.getId() + " game id does not match sender ");
@@ -131,13 +138,15 @@ public class GameHandler extends UntypedActor {
 				destination = Integer.toString(gameMessage.getDestinationId());
 			} else if (gameMessage.hasDestination()) {
 				destination = gameMessage.getDestination();
-				PlayerDestination pd = destinationToPlayer(entity.getDestination(), entity.getPlayer().getId());
+				logger.debug("GameMessage destination "+destination);
+				PlayerDestination pd = destinationToPlayer(destination, entity.getPlayer().getId());
 				if (pd != null) {
 					Player recipientPlayer = pd.player;
 					if (pd.agent != null) {
 						gameMessage.setAgentId(pd.agent);
 					}
 					PlayerCommands.sendGameMessage(gameMessage,recipientPlayer.getId());
+					logger.debug("GameMessage sent to "+recipientPlayer.getId());
 					continue;
 				}
 			} else {

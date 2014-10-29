@@ -123,9 +123,15 @@ public class PlayerService {
 	
 	
 	public boolean authenticate(String playerId, String password) {
+		clearCache(playerId);
 		Player player = find(playerId);
 		if (player == null) {
 			logger.warn("Player " + playerId + " not found");
+			return false;
+		}
+		
+		if (player.hasLocked() && player.locked) {
+			logger.info("Player " + playerId + " is locked");
 			return false;
 		}
 		
@@ -165,6 +171,12 @@ public class PlayerService {
 			Player.store().set(player);
 		} else if (authType == SQL_DB) {
 			Player.db().save(player);
+		}
+	}
+	
+	public void clearCache(String playerId) {
+		if (players.containsKey(playerId)) {
+			players.remove(playerId);
 		}
 	}
 }

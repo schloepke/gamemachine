@@ -37,7 +37,7 @@ sourceSets {
 
 dependencies {
   compile 'org.slf4j:slf4j-api:1.7.7'
-  //compile 'org.slf4j:slf4j-simple:1.7.7'
+  compile 'org.slf4j:slf4j-simple:1.7.7'
   //compile 'ch.qos.logback:logback-classic:1.1.2'
   //compile 'ch.qos.logback:logback-core:1.1.2'
   //compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
@@ -65,6 +65,13 @@ task wrapper(type: Wrapper) {
 
 task agent(type: Copy) {
   into "$buildDir/../../agent/deploy"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+}
+
+task example(type: Copy) {
+  into "$buildDir/../../../../agents/agent_library_example/game_machine_lib"
     
   from configurations.runtime
   from "$buildDir/libs"

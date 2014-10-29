@@ -23,10 +23,10 @@ public class PlayerActor extends UntypedActor {
 
 	private String playerId;
 	private boolean connected = false;
-	private double lastUpdate = System.currentTimeMillis() + 5000;
+	private double lastUpdate = System.currentTimeMillis() + 10000;
 	private Api api;
 	private HashMap<String, ActorRef> runners = new HashMap<String, ActorRef>();
-	private static double connectionTimeout = 5000;
+	private static double connectionTimeout = 10000;
 	private static final Logger logger = LoggerFactory.getLogger(PlayerActor.class);
 
 	public PlayerActor(Api api, String playerId) {
@@ -59,6 +59,7 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	public void connect() {
+		lastUpdate = System.currentTimeMillis() + 10000;
 		api.newMessage().setConnect().send();
 	}
 
@@ -74,9 +75,9 @@ public class PlayerActor extends UntypedActor {
 				for (GameMessage gameMessage : entity.getGameMessages().getGameMessageList()) {
 					hasGameMessage = true;
 					if (gameMessage.getAgentId() != null) {
-						sendToAgent(gameMessage.getAgentId(),gameMessage);
+						sendToAgent(gameMessage.getAgentId(), gameMessage);
 					} else {
-						sendToAgent("MessageRouter",gameMessage);
+						sendToAgent("MessageRouter", gameMessage);
 					}
 				}
 			}
@@ -84,13 +85,13 @@ public class PlayerActor extends UntypedActor {
 			if (hasGameMessage) {
 				continue;
 			}
-			
+
 			if (entity.getEchoTest() != null) {
 				setConnected();
 				continue;
 			}
-			
-			sendToAgent("MessageRouter",entity);
+
+			sendToAgent("MessageRouter", entity);
 		}
 	}
 
@@ -100,7 +101,7 @@ public class PlayerActor extends UntypedActor {
 			runner.tell(message, getSelf());
 		}
 	}
-	
+
 	private ActorRef startRunner(Agent agent) {
 		ActorRef runner = context().actorOf(Props.create(CodeblockRunner.class, api, agent), agent.getId());
 		runners.put(agent.getId(), runner);
@@ -168,15 +169,17 @@ public class PlayerActor extends UntypedActor {
 				if ((System.currentTimeMillis() - lastUpdate) > connectionTimeout) {
 					setDisconnected();
 					logout();
-					tick(1000, "connect");
+					tick(3000, "connect");
 					return;
 				}
 
-				ping();
-				tick(1000, "check_connection");
+				if (isConnected()) {
+					ping();
+				}
+				tick(3000, "check_connection");
 			} else if (imsg.equals("connect")) {
 				connect();
-				tick(1000, "check_connection");
+				tick(3000, "check_connection");
 			}
 		} else {
 			unhandled(message);
@@ -186,7 +189,7 @@ public class PlayerActor extends UntypedActor {
 	@Override
 	public void preStart() {
 		connect();
-		tick(1000, "check_connection");
+		tick(3000, "check_connection");
 	}
 
 	public void tick(int delay, String message) {

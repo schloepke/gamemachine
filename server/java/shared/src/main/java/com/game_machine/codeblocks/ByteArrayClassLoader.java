@@ -27,7 +27,9 @@ public class ByteArrayClassLoader extends ClassLoader {
 			add("com.game_machine.client.agent.CodeblockEnv");
 			add("com.game_machine.client.agent.CodeblockRunner");
 			add("Client.Messages");
-			add("User.");
+			add("user.");
+			add("org.");
+			add("com.");
 		}
 	};
 
