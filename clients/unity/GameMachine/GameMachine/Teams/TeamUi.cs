@@ -110,6 +110,11 @@ namespace GameMachine
             createTeam.owner = User.Instance.username;
             createTeam.access = access;
             createTeam.max_members = System.Convert.ToInt32 (teamMaxMembers);
+
+            List<string> req = TeamRequirements.GetRequirements (teamName);
+            foreach (string expr in req) {
+                createTeam.AddRequirement (expr);
+            }
             createTeam.Send ();
         }
 
@@ -200,6 +205,10 @@ namespace GameMachine
         public void SendTeamsRequest ()
         {
             TeamsRequest request = new TeamsRequest ();
+            List<TeamMemberSkill> skills = TeamMemberSkills.GetSkills (User.Instance.username);
+            foreach (TeamMemberSkill skill in skills) {
+                request.skills [skill.name] = skill.value;
+            }
             request.Send ();
         }
 

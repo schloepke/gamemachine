@@ -8,22 +8,28 @@ using Newtonsoft.Json;
 namespace GameMachine.Models.Team
 {
 	
-	public class CreateTeam : JsonModel
-	{
-		public string name { get; set; }
-		public string owner { get; set; }
-		public string access { get; set; }
-		public int max_members { get; set; }
+    public class CreateTeam : JsonModel
+    {
+        public string name { get; set; }
+        public string owner { get; set; }
+        public string access { get; set; }
+        public int max_members { get; set; }
+        public List<string> requirements = new List<string> ();
 
 		
-		public static void Receive (string json)
-		{
-			CreateTeam createTeam = JsonConvert.DeserializeObject < CreateTeam > (json);
-		}
+        public void AddRequirement (string expr)
+        {
+            requirements.Add (expr);
+        }
+
+        public static void Receive (string json)
+        {
+            CreateTeam createTeam = JsonConvert.DeserializeObject < CreateTeam > (json);
+        }
 		
-		public override string ToJson ()
-		{
-			return JsonConvert.SerializeObject (this, Formatting.Indented);
-		}
-	}
+        public override string ToJson ()
+        {
+            return JsonConvert.SerializeObject (this, Formatting.Indented);
+        }
+    }
 }
