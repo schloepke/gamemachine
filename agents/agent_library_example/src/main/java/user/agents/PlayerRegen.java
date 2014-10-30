@@ -28,6 +28,7 @@ public class PlayerRegen implements Codeblock {
 			String periodic = (String)message;
 			if (periodic.equals("regen")) {
 				regen();
+				this.env.tick(1000, "regen");
 			}
 		}
 	}

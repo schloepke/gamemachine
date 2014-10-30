@@ -70,7 +70,11 @@ public class PlayerVitalsManager implements Codeblock {
 			}
 			Vitals vitals = Globals.getVitalsFor(playerId);
 			if (vitals == null) {
-				vitals = new Vitals(playerId);
+				vitals = this.cloud.find(playerId, Vitals.class);
+				if (vitals == null) {
+					vitals = new Vitals(playerId);
+				}
+				vitals.updated = true;
 				Globals.setVitalsFor(vitals);
 			}
 		}
@@ -83,23 +87,18 @@ public class PlayerVitalsManager implements Codeblock {
 			Vitals vitals = Globals.getVitalsFor(id);
 			if (!playerIds.contains(id) && vitals.entityType.equals("player")) {
 				iter.remove();
-
+				this.cloud.delete(vitals.id, Vitals.class);
 			}
 		}
 	}
 
 	private void saveVitals() {
-		System.out.println("Tracking "+Globals.getVitalsList().size()+" vitals");
+		System.out.println("Tracking " + Globals.getVitalsList().size() + " vitals");
 		for (Vitals vitals : Globals.getVitalsList()) {
 			if (vitals.updated) {
-				byte[] bytes = DynamicMessageUtil.serialize(Vitals.class, vitals);
-				StringResponse response = this.cloud.put(vitals.dbkey(), bytes);
-				if (response.getStatus() == 204) {
+				if (this.cloud.save(vitals.id, Vitals.class, vitals)) {
 					vitals.updated = false;
-				} else {
-					System.out.println("Error saving player data status=" + response.getStatus());
 				}
-
 			}
 		}
 	}

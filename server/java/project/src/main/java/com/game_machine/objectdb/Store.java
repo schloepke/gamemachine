@@ -34,6 +34,7 @@ public class Store {
 	
 	public void connect(String storeName, String serialization) {
 		this.serialization = serialization;
+		logger.info("Entity serialization is "+serialization);
 		
 		if (storeName.equals("gamecloud")) {
 			this.store = (Storable) new CloudStore();

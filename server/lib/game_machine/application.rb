@@ -197,6 +197,9 @@ module GameMachine
         Actor::Builder.new(GameSystems::LocalEcho).with_name('DistributedLocalEcho').distributed(2).start
         Actor::Builder.new(GameSystems::StressTest).with_router(JavaLib::RoundRobinRouter,1).start
         Actor::Builder.new(GameSystems::ChatManager).start
+
+        # Make sure shared hashmaps are initialized
+        team_handler = Application.config.handlers.team.constantize.new
         Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
       end
 

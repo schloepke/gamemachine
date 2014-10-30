@@ -146,19 +146,65 @@ public class Cloud {
 
 	private String urlFrom(String id, String format) {
 		if (format == null) {
-			return "http://" + host + "/api/db/" + username + "/" + encodeURIComponent(id);
+			return "http://" + host + "/api/db/" +gameId+"/" + username + "/" + encodeURIComponent(id);
 		} else {
-			return "http://" + host + "/api/db/" + username + "/" + encodeURIComponent(id) + "/" + format;
+			return "http://" + host + "/api/db/" +gameId+"/" + username + "/" + encodeURIComponent(id) + "/" + format;
 		}
 
 	}
 
+	public static String scopeId(String scope, String id) {
+		return scope + "^^" + id;
+	}
+
+    public static String unscopeId(String id) {
+    	if (id.contains("^^")) {
+    		String[] parts = id.split("^^");
+        	return parts[1];
+    	} else {
+    		throw new RuntimeException("Expected "+id+" to contain ##");
+    	}
+    }
+    
 	private void checkLimit() {
 		if (!limiter.tryAcquire()) {
 			throw new Api.RateLimitExceeded("Cloud rate limit exceeded");
 		}
 	}
 
+	public <T> boolean save(String id, Class<T> klass,T message) {
+		String scopedId = scopeId(klass.getSimpleName(),id);
+		StringResponse response = put(scopedId,DynamicMessageUtil.toJson(klass, message));
+		if (response.getStatus() == 204) {
+			return true;
+		} else {
+			System.out.println("Error saving message "+scopedId+" status=" + response.getStatus());
+			return false;
+		}
+	}
+	
+	public <T> T find(String id, Class<T> klass) {
+		String scopedId = scopeId(klass.getSimpleName(),id);
+		StringResponse response = getString(scopedId);
+		if (response.status == 200) {
+			T message = DynamicMessageUtil.fromJson(klass, response.body);
+			return message;
+		} else {
+			return null;
+		}
+	}
+	
+	public boolean delete(String id, Class<?> klass) {
+		String scopedId = scopeId(klass.getSimpleName(),id);
+		StringResponse response = deleteUnscoped(scopedId);
+		if (response.getStatus() == 204) {
+			return true;
+		} else {
+			System.out.println("Error deleting message "+scopedId+" status=" + response.getStatus());
+			return false;
+		}
+	}
+	
 	public StringResponse put(String id, String body) {
 		checkLimit();
 		String urlString = urlFrom(id, "json");
@@ -265,7 +311,8 @@ public class Cloud {
 		return response;
 	}
 
-	public StringResponse delete(String id) {
+	
+	public StringResponse deleteUnscoped(String id) {
 		checkLimit();
 		String urlString = urlFrom(id, null);
 		String token = hash256(username + id + apiKey);
