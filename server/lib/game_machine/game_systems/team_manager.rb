@@ -145,6 +145,7 @@ module GameMachine
         commands.datastore.call_dbproc(:team_add_team,scope_key('teams'),team.to_storage_entity,false)
         join_chat(team.name,team.owner)
         send_team_joined(team.name,message.player_id)
+        team_handler.team_created(team,message)
         handler_update_teams
       end
 

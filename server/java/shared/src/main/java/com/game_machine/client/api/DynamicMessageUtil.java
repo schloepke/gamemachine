@@ -1,9 +1,14 @@
 package com.game_machine.client.api;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+
 import Client.Messages.DynamicMessage;
 import Client.Messages.GameMessage;
 
 import com.dyuproject.protostuff.ByteString;
+import com.dyuproject.protostuff.JsonIOUtil;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
@@ -22,33 +27,33 @@ public class DynamicMessageUtil {
 	
 	public static <T> DynamicMessage toDynamicMessage(T message) {
 		DynamicMessage dynamicMessage = new DynamicMessage();
-		byte[] bytes = serialize(message);
+		byte[] bytes = toByteArray(message);
 		dynamicMessage.setMessage(ByteString.copyFrom(bytes));
 		dynamicMessage.setType(message.getClass().getSimpleName());
 		return dynamicMessage;
 	}
 	
 	public static <T> T fromGameMessage(GameMessage gameMessage)  {
-		return deserialize(gameMessage.getDynamicMessage().getType(),gameMessage.getDynamicMessage().getMessage().toByteArray());
+		return fromByteArray(gameMessage.getDynamicMessage().getType(),gameMessage.getDynamicMessage().getMessage().toByteArray());
 	}
 	
 	public static <T> T fromDynamicMessage(DynamicMessage dynamicMessage)  {
-		return deserialize(dynamicMessage.getType(),dynamicMessage.getMessage().toByteArray());
+		return fromByteArray(dynamicMessage.getType(),dynamicMessage.getMessage().toByteArray());
 	}
 	
 	
 	@SuppressWarnings("unchecked")
-	public static <T> T deserialize(String classname, byte[] bytes)  {
+	public static <T> T fromByteArray(String classname, byte[] bytes)  {
 		try {
 			Class<?> clazz = Class.forName(packageName + classname);
-			return (T) deserialize(clazz,bytes);
+			return (T) fromByteArray(clazz,bytes);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Invalid class name for message");
 		}
 	}
 	
-	public static <T> T deserialize(Class<T> klass, byte[] bytes)  {
+	public static <T> T fromByteArray(Class<T> klass, byte[] bytes)  {
 		T message;
 		try {
 			message = (T) klass.newInstance();
@@ -61,20 +66,33 @@ public class DynamicMessageUtil {
 		
 	}
 	
+	public static <T> T fromJson(Class<T> klass, String json)  {
+		T message;
+		byte[] bytes = json.getBytes(Charset.forName("UTF-8"));
+		try {
+			message = (T) klass.newInstance();
+			JsonIOUtil.mergeFrom(bytes, message, RuntimeSchema.getSchema(klass), false);
+			return message;
+		} catch (InstantiationException | IllegalAccessException | IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Protobuf decoding failed");
+		}
+	}
 	
 	
-	public static <T> byte[] serialize(T message) {
+	
+	public static <T> byte[] toByteArray(T message) {
 		try {
 			@SuppressWarnings("unchecked")
 			Class<T> clazz = (Class<T>) Class.forName(packageName + message.getClass().getSimpleName());
-			return serialize(clazz,message);
+			return toByteArray(clazz,message);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Invalid class name for message");
 		}
 	}
 	
-	public static <T> byte[] serialize(Class<T> klass,T message) {
+	public static <T> byte[] toByteArray(Class<T> klass,T message) {
 		LinkedBuffer buffer = LocalLinkedBuffer.get();
 		byte[] bytes = null;
 
@@ -87,6 +105,19 @@ public class DynamicMessageUtil {
 			throw new RuntimeException("Protobuf encoding failed");
 		}
 		return bytes;
+	}
+	
+	public static <T> String toJson(Class<T> klass,T message) {
+		boolean numeric = false;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		try {
+			JsonIOUtil.writeTo(out, message, RuntimeSchema.getSchema(klass), numeric);
+		} catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Json encoding failed");
+		}
+		String json = new String(out.toByteArray(), Charset.forName("UTF-8"));
+		return json;
 	}
 
 	public static String getPackageName() {

@@ -61,6 +61,7 @@ public class PlayerActor extends UntypedActor {
 	public void connect() {
 		lastUpdate = System.currentTimeMillis() + 10000;
 		api.newMessage().setConnect().send();
+		logger.info("PlayerConnect sent");
 	}
 
 	public void logout() {
@@ -155,6 +156,7 @@ public class PlayerActor extends UntypedActor {
 			Player player = clientMessage.getPlayer();
 
 			if (clientMessage.getPlayerConnected() != null) {
+				logger.info("PlayerConnected received");
 				setConnected();
 			} else if (clientMessage.getPlayerLogout() != null) {
 				context().stop(getSelf());

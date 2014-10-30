@@ -1,5 +1,6 @@
 package user.messages;
 
+
 public class Vitals {
 
 	public static final int HEALTH_MAX = 100;
@@ -10,16 +11,21 @@ public class Vitals {
 	public float y = 0;
 	public float z = 0;
 	public boolean updated = false;
+
+	// Classes that get saved to the cloud need a default no-arg constructor.
+	public Vitals() {
+		
+	}
 	
 	public void setEntityType(String type) {
 		this.entityType = type;
 	}
-	
+
 	public Vitals(String id) {
 		this.id = id;
 		this.health = HEALTH_MAX;
 	}
-	
+
 	public void lowerHealth(int amount) {
 		this.health -= amount;
 		if (this.health < 0) {
@@ -27,17 +33,17 @@ public class Vitals {
 		}
 		this.updated = true;
 	}
-	
+
 	public void raiseHealth(int amount) {
+		if (this.health == HEALTH_MAX) {
+			return;
+		}
+		
 		this.health += amount;
 		if (this.health > HEALTH_MAX) {
 			this.health = HEALTH_MAX;
 		}
 		this.updated = true;
-	}
-	
-	public String dbkey() {
-		return "player_vitals_"+this.id;
 	}
 
 }
