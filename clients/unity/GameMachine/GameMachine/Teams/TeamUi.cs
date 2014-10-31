@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using  System.Collections.Generic;
 using GameMachine.Models.Team;
@@ -18,7 +19,8 @@ namespace GameMachine
         private Teams teams;
         private TeamsManager teamsManager;
         private string teamName = "";
-        private string teamMaxMembers = "6";
+        private int teamMaxMembers = 6;
+        private int teamMinMembers = 3;
         public bool hasTeam = false;
         public Team currentTeam;
         public ChannelUi currentChannelUi;
@@ -37,30 +39,40 @@ namespace GameMachine
 		
         void WindowFunction2 (int windowID)
         {
-            GUILayout.BeginHorizontal ();
+
             if (hasTeam) {
+                GUILayout.BeginHorizontal ();
                 if (currentTeam.match_id == null) {
-                    if (GUILayout.Button ("Find Match")) {
+                    if (GUILayout.Button ("Find opponent team")) {
                         FindMatch ();
                     }
                 } else {
                     GUILayout.Label ("Joined match " + currentTeam.match_id + " on server " + currentTeam.match_server);
                 }
-
+                GUILayout.EndHorizontal ();
             } else {
+                GUILayout.BeginHorizontal ();
+                GUILayout.Label ("Team name:");
+                teamName = GUILayout.TextField (teamName);
+
+                GUILayout.Label ("Max members:");
+                teamMaxMembers = Int32.Parse (GUILayout.TextField (teamMaxMembers.ToString ()));
+
+                GUILayout.Label ("Min for match:");
+                teamMinMembers = Int32.Parse (GUILayout.TextField (teamMinMembers.ToString ()));
+                GUILayout.EndHorizontal ();
+
+
+                GUILayout.BeginHorizontal ();
                 if (GUILayout.Button ("Create team")) {
                     CreateTeam (teamName, "public");
                 }
                 if (GUILayout.Button ("Create private team")) {
                     CreateTeam (teamName, "private");
                 }
-                GUILayout.Label ("Name:");
-                teamName = GUILayout.TextField (teamName);
-                GUILayout.Label ("Max members:");
-                teamMaxMembers = GUILayout.TextField (teamMaxMembers);
-
+                GUILayout.EndHorizontal ();
             }			
-            GUILayout.EndHorizontal ();
+           
 
             if (teams != null) {
                 GUILayout.Label ("");
@@ -69,11 +81,32 @@ namespace GameMachine
                     GUILayout.BeginHorizontal ();
                     GUILayout.Label (team.name + " (" + team.access + ")");
                     GUILayout.Label (team.members.Count.ToString ());
-                    if (!hasTeam && team.access == "public") {
+
+                    if (team.locked) {
+                        GUILayout.Label (" Locked");
+                    }
+
+                    if (!hasTeam && !team.locked && team.access == "public") {
                         if (GUILayout.Button ("Join")) {
                             JoinTeam joinTeam = new JoinTeam ();
                             joinTeam.name = team.name;
                             joinTeam.Send ();
+                        }
+                    }
+
+                    if (!team.locked && team.owner == User.Instance.username) {
+                        if (GUILayout.Button ("Lock")) {
+                            LockTeam lockTeam = new LockTeam ();
+                            lockTeam.name = team.name;
+                            lockTeam.Send ();
+                        }
+                    }
+
+                    if (team.locked && team.owner == User.Instance.username) {
+                        if (GUILayout.Button ("Unlock")) {
+                            UnlockTeam unlockTeam = new UnlockTeam ();
+                            unlockTeam.name = team.name;
+                            unlockTeam.Send ();
                         }
                     }
 
@@ -109,7 +142,8 @@ namespace GameMachine
             createTeam.name = teamName;
             createTeam.owner = User.Instance.username;
             createTeam.access = access;
-            createTeam.max_members = System.Convert.ToInt32 (teamMaxMembers);
+            createTeam.max_members = teamMaxMembers;
+            createTeam.min_for_match = teamMinMembers;
 
             List<string> req = TeamRequirements.GetRequirements (teamName);
             foreach (string expr in req) {
@@ -205,10 +239,6 @@ namespace GameMachine
         public void SendTeamsRequest ()
         {
             TeamsRequest request = new TeamsRequest ();
-            List<TeamMemberSkill> skills = TeamMemberSkills.GetSkills (User.Instance.username);
-            foreach (TeamMemberSkill skill in skills) {
-                request.skills [skill.name] = skill.value;
-            }
             request.Send ();
         }
 
@@ -220,8 +250,7 @@ namespace GameMachine
         {
             // Create the channel
             messenger.JoinChannel ("Lobby", "subscribers");
-            GameObject lobby = new GameObject ("Lobby");
-            LobbyUi ui = lobby.AddComponent<GameMachine.LobbyUi> () as LobbyUi;
+            LobbyUi ui = this.gameObject.AddComponent<GameMachine.LobbyUi> () as LobbyUi;
             ui.channelName = "Lobby";
             ui.teamUi = this;
         }

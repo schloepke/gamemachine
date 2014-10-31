@@ -187,8 +187,7 @@ namespace GameMachine.Core
             bool findFailed;
 
             foreach (UntypedActor actor in actors.Values) {
-                //Logger.Debug("Processing actor " + actor.GetType().Name);
-                
+
                 List<List<string>> componentSets = actor.GetComponentSets ();
                 foreach (List<string> componentSet in componentSets) {
 
@@ -198,7 +197,6 @@ namespace GameMachine.Core
                         if (methods.ContainsKey (component)) {
                             method = methods [component];
                             
-                            //Logger.Debug("Looking for component " + component);
                             if (method.Invoke (entity, null) == null) {
                                 findFailed = true;
                                 

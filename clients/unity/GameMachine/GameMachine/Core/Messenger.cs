@@ -29,7 +29,7 @@ namespace GameMachine.Core
 
         public delegate void MessageReceived (object message);
         public delegate void DynamicMessageReceived (DynamicMessage message);
-        private Dictionary<string, DynamicMessageReceived> dynamicMessageCallbacks = new Dictionary<string, DynamicMessageReceived>();
+        private Dictionary<string, DynamicMessageReceived> dynamicMessageCallbacks = new Dictionary<string, DynamicMessageReceived> ();
 
         public delegate void InviteReceived (object message);
         public delegate void ChannelJoined (string channelName);
@@ -80,7 +80,7 @@ namespace GameMachine.Core
 
         public void OnDynamicMessageReceived (String channelName, DynamicMessageReceived callback)
         {
-            dynamicMessageCallbacks[channelName] = callback;
+            dynamicMessageCallbacks [channelName] = callback;
         }
 
         public void OnInviteReceived (InviteReceived callback)
@@ -254,9 +254,8 @@ namespace GameMachine.Core
                     privateChannelSubscriptions.Add (name);
                 }
 
-                if (channelJoined != null)
-                {
-                    channelJoined(name);
+                if (channelJoined != null) {
+                    channelJoined (name);
                 }
             }
 
@@ -267,9 +266,8 @@ namespace GameMachine.Core
                     privateChannelSubscriptions.Remove (name);
                 }
 
-                if (channelLeft != null)
-                {
-                    channelLeft(name);
+                if (channelLeft != null) {
+                    channelLeft (name);
                 }
             }
 
@@ -301,8 +299,8 @@ namespace GameMachine.Core
 
                 if (entity.chatMessage.message == "dynamic_message") {
                     string channelName = entity.chatMessage.chatChannel.name;
-                    if (dynamicMessageCallbacks.ContainsKey(channelName)) {
-                    dynamicMessageCallbacks[channelName](entity.chatMessage.dynamicMessage);
+                    if (dynamicMessageCallbacks.ContainsKey (channelName)) {
+                        dynamicMessageCallbacks [channelName] (entity.chatMessage.dynamicMessage);
                     }
                 }
 

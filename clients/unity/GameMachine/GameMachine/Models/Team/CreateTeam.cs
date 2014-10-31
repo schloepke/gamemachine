@@ -14,6 +14,7 @@ namespace GameMachine.Models.Team
         public string owner { get; set; }
         public string access { get; set; }
         public int max_members { get; set; }
+        public int min_for_match { get; set; }
         public List<string> requirements = new List<string> ();
 
 		
