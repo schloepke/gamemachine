@@ -647,34 +647,31 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TeamRequest")]
-  public partial class TeamRequest : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TeamMemberSkill")]
+  public partial class TeamMemberSkill : global::ProtoBuf.IExtensible
   {
-    public TeamRequest() {}
+    public TeamMemberSkill() {}
     
-    private string _json;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"json", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string json
+    private string _name;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string name
     {
-      get { return _json; }
-      set { _json = value; }
+      get { return _name; }
+      set { _name = value; }
     }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TeamResponse")]
-  public partial class TeamResponse : global::ProtoBuf.IExtensible
-  {
-    public TeamResponse() {}
-    
-    private string _json;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"json", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string json
+    private int _value;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"value", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int value
     {
-      get { return _json; }
-      set { _json = value; }
+      get { return _value; }
+      set { _value = value; }
+    }
+    private string _playerId;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"playerId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string playerId
+    {
+      get { return _playerId; }
+      set { _playerId = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -2628,21 +2625,13 @@ namespace GameMachine.Messages
       get { return _agentTrackData; }
       set { _agentTrackData = value; }
     }
-    private GameMachine.Messages.TeamRequest _teamRequest = null;
-    [global::ProtoBuf.ProtoMember(65, IsRequired = false, Name=@"teamRequest", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private GameMachine.Messages.TeamMemberSkill _teamMemberSkill = null;
+    [global::ProtoBuf.ProtoMember(65, IsRequired = false, Name=@"teamMemberSkill", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TeamRequest teamRequest
+    public GameMachine.Messages.TeamMemberSkill teamMemberSkill
     {
-      get { return _teamRequest; }
-      set { _teamRequest = value; }
-    }
-    private GameMachine.Messages.TeamResponse _teamResponse = null;
-    [global::ProtoBuf.ProtoMember(66, IsRequired = false, Name=@"teamResponse", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TeamResponse teamResponse
-    {
-      get { return _teamResponse; }
-      set { _teamResponse = value; }
+      get { return _teamMemberSkill; }
+      set { _teamMemberSkill = value; }
     }
     private GameMachine.Messages.Player _player = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]

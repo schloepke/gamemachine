@@ -106,6 +106,9 @@ namespace GameMachine.Core
             remoteEcho.OnEchoReceived (callback);
 
             // Json models
+            JsonModel.Register (typeof(PlayerSkills), "GameMachine::Models::PlayerSkills", "GameMachine/GameSystems/TeamManager");
+            JsonModel.Register (typeof(LockTeam), "GameMachine::Models::LockTeam", "GameMachine/GameSystems/TeamManager");
+            JsonModel.Register (typeof(UnlockTeam), "GameMachine::Models::UnlockTeam", "GameMachine/GameSystems/TeamManager");
             JsonModel.Register (typeof(Team), "GameMachine::Models::Team", "GameMachine/GameSystems/TeamManager");
             JsonModel.Register (typeof(CreateTeam), "GameMachine::Models::CreateTeam", "GameMachine/GameSystems/TeamManager");
             JsonModel.Register (typeof(DestroyTeam), "GameMachine::Models::DestroyTeam", "GameMachine/GameSystems/TeamManager");
