@@ -3,12 +3,10 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
-message TeamRequest {
-  required string json = 1;
-}
-
-message TeamResponse {
-  required string json = 1;
+message TeamMemberSkill {
+  required string name = 1;
+  required int32 value = 2;
+  required string playerId = 3;
 }
 
 message Statistic {
@@ -365,8 +363,7 @@ message Entity {
   optional PoisonPill poisonPill = 62;
   optional string senderId = 63;
   optional AgentTrackData agentTrackData = 64;
-  optional TeamRequest teamRequest = 65;
-  optional TeamResponse teamResponse = 66;
+  optional TeamMemberSkill teamMemberSkill = 65;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -142,8 +142,6 @@ module GameMachine
 
       def start_handlers
         JavaLib::GameMachineLoader.start_request_handler(config.routers.request_handler)
-        JavaLib::GameMachineLoader.start_game_handler(config.routers.request_handler)
-        
       end
 
       def start_development_systems

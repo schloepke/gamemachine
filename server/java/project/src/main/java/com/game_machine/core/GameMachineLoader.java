@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.net.GameHandler;
 import com.game_machine.net.Incoming;
 import com.game_machine.net.RequestHandler;
 import com.game_machine.objectdb.DbActor;
@@ -47,10 +46,6 @@ public class GameMachineLoader {
 
 	public static void startRequestHandler(int nodeCount) {
 		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(RequestHandler.class)), RequestHandler.name);
-	}
-	
-	public static void startGameHandler(int nodeCount) {
-		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(GameHandler.class)), GameHandler.name);
 	}
 	
 	public static void startIncoming(int nodeCount) {
