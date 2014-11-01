@@ -1,12 +1,28 @@
 package com.game_machine.core;
 
+/*
+ * Implements fast 2d spatial hashing.  Neighbor queries return all entities that are in our cell and neighboring cells.  The bounding is a box not a radius,
+ * so there is no way to get all entities within an exact range.  This is normally not an issue for large numbers of entities in a large open space, and if you are
+ * working with a small number of entities you can afford to do additional filtering client side.
+ * 
+ */
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import GameMachine.Messages.CreateGrid;
+import GameMachine.Messages.Entity;
 import GameMachine.Messages.TrackData;
+import GameMachine.Messages.TrackData.EntityType;
+
+import com.game_machine.core.AppConfig.GridConfig;
+import com.game_machine.objectdb.Store;
 
 public class Grid {
 
@@ -18,6 +34,10 @@ public class Grid {
 
 	private MovementVerifier movementVerifier;
 
+	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
+
+	public static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
+
 	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
 
 	private ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
@@ -28,6 +48,67 @@ public class Grid {
 
 	public static void resetGrids() {
 		grids = new ConcurrentHashMap<String, Grid>();
+	}
+
+	public static synchronized Grid loadGameGrid(String gameId, String gridName) {
+		logger.debug("loadGameGrid " + gameId + " " + gridName);
+		Store store = Store.getInstance();
+		String savedId = "create_grid_" + gameId + "_" + gridName;
+		Entity entity = (Entity) store.get(savedId, Entity.class);
+		if (entity == null) {
+			logger.debug(savedId + " not found in store");
+			String gridStr = AppConfig.Grids.getByName(gridName);
+			if (gridStr != null) {
+				GridConfig config = new GridConfig(gridName, gridStr);
+				CreateGrid create = new CreateGrid();
+				create.setName(gridName).setGridSize(config.getGridSize()).setCellSize(config.getCellSize());
+				store.set(savedId, new Entity().setId(savedId).setCreateGrid(create));
+				return createGameGrid(gameId, create);
+			}
+		} else {
+			return createGameGrid(gameId, entity.getCreateGrid());
+		}
+		return null;
+	}
+
+	public static synchronized Grid createGameGrid(String gameId, CreateGrid createGrid) {
+		logger.debug("createGameGrid " + gameId + " " + createGrid.getName());
+		if (!gameGrids.containsKey(gameId)) {
+			gameGrids.put(gameId, new ConcurrentHashMap<String, Grid>());
+		}
+
+		if (gameGrids.get(gameId).size() >= 5) {
+			logger.info("Grid limit exceeded");
+			return null;
+		}
+
+		Grid existing = gameGrids.get(gameId).get(createGrid.getName());
+		if (existing != null) {
+			if (existing.max == createGrid.getGridSize() && existing.cellSize == createGrid.getCellSize()) {
+				logger.debug("existing grid with same settings " + createGrid.getName());
+				return existing;
+			}
+		}
+
+		Grid gameGrid = Grid.findOrCreate(gameId, createGrid.getGridSize(), createGrid.getCellSize());
+		gameGrids.get(gameId).put(createGrid.getName(), gameGrid);
+		logger.debug("Grid created for " + gameId + " " + createGrid.getName());
+		return gameGrid;
+	}
+
+	public static Grid getGameGrid(String gameId, String gridName) {
+		if (gameGrids.containsKey(gameId)) {
+			if (gameGrids.get(gameId).containsKey(gridName)) {
+				return gameGrids.get(gameId).get(gridName);
+			} else {
+				loadGameGrid(gameId, gridName);
+				return gameGrids.get(gameId).get(gridName);
+			}
+		} else {
+			// No grids created for this gameId, create the defaults
+			loadGameGrid(gameId, gridName);
+			return gameGrids.get(gameId).get(gridName);
+		}
 	}
 
 	public static synchronized Grid findOrCreate(String name, int gridSize, int cellSize) {
@@ -63,11 +144,11 @@ public class Grid {
 	public int getMax() {
 		return this.max;
 	}
-	
+
 	public int getCellSize() {
 		return this.cellSize;
 	}
-	
+
 	public int getWidth() {
 		return this.width;
 	}
@@ -76,67 +157,46 @@ public class Grid {
 		return this.cellCount;
 	}
 
-	public Set<Integer> cellsWithinRadius(float x, float y) {
-		int cellHash = hash(x, y);
-		return cellsWithinRadius(cellHash, x, y);
-	}
-
-	public Set<Integer> cellsWithinRadius(int cellHash, float x, float y) {
-		int key = cellHash;
-		Set<Integer> cells = cellsCache.get(key);
-		if (cells != null) {
-			return cells;
-		}
-		cells = new HashSet<Integer>();
+	public Set<Integer> cellsWithinBounds(float x, float y) {
+		Set<Integer> cells = new HashSet<Integer>();
 
 		int offset = this.cellSize;
 
 		int startX = (int) (x - offset);
 		int startY = (int) (y - offset);
-		int endX = (int) (x + offset);
-		int endY = (int) (y + offset);
+		
+		// subtract one from offset to keep it from hashing to the next cell boundary outside of range
+		int endX = (int) (x + offset-1);
+		int endY = (int) (y + offset-1);
 
-		for (int rowNum = startX; rowNum <= endX; rowNum += this.cellSize) {
-			for (int colNum = startY; colNum <= endY; colNum += this.cellSize) {
+		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
+			for (int colNum = startY; colNum <= endY; colNum += offset) {
 				if (rowNum >= 0 && colNum >= 0) {
 					cells.add(hash(rowNum, colNum));
 				}
 			}
 		}
-		cellsCache.put(key, cells);
 		return cells;
 	}
 
-	public ArrayList<TrackData> neighbors(float x, float y, String entityType) {
-		int myCell = hash(x, y);
-		return neighbors(myCell, x, y, entityType);
-	}
-
-	// This could be optimized more (and gridValuesInCell), but it's simply
-	// dwarfed by
-	// the overhead of serialization that at this point it's not really worth
-	// it.
-	// - entityType should be an integer
-	// - where we call gridValuesInCell, filter out by entity type there.
-	// - and then just concat the return values of gridValuesInCell instead of
-	// building
-	// result one item at a time
-	public ArrayList<TrackData> neighbors(int myCell, float x, float y, String entityType) {
+	public ArrayList<TrackData> neighbors(float x, float y, EntityType entityType) {
 		ArrayList<TrackData> result;
 
-		TrackData[] gridValues;
+		Collection<TrackData> gridValues;
 		result = new ArrayList<TrackData>();
-		Set<Integer> cells = cellsWithinRadius(myCell, x, y);
+		Set<Integer> cells = cellsWithinBounds(x, y);
 		for (int cell : cells) {
 			gridValues = gridValuesInCell(cell);
-			if (gridValues != null) {
-				for (TrackData gridValue : gridValues) {
-					if (gridValue != null) {
-						if (entityType == null) {
-							result.add(gridValue);
-						} else if (gridValue.entityType.equals(entityType)) {
-							result.add(gridValue);
-						}
+			if (gridValues == null) {
+				continue;
+			}
+			
+			for (TrackData gridValue : gridValues) {
+				if (gridValue != null) {
+					if (entityType == null) {
+						result.add(gridValue);
+					} else if (gridValue.entityType == entityType) {
+						result.add(gridValue);
 					}
 				}
 			}
@@ -144,14 +204,11 @@ public class Grid {
 		return result;
 	}
 
-	public TrackData[] gridValuesInCell(int cell) {
+	public Collection<TrackData> gridValuesInCell(int cell) {
 		ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
 
 		if (cellGridValues != null) {
-			TrackData[] a = new TrackData[cellGridValues.size()];
-			cellGridValues.values().toArray(a);
-			return a;
-			// return cellGridValues.values();
+			return cellGridValues.values();
 		} else {
 			return null;
 		}
@@ -172,7 +229,7 @@ public class Grid {
 		return a;
 	}
 
-	public ArrayList<TrackData> getNeighborsFor(String id, String entityType) {
+	public ArrayList<TrackData> getNeighborsFor(String id, EntityType entityType) {
 		TrackData gridValue = get(id);
 		if (gridValue == null) {
 			return null;
@@ -183,7 +240,7 @@ public class Grid {
 	public List<TrackData> getAll() {
 		return new ArrayList<TrackData>(objectIndex.values());
 	}
-	
+
 	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}
@@ -201,7 +258,7 @@ public class Grid {
 		}
 	}
 
-	public Boolean set(String id, float x, float y, float z, String entityType) {
+	public Boolean set(String id, float x, float y, float z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.id = id;
 		trackData.x = x;
@@ -213,7 +270,7 @@ public class Grid {
 
 	public Boolean set(TrackData trackData) {
 
-		if (trackData.entityType.equals("player")) {
+		if (trackData.entityType == EntityType.PLAYER) {
 			if (movementVerifier != null) {
 				if (!movementVerifier.verify(trackData)) {
 					return false;

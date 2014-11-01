@@ -19,6 +19,10 @@ module GameMachine
         @matched = self.class.matched
       end
 
+      def player_can_set_skills?
+        true
+      end
+
       def scope_key(str,player_id)
         "#{game_id(player_id)}^^#{str}"
       end
@@ -36,19 +40,47 @@ module GameMachine
       end
 
       # Should return a Match object if a match is found, otherwise nil
-      def match!(key,team_name)
-        teams = GameMachine::Models::Teams.find(key)
-        
-        GameMachine.logger.info "match! team_name:#{team_name} teams:#{teams}"
-        if team = teams.teams.select {|team| team.name != team_name}.first
-          return GameMachine::Models::StartMatch.new(:team_names => [team_name,team.name])
+      def match!(teams,team)
+        my_rating = team_rating(team)
+        best = nil
+        best_team = nil
+        teams.teams.each do |other|
+
+          if other.members.size < other.min_for_match
+            next
+          end
+
+          if rating = team_rating(other)
+            diff = my_rating > rating ? my_rating - rating : rating - my_rating
+            if best.nil? || diff < best
+              best = diff
+              best_team = other
+            end
+          end
         end
-        nil
+
+        if best_team
+          GameMachine::Models::StartMatch.new(:team_names => [team.name,best_team.name])
+        else
+          nil
+        end
       end
 
       # Called when Game Machine has started the match
       def match_started(match)
 
+      end
+
+      def team_rating(team)
+        rating = 0
+        team.members.each do |member|
+          if skills = skills_for_player(member)
+            if skills[:rating] && skills[:rating] > 0
+              rating += skills[:rating]
+            end
+          end
+        end
+        rating
       end
 
       def skills_for_player(player_id)
@@ -65,6 +97,7 @@ module GameMachine
       # You can add whatever extra fields you want to the TeamsRequest
       # class on the client and they will show up here.
       def teams_filter(teams,teams_request)
+        skills = skills_for_player(teams_request.player_id)
         matching = []
         teams.teams.each do |team|
           if team.owner == teams_request.player_id
@@ -73,7 +106,7 @@ module GameMachine
           end
 
           if team.requirements
-            if skills = skills_for_player(teams_request.player_id)
+            if skills
               if matched[team.name] && matched[team.name][teams_request.player_id]
                 matching << team
               elsif pass_skilltest?(teams_request.player_id,skills,team.requirements)

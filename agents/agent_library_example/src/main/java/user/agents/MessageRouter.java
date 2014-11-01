@@ -1,5 +1,12 @@
 package user.agents;
 
+/*
+ * MessageRouter is a special agent that will receive all messages from the server that are not specifically addressed to an agent.  
+ * 
+ * The name you assign to this class in the UI must also be MessageRouter.
+ * 
+ */
+
 import user.messages.Attack;
 import Client.Messages.DynamicMessage;
 import Client.Messages.Entity;

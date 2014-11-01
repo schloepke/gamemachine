@@ -21,6 +21,7 @@ module GameMachine
 
     def set_java_config
       JavaLib::AppConfig.set_env(GameMachine.env)
+      JavaLib::AppConfig.set_default_game_id(config.default_game_id)
       JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)
       JavaLib::AppConfig::Gamecloud.set_host(config.gamecloud.host)
       JavaLib::AppConfig::Gamecloud.set_user(config.gamecloud.user)
@@ -41,6 +42,10 @@ module GameMachine
       JavaLib::AppConfig::Datastore.set_serialization(config.datastore.serialization)
       JavaLib::AppConfig::Datastore.set_cache_write_interval(config.datastore.cache_write_interval)
       JavaLib::AppConfig::Datastore.set_cache_writes_per_second(config.datastore.cache_writes_per_second)
+
+      JavaLib::AppConfig::Grids.set_default_grid(config.grids.default)
+      JavaLib::AppConfig::Grids.set_aoe_grid(config.grids.aoe)
+      JavaLib::AppConfig::Grids.set_chat_grid(config.grids.chat)
       
       JavaLib::AppConfig::Client.setIdleTimeout(config.client.idle_timeout)
     end

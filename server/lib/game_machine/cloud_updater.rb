@@ -3,7 +3,7 @@ module GameMachine
 
     attr_reader :node_status, :stats, :windows
     def post_init(*args)
-
+      @statistics = nil
       @stats = {}
       @windows = Config::CONFIG['target_os'].match(/mswin/)
 
@@ -42,8 +42,14 @@ module GameMachine
             end
           end
         end
+      elsif message.is_a?(MessageLib::Statistics)
+        @statistics = message
       elsif message.is_a?(String)
         if message == 'update'
+          if @statistics
+            node_status.set_statistics(@statistics)
+          end
+          
           node_status.set_last_updated(Time.now.to_i)
           node_status.set_client_count(ClientManager.local_players.size)
           node_status.set_heap_used(stats[:heap])

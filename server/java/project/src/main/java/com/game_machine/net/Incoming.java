@@ -47,9 +47,9 @@ public class Incoming extends UntypedActor {
 	private void handleIncoming(NetMessage netMessage) {
 		String clientId = clientIdFromMessage(netMessage);
 		ClientMessage clientMessage = null;
-		if (netMessage.protocol == 0) {
+		if (netMessage.protocol == NetMessage.UDP) {
 			clientMessage = ClientMessage.parseFrom(netMessage.bytes);
-		} else if (netMessage.protocol == 2) {
+		} else if (netMessage.protocol == NetMessage.TCP) {
 			clientMessage = netMessage.clientMessage;
 		} else {
 			throw new RuntimeException("Unknown protocol " + netMessage.protocol);
@@ -85,6 +85,11 @@ public class Incoming extends UntypedActor {
 				Connection connection = new Connection(netMessage.protocol, clientConnection, clientInfo, udpServer,
 						clientMessage.getPlayer().getId());
 				createChild(connection);
+			}
+		} else {
+			if (!clients.containsKey(clientMessage.getPlayer().getId())) {
+				logger.debug("Ignoring message before connection setup");
+				return;
 			}
 		}
 		gameHandler.tell(clientMessage, getSelf());

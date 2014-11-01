@@ -1,5 +1,11 @@
 package com.game_machine.client.api;
 
+/*
+ *  Provides a simple api for sending messages that takes care of much of the boilerplate message creation.  You should obtain ApiMessage instances by
+ *  calling newMessage on an Api instance, rather then instantiating it directly.
+ */
+
+
 import Client.Messages.AgentTrackData;
 import Client.Messages.ChatChannel;
 import Client.Messages.ChatMessage;

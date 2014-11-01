@@ -88,7 +88,7 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 	}
 
 	public byte[] receive() {
-		byte[] in = new byte[1024];
+		byte[] in = new byte[2048];
 		DatagramPacket inp = new DatagramPacket(in, in.length, hostAddress, port);
 		try {
 			s.receive(inp);

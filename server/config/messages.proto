@@ -3,6 +3,12 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message CreateGrid {
+  required string name = 1;
+  required int32 gridSize = 2;
+  required int32 cellSize = 3;
+}
+
 message TeamMemberSkill {
   required string name = 1;
   required int32 value = 2;
@@ -13,6 +19,26 @@ message Statistic {
   required string name = 1;
   required float value = 2;
   required string type = 3;
+}
+
+message Statistics {
+  repeated Statistic statistic = 1;
+}
+
+message NodeStatus {
+  required int32 containerId = 1;
+  required string clusterName = 2;
+  required int32 lastUpdated = 3;
+  required string hostname = 4;
+  required int32 port = 5;
+  required int32 clientCount = 6;
+  required double loadAverage = 7;
+  required int32 heapUsed = 8;
+  optional Statistics statistics = 9;
+}
+
+message NodeStatuses {
+  repeated NodeStatus nodeStatus = 1;
 }
 
 message AgentTrackData {
@@ -33,20 +59,7 @@ message AgentController {
   required string gameId = 3;
 }
 
-message NodeStatus {
-  required int32 containerId = 1;
-  required string clusterName = 2;
-  required int32 lastUpdated = 3;
-  required string hostname = 4;
-  required int32 port = 5;
-  required int32 clientCount = 6;
-  required double loadAverage = 7;
-  required int32 heapUsed = 8;
-}
 
-message NodeStatuses {
-  repeated NodeStatus nodeStatus = 1;
-}
 
 message MonoMessage {
   optional Entity entity = 1;
@@ -279,11 +292,9 @@ message Neighbor {
   required string id = 3;
 }
 
-message GetNeighbors {
-  optional uint32 search_radius = 2;
-  required Vector3 vector3 = 3;
-  optional string neighborType = 4;
-  optional string gridName = 5;
+message NeighborsRequest {
+  required string neighborEntityType = 1;
+  optional string gridName = 2;
 }
 
 message NativeBytes {
@@ -330,7 +341,7 @@ message Entity {
   optional ChatRegister chatRegister = 15;
   optional ChatChannels chatChannels = 16;
   optional ErrorMessage errorMessage = 17;
-  optional GetNeighbors getNeighbors = 21;
+  optional NeighborsRequest neighborsRequest = 21;
   optional TrackEntity trackEntity = 22;
   optional Transform transform = 23;
   optional Vector3 vector3 = 25;
@@ -364,6 +375,7 @@ message Entity {
   optional string senderId = 63;
   optional AgentTrackData agentTrackData = 64;
   optional TeamMemberSkill teamMemberSkill = 65;
+  optional CreateGrid createGrid = 66;
   //GAME_ENTITY_MESSAGES
 }
 

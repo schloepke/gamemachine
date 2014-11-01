@@ -7,7 +7,7 @@ import GameMachine.Messages.Entity;
 import GameMachine.Messages.Neighbors;
 import GameMachine.Messages.Player;
 import GameMachine.Messages.TrackData;
-import GameMachine.Messages.AgentTrackData;
+import GameMachine.Messages.TrackData.EntityType;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
@@ -18,12 +18,10 @@ public class EntityTracking extends UntypedActor {
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	public static String name = "fastpath_entity_tracking";
 
-	private Grid defaultGrid;
 	private ActorSelection messageGateway;
 
 	public EntityTracking() {
 		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
-		defaultGrid = Grid.find("default");
 		Commands.clientManagerRegister(name);
 	}
 
@@ -33,28 +31,33 @@ public class EntityTracking extends UntypedActor {
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
 
-			Grid grid = gameGrid(entity.player.id);
+			if (entity.hasAgentTrackData() && entity.getAgentTrackData().getTrackDataCount() >= 1) {
+				Grid agentGrid;
+				for (TrackData trackData : entity.getAgentTrackData().getTrackDataList()) {
+					agentGrid = gameGrid(entity.player.id, trackData.getGridName());
+					setEntityLocation(agentGrid, trackData);
+				}
+				return;
+			}
+
+			Grid grid = gameGrid(entity.player.id, entity.trackData.getGridName());
+
 			if (grid == null) {
 				logger.warning("No grid found for " + entity.player.id);
 				return;
 			}
-			
+
 			Player player = PlayerService.getInstance().find(entity.player.getId());
 			if (player == null) {
-				logger.warning("Player for "+entity.player.getId()+" is null");
+				logger.warning("Player for " + entity.player.getId() + " is null");
 				return;
 			}
-			
-			SendNeighbors(grid, entity,player.getRole());
-			
-			if (entity.hasAgentTrackData() && entity.getAgentTrackData().getTrackDataCount() >= 1) {
-				for (TrackData trackData : entity.getAgentTrackData().getTrackDataList()) {
-					setEntityLocation(grid, trackData);
-				}
-			} else {
-				setEntityLocation(grid, entity.trackData);
+
+			setEntityLocation(grid, entity.trackData);
+
+			if (entity.trackData.hasGetNeighbors() && entity.trackData.getNeighbors == 1) {
+				SendNeighbors(grid, entity.trackData.x, entity.trackData.y, player, entity.trackData.getNeighborEntityType());
 			}
-			
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
@@ -64,46 +67,51 @@ public class EntityTracking extends UntypedActor {
 		} else {
 			unhandled(message);
 		}
-
 	}
 
-	private Grid gameGrid(String playerId) {
+	public static Grid gameGrid(String playerId, String name) {
+		if (name == null) {
+			name = "default";
+		}
 		String gameId = PlayerService.getInstance().getGameId(playerId);
 		if (gameId == null) {
 			return null;
 		} else {
-			Grid gameGrid = Grid.find(gameId);
-			if (gameGrid == null) {
-				gameGrid = Grid.findOrCreate(gameId, defaultGrid.getMax(), defaultGrid.getCellSize());
-			}
-
-			return gameGrid;
+			return Grid.getGameGrid(gameId, name);
 		}
 	}
 
 	private void removePlayerData(ClientManagerEvent event) {
-		Grid grid = gameGrid(event.player_id);
-		if (grid != null) {
-			gameGrid(event.player_id).remove(event.player_id);
+		String gameId = PlayerService.getInstance().getGameId(event.player_id);
+		if (gameId == null) {
+			return;
 		}
+		if (Grid.gameGrids.containsKey(gameId)) {
+			for (String name : Grid.gameGrids.get(gameId).keySet()) {
+				Grid grid = gameGrid(event.player_id, name);
+				if (grid != null) {
+					logger.debug("Removing " + event.player_id + " from grid " + name);
+					grid.remove(event.player_id);
+				}
+			}
+		}
+
 	}
 
-	private void SendNeighbors(Grid grid, Entity entity, String playerRole) {
+	private void SendNeighbors(Grid grid, float x, float y, Player player, EntityType neighborType) {
 		List<TrackData> trackDatas;
-		if (entity.trackData.neighborEntityType != null && entity.trackData.neighborEntityType.equals("grid")) {
+		if (neighborType != null && neighborType == EntityType.ALL) {
 			// Only agents have access to entire grid
-			if (!playerRole.equals("agent_controller")) {
+			if (!player.getRole().equals("agent_controller")) {
 				return;
 			}
 			trackDatas = grid.getAll();
 		} else {
-			Float x = entity.trackData.x;
-			Float y = entity.trackData.y;
-			trackDatas = grid.neighbors(x, y, entity.trackData.neighborEntityType);
+			trackDatas = grid.neighbors(x, y, neighborType);
 		}
 
 		if (trackDatas.size() >= 1) {
-			toNeighbors(entity.player, trackDatas);
+			toNeighbors(player, trackDatas);
 		}
 	}
 
@@ -146,7 +154,12 @@ public class EntityTracking extends UntypedActor {
 		if (trackData.z == null) {
 			trackData.z = 0f;
 		}
-
+		
+		// Allows for getting neighbors without being added to the grid (ie agent controllers)
+		if (trackData.x == -1f && trackData.y == -1f) {
+			return;
+		}
+		
 		// TODO. If set returns false send message to the client letting them
 		// know their movement was not allowed
 		grid.set(trackData);

@@ -1,6 +1,5 @@
 package com.game_machine.client.agent;
 
-import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 
 import com.game_machine.client.api.Api;

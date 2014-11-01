@@ -88,7 +88,7 @@ import com.game_machine.core.CacheUpdate;
         
         public final int number;
         
-        private Corpus (int number)
+        private <%=group.name %> (int number)
         {
             this.number = number;
         }
@@ -98,7 +98,7 @@ import com.game_machine.core.CacheUpdate;
             return number;
         }
         
-        public static Corpus valueOf(int number)
+        public static <%=group.name %> valueOf(int number)
         {
             switch(number) 
             {
@@ -835,7 +835,7 @@ import com.game_machine.core.CacheUpdate;
                 	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
                     break;
                     <% elsif field.enumField %>
-                    message.<%=field.name%> = <%=classname(field.name)%>.valueOf(input.readEnum());
+                    message.<%=field.name%> = <%=get_type(field)%>.valueOf(input.readEnum());
                     break;
                 	<% else %>
                 	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
@@ -882,6 +882,7 @@ import com.game_machine.core.CacheUpdate;
     	if(message.<%=field.name%> != null)
     		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
     	<% elsif field.enumField %>
+    	if(message.<%=field.name%> != null)
     	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
     	<% else %>
     	if(message.<%=field.name%> != null)

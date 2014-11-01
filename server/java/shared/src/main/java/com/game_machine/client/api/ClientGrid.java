@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import Client.Messages.TrackData;
+import Client.Messages.TrackData.EntityType;
 
 
 public class ClientGrid {
@@ -103,7 +104,7 @@ public class ClientGrid {
 		return cells;
 	}
 
-	public ArrayList<TrackData> neighbors(float x, float y, String entityType) {
+	public ArrayList<TrackData> neighbors(float x, float y, EntityType entityType) {
 		int myCell = hash(x, y);
 		return neighbors(myCell, x, y, entityType);
 	}
@@ -117,7 +118,7 @@ public class ClientGrid {
 	// - and then just concat the return values of gridValuesInCell instead of
 	// building
 	// result one item at a time
-	public ArrayList<TrackData> neighbors(int myCell, float x, float y, String entityType) {
+	public ArrayList<TrackData> neighbors(int myCell, float x, float y, EntityType entityType) {
 		ArrayList<TrackData> result;
 
 		TrackData[] gridValues;
@@ -130,7 +131,7 @@ public class ClientGrid {
 					if (gridValue != null) {
 						if (entityType == null) {
 							result.add(gridValue);
-						} else if (gridValue.getEntityType().equals(entityType)) {
+						} else if (gridValue.getEntityType() == entityType) {
 							result.add(gridValue);
 						}
 					}
@@ -168,7 +169,7 @@ public class ClientGrid {
 		return a;
 	}
 
-	public ArrayList<TrackData> getNeighborsFor(String id, String entityType) {
+	public ArrayList<TrackData> getNeighborsFor(String id, EntityType entityType) {
 		TrackData gridValue = get(id);
 		if (gridValue == null) {
 			return null;
@@ -197,7 +198,7 @@ public class ClientGrid {
 		}
 	}
 
-	public Boolean set(String id, float x, float y, float z, String entityType) {
+	public Boolean set(String id, float x, float y, float z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.setId(id);
 		trackData.setX(x);

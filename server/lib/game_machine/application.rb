@@ -48,7 +48,6 @@ module GameMachine
 
       def start
         JavaLib::AuthorizedPlayers.setPlayerAuthentication(Handlers::PlayerAuthentication.instance)
-        create_grids
 
         start_actor_system
         data_store
@@ -98,10 +97,6 @@ module GameMachine
             System.exit 1
           end
         end
-      end
-
-      def create_grids
-        Grid.load_from_config
       end
 
       def load_games

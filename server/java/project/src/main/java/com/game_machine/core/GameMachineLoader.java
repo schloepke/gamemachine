@@ -25,11 +25,11 @@ public class GameMachineLoader {
 	}
 
 	public static void StartMessageGateway() {
-		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(MessageGateway.class)), MessageGateway.name);
+		actorSystem.actorOf(new RoundRobinPool(30).props(Props.create(MessageGateway.class)), MessageGateway.name);
 	}
 
 	public static void StartEntityTracking() {
-		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(EntityTracking.class)), EntityTracking.name);
+		actorSystem.actorOf(new RoundRobinPool(30).props(Props.create(EntityTracking.class)), EntityTracking.name);
 	}
 
 	public static void startObjectDb(int nodeCount) {

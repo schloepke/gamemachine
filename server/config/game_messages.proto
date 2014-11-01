@@ -23,10 +23,20 @@ message TrackData {
   required float x = 6;
   required float y = 7;
   optional float z = 8;
-  optional string entityType = 9;
-  optional string neighborEntityType = 11;
   optional int32 action = 12;
   optional DynamicMessage dynamicMessage = 13;
+  optional string gridName = 14;
+  required int32 getNeighbors = 15;
+  enum EntityType {
+    PLAYER = 0;
+    NPC = 1;
+    OTHER = 2;
+    ALL = 3;
+  }
+  optional EntityType neighborEntityType = 16;
+  optional EntityType entityType = 17;
+  
+  
 }
 
 message GameMessage {

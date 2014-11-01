@@ -1,12 +1,14 @@
 package user.messages;
 
+import Client.Messages.TrackData.EntityType;
+
 
 public class Vitals {
 
 	public static final int HEALTH_MAX = 100;
 	public String id;
 	public int health;
-	public String entityType = "player";
+	public EntityType entityType = EntityType.PLAYER;
 	public float x = 0;
 	public float y = 0;
 	public float z = 0;
@@ -17,7 +19,7 @@ public class Vitals {
 		
 	}
 	
-	public void setEntityType(String type) {
+	public void setEntityType(EntityType type) {
 		this.entityType = type;
 	}
 

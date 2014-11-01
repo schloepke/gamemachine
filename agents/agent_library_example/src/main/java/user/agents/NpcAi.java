@@ -7,6 +7,7 @@ import user.Globals;
 import user.messages.Attack;
 import user.messages.Vitals;
 import Client.Messages.TrackData;
+import Client.Messages.TrackData.EntityType;
 
 import com.game_machine.client.agent.CodeblockEnv;
 import com.game_machine.client.api.Api;
@@ -25,13 +26,15 @@ public class NpcAi implements Codeblock {
 			this.api = env.getApi();
 			System.out.println("Agent " + this.env.getAgentId() + " is awake");
 
-			for (int x = 0; x < 20; x++) {
-				String npcId = "npc_" + x;
+			for (int x = 0; x < 200; x++) {
+				String npcId = this.env.getAgentId()+"npc_" + x;
 				npcIds.add(npcId);
 				Vitals vitals = Globals.getVitalsFor(npcId);
 				if (vitals == null) {
 					vitals = new Vitals(npcId);
-					vitals.setEntityType("npc");
+					vitals.setEntityType(EntityType.NPC);
+					vitals.x = (float)(Math.random() * 2000 + 1);
+					vitals.y = (float)(Math.random() * 2000 + 1);
 					Globals.setVitalsFor(vitals);
 				}
 			}
@@ -51,7 +54,7 @@ public class NpcAi implements Codeblock {
 		Vitals vitals = Globals.getVitalsFor(npcId);
 		
 		// Random player
-		List<TrackData> players = Globals.grid.neighbors(vitals.x, vitals.y, "player");
+		List<TrackData> players = Globals.grid.neighbors(vitals.x, vitals.y, EntityType.PLAYER);
 		int playerIdx = (int) (Math.random() * players.size());
 		if (!players.contains(playerIdx)) {
 			return;

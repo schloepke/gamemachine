@@ -24,6 +24,8 @@ public class Api {
 	}
 	
 	public static class RateLimitExceeded extends RuntimeException {
+		private static final long serialVersionUID = 8259379701319382628L;
+
 		public RateLimitExceeded(String message){
 		      super(message);
 		   }
@@ -45,18 +47,31 @@ public class Api {
 		return Api.actorSystem.actorSelection("/user/" + name);
 	}
 	
+	
+	/**
+	 * @return The player id of the agent controller
+	 */
 	public String getPlayerId() {
 		return this.playerId;
 	}
 	
+	/**
+	 * @return The game id of the agent controller
+	 */
 	public String getGameid() {
 		return conf.getGameId();
 	}
 	
+	/**
+	 * @return The api key for this account
+	 */
 	public String getApiKey() {
 		return conf.getCloudApiKey();
 	}
 	
+	/**
+	 * @return  The cloud api server hostname
+	 */
 	public String getCloudHost() {
 		return conf.getCloudHost();
 	}
@@ -65,10 +80,16 @@ public class Api {
 		networkClient.sendMessage(bytes);
 	}
 	
+	/**
+	 * @return The {@link Cloud} instance
+	 */
 	public Cloud getCloud() {
 		return this.cloud;
 	}
 	
+	/**
+	 * @return A new {@link ApiMessage}
+	 */
 	public ApiMessage newMessage() {
 		return new ApiMessage(playerId, authtoken, this);
 	}

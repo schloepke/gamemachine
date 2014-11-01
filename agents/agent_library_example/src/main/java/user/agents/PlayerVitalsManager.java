@@ -8,13 +8,12 @@ import user.Globals;
 import user.messages.PlayerUpdate;
 import user.messages.Vitals;
 import Client.Messages.ChatChannel;
+import Client.Messages.TrackData.EntityType;
 
 import com.game_machine.client.agent.CodeblockEnv;
 import com.game_machine.client.api.Api;
 import com.game_machine.client.api.ApiMessage;
 import com.game_machine.client.api.Cloud;
-import com.game_machine.client.api.Cloud.StringResponse;
-import com.game_machine.client.api.DynamicMessageUtil;
 import com.game_machine.codeblocks.Codeblock;
 
 public class PlayerVitalsManager implements Codeblock {
@@ -49,8 +48,6 @@ public class PlayerVitalsManager implements Codeblock {
 				saveVitals();
 				this.env.tick(5000, "save_player_vitals");
 			}
-			// Subscribers to the game channel is a reliable method to maintain
-			// a list of logged in players
 		} else if (message instanceof ChatChannel) {
 			ChatChannel channel = (ChatChannel) message;
 			if (channel.getSubscribers() != null && channel.getSubscribers().getSubscriberIdCount() > 0) {
@@ -60,6 +57,11 @@ public class PlayerVitalsManager implements Codeblock {
 		}
 	}
 
+	/*
+	 *  We use the subscribers list from the chat channel we create for our game to keep an updated list of logged in players.
+	 *  Here we ensure that we have a Vitals instance for every subscriber in our global vitals map.  If the map has a player that is not
+	 *  in the current subscriber list, we consider them logged out and remove them.
+	 */
 	private void updateVitals(List<String> playerIds) {
 
 		// Add new players
@@ -85,13 +87,16 @@ public class PlayerVitalsManager implements Codeblock {
 			Map.Entry<String, Vitals> entry = iter.next();
 			String id = entry.getKey();
 			Vitals vitals = Globals.getVitalsFor(id);
-			if (!playerIds.contains(id) && vitals.entityType.equals("player")) {
+			if (!playerIds.contains(id) && vitals.entityType == EntityType.PLAYER) {
 				iter.remove();
 				this.cloud.delete(vitals.id, Vitals.class);
 			}
 		}
 	}
 
+	/*
+	 *  Actually save the vitals to the cloud periodically.
+	 */
 	private void saveVitals() {
 		System.out.println("Tracking " + Globals.getVitalsList().size() + " vitals");
 		for (Vitals vitals : Globals.getVitalsList()) {
@@ -103,7 +108,9 @@ public class PlayerVitalsManager implements Codeblock {
 		}
 	}
 
-	// Send vitals to all entities that are players and are not us
+	/*
+	 *  Update clients with the vitals of other players
+	 */
 	private void sendVitals() {
 		PlayerUpdate playerUpdate = new PlayerUpdate();
 		playerUpdate.vitals = Globals.getVitalsList();

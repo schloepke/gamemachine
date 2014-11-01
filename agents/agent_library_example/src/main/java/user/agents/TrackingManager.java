@@ -7,11 +7,13 @@ import user.messages.Vitals;
 import Client.Messages.AgentTrackData;
 import Client.Messages.Neighbors;
 import Client.Messages.TrackData;
+import Client.Messages.TrackData.EntityType;
 
 import com.game_machine.client.agent.CodeblockEnv;
 import com.game_machine.client.api.Api;
 import com.game_machine.client.api.ApiMessage;
 import com.game_machine.codeblocks.Codeblock;
+import com.google.common.collect.Lists;
 
 public class TrackingManager implements Codeblock {
 
@@ -64,37 +66,39 @@ public class TrackingManager implements Codeblock {
 		// Send a TrackData for each ai. Although the container is called
 		// AgentTrackData, the TrackData's it contains
 		// do not have to be agents, they can be anything they just need an id
-		// and coordinates.
-		AgentTrackData agentTrackData = new AgentTrackData();
-		for (Vitals vitals : Globals.getVitalsList()) {
-			TrackData trackData = new TrackData();
-			trackData.setId(vitals.id);
-			trackData.setEntityType(vitals.entityType);
-			trackData.setX(vitals.x);
-			trackData.setY(vitals.y);
-			trackData.setZ(vitals.z);
-			agentTrackData.addTrackData(trackData);
+		// and coordinates.  We split the vitals list into small chunks so we don't
+		// pass the threshold for udp packet sizes.
+		for (List<Vitals> vitalsList : Lists.partition(Globals.getVitalsList(), 30)) {
+			AgentTrackData agentTrackData = new AgentTrackData();
+			for (Vitals vitals : vitalsList) {
+				TrackData trackData = new TrackData();
+				trackData.setId(vitals.id);
+				trackData.setEntityType(vitals.entityType);
+				trackData.setX(vitals.x);
+				trackData.setY(vitals.y);
+				trackData.setZ(vitals.z);
+				trackData.setGetNeighbors(0);
+				agentTrackData.addTrackData(trackData);
+			}
+			ApiMessage apiMessage = this.api.newMessage();
+			apiMessage.setAgentTrackData(agentTrackData);
+			apiMessage.send();
 		}
-		ApiMessage apiMessage = this.api.newMessage();
-		apiMessage.setAgentTrackData(agentTrackData);
-
-		// Trackdata for the player (controller). We don't need to track the
-		// controller, but the server does it's neighbor
-		// query off of the entity type that trackdata contains. Trackdata was
-		// designed for 'normal' clients, so if this seems a bit odd
-		// that is why.
-
-		// Note: The entity type of 'grid' is specific to controllers (players
+		
+		
+		// Note: The entity type of ALL is specific to controllers (players
 		// with a role of agent_controller). It tells the server to send us
 		// the entire grid not just entities within range. Normal clients do not
-		// have access to this.
+		// have access to this. Coordinates of -1 tell the server we are just interested in getting neighbors, and not to
+		// store our coords in the grid.
+		ApiMessage apiMessage = this.api.newMessage();
 		TrackData trackData = new TrackData();
 		trackData.setId(this.api.getPlayerId());
-		trackData.setEntityType("player");
-		trackData.setX(0f);
-		trackData.setY(0f);
-		trackData.setZ(0f);
-		trackData.setNeighborEntityType("grid");
+		trackData.setEntityType(EntityType.PLAYER);
+		trackData.setX(-1f);
+		trackData.setY(-1f);
+		trackData.setNeighborEntityType(EntityType.ALL);
+		trackData.setGetNeighbors(1);
 		apiMessage.setTrackData(trackData);
 		apiMessage.send();
 

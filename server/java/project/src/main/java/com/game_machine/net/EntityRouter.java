@@ -56,9 +56,6 @@ public class EntityRouter {
 		}
 		if (entity.hasChatInvite() || entity.hasChatMessage() || entity.hasChatStatus() || entity.hasLeaveChat()
 				|| entity.hasJoinChat()) {
-			if (entity.hasJoinChat()) {
-				logger.info("entity with joinChat (component)");
-			}
 			sel = ActorUtil.getSelectionByName("GameMachine::GameSystems::ChatManager");
 			sel.tell(entity, null);
 		}

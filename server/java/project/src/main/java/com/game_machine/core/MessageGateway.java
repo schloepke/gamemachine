@@ -104,7 +104,7 @@ public class MessageGateway extends UntypedActor {
 
 	private void routeFastpath(Player player, Entity entity) {
 		entity.setPlayer(player);
-		if (entity.hasTrackData()) {
+		if (entity.hasTrackData() || entity.hasAgentTrackData()) {
 			entityTracking.tell(entity, getSelf());
 		} else {
 			log.warning("Unable to find destination for entity id " + entity.id);

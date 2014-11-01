@@ -13,8 +13,9 @@ if ARGV.first == 'server' || ARGV.first == 's'
     classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
     #-J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC
     #-J-XX:+UseG1GC
-    gc_opts = "-J-Xmx256m -J-Xss1024k -J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC -J-XX:+UseCompressedOops"
-    cmd = "jruby #{gc_opts} -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
+    #gc_opts = "-J-Xmx512m -J-XX:+UseG1GC -J-XX:MaxGCPauseMillis=1 -J-XX:+UseCompressedOops"
+    gc_opts = "-J-Xmx256m -J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC -J-XX:+UseCompressedOops"
+    cmd = "  jruby #{gc_opts} -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
     puts "Classpath not set, run again using the following commmand:\n#{cmd}"
     #system(cmd)
     exit

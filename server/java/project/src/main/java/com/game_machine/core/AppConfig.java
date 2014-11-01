@@ -6,6 +6,7 @@ import java.util.List;
 public class AppConfig {
 	
 	private static String env;
+	private static String defaultGameId;
 
 	public static class Client {
 		private static int idleTimeout;
@@ -18,6 +19,69 @@ public class AppConfig {
 			Client.idleTimeout = idleTimeout;
 		}
 
+	}
+	
+	public static class GridConfig {
+		private final String name;
+		private final int gridSize;
+		private final int cellSize;
+		
+		public GridConfig(String name, String config) {
+			String[] parts = config.split(",");
+			this.name = name;
+			this.gridSize = Integer.parseInt(parts[0].trim());
+			this.cellSize = Integer.parseInt(parts[1].trim());
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public int getGridSize() {
+			return gridSize;
+		}
+
+		public int getCellSize() {
+			return cellSize;
+		}
+	}
+	
+	
+	public static class Grids {
+		private static String defaultGrid;
+		private static String aoeGrid;
+		private static String chatGrid;
+		
+		public static String getByName(String name) {
+			if (name.equals("default")) {
+				return defaultGrid;
+			} else if (name.equals("aoe")) {
+				return aoeGrid;
+			} else if (name.equals("chat")) {
+				return chatGrid;
+			} else {
+				return null;
+			}
+		}
+		
+		public static String getDefaultGrid() {
+			return defaultGrid;
+		}
+		public static void setDefaultGrid(String defaultGrid) {
+			Grids.defaultGrid = defaultGrid;
+		}
+		public static String getChatGrid() {
+			return chatGrid;
+		}
+		public static void setChatGrid(String chatGrid) {
+			Grids.chatGrid = chatGrid;
+		}
+		public static String getAoeGrid() {
+			return aoeGrid;
+		}
+		public static void setAoeGrid(String aoeGrid) {
+			Grids.aoeGrid = aoeGrid;
+		}
 	}
 	
     public static class Datastore {
@@ -183,5 +247,13 @@ public class AppConfig {
 
 	public static void setEnv(String env) {
 		AppConfig.env = env;
+	}
+
+	public static String getDefaultGameId() {
+		return defaultGameId;
+	}
+
+	public static void setDefaultGameId(String defaultGameId) {
+		AppConfig.defaultGameId = defaultGameId;
 	}
 }
