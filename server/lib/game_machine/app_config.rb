@@ -43,10 +43,8 @@ module GameMachine
       JavaLib::AppConfig::Datastore.set_cache_write_interval(config.datastore.cache_write_interval)
       JavaLib::AppConfig::Datastore.set_cache_writes_per_second(config.datastore.cache_writes_per_second)
 
-      JavaLib::AppConfig::Grids.set_default_grid(config.grids.default)
-      JavaLib::AppConfig::Grids.set_aoe_grid(config.grids.aoe)
-      JavaLib::AppConfig::Grids.set_chat_grid(config.grids.chat)
-      
+      JavaLib::AppConfig::set_game_config(config.game)
+            
       JavaLib::AppConfig::Client.setIdleTimeout(config.client.idle_timeout)
     end
 

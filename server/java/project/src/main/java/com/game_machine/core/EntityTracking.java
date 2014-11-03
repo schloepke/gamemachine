@@ -1,6 +1,11 @@
 package com.game_machine.core;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import GameMachine.Messages.ClientManagerEvent;
 import GameMachine.Messages.Entity;
@@ -10,18 +15,15 @@ import GameMachine.Messages.TrackData;
 import GameMachine.Messages.TrackData.EntityType;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class EntityTracking extends UntypedActor {
 
-	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
+	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
+	private static MovementVerifier movementVerifier = null;
+	
 	public static String name = "fastpath_entity_tracking";
 
-	private ActorSelection messageGateway;
-
 	public EntityTracking() {
-		messageGateway = ActorUtil.getSelectionByName(MessageGateway.name);
 		Commands.clientManagerRegister(name);
 	}
 
@@ -43,13 +45,13 @@ public class EntityTracking extends UntypedActor {
 			Grid grid = gameGrid(entity.player.id, entity.trackData.getGridName());
 
 			if (grid == null) {
-				logger.warning("No grid found for " + entity.player.id);
+				logger.warn("No grid found for " + entity.player.id);
 				return;
 			}
 
 			Player player = PlayerService.getInstance().find(entity.player.getId());
 			if (player == null) {
-				logger.warning("Player for " + entity.player.getId() + " is null");
+				logger.warn("Player for " + entity.player.getId() + " is null");
 				return;
 			}
 
@@ -77,7 +79,7 @@ public class EntityTracking extends UntypedActor {
 		if (gameId == null) {
 			return null;
 		} else {
-			return Grid.getGameGrid(gameId, name);
+			return GameGrid.getGameGrid(gameId, name);
 		}
 	}
 
@@ -86,8 +88,10 @@ public class EntityTracking extends UntypedActor {
 		if (gameId == null) {
 			return;
 		}
-		if (Grid.gameGrids.containsKey(gameId)) {
-			for (String name : Grid.gameGrids.get(gameId).keySet()) {
+		
+		Map<String, ConcurrentHashMap<String, Grid>> gameGrids = GameGrid.getGameGrids();
+		if (gameGrids.containsKey(gameId)) {
+			for (String name : gameGrids.get(gameId).keySet()) {
 				Grid grid = gameGrid(event.player_id, name);
 				if (grid != null) {
 					logger.debug("Removing " + event.player_id + " from grid " + name);
@@ -100,9 +104,11 @@ public class EntityTracking extends UntypedActor {
 
 	private void SendNeighbors(Grid grid, float x, float y, Player player, EntityType neighborType) {
 		List<TrackData> trackDatas;
+		boolean isAgentController = (player.getRole().equals("agent_controller"));
+		
 		if (neighborType != null && neighborType == EntityType.ALL) {
 			// Only agents have access to entire grid
-			if (!player.getRole().equals("agent_controller")) {
+			if (!isAgentController) {
 				return;
 			}
 			trackDatas = grid.getAll();
@@ -111,7 +117,7 @@ public class EntityTracking extends UntypedActor {
 		}
 
 		if (trackDatas.size() >= 1) {
-			toNeighbors(player, trackDatas);
+			toNeighbors(player, trackDatas, isAgentController);
 		}
 	}
 
@@ -120,18 +126,24 @@ public class EntityTracking extends UntypedActor {
 		playerMessage.setNeighbors(neighbors);
 		playerMessage.setPlayer(player);
 		playerMessage.setId(player.id);
-		messageGateway.tell(playerMessage, getSelf());
+		ActorSelection sel = ActorUtil.getSelectionByName(player.id);
+		sel.tell(playerMessage, getSelf());
 	}
 
-	private void toNeighbors(Player player, List<TrackData> trackDatas) {
-		int count = 0;
+	private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
 		Neighbors neighbors = new Neighbors();
+		int size = 30;
+		if (isAgentController) {
+			size = 100;
+		}
+		
+		int count = 0;
 
 		for (TrackData trackData : trackDatas) {
 			neighbors.addTrackData(trackData);
 
 			count++;
-			if (count >= 30) {
+			if (count >= size) {
 				SendToGateway(player, neighbors);
 				count = 0;
 				neighbors = new Neighbors();
@@ -162,6 +174,14 @@ public class EntityTracking extends UntypedActor {
 		
 		// TODO. If set returns false send message to the client letting them
 		// know their movement was not allowed
+		if (trackData.entityType == EntityType.PLAYER) {
+			if (movementVerifier != null) {
+				if (!movementVerifier.verify(trackData)) {
+					return;
+				}
+			}
+		}
+		
 		grid.set(trackData);
 	}
 

@@ -11,7 +11,7 @@ import java.util.concurrent.TimeoutException;
 import net.spy.memcached.internal.OperationFuture;
 
 import com.couchbase.client.CouchbaseClient;
-import com.game_machine.core.AppConfig;
+import com.game_machine.config.AppConfig;
 
 public class CouchbaseStore implements Storable {
 

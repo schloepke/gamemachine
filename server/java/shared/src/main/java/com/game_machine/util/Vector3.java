@@ -1,9 +1,9 @@
-package com.game_machine.core;
+package com.game_machine.util;
 
 public class Vector3 {
-	private double x;
-	private double y;
-	private double z;
+	public double x;
+	public double y;
+	public double z;
 
 	public Vector3() {
 	}
@@ -14,6 +14,10 @@ public class Vector3 {
 		this.z = z;
 	}
 
+	public static Vector3 zero() {
+		return new Vector3(0f,0f,0f);
+	}
+	
 	public static Vector3 from(Vector3 other) {
 		Vector3 vec = new Vector3(other.x, other.y, other.z);
 		return vec;
@@ -122,6 +126,10 @@ public class Vector3 {
 	// Obtain distance between position vectors
 	public double distance(Vector3 other) {
 		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2));
+	}
+	
+	public double distance2d(Vector3 other) {
+		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
 	}
 
 	// Project the vector onto the plane passing through the origin,

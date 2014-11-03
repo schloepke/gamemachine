@@ -55,8 +55,8 @@ module GameMachine
         self.class.log_statistic('db_cachehit',cache_hits)
         #GameMachine.logger.info "Store: set=#{set_count} get=#{get_count} delete=#{delete_count} cache_hits=#{cache_hits}"
         
-        current_count = JavaLib::MessageGateway.messageCount.incrementAndGet
-        JavaLib::MessageGateway.messageCount.decrementAndGet
+        current_count = JavaLib::Incoming.messageCount.incrementAndGet
+        JavaLib::Incoming.messageCount.decrementAndGet
         diff = current_count - @last_count
         #GameMachine.logger.info "GatewayMessagesPerSecond: #{diff}"
         self.class.log_statistic('gateway_mps',diff / @interval)
@@ -75,8 +75,9 @@ module GameMachine
         #GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
         self.class.log_statistic('messages_out_mps',diff / @interval)
         @last_out_count = current_count
-        puts @stats.inspect
         update_statistics
+        #JavaLib::GameGrid.get_grid_counts
+        puts @stats.inspect
       end
       
     end

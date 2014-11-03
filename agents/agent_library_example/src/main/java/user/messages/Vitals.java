@@ -9,9 +9,9 @@ public class Vitals {
 	public String id;
 	public int health;
 	public EntityType entityType = EntityType.PLAYER;
-	public float x = 0;
-	public float y = 0;
-	public float z = 0;
+	public double x = 0;
+	public double y = 0;
+	public double z = 0;
 	public boolean updated = false;
 
 	// Classes that get saved to the cloud need a default no-arg constructor.

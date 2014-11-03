@@ -50,9 +50,8 @@ public class PlayerVitalsManager implements Codeblock {
 			}
 		} else if (message instanceof ChatChannel) {
 			ChatChannel channel = (ChatChannel) message;
-			if (channel.getSubscribers() != null && channel.getSubscribers().getSubscriberIdCount() > 0) {
-				List<String> subscribers = channel.getSubscribers().getSubscriberIdList();
-				updateVitals(subscribers);
+			if (channel.hasSubscribers()) {
+				updateVitals(channel.getSubscribers().getSubscriberIdList());
 			}
 		}
 	}

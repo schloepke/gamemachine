@@ -12,10 +12,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import akka.actor.ActorSelection;
+
 import com.game_machine.core.ActorUtil;
 import com.game_machine.core.NetMessage;
-
-import akka.actor.ActorSelection;
+import com.game_machine.routing.Incoming;
 
 //@Sharable
 public final class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
@@ -28,7 +29,7 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 	private ActorSelection inbound;
 
 	public UdpServerHandler() {
-		this.inbound = ActorUtil.getSelectionByName("message_gateway");
+		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
 	}
 
 	@Override

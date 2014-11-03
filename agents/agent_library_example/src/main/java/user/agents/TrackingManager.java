@@ -74,9 +74,9 @@ public class TrackingManager implements Codeblock {
 				TrackData trackData = new TrackData();
 				trackData.setId(vitals.id);
 				trackData.setEntityType(vitals.entityType);
-				trackData.setX(vitals.x);
-				trackData.setY(vitals.y);
-				trackData.setZ(vitals.z);
+				trackData.setX((float)vitals.x);
+				trackData.setY((float)vitals.y);
+				trackData.setZ((float)vitals.z);
 				trackData.setGetNeighbors(0);
 				agentTrackData.addTrackData(trackData);
 			}

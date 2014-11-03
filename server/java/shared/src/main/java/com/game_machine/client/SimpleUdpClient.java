@@ -26,11 +26,14 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 	private int timeout;
 	private boolean stop = false;
 	private ActorSelection inbound;
+	private DatagramPacket inp;
 
 	public SimpleUdpClient(String host, int port, String actorName) {
 		this.port = port;
 		this.timeout = 1000;
 		this.inbound = Api.getActorByName(actorName);
+		byte[] in = new byte[8192];
+		inp = new DatagramPacket(in, in.length, hostAddress, port);
 		connect(host,port);
 	}
 	
@@ -88,8 +91,6 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 	}
 
 	public byte[] receive() {
-		byte[] in = new byte[2048];
-		DatagramPacket inp = new DatagramPacket(in, in.length, hostAddress, port);
 		try {
 			s.receive(inp);
 			byte[] received = Arrays.copyOfRange(inp.getData(), inp.getOffset(), inp.getOffset() + inp.getLength());

@@ -5,6 +5,10 @@ package com.game_machine.core;
  * so there is no way to get all entities within an exact range.  This is normally not an issue for large numbers of entities in a large open space, and if you are
  * working with a small number of entities you can afford to do additional filtering client side.
  * 
+ * Grids are instantiated with a size and a cell size.  The grid is divided into cells of cell size.  The cell size must divide evenly into the grid size.
+ * 
+ * Grids operations are thread safe.
+ * 
  */
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,16 +17,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import GameMachine.Messages.CreateGrid;
-import GameMachine.Messages.Entity;
 import GameMachine.Messages.TrackData;
 import GameMachine.Messages.TrackData.EntityType;
-
-import com.game_machine.core.AppConfig.GridConfig;
-import com.game_machine.objectdb.Store;
 
 public class Grid {
 
@@ -32,103 +28,11 @@ public class Grid {
 	private int width;
 	private int cellCount;
 
-	private MovementVerifier movementVerifier;
-
-	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
-
-	public static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
-
-	public static ConcurrentHashMap<String, Grid> grids = new ConcurrentHashMap<String, Grid>();
-
 	private ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
-	private ConcurrentHashMap<Integer, Set<Integer>> cellsCache = new ConcurrentHashMap<Integer, Set<Integer>>();
-
-	public static void resetGrids() {
-		grids = new ConcurrentHashMap<String, Grid>();
-	}
-
-	public static synchronized Grid loadGameGrid(String gameId, String gridName) {
-		logger.debug("loadGameGrid " + gameId + " " + gridName);
-		Store store = Store.getInstance();
-		String savedId = "create_grid_" + gameId + "_" + gridName;
-		Entity entity = (Entity) store.get(savedId, Entity.class);
-		if (entity == null) {
-			logger.debug(savedId + " not found in store");
-			String gridStr = AppConfig.Grids.getByName(gridName);
-			if (gridStr != null) {
-				GridConfig config = new GridConfig(gridName, gridStr);
-				CreateGrid create = new CreateGrid();
-				create.setName(gridName).setGridSize(config.getGridSize()).setCellSize(config.getCellSize());
-				store.set(savedId, new Entity().setId(savedId).setCreateGrid(create));
-				return createGameGrid(gameId, create);
-			}
-		} else {
-			return createGameGrid(gameId, entity.getCreateGrid());
-		}
-		return null;
-	}
-
-	public static synchronized Grid createGameGrid(String gameId, CreateGrid createGrid) {
-		logger.debug("createGameGrid " + gameId + " " + createGrid.getName());
-		if (!gameGrids.containsKey(gameId)) {
-			gameGrids.put(gameId, new ConcurrentHashMap<String, Grid>());
-		}
-
-		if (gameGrids.get(gameId).size() >= 5) {
-			logger.info("Grid limit exceeded");
-			return null;
-		}
-
-		Grid existing = gameGrids.get(gameId).get(createGrid.getName());
-		if (existing != null) {
-			if (existing.max == createGrid.getGridSize() && existing.cellSize == createGrid.getCellSize()) {
-				logger.debug("existing grid with same settings " + createGrid.getName());
-				return existing;
-			}
-		}
-
-		Grid gameGrid = Grid.findOrCreate(gameId, createGrid.getGridSize(), createGrid.getCellSize());
-		gameGrids.get(gameId).put(createGrid.getName(), gameGrid);
-		logger.debug("Grid created for " + gameId + " " + createGrid.getName());
-		return gameGrid;
-	}
-
-	public static Grid getGameGrid(String gameId, String gridName) {
-		if (gameGrids.containsKey(gameId)) {
-			if (gameGrids.get(gameId).containsKey(gridName)) {
-				return gameGrids.get(gameId).get(gridName);
-			} else {
-				loadGameGrid(gameId, gridName);
-				return gameGrids.get(gameId).get(gridName);
-			}
-		} else {
-			// No grids created for this gameId, create the defaults
-			loadGameGrid(gameId, gridName);
-			return gameGrids.get(gameId).get(gridName);
-		}
-	}
-
-	public static synchronized Grid findOrCreate(String name, int gridSize, int cellSize) {
-		if (grids.containsKey(name)) {
-			return grids.get(name);
-		} else {
-			Grid grid = new Grid(gridSize, cellSize);
-			grids.put(name, grid);
-			return grid;
-		}
-	}
-
-	public static Grid find(String name) {
-		if (grids.containsKey(name)) {
-			return grids.get(name);
-		} else {
-			return null;
-		}
-	}
-
+	
 	public Grid(int max, int cellSize) {
 		this.max = max;
 		this.cellSize = cellSize;
@@ -137,10 +41,10 @@ public class Grid {
 		this.cellCount = this.width * this.width;
 	}
 
-	public void setMovementVerifier(MovementVerifier movementVerifier) {
-		this.movementVerifier = movementVerifier;
+	public int getObjectCount() {
+		return objectIndex.size();
 	}
-
+	
 	public int getMax() {
 		return this.max;
 	}
@@ -269,15 +173,6 @@ public class Grid {
 	}
 
 	public Boolean set(TrackData trackData) {
-
-		if (trackData.entityType == EntityType.PLAYER) {
-			if (movementVerifier != null) {
-				if (!movementVerifier.verify(trackData)) {
-					return false;
-				}
-			}
-		}
-
 		Boolean hasExisting = false;
 		Integer oldCellValue = -1;
 		String id = trackData.id;
@@ -292,8 +187,10 @@ public class Grid {
 		if (hasExisting) {
 			if (oldCellValue != cell) {
 				ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(oldCellValue);
-				cellGridValues.remove(id);
-				if (cellGridValues.size() == 0) {
+				if (cellGridValues != null && cellGridValues.containsKey(id)) {
+					cellGridValues.remove(id);
+				}
+				if (cellGridValues != null && cellGridValues.size() == 0) {
 					cells.remove(oldCellValue);
 				}
 
@@ -305,10 +202,14 @@ public class Grid {
 			objectIndex.put(id, trackData);
 		}
 
-		if (!cells.containsKey(cell)) {
-			cells.put(cell, new ConcurrentHashMap<String, TrackData>());
+		ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
+		if (cellGridValues == null) {
+			cellGridValues = new ConcurrentHashMap<String, TrackData>();
+			cellGridValues.put(id, trackData);
+			cells.put(cell, cellGridValues);
+		} else {
+			cellGridValues.put(id, trackData);
 		}
-		cells.get(cell).put(id, trackData);
 
 		// deltaIndex.put(id, gridValue);
 

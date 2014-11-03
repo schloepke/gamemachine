@@ -25,7 +25,7 @@ public class CodeblockRunner extends UntypedActor {
 	private String agentId;
 	private String encodedCompileResult;
 
-	public CodeblockRunner(Api api, Agent agent) {
+	public CodeblockRunner(Api api, Agent agent, String agentId) {
 		Permissions permissions = new Permissions();
 		permissions.add(new java.net.SocketPermission("*:24130", "connect,resolve"));
 		permissions.add(new java.net.SocketPermission(api.getCloudHost(), "connect,resolve"));
@@ -34,7 +34,7 @@ public class CodeblockRunner extends UntypedActor {
 		this.executor.setPerms(permissions);
 		this.classname = agent.getClassname();
 		this.encodedCompileResult = agent.getCompileResult();
-		this.agentId = agent.getId();
+		this.agentId = agentId;
 		this.codeblockEnv = new CodeblockEnv(api,this,agent.getId());
 		updateCodeblock();
 	}

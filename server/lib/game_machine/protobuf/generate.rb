@@ -32,6 +32,10 @@ module GameMachine
         File.join(java_root,'component.erb')
       end
 
+      def client_template
+        File.join(java_root,'client.erb')
+      end
+
       def model_template
         File.join(java_root,'model.erb')
       end
@@ -44,6 +48,10 @@ module GameMachine
         File.join(java_root,'src','main','java','GameMachine', 'Messages')
       end
 
+      def client_src
+        File.join(app_root,'java','shared','src','main','java','Client', 'Messages')
+      end
+
       def config_path
         File.join(app_root,'config')
       end
@@ -52,6 +60,8 @@ module GameMachine
         messages = proto.getMessages.reject {|message| message.getName == 'Components'}
         FileUtils.mkdir_p(java_src)
         FileUtils.mkdir_p(model_src)
+        FileUtils.rm_rf(client_src)
+        FileUtils.mkdir_p(client_src)
         message_names = proto.getMessages.map {|m| m.get_name}
         messages_index = proto.getMessages.each_with_object({}) {|v,res| res[v.getName] = v}
 
@@ -72,6 +82,11 @@ module GameMachine
           out = ERB.new(File.read(erb_template),0,'>').result(binding)
           out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
           src_file = File.join(java_src,"#{message.getName}.java")
+          File.open(src_file,'w') {|f| f.write out}
+
+          out = ERB.new(File.read(client_template),0,'>').result(binding)
+          out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
+          src_file = File.join(client_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
 
           if persistent

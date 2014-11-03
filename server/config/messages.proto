@@ -3,10 +3,14 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
-message CreateGrid {
-  required string name = 1;
-  required int32 gridSize = 2;
-  required int32 cellSize = 3;
+message GameConfigs {
+  repeated GameConfig gameConfig = 1;
+}
+
+message GameConfig {
+  required string config = 1;
+  required int32 version = 2;
+  required string gameId = 3;
 }
 
 message TeamMemberSkill {
@@ -50,7 +54,8 @@ message Agent {
   required string code = 2;
   required string classname = 3;
   optional bool remove = 5;
-  required string compileResult = 6; 
+  required string compileResult = 6;
+  required int32 concurrency = 7;
 }
 
 message AgentController {
@@ -375,7 +380,6 @@ message Entity {
   optional string senderId = 63;
   optional AgentTrackData agentTrackData = 64;
   optional TeamMemberSkill teamMemberSkill = 65;
-  optional CreateGrid createGrid = 66;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -8,11 +8,12 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.core.ActorUtil;
-import com.game_machine.core.NetMessage;
-
 import GameMachine.Messages.ClientMessage;
 import akka.actor.ActorSelection;
+
+import com.game_machine.core.ActorUtil;
+import com.game_machine.core.NetMessage;
+import com.game_machine.routing.Incoming;
 
 public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage> {
 
@@ -21,7 +22,7 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage>
 	private static final Logger log = LoggerFactory.getLogger(TcpServerHandler.class);
 
 	public TcpServerHandler() {
-		this.inbound = ActorUtil.getSelectionByName("message_gateway");
+		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
 	}
 
 	public static void sendClientMessage(ClientMessage clientMessage, ChannelHandlerContext ctx) {

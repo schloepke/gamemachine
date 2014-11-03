@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import com.game_machine.core.AppConfig;
+import com.game_machine.config.AppConfig;
 import com.game_machine.core.DbConnectionPool;
 
 public class JdbcStore implements Storable {

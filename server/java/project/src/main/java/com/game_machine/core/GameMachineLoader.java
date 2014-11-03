@@ -5,13 +5,15 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.net.Incoming;
-import com.game_machine.net.RequestHandler;
-import com.game_machine.objectdb.DbActor;
-
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
+
+import com.game_machine.config.AppConfig;
+import com.game_machine.config.GameConfig;
+import com.game_machine.objectdb.DbActor;
+import com.game_machine.routing.Incoming;
+import com.game_machine.routing.RequestHandler;
 
 public class GameMachineLoader {
 
@@ -24,10 +26,7 @@ public class GameMachineLoader {
 		return actorSystem;
 	}
 
-	public static void StartMessageGateway() {
-		actorSystem.actorOf(new RoundRobinPool(30).props(Props.create(MessageGateway.class)), MessageGateway.name);
-	}
-
+	// TODO move router count to a config
 	public static void StartEntityTracking() {
 		actorSystem.actorOf(new RoundRobinPool(30).props(Props.create(EntityTracking.class)), EntityTracking.name);
 	}
@@ -45,9 +44,10 @@ public class GameMachineLoader {
 	}
 
 	public static void startRequestHandler(int nodeCount) {
-		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(RequestHandler.class)), RequestHandler.name);
+		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(RequestHandler.class)),
+				RequestHandler.name);
 	}
-	
+
 	public static void startIncoming(int nodeCount) {
 		actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(Incoming.class)), Incoming.name);
 	}
@@ -69,6 +69,10 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 		startCacheUpdateHandler();
+
+		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
+			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
+		}
 
 	}
 

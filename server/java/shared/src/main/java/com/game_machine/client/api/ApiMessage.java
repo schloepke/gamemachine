@@ -91,7 +91,7 @@ public class ApiMessage {
 		chatChannel.setFlags(flags);
 
 		if (inviteId != null) {
-			chatChannel.setInviteId(inviteId);
+			chatChannel.setInvite_id(inviteId);
 		}
 		joinChat.addChatChannel(chatChannel);
 		clientMessage.addEntity(entity().setJoinChat(joinChat));
@@ -179,7 +179,7 @@ public class ApiMessage {
 		Player player = new Player();
 		player.setId(playerId).setAuthtoken(authtoken);
 		ClientMessage clientMessage = new ClientMessage();
-		clientMessage.setConnectionType(0);
+		clientMessage.setConnection_type(0);
 		clientMessage.setPlayer(player);
 		return clientMessage;
 	}

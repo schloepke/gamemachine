@@ -71,7 +71,7 @@ import com.game_machine.core.PersistableMessage;
 <% end %>
 
 <% if has_id %>
-import com.game_machine.api.Cache;
+import com.game_machine.objectdb.Cache;
 import com.game_machine.core.CacheUpdate;
 <% end %>
 
@@ -691,8 +691,14 @@ import com.game_machine.core.CacheUpdate;
 <% message.getFields.each do |field| %>
 	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     
+    public Boolean has<%=field_name %>()  {
+        return <%=field.name%> == null ? false : true;
+    }
+        
 	<% if field.isRepeated %>
 	public List<<%=get_type(field)%>> get<%=field_name %>List() {
+		if(this.<%=field.name%> == null)
+            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
 		return <%= field.name %>;
 	}
 
@@ -756,9 +762,6 @@ import com.game_machine.core.CacheUpdate;
 		<%= field_name == '_EntityId' ? '' : 'return this;'%>
 	}
 	
-	public Boolean has<%=field_name %>()  {
-        return <%=field.name%> == null ? false : true;
-    }
 	<% end %>
 <% end %>
 

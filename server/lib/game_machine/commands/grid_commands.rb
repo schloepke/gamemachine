@@ -4,16 +4,16 @@ module GameMachine
 
       attr_reader
       def initialize
-        @aoe_grid = JavaLib::Grid.get_game_grid(Application.config.default_game_id,"aoe")
-        @grid = JavaLib::Grid.get_game_grid(Application.config.default_game_id,"default")
+        @aoe_grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe")
+        @grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default")
       end
 
       def grid
-        @grid ||= JavaLib::Grid.get_game_grid(Application.config.default_game_id,"default")
+        @grid ||= JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default")
       end
 
       def aoe_grid
-        @aoe_grid ||= JavaLib::Grid.get_game_grid(Application.config.default_game_id,"aoe")
+        @aoe_grid ||= JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe")
       end
 
       def get_neighbors_for(id,entity_type='player')

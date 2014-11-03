@@ -7,14 +7,13 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import user.messages.Vitals;
 
-import com.game_machine.client.api.Api;
 import com.game_machine.client.api.ClientGrid;
 
 public class Globals {
 
 	private static ConcurrentHashMap<String,Vitals> vitals = new ConcurrentHashMap<String,Vitals>();
-	public static final ClientGrid grid = ClientGrid.findOrCreate("default", 4000, 50);
-	public static final ClientGrid aoeGrid = ClientGrid.findOrCreate("aoe", 4000, 10);
+	public static final ClientGrid grid = ClientGrid.findOrCreate("default", 2000, 100);
+	public static final ClientGrid aoeGrid = ClientGrid.findOrCreate("aoe", 2000, 10);
 	
 	public static Map<String,Vitals> getVitals() {
 		return vitals;

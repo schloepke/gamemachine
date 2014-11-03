@@ -1,4 +1,4 @@
-package com.game_machine.net;
+package com.game_machine.routing;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +13,7 @@ import GameMachine.Messages.Player;
 import akka.actor.ActorSelection;
 
 import com.game_machine.core.ActorUtil;
+import com.game_machine.core.EntityTracking;
 import com.game_machine.core.PlayerCommands;
 import com.game_machine.core.PlayerService;
 
@@ -31,10 +32,21 @@ public class EntityRouter {
 		}
 	}
 	
+	private ActorSelection entityTracking;
+	
+	public EntityRouter() {
+		entityTracking = ActorUtil.getSelectionByName(EntityTracking.name);
+	}
+	
 	public void route(List<Entity> entities, Player player) {
 		for (Entity entity : entities) {
 			entity.setPlayer(player);
-						
+			
+			if (entity.hasTrackData() || entity.hasAgentTrackData()) {
+				entityTracking.tell(entity,null);
+				continue;
+			}
+			
 			if (entity.hasDestination()) {
 				routeByDestination(entity);
 				continue;

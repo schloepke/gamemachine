@@ -6,8 +6,6 @@ import java.util.Map;
 
 import org.mapdb.HTreeMap;
 
-import com.game_machine.api.MemoryMap;
-
 public class MemoryStore implements Storable {
 
 	private Map<String, byte[]> cache;

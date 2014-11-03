@@ -148,6 +148,8 @@ module GameMachine
         Actor::Builder.new(ObjectDb).distributed(1).start
         JavaLib::GameMachineLoader.startObjectDb(config.routers.objectdb)
         Actor::Builder.new(MessageQueue).start
+
+        ClientManager.get_map('preload')
         Actor::Builder.new(ClientManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler * 2).start
         Actor::Builder.new(ClientManagerUpdater).start
         
@@ -157,8 +159,6 @@ module GameMachine
           GameMachine.logger.info("Waiting 2 seconds for core actors to start")
           sleep 2
         end
-
-        JavaLib::GameMachineLoader.StartMessageGateway
 
         # Mostly unused
         if config.datastore.store == 'gamecloud'
