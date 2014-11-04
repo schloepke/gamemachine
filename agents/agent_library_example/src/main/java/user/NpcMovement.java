@@ -1,70 +1,43 @@
 package user;
 
-import Client.Messages.TrackData;
-
-import com.game_machine.client.api.ClientGrid;
 import com.game_machine.util.Vector3;
 
 public class NpcMovement {
 
-	private ClientGrid grid;
 	private Vector3 target;
 	private Vector3 position;
 	private double distanceToTarget = 0;
 	private double lastMove = 0;
-	private double speedScale = 4;
-	private boolean positionChanged = false;
+	private double speedScale = 4f;
 	public boolean hasTarget = false;
-	private int updatesForMove = 0;
-	private int updatesBetweenMove = 5;
 	public boolean reachedTarget = false;
-	private String id;
 
-	public NpcMovement(String id, Vector3 position, ClientGrid grid) {
-		this.grid = grid;
-		this.id = id;
+	public NpcMovement(Vector3 position, double speedScale) {
+		this.speedScale = speedScale;
 		this.position = position;
-		this.lastMove = System.currentTimeMillis() / 1000l;
+		this.lastMove = System.currentTimeMillis();
 	}
 
 	public void update() {
-		positionChanged = false;
 		if (hasTarget && !reachedTarget) {
-			if (updatesForMove >= updatesBetweenMove) {
-				move();
-				updatesForMove = 0;
-			}
+			move();
 		} else {
 			return;
 		}
-
-		if (positionChanged) {
-			//System.out.println(id+" "+position.toString());
-			grid.set(id, (float) position.x, (float) position.y, 0, TrackData.EntityType.NPC);
-			positionChanged = false;
-		}
-		updatesForMove++;
 	}
 
 	private void targetReached() {
-		//System.out.println("Target reached "+target.toString());
+		// System.out.println("Target reached "+target.toString());
 		position.x = target.x;
 		position.y = target.y;
 		reachedTarget = true;
 	}
-	
+
 	public void setTarget(Vector3 newTarget) {
 		target = newTarget;
-		lastMove = System.currentTimeMillis() / 1000l;
+		lastMove = System.currentTimeMillis();
 		hasTarget = true;
 		reachedTarget = false;
-	}
-	
-	private void dropTarget() {
-		target = null;
-		hasTarget = false;
-		reachedTarget = false;
-		distanceToTarget = 0;
 	}
 
 	private void move() {
@@ -73,7 +46,7 @@ public class NpcMovement {
 			targetReached();
 			return;
 		}
-		double deltaTime = (System.currentTimeMillis() / 1000l) - lastMove;
+		double deltaTime = (System.currentTimeMillis() - lastMove) / 1000f;
 
 		Vector3 dist = Vector3.zero();
 		dist.x = target.x - position.x;
@@ -88,8 +61,7 @@ public class NpcMovement {
 			targetReached();
 		}
 
-		lastMove = System.currentTimeMillis() / 1000l;
-		positionChanged = true;
+		lastMove = System.currentTimeMillis();
 	}
 
 }

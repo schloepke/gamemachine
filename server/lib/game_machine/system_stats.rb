@@ -76,7 +76,7 @@ module GameMachine
         self.class.log_statistic('messages_out_mps',diff / @interval)
         @last_out_count = current_count
         update_statistics
-        #JavaLib::GameGrid.get_grid_counts
+        JavaLib::GameGrid.get_grid_counts
         puts @stats.inspect
       end
       

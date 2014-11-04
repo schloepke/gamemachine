@@ -5,52 +5,67 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import user.messages.Vitals;
+import user.messages.GameEntity;
+import Client.Messages.TrackData;
 
 import com.game_machine.client.api.ClientGrid;
 
 public class Globals {
 
-	private static ConcurrentHashMap<String,Vitals> vitals = new ConcurrentHashMap<String,Vitals>();
-	public static final ClientGrid grid = ClientGrid.findOrCreate("default", 2000, 100);
+	private static ConcurrentHashMap<String,GameEntity> gameEntities = new ConcurrentHashMap<String,GameEntity>();
+	public static final ClientGrid grid = ClientGrid.findOrCreate("default", 400, 50);
 	public static final ClientGrid aoeGrid = ClientGrid.findOrCreate("aoe", 2000, 10);
 	
-	public static Map<String,Vitals> getVitals() {
-		return vitals;
+	public static void clearVitals() {
+		gameEntities.clear();
+	}
+	
+	public static Map<String,GameEntity> getVitals() {
+		return gameEntities;
 	}
 	
 	public static List<String> getPlayerIds() {
 		List<String> playerIds = new ArrayList<String>();
-		for (Vitals v : vitals.values()) {
-			if (v.entityType.equals("player")) {
+		for (GameEntity v : gameEntities.values()) {
+			if (v.entityType == TrackData.EntityType.PLAYER) {
 				playerIds.add(v.id);
 			}
 		}
 		return playerIds;
 	}
 	
-	public static List<Vitals> getVitalsList() {
-		return new ArrayList<Vitals>(vitals.values());
+	public static List<GameEntity> getPlayerEntities() {
+		List<GameEntity> playerIds = new ArrayList<GameEntity>();
+		for (GameEntity v : gameEntities.values()) {
+			if (v.entityType == TrackData.EntityType.PLAYER) {
+				playerIds.add(v);
+			}
+		}
+		return playerIds;
 	}
 	
-	public static Vitals getVitalsFor(String id) {
-		if (vitals.containsKey(id)) {
-			return vitals.get(id);
+	public static List<GameEntity> gameEntitiesList() {
+		return new ArrayList<GameEntity>(gameEntities.values());
+	}
+	
+	public static GameEntity gameEntityFor(String id) {
+		if (gameEntities.containsKey(id)) {
+			return gameEntities.get(id);
 		} else {
 			return null;
 		}
 	}
 
-	public static boolean hasVitalsFor(String id) {
-		return vitals.containsKey(id);
+	public static boolean hasGameEntity(String id) {
+		return gameEntities.containsKey(id);
 	}
 	
-	public static void setVitalsFor(Vitals vitals) {
-		Globals.vitals.put(vitals.id, vitals);
+	public static void setGameEntity(GameEntity gameEntity) {
+		Globals.gameEntities.put(gameEntity.id, gameEntity);
 	}
 	
 	public static void removeVitalsFor(String id) {
-		vitals.remove(id);
+		gameEntities.remove(id);
 	}
 
 }

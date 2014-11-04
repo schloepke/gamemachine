@@ -13,11 +13,11 @@ public class Npc {
 	private NpcMovement movement;
 	public String id;
 
-	public Npc(String id, ClientGrid grid) {
+	public Npc(String id, ClientGrid grid, double speedScale) {
 		this.grid = grid;
 		this.id = id;
 		setSpawnPoint();
-		this.movement = new NpcMovement(id, position, grid);
+		this.movement = new NpcMovement(position, speedScale);
 	}
 
 	private float rand(int num) {

@@ -3,6 +3,11 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message TrackDataUpdate {
+  required string id = 1;
+  required DynamicMessage dynamicMessage = 2;
+}
+
 message GameConfigs {
   repeated GameConfig gameConfig = 1;
 }
@@ -380,6 +385,7 @@ message Entity {
   optional string senderId = 63;
   optional AgentTrackData agentTrackData = 64;
   optional TeamMemberSkill teamMemberSkill = 65;
+  optional TrackDataUpdate trackDataUpdate = 66;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -6,12 +6,14 @@ import java.util.List;
 import user.Globals;
 import user.Npc;
 import user.messages.Attack;
-import user.messages.Vitals;
+import user.messages.GameEntity;
+import Client.Messages.AgentTrackData;
 import Client.Messages.TrackData;
 import Client.Messages.TrackData.EntityType;
 
 import com.game_machine.client.agent.CodeblockEnv;
 import com.game_machine.client.api.Api;
+import com.game_machine.client.api.ApiMessage;
 import com.game_machine.codeblocks.Codeblock;
 
 public class NpcAi implements Codeblock {
@@ -19,7 +21,9 @@ public class NpcAi implements Codeblock {
 	private CodeblockEnv env;
 	private Api api;
 	private List<Npc> npcs = new ArrayList<Npc>();
-	private int npcCount = 5;
+	private int npcCount = 50;
+	private int delay = 50;
+	private double speedScale = 4f;
 
 	@Override
 	public void awake(Object message) {
@@ -29,21 +33,19 @@ public class NpcAi implements Codeblock {
 			System.out.println("Agent " + this.env.getAgentId() + " is awake");
 
 			for (int x = 0; x < npcCount; x++) {
-				String npcId = this.env.getAgentId() + "npc_" + x;
-				Npc npc = new Npc(npcId, Globals.grid);
+				String npcId = this.env.getAgentId() + "-" + x;
+				Npc npc = new Npc(npcId, Globals.grid, speedScale);
 				npcs.add(npc);
-				Vitals vitals = Globals.getVitalsFor(npc.id);
+				GameEntity vitals = Globals.gameEntityFor(npc.id);
 				if (vitals == null) {
-					vitals = new Vitals(npcId);
+					vitals = new GameEntity(npcId);
 					vitals.setEntityType(EntityType.NPC);
-					vitals.x = npc.position.x;
-					vitals.y = npc.position.y;
 					vitals.updated = true;
-					Globals.setVitalsFor(vitals);
+					Globals.setGameEntity(vitals);
 				}
 			}
 			if (this.env.getReloadCount() == 0) {
-				this.env.tick(30, "ai");
+				this.env.tick(delay, "ai");
 			}
 		}
 
@@ -51,22 +53,42 @@ public class NpcAi implements Codeblock {
 
 	@Override
 	public void run(Object message) throws Exception {
+		npcUpdate();
+		this.env.tick(delay, "ai");
+	}
 
+	private void npcUpdate() {
+		AgentTrackData agentTrackData = new AgentTrackData();
 		for (Npc npc : npcs) {
 			npc.update();
-			Vitals vitals = Globals.getVitalsFor(npc.id);
-			vitals.x = npc.position.x;
-			vitals.y = npc.position.y;
+			GameEntity vitals = Globals.gameEntityFor(npc.id);
+			
+			TrackData trackData = new TrackData();
+			trackData.setId(vitals.id);
+			trackData.setEntityType(vitals.entityType);
+			
+			// Limit scale to 2, no need to send extra data we don't have to
+			trackData.setX((float) Math.round(npc.position.x * 100) / 100);
+			trackData.setY((float) Math.round(npc.position.y * 100) / 100);
+			trackData.setZ(0f);
+			trackData.setGetNeighbors(0);
+			agentTrackData.addTrackData(trackData);
 		}
+		
+		if (agentTrackData.getTrackDataCount() >= 1) {
+			ApiMessage apiMessage = this.api.newMessage();
+			apiMessage.setAgentTrackData(agentTrackData);
+			apiMessage.send();
+		}
+	}
 
+	private void doCombat() {
 		// Random npc
 		int idx = (int) (Math.random() * npcCount - 1);
 		Npc npc = npcs.get(idx);
 
-		Vitals vitals = Globals.getVitalsFor(npc.id);
-
 		// Random player
-		List<TrackData> players = Globals.grid.neighbors((float) vitals.x, (float) vitals.y, EntityType.PLAYER);
+		List<TrackData> players = Globals.grid.neighbors((float) npc.position.x, (float) npc.position.y, EntityType.PLAYER);
 		int playerIdx = (int) (Math.random() * players.size());
 		if (players.contains(playerIdx)) {
 			TrackData trackData = players.get(playerIdx);
@@ -81,8 +103,31 @@ public class NpcAi implements Codeblock {
 				this.env.sendToAgent("CombatManager", attack);
 			}
 		}
+	}
 
-		this.env.tick(30, "ai");
-
+	@Override
+	public void shutdown(Object arg0) throws Exception {
+		
+		// Remove npc's from grid
+		AgentTrackData agentTrackData = new AgentTrackData();
+		for (Npc npc : npcs) {
+			TrackData trackData = new TrackData();
+			trackData.setId(npc.id);
+			trackData.setEntityType(TrackData.EntityType.NPC);
+			
+			trackData.setX(-1f);
+			trackData.setY(-1f);
+			trackData.setZ(-1f);
+			trackData.setGetNeighbors(0);
+			agentTrackData.addTrackData(trackData);
+		}
+		
+		if (agentTrackData.getTrackDataCount() >= 1) {
+			ApiMessage apiMessage = this.api.newMessage();
+			apiMessage.setAgentTrackData(agentTrackData);
+			apiMessage.send();
+		}
+		npcs.clear();
+		
 	}
 }

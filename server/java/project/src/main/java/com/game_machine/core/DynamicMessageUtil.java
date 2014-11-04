@@ -12,7 +12,7 @@ import com.game_machine.util.LocalLinkedBuffer;
 
 public class DynamicMessageUtil {
 
-	private static String packageName = "User.Messages.";
+	private static String packageName = "user.messages.";
 	
 	public static <T> GameMessage toGameMessage(T message) {
 		DynamicMessage dynamicMessage = toDynamicMessage(message);

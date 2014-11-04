@@ -1,5 +1,6 @@
 package com.game_machine.client.agent;
 
+import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.kernel.Bootable;
@@ -30,6 +31,14 @@ public class Runner implements Bootable {
 	}
 
 	public void shutdown() {
+		ActorSelection sel = Api.getActorByName(AgentUpdateActor.class.getSimpleName());
+		String message = "disconnected:"+conf.getPlayerId();
+		sel.tell(message, null);
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		system.shutdown();
 	}
 }

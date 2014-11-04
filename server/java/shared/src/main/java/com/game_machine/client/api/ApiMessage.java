@@ -11,6 +11,7 @@ import Client.Messages.ChatChannel;
 import Client.Messages.ChatMessage;
 import Client.Messages.ChatStatus;
 import Client.Messages.ClientMessage;
+import Client.Messages.DynamicMessage;
 import Client.Messages.EchoTest;
 import Client.Messages.Entity;
 import Client.Messages.GameMessage;
@@ -21,6 +22,7 @@ import Client.Messages.Player;
 import Client.Messages.PlayerConnect;
 import Client.Messages.PlayerLogout;
 import Client.Messages.TrackData;
+import Client.Messages.TrackDataUpdate;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
@@ -153,6 +155,17 @@ public class ApiMessage {
 	public ApiMessage setAgentTrackData(AgentTrackData agentTrackData) {
 		ensureEntity();
 		clientMessage.getEntity(0).setAgentTrackData(agentTrackData);
+		clientMessage.getEntity(0).setFastpath(true);
+		return this;
+	}
+	
+	public <T> ApiMessage setTrackDataUpdate(String id, T message) {
+		DynamicMessage dynamicMessage = DynamicMessageUtil.toDynamicMessage(message);
+		TrackDataUpdate update = new TrackDataUpdate();
+		update.setId(id);
+		update.setDynamicMessage(dynamicMessage);
+		ensureEntity();
+		clientMessage.getEntity(0).setTrackDataUpdate(update);
 		clientMessage.getEntity(0).setFastpath(true);
 		return this;
 	}

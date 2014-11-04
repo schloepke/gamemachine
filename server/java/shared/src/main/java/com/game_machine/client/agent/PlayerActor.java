@@ -130,6 +130,14 @@ public class PlayerActor extends UntypedActor {
 		return agentRunners;
 	}
 
+	public void shutdown() {
+		for (ActorRef runner : runners.values()) {
+			if (runner != null) {
+				runner.tell("shutdown", getSelf());
+			}
+		}
+	}
+	
 	private void stopRunners(Agent agent) {
 		ActorRef runner;
 		for (String agentId : agentIds(agent)) {
@@ -140,7 +148,6 @@ public class PlayerActor extends UntypedActor {
 				logger.info("Stopping agent " + agentId);
 			}
 		}
-
 	}
 
 	private List<ActorRef> getRunners(Agent agent) {
@@ -202,6 +209,11 @@ public class PlayerActor extends UntypedActor {
 			}
 		} else if (message instanceof String) {
 			String imsg = (String) message;
+			if (imsg.equals("shutdown")) {
+				shutdown();
+				return;
+			}
+			
 			if (imsg.equals("check_connection")) {
 				if ((System.currentTimeMillis() - lastUpdate) > connectionTimeout) {
 					setDisconnected();

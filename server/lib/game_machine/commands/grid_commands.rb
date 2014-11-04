@@ -9,11 +9,11 @@ module GameMachine
       end
 
       def grid
-        @grid ||= JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default")
+        JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default")
       end
 
       def aoe_grid
-        @aoe_grid ||= JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe")
+        JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe")
       end
 
       def get_neighbors_for(id,entity_type='player')
@@ -21,7 +21,7 @@ module GameMachine
         grid.getNeighborsFor(id,entity_type)
       end
 
-      def neighbors(x,y,type='player')
+      def neighbors(x,y,type=MessageLib::TrackData::EntityType::PLAYER)
         return [] if grid.nil?
         grid.neighbors(x,y,type)
       end
@@ -32,10 +32,10 @@ module GameMachine
         aoe_grid.remove(id)
       end
 
-      def track(id,x,y,z,entity_type='npc')
+      def track(id,x,y,z,entity_type=MessageLib::TrackData::EntityType::NPC)
         return if grid.nil?
-        grid.set(id,x,y,z,entity_type)
-        aoe_grid.set(id,x,y,z,entity_type)
+        grid.set(id,x.to_f,y.to_f,z,entity_type)
+        aoe_grid.set(id,x.to_f,y.to_f,z,entity_type)
       end
 
     end

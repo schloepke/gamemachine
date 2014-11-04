@@ -35,7 +35,7 @@ public class CodeblockRunner extends UntypedActor {
 		this.classname = agent.getClassname();
 		this.encodedCompileResult = agent.getCompileResult();
 		this.agentId = agentId;
-		this.codeblockEnv = new CodeblockEnv(api,this,agent.getId());
+		this.codeblockEnv = new CodeblockEnv(api,this,agentId);
 		updateCodeblock();
 	}
 
@@ -98,12 +98,22 @@ public class CodeblockRunner extends UntypedActor {
 			return;
 		}
 
+		
 		if (this.codeblock == null) {
 			logger.warn("Agent "+agentId+": Codeblock in onReceive is null");
 			return;
 		}
 
+		if (message instanceof String) {
+			String method = (String)message;
+			if (method.equals("shutdown")) {
+				this.executor.runUnrestricted(this.codeblock, "shutdown", message);
+				return;
+			}
+		}
+		
 		logger.debug("Agent "+agentId+": running codeblock with "+message.toString());
+		
 		this.executor.runUnrestricted(this.codeblock, "run", message);
 	}
 }

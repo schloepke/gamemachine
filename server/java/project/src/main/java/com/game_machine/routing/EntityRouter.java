@@ -42,7 +42,7 @@ public class EntityRouter {
 		for (Entity entity : entities) {
 			entity.setPlayer(player);
 			
-			if (entity.hasTrackData() || entity.hasAgentTrackData()) {
+			if (entity.hasTrackData() || entity.hasTrackDataUpdate() || entity.hasAgentTrackData()) {
 				entityTracking.tell(entity,null);
 				continue;
 			}

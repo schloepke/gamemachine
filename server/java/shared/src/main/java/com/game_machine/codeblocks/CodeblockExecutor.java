@@ -10,39 +10,37 @@ import java.security.ProtectionDomain;
 
 public class CodeblockExecutor {
 
-	private AccessControlContext context; 
-	
+	private AccessControlContext context;
+
 	// Default permissions
 	public void setPerms() {
 		Permissions permissions = new Permissions();
-		//permissions.add(new RuntimePermission("accessDeclaredMembers"));
-        ProtectionDomain protectionDomain =
-	    new ProtectionDomain(null, permissions);
-        context = new AccessControlContext(
-            new ProtectionDomain[] { protectionDomain });
+		// permissions.add(new RuntimePermission("accessDeclaredMembers"));
+		ProtectionDomain protectionDomain = new ProtectionDomain(null, permissions);
+		context = new AccessControlContext(new ProtectionDomain[] { protectionDomain });
 	}
-	
+
 	public void setPerms(Permissions permissions) {
-        ProtectionDomain protectionDomain =
-	    new ProtectionDomain(null, permissions);
-        context = new AccessControlContext(
-            new ProtectionDomain[] { protectionDomain });
+		ProtectionDomain protectionDomain = new ProtectionDomain(null, permissions);
+		context = new AccessControlContext(new ProtectionDomain[] { protectionDomain });
 	}
-	
+
 	public boolean runUnrestricted(Codeblock codeblock, String method, Object message) {
 		try {
 			if (method.equals("run")) {
-	    		codeblock.run(message);
-	    	} else if (method.equals("awake")) {
-	    		codeblock.awake(message);
-	    	}
+				codeblock.run(message);
+			} else if (method.equals("awake")) {
+				codeblock.awake(message);
+			} else if (method.equals("shutdown")) {
+				codeblock.shutdown(message);
+			}
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
+
 	public boolean runRestricted(Codeblock codeblock, String method, Object message) {
 		try {
 			run(codeblock, method, message);
@@ -50,22 +48,23 @@ public class CodeblockExecutor {
 		} catch (AccessControlException | PrivilegedActionException e) {
 			e.printStackTrace();
 			return false;
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
 	}
-	
-	public void run(final Codeblock codeblock, final String method, final Object message) throws PrivilegedActionException {
-		AccessController.doPrivileged(new PrivilegedExceptionAction<Void> () {
-		    public Void run() throws Exception {
-		    	if (method.equals("run")) {
-		    		codeblock.run(message);
-		    	} else if (method.equals("awake")) {
-		    		codeblock.awake(message);
-		    	}
+
+	public void run(final Codeblock codeblock, final String method, final Object message)
+			throws PrivilegedActionException {
+		AccessController.doPrivileged(new PrivilegedExceptionAction<Void>() {
+			public Void run() throws Exception {
+				if (method.equals("run")) {
+					codeblock.run(message);
+				} else if (method.equals("awake")) {
+					codeblock.awake(message);
+				}
 				return null;
-		    }
+			}
 		}, context);
 	}
 }

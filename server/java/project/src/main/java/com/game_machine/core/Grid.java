@@ -169,6 +169,7 @@ public class Grid {
 		trackData.y = y;
 		trackData.z = z;
 		trackData.entityType = entityType;
+		trackData.setGetNeighbors(0);
 		return set(trackData);
 	}
 

@@ -3,27 +3,30 @@ package user.messages;
 import Client.Messages.TrackData.EntityType;
 
 
-public class Vitals {
+public class GameEntity {
 
 	public static final int HEALTH_MAX = 100;
 	public String id;
-	public int health;
+	public int health = HEALTH_MAX;
 	public EntityType entityType = EntityType.PLAYER;
-	public double x = 0;
-	public double y = 0;
-	public double z = 0;
 	public boolean updated = false;
 
 	// Classes that get saved to the cloud need a default no-arg constructor.
-	public Vitals() {
+	public GameEntity() {
 		
+	}
+	
+	public ClientGameEntity toClientGameEntity() {
+		ClientGameEntity clientGameEntity = new ClientGameEntity();
+		clientGameEntity.health = this.health;
+		return clientGameEntity;
 	}
 	
 	public void setEntityType(EntityType type) {
 		this.entityType = type;
 	}
 
-	public Vitals(String id) {
+	public GameEntity(String id) {
 		this.id = id;
 		this.health = HEALTH_MAX;
 	}
