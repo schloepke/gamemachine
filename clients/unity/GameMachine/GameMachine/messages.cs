@@ -150,22 +150,6 @@ namespace GameMachine.Messages
       get { return _z; }
       set { _z = value; }
     }
-    private string _entityType = "";
-    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string entityType
-    {
-      get { return _entityType; }
-      set { _entityType = value; }
-    }
-    private string _neighborEntityType = "";
-    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string neighborEntityType
-    {
-      get { return _neighborEntityType; }
-      set { _neighborEntityType = value; }
-    }
     private int _action = default(int);
     [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -182,6 +166,54 @@ namespace GameMachine.Messages
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
     }
+    private string _gridName = "";
+    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string gridName
+    {
+      get { return _gridName; }
+      set { _gridName = value; }
+    }
+    private int _getNeighbors;
+    [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"getNeighbors", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int getNeighbors
+    {
+      get { return _getNeighbors; }
+      set { _getNeighbors = value; }
+    }
+    private GameMachine.Messages.TrackData.EntityType _neighborEntityType = GameMachine.Messages.TrackData.EntityType.PLAYER;
+    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(GameMachine.Messages.TrackData.EntityType.PLAYER)]
+    public GameMachine.Messages.TrackData.EntityType neighborEntityType
+    {
+      get { return _neighborEntityType; }
+      set { _neighborEntityType = value; }
+    }
+    private GameMachine.Messages.TrackData.EntityType _entityType = GameMachine.Messages.TrackData.EntityType.PLAYER;
+    [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(GameMachine.Messages.TrackData.EntityType.PLAYER)]
+    public GameMachine.Messages.TrackData.EntityType entityType
+    {
+      get { return _entityType; }
+      set { _entityType = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"EntityType")]
+    public enum EntityType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"PLAYER", Value=0)]
+      PLAYER = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"NPC", Value=1)]
+      NPC = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"OTHER", Value=2)]
+      OTHER = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ALL", Value=3)]
+      ALL = 3
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -647,6 +679,54 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GameConfigs")]
+  public partial class GameConfigs : global::ProtoBuf.IExtensible
+  {
+    public GameConfigs() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.GameConfig> _gameConfig = new global::System.Collections.Generic.List<GameMachine.Messages.GameConfig>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"gameConfig", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.GameConfig> gameConfig
+    {
+      get { return _gameConfig; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GameConfig")]
+  public partial class GameConfig : global::ProtoBuf.IExtensible
+  {
+    public GameConfig() {}
+    
+    private string _config;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"config", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string config
+    {
+      get { return _config; }
+      set { _config = value; }
+    }
+    private int _version;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"version", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int version
+    {
+      get { return _version; }
+      set { _version = value; }
+    }
+    private string _gameId;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"gameId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string gameId
+    {
+      get { return _gameId; }
+      set { _gameId = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TeamMemberSkill")]
   public partial class TeamMemberSkill : global::ProtoBuf.IExtensible
   {
@@ -709,95 +789,18 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AgentTrackData")]
-  public partial class AgentTrackData : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Statistics")]
+  public partial class Statistics : global::ProtoBuf.IExtensible
   {
-    public AgentTrackData() {}
+    public Statistics() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.TrackData> _trackData = new global::System.Collections.Generic.List<GameMachine.Messages.TrackData>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.TrackData> trackData
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Statistic> _statistic = new global::System.Collections.Generic.List<GameMachine.Messages.Statistic>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"statistic", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.Statistic> statistic
     {
-      get { return _trackData; }
+      get { return _statistic; }
     }
   
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Agent")]
-  public partial class Agent : global::ProtoBuf.IExtensible
-  {
-    public Agent() {}
-    
-    private string _id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _code;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"code", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string code
-    {
-      get { return _code; }
-      set { _code = value; }
-    }
-    private string _classname;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"classname", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string classname
-    {
-      get { return _classname; }
-      set { _classname = value; }
-    }
-    private bool _remove = default(bool);
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"remove", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(default(bool))]
-    public bool remove
-    {
-      get { return _remove; }
-      set { _remove = value; }
-    }
-    private string _compileResult;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"compileResult", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string compileResult
-    {
-      get { return _compileResult; }
-      set { _compileResult = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AgentController")]
-  public partial class AgentController : global::ProtoBuf.IExtensible
-  {
-    public AgentController() {}
-    
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Agent> _agent = new global::System.Collections.Generic.List<GameMachine.Messages.Agent>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"agent", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Agent> agent
-    {
-      get { return _agent; }
-    }
-  
-    private GameMachine.Messages.Player _player;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Player player
-    {
-      get { return _player; }
-      set { _player = value; }
-    }
-    private string _gameId;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"gameId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string gameId
-    {
-      get { return _gameId; }
-      set { _gameId = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -864,6 +867,14 @@ namespace GameMachine.Messages
       get { return _heapUsed; }
       set { _heapUsed = value; }
     }
+    private GameMachine.Messages.Statistics _statistics = null;
+    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"statistics", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public GameMachine.Messages.Statistics statistics
+    {
+      get { return _statistics; }
+      set { _statistics = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -881,6 +892,107 @@ namespace GameMachine.Messages
       get { return _nodeStatus; }
     }
   
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AgentTrackData")]
+  public partial class AgentTrackData : global::ProtoBuf.IExtensible
+  {
+    public AgentTrackData() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.TrackData> _trackData = new global::System.Collections.Generic.List<GameMachine.Messages.TrackData>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.TrackData> trackData
+    {
+      get { return _trackData; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Agent")]
+  public partial class Agent : global::ProtoBuf.IExtensible
+  {
+    public Agent() {}
+    
+    private string _id;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private string _code;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"code", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string code
+    {
+      get { return _code; }
+      set { _code = value; }
+    }
+    private string _classname;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"classname", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string classname
+    {
+      get { return _classname; }
+      set { _classname = value; }
+    }
+    private bool _remove = default(bool);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"remove", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool remove
+    {
+      get { return _remove; }
+      set { _remove = value; }
+    }
+    private string _compileResult;
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"compileResult", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string compileResult
+    {
+      get { return _compileResult; }
+      set { _compileResult = value; }
+    }
+    private int _concurrency;
+    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"concurrency", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int concurrency
+    {
+      get { return _concurrency; }
+      set { _concurrency = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"AgentController")]
+  public partial class AgentController : global::ProtoBuf.IExtensible
+  {
+    public AgentController() {}
+    
+    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Agent> _agent = new global::System.Collections.Generic.List<GameMachine.Messages.Agent>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"agent", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<GameMachine.Messages.Agent> agent
+    {
+      get { return _agent; }
+    }
+  
+    private GameMachine.Messages.Player _player;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public GameMachine.Messages.Player player
+    {
+      get { return _player; }
+      set { _player = value; }
+    }
+    private string _gameId;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"gameId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string gameId
+    {
+      get { return _gameId; }
+      set { _gameId = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2064,36 +2176,20 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GetNeighbors")]
-  public partial class GetNeighbors : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"NeighborsRequest")]
+  public partial class NeighborsRequest : global::ProtoBuf.IExtensible
   {
-    public GetNeighbors() {}
+    public NeighborsRequest() {}
     
-    private uint _search_radius = default(uint);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"search_radius", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(uint))]
-    public uint search_radius
+    private string _neighborEntityType;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string neighborEntityType
     {
-      get { return _search_radius; }
-      set { _search_radius = value; }
-    }
-    private GameMachine.Messages.Vector3 _vector3;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Vector3 vector3
-    {
-      get { return _vector3; }
-      set { _vector3 = value; }
-    }
-    private string _neighborType = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"neighborType", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string neighborType
-    {
-      get { return _neighborType; }
-      set { _neighborType = value; }
+      get { return _neighborEntityType; }
+      set { _neighborEntityType = value; }
     }
     private string _gridName = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
     public string gridName
     {
@@ -2361,13 +2457,13 @@ namespace GameMachine.Messages
       get { return _errorMessage; }
       set { _errorMessage = value; }
     }
-    private GameMachine.Messages.GetNeighbors _getNeighbors = null;
-    [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"getNeighbors", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private GameMachine.Messages.NeighborsRequest _neighborsRequest = null;
+    [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"neighborsRequest", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.GetNeighbors getNeighbors
+    public GameMachine.Messages.NeighborsRequest neighborsRequest
     {
-      get { return _getNeighbors; }
-      set { _getNeighbors = value; }
+      get { return _neighborsRequest; }
+      set { _neighborsRequest = value; }
     }
     private GameMachine.Messages.TrackEntity _trackEntity = null;
     [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"trackEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]

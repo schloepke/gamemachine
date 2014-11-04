@@ -46,8 +46,8 @@ namespace GameMachine.Tutorial
         public void OnLoggedIn ()
         {
             this.gameObject.AddComponent<TutorialSelect> ();
-            Tracker tracker = this.gameObject.GetComponent<Tracker> () as Tracker;
-            EntityTracking.Register (tracker);
+            //Tracker tracker = this.gameObject.GetComponent<Tracker> () as Tracker;
+            //EntityTracking.Register (tracker);
         }
 
     }

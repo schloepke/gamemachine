@@ -11,8 +11,6 @@ namespace GameMachine.Models.Team
     public class TeamsRequest : JsonModel
     {
         public string filter { get; set; }
-        public Dictionary<string,int> skills = new Dictionary<string,int> ();
-
 
         public static void Receive (string json)
         {

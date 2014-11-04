@@ -7,10 +7,11 @@ using ProtoBuf;
 namespace DynamicMessages
 {
     [ProtoContract]
-    public class PlayerUpdate
+    public class GameClientEntity
     {
+
         [ProtoMember(1)]
-        public List<Vitals>
-            vitals = new List<Vitals> ();
+        public int health { get; set; }
+
     }
 }

@@ -33,40 +33,40 @@ using TrackData = GameMachine.Messages.TrackData;
 namespace GameMachine.Example
 {
 
-	public class AreaOfInterest : MonoBehaviour
-	{
+    public class AreaOfInterest : MonoBehaviour
+    {
 
-		private EntityTracking entityTracking;
+        private EntityTracking entityTracking;
 
-		void Start ()
-		{
+        void Start ()
+        {
 	
-			entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
+            entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
 
-			EntityTracking.UpdateReceived callback = OnUpdateReceived;
-			entityTracking.OnUpdateReceived (callback);
-			ActorSystem.Instance.InvokeRepeating (this, "UpdateTracking");
-		}
+            EntityTracking.UpdateReceived callback = OnUpdateReceived;
+            entityTracking.OnUpdateReceived (callback);
+            ActorSystem.Instance.InvokeRepeating (this, "UpdateTracking");
+        }
 	
-		void UpdateTracking ()
-		{
-			Vector3 position = this.gameObject.transform.position;
+        void UpdateTracking ()
+        {
+            Vector3 position = this.gameObject.transform.position;
 
-			TrackData trackData = new TrackData ();
-			trackData.x = position.x;
-			trackData.y = position.z;
-			trackData.z = position.y;
-			trackData.id = User.Instance.username;
-			trackData.entityType = "player";
-			entityTracking.Update (trackData);
+            TrackData trackData = new TrackData ();
+            trackData.x = position.x;
+            trackData.y = position.z;
+            trackData.z = position.y;
+            trackData.id = User.Instance.username;
+            trackData.entityType = TrackData.EntityType.PLAYER;
+            entityTracking.Update (trackData);
             
-		}
+        }
 
-		void OnUpdateReceived (List<TrackingUpdate> updates)
-		{
-			foreach (TrackingUpdate update in updates) {
-			}
-		}
+        void OnUpdateReceived (List<TrackingUpdate> updates)
+        {
+            foreach (TrackingUpdate update in updates) {
+            }
+        }
 
-	}
+    }
 }
