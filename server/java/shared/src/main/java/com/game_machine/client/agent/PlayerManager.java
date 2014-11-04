@@ -57,6 +57,14 @@ public class PlayerManager {
 	
 	private void stopPlayerActor() {
 		ActorSelection sel = Api.getActorByName(playerId);
+		sel.tell("shutdown",null);
+		logger.info("Sleeping 5 seconds to allow for clean shutdown");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
 		sel.tell(akka.actor.PoisonPill.getInstance(), null);
 	}
 	

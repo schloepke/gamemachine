@@ -65,6 +65,23 @@ public class Store {
 		return get(id,"Entity");
 	}
 	
+	public Object get(String id, Class<?> clazz) {
+		getCount.incrementAndGet();
+		if (serialization.equals("json")) {
+			String stringValue = this.store.getString(id);
+			if (stringValue == null) {
+				return null;
+			}
+			return EntitySerializer.fromJson(stringValue, clazz);
+		} else {
+			byte[] byteValue = this.store.getBytes(id);
+			if (byteValue == null) {
+				return null;
+			}
+			return EntitySerializer.fromByteArray(byteValue, clazz);
+		}
+	}
+	
 	public Object get(String id, String classname) throws ClassNotFoundException {
 		getCount.incrementAndGet();
 		Class<?> clazz = getKlass(classname);

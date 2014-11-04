@@ -1,6 +1,8 @@
 package com.game_machine.client.agent;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -103,21 +105,59 @@ public class PlayerActor extends UntypedActor {
 		}
 	}
 
-	private ActorRef startRunner(Agent agent) {
-		ActorRef runner = context().actorOf(Props.create(CodeblockRunner.class, api, agent), agent.getId());
-		runners.put(agent.getId(), runner);
-		logger.info("Starting agent " + agent.getId());
-		return runner;
+	private List<String> agentIds(Agent agent) {
+		List<String> agentIds = new ArrayList<String>();
+		if (agent.getConcurrency() > 1) {
+			for (int i = 0; i < agent.getConcurrency(); i++) {
+				agentIds.add(agent.getId() + i);
+			}
+		} else {
+			agentIds.add(agent.getId());
+		}
+		return agentIds;
 	}
 
-	private void stopRunner(String id) {
-		ActorRef runner = getRunner(id);
-		if (runner != null) {
-			runner.tell(akka.actor.PoisonPill.getInstance(), getSelf());
-			runners.remove(id);
-			logger.info("Stopping agent " + id);
-
+	private List<ActorRef> startRunners(Agent agent) {
+		ActorRef runner;
+		List<ActorRef> agentRunners = new ArrayList<ActorRef>();
+		for (String agentId : agentIds(agent)) {
+			runner = context().actorOf(Props.create(CodeblockRunner.class, api, agent, agentId), agentId);
+			runners.put(agentId, runner);
+			agentRunners.add(runner);
+			logger.info("Starting agent " + agentId);
 		}
+
+		return agentRunners;
+	}
+
+	public void shutdown() {
+		for (ActorRef runner : runners.values()) {
+			if (runner != null) {
+				runner.tell("shutdown", getSelf());
+			}
+		}
+	}
+	
+	private void stopRunners(Agent agent) {
+		ActorRef runner;
+		for (String agentId : agentIds(agent)) {
+			runner = getRunner(agentId);
+			if (runner != null) {
+				runner.tell(akka.actor.PoisonPill.getInstance(), getSelf());
+				runners.remove(agentId);
+				logger.info("Stopping agent " + agentId);
+			}
+		}
+	}
+
+	private List<ActorRef> getRunners(Agent agent) {
+		List<ActorRef> agentRunners = new ArrayList<ActorRef>();
+		for (String agentId : agentIds(agent)) {
+			if (runners.containsKey(agentId)) {
+				agentRunners.add(runners.get(agentId));
+			}
+		}
+		return agentRunners;
 	}
 
 	private ActorRef getRunner(String id) {
@@ -129,17 +169,19 @@ public class PlayerActor extends UntypedActor {
 	}
 
 	private void handleAgent(Agent agent) {
-		ActorRef runner = getRunner(agent.getId());
+		List<ActorRef> agentRunners = getRunners(agent);
 
-		if (runner != null && agent.getRemove() != null) {
-			stopRunner(agent.getId());
+		if (agent.hasRemove()) {
+			stopRunners(agent);
 			return;
 		}
 
-		if (runner == null) {
-			runner = startRunner(agent);
+		if (agentRunners.isEmpty()) {
+			startRunners(agent);
 		} else {
-			runner.tell(agent, getSelf());
+			for (ActorRef runner : agentRunners) {
+				runner.tell(agent, getSelf());
+			}
 		}
 	}
 
@@ -167,6 +209,11 @@ public class PlayerActor extends UntypedActor {
 			}
 		} else if (message instanceof String) {
 			String imsg = (String) message;
+			if (imsg.equals("shutdown")) {
+				shutdown();
+				return;
+			}
+			
 			if (imsg.equals("check_connection")) {
 				if ((System.currentTimeMillis() - lastUpdate) > connectionTimeout) {
 					setDisconnected();

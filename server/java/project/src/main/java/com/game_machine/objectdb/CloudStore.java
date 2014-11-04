@@ -2,7 +2,7 @@ package com.game_machine.objectdb;
 
 import java.io.IOException;
 
-import com.game_machine.core.AppConfig;
+import com.game_machine.config.AppConfig;
 import com.game_machine.core.CloudClient;
 
 public class CloudStore implements Storable {

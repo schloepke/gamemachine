@@ -8,6 +8,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.game_machine.config.AppConfig;
+
 import GameMachine.Messages.Player;
 
 public class PlayerService {

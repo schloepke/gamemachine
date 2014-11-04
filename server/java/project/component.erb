@@ -71,7 +71,7 @@ import com.game_machine.core.PersistableMessage;
 <% end %>
 
 <% if has_id %>
-import com.game_machine.api.Cache;
+import com.game_machine.objectdb.Cache;
 import com.game_machine.core.CacheUpdate;
 <% end %>
 
@@ -88,7 +88,7 @@ import com.game_machine.core.CacheUpdate;
         
         public final int number;
         
-        private Corpus (int number)
+        private <%=group.name %> (int number)
         {
             this.number = number;
         }
@@ -98,7 +98,7 @@ import com.game_machine.core.CacheUpdate;
             return number;
         }
         
-        public static Corpus valueOf(int number)
+        public static <%=group.name %> valueOf(int number)
         {
             switch(number) 
             {
@@ -691,8 +691,14 @@ import com.game_machine.core.CacheUpdate;
 <% message.getFields.each do |field| %>
 	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     
+    public Boolean has<%=field_name %>()  {
+        return <%=field.name%> == null ? false : true;
+    }
+        
 	<% if field.isRepeated %>
 	public List<<%=get_type(field)%>> get<%=field_name %>List() {
+		if(this.<%=field.name%> == null)
+            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
 		return <%= field.name %>;
 	}
 
@@ -756,9 +762,6 @@ import com.game_machine.core.CacheUpdate;
 		<%= field_name == '_EntityId' ? '' : 'return this;'%>
 	}
 	
-	public Boolean has<%=field_name %>()  {
-        return <%=field.name%> == null ? false : true;
-    }
 	<% end %>
 <% end %>
 
@@ -835,7 +838,7 @@ import com.game_machine.core.CacheUpdate;
                 	message.<%=field.name%> = input.mergeObject(message.<%=field.name%>, <%=get_type(field)%>.getSchema());
                     break;
                     <% elsif field.enumField %>
-                    message.<%=field.name%> = <%=classname(field.name)%>.valueOf(input.readEnum());
+                    message.<%=field.name%> = <%=get_type(field)%>.valueOf(input.readEnum());
                     break;
                 	<% else %>
                 	message.<%=field.name%> = input.read<%=field.getClass.getSimpleName%>();
@@ -882,6 +885,7 @@ import com.game_machine.core.CacheUpdate;
     	if(message.<%=field.name%> != null)
     		output.writeObject(<%=field.number%>, message.<%=field.name%>, <%=get_type(field)%>.getSchema(), false);
     	<% elsif field.enumField %>
+    	if(message.<%=field.name%> != null)
     	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
     	<% else %>
     	if(message.<%=field.name%> != null)

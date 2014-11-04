@@ -1,12 +1,40 @@
-package com.game_machine.core;
+package com.game_machine.config;
 
 import java.util.List;
+
+import com.typesafe.config.Config;
 
 
 public class AppConfig {
 	
 	private static String env;
+	private static String defaultGameId;
+	private static Config gameConfig;
 
+	public static String getEnv() {
+		return env;
+	}
+
+	public static void setEnv(String env) {
+		AppConfig.env = env;
+	}
+
+	public static String getDefaultGameId() {
+		return defaultGameId;
+	}
+
+	public static void setDefaultGameId(String defaultGameId) {
+		AppConfig.defaultGameId = defaultGameId;
+	}
+
+	public static Config getGameConfig() {
+		return gameConfig;
+	}
+
+	public static void setGameConfig(Config gameConfig) {
+		AppConfig.gameConfig = gameConfig;
+	}
+	
 	public static class Client {
 		private static int idleTimeout;
 
@@ -19,6 +47,34 @@ public class AppConfig {
 		}
 
 	}
+	
+	public static class GridConfig {
+		private final String name;
+		private final int gridSize;
+		private final int cellSize;
+		
+		public GridConfig(String name, String config) {
+			String[] parts = config.split(",");
+			this.name = name;
+			this.gridSize = Integer.parseInt(parts[0].trim());
+			this.cellSize = Integer.parseInt(parts[1].trim());
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public int getGridSize() {
+			return gridSize;
+		}
+
+		public int getCellSize() {
+			return cellSize;
+		}
+	}
+	
+	
+	
 	
     public static class Datastore {
     	private static String store;
@@ -177,11 +233,5 @@ public class AppConfig {
 		}
 	}
 
-	public static String getEnv() {
-		return env;
-	}
-
-	public static void setEnv(String env) {
-		AppConfig.env = env;
-	}
+	
 }

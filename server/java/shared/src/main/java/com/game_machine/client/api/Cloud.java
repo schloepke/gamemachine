@@ -153,11 +153,11 @@ public class Cloud {
 
 	}
 
-	public static String scopeId(String scope, String id) {
+	private static String scopeId(String scope, String id) {
 		return scope + "^^" + id;
 	}
 
-    public static String unscopeId(String id) {
+    private static String unscopeId(String id) {
     	if (id.contains("^^")) {
     		String[] parts = id.split("^^");
         	return parts[1];
@@ -172,6 +172,10 @@ public class Cloud {
 		}
 	}
 
+	/**
+	 * Saves the {@code message} to the cloud
+	 * @return true on success
+	 */
 	public <T> boolean save(String id, Class<T> klass,T message) {
 		String scopedId = scopeId(klass.getSimpleName(),id);
 		StringResponse response = put(scopedId,DynamicMessageUtil.toJson(klass, message));
@@ -183,6 +187,10 @@ public class Cloud {
 		}
 	}
 	
+	/**
+	 * Retrieves a dynamic message from the cloud
+	 * @return a dynamic {@code message}
+	 */
 	public <T> T find(String id, Class<T> klass) {
 		String scopedId = scopeId(klass.getSimpleName(),id);
 		StringResponse response = getString(scopedId);
@@ -194,6 +202,10 @@ public class Cloud {
 		}
 	}
 	
+	/**
+	 * Deletes a dynamic message from the cloud given the {@code id} and {@code klass}
+	 * @return true on success
+	 */
 	public boolean delete(String id, Class<?> klass) {
 		String scopedId = scopeId(klass.getSimpleName(),id);
 		StringResponse response = deleteUnscoped(scopedId);
@@ -205,6 +217,11 @@ public class Cloud {
 		}
 	}
 	
+	/**
+	 * @param id
+	 * @param body
+	 * @return {@link StringResponse}
+	 */
 	public StringResponse put(String id, String body) {
 		checkLimit();
 		String urlString = urlFrom(id, "json");
@@ -235,6 +252,11 @@ public class Cloud {
 		return response;
 	}
 
+	/**
+	 * @param id
+	 * @param body
+	 * @return {@link StringResponse}
+	 */
 	public StringResponse put(String id, byte[] body) {
 		checkLimit();
 		String urlString = urlFrom(id, "bytes");

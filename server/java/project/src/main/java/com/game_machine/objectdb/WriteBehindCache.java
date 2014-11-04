@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 
-import com.game_machine.core.AppConfig;
+import com.game_machine.config.AppConfig;
 import com.game_machine.core.PersistableMessage;
 
 public class WriteBehindCache extends UntypedActor {

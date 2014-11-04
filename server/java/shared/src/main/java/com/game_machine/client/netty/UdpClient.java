@@ -22,65 +22,71 @@ import com.game_machine.client.NetworkClient;
 public final class UdpClient implements Runnable, NetworkClient {
 
 	private static final Logger logger = LoggerFactory.getLogger(UdpClient.class);
-	
+
 	private static ExecutorService executor = Executors.newCachedThreadPool();
-	
-	private static final EventLoopGroup group = new NioEventLoopGroup();
-    private Channel channel = null;
-    private UdpClientHandler handler;
-    private String host;
-    private int port;
-    private InetSocketAddress remote;
-    
-    public UdpClient(String host, int port, String actorName) {
-    	this.host = host;
-    	this.port = port;
-    	handler = new UdpClientHandler(actorName);
-    	remote = new InetSocketAddress(host,port);
-    }
-    
-    public void sendMessage(byte[] bytes) {
-    	if (channel == null) {
-    		logger.info("sendMessage: Channel not active");
-    		return;
-    	}
-    	ByteBuf buf = Unpooled.wrappedBuffer(bytes);
+
+	private EventLoopGroup group;
+	private Channel channel = null;
+	private UdpClientHandler handler;
+	private String host;
+	private int port;
+	private InetSocketAddress remote;
+
+	public UdpClient(String host, int port, String actorName) {
+		this.host = host;
+		this.port = port;
+		handler = new UdpClientHandler(actorName);
+		remote = new InetSocketAddress(host, port);
+	}
+
+	public void sendMessage(byte[] bytes) {
+		if (channel == null) {
+			logger.info("sendMessage: Channel not active");
+			return;
+		}
+		ByteBuf buf = Unpooled.wrappedBuffer(bytes);
 		DatagramPacket packet = new DatagramPacket(buf, remote);
 		channel.writeAndFlush(packet);
-    }
-    
-    public void stop() {
-    	channel.close();
+	}
+
+	public void stop() {
 		try {
-			channel.closeFuture().await();
+			if (channel != null) {
+				channel.close();
+				channel.closeFuture().await();
+			}
+			group.shutdownGracefully();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-    }
-    
-    public void start() {
-    	executor.execute(this);
-    }
-    
-    public void run() {
+	}
 
-        
-        try {
-            Bootstrap b = new Bootstrap();
-            b.group(group)
-             .channel(NioDatagramChannel.class)
-             .option(ChannelOption.SO_BROADCAST, false)
-             .handler(handler);
+	public void start() {
+		executor.execute(this);
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
-            channel = b.bind(0).sync().channel();
-            logger.info("Channel started on "+host+":"+port);
-            channel.closeFuture().await();
-        } catch (InterruptedException e) {
+	public void run() {
+
+		group = new NioEventLoopGroup();
+		try {
+			Bootstrap b = new Bootstrap();
+			b.group(group).channel(NioDatagramChannel.class).option(ChannelOption.SO_BROADCAST, false).handler(handler);
+
+			channel = b.bind(0).sync().channel();
+			logger.info("Channel started on " + host + ":" + port);
+			channel.closeFuture().await();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		} finally {
-            group.shutdownGracefully();
-        }
-    }
+			group.shutdownGracefully();
+		}
+	}
 
 	public Channel getChannel() {
 		return channel;

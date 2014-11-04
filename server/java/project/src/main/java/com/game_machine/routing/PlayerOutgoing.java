@@ -1,4 +1,4 @@
-package com.game_machine.net;
+package com.game_machine.routing;
 
 import java.util.concurrent.TimeUnit;
 
@@ -12,10 +12,12 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-import com.game_machine.core.AppConfig;
+import com.game_machine.config.AppConfig;
+import com.game_machine.net.Connection;
 
-public class Outgoing extends UntypedActor {
+public class PlayerOutgoing extends UntypedActor {
 
+		
 	private Connection connection;
 	private String playerId;
 	private ClientConnection clientConnection;
@@ -23,7 +25,7 @@ public class Outgoing extends UntypedActor {
 	private long lastActivity;
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	public Outgoing(Connection connection) {
+	public PlayerOutgoing(Connection connection) {
 		this.connection = connection;
 		this.playerId = connection.getPlayerId();
 		this.clientConnection = connection.getClientConnection();
@@ -65,7 +67,7 @@ public class Outgoing extends UntypedActor {
 			logger.info("Player "+playerId+" timed out");
 			ClientMessage clientMessage = createClientMessage();
 			clientMessage.setPlayer(new Player().setId(playerId));
-			Incoming.clients.remove(playerId);
+			Incoming.removeClient(playerId);
 			RequestHandler.unregisterClient(clientMessage);
 			getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
 		}

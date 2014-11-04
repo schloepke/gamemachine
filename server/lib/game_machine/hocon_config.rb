@@ -14,6 +14,7 @@ module GameMachine
       conf = OpenStruct.new
       top.each {|t| conf.send("#{t}=",OpenStruct.new)}
 
+      conf.default_game_id = config.get_string('default_game_id')
       conf.environment = config.get_string('environment')
       conf.use_regions = config.get_boolean('use_regions')
       conf.orm = config.get_boolean('orm')
@@ -43,10 +44,8 @@ module GameMachine
       conf.gamecloud.user = config.get_string('gamecloud.user')
       conf.gamecloud.api_key = config.get_string('gamecloud.api_key')
 
-      conf.grids.default = config.get_string('grids.default')
-      conf.grids.aoe = config.get_string('grids.aoe')
-      conf.grids.local_chat = config.get_string('grids.local_chat')
-
+      conf.game = config.get_config('game')
+      
       conf.couchbase.bucket = config.get_string('couchbase.bucket')
       conf.couchbase.password = config.get_string('couchbase.password')
       conf.couchbase.servers = config.get_string_list('couchbase.servers').to_a

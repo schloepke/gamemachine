@@ -1,4 +1,4 @@
-package com.game_machine.api;
+package com.game_machine.objectdb;
 
 import java.util.Map;
 

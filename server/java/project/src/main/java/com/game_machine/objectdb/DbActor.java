@@ -16,9 +16,8 @@ import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 
-import com.game_machine.api.MemoryMap;
+import com.game_machine.config.AppConfig;
 import com.game_machine.core.ActorUtil;
-import com.game_machine.core.AppConfig;
 import com.game_machine.core.EntitySerializer;
 import com.game_machine.core.PersistableMessage;
 

@@ -28,8 +28,8 @@ module Tutorial
 
 
     def set_spawn_point
-      position.x = rand(1000) + 1
-      position.y = rand(1000) + 1
+      position.x = rand(2000) + 1
+      position.y = rand(2000) + 1
     end
 
     def has_players?
@@ -60,11 +60,11 @@ module Tutorial
     def pick_random_target
       @target.x = position.x + rand(-30..30)
       @target.y = position.y + rand(-30..30)
-      if @target.x < 2 || @target.x > 2045
-        @target.x = rand(5..2045)
+      if @target.x < 2 || @target.x > 2000
+        @target.x = rand(5..2000)
       end
-      if @target.y < 2 || @target.y > 2045
-        @target.x = rand(5..2045)
+      if @target.y < 2 || @target.y > 2000
+        @target.x = rand(5..2000)
       end
       movement.set_target(@target)
     end

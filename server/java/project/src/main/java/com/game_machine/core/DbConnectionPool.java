@@ -46,7 +46,7 @@ public class DbConnectionPool {
 		config.addDataSourceProperty("databaseName", dbname);
 		config.addDataSourceProperty("user", username);
 		config.addDataSourceProperty("password", password);
-		config.setMaximumPoolSize(20);
+		config.setMaximumPoolSize(5);
 		config.setIdleTimeout(30000);
 		config.setLeakDetectionThreshold(10000);
 		// config.setAutoCommit(false);

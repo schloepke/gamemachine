@@ -18,6 +18,10 @@ public class DynamicMessageUtil {
 
 	private static String packageName = "user.messages.";
 	
+	/**
+	 * Serializes the {@code message} into a {@link GameMessage}
+	 * @return a {@link GameMessage}
+	 */
 	public static <T> GameMessage toGameMessage(T message) {
 		DynamicMessage dynamicMessage = toDynamicMessage(message);
 		GameMessage gameMessage = new GameMessage();
@@ -25,6 +29,10 @@ public class DynamicMessageUtil {
 		return gameMessage;
 	}
 	
+	/**
+	 * Serializes the {@code message} into a {@link DynamicMessage}
+	 * @return a {@link DynamicMessage}
+	 */
 	public static <T> DynamicMessage toDynamicMessage(T message) {
 		DynamicMessage dynamicMessage = new DynamicMessage();
 		byte[] bytes = toByteArray(message);
@@ -33,10 +41,18 @@ public class DynamicMessageUtil {
 		return dynamicMessage;
 	}
 	
+	/**
+	 * Extracts a generic message from a {@link GameMessage}
+	 * @return a generic message
+	 */
 	public static <T> T fromGameMessage(GameMessage gameMessage)  {
 		return fromByteArray(gameMessage.getDynamicMessage().getType(),gameMessage.getDynamicMessage().getMessage().toByteArray());
 	}
 	
+	/**
+	 * Extracts a generic message from a {@link DynamicMessage}
+	 * @return a generic message
+	 */
 	public static <T> T fromDynamicMessage(DynamicMessage dynamicMessage)  {
 		return fromByteArray(dynamicMessage.getType(),dynamicMessage.getMessage().toByteArray());
 	}

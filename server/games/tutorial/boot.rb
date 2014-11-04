@@ -12,7 +12,7 @@ end
 require_relative 'npc_controller'
 
 names = []
-5.times do |x|
+1.times do |x|
   name = "npc#{x}"
   GameMachine::Actor::Builder.new(Tutorial::NpcController,name).with_name(name).start
   names << name

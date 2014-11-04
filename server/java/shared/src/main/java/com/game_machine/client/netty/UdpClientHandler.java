@@ -7,8 +7,8 @@ import io.netty.channel.socket.DatagramPacket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.client.Api;
-import com.game_machine.client.ApiMessage;
+import com.game_machine.client.api.Api;
+import com.game_machine.client.api.ApiMessage;
 
 import Client.Messages.ClientMessage;
 import akka.actor.ActorSelection;

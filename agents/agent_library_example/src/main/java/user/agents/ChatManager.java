@@ -74,4 +74,10 @@ public class ChatManager implements Codeblock {
 		apiMessage.setJoinPublicChat("Lobby");
 		apiMessage.send();
 	}
+
+	@Override
+	public void shutdown(Object arg0) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
 }

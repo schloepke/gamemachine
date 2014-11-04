@@ -14,8 +14,18 @@ module GameMachine
         @cluster = JavaLib::Cluster.get(getContext.system)
       end
       @stats = {}
-      schedule_message('message_count',5,:seconds)
+      @interval = 5
+      schedule_message('message_count',@interval,:seconds)
       #schedule_message('update',60,:seconds)
+    end
+
+    def update_statistics
+      statistics = MessageLib::Statistics.new
+      @stats.each do |stat|
+        s = stat.flatten
+        statistics.add_statistic(MessageLib::Statistic.new.set_type('static').set_name(s[0]).set_value(s[1]))
+      end
+      CloudUpdater.find.tell(statistics)
     end
 
     def on_receive(message)
@@ -45,33 +55,29 @@ module GameMachine
         self.class.log_statistic('db_cachehit',cache_hits)
         #GameMachine.logger.info "Store: set=#{set_count} get=#{get_count} delete=#{delete_count} cache_hits=#{cache_hits}"
         
-        if message == 'message_count'
-          current_count = JavaLib::MessageGateway.messageCount.incrementAndGet
-          diff = current_count - @last_count
-          #GameMachine.logger.info "GatewayMessagesPerSecond: #{diff}"
-          self.class.log_statistic('gateway_mps',diff)
-          @last_count = current_count
+        current_count = JavaLib::Incoming.messageCount.incrementAndGet
+        JavaLib::Incoming.messageCount.decrementAndGet
+        diff = current_count - @last_count
+        #GameMachine.logger.info "GatewayMessagesPerSecond: #{diff}"
+        self.class.log_statistic('gateway_mps',diff / @interval)
+        @last_count = current_count
 
-          current_count = NetLib::UdpServerHandler.countIn.incrementAndGet
-          diff = current_count - @last_in_count
-          #GameMachine.logger.info "MessagesInPerSecond: #{diff}"
-          self.class.log_statistic('messages_in_mps',diff)
-          @last_in_count = current_count
+        current_count = NetLib::UdpServerHandler.countIn.incrementAndGet
+        NetLib::UdpServerHandler.countIn.decrementAndGet
+        diff = current_count - @last_in_count
+        #GameMachine.logger.info "MessagesInPerSecond: #{diff}"
+        self.class.log_statistic('messages_in_mps',diff / @interval)
+        @last_in_count = current_count
 
-          current_count = NetLib::UdpServerHandler.countOut.incrementAndGet
-          diff = current_count - @last_out_count
-          #GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
-          self.class.log_statistic('messages_out_mps',diff)
-          @last_out_count = current_count
-
-        elsif message == 'update'
-          JavaLib::Grid.grids.each do |name,grid|
-            object_index_size = grid.objectIndex.length
-            cellscache_size = grid.cellsCache.length
-            cells_size = grid.cells.length
-            GameMachine.logger.info "Grid #{name} ondex_size: #{object_index_size} ccache_size: #{cellscache_size} csize: #{cells_size}"
-          end
-        end
+        current_count = NetLib::UdpServerHandler.countOut.incrementAndGet
+        NetLib::UdpServerHandler.countOut.decrementAndGet
+        diff = current_count - @last_out_count
+        #GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
+        self.class.log_statistic('messages_out_mps',diff / @interval)
+        @last_out_count = current_count
+        update_statistics
+        JavaLib::GameGrid.get_grid_counts
+        puts @stats.inspect
       end
       
     end

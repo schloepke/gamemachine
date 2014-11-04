@@ -1,7 +1,7 @@
 package user.agents;
 
 import user.Globals;
-import user.messages.Vitals;
+import user.messages.GameEntity;
 
 import com.game_machine.client.agent.CodeblockEnv;
 import com.game_machine.codeblocks.Codeblock;
@@ -34,8 +34,14 @@ public class PlayerRegen implements Codeblock {
 	}
 	
 	private void regen() {
-		for (Vitals vitals : Globals.getVitalsList()) {
+		for (GameEntity vitals : Globals.gameEntitiesList()) {
 			vitals.raiseHealth(1);
 		}
+	}
+
+	@Override
+	public void shutdown(Object arg0) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

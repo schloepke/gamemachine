@@ -3,12 +3,25 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
-message TeamRequest {
-  required string json = 1;
+message TrackDataUpdate {
+  required string id = 1;
+  required DynamicMessage dynamicMessage = 2;
 }
 
-message TeamResponse {
-  required string json = 1;
+message GameConfigs {
+  repeated GameConfig gameConfig = 1;
+}
+
+message GameConfig {
+  required string config = 1;
+  required int32 version = 2;
+  required string gameId = 3;
+}
+
+message TeamMemberSkill {
+  required string name = 1;
+  required int32 value = 2;
+  required string playerId = 3;
 }
 
 message Statistic {
@@ -17,22 +30,8 @@ message Statistic {
   required string type = 3;
 }
 
-message AgentTrackData {
-  repeated TrackData trackData = 1;
-}
-
-message Agent {
-  required string id = 1;
-  required string code = 2;
-  required string classname = 3;
-  optional bool remove = 5;
-  required string compileResult = 6; 
-}
-
-message AgentController {
-  repeated Agent agent = 1;
-  required Player player = 2;
-  required string gameId = 3;
+message Statistics {
+  repeated Statistic statistic = 1;
 }
 
 message NodeStatus {
@@ -44,11 +43,33 @@ message NodeStatus {
   required int32 clientCount = 6;
   required double loadAverage = 7;
   required int32 heapUsed = 8;
+  optional Statistics statistics = 9;
 }
 
 message NodeStatuses {
   repeated NodeStatus nodeStatus = 1;
 }
+
+message AgentTrackData {
+  repeated TrackData trackData = 1;
+}
+
+message Agent {
+  required string id = 1;
+  required string code = 2;
+  required string classname = 3;
+  optional bool remove = 5;
+  required string compileResult = 6;
+  required int32 concurrency = 7;
+}
+
+message AgentController {
+  repeated Agent agent = 1;
+  required Player player = 2;
+  required string gameId = 3;
+}
+
+
 
 message MonoMessage {
   optional Entity entity = 1;
@@ -281,11 +302,9 @@ message Neighbor {
   required string id = 3;
 }
 
-message GetNeighbors {
-  optional uint32 search_radius = 2;
-  required Vector3 vector3 = 3;
-  optional string neighborType = 4;
-  optional string gridName = 5;
+message NeighborsRequest {
+  required string neighborEntityType = 1;
+  optional string gridName = 2;
 }
 
 message NativeBytes {
@@ -332,7 +351,7 @@ message Entity {
   optional ChatRegister chatRegister = 15;
   optional ChatChannels chatChannels = 16;
   optional ErrorMessage errorMessage = 17;
-  optional GetNeighbors getNeighbors = 21;
+  optional NeighborsRequest neighborsRequest = 21;
   optional TrackEntity trackEntity = 22;
   optional Transform transform = 23;
   optional Vector3 vector3 = 25;
@@ -365,8 +384,8 @@ message Entity {
   optional PoisonPill poisonPill = 62;
   optional string senderId = 63;
   optional AgentTrackData agentTrackData = 64;
-  optional TeamRequest teamRequest = 65;
-  optional TeamResponse teamResponse = 66;
+  optional TeamMemberSkill teamMemberSkill = 65;
+  optional TrackDataUpdate trackDataUpdate = 66;
   //GAME_ENTITY_MESSAGES
 }
 

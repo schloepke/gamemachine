@@ -1,10 +1,17 @@
 package com.game_machine.client.api;
 
+/*
+ *  Provides a simple api for sending messages that takes care of much of the boilerplate message creation.  You should obtain ApiMessage instances by
+ *  calling newMessage on an Api instance, rather then instantiating it directly.
+ */
+
+
 import Client.Messages.AgentTrackData;
 import Client.Messages.ChatChannel;
 import Client.Messages.ChatMessage;
 import Client.Messages.ChatStatus;
 import Client.Messages.ClientMessage;
+import Client.Messages.DynamicMessage;
 import Client.Messages.EchoTest;
 import Client.Messages.Entity;
 import Client.Messages.GameMessage;
@@ -15,6 +22,7 @@ import Client.Messages.Player;
 import Client.Messages.PlayerConnect;
 import Client.Messages.PlayerLogout;
 import Client.Messages.TrackData;
+import Client.Messages.TrackDataUpdate;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
@@ -85,7 +93,7 @@ public class ApiMessage {
 		chatChannel.setFlags(flags);
 
 		if (inviteId != null) {
-			chatChannel.setInviteId(inviteId);
+			chatChannel.setInvite_id(inviteId);
 		}
 		joinChat.addChatChannel(chatChannel);
 		clientMessage.addEntity(entity().setJoinChat(joinChat));
@@ -151,6 +159,17 @@ public class ApiMessage {
 		return this;
 	}
 	
+	public <T> ApiMessage setTrackDataUpdate(String id, T message) {
+		DynamicMessage dynamicMessage = DynamicMessageUtil.toDynamicMessage(message);
+		TrackDataUpdate update = new TrackDataUpdate();
+		update.setId(id);
+		update.setDynamicMessage(dynamicMessage);
+		ensureEntity();
+		clientMessage.getEntity(0).setTrackDataUpdate(update);
+		clientMessage.getEntity(0).setFastpath(true);
+		return this;
+	}
+	
 	public <T> ApiMessage setDynamicMessage(T message) {
 		GameMessage gameMessage = DynamicMessageUtil.toGameMessage(message);
 		return setGameMessage(gameMessage);
@@ -173,7 +192,7 @@ public class ApiMessage {
 		Player player = new Player();
 		player.setId(playerId).setAuthtoken(authtoken);
 		ClientMessage clientMessage = new ClientMessage();
-		clientMessage.setConnectionType(0);
+		clientMessage.setConnection_type(0);
 		clientMessage.setPlayer(player);
 		return clientMessage;
 	}

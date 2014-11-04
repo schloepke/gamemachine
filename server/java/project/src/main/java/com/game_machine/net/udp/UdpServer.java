@@ -68,6 +68,7 @@ public final class UdpServer implements Runnable {
 			boot.channel(NioDatagramChannel.class);
 			boot.group(group);
 			boot.option(ChannelOption.SO_BROADCAST, false);
+			boot.option(ChannelOption.SO_RCVBUF, 102400);
 			boot.handler(new UdpServerHandler());
 
 			InetSocketAddress address = new InetSocketAddress(hostname, port);

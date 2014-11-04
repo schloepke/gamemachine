@@ -48,14 +48,16 @@ module GameMachine
       end
 
       def create_player_team(team_name,player_id)
-        player_team = PlayerTeam.new(:id => player_id, :name => team_name)
+        player_team_id = "player_team_#{player_id}"
+        player_team = PlayerTeam.new(:id => player_team_id, :name => team_name)
         scope(player_team)
-        player_team.save!
+        player_team.save
       end
 
       def send_team(message)
-        if player_team = PlayerTeam.find!(scope_key(message.player_id))
-          if team = Team.find!(scope_key(player_team.name))
+        player_team_id = "player_team_#{message.player_id}"
+        if player_team = PlayerTeam.find(scope_key(player_team_id))
+          if team = Team.find(scope_key(player_team.name))
             commands.player.send_message(team,message.player_id)
           end
         end
@@ -70,9 +72,10 @@ module GameMachine
       end
 
       def destroy_player_team(player_id)
-        if player_team = PlayerTeam.find!(scope_key(player_id))
+        player_team_id = "player_team_#{player_id}"
+        if player_team = PlayerTeam.find(scope_key(player_team_id))
           scope(player_team)
-          player_team.destroy!
+          player_team.destroy
         end
       end
 
@@ -104,8 +107,10 @@ module GameMachine
         team_handler.teams_filter(teams,teams_request)
       end
 
-      def handler_find_match(team_name)
-        team_handler.match!(scope_key('teams'),team_name)
+      def handler_find_match(team)
+        if teams = Teams.find(scope_key('teams'))
+          team_handler.match!(teams,team)
+        end
       end
 
       def handler_match_started(match)
@@ -113,17 +118,30 @@ module GameMachine
       end
 
       def create_team(message)
+
+        # no team name that equals player name
+        if player_exists?(message.name)
+          return false
+        end
+
+        # reserved key
+        if message.name == 'teams'
+          return false
+        end
+
         unless can_create_team?(message.name,message.player_id)
           return false
         end
 
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
           send_team_joined(team.name,message.player_id)
           return false
         end
 
         message.max_members ||= default_max_members
 
+        min_for_match = message.min_for_match >= 1 ? message.min_for_match : 1
+        
         team = Team.new(
           :id => message.name,
           :team_id => team_id(message.name),
@@ -131,8 +149,11 @@ module GameMachine
           :owner => message.owner,
           :access => message.access,
           :max_members => message.max_members,
+          :min_for_match => min_for_match,
           :destroy_on_owner_leave => destroy_on_owner_leave?,
-          :members => [message.owner]
+          :members => [message.owner],
+          :locked => false,
+          :requirements => message.requirements
         )
 
         create_player_team(team.name,message.player_id)
@@ -141,7 +162,7 @@ module GameMachine
         end
 
         scope(team)
-        team.save!
+        team.save
         commands.datastore.call_dbproc(:team_add_team,scope_key('teams'),team.to_storage_entity,false)
         join_chat(team.name,team.owner)
         send_team_joined(team.name,message.player_id)
@@ -150,7 +171,8 @@ module GameMachine
       end
 
       def member_disconnected(message)
-        if player_team = PlayerTeam.find!(scope_key(message.player_id))
+        player_team_id = "player_team_#{message.player_id}"
+        if player_team = PlayerTeam.find(scope_key(player_team_id))
           leave = LeaveTeam.new(
             :name => player_team.name,
             :player_id => message.player_id
@@ -160,7 +182,7 @@ module GameMachine
       end
 
       def destroy_team(message,force=false)
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
           if team.owner == message.player_id || force
             team.members.each do |member|
               leave_chat(message.name,member)
@@ -169,7 +191,7 @@ module GameMachine
             end
             commands.datastore.call_dbproc(:team_remove_team,scope_key('teams'),team.to_storage_entity,false)
             scope(team)
-            team.destroy!
+            team.destroy
             handler_update_teams
 
             # team destroyed ends match
@@ -183,12 +205,38 @@ module GameMachine
         end
       end
 
+      def lock_team(message)
+        if team = Team.find(scope_key(message.name))
+          if team.owner == message.player_id
+            team.locked = true
+            scope(team)
+            team.save
+            commands.datastore.call_dbproc(:team_update_team,scope_key('teams'),team.to_storage_entity,false)
+          end
+        end
+      end
+
+      def unlock_team(message)
+        if team = Team.find(scope_key(message.name))
+          if team.owner == message.player_id
+            team.locked = false
+            scope(team)
+            team.save
+            commands.datastore.call_dbproc(:team_update_team,scope_key('teams'),team.to_storage_entity,false)
+          end
+        end
+      end
+
       def join_team(message,invite_accepted=false)
         unless can_add_member?(message.name,message.player_id)
           return false
         end
 
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
+
+          if team.locked
+            return
+          end
 
           if (team.max_members.nil? || team.max_members == 0)
             team.max_members = default_max_members
@@ -202,7 +250,7 @@ module GameMachine
             unless team.members.include?(message.player_id)
               team.members << message.player_id
               scope(team)
-              team.save!
+              team.save
               create_player_team(team.name,message.player_id)
               commands.datastore.call_dbproc(:team_update_team,scope_key('teams'),team.to_storage_entity,false)
             end
@@ -213,7 +261,7 @@ module GameMachine
       end
 
       def leave_team(message)
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
           if message.player_id == team.owner && destroy_on_owner_leave?
             destroy_team(
               DestroyTeam.new(
@@ -245,7 +293,7 @@ module GameMachine
           end
 
           scope(team)
-          team.save!
+          team.save
 
           commands.datastore.call_dbproc(:team_update_team,scope_key('teams'),team.to_storage_entity,false)
           destroy_player_team(message.player_id)
@@ -257,7 +305,7 @@ module GameMachine
       end
 
       def team_invite(message)
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
           if message.player_id == team.owner
             message.invite_id = team.invite_id
             commands.player.send_message(message,message.invitee)
@@ -266,7 +314,7 @@ module GameMachine
       end
 
       def team_accept_invite(message)
-        if team = Team.find!(scope_key(message.name))
+        if team = Team.find(scope_key(message.name))
           if message.invite_id == team.invite_id
             join_team(JoinTeam.new(:name => team.name, :player_id => message.player_id),true)
           end
@@ -278,12 +326,12 @@ module GameMachine
           return
         end
 
-        if match = Match.find!(message.match_id)
+        if match = Match.find(message.match_id)
           match.teams.each do |team|
-            if team = Team.find!(scope_key(team.name))
+            if team = Team.find(scope_key(team.name))
               team.match_id = nil
               scope(team)
-              team.save!
+              team.save
             end
           end
           match.destroy
@@ -298,12 +346,12 @@ module GameMachine
         end
 
         match_id = self.class.match_id_for(message.team_names)
-        if match = Match.find!(match_id)
+        if match = Match.find(match_id)
           self.class.logger.info "Match #{match_id} already created"
           return
         end
 
-        teams = message.team_names.collect {|name| Team.find!(scope_key(name))}.compact
+        teams = message.team_names.collect {|name| Team.find(scope_key(name))}.compact
         teams = teams.map {|team| unscope(team)}
         if teams.size != message.team_names.size
           self.class.logger.info "#{self.class.name} Unable to find all teams for match"
@@ -335,7 +383,7 @@ module GameMachine
 
       def find_match(message)
         if team = Team.find(scope_key(message.team_name))
-          if s = handler_find_match(message.team_name)
+          if s = handler_find_match(team)
             self.class.logger.debug "Match found: #{s}"
             start_match(s)
           end
@@ -362,6 +410,11 @@ module GameMachine
         player_service.get_game_id(player_id)
       end
 
+      def player_exists?(player_id)
+        player_service = GameMachine::JavaLib::PlayerService.get_instance
+        player_service.find(player_id)
+      end
+
       def on_receive(message)
         if message.respond_to?(:player_id)
           @player_id = message.player_id
@@ -372,6 +425,12 @@ module GameMachine
         if message.is_a?(CreateTeam)
           create_team(message)
           send_team(message)
+        elsif message.is_a?(PlayerSkills)
+          set_player_skills(message)
+        elsif message.is_a?(LockTeam)
+          lock_team(message)
+        elsif message.is_a?(UnlockTeam)
+          unlock_team(message)
         elsif message.is_a?(DestroyTeam)
           destroy_team(message)
         elsif message.is_a?(TeamInvite)
@@ -399,6 +458,17 @@ module GameMachine
         else
           unhandled(message)
         end
+      end
+
+      def set_player_skills(message)
+        unless team_handler.player_can_set_skills?
+          return
+        end
+
+        player_skills_id = "player_skills_#{message.player_id}"
+        player_skills = PlayerSkills.new(:id => player_skills_id, :skills => message.skills.marshal_dump)
+        scope(player_skills)
+        player_skills.save
       end
 
       def define_update_procs
