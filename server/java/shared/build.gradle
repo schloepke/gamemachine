@@ -94,12 +94,6 @@ task agent(type: Copy) {
   from "$buildDir/libs"
 }
 
-task example(type: Copy) {
-  into "$buildDir/../../../../agents/agent_library_example/game_machine_lib"
-    
-  from configurations.runtime
-  from "$buildDir/libs"
-}
 
 task install_libs(type: Copy) {
   into "$buildDir/../lib"
