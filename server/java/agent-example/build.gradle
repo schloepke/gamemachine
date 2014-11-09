@@ -1,0 +1,32 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+buildscript {
+  repositories { jcenter() }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
+  }
+}
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'com.gamemachine.agent-example'
+ version = '1.0'
+
+
+description = """"""
+
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+	//compile 'gamemachine:shared:1.0'
+	compile project(':com.gamemachine.shared')
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.1'
+}
