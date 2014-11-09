@@ -11,6 +11,12 @@ public class DynamicMessageUtil
 
     private static string dynamicNamespace = "DynamicMessages";
 
+
+    public static void setNamespace (string ns)
+    {
+        dynamicNamespace = ns;
+    }
+
     public static DynamicMessage ToDynamicMessage (object component)
     {
         DynamicMessage wrapper = new DynamicMessage ();
