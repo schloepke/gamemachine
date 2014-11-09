@@ -16,13 +16,13 @@ public class Api {
 	private String authtoken;
 	private NetworkClient networkClient;
 	private Config conf = Config.getInstance();
-	private ObjectStore cloud;
+	private ObjectStore objectStore;
 	
-	public Api(String playerId, String authtoken, NetworkClient networkClient, ObjectStore cloud) {
+	public Api(String playerId, String authtoken, NetworkClient networkClient, ObjectStore objectStore) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.networkClient = networkClient;
-		this.cloud = cloud;
+		this.objectStore = objectStore;
 	}
 	
 	public static class RateLimitExceeded extends RuntimeException {
@@ -85,8 +85,8 @@ public class Api {
 	/**
 	 * @return The {@link ObjectStore} instance
 	 */
-	public ObjectStore getCloud() {
-		return this.cloud;
+	public ObjectStore getObjectStore() {
+		return this.objectStore;
 	}
 	
 	/**

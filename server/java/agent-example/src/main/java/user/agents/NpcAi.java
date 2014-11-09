@@ -83,6 +83,7 @@ public class NpcAi implements Codeblock {
 	}
 
 	private void doCombat() {
+		
 		// Random npc
 		int idx = (int) (Math.random() * npcCount - 1);
 		Npc npc = npcs.get(idx);

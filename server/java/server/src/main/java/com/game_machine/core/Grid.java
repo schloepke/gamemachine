@@ -32,7 +32,7 @@ public class Grid {
 	private ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
-	
+
 	public Grid(int max, int cellSize) {
 		this.max = max;
 		this.cellSize = cellSize;
@@ -44,7 +44,7 @@ public class Grid {
 	public int getObjectCount() {
 		return objectIndex.size();
 	}
-	
+
 	public int getMax() {
 		return this.max;
 	}
@@ -68,10 +68,11 @@ public class Grid {
 
 		int startX = (int) (x - offset);
 		int startY = (int) (y - offset);
-		
-		// subtract one from offset to keep it from hashing to the next cell boundary outside of range
-		int endX = (int) (x + offset-1);
-		int endY = (int) (y + offset-1);
+
+		// subtract one from offset to keep it from hashing to the next cell
+		// boundary outside of range
+		int endX = (int) (x + offset - 1);
+		int endY = (int) (y + offset - 1);
 
 		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
 			for (int colNum = startY; colNum <= endY; colNum += offset) {
@@ -94,7 +95,7 @@ public class Grid {
 			if (gridValues == null) {
 				continue;
 			}
-			
+
 			for (TrackData gridValue : gridValues) {
 				if (gridValue != null) {
 					if (entityType == null) {
@@ -174,18 +175,13 @@ public class Grid {
 	}
 
 	public Boolean set(TrackData trackData) {
-		Boolean hasExisting = false;
-		Integer oldCellValue = -1;
 		String id = trackData.id;
 
-		if (objectIndex.containsKey(id)) {
-			hasExisting = true;
-			oldCellValue = cellsIndex.get(id);
-		}
+		Integer oldCellValue = cellsIndex.get(id);
 
 		int cell = hash(trackData.x, trackData.y);
 
-		if (hasExisting) {
+		if (oldCellValue != null) {
 			if (oldCellValue != cell) {
 				ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(oldCellValue);
 				if (cellGridValues != null && cellGridValues.containsKey(id)) {

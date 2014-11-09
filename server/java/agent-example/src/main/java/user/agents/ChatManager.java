@@ -52,7 +52,7 @@ public class ChatManager implements Codeblock {
 			ChatChannels channels = (ChatChannels)message;
 			for (ChatChannel channel : channels.getChatChannelList()) {
 				if (channel.getName().equals(this.api.getGameid())) {
-					this.env.sendToAgent("PlayerVitalsManager", channel);
+					this.env.sendToAgent("GameEntitiesManager", channel);
 				}
 			}
 		} else if (message instanceof ChatMessage) {

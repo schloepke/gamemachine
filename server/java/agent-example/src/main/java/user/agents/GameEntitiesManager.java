@@ -26,7 +26,7 @@ public class GameEntitiesManager implements Codeblock {
 		if (message instanceof CodeblockEnv) {
 			this.env = (CodeblockEnv) message;
 			this.api = env.getApi();
-			this.objectStore = api.getCloud();
+			this.objectStore = api.getObjectStore();
 			System.out.println("Agent " + this.env.getAgentId() + " is awake");
 
 			if (this.env.getReloadCount() == 0) {

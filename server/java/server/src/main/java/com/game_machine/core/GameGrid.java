@@ -20,7 +20,7 @@ public class GameGrid {
 			Map<String, Grid> grids = gameGrids.get(gameId);
 			for (Map.Entry<String, Grid> entry : grids.entrySet())
 			{
-				logger.debug("Grid "+gameId+":"+entry.getKey()+" count "+entry.getValue().getObjectCount());
+				logger.info("Grid "+gameId+":"+entry.getKey()+" count "+entry.getValue().getObjectCount());
 			}
 		}
 	}

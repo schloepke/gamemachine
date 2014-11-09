@@ -4,23 +4,6 @@ ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','server')
 ENV['GAME_ENV'] = 'development' unless ENV['GAME_ENV']
 
-
-
-if ARGV.first == 'server' || ARGV.first == 's'
-  require 'java'
-  classpath = java.lang.System.get_property("java.class.path")
-  unless classpath.match(/project/)
-    classpath = File.join(ENV['JAVA_ROOT'],'lib/*')
-    gc_opts = "-J-Xmx1024m -J-Xmn800m -J-XX:-UseAdaptiveSizePolicy -J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC -J-XX:NewSize=800m -J-XX:MaxNewSize=800m -J-XX:+UseCompressedOops -J-XX:+UnlockDiagnosticVMOptions -J-XX:ParGCCardsPerStrideChunk=32768 -J-XX:MaxTenuringThreshold=1 -J-XX:SurvivorRatio=190 -J-XX:TargetSurvivorRatio=90"
-    #-J-XX:+UseG1GC
-    #gc_opts = "-J-Xmx256m -J-XX:+UseConcMarkSweepGC -J-XX:+UseParNewGC -J-XX:+UseCompressedOops"
-    cmd = "  jruby #{gc_opts} -J-cp \"#{classpath}\" #{File.expand_path(__FILE__)} #{ARGV.join(' ')}"
-    puts "Classpath not set, run again using the following commmand:\n#{cmd}"
-    #system(cmd)
-    exit
-  end
-end
-
 ARGV << '--help' if ARGV.empty?
 
 aliases = {

@@ -2,6 +2,7 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin:'scala'
+apply plugin: 'maven-publish'
 
 
 
@@ -15,8 +16,8 @@ buildscript {
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
-group = 'com.gamemachine.server'
-  version = '1.0.4'
+group = 'com.gamemachine'
+  version = '1.0.4-SNAPSHOT'
   
 
 description = """"""
@@ -30,7 +31,16 @@ repositories {
   maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
+    maven {
+        url "https://raw.github.com/gamemachine/maven-repo/master"
+    }
+ }
   
+ configurations.all {
+  resolutionStrategy {
+    //cacheDynamicVersionsFor 24, 'hours'
+    cacheChangingModulesFor 0, 'seconds'
+  }
 }
 
 dependencies {
@@ -63,7 +73,7 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
-  compile project(':com.gamemachine.shared')
+  compile 'com.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
@@ -86,13 +96,6 @@ task wrapper(type: Wrapper) {
   gradleVersion = '2.1'
 }
 
-test {
-  //useTestNG()
-  //outputs.upToDateWhen { false }
-  //testLogging.showStandardStreams = true
-  //dependsOn cleanTest
-  //testLogging { exceptionFormat "full" }
-}
  
  task install_shadowjar(type: Copy) {
   into "$buildDir/../../../lib"
@@ -135,5 +138,27 @@ compileJava.doLast {
     addUrlIfNotPresent this.class.classLoader.rootLoader, sourceSets.main.output.classesDir.getPath()
     addUrlIfNotPresent Instrumentation.class.classLoader, sourceSets.main.output.classesDir.getPath()
     instrumentation.instrument()
+}
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+            artifact sourceJar {
+                classifier "sources"
+            }
+        }
+    }
+     repositories {
+        maven {
+            //url "$buildDir/repo"
+            url "/home/chris/maven-repo"
+        }
+    }
 }
 

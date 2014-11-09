@@ -18,7 +18,7 @@ configurations.all {
 
 buildscript {
   repositories {
-   	jcenter()
+    jcenter()
    }
   dependencies {
     classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
@@ -40,9 +40,23 @@ repositories {
 }
 
 dependencies {
-	compile 'com.gamemachine:shared:1.0-SNAPSHOT'
+    compile 'org.slf4j:slf4j-api:1.7.7'
+    compile 'org.slf4j:slf4j-simple:1.7.7'
+  compile 'com.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.1'
+}
+
+task cleanDeploy(type: Delete) {  
+    delete fileTree(dir: "deploy", exclude: "dont_delete.txt")  
+}
+
+task deploy(type: Copy, dependsOn: cleanDeploy) {
+  into "$buildDir/../deploy"
+    
+  from configurations.runtime
+  //from "$buildDir/libs"
+  //from "$buildDir/../local_lib/sigar"
 }

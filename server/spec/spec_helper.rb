@@ -1,6 +1,6 @@
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
-ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','project')
+ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','server')
 ENV['GAME_ENV'] = 'test'
 require 'rubygems'
 
@@ -23,7 +23,6 @@ RSpec.configure do |config|
 
   config.before(:each) do
     GameMachine::AppConfig.instance.load_config
-    GameMachine::Application.create_grids
     GameMachine::Application.data_store
     GameMachine::Application.start_actor_system
     GameMachine::Application.start_core_systems

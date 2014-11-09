@@ -8,9 +8,9 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.game_machine.config.AppConfig;
-
 import GameMachine.Messages.Player;
+
+import com.game_machine.config.AppConfig;
 
 public class PlayerService {
 
@@ -168,7 +168,7 @@ public class PlayerService {
 			Player.db().save(player);
 		}
 	}
-	
+		
 	public void setAuthtoken(String playerId, String authtoken) {
 		Player player = find(playerId);
 		if (player == null) {
