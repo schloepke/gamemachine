@@ -1,7 +1,7 @@
-/lib
+lib
 build¬
-/bin¬
+bin¬
 .settings¬
 .classpath¬
 .project
-/src/main/java/com/game_machine/client/messages
+src/main/java/com/game_machine/client/messages
