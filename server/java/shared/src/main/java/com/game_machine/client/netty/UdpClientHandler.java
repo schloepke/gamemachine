@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import com.game_machine.client.api.Api;
 import com.game_machine.client.api.ApiMessage;
 
-import Client.Messages.ClientMessage;
+import com.game_machine.client.messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 public class UdpClientHandler extends SimpleChannelInboundHandler<DatagramPacket> {

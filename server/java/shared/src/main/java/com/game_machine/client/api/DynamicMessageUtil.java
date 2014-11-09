@@ -4,8 +4,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import Client.Messages.DynamicMessage;
-import Client.Messages.GameMessage;
+import com.game_machine.client.messages.DynamicMessage;
+import com.game_machine.client.messages.GameMessage;
 
 import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.JsonIOUtil;

@@ -44,12 +44,12 @@ module GameMachine
         File.join(java_root,'src','main','java','com', 'game_machine','orm','models')
       end
 
-      def java_src
+      def server_src
         File.join(java_root,'src','main','java','GameMachine', 'Messages')
       end
 
-      def client_src
-        File.join(app_root,'java','shared','src','main','java','Client', 'Messages')
+      def shared_src
+        File.join(app_root,'java','shared','src','main','java','com', 'game_machine','client','messages')
       end
 
       def config_path
@@ -58,10 +58,10 @@ module GameMachine
 
       def write_components(proto,persistent_messages)
         messages = proto.getMessages.reject {|message| message.getName == 'Components'}
-        FileUtils.mkdir_p(java_src)
+        FileUtils.mkdir_p(server_src)
         FileUtils.mkdir_p(model_src)
-        FileUtils.rm_rf(client_src)
-        FileUtils.mkdir_p(client_src)
+        FileUtils.rm_rf(shared_src)
+        FileUtils.mkdir_p(shared_src)
         message_names = proto.getMessages.map {|m| m.get_name}
         messages_index = proto.getMessages.each_with_object({}) {|v,res| res[v.getName] = v}
 
@@ -81,12 +81,12 @@ module GameMachine
           #puts "Message: #{message.getName}"
           out = ERB.new(File.read(erb_template),0,'>').result(binding)
           out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
-          src_file = File.join(java_src,"#{message.getName}.java")
+          src_file = File.join(server_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
 
           out = ERB.new(File.read(client_template),0,'>').result(binding)
           out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
-          src_file = File.join(client_src,"#{message.getName}.java")
+          src_file = File.join(shared_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
 
           if persistent
@@ -181,7 +181,7 @@ module GameMachine
       end
 
       def generate
-        FileUtils.rm Dir.glob(File.join(java_src,'*.java'))
+        FileUtils.rm Dir.glob(File.join(server_src,'*.java'))
         game_protofile = File.join(config_path,'game_messages.proto')
         protofile = File.join(config_path,'messages.proto')
 

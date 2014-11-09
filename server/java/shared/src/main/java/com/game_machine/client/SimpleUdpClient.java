@@ -9,16 +9,18 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.game_machine.client.api.Api;
 import com.game_machine.client.api.ApiMessage;
 
-import Client.Messages.ClientMessage;
+import com.game_machine.client.messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 
 public class SimpleUdpClient implements Runnable, NetworkClient {
 
+	public static AtomicInteger messageCount = new AtomicInteger();
 	private static ExecutorService executor = Executors.newCachedThreadPool();
 	private int port;
 	private InetAddress hostAddress;
@@ -27,7 +29,8 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 	private boolean stop = false;
 	private ActorSelection inbound;
 	private DatagramPacket inp;
-
+	
+	
 	public SimpleUdpClient(String host, int port, String actorName) {
 		this.port = port;
 		this.timeout = 1000;
@@ -82,6 +85,7 @@ public class SimpleUdpClient implements Runnable, NetworkClient {
 	}
 
 	public void sendMessage(byte[] bytes) {
+		messageCount.incrementAndGet();
 		DatagramPacket out = new DatagramPacket(bytes, bytes.length, hostAddress, port);
 		try {
 			s.send(out);

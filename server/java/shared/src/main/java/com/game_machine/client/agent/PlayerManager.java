@@ -10,18 +10,22 @@ import akka.actor.Props;
 import com.game_machine.client.NetworkClient;
 import com.game_machine.client.SimpleUdpClient;
 import com.game_machine.client.api.Api;
-import com.game_machine.client.api.Cloud;
+import com.game_machine.client.api.cloud.ObjectStore;
+import com.google.common.util.concurrent.RateLimiter;
 
 public class PlayerManager {
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayerManager.class);
-			
+	private static final RateLimiter limiter = RateLimiter.create(Config.getInstance().getRateLimit());
+	
 	private NetworkClient networkClient;
 	private String host;
 	private int port;
 	private String playerId;
 	private String gameId;
 	private String authtoken;
+	private ObjectStore cloud;
+	private Config conf;
 	
 	public PlayerManager(String host, int port, String gameId, String playerId, String authtoken) {
 		this.host = host;
@@ -29,11 +33,12 @@ public class PlayerManager {
 		this.gameId = gameId;
 		this.playerId = playerId;
 		this.authtoken = authtoken;
+		conf = Runner.getConfig();
+		this.cloud = new ObjectStore(conf.getCloudHost(),conf.getCloudUser(),conf.getCloudApiKey(),conf.getGameId(),limiter);
 	}
 	
 	public boolean start() {
-		Config conf = Runner.getConfig();
-		String nodeHost = new Cloud().getNode();
+		String nodeHost = cloud.getNode();
 		if (nodeHost != null) {
 			host = nodeHost;
 			logger.info("Node host="+host);
@@ -51,7 +56,7 @@ public class PlayerManager {
 	
 	private void startPlayerActor() {
 		ActorSystem system = Api.getActorSystem();
-		Api api = new Api(playerId, authtoken, networkClient);
+		Api api = new Api(playerId, authtoken, networkClient, this.cloud);
 		system.actorOf(Props.create(PlayerActor.class, api, playerId), playerId);
 	}
 	

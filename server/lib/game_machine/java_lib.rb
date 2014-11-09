@@ -34,6 +34,12 @@ module GameMachine
     include_package 'com.game_machine.orm.models'
   end
   
+  module ClientLib
+    include_package 'com.game_machine.client.api'
+    include_package 'com.game_machine.client.api.cloud'
+    include_package 'com.game_machine.client'
+  end
+
   module NetLib
     include_package 'com.game_machine.net.udp'
     include_package 'com.game_machine.net.tcp'

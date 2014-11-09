@@ -6,23 +6,23 @@ package com.game_machine.client.api;
  */
 
 
-import Client.Messages.AgentTrackData;
-import Client.Messages.ChatChannel;
-import Client.Messages.ChatMessage;
-import Client.Messages.ChatStatus;
-import Client.Messages.ClientMessage;
-import Client.Messages.DynamicMessage;
-import Client.Messages.EchoTest;
-import Client.Messages.Entity;
-import Client.Messages.GameMessage;
-import Client.Messages.GameMessages;
-import Client.Messages.JoinChat;
-import Client.Messages.LeaveChat;
-import Client.Messages.Player;
-import Client.Messages.PlayerConnect;
-import Client.Messages.PlayerLogout;
-import Client.Messages.TrackData;
-import Client.Messages.TrackDataUpdate;
+import com.game_machine.client.messages.AgentTrackData;
+import com.game_machine.client.messages.ChatChannel;
+import com.game_machine.client.messages.ChatMessage;
+import com.game_machine.client.messages.ChatStatus;
+import com.game_machine.client.messages.ClientMessage;
+import com.game_machine.client.messages.DynamicMessage;
+import com.game_machine.client.messages.EchoTest;
+import com.game_machine.client.messages.Entity;
+import com.game_machine.client.messages.GameMessage;
+import com.game_machine.client.messages.GameMessages;
+import com.game_machine.client.messages.JoinChat;
+import com.game_machine.client.messages.LeaveChat;
+import com.game_machine.client.messages.Player;
+import com.game_machine.client.messages.PlayerConnect;
+import com.game_machine.client.messages.PlayerLogout;
+import com.game_machine.client.messages.TrackData;
+import com.game_machine.client.messages.TrackDataUpdate;
 
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
@@ -63,6 +63,10 @@ public class ApiMessage {
 		return bytes;
 	}
 
+	public ClientMessage getClientMessage() {
+		return this.clientMessage;
+	}
+	
 	public void send() {
 		byte[] bytes = toByteArray(clientMessage);
 		base.sendToNetwork(bytes);
@@ -146,9 +150,7 @@ public class ApiMessage {
 	}
 
 	public ApiMessage setTrackData(TrackData trackData) {
-		ensureEntity();
-		clientMessage.getEntity(0).setTrackData(trackData);
-		clientMessage.getEntity(0).setFastpath(true);
+		clientMessage.setTrackData(trackData);
 		return this;
 	}
 	

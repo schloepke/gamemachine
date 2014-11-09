@@ -15,15 +15,10 @@ persistent_message Player {
 }
 
 message TrackData {
-  optional float speed = 1;
-  optional float velocity = 2;
-  optional Vector3 direction = 3;
-  optional string json = 4;
   optional string id = 5;
   required float x = 6;
   required float y = 7;
   optional float z = 8;
-  optional int32 action = 12;
   optional DynamicMessage dynamicMessage = 13;
   optional string gridName = 14;
   required int32 getNeighbors = 15;

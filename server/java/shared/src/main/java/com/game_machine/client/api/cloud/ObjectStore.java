@@ -1,4 +1,4 @@
-package com.game_machine.client.api;
+package com.game_machine.client.api.cloud;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -11,23 +11,24 @@ import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.game_machine.client.agent.Config;
+import com.game_machine.client.api.Api;
+import com.game_machine.client.api.DynamicMessageUtil;
 import com.google.common.util.concurrent.RateLimiter;
 
-public class Cloud {
+public final class ObjectStore {
 
-	private static final RateLimiter limiter = RateLimiter.create(Config.getInstance().getRateLimit());
+	private RateLimiter limiter;
 	private String host;
 	private String username;
 	private String apiKey;
 	private String gameId;
-	private Config conf = Config.getInstance();
 
-	public Cloud() {
-		this.host = conf.getCloudHost();
-		this.username = conf.getCloudUser();
-		this.apiKey = conf.getCloudApiKey();
-		this.gameId = conf.getGameId();
+	public ObjectStore(String host, String username, String apiKey, String gameId, RateLimiter limiter) {
+		this.host = host;
+		this.username = username;
+		this.apiKey = apiKey;
+		this.gameId = gameId;
+		this.limiter = limiter;
 	}
 
 	public class Response {
@@ -144,29 +145,23 @@ public class Cloud {
 		return result;
 	}
 
-	private String urlFrom(String id, String format) {
+	private String dbUrl(String id, String format) {
 		if (format == null) {
 			return "http://" + host + "/api/db/" +gameId+"/" + username + "/" + encodeURIComponent(id);
 		} else {
 			return "http://" + host + "/api/db/" +gameId+"/" + username + "/" + encodeURIComponent(id) + "/" + format;
 		}
-
 	}
-
+	
 	private static String scopeId(String scope, String id) {
 		return scope + "^^" + id;
 	}
 
-    private static String unscopeId(String id) {
-    	if (id.contains("^^")) {
-    		String[] parts = id.split("^^");
-        	return parts[1];
-    	} else {
-    		throw new RuntimeException("Expected "+id+" to contain ##");
-    	}
-    }
-    
-	private void checkLimit() {
+    private void checkLimit() {
+		if (limiter == null) {
+			return;
+		}
+		
 		if (!limiter.tryAcquire()) {
 			throw new Api.RateLimitExceeded("Cloud rate limit exceeded");
 		}
@@ -216,7 +211,7 @@ public class Cloud {
 			return false;
 		}
 	}
-	
+		
 	/**
 	 * @param id
 	 * @param body
@@ -224,7 +219,7 @@ public class Cloud {
 	 */
 	public StringResponse put(String id, String body) {
 		checkLimit();
-		String urlString = urlFrom(id, "json");
+		String urlString = dbUrl(id, "json");
 		String token = hash256(username + id + apiKey);
 		StringResponse response = new StringResponse();
 		URL url;
@@ -259,7 +254,7 @@ public class Cloud {
 	 */
 	public StringResponse put(String id, byte[] body) {
 		checkLimit();
-		String urlString = urlFrom(id, "bytes");
+		String urlString = dbUrl(id, "bytes");
 		String token = hash256(username + id + apiKey);
 		StringResponse response = new StringResponse();
 		URL url;
@@ -305,7 +300,7 @@ public class Cloud {
 
 	public Response get(String id, String format) {
 		checkLimit();
-		String urlString = urlFrom(id, format);
+		String urlString = dbUrl(id, format);
 		String token = hash256(username + id + apiKey);
 		Response response = new Response();
 
@@ -336,7 +331,7 @@ public class Cloud {
 	
 	public StringResponse deleteUnscoped(String id) {
 		checkLimit();
-		String urlString = urlFrom(id, null);
+		String urlString = dbUrl(id, null);
 		String token = hash256(username + id + apiKey);
 		StringResponse response = new StringResponse();
 

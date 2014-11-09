@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import Client.Messages.TrackData;
-import Client.Messages.TrackData.EntityType;
+import com.game_machine.client.messages.TrackData;
+import com.game_machine.client.messages.TrackData.EntityType;
 
 
 public class ClientGrid {

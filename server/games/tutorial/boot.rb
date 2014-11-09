@@ -9,14 +9,14 @@ if GameMachine::Application.config.orm
   GameMachine::Actor::Builder.new(Tutorial::ItemManager).distributed(3).start
 end
 
-require_relative 'npc_controller'
+#require_relative 'npc_controller'
 
-names = []
-1.times do |x|
-  name = "npc#{x}"
-  GameMachine::Actor::Builder.new(Tutorial::NpcController,name).with_name(name).start
-  names << name
-end
+#names = []
+#500.times do |x|
+#  name = "npc#{x}"
+#  GameMachine::Actor::Builder.new(Tutorial::NpcController,name).with_name(name).start
+#  names << name
+#end
 
 
 
