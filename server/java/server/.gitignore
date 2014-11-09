@@ -1,8 +1,7 @@
 build
 lib
-build¬
-bin¬
-.settings¬
-.classpath¬
-.project¬
+bin
+.settings
+.classpath
+.project
 src/main/java/GameMachine
