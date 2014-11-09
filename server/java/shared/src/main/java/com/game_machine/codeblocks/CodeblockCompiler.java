@@ -164,7 +164,7 @@ public class CodeblockCompiler {
 	}
 
 	public static Codeblock load(CompileResult compileResult) {
-		logger.info("Attempting to load " + compileResult.getClassname());
+		logger.debug("Attempting to load " + compileResult.getClassname());
 
 		try {
 			ClassLoader parent = ByteArrayClassLoader.class.getClassLoader();

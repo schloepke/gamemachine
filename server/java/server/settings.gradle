@@ -1,0 +1,6 @@
+rootProject.name = 'com.gamemachine.server'
+//include 'client'
+
+include 'com.gamemachine.shared'
+project(':com.gamemachine.shared').projectDir =  new File(settingsDir, '../shared')
+

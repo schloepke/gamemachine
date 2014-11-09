@@ -1,0 +1,4 @@
+rootProject.name = 'com.gamemachine.agent-example'
+
+include 'com.gamemachine.shared'
+project(':com.gamemachine.shared').projectDir =  new File(settingsDir, '../shared')

@@ -9,28 +9,28 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import Client.Messages.Agent;
-import Client.Messages.AgentController;
+import com.game_machine.client.messages.Agent;
+import com.game_machine.client.messages.AgentController;
 import akka.actor.ActorSelection;
 
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 import com.game_machine.client.api.Api;
-import com.game_machine.client.api.Cloud;
+import com.game_machine.client.api.cloud.ObjectStore;
 
 public class AgentUpdater {
 
 	private static final Logger logger = LoggerFactory.getLogger(AgentUpdater.class);
 	
 	private Config conf;
-	private Cloud cloud;
+	private ObjectStore cloud;
 
 	private HashMap<String, String> agents = new HashMap<String, String>();
 	private HashMap<String, PlayerManager> playerManagers = new HashMap<String, PlayerManager>();
 
 	public AgentUpdater() {
 		conf = Config.getInstance();
-		this.cloud = new Cloud();
+		this.cloud = new ObjectStore(conf.getCloudHost(),conf.getCloudUser(),conf.getCloudApiKey(),conf.getGameId(),null);
 	}
 
 	private void pruneAgents(List<String> latest) {

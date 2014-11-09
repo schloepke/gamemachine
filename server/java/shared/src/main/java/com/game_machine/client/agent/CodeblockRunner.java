@@ -7,7 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import scala.concurrent.duration.Duration;
-import Client.Messages.Agent;
+import com.game_machine.client.messages.Agent;
 import akka.actor.UntypedActor;
 
 import com.game_machine.client.api.Api;
@@ -43,7 +43,7 @@ public class CodeblockRunner extends UntypedActor {
 		CodeblockCompiler.CompileResult compileResult = CodeblockCompiler.CompileResult.decode(this.encodedCompileResult);
 		if (compileResult.isCompiled()) {
 			Codeblock codeblock = CodeblockCompiler.load(compileResult);
-			logger.info("New codeblock " + codeblock.toString());
+			logger.debug("New codeblock " + codeblock.toString());
 			if (codeblock != null) {
 				if (this.codeblock != null) {
 					this.codeblockEnv.incReloadCount();
@@ -63,12 +63,12 @@ public class CodeblockRunner extends UntypedActor {
 
 	@Override
 	public void postStop() {
-		logger.info(agentId+" stopped");
+		logger.debug(agentId+" stopped");
 	}
 	
 	@Override
 	public void preStart() {
-		logger.warn("Agent "+agentId+": starting");
+		logger.debug("Agent "+agentId+": starting");
 		if (this.codeblock == null) {
 			logger.warn("Agent "+agentId+": Codeblock in prestart is null");
 			return;
@@ -89,7 +89,7 @@ public class CodeblockRunner extends UntypedActor {
 		if (message instanceof Agent) {
 			Agent agent = (Agent)message;
 			if (!this.classname.equals(agent.getClassname())) {
-				logger.info("Agent "+agentId+": class change");
+				logger.debug("Agent "+agentId+": class change");
 				this.classname = agent.getClassname();
 				this.encodedCompileResult = agent.getCompileResult();
 				updateCodeblock();

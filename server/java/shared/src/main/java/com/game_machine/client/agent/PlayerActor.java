@@ -9,11 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import scala.concurrent.duration.Duration;
-import Client.Messages.Agent;
-import Client.Messages.ClientMessage;
-import Client.Messages.Entity;
-import Client.Messages.GameMessage;
-import Client.Messages.Player;
+import com.game_machine.client.messages.Agent;
+import com.game_machine.client.messages.ClientMessage;
+import com.game_machine.client.messages.Entity;
+import com.game_machine.client.messages.GameMessage;
+import com.game_machine.client.messages.Player;
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.Props;
@@ -89,7 +89,8 @@ public class PlayerActor extends UntypedActor {
 				continue;
 			}
 
-			if (entity.getEchoTest() != null) {
+			if (entity.hasEchoTest()) {
+				logger.info("Received echotest");
 				setConnected();
 				continue;
 			}
@@ -124,7 +125,7 @@ public class PlayerActor extends UntypedActor {
 			runner = context().actorOf(Props.create(CodeblockRunner.class, api, agent, agentId), agentId);
 			runners.put(agentId, runner);
 			agentRunners.add(runner);
-			logger.info("Starting agent " + agentId);
+			logger.debug("Starting agent " + agentId);
 		}
 
 		return agentRunners;

@@ -2,15 +2,22 @@ package com.game_machine.client.agent;
 
 import java.util.concurrent.TimeUnit;
 
+import com.game_machine.client.SimpleUdpClient;
+
 import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 
 public class AgentUpdateActor extends UntypedActor {
 
+	private static int lastCount = 0;
 	private AgentUpdater updater;
 	
 	@Override
 	public void onReceive(Object message) throws Exception {
+		int current = SimpleUdpClient.messageCount.incrementAndGet();
+		int count = (current - lastCount) / 5;
+		lastCount = current;
+		System.out.println(count);
 		if (message instanceof String) {
 			String imsg = (String) message;
 			if (imsg.equals("update_codeblocks")) {

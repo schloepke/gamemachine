@@ -5,22 +5,24 @@ import akka.actor.ActorSystem;
 
 import com.game_machine.client.NetworkClient;
 import com.game_machine.client.agent.Config;
+import com.game_machine.client.api.cloud.ObjectStore;
 
 
 public class Api {
 
+	
 	private static ActorSystem actorSystem;
 	private String playerId;
 	private String authtoken;
 	private NetworkClient networkClient;
 	private Config conf = Config.getInstance();
-	private Cloud cloud;
+	private ObjectStore cloud;
 	
-	public Api(String playerId, String authtoken, NetworkClient networkClient) {
+	public Api(String playerId, String authtoken, NetworkClient networkClient, ObjectStore cloud) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.networkClient = networkClient;
-		this.cloud = new Cloud();
+		this.cloud = cloud;
 	}
 	
 	public static class RateLimitExceeded extends RuntimeException {
@@ -81,9 +83,9 @@ public class Api {
 	}
 	
 	/**
-	 * @return The {@link Cloud} instance
+	 * @return The {@link ObjectStore} instance
 	 */
-	public Cloud getCloud() {
+	public ObjectStore getCloud() {
 		return this.cloud;
 	}
 	
