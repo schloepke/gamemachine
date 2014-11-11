@@ -15,20 +15,12 @@ server/games/moba
 .vagrant
 *.cache
 /pkg/
-server/jruby
 server/tmp
-server/config/config.yml
 server/config/combined_messages.proto
 server/lib/bin
-server/java/project/bin
-server/java/project/build
-server/java/project/lib
 server/log
 server/tmp
 server/pathfinding/build
-server/java/project/bin
-server/java/project/.cache
-server/java/project/src/main/java/GameMachine/Messages/*.java
 
 
 ## Documentation cache and generated files:
@@ -37,4 +29,3 @@ server/java/project/src/main/java/GameMachine/Messages/*.java
 /doc/
 /rdoc/
 /server/java/project/.nb-gradle/private/
-server/java/shared/src/main/java/Client/Messages

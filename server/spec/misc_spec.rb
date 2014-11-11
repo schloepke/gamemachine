@@ -30,8 +30,8 @@ module GameMachine
       message.set_numbers64(555)
     end
 
-    it "dynamic protobuf messages" do
-      JavaLib::MessageTest.test
+    it "generates random base62" do
+      puts JavaLib::BaseX.random62(64)
     end
 
     xit "object store stress" do

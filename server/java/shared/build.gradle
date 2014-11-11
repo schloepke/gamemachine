@@ -2,16 +2,8 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-buildscript {
-  repositories { jcenter() }
-  dependencies {
-    classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
-  }
-}
-apply plugin: 'com.github.johnrengelman.shadow'
-
-group = 'com.gamemachine.shared'
- version = '1.0'
+group = 'io.gamemachine'
+ version = '1.0-SNAPSHOT'
 
 
 description = """"""
@@ -30,8 +22,6 @@ repositories {
 
 dependencies {
   compile 'org.slf4j:slf4j-api:1.7.7'
-  compile 'ch.qos.logback:logback-classic:1.1.2'
-  compile 'ch.qos.logback:logback-core:1.1.2'
   compile 'com.dyuproject.protostuff:protostuff-api:1.0.8'
   compile 'com.dyuproject.protostuff:protostuff-core:1.0.8'
   compile 'com.dyuproject.protostuff:protostuff-runtime:1.0.8'
@@ -42,13 +32,6 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'io.netty:netty-all:4.0.23.Final'
-}
-import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
-
-shadowJar {
-  transform(AppendingTransformer) {
-    resource = 'reference.conf'
-  }
 }
 
 task wrapper(type: Wrapper) {
@@ -71,33 +54,23 @@ publishing {
     }
      repositories {
         maven {
-            url "$buildDir/repo"
+            url "/home/chris/maven-repo"
         }
     }
 }
 
-    
-//task sourcesJar(type: Jar, dependsOn: classes) {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
-//}
 
 
-//artifacts {
-//    archives sourcesJar
-//}
-
-task agent(type: Copy) {
-  into "$buildDir/../../agent/deploy"
-    
-  from configurations.runtime
-  from "$buildDir/libs"
+task removeOldSnapshots(type: Exec) {
+  executable "sh"
+  args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/shared/1.0-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
 }
 
 
-task install_libs(type: Copy) {
-  into "$buildDir/../lib"
-    
-  from configurations.runtime
-  from "$buildDir/libs"
+task publish_to_github(type: Exec, dependsOn: publish) {
+  executable "sh"
+  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
 }
+publish.dependsOn removeOldSnapshots
+publish.mustRunAfter removeOldSnapshots
+

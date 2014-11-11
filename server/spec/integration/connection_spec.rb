@@ -26,7 +26,7 @@ module GameMachine
 
     it "login all" do
       clients = {}
-      count = 10000
+      count = 1000
 
       count.times do |i|
         name = "user#{i}"

@@ -1,15 +1,32 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+repositories {
+  mavenCentral()
+    maven {
+        url "https://raw.github.com/gamemachine/maven-repo/master"
+    }
+    
+    
+}
+configurations.all {
+  resolutionStrategy {
+    cacheDynamicVersionsFor 0, 'seconds'
+    cacheChangingModulesFor 0, 'seconds'
+  }
+}
+
 buildscript {
-  repositories { jcenter() }
+  repositories {
+   	jcenter()
+   }
   dependencies {
     classpath 'com.github.jengelman.gradle.plugins:shadow:1.1.1'
   }
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
-group = 'com.gamemachine.agent-example'
+group = 'io.gamemachine'
  version = '1.0'
 
 
@@ -23,8 +40,7 @@ repositories {
 }
 
 dependencies {
-	//compile 'gamemachine:shared:1.0'
-	compile project(':com.gamemachine.shared')
+	compile 'io.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 task wrapper(type: Wrapper) {

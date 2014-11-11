@@ -1,0 +1,9 @@
+.game_machine
+Makefile
+config/development.conf
+config/docker.conf
+messages.cs
+mono/server/server.exe.mdb
+pathfinding/bin/
+pathfinding/recastnavigation
+pkg/

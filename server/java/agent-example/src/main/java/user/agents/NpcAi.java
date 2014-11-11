@@ -7,14 +7,14 @@ import user.Globals;
 import user.Npc;
 import user.messages.Attack;
 import user.messages.GameEntity;
-import com.game_machine.client.messages.AgentTrackData;
-import com.game_machine.client.messages.TrackData;
-import com.game_machine.client.messages.TrackData.EntityType;
+import io.gamemachine.client.messages.AgentTrackData;
+import io.gamemachine.client.messages.TrackData;
+import io.gamemachine.client.messages.TrackData.EntityType;
 
-import com.game_machine.client.agent.CodeblockEnv;
-import com.game_machine.client.api.Api;
-import com.game_machine.client.api.ApiMessage;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.client.api.Api;
+import io.gamemachine.client.api.ApiMessage;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class NpcAi implements Codeblock {
 
@@ -83,6 +83,7 @@ public class NpcAi implements Codeblock {
 	}
 
 	private void doCombat() {
+		
 		// Random npc
 		int idx = (int) (Math.random() * npcCount - 1);
 		Npc npc = npcs.get(idx);

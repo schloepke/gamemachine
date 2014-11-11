@@ -398,10 +398,10 @@ message ClientMessage {
   optional Player player = 2;
   optional ClientConnection clientConnection = 4;
   optional PlayerLogout playerLogout = 5;
-  optional ErrorMessage errorMessage = 6;
   optional PlayerConnect playerConnect = 7;
   optional PlayerConnected playerConnected = 8;
   optional int32 connection_type = 9;
-  optional bool fastpath = 10;
+  optional uint64 sentAt = 10;
   optional TrackData trackData = 11;
+  optional string gameId = 12;
 }

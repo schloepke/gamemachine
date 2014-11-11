@@ -19,31 +19,31 @@ module GameMachine
   end
 
   module ApiLib
-    include_package 'com.game_machine.api'
+    include_package 'io.gamemachine.api'
   end
 
   module DbLib
-    include_package 'com.game_machine.objectdb'
+    include_package 'io.gamemachine.objectdb'
   end
 
   module TutorialLib
-    include_package 'com.game_machine.examples'
+    include_package 'io.gamemachine.examples'
   end
 
   module ModelLib
-    include_package 'com.game_machine.orm.models'
+    include_package 'io.gamemachine.orm.models'
   end
   
   module ClientLib
-    include_package 'com.game_machine.client.api'
-    include_package 'com.game_machine.client.api.cloud'
-    include_package 'com.game_machine.client'
+    include_package 'io.gamemachine.client.api'
+    include_package 'io.gamemachine.client.api.cloud'
+    include_package 'io.gamemachine.client'
   end
 
   module NetLib
-    include_package 'com.game_machine.net.udp'
-    include_package 'com.game_machine.net.tcp'
-    include_package 'com.game_machine.net.http'
+    include_package 'io.gamemachine.net.udp'
+    include_package 'io.gamemachine.net.tcp'
+    include_package 'io.gamemachine.net.http'
   end
 
   module JavaLib
@@ -52,8 +52,9 @@ module GameMachine
     java_import 'akka.cluster.ClusterEvent'
     java_import 'akka.contrib.pattern.ClusterSingletonManager'
     java_import 'akka.contrib.pattern.ClusterSingletonProxy'
-    include_package 'com.game_machine.routing'
-    include_package 'com.game_machine.config'
+    include_package 'io.gamemachine.routing'
+    include_package 'io.gamemachine.config'
+     include_package 'io.gamemachine.util'
     include_package 'akka.serialization'
     include_package 'com.typesafe.config'
     include_package 'akka.actor'
@@ -66,14 +67,14 @@ module GameMachine
     include_package 'akka.event'
     include_package 'akka.camel.javaapi'
     include_package 'akka.camel'
-    java_import 'com.game_machine.core.Grid'
-    include_package 'com.game_machine.core'
-    include_package 'com.game_machine.net'
-    include_package 'com.game_machine.codeblocks'
-    include_package 'com.game_machine.shared.codeblocks'
-    include_package 'com.game_machine.orm'
-    include_package 'com.game_machine.authentication'
-    include_package 'com.game_machine.ui'
+    java_import 'io.gamemachine.core.Grid'
+    include_package 'io.gamemachine.core'
+    include_package 'io.gamemachine.net'
+    include_package 'io.gamemachine.codeblocks'
+    include_package 'io.gamemachine.shared.codeblocks'
+    include_package 'io.gamemachine.orm'
+    include_package 'io.gamemachine.authentication'
+    include_package 'io.gamemachine.ui'
     include_package 'java.net'
     include_package 'java.util.concurrent.atomic'
     include_package 'scala.concurrent.duration'

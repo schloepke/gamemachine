@@ -3,8 +3,8 @@ package user.agents;
 import user.Globals;
 import user.messages.GameEntity;
 
-import com.game_machine.client.agent.CodeblockEnv;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class PlayerRegen implements Codeblock {
 

@@ -27,7 +27,7 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
 
-import com.game_machine.util.LocalLinkedBuffer;
+import io.gamemachine.util.LocalLinkedBuffer;
 
 
 import java.nio.charset.Charset;
@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 <% end %>
 
 <% if persistent %>
-import com.game_machine.core.GameMachineLoader;
+import io.gamemachine.core.GameMachineLoader;
 import akka.actor.TypedActor;
 import akka.actor.TypedProps;
 import akka.actor.ActorSystem;
@@ -55,7 +55,7 @@ import org.javalite.activejdbc.Errors;
 <% end %>
 
 <% if persistent || has_id %>
-import com.game_machine.core.ActorUtil;
+import io.gamemachine.core.ActorUtil;
 <% end %>
 
 import org.javalite.activejdbc.Model;
@@ -63,7 +63,7 @@ import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.UninitializedMessageException;
 
 <% if has_id %>
-import com.game_machine.core.PersistableMessage;
+import io.gamemachine.core.PersistableMessage;
 
 <% decl = "public final class #{klass} implements Externalizable, Message<#{klass}>, Schema<#{klass}>, PersistableMessage" %>
 <% else %>
@@ -71,8 +71,8 @@ import com.game_machine.core.PersistableMessage;
 <% end %>
 
 <% if has_id %>
-import com.game_machine.objectdb.Cache;
-import com.game_machine.core.CacheUpdate;
+import io.gamemachine.objectdb.Cache;
+import io.gamemachine.core.CacheUpdate;
 <% end %>
 
 @SuppressWarnings("unused")
@@ -476,16 +476,16 @@ import com.game_machine.core.CacheUpdate;
 	        
 	    public Boolean save(<%=klass%> message, boolean inTransaction) {
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.open();
+	    		io.gamemachine.orm.models.<%=klass%>.open();
 	    	}
 	    	
-	    	com.game_machine.orm.models.<%=klass%> model = null;
+	    	io.gamemachine.orm.models.<%=klass%> model = null;
 	    	if (message.hasRecordId()) {
-	    		model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
+	    		model = io.gamemachine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
 	    	}
 	    	
 	    	if (model == null) {
-	    		model = new com.game_machine.orm.models.<%=klass%>();
+	    		model = new io.gamemachine.orm.models.<%=klass%>();
 	    		message.toModel(model);
 	    	} else {
 	    		message.toModel(model);
@@ -505,34 +505,34 @@ import com.game_machine.core.CacheUpdate;
 	    		dbErrors = model.errors();
 	    	}
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.close();
+	    		io.gamemachine.orm.models.<%=klass%>.close();
 	    	}
 	    	return res;
 	    }
 	    
 	    public Boolean delete(int recordId) {
 	    	Boolean result;
-	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	int deleted = com.game_machine.orm.models.<%=klass%>.delete("id = ?", recordId);
+	    	io.gamemachine.orm.models.<%=klass%>.open();
+	    	int deleted = io.gamemachine.orm.models.<%=klass%>.delete("id = ?", recordId);
 	    	if (deleted >= 1) {
 	    		result = true;
 	    	} else {
 	    		result = false;
 	    	}
-	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	io.gamemachine.orm.models.<%=klass%>.close();
 	    	return result;
 	    }
 	    
 	    public Boolean deleteWhere(String query, Object ... params) {
 	    	Boolean result;
-	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	int deleted = com.game_machine.orm.models.<%=klass%>.delete(query,params);
+	    	io.gamemachine.orm.models.<%=klass%>.open();
+	    	int deleted = io.gamemachine.orm.models.<%=klass%>.delete(query,params);
 	    	if (deleted >= 1) {
 	    		result = true;
 	    	} else {
 	    		result = false;
 	    	}
-	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	io.gamemachine.orm.models.<%=klass%>.close();
 	    	return result;
 	    }
 	    
@@ -542,13 +542,13 @@ import com.game_machine.core.CacheUpdate;
 	    
 	    public <%=klass%> find(int recordId, boolean inTransaction) {
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.open();
+	    		io.gamemachine.orm.models.<%=klass%>.open();
 	    	}
 	    	
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst("id = ?", recordId);
+	    	io.gamemachine.orm.models.<%=klass%> model = io.gamemachine.orm.models.<%=klass%>.findFirst("id = ?", recordId);
 	    	
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.close();
+	    		io.gamemachine.orm.models.<%=klass%>.close();
 	    	}
 	    	
 	    	if (model == null) {
@@ -563,9 +563,9 @@ import com.game_machine.core.CacheUpdate;
 	    }
 	    
 	    public <%=klass%> findFirst(String query, Object ... params) {
-	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	com.game_machine.orm.models.<%=klass%> model = com.game_machine.orm.models.<%=klass%>.findFirst(query, params);
-	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	io.gamemachine.orm.models.<%=klass%>.open();
+	    	io.gamemachine.orm.models.<%=klass%> model = io.gamemachine.orm.models.<%=klass%>.findFirst(query, params);
+	    	io.gamemachine.orm.models.<%=klass%>.close();
 	    	if (model == null) {
 	    		return null;
 	    	} else {
@@ -578,17 +578,17 @@ import com.game_machine.core.CacheUpdate;
 	    }
 	    
 	    public List<<%=klass%>> findAll() {
-	    	com.game_machine.orm.models.<%=klass%>.open();
-	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.findAll();
+	    	io.gamemachine.orm.models.<%=klass%>.open();
+	    	List<io.gamemachine.orm.models.<%=klass%>> models = io.gamemachine.orm.models.<%=klass%>.findAll();
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
-	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+	    	for (io.gamemachine.orm.models.<%=klass%> model : models) {
 	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
 	    		<% message_fields.each do |message_field| %>
 	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
 	    		<% end %>
 	    		messages.add(<%= varname(klass) %>);
 	    	}
-	    	com.game_machine.orm.models.<%=klass%>.close();
+	    	io.gamemachine.orm.models.<%=klass%>.close();
 	    	return messages;
 	    }
 	    
@@ -598,11 +598,11 @@ import com.game_machine.core.CacheUpdate;
 	    
 	    public List<<%=klass%>> where(boolean inTransaction, String query, Object ... params) {
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.open();
+	    		io.gamemachine.orm.models.<%=klass%>.open();
 	    	}
-	    	List<com.game_machine.orm.models.<%=klass%>> models = com.game_machine.orm.models.<%=klass%>.where(query, params);
+	    	List<io.gamemachine.orm.models.<%=klass%>> models = io.gamemachine.orm.models.<%=klass%>.where(query, params);
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
-	    	for (com.game_machine.orm.models.<%=klass%> model : models) {
+	    	for (io.gamemachine.orm.models.<%=klass%> model : models) {
 	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
 	    		<% message_fields.each do |message_field| %>
 	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
@@ -610,7 +610,7 @@ import com.game_machine.core.CacheUpdate;
 	    		messages.add(<%= varname(klass) %>);
 	    	}
 	    	if (!inTransaction) {
-	    		com.game_machine.orm.models.<%=klass%>.close();
+	    		io.gamemachine.orm.models.<%=klass%>.close();
 	    	}
 	    	return messages;
 	    }
