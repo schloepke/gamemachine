@@ -1,10 +1,10 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.GameMessages;
+import io.gamemachine.messages.Player;
 import io.gamemachine.routing.Incoming;
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.GameMessage;
-import GameMachine.Messages.GameMessages;
-import GameMachine.Messages.Player;
 import akka.actor.ActorSelection;
 
 public class PlayerCommands {

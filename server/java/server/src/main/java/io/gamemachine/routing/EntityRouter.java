@@ -4,6 +4,10 @@ import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.EntityTracking;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.TrackData;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +16,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.GameMessage;
-import GameMachine.Messages.Player;
-import GameMachine.Messages.TrackData;
 import akka.actor.ActorSelection;
 
 public class EntityRouter {

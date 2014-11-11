@@ -3,16 +3,16 @@ package io.gamemachine.routing;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.ClientConnection;
+import io.gamemachine.messages.ClientMessage;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.PlayerConnected;
 import io.gamemachine.net.Connection;
 
 import java.util.concurrent.TimeUnit;
 
 import scala.concurrent.duration.Duration;
-import GameMachine.Messages.ClientConnection;
-import GameMachine.Messages.ClientMessage;
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.Player;
-import GameMachine.Messages.PlayerConnected;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;

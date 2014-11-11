@@ -1,5 +1,7 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.NodeStatus;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
@@ -26,8 +28,6 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import GameMachine.Messages.NodeStatus;
 
 public class CloudClient {
 

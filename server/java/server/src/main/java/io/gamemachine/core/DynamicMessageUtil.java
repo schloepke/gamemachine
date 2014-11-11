@@ -1,13 +1,13 @@
 package io.gamemachine.core;
 
 
-import GameMachine.Messages.DynamicMessage;
-import GameMachine.Messages.GameMessage;
-
 import com.dyuproject.protostuff.ByteString;
 import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
+
+import io.gamemachine.messages.DynamicMessage;
+import io.gamemachine.messages.GameMessage;
 import io.gamemachine.util.LocalLinkedBuffer;
 
 public class DynamicMessageUtil {

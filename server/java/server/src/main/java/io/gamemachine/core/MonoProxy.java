@@ -1,8 +1,8 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.MonoMessage;
 import io.gamemachine.net.udp.UdpClient;
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.MonoMessage;
 
 public class MonoProxy {
 

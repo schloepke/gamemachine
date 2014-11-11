@@ -1,7 +1,7 @@
 module GameMachine
 
   module MessageLib
-    include_package 'GameMachine.Messages'
+    include_package 'io.gamemachine.messages'
   end
 
   module RedisLib

@@ -10,15 +10,15 @@ package io.gamemachine.core;
  * Grids operations are thread safe.
  * 
  */
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.TrackData.EntityType;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
-import GameMachine.Messages.TrackData;
-import GameMachine.Messages.TrackData.EntityType;
 
 public class Grid {
 

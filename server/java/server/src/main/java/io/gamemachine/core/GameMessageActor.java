@@ -1,7 +1,7 @@
 package io.gamemachine.core;
 
-import GameMachine.Messages.ClientManagerEvent;
-import GameMachine.Messages.GameMessage;
+import io.gamemachine.messages.ClientManagerEvent;
+import io.gamemachine.messages.GameMessage;
 
 public class GameMessageActor extends GameActor {
 

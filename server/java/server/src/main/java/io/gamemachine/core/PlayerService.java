@@ -1,6 +1,7 @@
 package io.gamemachine.core;
 
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.messages.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +10,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import GameMachine.Messages.Player;
 
 public class PlayerService {
 
@@ -22,7 +21,7 @@ public class PlayerService {
 	
 	private PlayerService() {
 		String auth = AppConfig.Handlers.getAuth();
-		if (auth.equals("com.game_machine.authentication.DbAuthenticator")) {
+		if (auth.equals("io.gamemachine.authentication.DbAuthenticator")) {
 			this.authType = 1;
 		} else {
 			this.authType = 0;

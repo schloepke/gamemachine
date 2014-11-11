@@ -1,6 +1,6 @@
 package io.gamemachine.core;
 
-import GameMachine.Messages.Entity;
+import io.gamemachine.messages.Entity;
 import akka.actor.UntypedActor;
 
 public class RemoteEcho extends UntypedActor {

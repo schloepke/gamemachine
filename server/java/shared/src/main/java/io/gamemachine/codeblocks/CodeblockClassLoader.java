@@ -18,7 +18,10 @@ public class CodeblockClassLoader extends URLClassLoader {
 		add("java.util");
 		add("javax.crypto");
 		add("javax.xml");
-		add("com.game_machine.codeblocks.api");
+		add("user.");
+		add("org.");
+		add("com.");
+		add("io.");
 	}};
 		
 	public CodeblockClassLoader(URL[] urls, ClassLoader parent) {

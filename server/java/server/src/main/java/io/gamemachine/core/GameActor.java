@@ -1,10 +1,11 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.GameMessages;
+
 import java.util.concurrent.ConcurrentHashMap;
 
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.GameMessage;
-import GameMachine.Messages.GameMessages;
 import akka.actor.UntypedActor;
 
 public class GameActor extends UntypedActor {

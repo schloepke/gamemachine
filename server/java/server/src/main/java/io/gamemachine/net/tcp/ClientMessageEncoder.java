@@ -2,12 +2,11 @@ package io.gamemachine.net.tcp;
 
 import static io.netty.buffer.Unpooled.wrappedBuffer;
 import io.gamemachine.config.GameLimits;
+import io.gamemachine.messages.ClientMessage;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.util.List;
-
-import GameMachine.Messages.ClientMessage;
 
 public class ClientMessageEncoder extends MessageToMessageEncoder<ClientMessage> {
 	@Override

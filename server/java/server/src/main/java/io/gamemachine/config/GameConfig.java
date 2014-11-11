@@ -5,6 +5,7 @@ import io.gamemachine.core.CloudClient;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.UserApi;
 import io.gamemachine.core.CloudClient.CloudResponse;
+import io.gamemachine.messages.GameConfigs;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import scala.concurrent.duration.Duration;
-import GameMachine.Messages.GameConfigs;
 import akka.actor.UntypedActor;
 
 import com.typesafe.config.Config;
@@ -63,7 +63,7 @@ public class GameConfig extends UntypedActor {
 		CloudResponse response = cloud.getString("game_configs");
 		if (response.status == 200) {
 			GameConfigs configs = GameConfigs.parseFromJson(response.stringBody);
-			for (GameMachine.Messages.GameConfig config : configs.getGameConfigList()) {
+			for (io.gamemachine.messages.GameConfig config : configs.getGameConfigList()) {
 				if (versions.containsKey(config.getGameId())) {
 					if (!versions.get(config.getGameId()).equals(config.getVersion())) {
 						updateConfig = true;

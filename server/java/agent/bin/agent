@@ -24,4 +24,4 @@ fi
 
 [ -n "$AKKA_CLASSPATH" ] || AKKA_CLASSPATH="$AKKA_HOME/config:$AKKA_HOME/lib/akka/*:$AKKA_HOME/deploy/*"
 
-java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Djava.security.policy="$AKKA_HOME/config/agent.policy" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet akka.kernel.Main com.game_machine.client.agent.Runner
+java $JAVA_OPTS -cp "$AKKA_CLASSPATH" -Djava.security.policy="$AKKA_HOME/config/agent.policy" -Dakka.home="$AKKA_HOME" -Dakka.kernel.quiet=$quiet akka.kernel.Main io.gamemachine.client.agent.Runner

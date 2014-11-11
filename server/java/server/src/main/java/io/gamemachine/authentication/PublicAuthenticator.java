@@ -1,6 +1,6 @@
 package io.gamemachine.authentication;
 
-import GameMachine.Messages.Player;
+import io.gamemachine.messages.Player;
 
 public class PublicAuthenticator implements PlayerAuthenticator {
 

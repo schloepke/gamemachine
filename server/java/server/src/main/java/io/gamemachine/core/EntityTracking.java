@@ -1,5 +1,13 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.ClientManagerEvent;
+import io.gamemachine.messages.DynamicMessage;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.Neighbors;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.TrackDataUpdate;
+import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.objectdb.Cache;
 
 import java.util.List;
@@ -9,14 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.ClientManagerEvent;
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.DynamicMessage;
-import GameMachine.Messages.Neighbors;
-import GameMachine.Messages.Player;
-import GameMachine.Messages.TrackData;
-import GameMachine.Messages.TrackData.EntityType;
-import GameMachine.Messages.TrackDataUpdate;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 

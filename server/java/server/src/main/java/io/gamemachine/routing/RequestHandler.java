@@ -2,18 +2,18 @@ package io.gamemachine.routing;
 
 import io.gamemachine.authentication.Authentication;
 import io.gamemachine.core.ActorUtil;
+import io.gamemachine.messages.ChatDestroy;
+import io.gamemachine.messages.ClientConnection;
+import io.gamemachine.messages.ClientManagerRegister;
+import io.gamemachine.messages.ClientManagerUnregister;
+import io.gamemachine.messages.ClientMessage;
+import io.gamemachine.messages.Entity;
 
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.ChatDestroy;
-import GameMachine.Messages.ClientConnection;
-import GameMachine.Messages.ClientManagerRegister;
-import GameMachine.Messages.ClientManagerUnregister;
-import GameMachine.Messages.ClientMessage;
-import GameMachine.Messages.Entity;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 

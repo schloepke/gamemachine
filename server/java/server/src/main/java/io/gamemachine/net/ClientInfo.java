@@ -2,7 +2,7 @@ package io.gamemachine.net;
 
 import java.net.InetSocketAddress;
 
-import GameMachine.Messages.ClientConnection;
+import io.gamemachine.messages.ClientConnection;
 import io.netty.channel.ChannelHandlerContext;
 
 public class ClientInfo {

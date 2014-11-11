@@ -4,8 +4,8 @@ import io.gamemachine.core.Commands;
 import io.gamemachine.core.DynamicMessageUtil;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.messages.GameMessage;
 import user.messages.TestMessage;
-import GameMachine.Messages.GameMessage;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 

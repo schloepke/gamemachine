@@ -1,4 +1,4 @@
-package GameMachine.Messages;
+package io.gamemachine.messages;
 option optimize_for = SPEED;
 
 //GAME_MESSAGES

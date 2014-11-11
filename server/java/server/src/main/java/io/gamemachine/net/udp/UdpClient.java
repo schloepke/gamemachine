@@ -1,5 +1,7 @@
 package io.gamemachine.net.udp;
 
+import io.gamemachine.messages.ClientMessage;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,8 +13,6 @@ import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import GameMachine.Messages.ClientMessage;
 
 public class UdpClient {
 

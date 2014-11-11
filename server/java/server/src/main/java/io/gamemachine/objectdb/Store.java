@@ -55,7 +55,7 @@ public class Store {
 		if (classCache.containsKey(classname)) {
 			return classCache.get(classname);
 		} else {
-			Class<?> clazz = Class.forName("GameMachine.Messages." + classname);
+			Class<?> clazz = Class.forName("io.gamemachine.messages." + classname);
 			classCache.put(classname, clazz);
 			return clazz;
 		}

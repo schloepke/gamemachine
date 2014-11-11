@@ -1,8 +1,8 @@
 package io.gamemachine.core;
 
-import java.util.concurrent.ConcurrentHashMap;
+import io.gamemachine.messages.TrackData;
 
-import GameMachine.Messages.TrackData;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DefaultMovementVerifier implements MovementVerifier {
 

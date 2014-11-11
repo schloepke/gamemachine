@@ -2,10 +2,10 @@ package io.gamemachine.net;
 
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.ClientConnection;
+import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.net.udp.UdpServer;
 import io.gamemachine.net.udp.UdpServerHandler;
-import GameMachine.Messages.ClientConnection;
-import GameMachine.Messages.ClientMessage;
 
 public class Connection {
 

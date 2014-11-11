@@ -4,6 +4,7 @@ import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.NetMessage;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -18,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 @Sharable

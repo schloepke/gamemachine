@@ -1,13 +1,12 @@
 package io.gamemachine.authentication;
 
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Player;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import GameMachine.Messages.Player;
 
 public class Authentication {
 

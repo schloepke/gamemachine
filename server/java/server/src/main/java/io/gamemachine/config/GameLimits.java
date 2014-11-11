@@ -3,6 +3,7 @@ package io.gamemachine.config;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.UserApi;
 import io.gamemachine.core.UserApi.Response;
+import io.gamemachine.messages.ClientMessage;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -13,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import scala.concurrent.duration.Duration;
-import GameMachine.Messages.ClientMessage;
 import akka.actor.UntypedActor;
 
 import com.google.common.util.concurrent.RateLimiter;

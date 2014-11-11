@@ -1,7 +1,7 @@
 package io.gamemachine.core;
 
-import GameMachine.Messages.ClientManagerRegister;
-import GameMachine.Messages.Entity;
+import io.gamemachine.messages.ClientManagerRegister;
+import io.gamemachine.messages.Entity;
 import akka.actor.ActorSelection;
 
 public class Commands {

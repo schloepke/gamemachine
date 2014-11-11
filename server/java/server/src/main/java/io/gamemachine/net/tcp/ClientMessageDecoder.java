@@ -1,13 +1,12 @@
 package io.gamemachine.net.tcp;
 
+import io.gamemachine.messages.ClientMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
-
-import GameMachine.Messages.ClientMessage;
 
 import com.dyuproject.protostuff.ProtobufIOUtil;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;

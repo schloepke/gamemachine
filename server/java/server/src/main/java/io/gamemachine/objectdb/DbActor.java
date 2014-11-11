@@ -4,6 +4,11 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.EntitySerializer;
 import io.gamemachine.core.PersistableMessage;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.ObjectdbDel;
+import io.gamemachine.messages.ObjectdbGet;
+import io.gamemachine.messages.ObjectdbPut;
+import io.gamemachine.messages.ObjectdbUpdate;
 
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -11,11 +16,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.Entity;
-import GameMachine.Messages.ObjectdbDel;
-import GameMachine.Messages.ObjectdbGet;
-import GameMachine.Messages.ObjectdbPut;
-import GameMachine.Messages.ObjectdbUpdate;
 import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.Props;
@@ -64,7 +64,7 @@ public class DbActor extends UntypedActor {
 	public Object getEntity(String id, String classname) throws ClassNotFoundException {
 		if (cache.containsKey(id)) {
 			cacheHits.incrementAndGet();
-			Class<?> clazz = Class.forName("GameMachine.Messages." + classname);
+			Class<?> clazz = Class.forName("io.gamemachine.messages." + classname);
 			return EntitySerializer.fromByteArray(cache.get(id), clazz);
 		} else {
 			return store.get(id, classname);

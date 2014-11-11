@@ -2,7 +2,7 @@ package game;
 
 import io.gamemachine.core.Commands;
 import io.gamemachine.core.GameMessageActor;
-import GameMachine.Messages.GameMessage;
+import io.gamemachine.messages.GameMessage;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 

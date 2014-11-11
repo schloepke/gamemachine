@@ -1,6 +1,6 @@
 package io.gamemachine.core;
 
-import GameMachine.Messages.TrackData;
+import io.gamemachine.messages.TrackData;
 
 public interface MovementVerifier {
 	boolean verify(TrackData trackData);

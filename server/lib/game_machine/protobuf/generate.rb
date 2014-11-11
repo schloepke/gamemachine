@@ -45,7 +45,7 @@ module GameMachine
       end
 
       def server_src
-        File.join(java_root,'src','main','java','GameMachine', 'Messages')
+        File.join(java_root,'src','main','java','io', 'gamemachine','messages')
       end
 
       def shared_src

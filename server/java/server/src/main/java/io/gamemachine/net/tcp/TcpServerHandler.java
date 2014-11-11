@@ -2,6 +2,7 @@ package io.gamemachine.net.tcp;
 
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.NetMessage;
+import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -11,7 +12,6 @@ import java.net.InetSocketAddress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import GameMachine.Messages.ClientMessage;
 import akka.actor.ActorSelection;
 
 public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage> {

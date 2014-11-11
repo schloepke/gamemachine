@@ -1,11 +1,10 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.ClientMessage;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 
 import java.net.InetSocketAddress;
-
-import GameMachine.Messages.ClientMessage;
 
 public class NetMessage {
 
