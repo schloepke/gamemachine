@@ -8,11 +8,17 @@ import java.util.List;
 
 import GameMachine.Messages.ClientMessage;
 
+import com.game_machine.config.GameLimits;
+
 public class ClientMessageEncoder extends MessageToMessageEncoder<ClientMessage> {
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ClientMessage msg, List<Object> out) throws Exception {
 		if (msg instanceof ClientMessage) {
-			out.add(wrappedBuffer(msg.toPrefixedByteArray()));
+			String gameId = msg.getGameId();
+			msg.setGameId(null);
+			byte[] bytes = msg.toPrefixedByteArray();
+			GameLimits.addBytesTransferred(gameId, bytes.length);
+			out.add(wrappedBuffer(bytes));
 			return;
 		}
 	}

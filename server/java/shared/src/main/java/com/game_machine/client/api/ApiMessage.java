@@ -75,6 +75,10 @@ public class ApiMessage {
 		}
 	}
 
+	public void timestamp() {
+		clientMessage.setSentAt(System.currentTimeMillis());
+	}
+	
 	public ApiMessage setLeaveChat(String name) {
 		LeaveChat leaveChat = new LeaveChat();
 
@@ -145,7 +149,6 @@ public class ApiMessage {
 	public ApiMessage setEchoTest() {
 		EchoTest echoTest = new EchoTest().setMessage("echo");
 		clientMessage.addEntity(entity().setEchoTest(echoTest));
-		//this.setDestination("GameMachine/GameSystems/RemoteEcho");
 		return this;
 	}
 

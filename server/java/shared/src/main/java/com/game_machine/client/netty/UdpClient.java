@@ -2,6 +2,7 @@ package com.game_machine.client.netty;
 
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -76,7 +77,12 @@ public final class UdpClient implements Runnable, NetworkClient {
 		group = new NioEventLoopGroup();
 		try {
 			Bootstrap b = new Bootstrap();
-			b.group(group).channel(NioDatagramChannel.class).option(ChannelOption.SO_BROADCAST, false).handler(handler);
+			b.option(ChannelOption.SO_BROADCAST, false);
+			b.option(ChannelOption.SO_RCVBUF, 302400);
+			b.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
+			b.group(group);
+			b.channel(NioDatagramChannel.class);
+			b.handler(handler);
 
 			channel = b.bind(0).sync().channel();
 			logger.info("Channel started on " + host + ":" + port);

@@ -183,10 +183,6 @@ public class EntityTracking extends UntypedActor {
 	private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
 		Neighbors neighbors = new Neighbors();
 		int size = 30;
-		if (isAgentController) {
-			size = 100;
-		}
-		
 		int count = 0;
 
 		DynamicMessage dynamicMessage;

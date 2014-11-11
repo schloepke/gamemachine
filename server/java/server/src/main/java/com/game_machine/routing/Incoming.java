@@ -2,7 +2,6 @@ package com.game_machine.routing;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import GameMachine.Messages.ClientConnection;
 import GameMachine.Messages.ClientMessage;
@@ -14,7 +13,6 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.authentication.Authentication;
-import com.game_machine.config.GameConfig;
 import com.game_machine.config.GameLimits;
 import com.game_machine.core.ActorUtil;
 import com.game_machine.core.GameMachineLoader;
@@ -27,21 +25,20 @@ import com.game_machine.net.udp.UdpServer;
 public class Incoming extends UntypedActor {
 
 	private static ConcurrentHashMap<String, ClientInfo> clients = new ConcurrentHashMap<String, ClientInfo>();
-	private static ConcurrentHashMap<String, AtomicInteger> gameConnections = new ConcurrentHashMap<String, AtomicInteger>();
 
 	public static String name = "incoming";
-	public static AtomicInteger messageCount;
 	private static Map<String, String> env = System.getenv();
 	private ActorSelection gameHandler;
 	private UdpServer udpServer;
 	private Authentication authentication;
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
+	private PlayerService playerService;
 
 	public Incoming() {
 		udpServer = UdpServer.getUdpServer();
 		gameHandler = ActorUtil.getSelectionByName(RequestHandler.name);
 		authentication = new Authentication();
-		messageCount = new AtomicInteger();
+		playerService = PlayerService.getInstance();
 	}
 
 	@Override
@@ -52,20 +49,11 @@ public class Incoming extends UntypedActor {
 	}
 
 	private void handleIncoming(NetMessage netMessage) {
-		messageCount.incrementAndGet();
 		String clientId = clientIdFromMessage(netMessage);
-		ClientMessage clientMessage = null;
-		if (netMessage.protocol == NetMessage.UDP) {
-			clientMessage = ClientMessage.parseFrom(netMessage.bytes);
-		} else if (netMessage.protocol == NetMessage.TCP) {
-			clientMessage = netMessage.clientMessage;
-		} else {
-			throw new RuntimeException("Unknown protocol " + netMessage.protocol);
-		}
-
-		if (GameLimits.messageLimitExceeded(clientMessage)) {
-			return;
-		}
+		ClientMessage clientMessage = netMessage.clientMessage;
+		
+		String gameId = playerService.getGameId(clientMessage.getPlayer().getId());
+		GameLimits.incrementMessageCountIn(gameId);
 
 		if (clientMessage.hasPlayerLogout()) {
 			handleLogout(clientMessage, clientId);
@@ -102,8 +90,8 @@ public class Incoming extends UntypedActor {
 			return;
 		}
 
-		if (isConnectionLimitReached(clientMessage.getPlayer().getId())) {
-			String gameId = PlayerService.getInstance().getGameId(clientMessage.getPlayer().getId());
+		String gameId = playerService.getGameId(clientMessage.getPlayer().getId());
+		if (GameLimits.isConnectionLimitReached(gameId)) {
 			logger.info("Connection limit reached for " + gameId);
 			return;
 		}
@@ -193,46 +181,19 @@ public class Incoming extends UntypedActor {
 	private void createChild(Connection connection) {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(PlayerOutgoing.class, connection),
 				connection.getPlayerId());
-		updateConnectionCount(connection.getPlayerId(), 0);
+		String gameId = playerService.getGameId(connection.getPlayerId());
+		GameLimits.incrementConnectionCount(gameId);
 		logger.debug("Starting Outgoing actor " + connection.getPlayerId());
 	}
 
 	private void destroyChild(String playerId) {
 		ActorSelection sel = ActorUtil.getSelectionByName(playerId);
 		sel.tell(akka.actor.PoisonPill.getInstance(), getSelf());
-		updateConnectionCount(playerId, 1);
+		String gameId = playerService.getGameId(playerId);
+		GameLimits.decrementConnectionCount(gameId);
 		logger.debug("Stopping Outgoing actor " + playerId);
 	}
 
-	private boolean isConnectionLimitReached(String playerId) {
-		String gameId = PlayerService.getInstance().getGameId(playerId);
-		ensureConnectionCount(gameId);
-		int limit = GameConfig.getConnectionLimit(gameId);
-		gameConnections.get(gameId).decrementAndGet();
-		int current = gameConnections.get(gameId).incrementAndGet();
 
-		if (current > limit) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	private void ensureConnectionCount(String gameId) {
-		if (!gameConnections.containsKey(gameId)) {
-			gameConnections.put(gameId, new AtomicInteger());
-		}
-	}
-
-	private void updateConnectionCount(String playerId, int type) {
-		String gameId = PlayerService.getInstance().getGameId(playerId);
-		ensureConnectionCount(gameId);
-
-		if (type == 0) {
-			gameConnections.get(gameId).incrementAndGet();
-		} else {
-			gameConnections.get(gameId).decrementAndGet();
-		}
-	}
 
 }

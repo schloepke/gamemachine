@@ -11,7 +11,6 @@ repositories {
 }
 configurations.all {
   resolutionStrategy {
-    cacheDynamicVersionsFor 0, 'seconds'
     cacheChangingModulesFor 0, 'seconds'
   }
 }
@@ -35,14 +34,10 @@ description = """"""
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
-repositories {
-  mavenCentral()
-}
-
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.7'
     compile 'org.slf4j:slf4j-simple:1.7.7'
-  compile 'com.gamemachine:shared:1.0-SNAPSHOT'
+  	compile 'com.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 task wrapper(type: Wrapper) {
@@ -50,7 +45,7 @@ task wrapper(type: Wrapper) {
 }
 
 task cleanDeploy(type: Delete) {  
-    delete fileTree(dir: "deploy", exclude: "dont_delete.txt")  
+    delete fileTree(dir: "deploy")
 }
 
 task deploy(type: Copy, dependsOn: cleanDeploy) {

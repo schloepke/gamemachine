@@ -139,8 +139,8 @@ public class EntityRouter {
 				GameMessageRoute route = GameMessageRoute.routes.get(destination);
 				gameMessage.setPlayerId(entity.getPlayer().getId());
 				ActorSelection sel;
+				logger.debug("GameMessage route to=" + route.getTo() + " player=" + entity.getPlayer().getId());
 				if (route.isDistributed()) {
-					logger.debug("GameMessage route to=" + route.getTo() + " player=" + entity.getPlayer().getId());
 					sel = ActorUtil.findDistributed(route.getTo(), entity.getPlayer().getId());
 				} else {
 					sel = ActorUtil.getSelectionByName(route.getTo());

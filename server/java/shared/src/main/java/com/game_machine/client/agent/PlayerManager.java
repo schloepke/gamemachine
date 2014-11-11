@@ -50,7 +50,6 @@ public class PlayerManager {
 		networkClient = new SimpleUdpClient(host,port,playerId);
 		networkClient.start();
 		startPlayerActor();
-		System.gc();
 		return true;
 	}
 	

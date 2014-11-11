@@ -1,5 +1,7 @@
 package com.game_machine.core;
 
+import com.game_machine.routing.Incoming;
+
 import GameMachine.Messages.Entity;
 import GameMachine.Messages.GameMessage;
 import GameMachine.Messages.GameMessages;
@@ -25,7 +27,14 @@ public class PlayerCommands {
 		}
 		entity.setSendToPlayer(true);
 
-		ActorSelection sel = ActorUtil.getSelectionByName("GameMachine::ClientManager");
+		ActorSelection sel;
+		
+		if (Incoming.hasClient(playerId)) {
+			sel = ActorUtil.getSelectionByName(playerId);
+		} else {
+			sel = ActorUtil.getSelectionByName("GameMachine::ClientManager");
+		}
+		
 		sel.tell(entity, null);
 	}
 }

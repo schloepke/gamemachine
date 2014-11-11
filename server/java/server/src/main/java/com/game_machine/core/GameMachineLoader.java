@@ -11,6 +11,8 @@ import akka.routing.RoundRobinPool;
 
 import com.game_machine.config.AppConfig;
 import com.game_machine.config.GameConfig;
+import com.game_machine.config.GameLimits;
+import com.game_machine.game_systems.LatencyTest;
 import com.game_machine.objectdb.DbActor;
 import com.game_machine.routing.Incoming;
 import com.game_machine.routing.RequestHandler;
@@ -68,10 +70,12 @@ public class GameMachineLoader {
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
+		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(LatencyTest.class)), LatencyTest.name);
 		startCacheUpdateHandler();
 
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
+			actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		}
 
 	}

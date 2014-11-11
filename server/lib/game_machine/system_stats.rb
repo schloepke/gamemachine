@@ -7,9 +7,6 @@ module GameMachine
     end
 
     def post_init(*args)
-      @last_count = 0
-      @last_in_count = 0
-      @last_out_count = 0
       if getContext.system.name == 'cluster'
         @cluster = JavaLib::Cluster.get(getContext.system)
       end
@@ -35,46 +32,26 @@ module GameMachine
       end
 
       if message.is_a?(String)
-        cache_hits = DbLib::DbActor.cacheHits.incrementAndGet
-        cache_hits = DbLib::DbActor.cacheHits.decrementAndGet
-        queue_size = DbLib::WriteBehindCache.queueSize.incrementAndGet
-        queue_size = DbLib::WriteBehindCache.queueSize.decrementAndGet
-        #GameMachine.logger.info "Queue Size: #{queue_size}"
+        cache_hits = DbLib::DbActor.cacheHits.get
+        queue_size = DbLib::WriteBehindCache.queueSize.get
         
-        set_count = DbLib::Store.setCount.incrementAndGet
-        get_count = DbLib::Store.getCount.incrementAndGet
-        delete_count = DbLib::Store.deleteCount.incrementAndGet
+        set_count = DbLib::Store.setCount.get
+        get_count = DbLib::Store.getCount.get
+        delete_count = DbLib::Store.deleteCount.get
 
-        set_count = DbLib::Store.setCount.decrementAndGet
-        get_count = DbLib::Store.getCount.decrementAndGet
-        delete_count = DbLib::Store.deleteCount.decrementAndGet
         self.class.log_statistic('queue_size',queue_size)
         self.class.log_statistic('dbset',set_count)
         self.class.log_statistic('dbget',get_count)
         self.class.log_statistic('dbdelete', delete_count)
         self.class.log_statistic('db_cachehit',cache_hits)
-        #GameMachine.logger.info "Store: set=#{set_count} get=#{get_count} delete=#{delete_count} cache_hits=#{cache_hits}"
         
-        current_count = JavaLib::Incoming.messageCount.incrementAndGet
-        JavaLib::Incoming.messageCount.decrementAndGet
-        diff = current_count - @last_count
-        #GameMachine.logger.info "GatewayMessagesPerSecond: #{diff}"
-        self.class.log_statistic('gateway_mps',diff / @interval)
-        @last_count = current_count
+        mps = JavaLib::GameLimits.get_mps_out + JavaLib::GameLimits.get_mps_in
+        self.class.log_statistic('mps',mps)
 
-        current_count = NetLib::UdpServerHandler.countIn.incrementAndGet
-        NetLib::UdpServerHandler.countIn.decrementAndGet
-        diff = current_count - @last_in_count
-        #GameMachine.logger.info "MessagesInPerSecond: #{diff}"
-        self.class.log_statistic('messages_in_mps',diff / @interval)
-        @last_in_count = current_count
+        self.class.log_statistic('mps_in',JavaLib::GameLimits.get_mps_in)
 
-        current_count = NetLib::UdpServerHandler.countOut.incrementAndGet
-        NetLib::UdpServerHandler.countOut.decrementAndGet
-        diff = current_count - @last_out_count
-        #GameMachine.logger.info "MessagesOutPerSecond: #{diff}"
-        self.class.log_statistic('messages_out_mps',diff / @interval)
-        @last_out_count = current_count
+        self.class.log_statistic('mps_out',JavaLib::GameLimits.get_mps_out)
+        
         update_statistics
         JavaLib::GameGrid.get_grid_counts
         puts @stats.inspect

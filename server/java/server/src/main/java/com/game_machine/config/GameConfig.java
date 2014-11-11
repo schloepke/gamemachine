@@ -16,6 +16,7 @@ import com.game_machine.config.AppConfig.GridConfig;
 import com.game_machine.core.CloudClient;
 import com.game_machine.core.GameGrid;
 import com.game_machine.core.CloudClient.CloudResponse;
+import com.game_machine.core.UserApi;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
@@ -25,10 +26,9 @@ public class GameConfig extends UntypedActor {
 	private static final Logger logger = LoggerFactory.getLogger(GameConfig.class);
 	
 	private static Map<String, Config> gameConfigs = new ConcurrentHashMap<String, Config>();
-	private static Map<String, Integer> messageLimits = new ConcurrentHashMap<String, Integer>();
-	private static Map<String, Integer> connectionLimits = new ConcurrentHashMap<String, Integer>();
 	
 	private Map<String,Integer> versions = new HashMap<String,Integer>();
+	
 	
 	private static Config getConfig(String gameId) {
 		Config config = null;
@@ -50,26 +50,10 @@ public class GameConfig extends UntypedActor {
 			return null;
 		}
 	}
-	
-	public static Integer getMessageLimit(String gameId) {
-		if (!messageLimits.containsKey(gameId)) {
-			Config config = getConfig(gameId);
-			messageLimits.put(gameId, config.getInt("message_limit"));
-		}
-		return messageLimits.get(gameId);
-	}
-	
-	public static Integer getConnectionLimit(String gameId) {
-		if (!connectionLimits.containsKey(gameId)) {
-			Config config = getConfig(gameId);
-			connectionLimits.put(gameId, config.getInt("connection_limit"));
-		}
-		return connectionLimits.get(gameId);
-	}
+		
 
 	private void updateDependencies(String gameId) {
 		GameGrid.removeGridsForGame(gameId);
-		GameLimits.resetMessageLimit(gameId);
 	}
 	
 	private void checkConfig() throws Exception {
@@ -92,16 +76,13 @@ public class GameConfig extends UntypedActor {
 					Config conf = ConfigFactory.parseString(config.getConfig()).getConfig("game");
 					gameConfigs.put(config.getGameId(), conf);
 					versions.put(config.getGameId(), config.getVersion());
-					if (messageLimits.containsKey(config.getGameId())) {
-						messageLimits.remove(config.getGameId());
-					}
 					updateDependencies(config.getGameId());
 					updateConfig = false;
 				}
 			}
 		}
 	}
-	
+		
 	@Override
 	public void preStart() {
 		tick(10000,"check_config");

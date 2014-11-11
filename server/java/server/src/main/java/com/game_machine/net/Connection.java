@@ -3,6 +3,8 @@ package com.game_machine.net;
 import GameMachine.Messages.ClientConnection;
 import GameMachine.Messages.ClientMessage;
 
+import com.game_machine.config.GameLimits;
+import com.game_machine.core.PlayerService;
 import com.game_machine.net.udp.UdpServer;
 import com.game_machine.net.udp.UdpServerHandler;
 
@@ -13,6 +15,7 @@ public class Connection {
 	private ClientInfo clientInfo;
 	private UdpServer udpServer;
 	private String playerId;
+	private String gameId;
 	
 	public Connection(int protocol,ClientConnection clientConnection,ClientInfo clientInfo,UdpServer server,String playerId) {
 		this.setProtocol(protocol);
@@ -20,19 +23,22 @@ public class Connection {
 		this.setClientInfo(clientInfo);
 		this.setPlayerId(playerId);
 		this.udpServer = server;
+		this.gameId = PlayerService.getInstance().getGameId(playerId);
 	}
   
 	public void sendToClient(ClientMessage clientMessage) {
 		if (protocol == 0) {
 			byte[] bytes = clientMessage.toByteArray();
+			GameLimits.addBytesTransferred(gameId, bytes.length);
 			udpServer.sendToClient(clientInfo.address, bytes, clientInfo.ctx);
 		} else if (protocol == 2) {
+			clientMessage.setGameId(gameId);
 			clientInfo.ctx.write(clientMessage);
 			clientInfo.ctx.flush();
-			UdpServerHandler.countOut.incrementAndGet();
 		} else {
 			throw new RuntimeException("Invalid protocol "+protocol);
 		}
+		GameLimits.incrementMessageCountOut(gameId);
 	}
 	
 	public String getPlayerId() {

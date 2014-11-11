@@ -6,5 +6,6 @@ GameMachine::Routes.game_messages do
   # to: should be the string name of the actor (as defined in the java class)
   route 1, to: 'Tutorial::ItemManager', distributed: true, name: 'item_manager'
 
+  route 10, to: 'LatencyTest', distributed: false, name: 'LatencyTest'
   route 100, to: 'GameMachine::GameSystems::UserMessageTest', distributed: false, name: 'user_message_test'
 end

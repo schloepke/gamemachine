@@ -13,6 +13,8 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
 import com.game_machine.config.AppConfig;
+import com.game_machine.config.GameLimits;
+import com.game_machine.core.PlayerService;
 import com.game_machine.net.Connection;
 
 public class PlayerOutgoing extends UntypedActor {
@@ -23,6 +25,7 @@ public class PlayerOutgoing extends UntypedActor {
 	private ClientConnection clientConnection;
 	private int idleTimeout;
 	private long lastActivity;
+	
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
 	public PlayerOutgoing(Connection connection) {
