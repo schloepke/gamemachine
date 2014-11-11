@@ -24,7 +24,7 @@ module GameMachine
       end
 
       def public?
-        AppConfig.instance.config.handlers.auth == "com.game_machine.authentication.PublicAuthenticator"
+        AppConfig.instance.config.handlers.auth == "io.gamemachine.authentication.PublicAuthenticator"
       end
 
       def get_player(username)

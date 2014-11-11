@@ -16,7 +16,7 @@ buildscript {
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
-group = 'com.gamemachine'
+group = 'io.gamemachine'
   version = '1.0.4-SNAPSHOT'
   
 
@@ -73,7 +73,7 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
-  compile 'com.gamemachine:shared:1.0-SNAPSHOT'
+  compile 'io.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

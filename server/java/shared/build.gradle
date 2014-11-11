@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-group = 'com.gamemachine'
+group = 'io.gamemachine'
  version = '1.0-SNAPSHOT'
 
 
@@ -63,13 +63,13 @@ publishing {
 
 task removeOldSnapshots(type: Exec) {
   executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git rm -r com/gamemachine/shared/1.0-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
+  args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/shared/1.0-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
 }
 
 
 task publish_to_github(type: Exec, dependsOn: publish) {
   executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git add com/*;git commit -am 'release';git push origin master"
+  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
 }
 publish.dependsOn removeOldSnapshots
 publish.mustRunAfter removeOldSnapshots

@@ -1,11 +1,11 @@
 package user.agents;
 
-import com.game_machine.client.agent.CodeblockEnv;
-import com.game_machine.client.api.Api;
-import com.game_machine.client.api.ApiMessage;
-import com.game_machine.client.messages.TrackData;
-import com.game_machine.client.messages.TrackData.EntityType;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.client.api.Api;
+import io.gamemachine.client.api.ApiMessage;
+import io.gamemachine.client.messages.TrackData;
+import io.gamemachine.client.messages.TrackData.EntityType;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class StressTest implements Codeblock {
 

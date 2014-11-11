@@ -6,9 +6,9 @@ package user.agents;
 
 import user.messages.TestMessage;
 
-import com.game_machine.client.api.DynamicMessageUtil;
-import com.game_machine.client.messages.GameMessage;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.api.DynamicMessageUtil;
+import io.gamemachine.client.messages.GameMessage;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class LatencyTestReceiver implements Codeblock {
 

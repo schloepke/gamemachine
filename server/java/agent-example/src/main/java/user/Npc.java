@@ -2,8 +2,8 @@ package user;
 
 import java.util.Random;
 
-import com.game_machine.client.api.ClientGrid;
-import com.game_machine.util.Vector3;
+import io.gamemachine.client.api.ClientGrid;
+import io.gamemachine.util.Vector3;
 
 public class Npc {
 

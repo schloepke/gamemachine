@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import user.messages.GameEntity;
-import com.game_machine.client.messages.TrackData;
+import io.gamemachine.client.messages.TrackData;
 
-import com.game_machine.client.api.ClientGrid;
+import io.gamemachine.client.api.ClientGrid;
 
 public class Globals {
 

@@ -1,13 +1,13 @@
 package user.agents;
 
-import com.game_machine.client.messages.ChatChannel;
-import com.game_machine.client.messages.ChatChannels;
-import com.game_machine.client.messages.ChatMessage;
+import io.gamemachine.client.messages.ChatChannel;
+import io.gamemachine.client.messages.ChatChannels;
+import io.gamemachine.client.messages.ChatMessage;
 
-import com.game_machine.client.agent.CodeblockEnv;
-import com.game_machine.client.api.Api;
-import com.game_machine.client.api.ApiMessage;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.client.api.Api;
+import io.gamemachine.client.api.ApiMessage;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class ChatManager implements Codeblock {
 

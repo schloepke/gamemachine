@@ -1,6 +1,6 @@
 package user.messages;
 
-import com.game_machine.client.messages.TrackData.EntityType;
+import io.gamemachine.client.messages.TrackData.EntityType;
 
 
 public class GameEntity {

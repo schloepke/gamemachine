@@ -1,6 +1,6 @@
 package user;
 
-import com.game_machine.util.Vector3;
+import io.gamemachine.util.Vector3;
 
 public class NpcMovement {
 

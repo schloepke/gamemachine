@@ -26,7 +26,7 @@ buildscript {
 }
 apply plugin: 'com.github.johnrengelman.shadow'
 
-group = 'com.gamemachine'
+group = 'io.gamemachine'
  version = '1.0'
 
 
@@ -40,7 +40,7 @@ repositories {
 }
 
 dependencies {
-	compile 'com.gamemachine:shared:1.0-SNAPSHOT'
+	compile 'io.gamemachine:shared:1.0-SNAPSHOT'
 }
 
 task wrapper(type: Wrapper) {

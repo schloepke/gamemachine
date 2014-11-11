@@ -41,7 +41,7 @@ module GameMachine
       end
 
       def model_src
-        File.join(java_root,'src','main','java','com', 'game_machine','orm','models')
+        File.join(java_root,'src','main','java','io', 'gamemachine','orm','models')
       end
 
       def server_src
@@ -49,7 +49,7 @@ module GameMachine
       end
 
       def shared_src
-        File.join(app_root,'java','shared','src','main','java','com', 'game_machine','client','messages')
+        File.join(app_root,'java','shared','src','main','java','io', 'gamemachine','client','messages')
       end
 
       def config_path

@@ -8,13 +8,13 @@ package user.agents;
  */
 
 import user.messages.Attack;
-import com.game_machine.client.messages.DynamicMessage;
-import com.game_machine.client.messages.Entity;
-import com.game_machine.client.messages.GameMessage;
+import io.gamemachine.client.messages.DynamicMessage;
+import io.gamemachine.client.messages.Entity;
+import io.gamemachine.client.messages.GameMessage;
 
-import com.game_machine.client.agent.CodeblockEnv;
-import com.game_machine.client.api.DynamicMessageUtil;
-import com.game_machine.codeblocks.Codeblock;
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.client.api.DynamicMessageUtil;
+import io.gamemachine.codeblocks.Codeblock;
 
 public class MessageRouter implements Codeblock {
 
