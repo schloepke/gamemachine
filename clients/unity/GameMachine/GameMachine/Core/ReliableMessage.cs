@@ -1,6 +1,6 @@
 
 using System;
-using GameMessage = GameMachine.Messages.GameMessage;
+using GameMessage = io.gamemachine.messages.GameMessage;
 
 namespace GameMachine.Core
 {

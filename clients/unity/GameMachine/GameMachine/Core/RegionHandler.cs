@@ -1,7 +1,7 @@
 using GameMachine;
 using System;
-using Entity = GameMachine.Messages.Entity;
-using Regions = GameMachine.Messages.Regions;
+using Entity = io.gamemachine.messages.Entity;
+using Regions = io.gamemachine.messages.Regions;
 using  System.Collections.Generic;
 using  System.Text.RegularExpressions;
 

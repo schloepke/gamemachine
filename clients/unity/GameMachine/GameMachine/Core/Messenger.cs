@@ -5,17 +5,17 @@ using System.Linq;
 using  System.Text.RegularExpressions;
 using GameMachine;
 using GameMachine.Core;
-using JoinChat = GameMachine.Messages.JoinChat;
-using LeaveChat = GameMachine.Messages.LeaveChat;
-using ChatChannel = GameMachine.Messages.ChatChannel;
-using ChatMessage = GameMachine.Messages.ChatMessage;
-using ChatChannels = GameMachine.Messages.ChatChannels;
-using ChatStatus = GameMachine.Messages.ChatStatus;
-using ChatInvite = GameMachine.Messages.ChatInvite;
-using JsonEntity = GameMachine.Messages.JsonEntity;
-using DynamicMessage = GameMachine.Messages.DynamicMessage;
+using JoinChat = io.gamemachine.messages.JoinChat;
+using LeaveChat = io.gamemachine.messages.LeaveChat;
+using ChatChannel = io.gamemachine.messages.ChatChannel;
+using ChatMessage = io.gamemachine.messages.ChatMessage;
+using ChatChannels = io.gamemachine.messages.ChatChannels;
+using ChatStatus = io.gamemachine.messages.ChatStatus;
+using ChatInvite = io.gamemachine.messages.ChatInvite;
+using JsonEntity = io.gamemachine.messages.JsonEntity;
+using DynamicMessage = io.gamemachine.messages.DynamicMessage;
 
-using Entity = GameMachine.Messages.Entity;
+using Entity = io.gamemachine.messages.Entity;
 
 namespace GameMachine.Core
 {

@@ -2,12 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using GameMachine.Core;
-using GameMessage = GameMachine.Messages.GameMessage;
-using RequestPlayerItems = GameMachine.Messages.RequestPlayerItems;
-using PlayerItems = GameMachine.Messages.PlayerItems;
-using PlayerItem = GameMachine.Messages.PlayerItem;
-using AddPlayerItem = GameMachine.Messages.AddPlayerItem;
-using RemovePlayerItem = GameMachine.Messages.RemovePlayerItem;
+using GameMessage = io.gamemachine.messages.GameMessage;
+using RequestPlayerItems = io.gamemachine.messages.RequestPlayerItems;
+using PlayerItems = io.gamemachine.messages.PlayerItems;
+using PlayerItem = io.gamemachine.messages.PlayerItem;
+using AddPlayerItem = io.gamemachine.messages.AddPlayerItem;
+using RemovePlayerItem = io.gamemachine.messages.RemovePlayerItem;
 
 namespace GameMachine.Tutorial
 {

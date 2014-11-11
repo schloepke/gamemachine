@@ -2,7 +2,7 @@
 using UnityEngine;
 using  System.Collections.Generic;
 using GameMachine;
-using Entity = GameMachine.Messages.Entity;
+using Entity = io.gamemachine.messages.Entity;
 using GameMachine.Models.Team;
 using GameMachine.Models;
 

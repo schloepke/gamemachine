@@ -4,8 +4,8 @@ using  System.Collections.Generic;
 using System.Reflection;
 using GameMachine;
 using GameMachine.Models;
-using Entity = GameMachine.Messages.Entity;
-using JsonEntity = GameMachine.Messages.JsonEntity;
+using Entity = io.gamemachine.messages.Entity;
+using JsonEntity = io.gamemachine.messages.JsonEntity;
 using System.Diagnostics;
 using Newtonsoft.Json;
 

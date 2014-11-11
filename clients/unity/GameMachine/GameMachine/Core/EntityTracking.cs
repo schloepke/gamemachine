@@ -4,12 +4,12 @@ using System.IO;
 using System.Reflection;
 using System;
 using System.Runtime.Serialization.Formatters.Binary;
-using Entity = GameMachine.Messages.Entity;
-using TrackEntity = GameMachine.Messages.TrackEntity;
-using Vector3 = GameMachine.Messages.Vector3;
-using Neighbors = GameMachine.Messages.Neighbors;
-using Neighbor = GameMachine.Messages.Neighbor;
-using TrackData = GameMachine.Messages.TrackData;
+using Entity = io.gamemachine.messages.Entity;
+using TrackEntity = io.gamemachine.messages.TrackEntity;
+using Vector3 = io.gamemachine.messages.Vector3;
+using Neighbors = io.gamemachine.messages.Neighbors;
+using Neighbor = io.gamemachine.messages.Neighbor;
+using TrackData = io.gamemachine.messages.TrackData;
 
 namespace GameMachine.Core
 {
@@ -53,9 +53,6 @@ namespace GameMachine.Core
             Entity entity = new Entity ();
             entity.id = "0";
             entity.trackData = trackData;
-
-            // stay on the fastpath server side (no crossing language boundaries)
-            entity.fastpath = true;
 
             // Always regional
             ActorSystem.Instance.FindRegional ("default").Tell (entity);

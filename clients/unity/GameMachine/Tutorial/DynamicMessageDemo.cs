@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using GameMachine;
 using GameMachine.Core;
 using DynamicMessages;
-using DynamicMessage = GameMachine.Messages.DynamicMessage;
+using DynamicMessage = io.gamemachine.messages.DynamicMessage;
 
 public class DynamicMessageDemo : MonoBehaviour, GameMachine.Core.Behavior
 {

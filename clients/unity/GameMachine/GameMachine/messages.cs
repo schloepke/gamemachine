@@ -8,7 +8,7 @@
 //------------------------------------------------------------------------------
 
 // Generated from: combined_messages.proto
-namespace GameMachine.Messages
+namespace io.gamemachine.messages
 {
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Player")]
   public partial class Player : global::ProtoBuf.IExtensible
@@ -88,38 +88,6 @@ namespace GameMachine.Messages
   {
     public TrackData() {}
     
-    private float _speed = default(float);
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"speed", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float speed
-    {
-      get { return _speed; }
-      set { _speed = value; }
-    }
-    private float _velocity = default(float);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"velocity", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float velocity
-    {
-      get { return _velocity; }
-      set { _velocity = value; }
-    }
-    private GameMachine.Messages.Vector3 _direction = null;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"direction", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Vector3 direction
-    {
-      get { return _direction; }
-      set { _direction = value; }
-    }
-    private string _json = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"json", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string json
-    {
-      get { return _json; }
-      set { _json = value; }
-    }
     private string _id = "";
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
@@ -150,18 +118,10 @@ namespace GameMachine.Messages
       get { return _z; }
       set { _z = value; }
     }
-    private int _action = default(int);
-    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int action
-    {
-      get { return _action; }
-      set { _action = value; }
-    }
-    private GameMachine.Messages.DynamicMessage _dynamicMessage = null;
+    private io.gamemachine.messages.DynamicMessage _dynamicMessage = null;
     [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.DynamicMessage dynamicMessage
+    public io.gamemachine.messages.DynamicMessage dynamicMessage
     {
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
@@ -181,18 +141,18 @@ namespace GameMachine.Messages
       get { return _getNeighbors; }
       set { _getNeighbors = value; }
     }
-    private GameMachine.Messages.TrackData.EntityType _neighborEntityType = GameMachine.Messages.TrackData.EntityType.PLAYER;
+    private io.gamemachine.messages.TrackData.EntityType _neighborEntityType = io.gamemachine.messages.TrackData.EntityType.PLAYER;
     [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(GameMachine.Messages.TrackData.EntityType.PLAYER)]
-    public GameMachine.Messages.TrackData.EntityType neighborEntityType
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.PLAYER)]
+    public io.gamemachine.messages.TrackData.EntityType neighborEntityType
     {
       get { return _neighborEntityType; }
       set { _neighborEntityType = value; }
     }
-    private GameMachine.Messages.TrackData.EntityType _entityType = GameMachine.Messages.TrackData.EntityType.PLAYER;
+    private io.gamemachine.messages.TrackData.EntityType _entityType = io.gamemachine.messages.TrackData.EntityType.PLAYER;
     [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(GameMachine.Messages.TrackData.EntityType.PLAYER)]
-    public GameMachine.Messages.TrackData.EntityType entityType
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.PLAYER)]
+    public io.gamemachine.messages.TrackData.EntityType entityType
     {
       get { return _entityType; }
       set { _entityType = value; }
@@ -264,42 +224,42 @@ namespace GameMachine.Messages
       get { return _agentId; }
       set { _agentId = value; }
     }
-    private GameMachine.Messages.DynamicMessage _dynamicMessage = null;
+    private io.gamemachine.messages.DynamicMessage _dynamicMessage = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.DynamicMessage dynamicMessage
+    public io.gamemachine.messages.DynamicMessage dynamicMessage
     {
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
     }
-    private GameMachine.Messages.PlayerItems _playerItems = null;
+    private io.gamemachine.messages.PlayerItems _playerItems = null;
     [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"playerItems", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerItems playerItems
+    public io.gamemachine.messages.PlayerItems playerItems
     {
       get { return _playerItems; }
       set { _playerItems = value; }
     }
-    private GameMachine.Messages.AddPlayerItem _addPlayerItem = null;
+    private io.gamemachine.messages.AddPlayerItem _addPlayerItem = null;
     [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"addPlayerItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.AddPlayerItem addPlayerItem
+    public io.gamemachine.messages.AddPlayerItem addPlayerItem
     {
       get { return _addPlayerItem; }
       set { _addPlayerItem = value; }
     }
-    private GameMachine.Messages.RemovePlayerItem _removePlayerItem = null;
+    private io.gamemachine.messages.RemovePlayerItem _removePlayerItem = null;
     [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"removePlayerItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.RemovePlayerItem removePlayerItem
+    public io.gamemachine.messages.RemovePlayerItem removePlayerItem
     {
       get { return _removePlayerItem; }
       set { _removePlayerItem = value; }
     }
-    private GameMachine.Messages.RequestPlayerItems _requestPlayerItems = null;
+    private io.gamemachine.messages.RequestPlayerItems _requestPlayerItems = null;
     [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"requestPlayerItems", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.RequestPlayerItems requestPlayerItems
+    public io.gamemachine.messages.RequestPlayerItems requestPlayerItems
     {
       get { return _requestPlayerItems; }
       set { _requestPlayerItems = value; }
@@ -314,9 +274,9 @@ namespace GameMachine.Messages
   {
     public GameMessages() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.GameMessage> _gameMessage = new global::System.Collections.Generic.List<GameMachine.Messages.GameMessage>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.GameMessage> _gameMessage = new global::System.Collections.Generic.List<io.gamemachine.messages.GameMessage>();
     [global::ProtoBuf.ProtoMember(1, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.GameMessage> gameMessage
+    public global::System.Collections.Generic.List<io.gamemachine.messages.GameMessage> gameMessage
     {
       get { return _gameMessage; }
     }
@@ -384,26 +344,26 @@ namespace GameMachine.Messages
       get { return _color; }
       set { _color = value; }
     }
-    private GameMachine.Messages.Weapon _weapon = null;
+    private io.gamemachine.messages.Weapon _weapon = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"weapon", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Weapon weapon
+    public io.gamemachine.messages.Weapon weapon
     {
       get { return _weapon; }
       set { _weapon = value; }
     }
-    private GameMachine.Messages.Consumable _consumable = null;
+    private io.gamemachine.messages.Consumable _consumable = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"consumable", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Consumable consumable
+    public io.gamemachine.messages.Consumable consumable
     {
       get { return _consumable; }
       set { _consumable = value; }
     }
-    private GameMachine.Messages.Cost _cost = null;
+    private io.gamemachine.messages.Cost _cost = null;
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"cost", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Cost cost
+    public io.gamemachine.messages.Cost cost
     {
       get { return _cost; }
       set { _cost = value; }
@@ -532,9 +492,9 @@ namespace GameMachine.Messages
       get { return _catalog; }
       set { _catalog = value; }
     }
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.PlayerItem> _playerItem = new global::System.Collections.Generic.List<GameMachine.Messages.PlayerItem>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.PlayerItem> _playerItem = new global::System.Collections.Generic.List<io.gamemachine.messages.PlayerItem>();
     [global::ProtoBuf.ProtoMember(2, Name=@"playerItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.PlayerItem> playerItem
+    public global::System.Collections.Generic.List<io.gamemachine.messages.PlayerItem> playerItem
     {
       get { return _playerItem; }
     }
@@ -549,9 +509,9 @@ namespace GameMachine.Messages
   {
     public AddPlayerItem() {}
     
-    private GameMachine.Messages.PlayerItem _playerItem;
+    private io.gamemachine.messages.PlayerItem _playerItem;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"playerItem", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.PlayerItem playerItem
+    public io.gamemachine.messages.PlayerItem playerItem
     {
       get { return _playerItem; }
       set { _playerItem = value; }
@@ -659,9 +619,9 @@ namespace GameMachine.Messages
       get { return _numbers64; }
       set { _numbers64 = value; }
     }
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Player> _player = new global::System.Collections.Generic.List<GameMachine.Messages.Player>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Player> _player = new global::System.Collections.Generic.List<io.gamemachine.messages.Player>();
     [global::ProtoBuf.ProtoMember(9, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Player> player
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Player> player
     {
       get { return _player; }
     }
@@ -679,14 +639,38 @@ namespace GameMachine.Messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TrackDataUpdate")]
+  public partial class TrackDataUpdate : global::ProtoBuf.IExtensible
+  {
+    public TrackDataUpdate() {}
+    
+    private string _id;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private io.gamemachine.messages.DynamicMessage _dynamicMessage;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public io.gamemachine.messages.DynamicMessage dynamicMessage
+    {
+      get { return _dynamicMessage; }
+      set { _dynamicMessage = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GameConfigs")]
   public partial class GameConfigs : global::ProtoBuf.IExtensible
   {
     public GameConfigs() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.GameConfig> _gameConfig = new global::System.Collections.Generic.List<GameMachine.Messages.GameConfig>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.GameConfig> _gameConfig = new global::System.Collections.Generic.List<io.gamemachine.messages.GameConfig>();
     [global::ProtoBuf.ProtoMember(1, Name=@"gameConfig", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.GameConfig> gameConfig
+    public global::System.Collections.Generic.List<io.gamemachine.messages.GameConfig> gameConfig
     {
       get { return _gameConfig; }
     }
@@ -794,9 +778,9 @@ namespace GameMachine.Messages
   {
     public Statistics() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Statistic> _statistic = new global::System.Collections.Generic.List<GameMachine.Messages.Statistic>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Statistic> _statistic = new global::System.Collections.Generic.List<io.gamemachine.messages.Statistic>();
     [global::ProtoBuf.ProtoMember(1, Name=@"statistic", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Statistic> statistic
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Statistic> statistic
     {
       get { return _statistic; }
     }
@@ -867,10 +851,10 @@ namespace GameMachine.Messages
       get { return _heapUsed; }
       set { _heapUsed = value; }
     }
-    private GameMachine.Messages.Statistics _statistics = null;
+    private io.gamemachine.messages.Statistics _statistics = null;
     [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"statistics", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Statistics statistics
+    public io.gamemachine.messages.Statistics statistics
     {
       get { return _statistics; }
       set { _statistics = value; }
@@ -885,9 +869,9 @@ namespace GameMachine.Messages
   {
     public NodeStatuses() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.NodeStatus> _nodeStatus = new global::System.Collections.Generic.List<GameMachine.Messages.NodeStatus>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.NodeStatus> _nodeStatus = new global::System.Collections.Generic.List<io.gamemachine.messages.NodeStatus>();
     [global::ProtoBuf.ProtoMember(1, Name=@"nodeStatus", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.NodeStatus> nodeStatus
+    public global::System.Collections.Generic.List<io.gamemachine.messages.NodeStatus> nodeStatus
     {
       get { return _nodeStatus; }
     }
@@ -902,9 +886,9 @@ namespace GameMachine.Messages
   {
     public AgentTrackData() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.TrackData> _trackData = new global::System.Collections.Generic.List<GameMachine.Messages.TrackData>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.TrackData> _trackData = new global::System.Collections.Generic.List<io.gamemachine.messages.TrackData>();
     [global::ProtoBuf.ProtoMember(1, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.TrackData> trackData
+    public global::System.Collections.Generic.List<io.gamemachine.messages.TrackData> trackData
     {
       get { return _trackData; }
     }
@@ -972,16 +956,16 @@ namespace GameMachine.Messages
   {
     public AgentController() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Agent> _agent = new global::System.Collections.Generic.List<GameMachine.Messages.Agent>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Agent> _agent = new global::System.Collections.Generic.List<io.gamemachine.messages.Agent>();
     [global::ProtoBuf.ProtoMember(1, Name=@"agent", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Agent> agent
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Agent> agent
     {
       get { return _agent; }
     }
   
-    private GameMachine.Messages.Player _player;
+    private io.gamemachine.messages.Player _player;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Player player
+    public io.gamemachine.messages.Player player
     {
       get { return _player; }
       set { _player = value; }
@@ -1003,10 +987,10 @@ namespace GameMachine.Messages
   {
     public MonoMessage() {}
     
-    private GameMachine.Messages.Entity _entity = null;
+    private io.gamemachine.messages.Entity _entity = null;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Entity entity
+    public io.gamemachine.messages.Entity entity
     {
       get { return _entity; }
       set { _entity = value; }
@@ -1061,10 +1045,10 @@ namespace GameMachine.Messages
       get { return _internal; }
       set { _internal = value; }
     }
-    private GameMachine.Messages.TrackData _trackData = null;
+    private io.gamemachine.messages.TrackData _trackData = null;
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TrackData trackData
+    public io.gamemachine.messages.TrackData trackData
     {
       get { return _trackData; }
       set { _trackData = value; }
@@ -1266,9 +1250,9 @@ namespace GameMachine.Messages
   {
     public ChatBannedList() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.ChatBanned> _chatBanned = new global::System.Collections.Generic.List<GameMachine.Messages.ChatBanned>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ChatBanned> _chatBanned = new global::System.Collections.Generic.List<io.gamemachine.messages.ChatBanned>();
     [global::ProtoBuf.ProtoMember(1, Name=@"chatBanned", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.ChatBanned> chatBanned
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ChatBanned> chatBanned
     {
       get { return _chatBanned; }
     }
@@ -1283,9 +1267,9 @@ namespace GameMachine.Messages
   {
     public ChatChannels() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel>();
     [global::ProtoBuf.ProtoMember(1, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> chatChannel
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> chatChannel
     {
       get { return _chatChannel; }
     }
@@ -1307,10 +1291,10 @@ namespace GameMachine.Messages
       get { return _name; }
       set { _name = value; }
     }
-    private GameMachine.Messages.Subscribers _subscribers = null;
+    private io.gamemachine.messages.Subscribers _subscribers = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"subscribers", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Subscribers subscribers
+    public io.gamemachine.messages.Subscribers subscribers
     {
       get { return _subscribers; }
       set { _subscribers = value; }
@@ -1365,9 +1349,9 @@ namespace GameMachine.Messages
   {
     public JoinChat() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel>();
     [global::ProtoBuf.ProtoMember(1, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> chatChannel
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> chatChannel
     {
       get { return _chatChannel; }
     }
@@ -1382,9 +1366,9 @@ namespace GameMachine.Messages
   {
     public LeaveChat() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> _chatChannel = new global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel>();
     [global::ProtoBuf.ProtoMember(1, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.ChatChannel> chatChannel
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ChatChannel> chatChannel
     {
       get { return _chatChannel; }
     }
@@ -1399,9 +1383,9 @@ namespace GameMachine.Messages
   {
     public ChatMessage() {}
     
-    private GameMachine.Messages.ChatChannel _chatChannel;
+    private io.gamemachine.messages.ChatChannel _chatChannel;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.ChatChannel chatChannel
+    public io.gamemachine.messages.ChatChannel chatChannel
     {
       get { return _chatChannel; }
       set { _chatChannel = value; }
@@ -1428,18 +1412,18 @@ namespace GameMachine.Messages
       get { return _senderId; }
       set { _senderId = value; }
     }
-    private GameMachine.Messages.Entity _entity = null;
+    private io.gamemachine.messages.Entity _entity = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Entity entity
+    public io.gamemachine.messages.Entity entity
     {
       get { return _entity; }
       set { _entity = value; }
     }
-    private GameMachine.Messages.DynamicMessage _dynamicMessage = null;
+    private io.gamemachine.messages.DynamicMessage _dynamicMessage = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.DynamicMessage dynamicMessage
+    public io.gamemachine.messages.DynamicMessage dynamicMessage
     {
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
@@ -1528,9 +1512,9 @@ namespace GameMachine.Messages
   {
     public ClientEvents() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.ClientEvent> _clientEvent = new global::System.Collections.Generic.List<GameMachine.Messages.ClientEvent>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ClientEvent> _clientEvent = new global::System.Collections.Generic.List<io.gamemachine.messages.ClientEvent>();
     [global::ProtoBuf.ProtoMember(1, Name=@"clientEvent", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.ClientEvent> clientEvent
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ClientEvent> clientEvent
     {
       get { return _clientEvent; }
     }
@@ -1710,9 +1694,9 @@ namespace GameMachine.Messages
       get { return _topic; }
       set { _topic = value; }
     }
-    private GameMachine.Messages.Entity _message;
+    private io.gamemachine.messages.Entity _message;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"message", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Entity message
+    public io.gamemachine.messages.Entity message
     {
       get { return _message; }
       set { _message = value; }
@@ -1809,9 +1793,9 @@ namespace GameMachine.Messages
   {
     public ObjectdbPut() {}
     
-    private GameMachine.Messages.Entity _entity;
+    private io.gamemachine.messages.Entity _entity;
     [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Entity entity
+    public io.gamemachine.messages.Entity entity
     {
       get { return _entity; }
       set { _entity = value; }
@@ -1848,9 +1832,9 @@ namespace GameMachine.Messages
       get { return _updateMethod; }
       set { _updateMethod = value; }
     }
-    private GameMachine.Messages.Entity _updateEntity;
+    private io.gamemachine.messages.Entity _updateEntity;
     [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"updateEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Entity updateEntity
+    public io.gamemachine.messages.Entity updateEntity
     {
       get { return _updateEntity; }
       set { _updateEntity = value; }
@@ -1981,9 +1965,9 @@ namespace GameMachine.Messages
   {
     public Polygon() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Vector3> _vertex = new global::System.Collections.Generic.List<GameMachine.Messages.Vector3>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> _vertex = new global::System.Collections.Generic.List<io.gamemachine.messages.Vector3>();
     [global::ProtoBuf.ProtoMember(1, Name=@"vertex", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Vector3> vertex
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> vertex
     {
       get { return _vertex; }
     }
@@ -1998,9 +1982,9 @@ namespace GameMachine.Messages
   {
     public Mesh() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Polygon> _polygon = new global::System.Collections.Generic.List<GameMachine.Messages.Polygon>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Polygon> _polygon = new global::System.Collections.Generic.List<io.gamemachine.messages.Polygon>();
     [global::ProtoBuf.ProtoMember(1, Name=@"polygon", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Polygon> polygon
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Polygon> polygon
     {
       get { return _polygon; }
     }
@@ -2089,18 +2073,18 @@ namespace GameMachine.Messages
   {
     public Transform() {}
     
-    private GameMachine.Messages.Vector3 _vector3 = null;
+    private io.gamemachine.messages.Vector3 _vector3 = null;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Vector3 vector3
+    public io.gamemachine.messages.Vector3 vector3
     {
       get { return _vector3; }
       set { _vector3 = value; }
     }
-    private GameMachine.Messages.Quaternion _quaternion = null;
+    private io.gamemachine.messages.Quaternion _quaternion = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"quaternion", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Quaternion quaternion
+    public io.gamemachine.messages.Quaternion quaternion
     {
       get { return _quaternion; }
       set { _quaternion = value; }
@@ -2132,9 +2116,9 @@ namespace GameMachine.Messages
   {
     public Neighbors() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.TrackData> _trackData = new global::System.Collections.Generic.List<GameMachine.Messages.TrackData>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.TrackData> _trackData = new global::System.Collections.Generic.List<io.gamemachine.messages.TrackData>();
     [global::ProtoBuf.ProtoMember(1, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.TrackData> trackData
+    public global::System.Collections.Generic.List<io.gamemachine.messages.TrackData> trackData
     {
       get { return _trackData; }
     }
@@ -2149,17 +2133,17 @@ namespace GameMachine.Messages
   {
     public Neighbor() {}
     
-    private GameMachine.Messages.TrackData _trackData = null;
+    private io.gamemachine.messages.TrackData _trackData = null;
     [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TrackData trackData
+    public io.gamemachine.messages.TrackData trackData
     {
       get { return _trackData; }
       set { _trackData = value; }
     }
-    private GameMachine.Messages.Vector3 _location;
+    private io.gamemachine.messages.Vector3 _location;
     [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"location", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public GameMachine.Messages.Vector3 location
+    public io.gamemachine.messages.Vector3 location
     {
       get { return _location; }
       set { _location = value; }
@@ -2346,34 +2330,34 @@ namespace GameMachine.Messages
   {
     public Entity() {}
     
-    private GameMachine.Messages.Neighbors _neighbors = null;
+    private io.gamemachine.messages.Neighbors _neighbors = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"neighbors", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Neighbors neighbors
+    public io.gamemachine.messages.Neighbors neighbors
     {
       get { return _neighbors; }
       set { _neighbors = value; }
     }
-    private GameMachine.Messages.ChatMessage _chatMessage = null;
+    private io.gamemachine.messages.ChatMessage _chatMessage = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"chatMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatMessage chatMessage
+    public io.gamemachine.messages.ChatMessage chatMessage
     {
       get { return _chatMessage; }
       set { _chatMessage = value; }
     }
-    private GameMachine.Messages.ClientConnection _clientConnection = null;
+    private io.gamemachine.messages.ClientConnection _clientConnection = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"clientConnection", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientConnection clientConnection
+    public io.gamemachine.messages.ClientConnection clientConnection
     {
       get { return _clientConnection; }
       set { _clientConnection = value; }
     }
-    private GameMachine.Messages.EchoTest _echoTest = null;
+    private io.gamemachine.messages.EchoTest _echoTest = null;
     [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"echoTest", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.EchoTest echoTest
+    public io.gamemachine.messages.EchoTest echoTest
     {
       get { return _echoTest; }
       set { _echoTest = value; }
@@ -2385,114 +2369,114 @@ namespace GameMachine.Messages
       get { return _id; }
       set { _id = value; }
     }
-    private GameMachine.Messages.Subscribe _subscribe = null;
+    private io.gamemachine.messages.Subscribe _subscribe = null;
     [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"subscribe", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Subscribe subscribe
+    public io.gamemachine.messages.Subscribe subscribe
     {
       get { return _subscribe; }
       set { _subscribe = value; }
     }
-    private GameMachine.Messages.Publish _publish = null;
+    private io.gamemachine.messages.Publish _publish = null;
     [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"publish", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Publish publish
+    public io.gamemachine.messages.Publish publish
     {
       get { return _publish; }
       set { _publish = value; }
     }
-    private GameMachine.Messages.ChatChannel _chatChannel = null;
+    private io.gamemachine.messages.ChatChannel _chatChannel = null;
     [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"chatChannel", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatChannel chatChannel
+    public io.gamemachine.messages.ChatChannel chatChannel
     {
       get { return _chatChannel; }
       set { _chatChannel = value; }
     }
-    private GameMachine.Messages.JoinChat _joinChat = null;
+    private io.gamemachine.messages.JoinChat _joinChat = null;
     [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"joinChat", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.JoinChat joinChat
+    public io.gamemachine.messages.JoinChat joinChat
     {
       get { return _joinChat; }
       set { _joinChat = value; }
     }
-    private GameMachine.Messages.LeaveChat _leaveChat = null;
+    private io.gamemachine.messages.LeaveChat _leaveChat = null;
     [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"leaveChat", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.LeaveChat leaveChat
+    public io.gamemachine.messages.LeaveChat leaveChat
     {
       get { return _leaveChat; }
       set { _leaveChat = value; }
     }
-    private GameMachine.Messages.Unsubscribe _unsubscribe = null;
+    private io.gamemachine.messages.Unsubscribe _unsubscribe = null;
     [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"unsubscribe", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Unsubscribe unsubscribe
+    public io.gamemachine.messages.Unsubscribe unsubscribe
     {
       get { return _unsubscribe; }
       set { _unsubscribe = value; }
     }
-    private GameMachine.Messages.ChatRegister _chatRegister = null;
+    private io.gamemachine.messages.ChatRegister _chatRegister = null;
     [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"chatRegister", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatRegister chatRegister
+    public io.gamemachine.messages.ChatRegister chatRegister
     {
       get { return _chatRegister; }
       set { _chatRegister = value; }
     }
-    private GameMachine.Messages.ChatChannels _chatChannels = null;
+    private io.gamemachine.messages.ChatChannels _chatChannels = null;
     [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"chatChannels", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatChannels chatChannels
+    public io.gamemachine.messages.ChatChannels chatChannels
     {
       get { return _chatChannels; }
       set { _chatChannels = value; }
     }
-    private GameMachine.Messages.ErrorMessage _errorMessage = null;
+    private io.gamemachine.messages.ErrorMessage _errorMessage = null;
     [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"errorMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ErrorMessage errorMessage
+    public io.gamemachine.messages.ErrorMessage errorMessage
     {
       get { return _errorMessage; }
       set { _errorMessage = value; }
     }
-    private GameMachine.Messages.NeighborsRequest _neighborsRequest = null;
+    private io.gamemachine.messages.NeighborsRequest _neighborsRequest = null;
     [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"neighborsRequest", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.NeighborsRequest neighborsRequest
+    public io.gamemachine.messages.NeighborsRequest neighborsRequest
     {
       get { return _neighborsRequest; }
       set { _neighborsRequest = value; }
     }
-    private GameMachine.Messages.TrackEntity _trackEntity = null;
+    private io.gamemachine.messages.TrackEntity _trackEntity = null;
     [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"trackEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TrackEntity trackEntity
+    public io.gamemachine.messages.TrackEntity trackEntity
     {
       get { return _trackEntity; }
       set { _trackEntity = value; }
     }
-    private GameMachine.Messages.Transform _transform = null;
+    private io.gamemachine.messages.Transform _transform = null;
     [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"transform", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Transform transform
+    public io.gamemachine.messages.Transform transform
     {
       get { return _transform; }
       set { _transform = value; }
     }
-    private GameMachine.Messages.Vector3 _vector3 = null;
+    private io.gamemachine.messages.Vector3 _vector3 = null;
     [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Vector3 vector3
+    public io.gamemachine.messages.Vector3 vector3
     {
       get { return _vector3; }
       set { _vector3 = value; }
     }
-    private GameMachine.Messages.EntityList _entityList = null;
+    private io.gamemachine.messages.EntityList _entityList = null;
     [global::ProtoBuf.ProtoMember(27, IsRequired = false, Name=@"entityList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.EntityList entityList
+    public io.gamemachine.messages.EntityList entityList
     {
       get { return _entityList; }
       set { _entityList = value; }
@@ -2513,18 +2497,18 @@ namespace GameMachine.Messages
       get { return _entityType; }
       set { _entityType = value; }
     }
-    private GameMachine.Messages.PlayerAuthenticated _playerAuthenticated = null;
+    private io.gamemachine.messages.PlayerAuthenticated _playerAuthenticated = null;
     [global::ProtoBuf.ProtoMember(37, IsRequired = false, Name=@"playerAuthenticated", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerAuthenticated playerAuthenticated
+    public io.gamemachine.messages.PlayerAuthenticated playerAuthenticated
     {
       get { return _playerAuthenticated; }
       set { _playerAuthenticated = value; }
     }
-    private GameMachine.Messages.PlayerLogout _playerLogout = null;
+    private io.gamemachine.messages.PlayerLogout _playerLogout = null;
     [global::ProtoBuf.ProtoMember(38, IsRequired = false, Name=@"playerLogout", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerLogout playerLogout
+    public io.gamemachine.messages.PlayerLogout playerLogout
     {
       get { return _playerLogout; }
       set { _playerLogout = value; }
@@ -2537,10 +2521,10 @@ namespace GameMachine.Messages
       get { return _sendToPlayer; }
       set { _sendToPlayer = value; }
     }
-    private GameMachine.Messages.Subscribers _subscribers = null;
+    private io.gamemachine.messages.Subscribers _subscribers = null;
     [global::ProtoBuf.ProtoMember(41, IsRequired = false, Name=@"subscribers", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Subscribers subscribers
+    public io.gamemachine.messages.Subscribers subscribers
     {
       get { return _subscribers; }
       set { _subscribers = value; }
@@ -2553,34 +2537,34 @@ namespace GameMachine.Messages
       get { return _save; }
       set { _save = value; }
     }
-    private GameMachine.Messages.ObjectdbGetResponse _objectdbGetResponse = null;
+    private io.gamemachine.messages.ObjectdbGetResponse _objectdbGetResponse = null;
     [global::ProtoBuf.ProtoMember(44, IsRequired = false, Name=@"objectdbGetResponse", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ObjectdbGetResponse objectdbGetResponse
+    public io.gamemachine.messages.ObjectdbGetResponse objectdbGetResponse
     {
       get { return _objectdbGetResponse; }
       set { _objectdbGetResponse = value; }
     }
-    private GameMachine.Messages.NativeBytes _nativeBytes = null;
+    private io.gamemachine.messages.NativeBytes _nativeBytes = null;
     [global::ProtoBuf.ProtoMember(45, IsRequired = false, Name=@"nativeBytes", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.NativeBytes nativeBytes
+    public io.gamemachine.messages.NativeBytes nativeBytes
     {
       get { return _nativeBytes; }
       set { _nativeBytes = value; }
     }
-    private GameMachine.Messages.ObjectdbGet _objectdbGet = null;
+    private io.gamemachine.messages.ObjectdbGet _objectdbGet = null;
     [global::ProtoBuf.ProtoMember(46, IsRequired = false, Name=@"objectdbGet", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ObjectdbGet objectdbGet
+    public io.gamemachine.messages.ObjectdbGet objectdbGet
     {
       get { return _objectdbGet; }
       set { _objectdbGet = value; }
     }
-    private GameMachine.Messages.JsonEntity _jsonEntity = null;
+    private io.gamemachine.messages.JsonEntity _jsonEntity = null;
     [global::ProtoBuf.ProtoMember(47, IsRequired = false, Name=@"jsonEntity", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.JsonEntity jsonEntity
+    public io.gamemachine.messages.JsonEntity jsonEntity
     {
       get { return _jsonEntity; }
       set { _jsonEntity = value; }
@@ -2609,82 +2593,82 @@ namespace GameMachine.Messages
       get { return _params; }
       set { _params = value; }
     }
-    private GameMachine.Messages.ChatStatus _chatStatus = null;
+    private io.gamemachine.messages.ChatStatus _chatStatus = null;
     [global::ProtoBuf.ProtoMember(51, IsRequired = false, Name=@"chatStatus", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatStatus chatStatus
+    public io.gamemachine.messages.ChatStatus chatStatus
     {
       get { return _chatStatus; }
       set { _chatStatus = value; }
     }
-    private GameMachine.Messages.ChatBannedList _chatBannedList = null;
+    private io.gamemachine.messages.ChatBannedList _chatBannedList = null;
     [global::ProtoBuf.ProtoMember(52, IsRequired = false, Name=@"chatBannedList", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatBannedList chatBannedList
+    public io.gamemachine.messages.ChatBannedList chatBannedList
     {
       get { return _chatBannedList; }
       set { _chatBannedList = value; }
     }
-    private GameMachine.Messages.ChatInvite _chatInvite = null;
+    private io.gamemachine.messages.ChatInvite _chatInvite = null;
     [global::ProtoBuf.ProtoMember(53, IsRequired = false, Name=@"chatInvite", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ChatInvite chatInvite
+    public io.gamemachine.messages.ChatInvite chatInvite
     {
       get { return _chatInvite; }
       set { _chatInvite = value; }
     }
-    private GameMachine.Messages.ClientManagerRegister _clientManagerRegister = null;
+    private io.gamemachine.messages.ClientManagerRegister _clientManagerRegister = null;
     [global::ProtoBuf.ProtoMember(54, IsRequired = false, Name=@"clientManagerRegister", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientManagerRegister clientManagerRegister
+    public io.gamemachine.messages.ClientManagerRegister clientManagerRegister
     {
       get { return _clientManagerRegister; }
       set { _clientManagerRegister = value; }
     }
-    private GameMachine.Messages.ClientManagerUnregister _clientManagerUnregister = null;
+    private io.gamemachine.messages.ClientManagerUnregister _clientManagerUnregister = null;
     [global::ProtoBuf.ProtoMember(55, IsRequired = false, Name=@"clientManagerUnregister", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientManagerUnregister clientManagerUnregister
+    public io.gamemachine.messages.ClientManagerUnregister clientManagerUnregister
     {
       get { return _clientManagerUnregister; }
       set { _clientManagerUnregister = value; }
     }
-    private GameMachine.Messages.ClientEvent _clientEvent = null;
+    private io.gamemachine.messages.ClientEvent _clientEvent = null;
     [global::ProtoBuf.ProtoMember(56, IsRequired = false, Name=@"clientEvent", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientEvent clientEvent
+    public io.gamemachine.messages.ClientEvent clientEvent
     {
       get { return _clientEvent; }
       set { _clientEvent = value; }
     }
-    private GameMachine.Messages.ClientEvents _clientEvents = null;
+    private io.gamemachine.messages.ClientEvents _clientEvents = null;
     [global::ProtoBuf.ProtoMember(57, IsRequired = false, Name=@"clientEvents", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientEvents clientEvents
+    public io.gamemachine.messages.ClientEvents clientEvents
     {
       get { return _clientEvents; }
       set { _clientEvents = value; }
     }
-    private GameMachine.Messages.JsonStorage _jsonStorage = null;
+    private io.gamemachine.messages.JsonStorage _jsonStorage = null;
     [global::ProtoBuf.ProtoMember(58, IsRequired = false, Name=@"jsonStorage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.JsonStorage jsonStorage
+    public io.gamemachine.messages.JsonStorage jsonStorage
     {
       get { return _jsonStorage; }
       set { _jsonStorage = value; }
     }
-    private GameMachine.Messages.ClientManagerEvent _clientManagerEvent = null;
+    private io.gamemachine.messages.ClientManagerEvent _clientManagerEvent = null;
     [global::ProtoBuf.ProtoMember(59, IsRequired = false, Name=@"clientManagerEvent", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientManagerEvent clientManagerEvent
+    public io.gamemachine.messages.ClientManagerEvent clientManagerEvent
     {
       get { return _clientManagerEvent; }
       set { _clientManagerEvent = value; }
     }
-    private GameMachine.Messages.Regions _regions = null;
+    private io.gamemachine.messages.Regions _regions = null;
     [global::ProtoBuf.ProtoMember(60, IsRequired = false, Name=@"regions", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Regions regions
+    public io.gamemachine.messages.Regions regions
     {
       get { return _regions; }
       set { _regions = value; }
@@ -2697,10 +2681,10 @@ namespace GameMachine.Messages
       get { return _fastpath; }
       set { _fastpath = value; }
     }
-    private GameMachine.Messages.PoisonPill _poisonPill = null;
+    private io.gamemachine.messages.PoisonPill _poisonPill = null;
     [global::ProtoBuf.ProtoMember(62, IsRequired = false, Name=@"poisonPill", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PoisonPill poisonPill
+    public io.gamemachine.messages.PoisonPill poisonPill
     {
       get { return _poisonPill; }
       set { _poisonPill = value; }
@@ -2713,74 +2697,82 @@ namespace GameMachine.Messages
       get { return _senderId; }
       set { _senderId = value; }
     }
-    private GameMachine.Messages.AgentTrackData _agentTrackData = null;
+    private io.gamemachine.messages.AgentTrackData _agentTrackData = null;
     [global::ProtoBuf.ProtoMember(64, IsRequired = false, Name=@"agentTrackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.AgentTrackData agentTrackData
+    public io.gamemachine.messages.AgentTrackData agentTrackData
     {
       get { return _agentTrackData; }
       set { _agentTrackData = value; }
     }
-    private GameMachine.Messages.TeamMemberSkill _teamMemberSkill = null;
+    private io.gamemachine.messages.TeamMemberSkill _teamMemberSkill = null;
     [global::ProtoBuf.ProtoMember(65, IsRequired = false, Name=@"teamMemberSkill", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TeamMemberSkill teamMemberSkill
+    public io.gamemachine.messages.TeamMemberSkill teamMemberSkill
     {
       get { return _teamMemberSkill; }
       set { _teamMemberSkill = value; }
     }
-    private GameMachine.Messages.Player _player = null;
+    private io.gamemachine.messages.TrackDataUpdate _trackDataUpdate = null;
+    [global::ProtoBuf.ProtoMember(66, IsRequired = false, Name=@"trackDataUpdate", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.TrackDataUpdate trackDataUpdate
+    {
+      get { return _trackDataUpdate; }
+      set { _trackDataUpdate = value; }
+    }
+    private io.gamemachine.messages.Player _player = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Player player
+    public io.gamemachine.messages.Player player
     {
       get { return _player; }
       set { _player = value; }
     }
-    private GameMachine.Messages.TrackData _trackData = null;
+    private io.gamemachine.messages.TrackData _trackData = null;
     [global::ProtoBuf.ProtoMember(1001, IsRequired = false, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TrackData trackData
+    public io.gamemachine.messages.TrackData trackData
     {
       get { return _trackData; }
       set { _trackData = value; }
     }
-    private GameMachine.Messages.GameMessage _gameMessage = null;
+    private io.gamemachine.messages.GameMessage _gameMessage = null;
     [global::ProtoBuf.ProtoMember(1002, IsRequired = false, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.GameMessage gameMessage
+    public io.gamemachine.messages.GameMessage gameMessage
     {
       get { return _gameMessage; }
       set { _gameMessage = value; }
     }
-    private GameMachine.Messages.GameMessages _gameMessages = null;
+    private io.gamemachine.messages.GameMessages _gameMessages = null;
     [global::ProtoBuf.ProtoMember(1003, IsRequired = false, Name=@"gameMessages", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.GameMessages gameMessages
+    public io.gamemachine.messages.GameMessages gameMessages
     {
       get { return _gameMessages; }
       set { _gameMessages = value; }
     }
-    private GameMachine.Messages.DynamicMessage _dynamicMessage = null;
+    private io.gamemachine.messages.DynamicMessage _dynamicMessage = null;
     [global::ProtoBuf.ProtoMember(1004, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.DynamicMessage dynamicMessage
+    public io.gamemachine.messages.DynamicMessage dynamicMessage
     {
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
     }
-    private GameMachine.Messages.PlayerItems _playerItems = null;
+    private io.gamemachine.messages.PlayerItems _playerItems = null;
     [global::ProtoBuf.ProtoMember(1005, IsRequired = false, Name=@"playerItems", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerItems playerItems
+    public io.gamemachine.messages.PlayerItems playerItems
     {
       get { return _playerItems; }
       set { _playerItems = value; }
     }
-    private GameMachine.Messages.TestObject _testObject = null;
+    private io.gamemachine.messages.TestObject _testObject = null;
     [global::ProtoBuf.ProtoMember(1006, IsRequired = false, Name=@"testObject", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.TestObject testObject
+    public io.gamemachine.messages.TestObject testObject
     {
       get { return _testObject; }
       set { _testObject = value; }
@@ -2795,9 +2787,9 @@ namespace GameMachine.Messages
   {
     public EntityList() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Entity> _entity = new global::System.Collections.Generic.List<GameMachine.Messages.Entity>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Entity> _entity = new global::System.Collections.Generic.List<io.gamemachine.messages.Entity>();
     [global::ProtoBuf.ProtoMember(1, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Entity> entity
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Entity> entity
     {
       get { return _entity; }
     }
@@ -2812,57 +2804,49 @@ namespace GameMachine.Messages
   {
     public ClientMessage() {}
     
-    private readonly global::System.Collections.Generic.List<GameMachine.Messages.Entity> _entity = new global::System.Collections.Generic.List<GameMachine.Messages.Entity>();
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Entity> _entity = new global::System.Collections.Generic.List<io.gamemachine.messages.Entity>();
     [global::ProtoBuf.ProtoMember(1, Name=@"entity", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<GameMachine.Messages.Entity> entity
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Entity> entity
     {
       get { return _entity; }
     }
   
-    private GameMachine.Messages.Player _player = null;
+    private io.gamemachine.messages.Player _player = null;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.Player player
+    public io.gamemachine.messages.Player player
     {
       get { return _player; }
       set { _player = value; }
     }
-    private GameMachine.Messages.ClientConnection _clientConnection = null;
+    private io.gamemachine.messages.ClientConnection _clientConnection = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"clientConnection", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ClientConnection clientConnection
+    public io.gamemachine.messages.ClientConnection clientConnection
     {
       get { return _clientConnection; }
       set { _clientConnection = value; }
     }
-    private GameMachine.Messages.PlayerLogout _playerLogout = null;
+    private io.gamemachine.messages.PlayerLogout _playerLogout = null;
     [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"playerLogout", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerLogout playerLogout
+    public io.gamemachine.messages.PlayerLogout playerLogout
     {
       get { return _playerLogout; }
       set { _playerLogout = value; }
     }
-    private GameMachine.Messages.ErrorMessage _errorMessage = null;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"errorMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.ErrorMessage errorMessage
-    {
-      get { return _errorMessage; }
-      set { _errorMessage = value; }
-    }
-    private GameMachine.Messages.PlayerConnect _playerConnect = null;
+    private io.gamemachine.messages.PlayerConnect _playerConnect = null;
     [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"playerConnect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerConnect playerConnect
+    public io.gamemachine.messages.PlayerConnect playerConnect
     {
       get { return _playerConnect; }
       set { _playerConnect = value; }
     }
-    private GameMachine.Messages.PlayerConnected _playerConnected = null;
+    private io.gamemachine.messages.PlayerConnected _playerConnected = null;
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"playerConnected", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public GameMachine.Messages.PlayerConnected playerConnected
+    public io.gamemachine.messages.PlayerConnected playerConnected
     {
       get { return _playerConnected; }
       set { _playerConnected = value; }
@@ -2875,13 +2859,29 @@ namespace GameMachine.Messages
       get { return _connection_type; }
       set { _connection_type = value; }
     }
-    private bool _fastpath = default(bool);
-    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"fastpath", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(default(bool))]
-    public bool fastpath
+    private ulong _sentAt = default(ulong);
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"sentAt", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(ulong))]
+    public ulong sentAt
     {
-      get { return _fastpath; }
-      set { _fastpath = value; }
+      get { return _sentAt; }
+      set { _sentAt = value; }
+    }
+    private io.gamemachine.messages.TrackData _trackData = null;
+    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"trackData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.TrackData trackData
+    {
+      get { return _trackData; }
+      set { _trackData = value; }
+    }
+    private string _gameId = "";
+    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"gameId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string gameId
+    {
+      get { return _gameId; }
+      set { _gameId = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

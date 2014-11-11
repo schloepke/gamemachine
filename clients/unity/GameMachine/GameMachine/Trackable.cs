@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using TrackData = GameMachine.Messages.TrackData;
+using TrackData = io.gamemachine.messages.TrackData;
 namespace GameMachine
 {
 	public interface Trackable

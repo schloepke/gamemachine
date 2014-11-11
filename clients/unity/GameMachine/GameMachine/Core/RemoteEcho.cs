@@ -1,9 +1,9 @@
 using GameMachine;
-using Entity = GameMachine.Messages.Entity;
-using EchoTest = GameMachine.Messages.EchoTest;
-using ObjectdbGet = GameMachine.Messages.ObjectdbGet;
-using ObjectdbGetResponse = GameMachine.Messages.ObjectdbGetResponse;
-using NativeBytes = GameMachine.Messages.NativeBytes;
+using Entity = io.gamemachine.messages.Entity;
+using EchoTest = io.gamemachine.messages.EchoTest;
+using ObjectdbGet = io.gamemachine.messages.ObjectdbGet;
+using ObjectdbGetResponse = io.gamemachine.messages.ObjectdbGetResponse;
+using NativeBytes = io.gamemachine.messages.NativeBytes;
 using Newtonsoft;
 
 namespace GameMachine.Core

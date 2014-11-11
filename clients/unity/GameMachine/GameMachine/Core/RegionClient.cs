@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 using GameMachine;
-using Entity = GameMachine.Messages.Entity;
+using Entity = io.gamemachine.messages.Entity;
 
 
 namespace GameMachine.Core

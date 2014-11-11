@@ -4,12 +4,18 @@ using System;
 using ProtoBuf;
 using System.Collections.Generic;
 using System.Reflection;
-using DynamicMessage = GameMachine.Messages.DynamicMessage;
+using DynamicMessage = io.gamemachine.messages.DynamicMessage;
 
 public class DynamicMessageUtil
 {
 
     private static string dynamicNamespace = "DynamicMessages";
+
+
+    public static void setNamespace (string ns)
+    {
+        dynamicNamespace = ns;
+    }
 
     public static DynamicMessage ToDynamicMessage (object component)
     {
