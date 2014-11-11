@@ -1,8 +1,8 @@
 package io.gamemachine.util;
 
-import static com.dyuproject.protostuff.LinkedBuffer.allocate;
+import static io.protostuff.LinkedBuffer.allocate;
 
-import com.dyuproject.protostuff.LinkedBuffer;
+import io.protostuff.LinkedBuffer;
 
 public class LocalLinkedBuffer {
 

@@ -24,9 +24,9 @@ import io.gamemachine.client.messages.PlayerLogout;
 import io.gamemachine.client.messages.TrackData;
 import io.gamemachine.client.messages.TrackDataUpdate;
 
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 public class ApiMessage {
 

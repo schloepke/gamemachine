@@ -4,10 +4,8 @@ require 'erb'
 require 'fileutils'
 require 'active_support/inflector'
 
-java_import java.lang.System
-java_import com.dyuproject.protostuff.compiler.CachingProtoLoader
-java_import java.io.FileNotFoundException
-java_import com.dyuproject.protostuff.parser.ProtoUtil
+
+
 
 module GameMachine
   module Protobuf
@@ -16,6 +14,16 @@ module GameMachine
       attr_reader :app_root
       def initialize(app_root)
         @app_root = app_root
+
+        jars = Dir[File.join(ENV['JAVA_ROOT'], 'local_lib', '*.jar')]
+        jars.each do |jar|
+          puts jar
+          require jar
+        end
+        java_import java.lang.System
+        java_import 'com.dyuproject.protostuff.compiler.CachingProtoLoader'
+        java_import java.io.FileNotFoundException
+        java_import 'com.dyuproject.protostuff.parser.ProtoUtil'
       end
 
       def java_root

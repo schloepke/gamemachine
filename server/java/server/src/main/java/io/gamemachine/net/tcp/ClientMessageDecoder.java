@@ -8,8 +8,8 @@ import io.netty.handler.codec.MessageToMessageDecoder;
 
 import java.util.List;
 
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 @Sharable
 public class ClientMessageDecoder extends MessageToMessageDecoder<ByteBuf> {

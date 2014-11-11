@@ -56,9 +56,13 @@ dependencies {
   compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
   compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
   
-  compile 'com.dyuproject.protostuff:protostuff-uberjar:1.0.8'
-  compile 'com.dyuproject.protostuff:protostuff:1.0.8'
-  compile 'com.dyuproject.protostuff:protostuff-json:1.0.8'
+  compile 'io.protostuff:protostuff-uberjar:1.1.0'
+  compile 'io.protostuff:protostuff:1.1.0'
+  compile 'io.protostuff:protostuff-api:1.1.0'
+  compile 'io.protostuff:protostuff-core:1.1.0'
+  compile 'io.protostuff:protostuff-runtime:1.1.0'
+  compile 'io.protostuff:protostuff-compiler:1.1.0'
+  compile 'io.protostuff:protostuff-json:1.1.0'
   
   compile 'com.couchbase.client:couchbase-client:1.4.2'
   //compile 'redis.clients:jedis:2.2.1'
@@ -161,4 +165,17 @@ publishing {
         }
     }
 }
+
+task removeOldSnapshots(type: Exec) {
+  executable "sh"
+  args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/server/1.0.4-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
+}
+
+
+task publish_to_github(type: Exec, dependsOn: publish) {
+  executable "sh"
+  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
+}
+publish.dependsOn removeOldSnapshots
+publish.mustRunAfter removeOldSnapshots
 

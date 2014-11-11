@@ -15,7 +15,7 @@ module GameMachine
   end
 
   module ProtoLib
-    include_package 'com.dyuproject.protostuff'
+    include_package 'io.protostuff'
   end
 
   module ApiLib

@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorSelection;
 
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 public class AgentUpdater {
 

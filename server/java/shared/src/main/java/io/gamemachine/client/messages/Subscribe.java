@@ -11,18 +11,18 @@ import java.util.List;
 import java.util.HashMap;
 import java.io.UnsupportedEncodingException;
 
-import com.dyuproject.protostuff.ByteString;
-import com.dyuproject.protostuff.GraphIOUtil;
-import com.dyuproject.protostuff.Input;
-import com.dyuproject.protostuff.Message;
-import com.dyuproject.protostuff.Output;
-import com.dyuproject.protostuff.ProtobufOutput;
+import io.protostuff.ByteString;
+import io.protostuff.GraphIOUtil;
+import io.protostuff.Input;
+import io.protostuff.Message;
+import io.protostuff.Output;
+import io.protostuff.ProtobufOutput;
 
 import java.io.ByteArrayOutputStream;
-import com.dyuproject.protostuff.JsonIOUtil;
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.JsonIOUtil;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 import io.gamemachine.util.LocalLinkedBuffer;
 
@@ -30,8 +30,8 @@ import io.gamemachine.util.LocalLinkedBuffer;
 import java.nio.charset.Charset;
 
 
-import com.dyuproject.protostuff.Schema;
-import com.dyuproject.protostuff.UninitializedMessageException;
+import io.protostuff.Schema;
+import io.protostuff.UninitializedMessageException;
 
 
 @SuppressWarnings("unused")

@@ -11,18 +11,18 @@ import java.util.List;
 import java.util.HashMap;
 import java.io.UnsupportedEncodingException;
 
-import com.dyuproject.protostuff.ByteString;
-import com.dyuproject.protostuff.GraphIOUtil;
-import com.dyuproject.protostuff.Input;
-import com.dyuproject.protostuff.Message;
-import com.dyuproject.protostuff.Output;
-import com.dyuproject.protostuff.ProtobufOutput;
+import io.protostuff.ByteString;
+import io.protostuff.GraphIOUtil;
+import io.protostuff.Input;
+import io.protostuff.Message;
+import io.protostuff.Output;
+import io.protostuff.ProtobufOutput;
 
 import java.io.ByteArrayOutputStream;
-import com.dyuproject.protostuff.JsonIOUtil;
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.JsonIOUtil;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 import io.gamemachine.util.LocalLinkedBuffer;
 
@@ -31,8 +31,8 @@ import java.nio.charset.Charset;
 
 <% has_id = message.getFields.select { |field| field.name == 'id' }.empty? ? false : true %>
 
-import com.dyuproject.protostuff.Schema;
-import com.dyuproject.protostuff.UninitializedMessageException;
+import io.protostuff.Schema;
+import io.protostuff.UninitializedMessageException;
 
 <% decl = "public final class #{klass} implements Externalizable, Message<#{klass}>, Schema<#{klass}>" %>
 
@@ -41,7 +41,7 @@ import com.dyuproject.protostuff.UninitializedMessageException;
 {
 
 <% message.nestedEnumGroups.each do |group| %>
-	public enum <%=group.name %> implements com.dyuproject.protostuff.EnumLite<<%=group.name %>>
+	public enum <%=group.name %> implements io.protostuff.EnumLite<<%=group.name %>>
     {
     	
     	<% group.values.each do |value| %>

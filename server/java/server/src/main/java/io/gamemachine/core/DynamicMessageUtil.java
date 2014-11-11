@@ -1,10 +1,10 @@
 package io.gamemachine.core;
 
 
-import com.dyuproject.protostuff.ByteString;
-import com.dyuproject.protostuff.LinkedBuffer;
-import com.dyuproject.protostuff.ProtobufIOUtil;
-import com.dyuproject.protostuff.runtime.RuntimeSchema;
+import io.protostuff.ByteString;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.runtime.RuntimeSchema;
 
 import io.gamemachine.messages.DynamicMessage;
 import io.gamemachine.messages.GameMessage;
