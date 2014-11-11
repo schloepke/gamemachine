@@ -1,5 +1,5 @@
 using  ProtoBuf;
-using Entity = GameMachine.Messages.Entity;
+using Entity = io.gamemachine.messages.Entity;
 using GameMachine;
 using  System.Text.RegularExpressions;
 using System;

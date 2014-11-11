@@ -1,4 +1,4 @@
-using Entity = GameMachine.Messages.Entity;
+using Entity = io.gamemachine.messages.Entity;
 using GameMachine;
 using System;
 using System.Collections.Generic;

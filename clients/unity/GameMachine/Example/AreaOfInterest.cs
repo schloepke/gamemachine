@@ -3,8 +3,8 @@ using System.Collections;
 using  System.Collections.Generic;
 using GameMachine;
 using GameMachine.Core;
-using Entity = GameMachine.Messages.Entity;
-using TrackData = GameMachine.Messages.TrackData;
+using Entity = io.gamemachine.messages.Entity;
+using TrackData = io.gamemachine.messages.TrackData;
 
 // This is an example of how to track objects in the game that are near you.
 // The basic flow is that you send a message to the server at regular intervals with your position, and a request

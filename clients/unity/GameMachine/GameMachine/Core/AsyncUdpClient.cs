@@ -9,9 +9,9 @@ using ProtoBuf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using GameMachine;
-using ClientMessage = GameMachine.Messages.ClientMessage;
-using Entity = GameMachine.Messages.Entity;
-using PlayerLogout = GameMachine.Messages.PlayerLogout;
+using ClientMessage = io.gamemachine.messages.ClientMessage;
+using Entity = io.gamemachine.messages.Entity;
+using PlayerLogout = io.gamemachine.messages.PlayerLogout;
 
 
 namespace GameMachine.Core
@@ -57,7 +57,7 @@ namespace GameMachine.Core
 
         public ClientMessage CreateClientMessage ()
         {
-            GameMachine.Messages.Player player = new GameMachine.Messages.Player ();
+            io.gamemachine.messages.Player player = new io.gamemachine.messages.Player ();
             player.id = playerId;
             player.authtoken = authtoken;
             ClientMessage clientMessage = new ClientMessage ();
@@ -87,7 +87,7 @@ namespace GameMachine.Core
             receiveData ();
 
             ClientMessage message = CreateClientMessage ();
-            message.playerConnect = new GameMachine.Messages.PlayerConnect ();
+            message.playerConnect = new io.gamemachine.messages.PlayerConnect ();
             Send (Serialize (message));
         }
 				

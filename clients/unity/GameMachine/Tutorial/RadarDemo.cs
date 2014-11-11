@@ -4,11 +4,11 @@ using System.Linq;
 using GameMachine;
 using GameMachine.Core;
 using GameMachine.Tutorial;
-using Entity = GameMachine.Messages.Entity;
-using EchoTest = GameMachine.Messages.EchoTest;
+using Entity = io.gamemachine.messages.Entity;
+using EchoTest = io.gamemachine.messages.EchoTest;
 using System.Collections;
 using System.Collections.Generic;
-using TrackData = GameMachine.Messages.TrackData;
+using TrackData = io.gamemachine.messages.TrackData;
 
 public class RadarDemo : MonoBehaviour, GameMachine.Trackable
 {

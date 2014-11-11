@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using GameMachine;
-using TrackData = GameMachine.Messages.TrackData;
+using TrackData = io.gamemachine.messages.TrackData;
 
 namespace GameMachine.Core
 {

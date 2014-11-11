@@ -6,10 +6,10 @@ using System;
 using System.IO;
 using ProtoBuf;
 using System.Linq;
-using GameMessage = GameMachine.Messages.GameMessage;
-using GameMessages = GameMachine.Messages.GameMessages;
-using Entity = GameMachine.Messages.Entity;
-using DynamicMessage = GameMachine.Messages.DynamicMessage;
+using GameMessage = io.gamemachine.messages.GameMessage;
+using GameMessages = io.gamemachine.messages.GameMessages;
+using Entity = io.gamemachine.messages.Entity;
+using DynamicMessage = io.gamemachine.messages.DynamicMessage;
 
 namespace GameMachine.Core
 {
