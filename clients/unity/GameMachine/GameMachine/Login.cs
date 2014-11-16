@@ -94,7 +94,7 @@ namespace GameMachine
             GameMachine.Core.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
             app.OnConnectionTimeout (connectionCallback);
 
-            app.Run (protocol, hostname, port, User.Instance.username, authtoken);
+            app.Run (protocol, hostname, port, User.Instance.username, Int32.Parse (authtoken));
 
             StartRegionClient (authtoken);
         }
@@ -129,7 +129,7 @@ namespace GameMachine
             RegionClient.RegionClientStarted callback = OnRegionClientStarted;
             regionClient.OnRegionClientStarted (callback);
 			
-            regionClient.Init (port, User.Instance.username, authtoken);
+            regionClient.Init (port, User.Instance.username, Int32.Parse (authtoken));
         }
 
         void Start ()

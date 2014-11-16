@@ -60,7 +60,7 @@ namespace GameMachine.Core
             StartCoroutine (auth.Authenticate (gameId, hostname, httpPort, username, password, success, error));
         }
 
-        public void Run (string protocol, string host, int port, string username, string authtoken)
+        public void Run (string protocol, string host, int port, string username, int authtoken)
         {
             App.protocol = protocol;
             // Create client and start actor system

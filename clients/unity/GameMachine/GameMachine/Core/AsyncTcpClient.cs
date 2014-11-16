@@ -21,7 +21,7 @@ namespace GameMachine.Core
         private TcpClient tcpClient;
         private int failedConnectionCount;
         private int maxFailedConnections;
-        private string authtoken;
+        private int authtoken;
         private ClientMessage clientMessage;
         private string playerId;
         private bool measure = false;
@@ -68,10 +68,10 @@ namespace GameMachine.Core
             Write (Serialize (message));
         }
 
-        public AsyncTcpClient (string address, int port, string playerId, string _authtoken)
+        public AsyncTcpClient (string address, int port, string playerId, int authtoken)
 			: this(port)
         {
-            this.authtoken = _authtoken;
+            this.authtoken = authtoken;
             this.playerId = playerId;
             Logger.Debug (address);
 

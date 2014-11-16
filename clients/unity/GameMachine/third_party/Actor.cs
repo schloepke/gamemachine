@@ -236,14 +236,14 @@ namespace KAM
             
             // if not, add it                   
             if (rigidbody == null)
-                rigidbody = (Rigidbody)gameObject.AddComponent ("Rigidbody");
+                rigidbody = (Rigidbody)gameObject.AddComponent <Rigidbody>();
             
             // it may be already attached to this gameObject
             collider = GetComponentInChildren<CapsuleCollider> (); 
             
             // if not, add it                   
             if (collider == null)
-                collider = (CapsuleCollider)gameObject.AddComponent ("CapsuleCollider");
+                collider = (CapsuleCollider)gameObject.AddComponent <CapsuleCollider>();
             
             // collider properties
             if (collider != null) {
@@ -284,7 +284,7 @@ namespace KAM
                 nameTagMesh.richText = false;
                 SetNameTagColor (nameTagColor);
                 SetNameTag (nameTag);
-                nameTagMesh.renderer.enabled = true; // we need to set this explicity here since it might get hidden by the inspector
+                nameTagMesh.GetComponent<Renderer>().enabled = true; // we need to set this explicity here since it might get hidden by the inspector
             }
             return (nameTagMesh != null);
         }
@@ -416,9 +416,9 @@ namespace KAM
             if (nameTagMesh != null) {
                 nameTagMesh.gameObject.SetActive (showNameTag);
                 if (showNameTag) {
-                    nameTagMesh.transform.rotation = User.Instance.camera.transform.rotation;
+                    nameTagMesh.transform.rotation = User.Instance.GetComponent<Camera>().transform.rotation;
                     nameTagMesh.transform.position = User.SetVectorY (transform.position, 
-                                                                     transform.position.y + collider.height * transform.localScale.y + nameTagMesh.renderer.bounds.size.y * 2f) + nameTagOffset;
+                                                                     transform.position.y + collider.height * transform.localScale.y + nameTagMesh.GetComponent<Renderer>().bounds.size.y * 2f) + nameTagOffset;
                     
                 }
             }
@@ -609,23 +609,23 @@ namespace KAM
             if (!Application.isPlaying) {
                 TextMesh m = GetComponentInChildren<TextMesh> ();
                 if (m != null)
-                    m.renderer.enabled = showNameTag;
+                    m.GetComponent<Renderer>().enabled = showNameTag;
             }
         }
         public virtual void SetNameTagColor (Color color)
         {
             nameTagColor = color;
             if (nameTagMesh != null) {
-                nameTagMesh.renderer.material.color = nameTagColor;
+                nameTagMesh.GetComponent<Renderer>().material.color = nameTagColor;
             }
             // for custom inspector only
             if (!Application.isPlaying) {
                 TextMesh m = GetComponentInChildren<TextMesh> ();
                 if (m != null) {
                     if (nameTagMaterial == null)
-                        nameTagMaterial = new Material (m.renderer.sharedMaterial);
+                        nameTagMaterial = new Material (m.GetComponent<Renderer>().sharedMaterial);
                     nameTagMaterial.color = nameTagColor;
-                    m.renderer.material = nameTagMaterial;
+                    m.GetComponent<Renderer>().material = nameTagMaterial;
                 }
             }
         }

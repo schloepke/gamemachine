@@ -22,6 +22,16 @@ namespace GameMachine.Core
         private UpdateReceived updateReceived;
 
 
+        public static float fromDelta (float pos, int delta)
+        {
+            pos += (float)(delta / 100f);
+            return pos;
+        }
+
+        public static int ToInt (float f)
+        {
+            return (int)(Math.Round (f * 100, 2));
+        }
         public static void Register (Trackable component)
         {
             EntityTracking entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
@@ -60,6 +70,13 @@ namespace GameMachine.Core
         public override void OnReceive (object message)
         {
             Entity entity = message as Entity;
+
+            if (entity.trackDataResponse != null) {
+                if (trackable != null) {
+                    trackable.HandleTrackDataResponse (entity.trackDataResponse);
+                }
+                return;
+            }
 
             List<TrackingUpdate> updates = new List<TrackingUpdate> ();
             int i = 0;
