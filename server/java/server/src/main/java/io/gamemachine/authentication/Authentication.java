@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 
 public class Authentication {
 
-	private static ConcurrentHashMap<String, String> authenticatedUsers = new ConcurrentHashMap<String, String>();
+	private static ConcurrentHashMap<String, Integer> authenticatedUsers = new ConcurrentHashMap<String, Integer>();
 	private static final Logger logger = LoggerFactory.getLogger(Authentication.class);
 
 	private Authable playerAuth;
@@ -21,14 +21,14 @@ public class Authentication {
 
 	public static boolean isAuthenticated(Player player) {
 		if (authenticatedUsers.containsKey(player.getId())) {
-			String authtoken = authenticatedUsers.get(player.getId());
-			if (authtoken.equals(player.getAuthtoken())) {
+			int authtoken = authenticatedUsers.get(player.id);
+			if (authtoken == player.authtoken) {
 				return true;
 			} else {
 				// Reload from database to see if it's been updated
-				authtoken = PlayerService.getInstance().getAuthtoken(player.getId());
-				if (authtoken.equals(player.getAuthtoken())) {
-					authenticatedUsers.put(player.getId(),authtoken);
+				authtoken = PlayerService.getInstance().getAuthtoken(player.id);
+				if (authtoken == player.authtoken) {
+					authenticatedUsers.put(player.id,authtoken);
 					return true;
 				}
 			}
@@ -44,7 +44,7 @@ public class Authentication {
 		authenticatedUsers.put(player.getId(), authtokenForPlayer(player));
 	}
 
-	public String authtokenForPlayer(Player player) {
+	public Integer authtokenForPlayer(Player player) {
 		if (isPublic()) {
 			return player.getAuthtoken();
 		} else {

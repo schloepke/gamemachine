@@ -112,6 +112,19 @@ public class PlayerService {
 		}
 	}
 
+	public boolean playerIsAgent(String playerId) {
+		Player player = find(playerId);
+		if (player == null) {
+			return false;
+		} else {
+			if (player.getRole().equals("agent_controller")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
 	public String getGameId(String playerId) {
 		Player player = find(playerId);
 		if (player == null) {
@@ -121,13 +134,13 @@ public class PlayerService {
 		}
 	}
 	
-	public String getAuthtoken(String playerId) {
+	public Integer getAuthtoken(String playerId) {
 		clearCache(playerId);
 		Player player = find(playerId);
 		if (player == null) {
 			return null;
 		} else {
-			return player.getAuthtoken();
+			return player.authtoken;
 		}
 	}
 	
@@ -168,7 +181,7 @@ public class PlayerService {
 		}
 	}
 		
-	public void setAuthtoken(String playerId, String authtoken) {
+	public void setAuthtoken(String playerId, int authtoken) {
 		Player player = find(playerId);
 		if (player == null) {
 			logger.warn("Player " + playerId + " not found");

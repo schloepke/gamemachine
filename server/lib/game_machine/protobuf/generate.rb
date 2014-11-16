@@ -17,7 +17,6 @@ module GameMachine
 
         jars = Dir[File.join(ENV['JAVA_ROOT'], 'local_lib', '*.jar')]
         jars.each do |jar|
-          puts jar
           require jar
         end
         java_import java.lang.System

@@ -21,9 +21,10 @@ public class NpcAi implements Codeblock {
 	private CodeblockEnv env;
 	private Api api;
 	private List<Npc> npcs = new ArrayList<Npc>();
-	private int npcCount = 50;
+	private int npcCount = 5;
 	private int delay = 50;
 	private double speedScale = 4f;
+	private int updateCount = 0;
 
 	@Override
 	public void awake(Object message) {
@@ -36,12 +37,12 @@ public class NpcAi implements Codeblock {
 				String npcId = this.env.getAgentId() + "-" + x;
 				Npc npc = new Npc(npcId, Globals.grid, speedScale);
 				npcs.add(npc);
-				GameEntity vitals = Globals.gameEntityFor(npc.id);
-				if (vitals == null) {
-					vitals = new GameEntity(npcId);
-					vitals.setEntityType(EntityType.NPC);
-					vitals.updated = true;
-					Globals.setGameEntity(vitals);
+				GameEntity gameEntity = Globals.gameEntityFor(npc.id);
+				if (gameEntity == null) {
+					gameEntity = new GameEntity(npcId);
+					gameEntity.setEntityType(EntityType.NPC);
+					gameEntity.updated = true;
+					Globals.setGameEntity(gameEntity);
 				}
 			}
 			if (this.env.getReloadCount() == 0) {
@@ -60,36 +61,63 @@ public class NpcAi implements Codeblock {
 	private void npcUpdate() {
 		AgentTrackData agentTrackData = new AgentTrackData();
 		for (Npc npc : npcs) {
+			double x = npc.position.x;
+			double y = npc.position.y;
 			npc.update();
-			GameEntity vitals = Globals.gameEntityFor(npc.id);
-			
+			GameEntity gameEntity = Globals.gameEntityFor(npc.id);
+
 			TrackData trackData = new TrackData();
-			trackData.setId(vitals.id);
-			trackData.setEntityType(vitals.entityType);
+			trackData.setId(gameEntity.id);
+			trackData.setEntityType(gameEntity.entityType);
+
+			if (updateCount < 5) {
+				trackData.setX((int)Math.round(npc.position.x * 100));
+				trackData.setY((int)Math.round(npc.position.y * 100));
+				if (npc.id.equals("NpcAi8-0")) {
+					System.out.println(trackData.x + "."+trackData.y);
+				}
+			} else {
+				double xDelta;
+				double yDelta;
+				if (npc.position.x >= x) {
+					 xDelta = npc.position.x - x;
+				} else {
+					xDelta = -(x - npc.position.x);
+				}
+				
+				if (npc.position.y >= y) {
+					 yDelta = npc.position.y - y;
+				} else {
+					yDelta = -(y - npc.position.y);
+				}
+				
+				int xi = (int) (xDelta * 100);
+				int yi = (int) (yDelta * 100);
+				trackData.setIx(xi);
+				trackData.setIy(yi);
+			}
 			
-			// Limit scale to 2, no need to send extra data we don't have to
-			trackData.setX((float) Math.round(npc.position.x * 100) / 100);
-			trackData.setY((float) Math.round(npc.position.y * 100) / 100);
-			trackData.setZ(0f);
 			trackData.setGetNeighbors(0);
 			agentTrackData.addTrackData(trackData);
 		}
-		
+
 		if (agentTrackData.getTrackDataCount() >= 1) {
 			ApiMessage apiMessage = this.api.newMessage();
 			apiMessage.setAgentTrackData(agentTrackData);
 			apiMessage.send();
 		}
+		updateCount++;
 	}
 
 	private void doCombat() {
-		
+
 		// Random npc
 		int idx = (int) (Math.random() * npcCount - 1);
 		Npc npc = npcs.get(idx);
 
 		// Random player
-		List<TrackData> players = Globals.grid.neighbors((float) npc.position.x, (float) npc.position.y, EntityType.PLAYER);
+		List<TrackData> players = Globals.grid.neighbors((float) npc.position.x, (float) npc.position.y,
+				EntityType.PLAYER);
 		int playerIdx = (int) (Math.random() * players.size());
 		if (players.contains(playerIdx)) {
 			TrackData trackData = players.get(playerIdx);
@@ -108,27 +136,27 @@ public class NpcAi implements Codeblock {
 
 	@Override
 	public void shutdown(Object arg0) throws Exception {
-		
+
 		// Remove npc's from grid
 		AgentTrackData agentTrackData = new AgentTrackData();
 		for (Npc npc : npcs) {
 			TrackData trackData = new TrackData();
 			trackData.setId(npc.id);
 			trackData.setEntityType(TrackData.EntityType.NPC);
-			
-			trackData.setX(-1f);
-			trackData.setY(-1f);
-			trackData.setZ(-1f);
+
+			trackData.setX(-1);
+			trackData.setY(-1);
+			trackData.setZ(-1);
 			trackData.setGetNeighbors(0);
 			agentTrackData.addTrackData(trackData);
 		}
-		
+
 		if (agentTrackData.getTrackDataCount() >= 1) {
 			ApiMessage apiMessage = this.api.newMessage();
 			apiMessage.setAgentTrackData(agentTrackData);
 			apiMessage.send();
 		}
 		npcs.clear();
-		
+
 	}
 }

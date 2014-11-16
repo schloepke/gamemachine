@@ -898,6 +898,17 @@ import io.gamemachine.core.CacheUpdate;
     	
     }
 
+	public void dumpObject()
+    {
+    	System.out.println("START <%=klass%>");
+    	<% message.getFields.each do |field| %>
+    	if(this.<%=field.name%> != null) {
+    		System.out.println("<%=field.name%>="+this.<%=field.name%>);
+    	}
+    	<% end %>
+    	System.out.println("END <%=klass%>");
+    }
+    
     public String getFieldName(int number)
     {
         switch(number)

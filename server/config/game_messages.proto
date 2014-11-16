@@ -6,7 +6,7 @@
 persistent_message Player {
   required string id = 1;
   optional bool authenticated = 2;
-  optional string authtoken = 3;
+  optional int32 authtoken = 3;
   optional string passwordHash = 4;
   optional string gameId = 5;
   optional int32 recordId = 6;
@@ -15,23 +15,31 @@ persistent_message Player {
 }
 
 message TrackData {
-  optional string id = 5;
-  required float x = 6;
-  required float y = 7;
-  optional float z = 8;
-  optional DynamicMessage dynamicMessage = 13;
-  optional string gridName = 14;
-  required int32 getNeighbors = 15;
+  optional sint32 ix = 1;
+  optional sint32 iy = 2;
+  optional sint32 iz = 3;
+  
+  optional string id = 4;
+  optional int32 x = 5;
+  optional int32 y = 6;
+  optional int32 z = 7;
+
+  optional DynamicMessage dynamicMessage = 8;
+  optional string gridName = 9;
+  optional int32 getNeighbors = 10;
   enum EntityType {
     PLAYER = 0;
     NPC = 1;
     OTHER = 2;
     ALL = 3;
   }
-  optional EntityType neighborEntityType = 16;
-  optional EntityType entityType = 17;
-  
-  
+  optional EntityType neighborEntityType = 11;
+  optional EntityType entityType = 12;
+
+  optional float speed = 13;
+  optional float velocity = 14;
+  optional Vector3 direction = 15;
+  optional int32 shortId = 16;
 }
 
 message GameMessage {

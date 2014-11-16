@@ -4,6 +4,7 @@ import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.ClientConnection;
 import io.gamemachine.messages.ClientMessage;
+import io.gamemachine.messages.Player;
 import io.gamemachine.net.udp.UdpServer;
 import io.gamemachine.net.udp.UdpServerHandler;
 
@@ -15,31 +16,44 @@ public class Connection {
 	private UdpServer udpServer;
 	private String playerId;
 	private String gameId;
-	
-	public Connection(int protocol,ClientConnection clientConnection,ClientInfo clientInfo,UdpServer server,String playerId) {
+	private boolean playerIsAgent = false;
+
+	public Connection(int protocol, ClientConnection clientConnection, ClientInfo clientInfo, UdpServer server,
+			String playerId) {
 		this.setProtocol(protocol);
 		this.setClientConnection(clientConnection);
 		this.setClientInfo(clientInfo);
 		this.setPlayerId(playerId);
 		this.udpServer = server;
 		this.gameId = PlayerService.getInstance().getGameId(playerId);
+		this.playerIsAgent = PlayerService.getInstance().playerIsAgent(playerId);
 	}
-  
+
 	public void sendToClient(ClientMessage clientMessage) {
 		if (protocol == 0) {
 			byte[] bytes = clientMessage.toByteArray();
-			GameLimits.addBytesTransferred(gameId, bytes.length);
+
+			// Don't count data transfers on local network
+			if (!playerIsAgent) {
+				GameLimits.addBytesTransferred(gameId, bytes.length);
+			}
+
 			udpServer.sendToClient(clientInfo.address, bytes, clientInfo.ctx);
 		} else if (protocol == 2) {
-			clientMessage.setGameId(gameId);
+			
+			// Have to pass the game id through here so tcp encoder can call addBytesTransferred
+			if (!playerIsAgent) {
+				clientMessage.setGameId(gameId);
+			}
+
 			clientInfo.ctx.write(clientMessage);
 			clientInfo.ctx.flush();
 		} else {
-			throw new RuntimeException("Invalid protocol "+protocol);
+			throw new RuntimeException("Invalid protocol " + protocol);
 		}
 		GameLimits.incrementMessageCountOut(gameId);
 	}
-	
+
 	public String getPlayerId() {
 		return playerId;
 	}

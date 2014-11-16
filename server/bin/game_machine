@@ -76,6 +76,7 @@ elsif command == 'build' || command == 'bundle'
   
 
 elsif command == 'server'
+  #puts 'classpath is ' + java.lang.System.getProperty("java.class.path")
   policyfile = File.join(ENV['APP_ROOT'],'config','app.policy')
   #java.lang.System.setProperty("java.security.policy", policyfile)
 

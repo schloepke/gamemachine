@@ -67,7 +67,7 @@ public class AgentUpdater {
 		ProtobufIOUtil.mergeFrom(bytes, agentController, RuntimeSchema.getSchema(AgentController.class));
 
 		String playerId = agentController.getPlayer().getId();
-		String authtoken = agentController.getPlayer().getAuthtoken();
+		int authtoken = agentController.getPlayer().getAuthtoken();
 
 		if (!playerManagers.containsKey(playerId)) {
 			PlayerManager playerManager = new PlayerManager(conf.getDefaultHost(), conf.getDefaultPort(),

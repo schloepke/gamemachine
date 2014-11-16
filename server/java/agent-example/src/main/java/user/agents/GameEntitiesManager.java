@@ -67,14 +67,14 @@ public class GameEntitiesManager implements Codeblock {
 			if (playerId.equals(api.getPlayerId())) {
 				continue;
 			}
-			GameEntity vitals = Globals.gameEntityFor(playerId);
-			if (vitals == null) {
-				vitals = this.objectStore.find(playerId, GameEntity.class);
-				if (vitals == null) {
-					vitals = new GameEntity(playerId);
+			GameEntity gameEntity = Globals.gameEntityFor(playerId);
+			if (gameEntity == null) {
+				gameEntity = this.objectStore.find(playerId, GameEntity.class);
+				if (gameEntity == null) {
+					gameEntity = new GameEntity(playerId);
 				}
-				vitals.updated = true;
-				Globals.setGameEntity(vitals);
+				gameEntity.updated = true;
+				Globals.setGameEntity(gameEntity);
 			}
 		}
 
@@ -83,10 +83,10 @@ public class GameEntitiesManager implements Codeblock {
 		while (iter.hasNext()) {
 			Map.Entry<String, GameEntity> entry = iter.next();
 			String id = entry.getKey();
-			GameEntity vitals = Globals.gameEntityFor(id);
-			if (!playerIds.contains(id) && vitals.entityType == EntityType.PLAYER) {
+			GameEntity gameEntity = Globals.gameEntityFor(id);
+			if (!playerIds.contains(id) && gameEntity.entityType == EntityType.PLAYER) {
 				iter.remove();
-				this.objectStore.delete(vitals.id, GameEntity.class);
+				this.objectStore.delete(gameEntity.id, GameEntity.class);
 			}
 		}
 	}

@@ -31,12 +31,12 @@ import io.protostuff.runtime.RuntimeSchema;
 public class ApiMessage {
 
 	private String playerId;
-	private String authtoken;
+	private int authtoken;
 	private String defaultId = "0";
 	private Api base;
 	private ClientMessage clientMessage;
 
-	public ApiMessage(String playerId, String authtoken, Api base) {
+	public ApiMessage(String playerId, int authtoken, Api base) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.base = base;
