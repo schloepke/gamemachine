@@ -12,12 +12,12 @@ public class Api {
 	
 	private static ActorSystem actorSystem;
 	private String playerId;
-	private String authtoken;
+	private int authtoken;
 	private NetworkClient networkClient;
 	private Config conf = Config.getInstance();
 	private ObjectStore objectStore;
 	
-	public Api(String playerId, String authtoken, NetworkClient networkClient, ObjectStore objectStore) {
+	public Api(String playerId, int authtoken, NetworkClient networkClient, ObjectStore objectStore) {
 		this.playerId = playerId;
 		this.authtoken = authtoken;
 		this.networkClient = networkClient;

@@ -88,7 +88,7 @@ message TrackEntity {
 
 message PlayerLogout {
   required string playerId = 1;
-  optional string authtoken = 2;
+  optional int32 authtoken = 2;
 }
 
 message PlayerConnect {
@@ -102,7 +102,7 @@ message PlayerConnected {
 
 message PlayerAuthenticated {
   required string playerId = 1;
-  required string authtoken = 2;
+  required int32 authtoken = 2;
 }
 
 message ErrorMessage {

@@ -7,7 +7,15 @@ package io.gamemachine.core;
  * 
  * Grids are instantiated with a size and a cell size.  The grid is divided into cells of cell size.  The cell size must divide evenly into the grid size.
  * 
- * Grids operations are thread safe.
+ * Internally all coordinates are stored as integers with a precision scale of 2 assumed.  Clients do the math to convert floats to integers and back to floats.
+ * Space is more important then precision here.
+ * 
+ * When possible we send delta's to clients instead of full coordinates,and clients can send us delta's of their movement instead of full coordinates.  We know to send
+ * a delta when we have recently sent info to the client on the same entity.  If a client has not seen an entity recently we send the full coordinates.
+ * 
+ * Clients can send delta's, but must ensure that the server receives the full coordinates once before doing so.  The best way to do this is to wait for the first
+ * response from a neighbor query before you start sending delta's.
+ * 
  * 
  */
 import io.gamemachine.messages.TrackData;
@@ -19,6 +27,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Grid {
 
@@ -28,7 +41,12 @@ public class Grid {
 	private int width;
 	private int cellCount;
 
-	private ConcurrentHashMap<String, TrackData> deltaIndex = new ConcurrentHashMap<String, TrackData>();
+	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
+	
+	private PriorityBlockingQueue<Integer> shortIdQueue = new PriorityBlockingQueue<Integer>();	
+	private ConcurrentHashMap<String, Integer> shortIds = new ConcurrentHashMap<String, Integer>();
+	private ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>> gridValues = new ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>>();
+
 	private ConcurrentHashMap<String, TrackData> objectIndex = new ConcurrentHashMap<String, TrackData>();
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
@@ -39,6 +57,69 @@ public class Grid {
 		this.convFactor = 1.0f / this.cellSize;
 		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
+		
+		for(int i=1; i<1000; i++){
+			shortIdQueue.put(i);
+		}
+	}
+
+	public class GridValue {
+
+		private TrackData trackData;
+		private int x;
+		private int y;
+		private long lastSend = System.currentTimeMillis();
+
+		public GridValue(TrackData trackData, int shortId) {
+			this.x = trackData.x;
+			this.y = trackData.y;
+
+			this.trackData = cloneTrackData(trackData);
+			this.trackData.shortId = shortId;
+			this.trackData.id = null;
+		}
+
+		private TrackData cloneTrackData(TrackData trackData) {
+			TrackData clone = trackData.clone();
+			clone.x = null;
+			clone.y = null;
+			clone.z = null;
+			clone.getNeighbors = null;
+			clone.dynamicMessage = trackData.dynamicMessage;
+			clone.direction = trackData.direction;
+			clone.speed = trackData.speed;
+			clone.velocity = trackData.velocity;
+			return clone;
+		}
+	}
+
+	public void releaseShortId(String playerId) {
+		shortIds.remove(playerId);
+		Integer shortId = getShortId(playerId);
+		if (shortId != null) {
+			shortIdQueue.put(shortId);
+		}
+	}
+	
+	public Integer getShortId(String playerId) {
+		if (shortIds.containsKey(playerId)) {
+			return shortIds.get(playerId);
+		} else {
+			try {
+				int shortId = shortIdQueue.poll(10, TimeUnit.MILLISECONDS);
+				shortIds.put(playerId, shortId);
+				return shortId;
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+	}
+	
+	public void dumpGrid() {
+		for (TrackData td : objectIndex.values()) {
+			System.out.println("id=" + td.id + " x=" + td.x / 100 + " y=" + td.y / 100);
+		}
 	}
 
 	public int getObjectCount() {
@@ -61,18 +142,27 @@ public class Grid {
 		return this.cellCount;
 	}
 
-	public Set<Integer> cellsWithinBounds(float x, float y) {
+	private ConcurrentHashMap<String, GridValue> gridValuesForPlayer(String playerId) {
+		ConcurrentHashMap<String, GridValue> playerGridValues = gridValues.get(playerId);
+		if (playerGridValues == null) {
+			playerGridValues = new ConcurrentHashMap<String, GridValue>();
+			gridValues.put(playerId, playerGridValues);
+		}
+		return playerGridValues;
+	}
+
+	public Set<Integer> cellsWithinBounds(int x, int y) {
 		Set<Integer> cells = new HashSet<Integer>();
 
 		int offset = this.cellSize;
 
-		int startX = (int) (x - offset);
-		int startY = (int) (y - offset);
+		int startX = (x - offset);
+		int startY = (y - offset);
 
 		// subtract one from offset to keep it from hashing to the next cell
 		// boundary outside of range
-		int endX = (int) (x + offset - 1);
-		int endY = (int) (y + offset - 1);
+		int endX = (x + offset - 1);
+		int endY = (y + offset - 1);
 
 		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
 			for (int colNum = startY; colNum <= endY; colNum += offset) {
@@ -84,29 +174,74 @@ public class Grid {
 		return cells;
 	}
 
-	public ArrayList<TrackData> neighbors(float x, float y, EntityType entityType) {
+	public ArrayList<TrackData> neighbors(String playerId, int px, int py, EntityType entityType, int optsFlag) {
+		int x = px / 100;
+		int y = py / 100;
 		ArrayList<TrackData> result;
 
-		Collection<TrackData> gridValues;
+		Collection<TrackData> trackDatas;
 		result = new ArrayList<TrackData>();
 		Set<Integer> cells = cellsWithinBounds(x, y);
+		long currentTime = System.currentTimeMillis();
+
+		ConcurrentHashMap<String, GridValue> playerGridValues = gridValuesForPlayer(playerId);
+
 		for (int cell : cells) {
-			gridValues = gridValuesInCell(cell);
-			if (gridValues == null) {
+			trackDatas = gridValuesInCell(cell);
+			if (trackDatas == null) {
 				continue;
 			}
 
-			for (TrackData gridValue : gridValues) {
-				if (gridValue != null) {
-					if (entityType == null) {
-						result.add(gridValue);
-					} else if (gridValue.entityType == entityType) {
-						result.add(gridValue);
+			for (TrackData trackData : trackDatas) {
+				if (trackData == null) {
+					continue;
+				}
+
+				if (trackData.id.equals(playerId)) {
+					continue;
+				}
+
+				if (entityType == null || trackData.entityType == entityType) {
+					if (optsFlag == 2) {
+						result.add(trackData);
+					} else {
+
+						GridValue gridValue = playerGridValues.get(trackData.id);
+
+						if (gridValue == null) {
+							Integer shortId = getShortId(trackData.id);
+							gridValue = new GridValue(trackData, shortId);
+							playerGridValues.put(trackData.id, gridValue);
+							result.add(trackData);
+						} else if ((currentTime - gridValue.lastSend) > 100) {
+							playerGridValues.remove(trackData.id);
+							result.add(trackData);
+						} else {
+							updateGridValue(gridValue, trackData);
+							gridValue.lastSend = currentTime;
+							result.add(gridValue.trackData);
+						}
 					}
 				}
 			}
 		}
 		return result;
+	}
+
+	private void updateGridValue(GridValue gridValue, TrackData trackData) {
+		if (trackData.x >= gridValue.x) {
+			gridValue.trackData.ix = trackData.x - gridValue.x;
+		} else {
+			gridValue.trackData.ix = -(gridValue.x - trackData.x);
+		}
+
+		if (trackData.y >= gridValue.y) {
+			gridValue.trackData.iy = trackData.y - gridValue.y;
+		} else {
+			gridValue.trackData.iy = -(gridValue.y - trackData.y);
+		}
+		gridValue.x = trackData.x;
+		gridValue.y = trackData.y;
 	}
 
 	public Collection<TrackData> gridValuesInCell(int cell) {
@@ -119,27 +254,12 @@ public class Grid {
 		}
 	}
 
-	public void updateFromDelta(TrackData[] gridValues) {
-		for (TrackData gridValue : gridValues) {
-			if (gridValue != null) {
-				objectIndex.put(gridValue.id, gridValue);
-			}
-		}
-	}
-
-	public TrackData[] currentDelta() {
-		TrackData[] a = new TrackData[deltaIndex.size()];
-		deltaIndex.values().toArray(a);
-		deltaIndex.clear();
-		return a;
-	}
-
-	public ArrayList<TrackData> getNeighborsFor(String id, EntityType entityType) {
+	public ArrayList<TrackData> getNeighborsFor(String playerId, String id, EntityType entityType, int optsFlag) {
 		TrackData gridValue = get(id);
 		if (gridValue == null) {
 			return null;
 		}
-		return neighbors(gridValue.x, gridValue.y, entityType);
+		return neighbors(playerId, gridValue.x, gridValue.y, entityType, optsFlag);
 	}
 
 	public List<TrackData> getAll() {
@@ -150,20 +270,22 @@ public class Grid {
 		return objectIndex.get(id);
 	}
 
-	public void remove(String id) {
-		TrackData indexValue = objectIndex.get(id);
+	public void remove(String playerId) {
+		TrackData indexValue = objectIndex.get(playerId);
 		if (indexValue != null) {
-			int cell = cellsIndex.get(id);
+			int cell = cellsIndex.get(playerId);
 			ConcurrentHashMap<String, TrackData> cellGridValues = cells.get(cell);
 			if (cellGridValues != null) {
-				cellGridValues.remove(id);
+				cellGridValues.remove(playerId);
 			}
-			objectIndex.remove(id);
-			cellsIndex.remove(id);
+			objectIndex.remove(playerId);
+			cellsIndex.remove(playerId);
+			gridValues.remove(playerId);
+			releaseShortId(playerId);
 		}
 	}
 
-	public Boolean set(String id, float x, float y, float z, EntityType entityType) {
+	public Boolean set(String id, int x, int y, int z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.id = id;
 		trackData.x = x;
@@ -174,12 +296,48 @@ public class Grid {
 		return set(trackData);
 	}
 
-	public Boolean set(TrackData trackData) {
+	private TrackData updateFromDelta(TrackData deltaTrackData) {
+
+		TrackData trackData = objectIndex.get(deltaTrackData.id);
+		if (trackData == null) {
+			return null;
+		}
+
+		trackData.x += deltaTrackData.ix;
+		trackData.y += deltaTrackData.iy;
+
+		if (deltaTrackData.hasDynamicMessage()) {
+			trackData.dynamicMessage = deltaTrackData.dynamicMessage;
+		}
+
+		if (deltaTrackData.hasDirection()) {
+			trackData.direction = deltaTrackData.direction;
+		}
+
+		if (deltaTrackData.hasSpeed()) {
+			trackData.speed = deltaTrackData.speed;
+		}
+
+		return trackData;
+	}
+
+	public Boolean set(TrackData newTrackData) {
+		TrackData trackData = null;
+		if (newTrackData.hasIx()) {
+			trackData = updateFromDelta(newTrackData);
+			if (trackData == null) {
+				logger.info("Delta update with no original " + newTrackData.id);
+				return false;
+			}
+		} else {
+			trackData = newTrackData;
+		}
+
 		String id = trackData.id;
 
 		Integer oldCellValue = cellsIndex.get(id);
 
-		int cell = hash(trackData.x, trackData.y);
+		int cell = hash(trackData.x / 100, trackData.y / 100);
 
 		if (oldCellValue != null) {
 			if (oldCellValue != cell) {
@@ -213,11 +371,11 @@ public class Grid {
 		return true;
 	}
 
-	public int hash2(float x, float y) {
+	public int hash2(int x, int y) {
 		return (int) (Math.floor(x / this.cellSize) + Math.floor(y / this.cellSize) * width);
 	}
 
-	public int hash(float x, float y) {
+	public int hash(int x, int y) {
 		return (int) ((x * this.convFactor)) + (int) ((y * this.convFactor)) * this.width;
 	}
 }

@@ -69,8 +69,8 @@ public class TrackingManager implements Codeblock {
 		TrackData trackData = new TrackData();
 		trackData.setId(this.api.getPlayerId());
 		trackData.setEntityType(EntityType.PLAYER);
-		trackData.setX(-1f);
-		trackData.setY(-1f);
+		trackData.setX(-1);
+		trackData.setY(-1);
 		trackData.setNeighborEntityType(EntityType.ALL);
 		trackData.setGetNeighbors(1);
 		apiMessage.setTrackData(trackData);

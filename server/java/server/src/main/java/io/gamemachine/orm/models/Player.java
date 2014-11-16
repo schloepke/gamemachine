@@ -22,7 +22,7 @@ CREATE TABLE players (
 
   player_authenticated boolean DEFAULT NULL,
 
-  player_authtoken character varying(128) DEFAULT NULL,
+  player_authtoken integer DEFAULT NULL,
 
   player_password_hash character varying(128) DEFAULT NULL,
 
@@ -51,7 +51,7 @@ CREATE TABLE `players` (
 
   `player_authenticated` tinyint(4) DEFAULT NULL,
 
-  `player_authtoken` varchar(128) DEFAULT NULL,
+  `player_authtoken` int(11) DEFAULT NULL,
 
   `player_password_hash` varchar(128) DEFAULT NULL,
 

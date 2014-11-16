@@ -24,43 +24,39 @@ public class EntityTracking extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
 	private static MovementVerifier movementVerifier = null;
-	private static Cache<String,DynamicMessage> dynamicMessageCache = new Cache<String,DynamicMessage>(120, 10000);
-	
+	private static Cache<String, DynamicMessage> dynamicMessageCache = new Cache<String, DynamicMessage>(120, 10000);
+
 	public static String name = "fastpath_entity_tracking";
 
 	public EntityTracking() {
 		Commands.clientManagerRegister(name);
 	}
 
-	public static void updateTrackData(TrackDataUpdate update) {
-		dynamicMessageCache.set(update.getId(), update.getDynamicMessage());
-	}
-	
 	private void updateTrackData(TrackDataUpdate update, Player player) {
-		
+
 		// No access for clients
-		if (player.getRole().equals("player")) {
+		if (player.role.equals("player")) {
 			return;
 		}
-		updateTrackData(update);
+		dynamicMessageCache.set(update.id, update.dynamicMessage);
 	}
-	
+
 	@Override
 	public void onReceive(Object message) throws Exception {
 
 		if (message instanceof TrackData) {
-			handleTrackData((TrackData)message);
+			handleTrackData((TrackData) message);
 			return;
 		}
-		
+
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
-			
+
 			if (entity.hasAgentTrackData()) {
 				Grid agentGrid;
-				for (TrackData trackData : entity.getAgentTrackData().getTrackDataList()) {
+				for (TrackData trackData : entity.agentTrackData.getTrackDataList()) {
 					agentGrid = gameGrid(entity.player.id, trackData.getGridName());
-					setEntityLocation(entity.player.id,agentGrid, trackData);
+					setEntityLocation(entity.player.id, agentGrid, trackData);
 				}
 				return;
 			}
@@ -70,24 +66,26 @@ public class EntityTracking extends UntypedActor {
 				logger.warn("Player for " + entity.player.getId() + " is null");
 				return;
 			}
+
+			
 			
 			if (entity.hasTrackDataUpdate()) {
-				updateTrackData(entity.getTrackDataUpdate(),player);
+				updateTrackData(entity.getTrackDataUpdate(), player);
 				return;
 			}
 			
-			Grid grid = gameGrid(entity.player.id, entity.trackData.getGridName());
-
+			Grid grid = gameGrid(entity.player.id, entity.trackData.gridName);
+			
 			if (grid == null) {
 				logger.warn("No grid found for " + entity.player.id);
 				return;
 			}
-			
-			
-			setEntityLocation(entity.player.id,grid, entity.trackData);
 
-			if (entity.trackData.hasGetNeighbors() && entity.trackData.getNeighbors == 1) {
-				SendNeighbors(grid, entity.trackData.x, entity.trackData.y, player, entity.trackData.getNeighborEntityType());
+			setEntityLocation(entity.player.id, grid, entity.trackData);
+
+			if (entity.trackData.hasGetNeighbors() && entity.trackData.getNeighbors >= 1) {
+				SendNeighbors(grid, entity.trackData.x, entity.trackData.y, player,
+						entity.trackData.neighborEntityType,entity.trackData.getNeighbors);
 			}
 
 		} else if (message instanceof ClientManagerEvent) {
@@ -101,26 +99,26 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	public void handleTrackData(TrackData trackData) {
-		Player player = PlayerService.getInstance().find(trackData.getId());
+		Player player = PlayerService.getInstance().find(trackData.id);
 		if (player == null) {
-			logger.warn("Player for " + trackData.getId() + " is null");
+			logger.warn("Player for " + trackData.id + " is null");
 			return;
 		}
-		
-		Grid grid = gameGrid(player.id, trackData.getGridName());
+
+		Grid grid = gameGrid(player.id, trackData.gridName);
 
 		if (grid == null) {
 			logger.warn("No grid found for " + player.id);
 			return;
 		}
-		
-		setEntityLocation(player.id,grid, trackData);
+
+		setEntityLocation(player.id, grid, trackData);
 
 		if (trackData.hasGetNeighbors() && trackData.getNeighbors == 1) {
-			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.getNeighborEntityType());
+			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType,trackData.getNeighbors);
 		}
 	}
-	
+
 	public static Grid gameGrid(String playerId, String name) {
 		if (name == null) {
 			name = "default";
@@ -138,7 +136,7 @@ public class EntityTracking extends UntypedActor {
 		if (gameId == null) {
 			return;
 		}
-		
+
 		Map<String, ConcurrentHashMap<String, Grid>> gameGrids = GameGrid.getGameGrids();
 		if (gameGrids.containsKey(gameId)) {
 			for (String name : gameGrids.get(gameId).keySet()) {
@@ -152,10 +150,10 @@ public class EntityTracking extends UntypedActor {
 
 	}
 
-	private void SendNeighbors(Grid grid, float x, float y, Player player, EntityType neighborType) {
+	private void SendNeighbors(Grid grid, int x, int y, Player player, EntityType neighborType, int neighborsFlag) {
 		List<TrackData> trackDatas;
 		boolean isAgentController = (player.getRole().equals("agent_controller"));
-		
+
 		if (neighborType != null && neighborType == EntityType.ALL) {
 			// Only agents have access to entire grid
 			if (!isAgentController) {
@@ -163,7 +161,7 @@ public class EntityTracking extends UntypedActor {
 			}
 			trackDatas = grid.getAll();
 		} else {
-			trackDatas = grid.neighbors(x, y, neighborType);
+			trackDatas = grid.neighbors(player.id, x, y, neighborType, neighborsFlag);
 		}
 
 		if (trackDatas.size() >= 1) {
@@ -185,13 +183,7 @@ public class EntityTracking extends UntypedActor {
 		int size = 30;
 		int count = 0;
 
-		DynamicMessage dynamicMessage;
 		for (TrackData trackData : trackDatas) {
-			dynamicMessage = dynamicMessageCache.get(trackData.getId());
-			if (dynamicMessage != null) {
-				trackData.setDynamicMessage(dynamicMessage);
-			}
-			
 			neighbors.addTrackData(trackData);
 
 			count++;
@@ -206,24 +198,13 @@ public class EntityTracking extends UntypedActor {
 
 	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
-		// So either protostuff or protobuf-net has a bug where 0 floats come
-		// through as null
-		// This is *really* annoying must track down
-		if (trackData.x == null) {
-			trackData.x = 0f;
+		if (trackData.x != null) {
+			if (trackData.x == -1 && trackData.y == -1) {
+				grid.remove(trackData.id);
+				return;
+			}
 		}
-		if (trackData.y == null) {
-			trackData.y = 0f;
-		}
-		if (trackData.z == null) {
-			trackData.z = 0f;
-		}
-		
-		if (trackData.x == -1f && trackData.y == -1f) {
-			grid.remove(trackData.id);
-			return;
-		}
-		
+
 		if (trackData.entityType == EntityType.PLAYER) {
 			if (!trackData.id.equals(playerId)) {
 				return;
@@ -234,7 +215,12 @@ public class EntityTracking extends UntypedActor {
 				}
 			}
 		}
-		
+
+		DynamicMessage dynamicMessage = dynamicMessageCache.get(trackData.getId());
+		if (dynamicMessage != null) {
+			//trackData.setDynamicMessage(dynamicMessage);
+		}
+
 		grid.set(trackData);
 	}
 

@@ -24,11 +24,11 @@ public class PlayerManager {
 	private int port;
 	private String playerId;
 	private String gameId;
-	private String authtoken;
+	private int authtoken;
 	private ObjectStore cloud;
 	private Config conf;
 	
-	public PlayerManager(String host, int port, String gameId, String playerId, String authtoken) {
+	public PlayerManager(String host, int port, String gameId, String playerId, int authtoken) {
 		this.host = host;
 		this.port = port;
 		this.gameId = gameId;

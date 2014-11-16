@@ -24,6 +24,7 @@ public class GameLimits extends UntypedActor {
 
 	private static long messagesIn = 0;
 	private static long messagesOut = 0;
+	private static long bytesOut = 0;
 	
 	private static Map<String, Integer> messageLimits = new ConcurrentHashMap<String, Integer>();
 	private static Map<String, Integer> connectionLimits = new ConcurrentHashMap<String, Integer>();
@@ -45,6 +46,16 @@ public class GameLimits extends UntypedActor {
 	}
 
 	private void updateUserLimits() {
+		messagesIn = 0;
+		messagesOut = 0;
+		bytesOut = 0;
+		for (String gameId : messageCountsIn.keySet()) {
+			messagesIn += getMessageCountIn(gameId);
+			messagesOut += getMessageCountOut(gameId);
+			bytesOut += getBytesTransferred(gameId);
+		}
+		
+		
 		for (String gameId : messageCountsIn.keySet()) {
 			int messageCountIn = getMessageCountIn(gameId);
 			int messageCountOut = getMessageCountOut(gameId);
@@ -58,8 +69,7 @@ public class GameLimits extends UntypedActor {
 				Integer connectionLimit = response.params.get("connection_limit").asInt();
 				connectionLimits.put(gameId, connectionLimit);
 				
-				messagesIn = messageCountIn;
-				messagesOut = messageCountOut;
+				
 				resetMessageCountOut(gameId);
 				resetMessageCountIn(gameId);
 				resetBytesTransferred(gameId);
@@ -201,6 +211,10 @@ public class GameLimits extends UntypedActor {
 	
 	public static long getMpsIn() {
 		return messagesIn / 10l;
+	}
+	
+	public static long getBpsOut() {
+		return bytesOut / 10l;
 	}
 		
 	public static void resetMessageCountIn(String gameId) {

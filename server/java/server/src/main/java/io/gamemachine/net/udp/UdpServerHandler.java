@@ -36,6 +36,7 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
 		logger.info("close the connection when an exception is raised", cause);
 		ctx.close();
+		System.exit(0);
 	}
 
 	@Override

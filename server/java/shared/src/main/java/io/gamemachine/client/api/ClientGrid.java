@@ -174,7 +174,7 @@ public class ClientGrid {
 		}
 	}
 
-	public Boolean set(String id, float x, float y, float z, EntityType entityType) {
+	public Boolean set(String id, int x, int y, int z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.setId(id);
 		trackData.setX(x);

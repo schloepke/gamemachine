@@ -51,7 +51,15 @@ module GameMachine
         self.class.log_statistic('mps_in',JavaLib::GameLimits.get_mps_in)
 
         self.class.log_statistic('mps_out',JavaLib::GameLimits.get_mps_out)
-        
+
+        self.class.log_statistic('bps_out',JavaLib::GameLimits.get_bps_out)
+
+        bps_out = JavaLib::GameLimits.get_bps_out
+        mps_out = JavaLib::GameLimits.get_mps_out
+        if mps_out > 0 && bps_out > 0
+          self.class.log_statistic('bpm', bps_out/mps_out )
+        end
+
         update_statistics
         JavaLib::GameGrid.get_grid_counts
         puts @stats.inspect

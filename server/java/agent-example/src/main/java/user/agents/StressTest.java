@@ -24,8 +24,8 @@ public class StressTest implements Codeblock {
 		TrackData trackData = new TrackData();
 		trackData.setId(api.getPlayerId());
 		trackData.setEntityType(EntityType.NPC);
-		trackData.setX(4f);
-		trackData.setY(4f);
+		trackData.setX(4);
+		trackData.setY(4);
 		trackData.setGetNeighbors(0);
 		apiMessage.setTrackData(trackData);
 		bytes = apiMessage.getClientMessage().toByteArray();
