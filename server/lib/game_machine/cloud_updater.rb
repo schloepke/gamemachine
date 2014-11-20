@@ -53,7 +53,12 @@ module GameMachine
           node_status.set_last_updated(Time.now.to_i)
           node_status.set_client_count(ClientManager.local_players.size)
           node_status.set_heap_used(stats[:heap])
-          node_status.set_load_average(stats[:load_average])
+          if windows
+            node_status.set_load_average(0)
+          else
+            node_status.set_load_average(stats[:load_average])
+          end
+
           cloud_response = JavaLib::CloudClient.get_instance.update_node_status(node_status)
           if cloud_response.status != 200
             self.class.logger.warn "Update node status returned #{cloud_response.status}"
