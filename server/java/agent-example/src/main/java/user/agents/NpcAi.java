@@ -1,5 +1,13 @@
 package user.agents;
 
+import io.gamemachine.client.agent.CodeblockEnv;
+import io.gamemachine.client.api.Api;
+import io.gamemachine.client.api.ApiMessage;
+import io.gamemachine.client.messages.AgentTrackData;
+import io.gamemachine.client.messages.TrackData;
+import io.gamemachine.client.messages.TrackData.EntityType;
+import io.gamemachine.codeblocks.Codeblock;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,20 +15,13 @@ import user.Globals;
 import user.Npc;
 import user.messages.Attack;
 import user.messages.GameEntity;
-import io.gamemachine.client.messages.AgentTrackData;
-import io.gamemachine.client.messages.TrackData;
-import io.gamemachine.client.messages.TrackData.EntityType;
-
-import io.gamemachine.client.agent.CodeblockEnv;
-import io.gamemachine.client.api.Api;
-import io.gamemachine.client.api.ApiMessage;
-import io.gamemachine.codeblocks.Codeblock;
 
 public class NpcAi implements Codeblock {
 
 	private CodeblockEnv env;
 	private Api api;
 	private List<Npc> npcs = new ArrayList<Npc>();
+
 	private int npcCount = 5;
 	private int delay = 50;
 	private double speedScale = 4f;
@@ -54,8 +55,10 @@ public class NpcAi implements Codeblock {
 
 	@Override
 	public void run(Object message) throws Exception {
-		npcUpdate();
-		this.env.tick(delay, "ai");
+		if (message instanceof String) {
+			npcUpdate();
+			this.env.tick(delay, "ai");
+		}
 	}
 
 	private void npcUpdate() {
@@ -70,33 +73,31 @@ public class NpcAi implements Codeblock {
 			trackData.setId(gameEntity.id);
 			trackData.setEntityType(gameEntity.entityType);
 
-			if (updateCount < 5) {
-				trackData.setX((int)Math.round(npc.position.x * 100));
-				trackData.setY((int)Math.round(npc.position.y * 100));
-				if (npc.id.equals("NpcAi8-0")) {
-					System.out.println(trackData.x + "."+trackData.y);
-				}
+			if (Globals.npcResend.containsKey(npc.id)) {
+				trackData.setX((int) Math.round(npc.position.x * 100));
+				trackData.setY((int) Math.round(npc.position.y * 100));
+				Globals.npcResend.remove(npc.id);
 			} else {
 				double xDelta;
 				double yDelta;
 				if (npc.position.x >= x) {
-					 xDelta = npc.position.x - x;
+					xDelta = npc.position.x - x;
 				} else {
 					xDelta = -(x - npc.position.x);
 				}
-				
+
 				if (npc.position.y >= y) {
-					 yDelta = npc.position.y - y;
+					yDelta = npc.position.y - y;
 				} else {
 					yDelta = -(y - npc.position.y);
 				}
-				
+
 				int xi = (int) (xDelta * 100);
 				int yi = (int) (yDelta * 100);
 				trackData.setIx(xi);
 				trackData.setIy(yi);
 			}
-			
+
 			trackData.setGetNeighbors(0);
 			agentTrackData.addTrackData(trackData);
 		}

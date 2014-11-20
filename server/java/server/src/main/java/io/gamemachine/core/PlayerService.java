@@ -117,7 +117,7 @@ public class PlayerService {
 		if (player == null) {
 			return false;
 		} else {
-			if (player.getRole().equals("agent_controller")) {
+			if (player.role.equals("agent_controller")) {
 				return true;
 			} else {
 				return false;
@@ -130,7 +130,7 @@ public class PlayerService {
 		if (player == null) {
 			return null;
 		} else {
-			return player.getGameId();
+			return player.gameId;
 		}
 	}
 	

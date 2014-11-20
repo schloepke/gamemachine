@@ -32,12 +32,17 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
 	}
 
-	@Override
-	public void exceptionCaught(final ChannelHandlerContext ctx, final Throwable cause) {
-		logger.info("close the connection when an exception is raised", cause);
-		ctx.close();
-		System.exit(0);
-	}
+	// @Override
+	// public void exceptionCaught(final ChannelHandlerContext ctx, final
+	// Throwable cause) {
+	// logger.info("Channel exception caught");
+	//
+	// try {
+	// ctx.close();
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
 
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) {
@@ -63,16 +68,16 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 		m.content().readBytes(bytes);
 
 		ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
+		if (clientMessage.hasSentAt()) {
+			long latency = System.currentTimeMillis() - clientMessage.getSentAt();
+			if (latency >= 4) {
+				logger.info("ClientMessage latency " + latency);
+			}
+		}
+
 		NetMessage netMessage = new NetMessage(NetMessage.UDP, m.sender().getHostString(), m.sender().getPort(), ctx);
 		netMessage.clientMessage = clientMessage;
 		netMessage.address = m.sender();
-
-//		if (clientMessage.hasSentAt()) {
-//			long latency = System.currentTimeMillis() - clientMessage.getSentAt();
-//			if (latency >= 4) {
-//				logger.info("ClientMessage latency " + latency);
-//			}
-//		}
 
 		logger.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(netMessage, null);

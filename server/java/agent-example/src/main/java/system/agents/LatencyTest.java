@@ -1,4 +1,4 @@
-package user.agents;
+package system.agents;
 
 /*
  * For internal testing only and not enabled on production servers.  In production the server will drop these messages, but you will be charged.  You have been warned!

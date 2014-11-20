@@ -14,6 +14,7 @@ import io.gamemachine.net.Connection;
 import io.gamemachine.net.udp.UdpServer;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import akka.actor.ActorSelection;
@@ -134,6 +135,10 @@ public class Incoming extends UntypedActor {
 		}
 	}
 
+	public static Set<String> getConnectedPlayerIds() {
+		return clients.keySet();
+	}
+	
 	public static boolean hasClient(String playerId) {
 		return (clients.containsKey(playerId));
 	}

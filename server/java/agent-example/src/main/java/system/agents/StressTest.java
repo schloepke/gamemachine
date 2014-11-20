@@ -1,4 +1,4 @@
-package user.agents;
+package system.agents;
 
 import io.gamemachine.client.agent.CodeblockEnv;
 import io.gamemachine.client.api.Api;

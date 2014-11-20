@@ -8,6 +8,16 @@ message TrackDataUpdate {
   required DynamicMessage dynamicMessage = 2;
 }
 
+message TrackDataResponse {
+  required string id = 1;
+  enum REASON {
+    RESEND = 0;
+    VALIDATION_FAILED = 1;
+    REMOVED = 2;
+  }
+  optional REASON reason = 2;
+}
+
 message GameConfigs {
   repeated GameConfig gameConfig = 1;
 }
@@ -386,6 +396,7 @@ message Entity {
   optional AgentTrackData agentTrackData = 64;
   optional TeamMemberSkill teamMemberSkill = 65;
   optional TrackDataUpdate trackDataUpdate = 66;
+  optional TrackDataResponse trackDataResponse = 67;
   //GAME_ENTITY_MESSAGES
 }
 

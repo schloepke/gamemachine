@@ -1,17 +1,18 @@
 package user;
 
+import io.gamemachine.client.api.ClientGrid;
+import io.gamemachine.client.messages.TrackData;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import user.messages.GameEntity;
-import io.gamemachine.client.messages.TrackData;
-
-import io.gamemachine.client.api.ClientGrid;
 
 public class Globals {
 
+	public static Map<String,Boolean> npcResend = new ConcurrentHashMap<String,Boolean>();
 	private static ConcurrentHashMap<String,GameEntity> gameEntities = new ConcurrentHashMap<String,GameEntity>();
 	public static final ClientGrid grid = ClientGrid.findOrCreate("default", 400, 50);
 	public static final ClientGrid aoeGrid = ClientGrid.findOrCreate("aoe", 2000, 10);

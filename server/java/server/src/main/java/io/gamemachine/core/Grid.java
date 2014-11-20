@@ -7,14 +7,16 @@ package io.gamemachine.core;
  * 
  * Grids are instantiated with a size and a cell size.  The grid is divided into cells of cell size.  The cell size must divide evenly into the grid size.
  * 
- * Internally all coordinates are stored as integers with a precision scale of 2 assumed.  Clients do the math to convert floats to integers and back to floats.
+ * Internally all coordinates are stored as integers with a precision scale of scaleFactor.  Clients do the math to convert floats to integers and back to floats.
  * Space is more important then precision here.
  * 
  * When possible we send delta's to clients instead of full coordinates,and clients can send us delta's of their movement instead of full coordinates.  We know to send
  * a delta when we have recently sent info to the client on the same entity.  If a client has not seen an entity recently we send the full coordinates.
  * 
- * Clients can send delta's, but must ensure that the server receives the full coordinates once before doing so.  The best way to do this is to wait for the first
- * response from a neighbor query before you start sending delta's.
+ * Clients should initially send a TrackData with full coordinates.  The entity tracking system will send the client a TrackDataResponse with
+ * reason RESEND if we do not have a full coordinate yet.
+ * 
+ * 
  * 
  * 
  */
@@ -40,6 +42,8 @@ public class Grid {
 	private float convFactor;
 	private int width;
 	private int cellCount;
+	private int scaleFactor = 100;
+	private int shortIdQueueSize = 1000;
 
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
 	
@@ -58,7 +62,7 @@ public class Grid {
 		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
 		
-		for(int i=1; i<1000; i++){
+		for(int i=1; i<this.shortIdQueueSize; i++){
 			shortIdQueue.put(i);
 		}
 	}
@@ -94,10 +98,10 @@ public class Grid {
 	}
 
 	public void releaseShortId(String playerId) {
-		shortIds.remove(playerId);
-		Integer shortId = getShortId(playerId);
-		if (shortId != null) {
+		if (shortIds.containsKey(playerId)) {
+			int shortId = shortIds.get(playerId);
 			shortIdQueue.put(shortId);
+			shortIds.remove(playerId);
 		}
 	}
 	
@@ -106,7 +110,12 @@ public class Grid {
 			return shortIds.get(playerId);
 		} else {
 			try {
-				int shortId = shortIdQueue.poll(10, TimeUnit.MILLISECONDS);
+				Integer shortId = shortIdQueue.poll(10, TimeUnit.MILLISECONDS);
+				if (shortId == null) {
+					logger.warn("Unable to get short id from queue");
+					return null;
+				}
+				
 				shortIds.put(playerId, shortId);
 				return shortId;
 			} catch (InterruptedException e) {
@@ -118,7 +127,7 @@ public class Grid {
 	
 	public void dumpGrid() {
 		for (TrackData td : objectIndex.values()) {
-			System.out.println("id=" + td.id + " x=" + td.x / 100 + " y=" + td.y / 100);
+			System.out.println("id=" + td.id + " x=" + td.x / this.scaleFactor + " y=" + td.y / this.scaleFactor);
 		}
 	}
 
@@ -175,8 +184,8 @@ public class Grid {
 	}
 
 	public ArrayList<TrackData> neighbors(String playerId, int px, int py, EntityType entityType, int optsFlag) {
-		int x = px / 100;
-		int y = py / 100;
+		int x = px / this.scaleFactor;
+		int y = py / this.scaleFactor;
 		ArrayList<TrackData> result;
 
 		Collection<TrackData> trackDatas;
@@ -210,6 +219,11 @@ public class Grid {
 
 						if (gridValue == null) {
 							Integer shortId = getShortId(trackData.id);
+							if (shortId == null) {
+								logger.warn("Unable to obtain short id");
+								continue;
+							}
+							trackData.shortId = shortId;
 							gridValue = new GridValue(trackData, shortId);
 							playerGridValues.put(trackData.id, gridValue);
 							result.add(trackData);
@@ -322,11 +336,16 @@ public class Grid {
 	}
 
 	public Boolean set(TrackData newTrackData) {
+		Integer shortId = getShortId(newTrackData.id);
+		if (shortId == null) {
+			return false;
+		}
+		
 		TrackData trackData = null;
 		if (newTrackData.hasIx()) {
 			trackData = updateFromDelta(newTrackData);
 			if (trackData == null) {
-				logger.info("Delta update with no original " + newTrackData.id);
+				logger.debug("Delta update with no original " + newTrackData.id);
 				return false;
 			}
 		} else {
@@ -337,7 +356,7 @@ public class Grid {
 
 		Integer oldCellValue = cellsIndex.get(id);
 
-		int cell = hash(trackData.x / 100, trackData.y / 100);
+		int cell = hash(trackData.x / this.scaleFactor, trackData.y / this.scaleFactor);
 
 		if (oldCellValue != null) {
 			if (oldCellValue != cell) {
@@ -365,8 +384,6 @@ public class Grid {
 		} else {
 			cellGridValues.put(id, trackData);
 		}
-
-		// deltaIndex.put(id, gridValue);
 
 		return true;
 	}
