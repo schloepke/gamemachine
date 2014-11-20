@@ -25,12 +25,14 @@ public class PlayerOutgoing extends UntypedActor {
 	private ClientConnection clientConnection;
 	private int idleTimeout;
 	private long lastActivity;
+	private String gameId;
 	
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
 	public PlayerOutgoing(Connection connection) {
 		this.connection = connection;
 		this.playerId = connection.getPlayerId();
+		this.gameId = PlayerService.getInstance().getGameId(playerId);
 		this.clientConnection = connection.getClientConnection();
 		this.idleTimeout = AppConfig.Client.getIdleTimeout();
 		logger.debug("Player idle timeout = "+this.idleTimeout);
@@ -67,20 +69,28 @@ public class PlayerOutgoing extends UntypedActor {
 	
 	private void unregisterIfIdle() {
 		if (((System.currentTimeMillis() / 1000l) - lastActivity) > idleTimeout) {
-			logger.info("Player "+playerId+" timed out");
-			ClientMessage clientMessage = createClientMessage();
-			clientMessage.setPlayer(new Player().setId(playerId));
-			Incoming.removeClient(playerId);
-			RequestHandler.unregisterClient(clientMessage);
-			getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
+			unregister();
 		}
 		tick(1000l,"idle_timeout");
 	}
+	
+	private void unregister() {
+		logger.info("Player "+playerId+" timed out");
+		ClientMessage clientMessage = createClientMessage();
+		clientMessage.setPlayer(new Player().setId(playerId));
+		Incoming.removeClient(playerId);
+		RequestHandler.unregisterClient(clientMessage);
+		getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
+	}
+	
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
-			if (((String)message).equals("idle_timeout")) {
+			String msg = (String)message;
+			if (msg.equals("idle_timeout")) {
 				unregisterIfIdle();
+			} else if (msg.equals(this.gameId)) {
+				unregister();
 			}
 		} else {
 			lastActivity = System.currentTimeMillis() / 1000l;

@@ -7,11 +7,12 @@ package user.agents;
  * 
  */
 
+import user.Globals;
 import user.messages.Attack;
 import io.gamemachine.client.messages.DynamicMessage;
 import io.gamemachine.client.messages.Entity;
 import io.gamemachine.client.messages.GameMessage;
-
+import io.gamemachine.client.messages.TrackDataResponse;
 import io.gamemachine.client.agent.CodeblockEnv;
 import io.gamemachine.client.api.DynamicMessageUtil;
 import io.gamemachine.codeblocks.Codeblock;
@@ -48,7 +49,12 @@ public class MessageRouter implements Codeblock {
 				this.env.sendToAgent("TrackingManager", entity.getNeighbors());
 				return;
 			}
-						
+			
+			if (entity.hasTrackDataResponse()) {
+				Globals.npcResend.put(entity.trackDataResponse.id,true);
+				return;
+			}
+			
 			// Can be multiple chat related messages in a single entity
 			if (entity.getChatChannels() != null) {
 				this.env.sendToAgent("ChatManager", entity.getChatChannels());

@@ -4,6 +4,7 @@ import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GameMessages;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.TrackDataResponse;
 import io.gamemachine.routing.Incoming;
 import akka.actor.ActorSelection;
 
@@ -18,6 +19,16 @@ public class PlayerCommands {
 		PlayerCommands.sendToPlayer(entity, playerId);
 	}
 
+	public static void sendTrackDataResponse(String playerId, String id, TrackDataResponse.REASON reason) {
+		Entity entity = new Entity();
+		entity.id = "0";
+		TrackDataResponse response = new TrackDataResponse();
+		response.id = id;
+		response.reason = reason;
+		entity.setTrackDataResponse(response);
+		PlayerCommands.sendToPlayer(entity, playerId);
+	}
+
 	public static void sendToPlayer(Entity entity, String playerId) {
 		if (!entity.hasPlayer()) {
 			Player player = new Player();
@@ -27,13 +38,21 @@ public class PlayerCommands {
 		entity.setSendToPlayer(true);
 
 		ActorSelection sel;
-		
+
 		if (Incoming.hasClient(playerId)) {
 			sel = ActorUtil.getSelectionByName(playerId);
 		} else {
 			sel = ActorUtil.getSelectionByName("GameMachine::ClientManager");
 		}
-		
+
 		sel.tell(entity, null);
+	}
+
+	// We need to refactor the client manager that's in ruby so we have a better way of getting at player info directly
+	public static void disconnectPlayersForGame(String gameId) {
+		for (String playerId : Incoming.getConnectedPlayerIds()) {
+			ActorSelection sel = ActorUtil.getSelectionByName(playerId);
+			sel.tell(gameId, null);
+		}
 	}
 }

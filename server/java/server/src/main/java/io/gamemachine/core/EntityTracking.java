@@ -1,11 +1,13 @@
 package io.gamemachine.core;
 
+import io.gamemachine.messages.AgentTrackData;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.DynamicMessage;
 import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.Neighbors;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.TrackDataResponse;
 import io.gamemachine.messages.TrackDataUpdate;
 import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.objectdb.Cache;
@@ -24,7 +26,7 @@ public class EntityTracking extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
 	private static MovementVerifier movementVerifier = null;
-	private static Cache<String, DynamicMessage> dynamicMessageCache = new Cache<String, DynamicMessage>(120, 10000);
+	private static ConcurrentHashMap<String,Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String,Cache<String, DynamicMessage>>();
 
 	public static String name = "fastpath_entity_tracking";
 
@@ -32,61 +34,60 @@ public class EntityTracking extends UntypedActor {
 		Commands.clientManagerRegister(name);
 	}
 
+	private static Cache<String, DynamicMessage> getDynamicMessageCache(String gameId) {
+		Cache<String, DynamicMessage> cache = dynamicMessageCaches.get(gameId);
+		if (cache == null) {
+			cache = new Cache<String, DynamicMessage>(120, 10000);
+			dynamicMessageCaches.put(gameId, cache);
+		}
+		return cache;
+	}
+	
 	private void updateTrackData(TrackDataUpdate update, Player player) {
-
+		String gameId = PlayerService.getInstance().getGameId(player.id);
 		// No access for clients
 		if (player.role.equals("player")) {
 			return;
 		}
-		dynamicMessageCache.set(update.id, update.dynamicMessage);
+		Cache<String, DynamicMessage> cache = getDynamicMessageCache(gameId);
+		cache.set(update.id, update.dynamicMessage);
 	}
 
 	@Override
 	public void onReceive(Object message) throws Exception {
-
+		Player player;
+		
 		if (message instanceof TrackData) {
-			handleTrackData((TrackData) message);
+			TrackData trackData = (TrackData)message;
+			player = PlayerService.getInstance().find(trackData.id);
+			if (player == null) {
+				logger.warn("Player for " + trackData.id + " is null");
+				return;
+			}
+			handleTrackData(trackData, player);
 			return;
 		}
 
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
-
-			if (entity.hasAgentTrackData()) {
-				Grid agentGrid;
-				for (TrackData trackData : entity.agentTrackData.getTrackDataList()) {
-					agentGrid = gameGrid(entity.player.id, trackData.getGridName());
-					setEntityLocation(entity.player.id, agentGrid, trackData);
-				}
-				return;
-			}
-
-			Player player = PlayerService.getInstance().find(entity.player.getId());
-			if (player == null) {
-				logger.warn("Player for " + entity.player.getId() + " is null");
-				return;
-			}
-
 			
+			player = PlayerService.getInstance().find(entity.player.id);
+			if (player == null) {
+				logger.warn("Player for " + entity.player.id + " is null");
+				return;
+			}
+			
+			if (entity.hasAgentTrackData()) {
+				handleAgentTrackData(entity.agentTrackData, player);
+				return;
+			}
 			
 			if (entity.hasTrackDataUpdate()) {
 				updateTrackData(entity.getTrackDataUpdate(), player);
 				return;
 			}
 			
-			Grid grid = gameGrid(entity.player.id, entity.trackData.gridName);
-			
-			if (grid == null) {
-				logger.warn("No grid found for " + entity.player.id);
-				return;
-			}
-
-			setEntityLocation(entity.player.id, grid, entity.trackData);
-
-			if (entity.trackData.hasGetNeighbors() && entity.trackData.getNeighbors >= 1) {
-				SendNeighbors(grid, entity.trackData.x, entity.trackData.y, player,
-						entity.trackData.neighborEntityType,entity.trackData.getNeighbors);
-			}
+			handleTrackData(entity.trackData, player);
 
 		} else if (message instanceof ClientManagerEvent) {
 			ClientManagerEvent event = (ClientManagerEvent) message;
@@ -98,13 +99,15 @@ public class EntityTracking extends UntypedActor {
 		}
 	}
 
-	public void handleTrackData(TrackData trackData) {
-		Player player = PlayerService.getInstance().find(trackData.id);
-		if (player == null) {
-			logger.warn("Player for " + trackData.id + " is null");
-			return;
+	private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
+		Grid agentGrid;
+		for (TrackData trackData : agentTrackData.getTrackDataList()) {
+			agentGrid = gameGrid(player.id, trackData.gridName);
+			setEntityLocation(player.id, agentGrid, trackData);
 		}
-
+	}
+	
+	private void handleTrackData(TrackData trackData, Player player) {
 		Grid grid = gameGrid(player.id, trackData.gridName);
 
 		if (grid == null) {
@@ -114,12 +117,12 @@ public class EntityTracking extends UntypedActor {
 
 		setEntityLocation(player.id, grid, trackData);
 
-		if (trackData.hasGetNeighbors() && trackData.getNeighbors == 1) {
+		if (trackData.hasGetNeighbors() && trackData.getNeighbors >= 1) {
 			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType,trackData.getNeighbors);
 		}
 	}
 
-	public static Grid gameGrid(String playerId, String name) {
+	private Grid gameGrid(String playerId, String name) {
 		if (name == null) {
 			name = "default";
 		}
@@ -178,6 +181,7 @@ public class EntityTracking extends UntypedActor {
 		sel.tell(playerMessage, getSelf());
 	}
 
+		
 	private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
 		Neighbors neighbors = new Neighbors();
 		int size = 30;
@@ -201,6 +205,7 @@ public class EntityTracking extends UntypedActor {
 		if (trackData.x != null) {
 			if (trackData.x == -1 && trackData.y == -1) {
 				grid.remove(trackData.id);
+				PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.REMOVED);
 				return;
 			}
 		}
@@ -211,17 +216,25 @@ public class EntityTracking extends UntypedActor {
 			}
 			if (movementVerifier != null) {
 				if (!movementVerifier.verify(trackData)) {
+					PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.VALIDATION_FAILED);
 					return;
 				}
 			}
 		}
 
-		DynamicMessage dynamicMessage = dynamicMessageCache.get(trackData.getId());
+		String gameId = PlayerService.getInstance().getGameId(playerId);
+		Cache<String, DynamicMessage> cache = getDynamicMessageCache(gameId);
+		DynamicMessage dynamicMessage = cache.get(trackData.getId());
 		if (dynamicMessage != null) {
-			//trackData.setDynamicMessage(dynamicMessage);
+			trackData.setDynamicMessage(dynamicMessage);
 		}
 
-		grid.set(trackData);
+		if (!grid.set(trackData)) {
+			
+			// Resend is most likely from a TrackData that contains a delta, but where we never received an initial
+			// TrackData with the full coordinates.
+			PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
+		}
 	}
 
 }

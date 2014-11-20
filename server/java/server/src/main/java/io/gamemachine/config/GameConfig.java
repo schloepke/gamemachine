@@ -29,6 +29,7 @@ public class GameConfig extends UntypedActor {
 	private static Map<String, Config> gameConfigs = new ConcurrentHashMap<String, Config>();
 	
 	private Map<String,Integer> versions = new HashMap<String,Integer>();
+	private static Map<String,Boolean> lockStatus = new ConcurrentHashMap<String,Boolean>();
 	
 	
 	private static Config getConfig(String gameId) {
@@ -39,6 +40,22 @@ public class GameConfig extends UntypedActor {
 			config = AppConfig.getGameConfig();
 		}
 		return config;
+	}
+	
+	public static Boolean isGameLocked(String gameId) {
+		if (!lockStatus.containsKey(gameId)) {
+			Config config = getConfig(gameId);
+			Boolean locked = config.getBoolean("locked");
+			if (locked == null) {
+				lockStatus.put(gameId, false);
+				return false;
+			} else {
+				lockStatus.put(gameId, locked);
+				return locked;
+			}
+		}
+		return lockStatus.get(gameId);
+		
 	}
 	
 	public static GridConfig getGridConfig(String gameId, String gridName) {
