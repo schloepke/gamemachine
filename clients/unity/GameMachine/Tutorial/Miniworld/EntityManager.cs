@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TrackData = io.gamemachine.messages.TrackData;
 using GameMachine.Core;
 using GameMachine.Tutorials.Miniworld;
+using TrackDataResponse = io.gamemachine.messages.TrackDataResponse;
 
 namespace GameMachine.Tutorials.Miniworld
 {
@@ -74,11 +75,18 @@ namespace GameMachine.Tutorials.Miniworld
             if (Input.GetAxis ("Jump") != 0f) {
                 //TODO trackData.action = 1;
             }
-            trackData.x = player.transform.position.x;
-            trackData.y = player.transform.position.z;
-            trackData.z = player.transform.position.y;
+            trackData.x = EntityTracking.ToInt (player.transform.position.x);
+            trackData.y = EntityTracking.ToInt (player.transform.position.z);
+            trackData.z = EntityTracking.ToInt (player.transform.position.y);
 
             return trackData;
+        }
+
+        public void HandleTrackDataResponse (TrackDataResponse response)
+        {
+            if (response.reason == TrackDataResponse.REASON.RESEND) {
+                
+            }
         }
     }
 }

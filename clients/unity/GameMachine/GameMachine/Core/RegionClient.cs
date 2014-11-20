@@ -6,146 +6,146 @@ using Entity = io.gamemachine.messages.Entity;
 
 namespace GameMachine.Core
 {
-	public class RegionClient : MonoBehaviour
-	{
-		public Client client;
+    public class RegionClient : MonoBehaviour
+    {
+        public Client client;
 
-		public bool running = false;
-		public static bool connected = false;
+        public bool running = false;
+        public static bool connected = false;
         
         
-		private double lastEcho = 0;
-		private double echosPerSecond = 1;
-		private double echoInterval;
-		private double lastEchoReceived = 0;
+        private double lastEcho = 0;
+        private double echosPerSecond = 1;
+        private double echoInterval;
+        private double lastEchoReceived = 0;
 
-		public double echoTimeout = 5.0f;
-		public float disconnectTime = 10f;
+        public double echoTimeout = 5.0f;
+        public float disconnectTime = 10f;
 
-		public delegate void RegionClientStarted ();
-		public delegate void ConnectionTimeout ();
-		private RegionClientStarted regionClientStarted;
-		private ConnectionTimeout connectionTimeout;
+        public delegate void RegionClientStarted ();
+        public delegate void ConnectionTimeout ();
+        private RegionClientStarted regionClientStarted;
+        private ConnectionTimeout connectionTimeout;
 
-		private bool regionStartedCalled = false;
-		private int port;
-		private string username;
-		private string authtoken;
-		public string currentRegion;
+        private bool regionStartedCalled = false;
+        private int port;
+        private string username;
+        private int authtoken;
+        public string currentRegion;
 
         
-		public void OnRegionClientStarted (RegionClientStarted callback)
-		{
-			regionClientStarted = callback;
-		}
+        public void OnRegionClientStarted (RegionClientStarted callback)
+        {
+            regionClientStarted = callback;
+        }
         
-		public void OnConnectionTimeout (ConnectionTimeout connectionTimeout)
-		{
-			this.connectionTimeout = connectionTimeout;
-		}
+        public void OnConnectionTimeout (ConnectionTimeout connectionTimeout)
+        {
+            this.connectionTimeout = connectionTimeout;
+        }
          
-		public void Disconnect ()
-		{
-			Logger.Debug ("Region client: disconnecting from current region");
-			running = false;
-			regionStartedCalled = false;
-			connected = false;
-			ActorSystem.Instance.SetRegionClient (null);
-			if (client != null && client.IsRunning ()) {
-				client.Stop ();
-			}
-		}
+        public void Disconnect ()
+        {
+            Logger.Debug ("Region client: disconnecting from current region");
+            running = false;
+            regionStartedCalled = false;
+            connected = false;
+            ActorSystem.Instance.SetRegionClient (null);
+            if (client != null && client.IsRunning ()) {
+                client.Stop ();
+            }
+        }
 
-		public void Init (int port, string username, string authtoken)
-		{
-			this.port = port;
-			this.username = username;
-			this.authtoken = authtoken;
-		}
+        public void Init (int port, string username, int authtoken)
+        {
+            this.port = port;
+            this.username = username;
+            this.authtoken = authtoken;
+        }
 
-		public void Connect (string region, string host)
-		{
-			if (running) {
-				Disconnect ();
-			}
+        public void Connect (string region, string host)
+        {
+            if (running) {
+                Disconnect ();
+            }
 
-			Logger.Debug ("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
-			if (App.protocol == "UDP") {
-				client = new AsyncUdpClient (host, port, username, authtoken);
-			} else {
-				client = new AsyncTcpClient (host, port, username, authtoken);
-			}
+            Logger.Debug ("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
+            if (App.protocol == "UDP") {
+                client = new AsyncUdpClient (host, port, username, authtoken);
+            } else {
+                client = new AsyncTcpClient (host, port, username, authtoken);
+            }
 
-			client.SetConnectionType (2);
-			client.Start ();
-			ActorSystem.Instance.SetRegionClient (client);
+            client.SetConnectionType (2);
+            client.Start ();
+            ActorSystem.Instance.SetRegionClient (client);
 
-			RemoteEcho.RegionEchoReceived callback = OnEchoReceived;
-			GameMachine.Core.App.remoteEcho.OnRegionEchoReceived (callback);
-			running = true;
-			currentRegion = region;
-			Logger.Debug ("Region client running - waiting to verify connection");
-		}
+            RemoteEcho.RegionEchoReceived callback = OnEchoReceived;
+            GameMachine.Core.App.remoteEcho.OnRegionEchoReceived (callback);
+            running = true;
+            currentRegion = region;
+            Logger.Debug ("Region client running - waiting to verify connection");
+        }
 
-		public void Connect (string region)
-		{
-			string host = RegionHandler.regions [region];
-			Connect (region, host);
-		}
+        public void Connect (string region)
+        {
+            string host = RegionHandler.regions [region];
+            Connect (region, host);
+        }
                 
-		void OnEchoReceived ()
-		{
-			if (!connected) {
-				connected = true;
-				Logger.Debug ("Region client connected " + currentRegion);
-				if (!regionStartedCalled) {
-					regionClientStarted ();
-					regionStartedCalled = true;
-				}
-			}
+        void OnEchoReceived ()
+        {
+            if (!connected) {
+                connected = true;
+                Logger.Debug ("Region client connected " + currentRegion);
+                if (!regionStartedCalled) {
+                    regionClientStarted ();
+                    regionStartedCalled = true;
+                }
+            }
             
-			lastEchoReceived = Time.time;
-		}
+            lastEchoReceived = Time.time;
+        }
         
-		void Start ()
-		{
-			echoInterval = 0.60 / echosPerSecond;
-			lastEchoReceived = Time.time;
-			InvokeRepeating ("UpdateNetwork", 1.0f, 1.0F);
-		}
+        void Start ()
+        {
+            echoInterval = 0.60 / echosPerSecond;
+            lastEchoReceived = Time.time;
+            InvokeRepeating ("UpdateNetwork", 1.0f, 1.0F);
+        }
         
-		void OnApplicationQuit ()
-		{
-			Disconnect ();
-		}
+        void OnApplicationQuit ()
+        {
+            Disconnect ();
+        }
         
         
-		void UpdateNetwork ()
-		{
+        void UpdateNetwork ()
+        {
              
-			if (!running) {
-				return;
-			}
+            if (!running) {
+                return;
+            }
 
-			if (Time.time > (lastEcho + echoInterval)) {
-				lastEcho = Time.time;
+            if (Time.time > (lastEcho + echoInterval)) {
+                lastEcho = Time.time;
                 
-				if ((Time.time - lastEchoReceived) >= echoTimeout) {
-					connected = false;
-					Logger.Debug ("RegionEcho timeout");
-					if ((Time.time - lastEchoReceived) >= disconnectTime) {
-						Logger.Debug ("Region Connection timeout");
-						if (connectionTimeout != null) {
-							Disconnect ();
-							connectionTimeout ();
-						}
+                if ((Time.time - lastEchoReceived) >= echoTimeout) {
+                    connected = false;
+                    Logger.Debug ("RegionEcho timeout");
+                    if ((Time.time - lastEchoReceived) >= disconnectTime) {
+                        Logger.Debug ("Region Connection timeout");
+                        if (connectionTimeout != null) {
+                            Disconnect ();
+                            connectionTimeout ();
+                        }
 
-					}
-				}
-				GameMachine.Core.App.remoteEcho.RegionEcho ();
-			}
-		}
+                    }
+                }
+                GameMachine.Core.App.remoteEcho.RegionEcho ();
+            }
+        }
         
         
-	}
+    }
 }

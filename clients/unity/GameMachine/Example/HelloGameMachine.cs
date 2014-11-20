@@ -58,7 +58,7 @@ namespace GameMachine.Example
         void StartAreaOfInterest ()
         {
             GameObject misc = GameObject.Find ("Game");
-            misc.AddComponent ("AreaOfInterest");
+            UnityEngineInternal.APIUpdaterRuntimeServices.AddComponent (misc, "Assets/GameMachine/Example/HelloGameMachine.cs (61,13)", "AreaOfInterest");
         }
 
         void StartChat ()

@@ -30,10 +30,10 @@ namespace io.gamemachine.messages
       get { return _authenticated; }
       set { _authenticated = value; }
     }
-    private string _authtoken = "";
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string authtoken
+    private int _authtoken = default(int);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int authtoken
     {
       get { return _authtoken; }
       set { _authtoken = value; }
@@ -88,38 +88,64 @@ namespace io.gamemachine.messages
   {
     public TrackData() {}
     
+    private int _ix = default(int);
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"ix", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int ix
+    {
+      get { return _ix; }
+      set { _ix = value; }
+    }
+    private int _iy = default(int);
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"iy", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int iy
+    {
+      get { return _iy; }
+      set { _iy = value; }
+    }
+    private int _iz = default(int);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"iz", DataFormat = global::ProtoBuf.DataFormat.ZigZag)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int iz
+    {
+      get { return _iz; }
+      set { _iz = value; }
+    }
     private string _id = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
     public string id
     {
       get { return _id; }
       set { _id = value; }
     }
-    private float _x;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public float x
+    private int _x = default(int);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int x
     {
       get { return _x; }
       set { _x = value; }
     }
-    private float _y;
-    [global::ProtoBuf.ProtoMember(7, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    public float y
+    private int _y = default(int);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int y
     {
       get { return _y; }
       set { _y = value; }
     }
-    private float _z = default(float);
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float z
+    private int _z = default(int);
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int z
     {
       get { return _z; }
       set { _z = value; }
     }
     private io.gamemachine.messages.DynamicMessage _dynamicMessage = null;
-    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"dynamicMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public io.gamemachine.messages.DynamicMessage dynamicMessage
     {
@@ -127,22 +153,23 @@ namespace io.gamemachine.messages
       set { _dynamicMessage = value; }
     }
     private string _gridName = "";
-    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"gridName", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
     public string gridName
     {
       get { return _gridName; }
       set { _gridName = value; }
     }
-    private int _getNeighbors;
-    [global::ProtoBuf.ProtoMember(15, IsRequired = true, Name=@"getNeighbors", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    private int _getNeighbors = default(int);
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"getNeighbors", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
     public int getNeighbors
     {
       get { return _getNeighbors; }
       set { _getNeighbors = value; }
     }
     private io.gamemachine.messages.TrackData.EntityType _neighborEntityType = io.gamemachine.messages.TrackData.EntityType.PLAYER;
-    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.PLAYER)]
     public io.gamemachine.messages.TrackData.EntityType neighborEntityType
     {
@@ -150,12 +177,44 @@ namespace io.gamemachine.messages
       set { _neighborEntityType = value; }
     }
     private io.gamemachine.messages.TrackData.EntityType _entityType = io.gamemachine.messages.TrackData.EntityType.PLAYER;
-    [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"entityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.PLAYER)]
     public io.gamemachine.messages.TrackData.EntityType entityType
     {
       get { return _entityType; }
       set { _entityType = value; }
+    }
+    private float _speed = default(float);
+    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"speed", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    [global::System.ComponentModel.DefaultValue(default(float))]
+    public float speed
+    {
+      get { return _speed; }
+      set { _speed = value; }
+    }
+    private float _velocity = default(float);
+    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"velocity", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    [global::System.ComponentModel.DefaultValue(default(float))]
+    public float velocity
+    {
+      get { return _velocity; }
+      set { _velocity = value; }
+    }
+    private io.gamemachine.messages.Vector3 _direction = null;
+    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"direction", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.Vector3 direction
+    {
+      get { return _direction; }
+      set { _direction = value; }
+    }
+    private int _shortId = default(int);
+    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"shortId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int shortId
+    {
+      get { return _shortId; }
+      set { _shortId = value; }
     }
     [global::ProtoBuf.ProtoContract(Name=@"EntityType")]
     public enum EntityType
@@ -663,6 +722,42 @@ namespace io.gamemachine.messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TrackDataResponse")]
+  public partial class TrackDataResponse : global::ProtoBuf.IExtensible
+  {
+    public TrackDataResponse() {}
+    
+    private string _id;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private io.gamemachine.messages.TrackDataResponse.REASON _reason = io.gamemachine.messages.TrackDataResponse.REASON.RESEND;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"reason", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackDataResponse.REASON.RESEND)]
+    public io.gamemachine.messages.TrackDataResponse.REASON reason
+    {
+      get { return _reason; }
+      set { _reason = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"REASON")]
+    public enum REASON
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"RESEND", Value=0)]
+      RESEND = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"VALIDATION_FAILED", Value=1)]
+      VALIDATION_FAILED = 1
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GameConfigs")]
   public partial class GameConfigs : global::ProtoBuf.IExtensible
   {
@@ -1070,10 +1165,10 @@ namespace io.gamemachine.messages
       get { return _playerId; }
       set { _playerId = value; }
     }
-    private string _authtoken = "";
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string authtoken
+    private int _authtoken = default(int);
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int authtoken
     {
       get { return _authtoken; }
       set { _authtoken = value; }
@@ -1139,9 +1234,9 @@ namespace io.gamemachine.messages
       get { return _playerId; }
       set { _playerId = value; }
     }
-    private string _authtoken;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string authtoken
+    private int _authtoken;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"authtoken", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int authtoken
     {
       get { return _authtoken; }
       set { _authtoken = value; }
@@ -2720,6 +2815,14 @@ namespace io.gamemachine.messages
     {
       get { return _trackDataUpdate; }
       set { _trackDataUpdate = value; }
+    }
+    private io.gamemachine.messages.TrackDataResponse _trackDataResponse = null;
+    [global::ProtoBuf.ProtoMember(67, IsRequired = false, Name=@"trackDataResponse", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.TrackDataResponse trackDataResponse
+    {
+      get { return _trackDataResponse; }
+      set { _trackDataResponse = value; }
     }
     private io.gamemachine.messages.Player _player = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]

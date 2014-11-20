@@ -157,7 +157,7 @@ namespace KAM
             viewAngle = new Vector3 (20f, 0f, 0f);
             velocity = Vector3.zero;
             angularVelocity = Vector3.zero;
-            camera.transform.eulerAngles = viewAngle;
+            GetComponent<Camera>().transform.eulerAngles = viewAngle;
         }
         
         //////////////////////////////////////////////////////////////
@@ -301,7 +301,7 @@ namespace KAM
             // viewAngle is the current camera angle + the angle of the transform 
             // since viewDelta.y is the left mouse button and angularVelocity.y (in Update()) 
             // is the right mouse button, this enables us to rotate around the actor
-            camera.transform.eulerAngles = player.transform.eulerAngles + viewAngle;
+            GetComponent<Camera>().transform.eulerAngles = player.transform.eulerAngles + viewAngle;
             
             // compute the eye position -- a bit above where the actor's eyes are located usually works nicely
             // note that we're using collider.height here instead renderer.bounds.size.y, which would give choppy 
@@ -317,7 +317,7 @@ namespace KAM
             
             // now check for a camera collision; if a collision, set a new distance clamped to the current zoom distance
             // note that speedDistance is also modified according to the speed of input to ensure the distance lerp keeps up with the user's twitchiness
-            RaycastHit[] hits = Physics.SphereCastAll (player.WaistPosition, player.Radius * 0.5f, -camera.transform.forward, zoomDistance);
+            RaycastHit[] hits = Physics.SphereCastAll (player.WaistPosition, player.Radius * 0.5f, -GetComponent<Camera>().transform.forward, zoomDistance);
             hitCamera.distance = Mathf.Infinity;
             foreach (RaycastHit hit in hits) {
                 if (hit.distance < hitCamera.distance && hit.transform != player.transform) {
@@ -343,7 +343,7 @@ namespace KAM
             viewDistance = Mathf.Lerp (viewDistance, moveDistance, speedDistance);
             
             // actor's eye position in world space minus the camera's normal scaled by the view distance
-            camera.transform.position = eyePosition - camera.transform.forward * viewDistance;
+            GetComponent<Camera>().transform.position = eyePosition - GetComponent<Camera>().transform.forward * viewDistance;
             
             // if we hit close to min zoom, hide the chararacter
             player.SetEnabled (Mathf.Abs (viewDistance - zoomRange.min) > 0.1f);
@@ -357,8 +357,8 @@ namespace KAM
         public Vector3 Direction {
             get { 
                 if (player == null)
-                    return camera.transform.forward;
-                Transform t = camera.transform;
+                    return GetComponent<Camera>().transform.forward;
+                Transform t = GetComponent<Camera>().transform;
                 Vector3 e = t.eulerAngles;
                 Vector3 p = SetVectorY (viewAngle, 0f);
                 t.eulerAngles = player.transform.eulerAngles + p;

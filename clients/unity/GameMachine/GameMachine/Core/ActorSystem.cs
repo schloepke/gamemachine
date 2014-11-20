@@ -147,7 +147,8 @@ namespace GameMachine.Core
                         GameMessageHandler.Instance.DeliverMessages (entity.gameMessages);
                         continue;
                     }
-                    if (entity.neighbors != null) {
+
+                    if (entity.neighbors != null || entity.trackDataResponse != null) {
                         EntityTracking entityTracking = actors ["EntityTracking"] as EntityTracking;
                         entityTracking.OnReceive (entity);
                         continue;

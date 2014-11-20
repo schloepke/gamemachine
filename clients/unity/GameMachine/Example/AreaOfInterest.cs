@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using  System.Collections.Generic;
 using GameMachine;
@@ -53,9 +53,9 @@ namespace GameMachine.Example
             Vector3 position = this.gameObject.transform.position;
 
             TrackData trackData = new TrackData ();
-            trackData.x = position.x;
-            trackData.y = position.z;
-            trackData.z = position.y;
+            trackData.x = EntityTracking.ToInt (position.x);
+            trackData.y = EntityTracking.ToInt (position.z);
+            trackData.z = EntityTracking.ToInt (position.y);
             trackData.id = User.Instance.username;
             trackData.entityType = TrackData.EntityType.PLAYER;
             entityTracking.Update (trackData);

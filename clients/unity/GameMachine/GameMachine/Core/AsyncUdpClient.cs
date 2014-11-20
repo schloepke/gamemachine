@@ -24,7 +24,7 @@ namespace GameMachine.Core
         private string host;
         private ClientMessage clientMessage;
         private string playerId;
-        private string authtoken;
+        private int authtoken;
         private bool measure = false;
         public bool running = false;
 
@@ -35,10 +35,10 @@ namespace GameMachine.Core
         private int connectionType = 0;
         public static ConcurrentQueue<Entity> entityQueue = new ConcurrentQueue<Entity> ();
 
-        public AsyncUdpClient (string host, int port, string _playerId, string _authtoken, bool measure=false)
+        public AsyncUdpClient (string host, int port, string _playerId, int authtoken, bool measure=false)
         {
             playerId = _playerId;
-            authtoken = _authtoken;
+            this.authtoken = authtoken;
             this.host = host;
             this.port = port;
             clientMessage = CreateClientMessage ();
