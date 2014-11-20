@@ -197,6 +197,26 @@ public class PlayerService {
 		}
 	}
 	
+	public void setIp(String playerId, int ip) {
+		Player player = find(playerId);
+		if (player == null) {
+			logger.warn("Player " + playerId + " not found");
+			return;
+		}
+		
+		if (player.ip != 0 && player.ip != ip) {
+			player.setIpChangedAt(System.currentTimeMillis());
+		}
+		
+		player.setIp(ip);
+
+		if (authType == OBJECT_DB) {
+			Player.store().set(player);
+		} else if (authType == SQL_DB) {
+			Player.db().save(player);
+		}
+	}
+	
 	public void clearCache(String playerId) {
 		if (players.containsKey(playerId)) {
 			players.remove(playerId);

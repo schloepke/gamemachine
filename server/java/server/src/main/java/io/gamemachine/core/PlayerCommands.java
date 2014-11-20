@@ -5,7 +5,7 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GameMessages;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackDataResponse;
-import io.gamemachine.routing.Incoming;
+import io.gamemachine.net.Connection;
 import akka.actor.ActorSelection;
 
 public class PlayerCommands {
@@ -39,7 +39,7 @@ public class PlayerCommands {
 
 		ActorSelection sel;
 
-		if (Incoming.hasClient(playerId)) {
+		if (Connection.hasConnection(playerId)) {
 			sel = ActorUtil.getSelectionByName(playerId);
 		} else {
 			sel = ActorUtil.getSelectionByName("GameMachine::ClientManager");
@@ -50,7 +50,7 @@ public class PlayerCommands {
 
 	// We need to refactor the client manager that's in ruby so we have a better way of getting at player info directly
 	public static void disconnectPlayersForGame(String gameId) {
-		for (String playerId : Incoming.getConnectedPlayerIds()) {
+		for (String playerId : Connection.getConnectedPlayerIds()) {
 			ActorSelection sel = ActorUtil.getSelectionByName(playerId);
 			sel.tell(gameId, null);
 		}

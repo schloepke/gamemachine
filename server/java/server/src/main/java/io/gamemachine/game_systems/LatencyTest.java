@@ -22,7 +22,7 @@ public class LatencyTest extends GameMessageActor {
 		TestMessage testMessage = DynamicMessageUtil.fromDynamicMessage(gameMessage.getDynamicMessage());
 		long latency = System.currentTimeMillis() - testMessage.sentAt;
 		if (latency >= 4) {
-			logger.info("latency " + latency);
+			//logger.info("latency " + latency);
 		}
 		gameMessage.setAgentId(testMessage.senderId);
 		PlayerCommands.sendGameMessage(gameMessage, playerId);

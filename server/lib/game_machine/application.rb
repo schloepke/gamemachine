@@ -129,7 +129,7 @@ module GameMachine
         end
 
         if config.udp.enabled
-          NetLib::UdpServer.start(config.udp.host,config.udp.port)
+          NetLib::UdpServer.start("netty",config.udp.host,config.udp.port)
         end
 
         JavaLib::GameMachineLoader.start_incoming(config.routers.incoming)

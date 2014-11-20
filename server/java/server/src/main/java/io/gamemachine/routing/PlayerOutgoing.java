@@ -1,7 +1,6 @@
 package io.gamemachine.routing;
 
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.ClientConnection;
 import io.gamemachine.messages.ClientMessage;
@@ -78,7 +77,7 @@ public class PlayerOutgoing extends UntypedActor {
 		logger.info("Player "+playerId+" timed out");
 		ClientMessage clientMessage = createClientMessage();
 		clientMessage.setPlayer(new Player().setId(playerId));
-		Incoming.removeClient(playerId);
+		Connection.removeConnection(playerId);
 		RequestHandler.unregisterClient(clientMessage);
 		getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
 	}

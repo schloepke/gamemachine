@@ -57,7 +57,10 @@ public class Authentication {
 	}
 
 	public boolean authtokenIsValid(Player player) {
-		if (isPublic() || player.authtoken.equals(authtokenForPlayer(player))) {
+		// 0 signifies logged out in the db, it's reserved and clients should never send this
+		if (player.authtoken == 0) {
+			return false;
+		} else 	if (isPublic() || player.authtoken.equals(authtokenForPlayer(player))) {
 			return true;
 		} else {
 			return false;
@@ -72,6 +75,17 @@ public class Authentication {
 		} else {
 			logger.warn("Authentication for " + player.getId() + " failed");
 			return false;
+		}
+	}
+	
+	public boolean ipCheck(String playerId) {
+		Player player = PlayerService.getInstance().find(playerId);
+		if (player.ipChangedAt == 0) {  // has not changed since player created
+			return true;
+		} else if ((System.currentTimeMillis() - player.ipChangedAt) < 60000) {
+			return false;
+		} else {
+			return true;
 		}
 	}
 

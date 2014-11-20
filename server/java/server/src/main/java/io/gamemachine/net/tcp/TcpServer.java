@@ -1,6 +1,6 @@
 package io.gamemachine.net.tcp;
 
-import io.gamemachine.net.udp.UdpServer;
+import io.gamemachine.net.udp.NettyUdpServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -23,7 +23,7 @@ public class TcpServer implements Runnable {
 	static final boolean SSL = System.getProperty("nossl") != null;
 	static final int PORT = Integer.parseInt(System.getProperty("port", "8463"));
 
-	private static final Logger log = LoggerFactory.getLogger(UdpServer.class);
+	private static final Logger log = LoggerFactory.getLogger(NettyUdpServer.class);
 	private static Thread serverThread;
 
 	private static TcpServer tcpServer;

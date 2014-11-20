@@ -12,6 +12,8 @@ persistent_message Player {
   optional int32 recordId = 6;
   optional string role = 7;
   optional bool locked = 8;
+  optional int32 ip = 9;
+  optional int64 ipChangedAt = 10;
 }
 
 message TrackData {

@@ -1,20 +1,20 @@
 package io.gamemachine.net.udp;
 
-import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.MathHelper;
 import io.gamemachine.core.NetMessage;
-import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.socket.DatagramPacket;
-import io.netty.channel.ChannelHandler.Sharable;
 
 import java.net.InetSocketAddress;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.nio.ByteBuffer;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,13 +22,24 @@ import org.slf4j.LoggerFactory;
 import akka.actor.ActorSelection;
 
 @Sharable
-public final class UdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
+public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<DatagramPacket> {
 
-	private static final Logger logger = LoggerFactory.getLogger(UdpServerHandler.class);
+	public class ClientAddress {
+		public ChannelHandlerContext ctx;
+		public InetSocketAddress address;
+		
+		public ClientAddress(InetSocketAddress address, ChannelHandlerContext ctx) {
+			this.address = address;
+			this.ctx = ctx;
+		}
+	}
+	
+	private static ConcurrentHashMap<Long,ClientAddress> clients = new ConcurrentHashMap<Long,ClientAddress>();
+	private static final Logger logger = LoggerFactory.getLogger(NettyUdpServerHandler.class);
 	public ChannelHandlerContext ctx = null;
 	private ActorSelection inbound;
 
-	public UdpServerHandler() {
+	public NettyUdpServerHandler() {
 		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
 	}
 
@@ -44,6 +55,12 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 	// }
 	// }
 
+	public static void removeClient(long clientId) {
+		if (clients.containsKey(clientId)) {
+			clients.remove(clientId);
+		}
+	}
+	
 	@Override
 	public void channelReadComplete(ChannelHandlerContext ctx) {
 		ctx.flush();
@@ -55,6 +72,17 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 		this.ctx = ctx;
 	}
 
+	public static void sendMessage(long clientId, byte[] bytes) {
+		ClientAddress clientAddress = clients.get(clientId);
+		if (clientAddress == null) {
+			logger.warn("ClientAddress not found for "+clientId);
+			return;
+		}
+		ByteBuf buf = Unpooled.wrappedBuffer(bytes);
+		DatagramPacket packet = new DatagramPacket(buf, clientAddress.address);
+		clientAddress.ctx.writeAndFlush(packet);
+	}
+	
 	public void send(InetSocketAddress address, byte[] bytes, ChannelHandlerContext ctx) {
 
 		ByteBuf buf = Unpooled.wrappedBuffer(bytes);
@@ -68,16 +96,17 @@ public final class UdpServerHandler extends SimpleChannelInboundHandler<Datagram
 		m.content().readBytes(bytes);
 
 		ClientMessage clientMessage = ClientMessage.parseFrom(bytes);
-		if (clientMessage.hasSentAt()) {
-			long latency = System.currentTimeMillis() - clientMessage.getSentAt();
-			if (latency >= 4) {
-				logger.info("ClientMessage latency " + latency);
-			}
+		int ip = ByteBuffer.wrap(m.sender().getAddress().getAddress()).getInt();
+		long clientId = MathHelper.cantorize(ip,m.sender().getPort());
+		
+		if (!clients.containsKey(clientId)) {
+			ClientAddress clientAddress = new ClientAddress(m.sender(),ctx);
+			clients.put(clientId, clientAddress);
 		}
-
-		NetMessage netMessage = new NetMessage(NetMessage.UDP, m.sender().getHostString(), m.sender().getPort(), ctx);
+		
+		
+		NetMessage netMessage = new NetMessage(NetMessage.NETTY_UDP, ip, clientId);
 		netMessage.clientMessage = clientMessage;
-		netMessage.address = m.sender();
 
 		logger.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(netMessage, null);

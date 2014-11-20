@@ -32,6 +32,10 @@ CREATE TABLE players (
 
   player_locked boolean DEFAULT NULL,
 
+  player_ip integer DEFAULT NULL,
+
+  player_ip_changed_at integer DEFAULT NULL,
+
   CONSTRAINT player_pkey PRIMARY KEY (id)
 );
 alter table players owner to gamemachine;
@@ -60,6 +64,10 @@ CREATE TABLE `players` (
   `player_role` varchar(128) DEFAULT NULL,
 
   `player_locked` tinyint(4) DEFAULT NULL,
+
+  `player_ip` int(11) DEFAULT NULL,
+
+  `player_ip_changed_at` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
