@@ -14,6 +14,7 @@ namespace GameMachine.Core
 
         private double lastEcho = -1000;
         private double echosPerSecond = 1.0f;
+        private float gameTickInterval = 0.066f;
         private double echoInterval;
         private double lastEchoReceived = 0;
         private AppStarted appStarted;
@@ -24,6 +25,7 @@ namespace GameMachine.Core
         public static RemoteEcho remoteEcho;
         public bool running = false;
         public bool connected = false;
+
         public double echoTimeout = 5.0f;
         public float disconnectTime = 10f;
         public static string protocol = "UDP";
@@ -166,7 +168,7 @@ namespace GameMachine.Core
             Application.runInBackground = true;
             SetEchoInterval ();
             lastEchoReceived = Time.time;
-            InvokeRepeating ("UpdateNetwork", 0.010f, 0.066f);
+            InvokeRepeating ("UpdateNetwork", 0.010f, gameTickInterval);
         }
 
         void OnApplicationQuit ()
