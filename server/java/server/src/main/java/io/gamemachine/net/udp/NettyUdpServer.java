@@ -10,6 +10,8 @@ import io.netty.channel.epoll.EpollDatagramChannel;
 import io.netty.channel.epoll.EpollEventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioDatagramChannel;
+import io.netty.handler.logging.LogLevel;
+import io.netty.handler.logging.LoggingHandler;
 
 import java.net.InetSocketAddress;
 
@@ -18,7 +20,7 @@ import org.slf4j.LoggerFactory;
 
 public final class NettyUdpServer implements Runnable {
 
-	private static final Logger log = LoggerFactory.getLogger(NettyUdpServer.class);
+	private static final Logger logger = LoggerFactory.getLogger(NettyUdpServer.class);
 	private static Thread serverThread;
 
 	private static NettyUdpServer udpServer;
@@ -45,7 +47,7 @@ public final class NettyUdpServer implements Runnable {
 	}
 
 	public static void stop() {
-		log.info("Stopping UDP server");
+		logger.info("Stopping UDP server");
 		// Don't try to stop a server that's not running
 		if (udpServer == null) {
 			return;
@@ -60,12 +62,12 @@ public final class NettyUdpServer implements Runnable {
 	}
 
 	public void run() {
-		log.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
+		logger.info("Starting UdpServer port=" + this.port + " hostname=" + this.hostname);
 		Thread.currentThread().setName("udp-server");
 		String os = System.getProperty("os.name").toLowerCase();
-		log.info("OS is "+os);
+		logger.info("OS is "+os);
 		if (os.startsWith("linux")) {
-			log.info("UDP using Epoll");
+			logger.info("UDP using Epoll");
 			runLinux();
 		} else {
 			runGeneric();
@@ -102,6 +104,7 @@ public final class NettyUdpServer implements Runnable {
 			boot.option(ChannelOption.SO_RCVBUF, 302400);
 			boot.option(ChannelOption.ALLOCATOR, PooledByteBufAllocator.DEFAULT);
 			boot.option(EpollChannelOption.SO_REUSEPORT, true);
+			boot.handler(new LoggingHandler(LogLevel.INFO));
 			boot.handler(new NettyUdpServerHandler());
 
 			for (int i = 0; i < threadcount; ++i) {

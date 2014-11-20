@@ -37,7 +37,6 @@ public class TcpServer implements Runnable {
 
 	public static void start(String host, Integer port) {
 
-		// Don't try to start an already running server
 		if (tcpServer != null) {
 			return;
 		}
@@ -49,7 +48,6 @@ public class TcpServer implements Runnable {
 
 	public static void stop() {
 		log.info("Stopping TCP server");
-		// Don't try to stop a server that's not running
 		if (tcpServer == null) {
 			return;
 		}
@@ -82,9 +80,13 @@ public class TcpServer implements Runnable {
 		EventLoopGroup workerGroup = new NioEventLoopGroup();
 		try {
 			ServerBootstrap b = new ServerBootstrap();
-			b.group(bossGroup, workerGroup).channel(NioServerSocketChannel.class)
-					.childOption(ChannelOption.TCP_NODELAY, true).childOption(ChannelOption.SO_REUSEADDR, true)
-					.handler(new LoggingHandler(LogLevel.INFO)).childHandler(new TcpServerInitializer(sslCtx));
+			b.group(bossGroup, workerGroup);
+			b.channel(NioServerSocketChannel.class);
+			b.childOption(ChannelOption.TCP_NODELAY, true);
+			b.childOption(ChannelOption.SO_REUSEADDR, true);
+			
+			b.handler(new LoggingHandler(LogLevel.INFO));
+			b.childHandler(new TcpServerInitializer(sslCtx));
 
 			InetSocketAddress address = new InetSocketAddress(hostname, port);
 			b.bind(address).sync().channel().closeFuture().sync();

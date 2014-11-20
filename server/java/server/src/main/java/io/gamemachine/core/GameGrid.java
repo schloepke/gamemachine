@@ -21,7 +21,7 @@ public class GameGrid {
 			for (Map.Entry<String, Grid> entry : grids.entrySet())
 			{
 				Grid grid = entry.getValue();
-				logger.info("Grid "+gameId+":"+entry.getKey()+" count "+grid.getObjectCount()+" max="+grid.getMax()+" size="+grid.getCellSize());
+				logger.debug("Grid "+gameId+":"+entry.getKey()+" count "+grid.getObjectCount()+" max="+grid.getMax()+" size="+grid.getCellSize());
 				//entry.getValue().dumpGrid();
 			}
 		}

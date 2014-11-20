@@ -76,7 +76,7 @@ public final class HttpServer implements Runnable {
             b.option(ChannelOption.SO_BACKLOG, 1024);
             b.group(bossGroup, workerGroup)
              .channel(NioServerSocketChannel.class)
-             .handler(new LoggingHandler(LogLevel.WARN))
+             .handler(new LoggingHandler(LogLevel.INFO))
              .childHandler(initializer);
 
             channel = b.bind(address).sync().channel();

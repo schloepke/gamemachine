@@ -13,7 +13,6 @@ module GameMachine
       @stats = {}
       @interval = 5
       schedule_message('message_count',@interval,:seconds)
-      #schedule_message('update',60,:seconds)
     end
 
     def update_statistics
@@ -62,7 +61,7 @@ module GameMachine
 
         update_statistics
         JavaLib::GameGrid.get_grid_counts
-        puts @stats.inspect
+        #puts @stats.inspect
       end
       
     end
