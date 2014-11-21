@@ -61,8 +61,8 @@ module GameMachine
         FileUtils.cp_r(mono_source,path)
 
         puts 'Upgrading java'
-        FileUtils.rm_rf(File.join(path,'java','project'))
-        FileUtils.cp_r(java_project_source, File.join(path,'java','project'))
+        FileUtils.rm_rf(File.join(path,'java','server'))
+        FileUtils.cp_r(java_project_source, File.join(path,'java','server'))
 
         puts 'Upgrading Gemfile'
         FileUtils.rm_rf(File.join(path,'Gemfile'))
