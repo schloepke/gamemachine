@@ -1,9 +1,11 @@
 apply plugin: 'java'
 apply plugin: 'eclipse'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 group = 'io.gamemachine'
- version = '1.0-SNAPSHOT'
+archivesBaseName = "common"
+ version = '1.1.0-SNAPSHOT'
 
 
 description = """"""
@@ -33,46 +35,85 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
   compile 'com.google.guava:guava:18.0'
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
-  compile 'io.netty:netty-all:4.0.23.Final'
+  compile 'io.netty:netty-all:4.0.24.Final'
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.1'
 }
 
-task sourceJar(type: Jar) {
-    from sourceSets.main.allJava
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
 }
 
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
 
-            artifact sourceJar {
-                classifier "sources"
-            }
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+uploadArchives {
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+      repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'Game Machine commons'
+        packaging 'jar'
+        // optionally artifactId can be defined here 
+        description 'A collection of common libraries used by Game Machine core.'
+        url 'http://www.gamemachine.io'
+
+        scm {
+          connection 'scm:git:git://github.com/gamemachine/gamemachine'
+          developerConnection 'scm:git:git@github.com:gamemachine/gamemachine.git'
+          url 'https://github.com/gamemachine/gamemachine'
         }
-    }
-     repositories {
-        maven {
-            url "/home/chris/maven-repo"
+
+        licenses {
+          license {
+            name 'The Apache License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
         }
+
+        developers {
+          developer {
+            name 'Chris Ochs'
+            email 'chris@gamemachine.io'
+          }
+        }
+      }
     }
+  }
 }
 
-
-
-task removeOldSnapshots(type: Exec) {
-  executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/shared/1.0-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
+signing {
+    sign configurations.archives
 }
 
+//task removeOldSnapshots(type: Exec) {
+//  executable "sh"
+//  args "-c", "cd /home/chris/maven-repo;git rm -rf io/gamemachine/common/1.1.0-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
+//}
 
-task publish_to_github(type: Exec, dependsOn: publish) {
-  executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
-}
-publish.dependsOn removeOldSnapshots
-publish.mustRunAfter removeOldSnapshots
+
+//task publish_to_github(type: Exec, dependsOn: publish) {
+//  executable "sh"
+//  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
+//}
+//publish.dependsOn removeOldSnapshots
+//publish.mustRunAfter removeOldSnapshots
 

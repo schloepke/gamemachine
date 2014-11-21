@@ -17,7 +17,7 @@ buildscript {
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'io.gamemachine'
-  version = '1.0.4-SNAPSHOT'
+  version = '1.1.0'
   
 
 description = """"""
@@ -30,9 +30,6 @@ repositories {
   mavenCentral()
   maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
-    }
-    maven {
-        url "https://raw.github.com/gamemachine/maven-repo/master"
     }
  }
   
@@ -77,7 +74,7 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
-  compile 'io.gamemachine:shared:1.0-SNAPSHOT'
+  compile 'io.gamemachine:common:1.1.0-SNAPSHOT'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
