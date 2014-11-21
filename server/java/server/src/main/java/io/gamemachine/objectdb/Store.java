@@ -48,6 +48,9 @@ public class Store {
 		} else if (storeName.equals("memory")) {
 			this.store = (Storable) new MemoryStore();
 			this.store.connect();
+		} else if (storeName.equals("file")) {
+			this.store = (Storable) new FileStore();
+			this.store.connect();
 		}
 	}
 	

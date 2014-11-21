@@ -42,6 +42,7 @@ module GameMachine
       JavaLib::AppConfig::Datastore.set_serialization(config.datastore.serialization)
       JavaLib::AppConfig::Datastore.set_cache_write_interval(config.datastore.cache_write_interval)
       JavaLib::AppConfig::Datastore.set_cache_writes_per_second(config.datastore.cache_writes_per_second)
+      JavaLib::AppConfig::Datastore.set_mapdb_path(config.datastore.mapdb_path)
 
       JavaLib::AppConfig::set_game_config(config.game)
             

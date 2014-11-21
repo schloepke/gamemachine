@@ -1,5 +1,6 @@
 require 'java'
 require File.join(ENV['JAVA_ROOT'], 'lib', 'config-1.2.1.jar')
+require 'fileutils'
 
 module GameMachine
   class HoconConfig
@@ -39,7 +40,8 @@ module GameMachine
       conf.datastore.serialization = config.get_string('datastore.serialization')
       conf.datastore.cache_write_interval = config.get_int('datastore.cache_write_interval')
       conf.datastore.cache_writes_per_second = config.get_int('datastore.cache_writes_per_second')
-
+      conf.datastore.mapdb_path =  File.join(ENV['APP_ROOT'],'db','mapdb')
+      
       conf.gamecloud.host = config.get_string('gamecloud.host')
       conf.gamecloud.user = config.get_string('gamecloud.user')
       conf.gamecloud.api_key = config.get_string('gamecloud.api_key')

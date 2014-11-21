@@ -62,6 +62,10 @@ public class PlayerService {
 		player = new Player();
 		player.setId(playerId);
 		player.setGameId(gameId);
+		player.setRole("player");
+		player.setAuthenticated(false);
+		player.setAuthtoken(0);
+		player.setIp(0);
 
 		if (authType == OBJECT_DB) {
 			Player.store().set(player);

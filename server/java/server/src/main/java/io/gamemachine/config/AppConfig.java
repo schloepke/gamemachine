@@ -81,6 +81,7 @@ public class AppConfig {
     	private static String serialization;
     	private static long cacheWriteInterval;
     	private static long cacheWritesPerSecond;
+    	private static String mapdbPath;
     	
 		public static String getStore() {
 			return store;
@@ -105,6 +106,12 @@ public class AppConfig {
 		}
 		public static void setCacheWritesPerSecond(long cacheWritesPerSecond) {
 			Datastore.cacheWritesPerSecond = cacheWritesPerSecond;
+		}
+		public static String getMapdbPath() {
+			return mapdbPath;
+		}
+		public static void setMapdbPath(String mapdbPath) {
+			Datastore.mapdbPath = mapdbPath;
 		}
 		
     }

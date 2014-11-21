@@ -81,7 +81,7 @@ module GameMachine
       private
 
       def authtoken(username,password)
-        Digest::MD5.hexdigest("#{username}#{password}#{rand(10000)}")
+        rand(999999) + 1
       end
     end
   end

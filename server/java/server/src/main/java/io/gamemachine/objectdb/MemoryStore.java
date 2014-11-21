@@ -4,8 +4,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Map;
 
-import org.mapdb.HTreeMap;
-
 public class MemoryStore implements Storable {
 
 	private Map<String, byte[]> cache;
