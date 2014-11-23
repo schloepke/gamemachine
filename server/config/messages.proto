@@ -263,8 +263,6 @@ message Name {
   required string value = 1;
 }
 
-
-
 message Vector3 {
   optional float x = 1;
   optional float y = 2;
@@ -274,28 +272,31 @@ message Vector3 {
   optional int32 zi = 6;
 }
 
-message Polygon {
-  repeated Vector3 vertex = 1;
+
+message GridData {
+  repeated Vector3 points = 1;
+  required int32 w = 2;
+  required int32 h = 3;
+}
+
+message TriangleMesh {
+  repeated Vector3 vertices = 1;
+  repeated int32 indices = 2;
+}
+
+message MeshNode {
+  required Vector3 position = 1;
+  repeated Vector3 connections = 2;
 }
 
 message Mesh {
-  repeated Polygon polygon = 1;
+  repeated MeshNode nodes = 1;
 }
 
-message Quaternion {
-  optional float w = 1;
-  optional float x = 2;
-  optional float y = 3;
-  optional float z = 4;
-  optional int32 wi = 5;
-  optional int32 xi = 6;
-  optional int32 yi = 7;
-  optional int32 zi = 8;
-}
-
-message Transform {
-  optional Vector3 vector3 = 1;
-  optional Quaternion quaternion = 2;
+message PathData {
+  optional Vector3 startPoint = 1;
+  optional Vector3 endPoint = 2;
+  repeated Vector3 nodes = 3;
 }
 
 message EchoTest {
@@ -363,7 +364,6 @@ message Entity {
   optional ErrorMessage errorMessage = 17;
   optional NeighborsRequest neighborsRequest = 21;
   optional TrackEntity trackEntity = 22;
-  optional Transform transform = 23;
   optional Vector3 vector3 = 25;
   optional EntityList entityList = 27;
   optional bool  published = 29;
@@ -397,6 +397,8 @@ message Entity {
   optional TeamMemberSkill teamMemberSkill = 65;
   optional TrackDataUpdate trackDataUpdate = 66;
   optional TrackDataResponse trackDataResponse = 67;
+  optional Mesh mesh = 68;
+  optional PathData pathData = 69;
   //GAME_ENTITY_MESSAGES
 }
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'spec_helper_minimal'
 require 'benchmark'
 require "net/http"
 require "uri"
@@ -30,11 +30,66 @@ module GameMachine
       message.set_numbers64(555)
     end
 
-    it "test1" do
-      f1 = java.lang.Float.new(10)
-      f2 = f1.clone
-      f2 = 1.2
-      puts "f1=#{f1} f2=#{f2}"
+    it "angle test" do
+      puts PathLib::MeshImporter.angle(0.5,2)
+      
+    end
+
+    xit "test2" do
+      graph = PathLib::MeshImporter.importGrid
+      result = graph.find_path(10,10,120,120)
+      puts result.result
+      
+      if result.startNode
+        pos = result.startNode.position
+        puts "startNode #{pos.toString}"
+      end
+
+      if result.endNode
+        puts "endNode #{result.endNode.position.toString}"
+      end
+
+      if result.result
+        puts result.resultPath.getCount
+        result.resultPath.nodes.each do |node|
+          puts node.position.toString
+        end
+        pathdata = PathLib::MeshImporter.fromPathResult(result)
+        PathLib::MeshImporter.write_path_data(pathdata)
+      else
+        puts "Path not found"
+      end
+    end
+
+    xit "test1" do
+      graph = PathLib::MeshImporter.import_mesh
+      result = graph.find_path(10,10,120,120)
+      puts result.result
+      
+      if result.startNode
+        pos = result.startNode.position
+        puts "startNode #{pos.toString}"
+      end
+
+      if result.endNode
+        puts "endNode #{result.endNode.position.toString}"
+      end
+
+      if result.result
+        puts result.resultPath.getCount
+        result.resultPath.nodes.each do |node|
+          puts node.position.toString
+        end
+        pathdata = PathLib::MeshImporter.fromPathResult(result)
+        PathLib::MeshImporter.write_path_data(pathdata)
+      else
+        puts "Path not found"
+      end
+      puts Benchmark.realtime {
+        #result = PathLib::MeshImporter.stresstest(graph,1)
+        #puts result.result
+      }
+      
     end
 
     xit "byte test" do

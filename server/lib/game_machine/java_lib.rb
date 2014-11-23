@@ -30,6 +30,10 @@ module GameMachine
     include_package 'io.gamemachine.examples'
   end
 
+  module PathLib
+    include_package 'io.gamemachine.pathfinding'
+  end
+
   module ModelLib
     include_package 'io.gamemachine.orm.models'
   end

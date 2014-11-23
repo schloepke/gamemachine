@@ -53,6 +53,10 @@ public class Vector3 {
 		z = other.z;
 	}
 
+	public boolean isEqualTo(Vector3 other) {
+		return (x == other.x && y == other.y && z == other.z);
+	}
+	
 	public void addLocal(Vector3 other) {
 		x += other.x;
 		y += other.y;
@@ -131,6 +135,10 @@ public class Vector3 {
 	public double distance2d(Vector3 other) {
 		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
 	}
+	
+	public double distance2d(double otherX, double otherY) {
+		return Math.sqrt(Math.pow(x - otherX, 2) + Math.pow(y - otherY, 2));
+	}
 
 	// Project the vector onto the plane passing through the origin,
 	// perpendicular to the given normal
@@ -161,6 +169,10 @@ public class Vector3 {
 		return rotated;
 	}
 
+	public static String toString(Vector3 v) {
+		return "(" + v.x + ", " + v.y + ", " + v.z + ")";
+	}
+	
 	@Override
 	public String toString() {
 		return "(" + x + ", " + y + ", " + z + ")";

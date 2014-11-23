@@ -14,10 +14,12 @@ public class LatencyTest extends GameMessageActor {
 	public static String name = LatencyTest.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
+	@Override
 	public void awake() {
 		Commands.clientManagerRegister(name);
 	}
 
+	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		TestMessage testMessage = DynamicMessageUtil.fromDynamicMessage(gameMessage.getDynamicMessage());
 		long latency = System.currentTimeMillis() - testMessage.sentAt;
@@ -28,7 +30,8 @@ public class LatencyTest extends GameMessageActor {
 		PlayerCommands.sendGameMessage(gameMessage, playerId);
 	}
 
-	private void onPlayerDisconnect(String playerId) {
+	@Override
+	public void onPlayerDisconnect(String playerId) {
 
 	}
 }

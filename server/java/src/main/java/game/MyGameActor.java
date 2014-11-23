@@ -18,7 +18,7 @@ public class MyGameActor extends GameMessageActor {
 
   }
 
-  private void onPlayerDisconnect(String playerId) {
+  public void onPlayerDisconnect(String playerId) {
 
   }
 
