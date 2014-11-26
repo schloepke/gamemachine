@@ -11,7 +11,9 @@ public class Node implements IndexedNode<Node>{
 
 	public int index;
 	public Vector3 position;
+	public double slope;
 	public Array<Connection<Node>> connections = new Array<Connection<Node>>();
+	
 	
 	@Override
 	public int getIndex() {
@@ -20,11 +22,16 @@ public class Node implements IndexedNode<Node>{
 
 	@Override
 	public Array<Connection<Node>> getConnections() {
-		// TODO Auto-generated method stub
 		return connections;
 	}
+	
+	public double slopeCost(Node other) {
+		return Math.abs(this.slope - other.slope);
+	}
+	
+	public double stepCost(Node other) {
+		return Math.abs(this.position.z - other.position.z);
+	}
 
-	
-	
 
 }

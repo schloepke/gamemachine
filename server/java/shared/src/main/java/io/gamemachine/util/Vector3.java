@@ -13,7 +13,7 @@ public class Vector3 {
 		this.y = y;
 		this.z = z;
 	}
-
+	
 	public static Vector3 zero() {
 		return new Vector3(0f,0f,0f);
 	}
@@ -41,16 +41,18 @@ public class Vector3 {
 		return z;
 	}
 
-	public void set(double x, double y, double z) {
+	public Vector3 set(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
+		return this;
 	}
 
-	public void set(Vector3 other) {
+	public Vector3 set(Vector3 other) {
 		x = other.x;
 		y = other.y;
 		z = other.z;
+		return this;
 	}
 
 	public boolean isEqualTo(Vector3 other) {
@@ -63,16 +65,38 @@ public class Vector3 {
 		z += other.z;
 	}
 
+	public Vector3 add(Vector3 other) {
+		x += other.x;
+		y += other.y;
+		z += other.z;
+		return this;
+	}
+	
 	public void addLocal(double x, double y, double z) {
 		this.x += x;
 		this.y += y;
 		this.z += z;
 	}
 
+	public Vector3 sub(Vector3 other) {
+		this.x -= other.x;
+		this.y -= other.y;
+		this.z -= other.z;
+		return this;
+	}
+	
 	public Vector3 subtract(Vector3 other) {
 		return new Vector3(x - other.x, y - other.y, z - other.z);
 	}
+	
+	public Vector3 addNew(Vector3 other) {
+		return new Vector3(x + other.x, y + other.y, z + other.z);
+	}
 
+	public Vector3 scl (double scalar) {
+		return this.set(this.x * scalar, this.y * scalar, this.z * scalar);
+	}
+	
 	public double angle(Vector3 other) {
 		// TODO: Find a faster arccos and sqrt method
 
@@ -127,6 +151,10 @@ public class Vector3 {
 		}
 	}
 
+	public double magnitudeSquared() {
+	    return Math.pow(this.x,2) + Math.pow(this.y,2);
+	}
+	
 	// Obtain distance between position vectors
 	public double distance(Vector3 other) {
 		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) + Math.pow(z - other.z, 2));

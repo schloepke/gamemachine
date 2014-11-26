@@ -43,6 +43,13 @@ task wrapper(type: Wrapper) {
   gradleVersion = '2.1'
 }
 
+task install_libs(type: Copy) {
+  into "$buildDir/../lib"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
+}
+
 task javadocJar(type: Jar) {
     classifier = 'javadoc'
     from javadoc

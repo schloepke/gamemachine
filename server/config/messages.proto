@@ -273,8 +273,13 @@ message Vector3 {
 }
 
 
+message GridNode {
+  required Vector3 point = 1;
+  optional float slope = 2;
+  optional int32 flat = 3;
+}
 message GridData {
-  repeated Vector3 points = 1;
+  repeated GridNode nodes = 1;
   required int32 w = 2;
   required int32 h = 3;
 }

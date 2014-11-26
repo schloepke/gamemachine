@@ -1,12 +1,21 @@
 package io.gamemachine.pathfinding;
 
-import com.badlogic.gdx.ai.pfa.GraphPath;
+import io.gamemachine.pathfinding.GridPathfinder.Metrics;
+import io.gamemachine.util.Vector3;
+
+import java.util.List;
+
+import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 
 public class PathResult {
 
 	public boolean result = false;
 	public Node startNode;
 	public Node endNode;
-	public GraphPath resultPath;
+	public DefaultGraphPath<Node> resultPath;
+	public List<Vector3> smoothPath;
+	public int smoothPathCount = 0;
+	public String error = "";
+	public Metrics metrics;
 	
 }
