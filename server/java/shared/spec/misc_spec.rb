@@ -8,9 +8,9 @@ describe 'Misc' do
     GridGraph.heuristic = GridGraph::Heuristic::MANHATTAN2D
     graph = MeshImporter.importGrid
     puts Benchmark.realtime {
-      #MeshImporter.stresstest(graph,10,10,260,220,false,true,1000)
+      MeshImporter.stresstest(graph,10,10,120,120,false,false,5000)
     }
-    #return
+    return
 
     result = graph.find_path(10,10,260,220,false,true)
     if result.metrics
@@ -32,8 +32,8 @@ describe 'Misc' do
       puts result.resultPath.getCount
       puts "Smooth paths #{result.smoothPathCount}"
       if result.smoothPathCount > 0
-        result.smoothPath.each do |vec|
-          puts vec.toString
+        result.smoothPath.each do |node|
+          puts node.toString
         end
       end
       pathdata = MeshImporter.fromPathResult(result)
