@@ -1,4 +1,6 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.mesh;
+
+import io.gamemachine.pathfinding.Node;
 
 import com.badlogic.gdx.ai.pfa.Heuristic;
 

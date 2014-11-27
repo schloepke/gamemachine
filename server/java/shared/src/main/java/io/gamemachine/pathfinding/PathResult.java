@@ -1,6 +1,6 @@
 package io.gamemachine.pathfinding;
 
-import io.gamemachine.pathfinding.GridPathfinder.Metrics;
+import io.gamemachine.pathfinding.grid.GridPathfinder.Metrics;
 import io.gamemachine.util.Vector3;
 
 import java.util.List;

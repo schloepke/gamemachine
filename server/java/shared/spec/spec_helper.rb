@@ -12,5 +12,4 @@ jars.each do |jar|
   require jar
 end
 
-java_import 'io.gamemachine.pathfinding.Node'
-java_import 'io.gamemachine.pathfinding.MeshImporter'
+

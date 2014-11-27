@@ -1,4 +1,4 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
 
 import java.util.List;
 

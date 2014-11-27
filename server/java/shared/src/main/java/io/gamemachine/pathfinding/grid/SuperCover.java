@@ -1,12 +1,14 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
+
+import io.gamemachine.pathfinding.Node;
 
 
 public class SuperCover {
 
 	public static int cover(Node[][] nodes, double from_x, double from_y, double to_x, double to_y, double cell_width, double cell_height) {
-		int connections = GridGraph.useDiagonals ? 8 : 4;
-		double maxSlope = GridGraph.maxSmoothSlope;
-		double maxStep = GridGraph.maxStep;
+		int connections = Graph.useDiagonals ? 8 : 4;
+		double maxSlope = Graph.maxSmoothSlope;
+		double maxStep = Graph.maxStep;
 		
 		double x0 = from_x / cell_width;
 		double y0 = from_y / cell_height;

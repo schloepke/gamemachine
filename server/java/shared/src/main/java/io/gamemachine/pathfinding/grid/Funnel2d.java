@@ -1,5 +1,6 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
 
+import io.gamemachine.pathfinding.Node;
 import io.gamemachine.util.Vector3;
 
 import java.util.ArrayList;
@@ -170,7 +171,7 @@ public class Funnel2d {
 			Vector3 leftPoint = null, rightPoint = null;
 			startPos = nextPos;
 			
-			if (GridGraph.useDiagonals) {
+			if (Graph.useDiagonals) {
 				// topleft
 				if (nextPos.y == currentPos.y + 1 && nextPos.x == currentPos.x - 1) {
 					leftPoint = rightPoint = new Vector3(bounds.min.x, bounds.max.y, startPos.z);

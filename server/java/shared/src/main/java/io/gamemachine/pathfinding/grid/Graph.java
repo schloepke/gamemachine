@@ -1,5 +1,8 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
 
+import io.gamemachine.pathfinding.Node;
+import io.gamemachine.pathfinding.PathResult;
+import io.gamemachine.pathfinding.ProximityGrid;
 import io.gamemachine.util.Vector3;
 
 import java.util.ArrayList;
@@ -11,7 +14,7 @@ import com.badlogic.gdx.ai.pfa.DefaultGraphPath;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.utils.Array;
 
-public class GridGraph implements IndexedGraph<Node> {
+public class Graph implements IndexedGraph<Node> {
 
 	public static boolean useDiagonals = true;
 	public static double maxSlope = 45.0;
@@ -33,7 +36,7 @@ public class GridGraph implements IndexedGraph<Node> {
 	public int width;
 	
 
-	public GridGraph(int width, int height) {
+	public Graph(int width, int height) {
 		this.width = width;
 		this.height = height;
 		nodes = new Node[width][height];

@@ -1,5 +1,8 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.mesh;
 
+import io.gamemachine.pathfinding.Node;
+import io.gamemachine.pathfinding.PathResult;
+import io.gamemachine.pathfinding.ProximityGrid;
 import io.gamemachine.pathfinding.ProximityGrid.GridValue;
 
 import java.util.ArrayList;

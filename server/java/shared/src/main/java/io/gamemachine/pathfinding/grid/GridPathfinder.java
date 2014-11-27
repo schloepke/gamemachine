@@ -1,4 +1,4 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
 
 import com.badlogic.gdx.ai.pfa.Connection;
 import com.badlogic.gdx.ai.pfa.GraphPath;
@@ -9,8 +9,11 @@ import com.badlogic.gdx.ai.pfa.PathFinderRequest;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedAStarPathFinder;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedGraph;
 import com.badlogic.gdx.ai.pfa.indexed.IndexedNode;
-import io.gamemachine.pathfinding.GridPathfinder.Metrics;
-import io.gamemachine.pathfinding.GridPathfinder.NodeRecord;
+
+import io.gamemachine.pathfinding.Node;
+import io.gamemachine.pathfinding.grid.GridPathfinder.Metrics;
+import io.gamemachine.pathfinding.grid.GridPathfinder.NodeRecord;
+
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.BinaryHeap;
 import com.badlogic.gdx.utils.TimeUtils;

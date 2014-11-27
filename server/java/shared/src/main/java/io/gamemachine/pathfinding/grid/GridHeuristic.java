@@ -1,5 +1,6 @@
-package io.gamemachine.pathfinding;
+package io.gamemachine.pathfinding.grid;
 
+import io.gamemachine.pathfinding.Node;
 import io.gamemachine.util.Vector3;
 
 import com.badlogic.gdx.ai.pfa.Heuristic;
@@ -8,9 +9,9 @@ public class GridHeuristic  implements Heuristic<Node> {
 
 	@Override
 	public float estimate (Node node, Node endNode) {
-		if (GridGraph.heuristic == GridGraph.Heuristic.MANHATTAN) {
+		if (Graph.heuristic == Graph.Heuristic.MANHATTAN) {
 			return (float) Math.abs(endNode.position.distance(node.position));
-		} else if (GridGraph.heuristic == GridGraph.Heuristic.EUCLIDEAN) {
+		} else if (Graph.heuristic == Graph.Heuristic.EUCLIDEAN) {
 			return (float) getEuclideanCost(node.position,endNode.position);
 		} else {
 			return (float) (Math.abs(endNode.position.x - node.position.x) + Math.abs(endNode.position.y - node.position.y));
