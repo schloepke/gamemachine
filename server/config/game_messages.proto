@@ -52,6 +52,7 @@ message GameMessage {
   optional string destination = 4;
   optional string agentId = 5;
   optional DynamicMessage dynamicMessage = 6;
+  optional PathData pathData = 7;
 
   // User modifiable
   optional PlayerItems playerItems = 10;

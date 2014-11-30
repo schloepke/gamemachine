@@ -29,7 +29,7 @@ public class FileStore implements Storable {
 	public void connect() {
 		db = DBMaker.newFileDB(new File(AppConfig.Datastore.getMapdbPath())).closeOnJvmShutdown().make();
 		this.cache = db.createHashMap("fcache").expireStoreSize(1).counterEnable().keySerializer(Serializer.STRING)
-				.valueSerializer(Serializer.BYTE_ARRAY).make();
+				.valueSerializer(Serializer.BYTE_ARRAY).makeOrGet();
 	}
 
 	@Override

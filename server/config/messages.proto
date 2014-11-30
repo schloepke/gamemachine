@@ -273,19 +273,31 @@ message Vector3 {
 }
 
 
+message Verticle {
+  required float x = 1;
+  required float y = 2;
+  repeated GridNode gridNode = 4;
+}
+
 message GridNode {
   required Vector3 point = 1;
   optional float slope = 2;
-  optional int32 flat = 3;
 }
+
 message GridData {
   repeated GridNode nodes = 1;
   required int32 w = 2;
   required int32 h = 3;
+  repeated Verticle verticles = 4;
 }
 
 message TriangleMesh {
   repeated Vector3 vertices = 1;
+  repeated int32 indices = 2;
+}
+
+message TriangleMesh2 {
+  repeated float vertices = 1;
   repeated int32 indices = 2;
 }
 

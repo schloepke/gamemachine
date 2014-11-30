@@ -1,21 +1,26 @@
 package io.gamemachine.pathfinding.mesh;
 
-import io.gamemachine.client.messages.GridData;
-import io.gamemachine.client.messages.GridNode;
-import io.gamemachine.client.messages.PathData;
 import io.gamemachine.client.messages.TriangleMesh;
+import io.gamemachine.client.messages.TriangleMesh2;
 import io.gamemachine.client.messages.Vector3;
 import io.gamemachine.pathfinding.Node;
-import io.gamemachine.pathfinding.PathResult;
-import io.gamemachine.pathfinding.grid.GridConnection;
-import io.gamemachine.pathfinding.grid.Graph;
+import io.gamemachine.pathfinding.Util;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+
+import org.critterai.nmgen.ContourSet;
+import org.critterai.nmgen.ContourSetBuilder;
+import org.critterai.nmgen.DetailMeshBuilder;
+import org.critterai.nmgen.OpenHeightfield;
+import org.critterai.nmgen.OpenHeightfieldBuilder;
+import org.critterai.nmgen.PolyMeshField;
+import org.critterai.nmgen.PolyMeshFieldBuilder;
+import org.critterai.nmgen.SolidHeightfield;
+import org.critterai.nmgen.SolidHeightfieldBuilder;
+import org.critterai.nmgen.SpanFlags;
 
 import com.badlogic.gdx.ai.pfa.DefaultConnection;
 import com.google.common.io.Files;
@@ -32,23 +37,7 @@ public class MeshImporter {
 		return meshToGraph(mesh);
 	}
 
-	public static void stresstest(Graph graph, double startX, double startY, double endX, double endY,
-			boolean smoothPath, boolean cover, int iterations) {
-		for (int i = 1; i < iterations; i++) {
-			graph.findPath(startX, startY, endX, endY, smoothPath, cover);
-		}
-	}
-
-	public static void writePathData(PathData pathData) {
-		byte[] bytes = pathData.toByteArray();
-		File file = new File("/home/chris/game_machine/server/java/shared/pathdata.bin");
-		try {
-			Files.write(bytes, file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
+	
 	public static TriangleMesh loadMesh() {
 		try {
 			byte[] bytes = Files.toByteArray(new File("/home/chris/game_machine/server/mesh.bin"));
@@ -59,10 +48,53 @@ public class MeshImporter {
 		}
 	}
 
-	public static String VectortoString(Vector3 v) {
-		return "(" + v.x + ", " + v.y + ", " + v.z + ")";
+	public static void BuildNavMesh() {
+		TriangleMesh2 input = null;
+		try {
+			byte[] bytes = Files.toByteArray(new File("/home/chris/game_machine/server/java/shared/mesh.bin"));
+			input = TriangleMesh2.parseFrom(bytes);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
+		}
+		
+		SolidHeightfieldBuilder sfbuilder = new SolidHeightfieldBuilder(1f, 0.5f, 5, 4, 45f, true);
+		float[] vertices = new float[input.vertices.size()];
+		for(int i = 0; i < input.vertices.size(); i++) vertices[i] = input.vertices.get(i);
+		
+		int[] indices = new int[input.indices.size()];
+		for(int i = 0; i < input.indices.size(); i++) indices[i] = input.indices.get(i);
+		
+		SolidHeightfield sf = sfbuilder.build(vertices, indices);
+		OpenHeightfieldBuilder hfbuilder = new OpenHeightfieldBuilder(4,5,1,0,SpanFlags.WALKABLE, true, null);
+		OpenHeightfield hf = hfbuilder.build(sf, true);
+		ContourSetBuilder csbuilder = new ContourSetBuilder(null);
+		ContourSet set = csbuilder.build(hf);
+		PolyMeshFieldBuilder pbuilder = new PolyMeshFieldBuilder(6);
+		PolyMeshField mf = pbuilder.build(set);
+		DetailMeshBuilder dtbuilder = new DetailMeshBuilder(2,2);
+		org.critterai.nmgen.TriangleMesh tmesh = dtbuilder.build(mf, hf);
+		
+		System.out.println(tmesh.vertCount());
+		TriangleMesh2 out = new TriangleMesh2();
+		Float[] verts = new Float[tmesh.vertices.length];
+		for(int i = 0; i < tmesh.vertices.length; i++) verts[i] = tmesh.vertices[i];
+		
+		Integer[] indexes = new Integer[tmesh.indices.length];
+		for(int i = 0; i < tmesh.indices.length; i++) indexes[i] = tmesh.indices[i];
+		
+		out.vertices = Arrays.asList(verts);
+		out.indices = Arrays.asList(indexes);
+		
+		byte[] bytes = out.toByteArray();
+		File file = new File("/home/chris/game_machine/server/java/shared/outmesh.bin");
+		try {
+			Files.write(bytes, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-
+	
 	public static TriangleMesh flipTriangles(TriangleMesh mesh) {
 
 		Integer[] array = new Integer[mesh.indices.size()];
@@ -105,9 +137,9 @@ public class MeshImporter {
 		Node c3;
 		for (Node node : nodes.values()) {
 			for (int i = 0; i < triangleCount; i++) {
-				io.gamemachine.util.Vector3 v1 = fromVector3(mesh.vertices.get(mesh.indices.get(i * 3)));
-				io.gamemachine.util.Vector3 v2 = fromVector3(mesh.vertices.get(mesh.indices.get(i * 3 + 1)));
-				io.gamemachine.util.Vector3 v3 = fromVector3(mesh.vertices.get(mesh.indices.get(i * 3 + 2)));
+				io.gamemachine.util.Vector3 v1 = Util.fromVector3(mesh.vertices.get(mesh.indices.get(i * 3)));
+				io.gamemachine.util.Vector3 v2 = Util.fromVector3(mesh.vertices.get(mesh.indices.get(i * 3 + 1)));
+				io.gamemachine.util.Vector3 v3 = Util.fromVector3(mesh.vertices.get(mesh.indices.get(i * 3 + 2)));
 
 				if (node.position.isEqualTo(v1)) {
 					c2 = nodes.get(v2.toString());
@@ -130,35 +162,6 @@ public class MeshImporter {
 		return graph;
 	}
 
-	public static PathData fromPathResult(PathResult result) {
-		PathData pathData = new PathData();
-		pathData.startPoint = toVector3(result.startNode.position);
-		pathData.endPoint = toVector3(result.endNode.position);
-
-		if (result.smoothPath != null) {
-			System.out.println("Exporting smooth path");
-			for (io.gamemachine.util.Vector3 vec : result.smoothPath) {
-				pathData.addNodes(toVector3(vec));
-			}
-		} else {
-			for (int i = 0; i < result.resultPath.getCount(); i++) {
-				Node node = (Node) result.resultPath.get(i);
-				pathData.addNodes(toVector3(node.position));
-			}
-		}
-		return pathData;
-	}
-
-	public static io.gamemachine.util.Vector3 fromVector3(Vector3 v) {
-		return new io.gamemachine.util.Vector3(v.x, v.y, v.z);
-	}
-
-	public static Vector3 toVector3(io.gamemachine.util.Vector3 v1) {
-		Vector3 v2 = new Vector3();
-		v2.x = (float) v1.x;
-		v2.y = (float) v1.z;
-		v2.z = (float) v1.y;
-		return v2;
-	}
+	
 
 }

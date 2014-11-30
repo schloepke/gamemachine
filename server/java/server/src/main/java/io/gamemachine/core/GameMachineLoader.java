@@ -4,6 +4,7 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.game_systems.LatencyTest;
+import io.gamemachine.game_systems.PathService;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
@@ -71,6 +72,7 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(LatencyTest.class)), LatencyTest.name);
+		actorSystem.actorOf(Props.create(PathService.class), PathService.name);
 		startCacheUpdateHandler();
 
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
