@@ -3,7 +3,7 @@ package io.gamemachine.core;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 
-public class GameMessageActor extends GameActor {
+public abstract class GameMessageActor extends GameActor {
 
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof GameMessage) {
@@ -25,19 +25,13 @@ public class GameMessageActor extends GameActor {
 		awake();
 	}
 
-	public void awake() {
+	public abstract void awake();
 
-	}
-
-	public void onGameMessage(GameMessage gameMessage) {
-
-	}
+	public abstract void onGameMessage(GameMessage gameMessage);
 
 	public void sendGameMessage(GameMessage gameMessage, String playerId) {
 		PlayerCommands.sendGameMessage(gameMessage, playerId);
 	}
 
-	private void onPlayerDisconnect(String playerId) {
-
-	}
+	public abstract void onPlayerDisconnect(String playerId);
 }

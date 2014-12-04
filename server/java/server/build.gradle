@@ -35,7 +35,7 @@ repositories {
   
  configurations.all {
   resolutionStrategy {
-    //cacheDynamicVersionsFor 24, 'hours'
+    //cacheDynamicVersionsFor 0, 'seconds'
     //cacheChangingModulesFor 0, 'seconds'
   }
 }
@@ -75,6 +75,7 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
   compile 'io.gamemachine:common:1.1.0-SNAPSHOT'
+  compile "com.badlogicgames.gdx:gdx-ai:1.4.1-SNAPSHOT"
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

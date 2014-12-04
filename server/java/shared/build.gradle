@@ -36,10 +36,18 @@ dependencies {
   compile 'com.google.guava:guava:18.0'
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'io.netty:netty-all:4.0.24.Final'
+  compile "com.badlogicgames.gdx:gdx-ai:1.4.1-SNAPSHOT"
 }
 
 task wrapper(type: Wrapper) {
   gradleVersion = '2.1'
+}
+
+task install_libs(type: Copy) {
+  into "$buildDir/../lib"
+    
+  from configurations.runtime
+  from "$buildDir/libs"
 }
 
 task javadocJar(type: Jar) {
