@@ -78,6 +78,22 @@ namespace io.gamemachine.messages
       get { return _locked; }
       set { _locked = value; }
     }
+    private int _ip = default(int);
+    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"ip", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int ip
+    {
+      get { return _ip; }
+      set { _ip = value; }
+    }
+    private long _ipChangedAt = default(long);
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"ipChangedAt", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long ipChangedAt
+    {
+      get { return _ipChangedAt; }
+      set { _ipChangedAt = value; }
+    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -290,6 +306,14 @@ namespace io.gamemachine.messages
     {
       get { return _dynamicMessage; }
       set { _dynamicMessage = value; }
+    }
+    private io.gamemachine.messages.PathData _pathData = null;
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"pathData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.PathData pathData
+    {
+      get { return _pathData; }
+      set { _pathData = value; }
     }
     private io.gamemachine.messages.PlayerItems _playerItems = null;
     [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"playerItems", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -750,7 +774,10 @@ namespace io.gamemachine.messages
       RESEND = 0,
             
       [global::ProtoBuf.ProtoEnum(Name=@"VALIDATION_FAILED", Value=1)]
-      VALIDATION_FAILED = 1
+      VALIDATION_FAILED = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"REMOVED", Value=2)]
+      REMOVED = 2
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -2055,16 +2082,165 @@ namespace io.gamemachine.messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Polygon")]
-  public partial class Polygon : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GridVerticle")]
+  public partial class GridVerticle : global::ProtoBuf.IExtensible
   {
-    public Polygon() {}
+    public GridVerticle() {}
     
-    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> _vertex = new global::System.Collections.Generic.List<io.gamemachine.messages.Vector3>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"vertex", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> vertex
+    private float _x;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    public float x
     {
-      get { return _vertex; }
+      get { return _x; }
+      set { _x = value; }
+    }
+    private float _y;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    public float y
+    {
+      get { return _y; }
+      set { _y = value; }
+    }
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.GridNode> _gridNodes = new global::System.Collections.Generic.List<io.gamemachine.messages.GridNode>();
+    [global::ProtoBuf.ProtoMember(4, Name=@"gridNodes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.GridNode> gridNodes
+    {
+      get { return _gridNodes; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GridNode")]
+  public partial class GridNode : global::ProtoBuf.IExtensible
+  {
+    public GridNode() {}
+    
+    private io.gamemachine.messages.Vector3 _point;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"point", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public io.gamemachine.messages.Vector3 point
+    {
+      get { return _point; }
+      set { _point = value; }
+    }
+    private float _slope = default(float);
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"slope", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    [global::System.ComponentModel.DefaultValue(default(float))]
+    public float slope
+    {
+      get { return _slope; }
+      set { _slope = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"GridData")]
+  public partial class GridData : global::ProtoBuf.IExtensible
+  {
+    public GridData() {}
+    
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.GridNode> _nodes = new global::System.Collections.Generic.List<io.gamemachine.messages.GridNode>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"nodes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.GridNode> nodes
+    {
+      get { return _nodes; }
+    }
+  
+    private int _w;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"w", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int w
+    {
+      get { return _w; }
+      set { _w = value; }
+    }
+    private int _h;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"h", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public int h
+    {
+      get { return _h; }
+      set { _h = value; }
+    }
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.GridVerticle> _gridVerticles = new global::System.Collections.Generic.List<io.gamemachine.messages.GridVerticle>();
+    [global::ProtoBuf.ProtoMember(4, Name=@"gridVerticles", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.GridVerticle> gridVerticles
+    {
+      get { return _gridVerticles; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TriangleMesh")]
+  public partial class TriangleMesh : global::ProtoBuf.IExtensible
+  {
+    public TriangleMesh() {}
+    
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> _vertices = new global::System.Collections.Generic.List<io.gamemachine.messages.Vector3>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"vertices", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> vertices
+    {
+      get { return _vertices; }
+    }
+  
+    private readonly global::System.Collections.Generic.List<int> _indices = new global::System.Collections.Generic.List<int>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"indices", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public global::System.Collections.Generic.List<int> indices
+    {
+      get { return _indices; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TriangleMesh2")]
+  public partial class TriangleMesh2 : global::ProtoBuf.IExtensible
+  {
+    public TriangleMesh2() {}
+    
+    private readonly global::System.Collections.Generic.List<float> _vertices = new global::System.Collections.Generic.List<float>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"vertices", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    public global::System.Collections.Generic.List<float> vertices
+    {
+      get { return _vertices; }
+    }
+  
+    private readonly global::System.Collections.Generic.List<int> _indices = new global::System.Collections.Generic.List<int>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"indices", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public global::System.Collections.Generic.List<int> indices
+    {
+      get { return _indices; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"MeshNode")]
+  public partial class MeshNode : global::ProtoBuf.IExtensible
+  {
+    public MeshNode() {}
+    
+    private io.gamemachine.messages.Vector3 _position;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"position", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public io.gamemachine.messages.Vector3 position
+    {
+      get { return _position; }
+      set { _position = value; }
+    }
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> _connections = new global::System.Collections.Generic.List<io.gamemachine.messages.Vector3>();
+    [global::ProtoBuf.ProtoMember(2, Name=@"connections", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> connections
+    {
+      get { return _connections; }
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -2077,11 +2253,11 @@ namespace io.gamemachine.messages
   {
     public Mesh() {}
     
-    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Polygon> _polygon = new global::System.Collections.Generic.List<io.gamemachine.messages.Polygon>();
-    [global::ProtoBuf.ProtoMember(1, Name=@"polygon", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public global::System.Collections.Generic.List<io.gamemachine.messages.Polygon> polygon
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.MeshNode> _nodes = new global::System.Collections.Generic.List<io.gamemachine.messages.MeshNode>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"nodes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.MeshNode> nodes
     {
-      get { return _polygon; }
+      get { return _nodes; }
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -2089,101 +2265,34 @@ namespace io.gamemachine.messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Quaternion")]
-  public partial class Quaternion : global::ProtoBuf.IExtensible
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"PathData")]
+  public partial class PathData : global::ProtoBuf.IExtensible
   {
-    public Quaternion() {}
+    public PathData() {}
     
-    private float _w = default(float);
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"w", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float w
+    private io.gamemachine.messages.Vector3 _startPoint = null;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"startPoint", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.Vector3 startPoint
     {
-      get { return _w; }
-      set { _w = value; }
+      get { return _startPoint; }
+      set { _startPoint = value; }
     }
-    private float _x = default(float);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"x", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float x
+    private io.gamemachine.messages.Vector3 _endPoint = null;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"endPoint", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.Vector3 endPoint
     {
-      get { return _x; }
-      set { _x = value; }
+      get { return _endPoint; }
+      set { _endPoint = value; }
     }
-    private float _y = default(float);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"y", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float y
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> _nodes = new global::System.Collections.Generic.List<io.gamemachine.messages.Vector3>();
+    [global::ProtoBuf.ProtoMember(3, Name=@"nodes", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Vector3> nodes
     {
-      get { return _y; }
-      set { _y = value; }
+      get { return _nodes; }
     }
-    private float _z = default(float);
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"z", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float z
-    {
-      get { return _z; }
-      set { _z = value; }
-    }
-    private int _wi = default(int);
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"wi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int wi
-    {
-      get { return _wi; }
-      set { _wi = value; }
-    }
-    private int _xi = default(int);
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"xi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int xi
-    {
-      get { return _xi; }
-      set { _xi = value; }
-    }
-    private int _yi = default(int);
-    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"yi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int yi
-    {
-      get { return _yi; }
-      set { _yi = value; }
-    }
-    private int _zi = default(int);
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"zi", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int zi
-    {
-      get { return _zi; }
-      set { _zi = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Transform")]
-  public partial class Transform : global::ProtoBuf.IExtensible
-  {
-    public Transform() {}
-    
-    private io.gamemachine.messages.Vector3 _vector3 = null;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.Vector3 vector3
-    {
-      get { return _vector3; }
-      set { _vector3 = value; }
-    }
-    private io.gamemachine.messages.Quaternion _quaternion = null;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"quaternion", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.Quaternion quaternion
-    {
-      get { return _quaternion; }
-      set { _quaternion = value; }
-    }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2552,14 +2661,6 @@ namespace io.gamemachine.messages
       get { return _trackEntity; }
       set { _trackEntity = value; }
     }
-    private io.gamemachine.messages.Transform _transform = null;
-    [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"transform", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.Transform transform
-    {
-      get { return _transform; }
-      set { _transform = value; }
-    }
     private io.gamemachine.messages.Vector3 _vector3 = null;
     [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"vector3", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -2823,6 +2924,22 @@ namespace io.gamemachine.messages
     {
       get { return _trackDataResponse; }
       set { _trackDataResponse = value; }
+    }
+    private io.gamemachine.messages.Mesh _mesh = null;
+    [global::ProtoBuf.ProtoMember(68, IsRequired = false, Name=@"mesh", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.Mesh mesh
+    {
+      get { return _mesh; }
+      set { _mesh = value; }
+    }
+    private io.gamemachine.messages.PathData _pathData = null;
+    [global::ProtoBuf.ProtoMember(69, IsRequired = false, Name=@"pathData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.PathData pathData
+    {
+      get { return _pathData; }
+      set { _pathData = value; }
     }
     private io.gamemachine.messages.Player _player = null;
     [global::ProtoBuf.ProtoMember(1000, IsRequired = false, Name=@"player", DataFormat = global::ProtoBuf.DataFormat.Default)]
