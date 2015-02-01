@@ -6,10 +6,24 @@ import io.gamemachine.messages.GameMessages;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackDataResponse;
 import io.gamemachine.net.Connection;
+import io.gamemachine.routing.GameMessageRoute;
 import akka.actor.ActorSelection;
 
 public class PlayerCommands {
 
+	public static void SendLocal(GameMessage gameMessage, String destination) {
+		if (GameMessageRoute.routes.containsKey(destination)) {
+			GameMessageRoute route = GameMessageRoute.routes.get(destination);
+			ActorSelection sel;
+			if (route.isDistributed()) {
+				sel = ActorUtil.findDistributed(route.getTo(), gameMessage.playerId);
+			} else {
+				sel = ActorUtil.getSelectionByName(route.getTo());
+			}
+			sel.tell(gameMessage, null);
+		}
+	}
+	
 	public static void sendGameMessage(GameMessage gameMessage, String playerId) {
 		GameMessages gameMessages = new GameMessages();
 		gameMessages.addGameMessage(gameMessage);

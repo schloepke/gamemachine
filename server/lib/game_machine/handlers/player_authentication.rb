@@ -40,6 +40,7 @@ module GameMachine
         logger.debug "authorize: #{username}"
         if player = get_player(username)
           authenticator = authclass.new(player)
+          #logger.debug("#{username} -> #{password}")
           if authenticator.authenticate(password)
             @sessions[username] = authtoken(username,password)
             player_service = GameMachine::JavaLib::PlayerService.get_instance

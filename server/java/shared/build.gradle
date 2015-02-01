@@ -37,6 +37,7 @@ dependencies {
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'io.netty:netty-all:4.0.24.Final'
   compile "com.badlogicgames.gdx:gdx-ai:1.4.1-SNAPSHOT"
+  compile "org.ode4j:core:0.3.0"
 }
 
 task wrapper(type: Wrapper) {

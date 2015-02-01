@@ -1,5 +1,8 @@
 package io.gamemachine.core;
 
+import java.util.concurrent.TimeUnit;
+
+import scala.concurrent.duration.Duration;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 
@@ -34,4 +37,14 @@ public abstract class GameMessageActor extends GameActor {
 	}
 
 	public abstract void onPlayerDisconnect(String playerId);
+	
+
+	public void scheduleOnce(long delay, GameMessage message) {
+		getContext()
+				.system()
+				.scheduler()
+				.scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS), getSelf(), message, getContext().dispatcher(),
+						null);
+	}
+	
 }

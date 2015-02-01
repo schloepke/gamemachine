@@ -6,7 +6,7 @@ module GameMachine
     class GameActor < Base
       include GameMachine::Commands
       include GameMachine::Models
-      attr_reader :player_id
+      attr_reader :player_id, :character_id
 
       def awake(args)
       end
@@ -38,9 +38,14 @@ module GameMachine
 
       def on_receive(message)
         @player_id = nil
+        @character_id = nil
 
         if message.is_a?(MessageLib::GameMessage)
           @player_id = message.player_id
+          unless @player_id.nil?
+            @character_id = JavaLib::PlayerService.getInstance.getCharacter(@player_id)
+          end
+
           set_player_id(message.player_id)
           on_game_message(message)
         elsif message.is_a?(MessageLib::ClientManagerEvent)

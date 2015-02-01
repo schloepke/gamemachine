@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pvp_game.GameLoader;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
@@ -66,20 +67,25 @@ public class GameMachineLoader {
 		}
 	}
 
+	public static void startJavaGameActors() {
+		GameLoader.load();
+	}
+	
 	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
 		actorSystem = newActorSystem;
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(LatencyTest.class)), LatencyTest.name);
-		actorSystem.actorOf(Props.create(PathService.class), PathService.name);
+		//actorSystem.actorOf(Props.create(PathService.class), PathService.name);
+		actorSystem.actorOf(Props.create(UnityProxy.class), UnityProxy.name);
 		startCacheUpdateHandler();
 
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
 			actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		}
-
+		
 	}
 
 }

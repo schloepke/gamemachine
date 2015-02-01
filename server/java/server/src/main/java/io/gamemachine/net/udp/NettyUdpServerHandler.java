@@ -108,7 +108,7 @@ public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<Dat
 		NetMessage netMessage = new NetMessage(NetMessage.NETTY_UDP, ip, clientId);
 		netMessage.clientMessage = clientMessage;
 
-		logger.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
+		//logger.debug("MessageReceived length" + bytes.length + " " + new String(bytes));
 		this.inbound.tell(netMessage, null);
 
 	}

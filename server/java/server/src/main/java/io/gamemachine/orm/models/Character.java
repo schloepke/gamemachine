@@ -15,32 +15,32 @@ CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CRE
 CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
 
 Table
-CREATE TABLE players (
+CREATE TABLE characters (
   id bigserial NOT NULL,
 
-  player_id character varying(128) NOT NULL,
+  character_id character varying(128) NOT NULL,
 
-  player_authenticated boolean DEFAULT NULL,
+  character_uma_data character varying(128) DEFAULT NULL,
 
-  player_authtoken integer DEFAULT NULL,
+  character_health integer DEFAULT NULL,
 
-  player_password_hash character varying(128) DEFAULT NULL,
+  character_player_id character varying(128) NOT NULL,
 
-  player_game_id character varying(128) DEFAULT NULL,
+  character_part integer DEFAULT NULL,
 
-  player_role character varying(128) DEFAULT NULL,
+  character_parts integer DEFAULT NULL,
 
-  player_locked boolean DEFAULT NULL,
+  character_worldx integer DEFAULT NULL,
 
-  player_ip integer DEFAULT NULL,
+  character_worldy integer DEFAULT NULL,
 
-  player_ip_changed_at integer DEFAULT NULL,
+  character_worldz integer DEFAULT NULL,
 
-  player_character_id character varying(128) DEFAULT NULL,
+  character_zone character varying(128) DEFAULT NULL,
 
-  CONSTRAINT player_pkey PRIMARY KEY (id)
+  CONSTRAINT character_pkey PRIMARY KEY (id)
 );
-alter table players owner to gamemachine;
+alter table characters owner to gamemachine;
 
 Mysql
 
@@ -50,34 +50,34 @@ GRANT ALL PRIVILEGES ON gamemachine.* TO 'gamemachine'@'%' IDENTIFIED BY 'gamema
 FLUSH PRIVILEGES;
 
 Table
-CREATE TABLE `players` (
+CREATE TABLE `characters` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
 
-  `player_id` varchar(128) NOT NULL,
+  `character_id` varchar(128) NOT NULL,
 
-  `player_authenticated` tinyint(4) DEFAULT NULL,
+  `character_uma_data` varchar(128) DEFAULT NULL,
 
-  `player_authtoken` int(11) DEFAULT NULL,
+  `character_health` int(11) DEFAULT NULL,
 
-  `player_password_hash` varchar(128) DEFAULT NULL,
+  `character_player_id` varchar(128) NOT NULL,
 
-  `player_game_id` varchar(128) DEFAULT NULL,
+  `character_part` int(11) DEFAULT NULL,
 
-  `player_role` varchar(128) DEFAULT NULL,
+  `character_parts` int(11) DEFAULT NULL,
 
-  `player_locked` tinyint(4) DEFAULT NULL,
+  `character_worldx` int(11) DEFAULT NULL,
 
-  `player_ip` int(11) DEFAULT NULL,
+  `character_worldy` int(11) DEFAULT NULL,
 
-  `player_ip_changed_at` int(11) DEFAULT NULL,
+  `character_worldz` int(11) DEFAULT NULL,
 
-  `player_character_id` varchar(128) DEFAULT NULL,
+  `character_zone` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-public class Player extends Model {
+public class Character extends Model {
 	
 	public static void openTransaction() {
 		open();

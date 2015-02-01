@@ -1,4 +1,4 @@
-package game;
+package pvp_game;
 
 import io.gamemachine.core.Commands;
 import io.gamemachine.core.GameMessageActor;

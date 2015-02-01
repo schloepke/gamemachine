@@ -46,8 +46,8 @@ public class Grid {
 	private int shortIdQueueSize = 1000;
 
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
-	
-	private PriorityBlockingQueue<Integer> shortIdQueue = new PriorityBlockingQueue<Integer>();	
+
+	private PriorityBlockingQueue<Integer> shortIdQueue = new PriorityBlockingQueue<Integer>();
 	private ConcurrentHashMap<String, Integer> shortIds = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>> gridValues = new ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>>();
 
@@ -61,8 +61,8 @@ public class Grid {
 		this.convFactor = 1.0f / this.cellSize;
 		this.width = (int) (this.max / this.cellSize);
 		this.cellCount = this.width * this.width;
-		
-		for(int i=1; i<this.shortIdQueueSize; i++){
+
+		for (int i = 1; i < this.shortIdQueueSize; i++) {
 			shortIdQueue.put(i);
 		}
 	}
@@ -72,15 +72,18 @@ public class Grid {
 		private TrackData trackData;
 		private int x;
 		private int y;
+		private int z;
 		private long lastSend = System.currentTimeMillis();
 
 		public GridValue(TrackData trackData, int shortId) {
 			this.x = trackData.x;
 			this.y = trackData.y;
+			this.z = trackData.z;
 
 			this.trackData = cloneTrackData(trackData);
 			this.trackData.shortId = shortId;
 			this.trackData.id = null;
+			
 		}
 
 		private TrackData cloneTrackData(TrackData trackData) {
@@ -89,10 +92,9 @@ public class Grid {
 			clone.y = null;
 			clone.z = null;
 			clone.getNeighbors = null;
+			clone.characterId = null;
 			clone.dynamicMessage = trackData.dynamicMessage;
-			clone.direction = trackData.direction;
-			clone.speed = trackData.speed;
-			clone.velocity = trackData.velocity;
+			clone.clientData = trackData.clientData;
 			return clone;
 		}
 	}
@@ -104,7 +106,7 @@ public class Grid {
 			shortIds.remove(playerId);
 		}
 	}
-	
+
 	public Integer getShortId(String playerId) {
 		if (shortIds.containsKey(playerId)) {
 			return shortIds.get(playerId);
@@ -115,7 +117,7 @@ public class Grid {
 					logger.warn("Unable to get short id from queue");
 					return null;
 				}
-				
+
 				shortIds.put(playerId, shortId);
 				return shortId;
 			} catch (InterruptedException e) {
@@ -124,7 +126,7 @@ public class Grid {
 			}
 		}
 	}
-	
+
 	public void dumpGrid() {
 		for (TrackData td : objectIndex.values()) {
 			System.out.println("id=" + td.id + " x=" + td.x / this.scaleFactor + " y=" + td.y / this.scaleFactor);
@@ -170,8 +172,8 @@ public class Grid {
 
 		// subtract one from offset to keep it from hashing to the next cell
 		// boundary outside of range
-		int endX = (x + offset - 1);
-		int endY = (y + offset - 1);
+		int endX = (x + offset);
+		int endY = (y + offset);
 
 		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
 			for (int colNum = startY; colNum <= endY; colNum += offset) {
@@ -227,7 +229,7 @@ public class Grid {
 							gridValue = new GridValue(trackData, shortId);
 							playerGridValues.put(trackData.id, gridValue);
 							result.add(trackData);
-						} else if ((currentTime - gridValue.lastSend) > 100) {
+						} else if ((currentTime - gridValue.lastSend) > 200) {
 							playerGridValues.remove(trackData.id);
 							result.add(trackData);
 						} else {
@@ -254,8 +256,19 @@ public class Grid {
 		} else {
 			gridValue.trackData.iy = -(gridValue.y - trackData.y);
 		}
+
+		if (trackData.z >= gridValue.z) {
+			gridValue.trackData.iz = trackData.z - gridValue.z;
+		} else {
+			gridValue.trackData.iz = -(gridValue.z - trackData.z);
+		}
+
 		gridValue.x = trackData.x;
 		gridValue.y = trackData.y;
+		gridValue.z = trackData.z;
+
+		gridValue.trackData.dynamicMessage = trackData.dynamicMessage;
+		gridValue.trackData.clientData = trackData.clientData;
 	}
 
 	public Collection<TrackData> gridValuesInCell(int cell) {
@@ -319,18 +332,13 @@ public class Grid {
 
 		trackData.x += deltaTrackData.ix;
 		trackData.y += deltaTrackData.iy;
+		trackData.z += deltaTrackData.iz;
 
 		if (deltaTrackData.hasDynamicMessage()) {
 			trackData.dynamicMessage = deltaTrackData.dynamicMessage;
 		}
 
-		if (deltaTrackData.hasDirection()) {
-			trackData.direction = deltaTrackData.direction;
-		}
-
-		if (deltaTrackData.hasSpeed()) {
-			trackData.speed = deltaTrackData.speed;
-		}
+		trackData.clientData = deltaTrackData.clientData;
 
 		return trackData;
 	}
@@ -340,7 +348,7 @@ public class Grid {
 		if (shortId == null) {
 			return false;
 		}
-		
+
 		TrackData trackData = null;
 		if (newTrackData.hasIx()) {
 			trackData = updateFromDelta(newTrackData);
@@ -350,6 +358,10 @@ public class Grid {
 			}
 		} else {
 			trackData = newTrackData;
+			trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
+			if (trackData.characterId == null) {
+				logger.warn("Null characterId for "+trackData.id);
+			}
 		}
 
 		String id = trackData.id;

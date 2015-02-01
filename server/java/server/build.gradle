@@ -7,11 +7,17 @@ apply plugin: 'maven-publish'
 
 
 buildscript {
-  repositories { jcenter() }
+  repositories {
+   jcenter()
+  
+  maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots/"
+    }
+   }
   dependencies {
     classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
-    classpath group: 'org.javalite', name: 'activejdbc', version: '1.4.9'
-    classpath group: 'org.javalite', name: 'activejdbc-instrumentation', version: '1.4.9'
+    classpath 'org.javalite:activejdbc:1.4.10'
+    classpath 'org.javalite:activejdbc-instrumentation:1.4.10'
   }
 }
 apply plugin: 'com.github.johnrengelman.shadow'
@@ -68,8 +74,8 @@ dependencies {
   compile 'io.netty:netty-all:4.0.23.Final'
   compile 'com.zaxxer:HikariCP-java6:2.1.0'
   compile 'mysql:mysql-connector-java:5.1.32'
-  compile 'org.javalite:activejdbc:1.4.10-SNAPSHOT'
-  compile 'org.javalite:activejdbc-instrumentation:1.4.10-SNAPSHOT'
+  compile 'org.javalite:activejdbc:1.4.10'
+  compile 'org.javalite:activejdbc-instrumentation:1.4.10'
   compile 'org.apache.httpcomponents:httpclient:4.3.5'
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'

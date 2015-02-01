@@ -24,6 +24,7 @@ module Tutorial
         player_item.set_record_id(existing_item.get_record_id)
       end
 
+      GameMachine.logger.debug "save_player_item #{player_item.id} #{player_item.quantity}"
       if in_transaction
         MessageLib::PlayerItem.db.save(player_item,true)
       else

@@ -15,32 +15,30 @@ CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CRE
 CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
 
 Table
-CREATE TABLE players (
+CREATE TABLE player_skills (
   id bigserial NOT NULL,
 
-  player_id character varying(128) NOT NULL,
+  player_skill_id character varying(128) NOT NULL,
 
-  player_authenticated boolean DEFAULT NULL,
+  player_skill_name character varying(128) NOT NULL,
 
-  player_authtoken integer DEFAULT NULL,
+  player_skill_category character varying(128) NOT NULL,
 
-  player_password_hash character varying(128) DEFAULT NULL,
+  player_skill_type character varying(128) NOT NULL,
 
-  player_game_id character varying(128) DEFAULT NULL,
+  player_skill_icon character varying(128) NOT NULL,
 
-  player_role character varying(128) DEFAULT NULL,
+  player_skill_description character varying(128) NOT NULL,
 
-  player_locked boolean DEFAULT NULL,
+  player_skill_resource character varying(128) NOT NULL,
 
-  player_ip integer DEFAULT NULL,
+  player_skill_resource_cost character varying(128) NOT NULL,
 
-  player_ip_changed_at integer DEFAULT NULL,
+  player_skill_character_id character varying(128) NOT NULL,
 
-  player_character_id character varying(128) DEFAULT NULL,
-
-  CONSTRAINT player_pkey PRIMARY KEY (id)
+  CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
-alter table players owner to gamemachine;
+alter table player_skills owner to gamemachine;
 
 Mysql
 
@@ -50,34 +48,32 @@ GRANT ALL PRIVILEGES ON gamemachine.* TO 'gamemachine'@'%' IDENTIFIED BY 'gamema
 FLUSH PRIVILEGES;
 
 Table
-CREATE TABLE `players` (
+CREATE TABLE `player_skills` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
 
-  `player_id` varchar(128) NOT NULL,
+  `player_skill_id` varchar(128) NOT NULL,
 
-  `player_authenticated` tinyint(4) DEFAULT NULL,
+  `player_skill_name` varchar(128) NOT NULL,
 
-  `player_authtoken` int(11) DEFAULT NULL,
+  `player_skill_category` varchar(128) NOT NULL,
 
-  `player_password_hash` varchar(128) DEFAULT NULL,
+  `player_skill_type` varchar(128) NOT NULL,
 
-  `player_game_id` varchar(128) DEFAULT NULL,
+  `player_skill_icon` varchar(128) NOT NULL,
 
-  `player_role` varchar(128) DEFAULT NULL,
+  `player_skill_description` varchar(128) NOT NULL,
 
-  `player_locked` tinyint(4) DEFAULT NULL,
+  `player_skill_resource` varchar(128) NOT NULL,
 
-  `player_ip` int(11) DEFAULT NULL,
+  `player_skill_resource_cost` varchar(128) NOT NULL,
 
-  `player_ip_changed_at` int(11) DEFAULT NULL,
-
-  `player_character_id` varchar(128) DEFAULT NULL,
+  `player_skill_character_id` varchar(128) NOT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-public class Player extends Model {
+public class PlayerSkill extends Model {
 	
 	public static void openTransaction() {
 		open();

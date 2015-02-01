@@ -65,13 +65,30 @@ public class MeshImporter {
 		int[] indices = new int[input.indices.size()];
 		for(int i = 0; i < input.indices.size(); i++) indices[i] = input.indices.get(i);
 		
+		System.out.println("input vertice count="+vertices.length+" input indice count="+indices.length);
 		SolidHeightfield sf = sfbuilder.build(vertices, indices);
+		if (sf == null) {
+			System.out.println("SolidHeightfield null");
+			return;
+		}
+		
 		OpenHeightfieldBuilder hfbuilder = new OpenHeightfieldBuilder(4,5,1,0,SpanFlags.WALKABLE, true, null);
 		OpenHeightfield hf = hfbuilder.build(sf, true);
+		if (hf == null) {
+			System.out.println("OpenHeightfield null");
+			return;
+		}
+		
 		ContourSetBuilder csbuilder = new ContourSetBuilder(null);
 		ContourSet set = csbuilder.build(hf);
+		if (set == null) {
+			System.out.println("CountourSet null");
+			return;
+		}
+		
 		PolyMeshFieldBuilder pbuilder = new PolyMeshFieldBuilder(6);
 		PolyMeshField mf = pbuilder.build(set);
+		System.out.println("polycount "+mf.polyCount());
 		DetailMeshBuilder dtbuilder = new DetailMeshBuilder(2,2);
 		org.critterai.nmgen.TriangleMesh tmesh = dtbuilder.build(mf, hf);
 		

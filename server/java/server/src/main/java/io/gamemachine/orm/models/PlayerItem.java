@@ -28,6 +28,14 @@ CREATE TABLE player_items (
 
   player_item_player_id character varying(128) DEFAULT NULL,
 
+  player_item_icon character varying(128) DEFAULT NULL,
+
+  player_item_harvestable integer DEFAULT NULL,
+
+  player_item_crafting_resource integer DEFAULT NULL,
+
+  player_item_craftable integer DEFAULT NULL,
+
   weapon_attack integer DEFAULT NULL,
   	
   weapon_delay integer DEFAULT NULL,
@@ -64,6 +72,14 @@ CREATE TABLE `player_items` (
   `player_item_color` varchar(128) DEFAULT NULL,
 
   `player_item_player_id` varchar(128) DEFAULT NULL,
+
+  `player_item_icon` varchar(128) DEFAULT NULL,
+
+  `player_item_harvestable` int(11) DEFAULT NULL,
+
+  `player_item_crafting_resource` int(11) DEFAULT NULL,
+
+  `player_item_craftable` int(11) DEFAULT NULL,
 
   	  `weapon_attack` int(11) DEFAULT NULL,
   	

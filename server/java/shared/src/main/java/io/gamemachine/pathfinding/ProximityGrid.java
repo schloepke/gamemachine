@@ -85,8 +85,9 @@ public class ProximityGrid {
 
 		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
 			for (int colNum = startY; colNum <= endY; colNum += offset) {
+				cells.add(hash(rowNum, colNum));
 				if (rowNum >= 0 && colNum >= 0) {
-					cells.add(hash(rowNum, colNum));
+					
 				}
 			}
 		}

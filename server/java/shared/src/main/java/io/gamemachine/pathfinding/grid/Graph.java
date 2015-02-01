@@ -30,33 +30,42 @@ public class Graph implements IndexedGraph<Node> {
 
 	public ProximityGrid grid;
 
-	public Node[][] nodes;
-	public HashMap<Integer, Node> nodeIndex = new HashMap<Integer, Node>();
+	public Verticle[][] verticles;
+	
+	public HashMap<Integer, Node> nodeMap = new HashMap<Integer, Node>();
 	public int height;
 	public int width;
-	
+	public int nodeIndex = 0;
 
 	public Graph(int width, int height) {
 		this.width = width;
 		this.height = height;
-		nodes = new Node[width][height];
+		verticles = new Verticle[width][height];
 		grid = new ProximityGrid(2000, 10);
 	}
 
+	public Node getNode(int x, int y, double height) {
+		Verticle verticle = verticles[x][y];
+		if (verticle == null) {
+			return null;
+		}
+		return verticle.getNearest(height);
+	}
+	
 	@Override
 	public int getNodeCount() {
-		return nodeIndex.values().size();
+		return nodeMap.values().size();
 	}
 
 	@Override
 	public Array<Connection<Node>> getConnections(Node fromNode) {
-		return nodeIndex.get(fromNode.index).getConnections();
+		return nodeMap.get(fromNode.index).getConnections();
 	}
 
-	public Node findClosestNode(double x, double y) {
-		int xi = (int) Math.round(x);
-		int yi = (int) Math.round(y);
-		return nodes[xi][yi];
+	public Node findClosestNode(Vector3 v) {
+		int x = (int) Math.round(v.x);
+		int y = (int) Math.round(v.y);
+		return getNode(x,y,v.z);
 	}
 
 	public double distance(double x, double y, double otherX, double otherY) {
@@ -64,13 +73,13 @@ public class Graph implements IndexedGraph<Node> {
 	}
 
 	@SuppressWarnings("unchecked")
-	public PathResult findPath(double startX, double startY, double endX, double endY, boolean useFunnel, boolean useCover) {
+	public PathResult findPath(Vector3 start, Vector3 end, boolean useFunnel, boolean useCover) {
 		PathResult pathResult = new PathResult();
-		pathResult.startNode = findClosestNode(startX, startY);
-		pathResult.endNode = findClosestNode(endX, endY);
+		pathResult.startNode = findClosestNode(start);
+		pathResult.endNode = findClosestNode(end);
 
 		if (pathResult.startNode == null) {
-			pathResult.error = "Node not found";
+			pathResult.error = "Start node not found";
 			return pathResult;
 		}
 		
@@ -80,7 +89,7 @@ public class Graph implements IndexedGraph<Node> {
 		}
 
 		if (pathResult.endNode == null) {
-			pathResult.error = "Node not found";
+			pathResult.error = "End node not found";
 			return pathResult;
 		}
 		
@@ -133,7 +142,7 @@ public class Graph implements IndexedGraph<Node> {
 		for (Vector3 point : points) {
 			current = point;
 			if (start != current) {
-				int walkable = SuperCover.cover(nodes, start.x, start.y, current.x, current.y, 1d, 1d);
+				int walkable = SuperCover.cover(this, start, current, 1d, 1d);
 				if (walkable != 0) {
 					smooth.add(previous);
 					start = previous;
@@ -161,7 +170,7 @@ public class Graph implements IndexedGraph<Node> {
 					break;
 				}
 				Vector3 end = points.get(currentIdx);
-				int walkable = SuperCover.cover(nodes, start.x, start.y, end.x, end.y, 1d, 1d);
+				int walkable = SuperCover.cover(this, start, end, 1d, 1d);
 				if (walkable == 0) {
 					lastWalkable = currentIdx;
 				} else {

@@ -31,6 +31,8 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import pvp_game.CharacterHandler;
+
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
 	private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
@@ -44,7 +46,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
 	}
 
-	private String login(String playerId, String password) {
+	private Integer login(String playerId, String password) {
 		return playerAuth.authorize(playerId, password);
 	}
 
@@ -57,7 +59,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	public void channelRead0(ChannelHandlerContext ctx, FullHttpRequest req) throws Exception {
 
 		Map<String, String> params = new HashMap<String, String>();
-		
+
 		if (!req.getDecoderResult().isSuccess()) {
 			logger.info("Bad request");
 			sendError(ctx, BAD_REQUEST);
@@ -73,6 +75,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 		}
 
+		logger.info(req.getUri());
 		if (req.getMethod() == POST) {
 			HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), req);
 			for (InterfaceHttpData data : decoder.getBodyHttpDatas()) {
@@ -83,13 +86,25 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 
 			if (req.getUri().startsWith("/api/client/login/")) {
-				String authtoken = login(params.get("username"), params.get("password"));
+				Integer authtoken = login(params.get("username"), params.get("password"));
 				if (authtoken == null) {
 					NotAuthorized(ctx);
 				} else {
 					String json = httpHelper.client_auth_response(authtoken);
 					Ok(ctx, json);
 				}
+			}
+
+			if (req.getUri().startsWith("/characters/create")) {
+				
+				CharacterHandler.createCharacter(params.get("playerId"), params.get("id"), params.get("umaData"));
+				byte[] resp = CharacterHandler.getCharacters(params.get("playerId"));
+				Ok(ctx, resp);
+			}
+			
+			if (req.getUri().startsWith("/characters/get")) {
+				byte[] resp = CharacterHandler.getCharacters(params.get("playerId"));
+				Ok(ctx, resp);
 			}
 		}
 
@@ -109,9 +124,21 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 		ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
 	}
 
+	private static void sendResponse(ChannelHandlerContext ctx, HttpResponseStatus status, byte[] body) {
+		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, Unpooled.copiedBuffer(body));
+		response.headers().set(CONTENT_TYPE, "application/octet-stream");
+		response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
+		ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
+	}
+
 	private static void NotAuthorized(ChannelHandlerContext ctx) {
 		HttpResponseStatus status = HttpResponseStatus.FORBIDDEN;
 		sendResponse(ctx, status, "Not authorized\r\n");
+	}
+
+	private static void Ok(ChannelHandlerContext ctx, byte[] body) {
+		HttpResponseStatus status = HttpResponseStatus.OK;
+		sendResponse(ctx, status, body);
 	}
 
 	private static void Ok(ChannelHandlerContext ctx, String body) {

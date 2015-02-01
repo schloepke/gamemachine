@@ -14,10 +14,14 @@ public class GameActor extends UntypedActor {
 	private static ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
 
 	public String playerId;
+	public String characterId;
 	public String messageId;
 
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
+		if (this.playerId != null) {
+			this.characterId = PlayerService.getInstance().getCharacter(this.playerId);
+		}
 	}
 
 	@Override

@@ -9,6 +9,7 @@ module GameMachine
       java_import 'com.typesafe.config.Config'
       java_import 'com.typesafe.config.ConfigFactory'
       file = File.join(ENV['APP_ROOT'],'config',"#{ENV['GAME_ENV']}.conf")
+      GameMachine.logger.info("Config file is #{file}")
       data = File.read(file)
       config = ConfigFactory.parseString(data).getConfig('gamemachine')
       top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :regions, :client]

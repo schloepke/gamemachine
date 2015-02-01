@@ -26,7 +26,7 @@ public class EntityTracking extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
 	private static MovementVerifier movementVerifier = null;
-	private static ConcurrentHashMap<String,Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String,Cache<String, DynamicMessage>>();
+	private static ConcurrentHashMap<String, Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String, Cache<String, DynamicMessage>>();
 
 	public static String name = "fastpath_entity_tracking";
 
@@ -42,7 +42,7 @@ public class EntityTracking extends UntypedActor {
 		}
 		return cache;
 	}
-	
+
 	private void updateTrackData(TrackDataUpdate update, Player player) {
 		String gameId = PlayerService.getInstance().getGameId(player.id);
 		// No access for clients
@@ -56,9 +56,9 @@ public class EntityTracking extends UntypedActor {
 	@Override
 	public void onReceive(Object message) throws Exception {
 		Player player;
-		
+
 		if (message instanceof TrackData) {
-			TrackData trackData = (TrackData)message;
+			TrackData trackData = (TrackData) message;
 			player = PlayerService.getInstance().find(trackData.id);
 			if (player == null) {
 				logger.warn("Player for " + trackData.id + " is null");
@@ -70,23 +70,23 @@ public class EntityTracking extends UntypedActor {
 
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
-			
+
 			player = PlayerService.getInstance().find(entity.player.id);
 			if (player == null) {
 				logger.warn("Player for " + entity.player.id + " is null");
 				return;
 			}
-			
+
 			if (entity.hasAgentTrackData()) {
 				handleAgentTrackData(entity.agentTrackData, player);
 				return;
 			}
-			
+
 			if (entity.hasTrackDataUpdate()) {
 				updateTrackData(entity.getTrackDataUpdate(), player);
 				return;
 			}
-			
+
 			handleTrackData(entity.trackData, player);
 
 		} else if (message instanceof ClientManagerEvent) {
@@ -106,7 +106,7 @@ public class EntityTracking extends UntypedActor {
 			setEntityLocation(player.id, agentGrid, trackData);
 		}
 	}
-	
+
 	private void handleTrackData(TrackData trackData, Player player) {
 		Grid grid = gameGrid(player.id, trackData.gridName);
 
@@ -115,10 +115,38 @@ public class EntityTracking extends UntypedActor {
 			return;
 		}
 
+		if (trackData.hasBroadcast() && trackData.broadcast == 1) {
+			List<TrackData> trackDatas = grid.neighbors(player.id, trackData.x, trackData.y,
+					trackData.neighborEntityType, 2);
+
+			if (trackDatas == null) {
+				return;
+			}
+
+			TrackData broadcastTrackData = new TrackData();
+			broadcastTrackData.x = trackData.x;
+			broadcastTrackData.y = trackData.y;
+			broadcastTrackData.z = trackData.z;
+			broadcastTrackData.clientData = trackData.clientData;
+			broadcastTrackData.broadcast = 1;
+			broadcastTrackData.id = player.id;
+
+			for (TrackData tdata : trackDatas) {
+				Entity playerMessage = new Entity();
+				playerMessage.id = "b";
+				Neighbors neighbors = new Neighbors();
+				neighbors.addTrackData(broadcastTrackData);
+				playerMessage.setNeighbors(neighbors);
+				PlayerCommands.sendToPlayer(playerMessage, tdata.id);
+				logger.warn("Broadcast sent to " + tdata.id);
+			}
+			return;
+		}
+
 		setEntityLocation(player.id, grid, trackData);
 
 		if (trackData.hasGetNeighbors() && trackData.getNeighbors >= 1) {
-			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType,trackData.getNeighbors);
+			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType, trackData.getNeighbors);
 		}
 	}
 
@@ -169,6 +197,8 @@ public class EntityTracking extends UntypedActor {
 
 		if (trackDatas.size() >= 1) {
 			toNeighbors(player, trackDatas, isAgentController);
+		} else {
+			// logger.warn("No Neighbors");
 		}
 	}
 
@@ -181,7 +211,6 @@ public class EntityTracking extends UntypedActor {
 		sel.tell(playerMessage, getSelf());
 	}
 
-		
 	private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
 		Neighbors neighbors = new Neighbors();
 		int size = 30;
@@ -216,7 +245,8 @@ public class EntityTracking extends UntypedActor {
 			}
 			if (movementVerifier != null) {
 				if (!movementVerifier.verify(trackData)) {
-					PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.VALIDATION_FAILED);
+					PlayerCommands.sendTrackDataResponse(playerId, trackData.id,
+							TrackDataResponse.REASON.VALIDATION_FAILED);
 					return;
 				}
 			}
@@ -230,8 +260,9 @@ public class EntityTracking extends UntypedActor {
 		}
 
 		if (!grid.set(trackData)) {
-			
-			// Resend is most likely from a TrackData that contains a delta, but where we never received an initial
+
+			// Resend is most likely from a TrackData that contains a delta, but
+			// where we never received an initial
 			// TrackData with the full coordinates.
 			PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
 		}

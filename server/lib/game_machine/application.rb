@@ -47,11 +47,12 @@ module GameMachine
       end
 
       def start
+        orm_connect
         JavaLib::AuthorizedPlayers.setPlayerAuthentication(Handlers::PlayerAuthentication.instance)
 
         start_actor_system
         data_store
-        orm_connect
+        
         start_endpoints
         start_core_systems
         start_handlers
@@ -102,6 +103,8 @@ module GameMachine
       def load_games
         require_relative '../../games/routes.rb'
         require_relative '../../games/boot.rb'
+
+        JavaLib::GameMachineLoader.start_java_game_actors
       end
 
       def start_http

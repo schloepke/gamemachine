@@ -26,9 +26,10 @@ module Tutorial
 
   class ItemManager < GameMachine::Actor::GameActor
     include GameMachine
-    attr_reader :player_item_cache, :catalog_list, :catalog_map, :object_store, :sql_store, :catalog_user
+    attr_reader :player_item_cache, :catalog_list, :catalog_map, :object_store, :sql_store, :catalog_user, :owner_id
 
     def awake(args)
+      @owner_id = nil
       @catalog_user = 'global'
       @sql_store = SqlStore.new
       @object_store = ObjectStore.new
@@ -40,6 +41,7 @@ module Tutorial
     end
 
     def on_game_message(game_message)
+      @owner_id = character_id
       player_items_message = MessageLib::PlayerItems.new
 
       # exactly_once returns true of the message is a reliable message, and it is the first time we have seen
@@ -48,8 +50,12 @@ module Tutorial
         reply = new_game_message.set_player_items(player_items_message)
 
         if game_message.has_add_player_item
-          add_player_item(game_message.add_player_item.player_item).each do |player_item|
-            reply.player_items.add_player_item(player_item)
+          if game_message.has_authtoken && JavaLib::AuthToken.has_token(game_message.authtoken)
+            add_player_item(game_message.add_player_item.player_item).each do |player_item|
+              reply.player_items.add_player_item(player_item)
+            end
+          else
+            GameMachine.logger.debug "Bad or missing authtoken #{game_message.authtoken}"
           end
         end
 
@@ -62,6 +68,25 @@ module Tutorial
         end
 
         set_reply(reply)
+
+      elsif game_message.has_add_player_item
+        if game_message.has_authtoken && JavaLib::AuthToken.has_token(game_message.authtoken)
+          reply = new_game_message.set_player_items(player_items_message)
+            add_player_item(game_message.add_player_item.player_item).each do |player_item|
+              reply.player_items.add_player_item(player_item)
+            end
+            tell_player(reply)
+        else
+           GameMachine.logger.debug "Bad or missing authtoken #{game_message.authtoken}"
+        end
+      elsif game_message.has_remove_player_item
+        reply = new_game_message.set_player_items(player_items_message)
+          if player_item = remove_player_item(game_message.remove_player_item.id,
+            game_message.remove_player_item.quantity
+          )
+            reply.player_items.add_player_item(player_item)
+          end
+          tell_player(reply)
 
       elsif game_message.has_request_player_items
 
@@ -81,25 +106,28 @@ module Tutorial
     end
 
     def on_player_disconnect(player_id)
-      player_item_cache.delete(player_id)
+      player_item_cache.delete(owner_id)
     end
 
     private
 
     def player_items
-      unless player_item_cache.fetch(player_id,nil)
-        player_item_cache[player_id] = {}
-        sql_store.all_for_player(player_id).each do |player_item|
-          player_item_cache[player_id][player_item.id] = player_item
+      unless player_item_cache.fetch(owner_id,nil)
+        player_item_cache[owner_id] = {}
+        sql_store.all_for_player(owner_id).each do |player_item|
+          player_item_cache[owner_id][player_item.id] = player_item
+          GameMachine.logger.debug "sql item found: #{player_item.id}"
         end
-        object_store.all_for_player(player_id).each do |player_item|
-          player_item_cache[player_id][player_item.id] = player_item
+        object_store.all_for_player(owner_id).each do |player_item|
+          player_item_cache[owner_id][player_item.id] = player_item
+          GameMachine.logger.debug "objectstore item found: #{player_item.id}"
         end
       end
-      player_item_cache[player_id]
+      player_item_cache[owner_id]
     end
 
     def add_player_item(player_item)
+      GameMachine.logger.info "add_player_item #{player_item.id}"
       catalog_item = catalog_map.fetch(player_item.id,nil)
       return nil if catalog_item.nil?
 
@@ -111,12 +139,13 @@ module Tutorial
     end
 
     def remove_player_item(id,quantity)
+      GameMachine.logger.info "remove_player_item #{id}"
       if player_item = player_items.fetch(id,nil)
         player_item.quantity -= quantity
         if player_item.quantity >= 1
-          store_save_player_item(player_item,player_id)
+          store_save_player_item(player_item,owner_id)
         else
-          store_delete_player_item(player_item,player_id)
+          store_delete_player_item(player_item,owner_id)
           player_items.delete(id)
         end
         player_item
@@ -148,7 +177,7 @@ module Tutorial
       currency_required = player_item.quantity * catalog_item.cost.amount
       if player_currency.quantity >= currency_required
         player_currency.quantity -= currency_required
-        store_save_player_item(player_currency,player_id,true)
+        store_save_player_item(player_currency,owner_id,true)
         return player_currency
       else
         nil
@@ -160,11 +189,12 @@ module Tutorial
       current_player_item.quantity += player_item.quantity
       player_items[current_player_item.id] = current_player_item
 
-      store_save_player_item(current_player_item,player_id)
+      store_save_player_item(current_player_item,owner_id)
       return [current_player_item]
     end
 
     def add_sql_item(player_item,catalog_item)
+      GameMachine.logger.info "add_sql_item #{player_item.id} #{player_item.quantity}"
       state = OpenStruct.new
       changed_items = []
       state.player_item = player_item(player_item.id,catalog_item).clone
@@ -195,8 +225,9 @@ module Tutorial
           end
         end
 
+        GameMachine.logger.debug "update quantity #{state.player_item.quantity} += #{player_item.quantity}"
         state.player_item.quantity += player_item.quantity
-        store_save_player_item(state.player_item,player_id,true)
+        store_save_player_item(state.player_item,owner_id,true)
         
         ModelLib::PlayerItem.commit_transaction
 
@@ -231,26 +262,26 @@ module Tutorial
         false
       elsif ['gold','silver'].include?(catalog_item.id)
         false
-      elsif catalog_item.quantity = -1
+      elsif catalog_item.quantity == -1
         true
       else
         false
       end
     end
 
-    def store_save_player_item(player_item,player_id,in_transaction=false)
+    def store_save_player_item(player_item,owner_id,in_transaction=false)
       if object_store_item?(player_item)
-        object_store.save_player_item(player_item,player_id)
+        object_store.save_player_item(player_item,owner_id)
       else
-        sql_store.save_player_item(player_item,player_id,in_transaction)
+        sql_store.save_player_item(player_item,owner_id,in_transaction)
       end
     end
 
-    def store_delete_player_item(player_item,player_id)
+    def store_delete_player_item(player_item,owner_id)
       if object_store_item?(player_item)
-        object_store.delete_player_item(player_item.id,player_id)
+        object_store.delete_player_item(player_item.id,owner_id)
       else
-        sql_store.delete_player_item(player_item.id,player_id)
+        sql_store.delete_player_item(player_item.id,owner_id)
       end
     end
     

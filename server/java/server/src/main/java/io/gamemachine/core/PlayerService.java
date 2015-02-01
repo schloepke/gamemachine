@@ -221,6 +221,30 @@ public class PlayerService {
 		}
 	}
 	
+	public void setCharacter(String playerId, String characterId) {
+		Player player = find(playerId);
+		if (player == null) {
+			logger.warn("Player " + playerId + " not found");
+			return;
+		}
+		player.setCharacterId(characterId);
+
+		if (authType == OBJECT_DB) {
+			Player.store().set(player);
+		} else if (authType == SQL_DB) {
+			Player.db().save(player);
+		}
+	}
+	
+	public String getCharacter(String playerId) {
+		Player player = find(playerId);
+		if (player == null) {
+			return null;
+		} else {
+			return player.characterId;
+		}
+	}
+	
 	public void clearCache(String playerId) {
 		if (players.containsKey(playerId)) {
 			players.remove(playerId);

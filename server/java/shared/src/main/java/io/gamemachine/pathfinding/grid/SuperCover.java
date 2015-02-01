@@ -1,19 +1,19 @@
 package io.gamemachine.pathfinding.grid;
 
 import io.gamemachine.pathfinding.Node;
-
+import io.gamemachine.util.Vector3;
 
 public class SuperCover {
 
-	public static int cover(Node[][] nodes, double from_x, double from_y, double to_x, double to_y, double cell_width, double cell_height) {
+	public static int cover(Graph graph, Vector3 from, Vector3 to, double cell_width, double cell_height) {
 		int connections = Graph.useDiagonals ? 8 : 4;
 		double maxSlope = Graph.maxSmoothSlope;
 		double maxStep = Graph.maxStep;
-		
-		double x0 = from_x / cell_width;
-		double y0 = from_y / cell_height;
-		double x1 = to_x / cell_width;
-		double y1 = to_y / cell_height;
+
+		double x0 = from.x / cell_width;
+		double y0 = from.y / cell_height;
+		double x1 = to.x / cell_width;
+		double y1 = to.y / cell_height;
 		double dx = Math.abs(x1 - x0);
 		double dy = Math.abs(y1 - y0);
 		int x = ipart(x0);
@@ -50,26 +50,31 @@ public class SuperCover {
 
 		// number of square to be plotted : num
 
+		double height = from.z;
 		Node node = null;
 		Node previous = null;
+		//System.out.println("START " + height);
 		while (true) {
-			node = nodes[x][y];
+			node = graph.getNode(x, y, height);
+			//if (node != null) {
+			//	System.out.println(node.position.z + " " + height);
+			//}
 			if (node == null) {
 				return 1;
 			}
-			
+
 			if (node.slope > maxSlope) {
 				return 2;
 			}
-			
+
 			if (previous != null) {
 				if (previous.stepCost(node) > maxStep) {
 					return 3;
 				}
 			}
 			previous = node;
-			
-			
+			height = node.position.z;
+
 			if (--num == 0)
 				break;
 
@@ -81,9 +86,13 @@ public class SuperCover {
 				x += sx;
 			}
 		}
-		return 0;
+		if (Math.abs(height - to.z) > graph.maxStep) {
+			return 3;
+		} else {
+			return 0;
+		}
 	}
-	
+
 	private static int ipart(double x) {
 		return (int) Math.floor(x);
 	}

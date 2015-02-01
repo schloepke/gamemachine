@@ -15,10 +15,10 @@ public class Util {
 		return "(" + v.x + ", " + v.y + ", " + v.z + ")";
 	}
 	
-	public static void stresstest(Graph graph, double startX, double startY, double endX, double endY,
+	public static void stresstest(Graph graph, io.gamemachine.util.Vector3 start, io.gamemachine.util.Vector3 end,
 			boolean smoothPath, boolean cover, int iterations) {
 		for (int i = 1; i < iterations; i++) {
-			graph.findPath(startX, startY, endX, endY, smoothPath, cover);
+			graph.findPath(start,end, smoothPath, cover);
 		}
 	}
 
@@ -52,6 +52,15 @@ public class Util {
 	}
 
 	public static io.gamemachine.util.Vector3 fromVector3(Vector3 v) {
+		if (v.x == null) {
+			v.x = 0f;
+		}
+		if (v.y == null) {
+			v.y = 0f;
+		}
+		if (v.z == null) {
+			v.z = 0f;
+		}
 		return new io.gamemachine.util.Vector3(v.x, v.y, v.z);
 	}
 

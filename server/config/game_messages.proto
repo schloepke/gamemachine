@@ -3,6 +3,46 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message Character {
+  required string id = 1;
+  optional string umaData = 2;
+  optional int32 health = 3;
+  optional int32 recordId = 4;
+  required string playerId = 5;
+  optional int32 part = 6;
+  optional int32 parts = 7;
+  optional int32 worldx = 8;
+  optional int32 worldy = 9;
+  optional int32 worldz = 10;
+  optional string zone = 11;
+}
+
+message Characters {
+  repeated Character characters = 1;
+}
+
+message PvpGameMessage {
+  optional Character character = 1;
+  optional Characters characters = 2;
+  optional int32 command = 3;
+}
+
+message Harvest {
+  required string id = 1;
+  optional int32 result = 2;
+  optional int64 harvestedAt = 3;
+  optional string characterId = 4;
+  optional string itemId = 5;
+}
+
+message CraftItem {
+  optional CraftableItem craftableItem = 1;
+  optional int32 result = 2;
+  optional string characterId = 3;
+  optional int32 craftedQuantity = 4;
+  optional string craftedId = 5;
+}
+
 persistent_message Player {
   required string id = 1;
   optional bool authenticated = 2;
@@ -14,6 +54,7 @@ persistent_message Player {
   optional bool locked = 8;
   optional int32 ip = 9;
   optional int64 ipChangedAt = 10;
+  optional string characterId = 11;
 }
 
 message TrackData {
@@ -38,10 +79,25 @@ message TrackData {
   optional EntityType neighborEntityType = 11;
   optional EntityType entityType = 12;
 
-  optional float speed = 13;
-  optional float velocity = 14;
-  optional Vector3 direction = 15;
-  optional int32 shortId = 16;
+  
+  optional int32 shortId = 13;
+  optional ClientData clientData = 14;
+  optional int32 broadcast = 15;
+  optional string characterId = 16;
+}
+
+message ClientData {
+  optional int32 command = 1;
+  optional int32 value = 2;
+  optional int32 command2 = 3;
+  optional int32 command3 = 4;
+  optional int32 command4 = 5;
+  optional int32 command5 = 6;
+  optional int32 command6 = 7;
+  optional int32 command7 = 8;
+  optional int32 command8 = 9;
+  optional int32 command9 = 10;
+  optional int32 command1 = 11;
 }
 
 message GameMessage {
@@ -59,6 +115,11 @@ message GameMessage {
   optional AddPlayerItem addPlayerItem = 11;
   optional RemovePlayerItem removePlayerItem = 12;
   optional RequestPlayerItems requestPlayerItems = 13;
+  optional PvpGameMessage pvpGameMessage = 14;
+  optional Harvest harvest = 15;
+  optional int64 authtoken = 16;
+  optional int64 unityMessageId = 17;
+  optional CraftItem craftItem = 18;
 }
 
 message GameMessages {
@@ -68,6 +129,32 @@ message GameMessages {
 message DynamicMessage {
   required string type = 1;
   required bytes message = 2;
+}
+
+local_persistent_message PlayerSkill {
+  required string id = 1;
+  required string name = 2;
+  optional int32 recordId = 3;
+  required string category = 4;
+  required string type = 5;
+  required string icon = 6;
+  required string description = 7;
+  required string resource = 8;
+  required string resourceCost = 9;
+  required string characterId = 10;
+}
+
+local_persistent_message CraftableItem {
+  required string id = 1;
+  optional string item1 = 2;
+  optional int32 item1_quantity = 3;
+  optional string item2 = 4;
+  optional int32 item2_quantity = 5;
+  optional string item3 = 6;
+  optional int32 item3_quantity = 7;
+  optional string item4 = 8;
+  optional int32 item4_quantity = 9;
+  optional int32 recordId = 10;
 }
 
 // Inventory messages
@@ -82,6 +169,10 @@ local_persistent_message PlayerItem {
   optional Cost cost = 8;
   optional string playerId = 9;
   optional int32 recordId = 10;
+  optional string icon = 11;
+  optional int32 harvestable = 12;
+  optional int32 craftingResource = 13;
+  optional int32 craftable = 14;
 }
 
 
