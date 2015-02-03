@@ -27,6 +27,28 @@ message PvpGameMessage {
   optional int32 command = 3;
 }
 
+message UseSkill {
+  required string id = 1;
+  optional string targetId = 2;
+  optional Vector3 location = 3;
+  optional Vector3 direction = 4;
+}
+
+message Vitals {
+  required string id = 1;
+  optional int32 health = 2;
+}
+
+message Attack {
+  required string attacker = 1;
+  required string target = 2;
+  required string skill = 3;
+  optional int32 health = 4;
+  optional int32 stamina = 5;
+  optional int32 magic = 6;
+  optional Vector3 targetLocation = 7;
+}
+
 message Harvest {
   required string id = 1;
   optional int32 result = 2;
@@ -120,6 +142,10 @@ message GameMessage {
   optional int64 authtoken = 16;
   optional int64 unityMessageId = 17;
   optional CraftItem craftItem = 18;
+  optional UseSkill useSkill = 19;
+  optional PlayerSkills playerSkills = 20;
+  optional Vitals vitals = 21;
+  optional Attack attack = 22;
 }
 
 message GameMessages {
@@ -136,12 +162,18 @@ local_persistent_message PlayerSkill {
   required string name = 2;
   optional int32 recordId = 3;
   required string category = 4;
-  required string type = 5;
+  optional string damageType = 5;
   required string icon = 6;
-  required string description = 7;
-  required string resource = 8;
-  required string resourceCost = 9;
+  optional string description = 7;
+  optional string resource = 8;
+  optional int32 resourceCost = 9;
   required string characterId = 10;
+  optional string weaponType = 11;
+  optional int32 radius = 12;
+}
+
+message PlayerSkills {
+  repeated PlayerSkill playerSkill = 1;
 }
 
 local_persistent_message CraftableItem {
@@ -164,7 +196,7 @@ local_persistent_message PlayerItem {
   required string name = 2;
   required int32 quantity = 3;
   optional string color = 4;
-  optional Weapon weapon = 5;
+  optional bool weapon = 5;
   optional Consumable consumable = 6;
   optional Cost cost = 8;
   optional string playerId = 9;
@@ -173,8 +205,23 @@ local_persistent_message PlayerItem {
   optional int32 harvestable = 12;
   optional int32 craftingResource = 13;
   optional int32 craftable = 14;
+  optional ModelInfo modelInfo = 15;
 }
 
+local_message ModelInfo {
+  optional float attachX = 1;
+  optional float attachY = 2;
+  optional float attachZ = 3;
+  optional float rotateX = 4;
+  optional float rotateY = 5;
+  optional float rotateZ = 6;
+  optional float scaleX = 7;
+  optional float scaleY = 8;
+  optional float scaleZ = 9;
+  optional string resource = 10;
+  optional string prefab = 11;
+  optional string weapon_type = 12;
+}
 
 local_message Cost {
   required float amount = 1;

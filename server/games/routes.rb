@@ -13,4 +13,6 @@ GameMachine::Routes.game_messages do
   route 200, to: 'CharacterHandler', distributed: false, name: 'CharacterHandler'
   route 201, to: 'HarvestHandler', distributed: false, name: 'HarvestHandler'
   route 201, to: 'CraftingHandler', distributed: false, name: 'CraftingHandler'
+  route 202, to: 'CombatHandler', distributed: false, name: 'CombatHandler'
+  route 203, to: 'PlayerSkillHandler', distributed: false, name: 'PlayerSkillHandler'
 end

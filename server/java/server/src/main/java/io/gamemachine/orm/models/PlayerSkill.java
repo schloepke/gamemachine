@@ -24,17 +24,21 @@ CREATE TABLE player_skills (
 
   player_skill_category character varying(128) NOT NULL,
 
-  player_skill_type character varying(128) NOT NULL,
+  player_skill_damage_type character varying(128) DEFAULT NULL,
 
   player_skill_icon character varying(128) NOT NULL,
 
-  player_skill_description character varying(128) NOT NULL,
+  player_skill_description character varying(128) DEFAULT NULL,
 
-  player_skill_resource character varying(128) NOT NULL,
+  player_skill_resource character varying(128) DEFAULT NULL,
 
-  player_skill_resource_cost character varying(128) NOT NULL,
+  player_skill_resource_cost integer DEFAULT NULL,
 
   player_skill_character_id character varying(128) NOT NULL,
+
+  player_skill_weapon_type character varying(128) DEFAULT NULL,
+
+  player_skill_radius integer DEFAULT NULL,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
@@ -57,17 +61,21 @@ CREATE TABLE `player_skills` (
 
   `player_skill_category` varchar(128) NOT NULL,
 
-  `player_skill_type` varchar(128) NOT NULL,
+  `player_skill_damage_type` varchar(128) DEFAULT NULL,
 
   `player_skill_icon` varchar(128) NOT NULL,
 
-  `player_skill_description` varchar(128) NOT NULL,
+  `player_skill_description` varchar(128) DEFAULT NULL,
 
-  `player_skill_resource` varchar(128) NOT NULL,
+  `player_skill_resource` varchar(128) DEFAULT NULL,
 
-  `player_skill_resource_cost` varchar(128) NOT NULL,
+  `player_skill_resource_cost` int(11) DEFAULT NULL,
 
   `player_skill_character_id` varchar(128) NOT NULL,
+
+  `player_skill_weapon_type` varchar(128) DEFAULT NULL,
+
+  `player_skill_radius` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

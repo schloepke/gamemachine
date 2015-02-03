@@ -22,6 +22,7 @@ package io.gamemachine.core;
  */
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackData.EntityType;
+import io.gamemachine.util.Vector3;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -296,7 +297,7 @@ public class Grid {
 	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}
-
+	
 	public void remove(String playerId) {
 		TrackData indexValue = objectIndex.get(playerId);
 		if (indexValue != null) {

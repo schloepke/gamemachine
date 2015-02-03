@@ -41,7 +41,9 @@ module Tutorial
     end
 
     def on_game_message(game_message)
+      # item owner is character by default.  Change this to player_id if you want items owned by player
       @owner_id = character_id
+      
       player_items_message = MessageLib::PlayerItems.new
 
       # exactly_once returns true of the message is a reliable message, and it is the first time we have seen

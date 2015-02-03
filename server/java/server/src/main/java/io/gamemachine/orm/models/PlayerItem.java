@@ -26,6 +26,8 @@ CREATE TABLE player_items (
 
   player_item_color character varying(128) DEFAULT NULL,
 
+  player_item_weapon boolean DEFAULT NULL,
+
   player_item_player_id character varying(128) DEFAULT NULL,
 
   player_item_icon character varying(128) DEFAULT NULL,
@@ -36,10 +38,6 @@ CREATE TABLE player_items (
 
   player_item_craftable integer DEFAULT NULL,
 
-  weapon_attack integer DEFAULT NULL,
-  	
-  weapon_delay integer DEFAULT NULL,
-
   consumable_type character varying(128) DEFAULT NULL,
   	
   consumable_size character varying(128) DEFAULT NULL,
@@ -47,6 +45,30 @@ CREATE TABLE player_items (
   cost_amount double precision DEFAULT NULL,
   	
   cost_currency character varying(128) DEFAULT NULL,
+
+  model_info_attach_x double precision DEFAULT NULL,
+  	
+  model_info_attach_y double precision DEFAULT NULL,
+  	
+  model_info_attach_z double precision DEFAULT NULL,
+  	
+  model_info_rotate_x double precision DEFAULT NULL,
+  	
+  model_info_rotate_y double precision DEFAULT NULL,
+  	
+  model_info_rotate_z double precision DEFAULT NULL,
+  	
+  model_info_scale_x double precision DEFAULT NULL,
+  	
+  model_info_scale_y double precision DEFAULT NULL,
+  	
+  model_info_scale_z double precision DEFAULT NULL,
+  	
+  model_info_resource character varying(128) DEFAULT NULL,
+  	
+  model_info_prefab character varying(128) DEFAULT NULL,
+  	
+  model_info_weapon_type character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_item_pkey PRIMARY KEY (id)
 );
@@ -71,6 +93,8 @@ CREATE TABLE `player_items` (
 
   `player_item_color` varchar(128) DEFAULT NULL,
 
+  `player_item_weapon` tinyint(4) DEFAULT NULL,
+
   `player_item_player_id` varchar(128) DEFAULT NULL,
 
   `player_item_icon` varchar(128) DEFAULT NULL,
@@ -81,10 +105,6 @@ CREATE TABLE `player_items` (
 
   `player_item_craftable` int(11) DEFAULT NULL,
 
-  	  `weapon_attack` int(11) DEFAULT NULL,
-  	
-  	  `weapon_delay` int(11) DEFAULT NULL,
-
   	  `consumable_type` varchar(128) DEFAULT NULL,
   	
   	  `consumable_size` varchar(128) DEFAULT NULL,
@@ -92,6 +112,30 @@ CREATE TABLE `player_items` (
   	  `cost_amount` float DEFAULT NULL,
   	
   	  `cost_currency` varchar(128) DEFAULT NULL,
+
+  	  `model_info_attach_x` float DEFAULT NULL,
+  	
+  	  `model_info_attach_y` float DEFAULT NULL,
+  	
+  	  `model_info_attach_z` float DEFAULT NULL,
+  	
+  	  `model_info_rotate_x` float DEFAULT NULL,
+  	
+  	  `model_info_rotate_y` float DEFAULT NULL,
+  	
+  	  `model_info_rotate_z` float DEFAULT NULL,
+  	
+  	  `model_info_scale_x` float DEFAULT NULL,
+  	
+  	  `model_info_scale_y` float DEFAULT NULL,
+  	
+  	  `model_info_scale_z` float DEFAULT NULL,
+  	
+  	  `model_info_resource` varchar(128) DEFAULT NULL,
+  	
+  	  `model_info_prefab` varchar(128) DEFAULT NULL,
+  	
+  	  `model_info_weapon_type` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
