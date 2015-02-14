@@ -2,7 +2,7 @@
 
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games that is straight forward and simple to use, while also being inherently scalable and performant.
 
-Highlights
+#### Highlights
 
 - Fully distributed platform that is inherently scalable to thousands of nodes.
 
@@ -19,7 +19,7 @@ Highlights
 -  Modular, pluggable systems for persistence and authentication.
 
 
-Roadmap
+#### Roadmap
 
 With the core server fairly mature and stable at this point, we have started working on an actual game to showcase what Game Machine can do.  As much of the code as possible will be open source.  Which is to say all of the server code and a large chunk of the client code, minus a few commercial assets from the Unity asset store (which can all be purchased to make the client fully playable).
 
