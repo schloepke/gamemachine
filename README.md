@@ -28,6 +28,7 @@ For the game itself we took the most challenging, complicated multiplayer game w
 Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
 
 Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Although we are making sure it retains the scalability, performance, and other features we want to highlight. 
+Current status is that after just a couple of weeks we have functional combat, siege weapons with destructable structures, a very basis harvesting/crafting system, and ships/naval combat partly done.  Live dev server is already in place, and should be publically available shortly (as of Feb 14).
 
 Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation, packaged downloads, and more.
 
