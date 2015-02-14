@@ -8,7 +8,8 @@ Much of what we do in this area is not outright bad or wrong (although that exis
 
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games that is straight forward and simple to use, while also being inherently scalable and performant.
 
-Making multiplayer games, especially large virtual worlds, has often been thought of as something only a big studio could tackle.  In fact many large studios rather like this stereotype, and saw now reason to change it either perceptually or in fact.   
+Making multiplayer games, especially large virtual worlds, has often been thought of as something only a big studio could tackle.  In fact many large studios rather like this stereotype, and saw now reason to change it either perceptually or in fact.
+
 The truth is that while some of the challenges are, well challenging.  We absolutely can do better.  Much better.  With modern approaches to scalability and good abstractions, even small indie studios should be able to tackle complex multiplayer games without having to hire some industry veteran network guru.
 
 Following is a short list of the key things we have done in Game Machine towards our goal.
