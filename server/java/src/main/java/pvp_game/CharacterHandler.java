@@ -33,7 +33,10 @@ public class CharacterHandler extends GameMessageActor {
 	public static String name = CharacterHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
-	private static int maxHealth = 1000;
+	public static int defaultHealth = 1000;
+	public static int defaultStamina = 1000;
+	public static int defaultMagic = 1000;
+	
 
 	@Override
 	public void awake() {
@@ -78,7 +81,7 @@ public class CharacterHandler extends GameMessageActor {
 						if (name.equals("default")) {
 							Grid grid = entry.getValue();
 							for (TrackData trackData : grid.getAll()) {
-								Character character = getCurrentCharacter(trackData.id);
+								Character character = currentCharacter(trackData.id);
 								if (character != null) {
 									character.worldx = trackData.x;
 									character.worldy = trackData.y;
@@ -139,7 +142,19 @@ public class CharacterHandler extends GameMessageActor {
 		}
 	}
 
-	public static Character getCurrentCharacter(String playerId) {
+	public static int currentHealth(String playerId) {
+		return currentCharacter(playerId).health;
+	}
+	
+	public static int currentStamina(String playerId) {
+		return currentCharacter(playerId).stamina;
+	}
+	
+	public static int currentMagic(String playerId) {
+		return currentCharacter(playerId).magic;
+	}
+	
+	public static Character currentCharacter(String playerId) {
 		String id = PlayerService.getInstance().getCharacter(playerId);
 		if (id != null) {
 			return getCharacter(playerId, id);
@@ -155,7 +170,9 @@ public class CharacterHandler extends GameMessageActor {
 			character = new Character();
 			character.setId(characterId);
 			character.setPlayerId(playerId);
-			character.setHealth(maxHealth);
+			character.setHealth(defaultHealth);
+			character.setStamina(defaultStamina);
+			character.setMagic(defaultMagic);
 			saveCharacter(character);
 		}
 		return character;

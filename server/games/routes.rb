@@ -15,4 +15,6 @@ GameMachine::Routes.game_messages do
   route 201, to: 'CraftingHandler', distributed: false, name: 'CraftingHandler'
   route 202, to: 'CombatHandler', distributed: false, name: 'CombatHandler'
   route 203, to: 'PlayerSkillHandler', distributed: false, name: 'PlayerSkillHandler'
+  route 204, to: 'ConsumableItemHandler', distributed: false, name: 'ConsumableItemHandler'
+  route 205, to: 'SiegeHandler', distributed: false, name: 'SiegeHandler'
 end

@@ -11,6 +11,7 @@ def add_items(items,player)
     player_item.set_harvestable(item['harvestable'])
     player_item.set_craftable(item['craftable'])
     player_item.set_crafting_resource(item['crafting_resource'])
+    player_item.set_is_consumable(item['is_consumable'])
 
     ['consumable','cost','model_info'].each do |component|
       if item[component]
@@ -58,6 +59,16 @@ items = [
     'quantity' => 1000000
   },
 
+  {
+    'id' => 'catapult',
+    'name' => 'Catapult',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => 'catapult',
+    'quantity' => 1000000,
+    'is_consumable' => true
+  },
+
 {
     'id' => 'katana',
     'name' => 'Katana',
@@ -69,6 +80,31 @@ items = [
     'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
     set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
     set_resource("medieval_weapons").set_prefab("Katana").set_weapon_type("1hsword")
+  },
+
+  {
+    'id' => '2hsword',
+    'name' => '2h Sword',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => '2hsword',
+    'quantity' => 1000000,
+    'weapon' => true,
+    'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
+    set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+    set_resource("medieval_weapons").set_prefab("2H_Sword_A").set_weapon_type("2hsword")
+  },
+  {
+  'id' => 'staff',
+    'name' => 'Staff',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => 'staff',
+    'quantity' => 1000000,
+    'weapon' => true,
+    'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
+    set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+    set_resource("medieval_weapons").set_prefab("Mage_Staff").set_weapon_type("staff")
   },
 
   {
@@ -144,7 +180,24 @@ items = [
     'item2_quantity' => 2
   },
   {
+    'id' => 'catapult',
+    'item1' => 'wood',
+    'item1_quantity' => 3,
+    'item2' => 'iron_ore',
+    'item2_quantity' => 1
+  },
+  {
     'id' => 'katana',
+    'item1' => 'iron_ore',
+    'item1_quantity' => 2
+  },
+  {
+    'id' => '2hsword',
+    'item1' => 'iron_ore',
+    'item1_quantity' => 4
+  },
+  {
+    'id' => 'staff',
     'item1' => 'wood',
     'item1_quantity' => 2
   }
@@ -173,34 +226,58 @@ skills = [
     'id' => 'poison_blade',
     'name' => 'Poison blade',
     'category' => 'weapon',
-    'weapon_type' => 'sword',
+    'weapon_type' => '1hsword',
     'damage_type' => 'st',
     'icon' => 'Icon.1_13',
     'resource' => 'magic',
     'resource_cost' => 20,
-    'radius' => 5,
+    'range' => 5,
   },
   {
     'id' => 'cleave',
     'name' => 'Cleave',
     'category' => 'weapon',
-    'weapon_type' => 'sword',
+    'weapon_type' => '2hsword',
     'damage_type' => 'pbaoe',
     'icon' => 'Icon.1_13',
     'resource' => 'stamina',
     'resource_cost' => 20,
-    'radius' => 8,
+    'range' => 8,
   },
+
+  {
+    'id' => 'charge',
+    'name' => 'Charge',
+    'category' => 'weapon',
+    'weapon_type' => '2hsword',
+    'damage_type' => 'pbaoe',
+    'icon' => 'Icon.1_13',
+    'resource' => 'stamina',
+    'resource_cost' => 20,
+    'range' => 15,
+  },
+
   {
     'id' => 'staff_heal',
     'name' => 'Staff heal',
     'category' => 'weapon',
     'weapon_type' => 'staff',
-    'damage_type' => 'aoe_heal',
+    'damage_type' => 'aoe',
     'icon' => 'Icon.3_35',
     'resource' => 'magic',
     'resource_cost' => 80,
-    'radius' => 14,
+    'range' => 14,
+  },
+  {
+    'id' => 'fire_field',
+    'name' => 'Fire Field',
+    'category' => 'weapon',
+    'weapon_type' => 'staff',
+    'damage_type' => 'aoe',
+    'icon' => 'Icon.3_35',
+    'resource' => 'magic',
+    'resource_cost' => 80,
+    'range' => 14,
   },
   {
     'id' => 'lightning_bolt',
@@ -211,8 +288,19 @@ skills = [
     'icon' => 'Icon.1_12',
     'resource' => 'magic',
     'resource_cost' => 40,
-    'radius' => 14,
+    'range' => 14,
   },
+  {
+    'id' => 'catapult_explosive',
+    'name' => 'Catapult explosive shot',
+    'category' => 'weapon',
+    'weapon_type' => 'siege',
+    'damage_type' => 'aoe',
+    'icon' => 'Icon.1_12',
+    'resource' => 'stamina',
+    'resource_cost' => 120,
+    'range' => 15,
+  }
   
 ]
 
@@ -229,7 +317,7 @@ characters.each do |char|
     citem.set_icon(item['icon'])
     citem.set_resource(item['resource'])
     citem.set_resource_cost(item['resource_cost'])
-    citem.set_radius(item['radius'])
+    citem.set_range(item['range'])
     citem.set_character_id(char)
 
     where = 'player_skill_id = ? AND player_skill_character_id = ?'

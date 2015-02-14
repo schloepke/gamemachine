@@ -13,6 +13,9 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(CraftingHandler.class), CraftingHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(CombatHandler.class), CombatHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(PlayerSkillHandler.class), PlayerSkillHandler.name);
+		GameMachineLoader.getActorSystem().actorOf(Props.create(StatusEffectHandler.class), StatusEffectHandler.name);
+		GameMachineLoader.getActorSystem().actorOf(Props.create(ConsumableItemHandler.class), ConsumableItemHandler.name);
+		GameMachineLoader.getActorSystem().actorOf(Props.create(SiegeHandler.class), SiegeHandler.name);
 		
 		Commands.seedCharacterItem("wood", 50);
 		Commands.seedCharacterItem("iron_ore", 50);

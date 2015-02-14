@@ -60,7 +60,7 @@ public class HarvestHandler extends GameMessageActor {
 	}
 
 	private String nameToItemId(String name) {
-		if (name.startsWith("rock")) {
+		if (name.startsWith("hv_")) {
 			return "iron_ore";
 		} else {
 			return null;

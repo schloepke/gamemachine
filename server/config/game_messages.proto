@@ -3,6 +3,39 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message WorldObject {
+  optional string playerItemId = 1;
+  optional int32 action = 2;
+  optional string id = 3;
+  optional int32 recordId = 4;
+  optional string ownerId = 5;
+  optional int32 x = 6;
+  optional int32 y = 7;
+  optional int32 z = 8;
+  optional int32 rx = 9;
+  optional int32 ry = 10;
+  optional int32 rz = 11;
+  optional int32 rw = 12;
+  optional int32 maxHealth = 13;
+  optional int32 health = 14;
+  optional string parentId = 15;
+  optional bool destructable = 16;
+}
+
+message WorldObjects {
+  repeated WorldObject worldObject = 1;
+}
+
+message SiegeCommand {
+  optional int32 startLoad = 1;
+  optional int32 fire = 2;
+  optional float force = 3;
+  optional string id = 4;
+  optional string hitId = 5;
+  optional Vector3 hit = 6;
+  optional string skillId = 7;
+}
+
 persistent_message Character {
   required string id = 1;
   optional string umaData = 2;
@@ -15,6 +48,8 @@ persistent_message Character {
   optional int32 worldy = 9;
   optional int32 worldz = 10;
   optional string zone = 11;
+  optional int32 stamina = 12;
+  optional int32 magic = 13;
 }
 
 message Characters {
@@ -34,19 +69,68 @@ message UseSkill {
   optional Vector3 direction = 4;
 }
 
+message StatusEffect {
+  enum Type {
+    AttributeDecrease = 0;
+    AttributeIncrease = 1;
+    Heal = 2;
+    Slow = 3;
+    Stun = 4;
+    Root = 5;
+    Death = 6;
+  }
+  optional Type type = 1;
+  optional string id = 2;
+  optional int32 duration = 3;
+  optional int32 ticks = 4;
+  optional string attribute = 5;
+  optional int32 minValue = 6;
+  optional int32 maxValue = 7;
+  optional string particleEffect = 8;
+}
+
+message VisualEffect {
+  optional string id = 1;
+  optional string prefab = 2;
+  optional Vector3 startPosition = 3;
+  optional Vector3 endPosition = 4;
+  optional string type = 5;
+  optional int32 duration = 6;
+}
+
+message StatusEffectResult {
+  required string target = 1;
+  required string origin = 2;
+  required int32 value = 3;
+  required string statusEffectId = 4;
+}
+
+message StatusEffectTarget {
+  required string target = 1;
+  required string skill = 2;
+  optional Vector3 location = 3;
+  optional int32 range = 4;
+  repeated StatusEffect statusEffect = 5;
+  required string origin = 6;
+  optional int32 ticks = 7;
+  optional int64 activeId = 8;
+  optional int64 lastTick = 9;
+}
+
 message Vitals {
   required string id = 1;
   optional int32 health = 2;
+  optional int32 stamina = 3;
+  optional int32 magic = 4;
+  optional int64 lastCombat = 5;
+  optional int32 dead = 6;
 }
 
 message Attack {
   required string attacker = 1;
   required string target = 2;
   required string skill = 3;
-  optional int32 health = 4;
-  optional int32 stamina = 5;
-  optional int32 magic = 6;
-  optional Vector3 targetLocation = 7;
+  optional Vector3 targetLocation = 4;
 }
 
 message Harvest {
@@ -122,6 +206,11 @@ message ClientData {
   optional int32 command1 = 11;
 }
 
+message DataRequest {
+  required string requester = 1;
+  required string name = 2;
+}
+
 message GameMessage {
   // Used internally, do not change
   optional string playerId = 1;
@@ -146,6 +235,12 @@ message GameMessage {
   optional PlayerSkills playerSkills = 20;
   optional Vitals vitals = 21;
   optional Attack attack = 22;
+  optional StatusEffect statusEffect = 23;
+  optional StatusEffectResult statusEffectResult = 24;
+  optional DataRequest dataRequest = 25;
+  optional VisualEffect visualEffect = 26;
+  optional WorldObjects worldObjects = 27;
+  optional SiegeCommand siegeCommand = 28;
 }
 
 message GameMessages {
@@ -169,7 +264,8 @@ local_persistent_message PlayerSkill {
   optional int32 resourceCost = 9;
   required string characterId = 10;
   optional string weaponType = 11;
-  optional int32 radius = 12;
+  optional int32 range = 12;
+  optional string statusEffectId = 13;
 }
 
 message PlayerSkills {
@@ -206,6 +302,7 @@ local_persistent_message PlayerItem {
   optional int32 craftingResource = 13;
   optional int32 craftable = 14;
   optional ModelInfo modelInfo = 15;
+  optional bool isConsumable = 16;
 }
 
 local_message ModelInfo {

@@ -38,6 +38,10 @@ CREATE TABLE characters (
 
   character_zone character varying(128) DEFAULT NULL,
 
+  character_stamina integer DEFAULT NULL,
+
+  character_magic integer DEFAULT NULL,
+
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
 alter table characters owner to gamemachine;
@@ -72,6 +76,10 @@ CREATE TABLE `characters` (
   `character_worldz` int(11) DEFAULT NULL,
 
   `character_zone` varchar(128) DEFAULT NULL,
+
+  `character_stamina` int(11) DEFAULT NULL,
+
+  `character_magic` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

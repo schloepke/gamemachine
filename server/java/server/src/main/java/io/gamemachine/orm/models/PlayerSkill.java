@@ -38,7 +38,9 @@ CREATE TABLE player_skills (
 
   player_skill_weapon_type character varying(128) DEFAULT NULL,
 
-  player_skill_radius integer DEFAULT NULL,
+  player_skill_range integer DEFAULT NULL,
+
+  player_skill_status_effect_id character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
@@ -75,7 +77,9 @@ CREATE TABLE `player_skills` (
 
   `player_skill_weapon_type` varchar(128) DEFAULT NULL,
 
-  `player_skill_radius` int(11) DEFAULT NULL,
+  `player_skill_range` int(11) DEFAULT NULL,
+
+  `player_skill_status_effect_id` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -361,7 +361,7 @@ public class Grid {
 			trackData = newTrackData;
 			trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
 			if (trackData.characterId == null) {
-				logger.warn("Null characterId for "+trackData.id);
+				//logger.warn("Null characterId for "+trackData.id);
 			}
 		}
 
