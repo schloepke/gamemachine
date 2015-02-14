@@ -10,7 +10,7 @@ Highlights
  
 - Good abstractions for concurrency that are simple to understand and use.  Modern approach using the actor model and messaging.
 
-- Industry standard messaging formats.  No custom binary bit field protocols (No you don't need those, and yes they are evil).
+- Industry standard messaging formats.  No custom binary bit field protocols.
 
 - A modern approach to reliable messaging that puts reliabilty back at the correct layer of abstraction.
 
