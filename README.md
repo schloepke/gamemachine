@@ -17,6 +17,8 @@ Following is a short list of the key things we have done in Game Machine towards
 
 - No separate server types such as login server, zone server, etc..  All nodes can serve all functions.  Not only does this eliminate single points of failure, it significantly simplifies deployment and dev ops in general.
 
+- Clients are just another node in the cluster.  Simple to write server side bots that are no different from a regular client.  Perform distributed processing across your clients, or use it for distributed load/stress testing.  
+- 
 - Good abstractions for concurrency that are simple to understand and use.  Modern approach using the actor model and messaging.
 
 - Industry standard messaging formats.  No custom binary bit field protocols (No you don't need those, and yes they are evil).
