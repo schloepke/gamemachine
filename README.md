@@ -18,5 +18,16 @@ Highlights
 
 -  Modular, pluggable systems for persistence and authentication.
 
+
+Roadmap
+
+With the core server fairly mature and stable at this point, we have started working on an actual game to showcase what Game Machine can do.  As much of the code as possible will be open source.  Which is to say all of the server code and a large chunk of the client code, minus a few commercial assets from the Unity asset store (which can all be purchased to make the client fully playable).
+
+For the game itself we took the most challenging, complicated multiplayer game we could think of, a massive pvp mmo with land/sea combat and siege warfare.  
+
+Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
+
+Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Although we are making sure it retains the scalability, performance, and other features we want to highlight. 
+
 Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation, packaged downloads, and more.
 
