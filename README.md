@@ -1,18 +1,8 @@
 # Welcome to Game Machine
 
-Game Machine is a statement as much as a platform.  It started out of my own personal frustration with how the game industry approached many of the problems in this domain.
-
-For one, we continue to solve the same problems over and over in isolation.  We failed to learn the benefits of open sourcing our core technologies, and in the process many of our approaches and much of our architecture have become dated and obsolete.
-
-Much of what we do in this area is not outright bad or wrong (although that exists also), it's just not good.
-
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games that is straight forward and simple to use, while also being inherently scalable and performant.
 
-Making multiplayer games, especially large virtual worlds, has often been thought of as something only a big studio could tackle.  In fact many large studios rather like this stereotype, and saw now reason to change it either perceptually or in fact.
-
-The truth is that while some of the challenges are, well challenging.  We absolutely can do better.  Much better.  With modern approaches to scalability and good abstractions, even small indie studios should be able to tackle complex multiplayer games without having to hire some industry veteran network guru.
-
-Following is a short list of the key things we have done in Game Machine towards our goal.
+Highlights
 
 - Fully distributed platform that is inherently scalable to thousands of nodes.
 
