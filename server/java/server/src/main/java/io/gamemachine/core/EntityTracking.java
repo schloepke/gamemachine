@@ -132,13 +132,15 @@ public class EntityTracking extends UntypedActor {
 			broadcastTrackData.id = player.id;
 
 			for (TrackData tdata : trackDatas) {
-				Entity playerMessage = new Entity();
-				playerMessage.id = "b";
-				Neighbors neighbors = new Neighbors();
-				neighbors.addTrackData(broadcastTrackData);
-				playerMessage.setNeighbors(neighbors);
-				PlayerCommands.sendToPlayer(playerMessage, tdata.id);
-				logger.warn("Broadcast sent to " + tdata.id);
+				if (tdata.entityType == TrackData.EntityType.PLAYER) {
+					Entity playerMessage = new Entity();
+					playerMessage.id = "b";
+					Neighbors neighbors = new Neighbors();
+					neighbors.addTrackData(broadcastTrackData);
+					playerMessage.setNeighbors(neighbors);
+					PlayerCommands.sendToPlayer(playerMessage, tdata.id);
+					logger.debug("Broadcast sent to " + tdata.id);
+				}
 			}
 			return;
 		}

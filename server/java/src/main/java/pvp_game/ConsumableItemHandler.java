@@ -5,12 +5,17 @@ import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Bounds;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.WorldObject;
 import io.gamemachine.messages.WorldObjects;
+import io.gamemachine.pathfinding.grid.BoundingBox;
+import io.gamemachine.util.Vector3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,6 +28,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 	public static String name = ConsumableItemHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
+	public static ConcurrentHashMap<String, WorldObject> playerAttached = new ConcurrentHashMap<String, WorldObject>();
 	public static ConcurrentHashMap<String, WorldObject> wobjects = new ConcurrentHashMap<String, WorldObject>();
 	public static AtomicLong counter = new AtomicLong();
 	private Grid worldObjectGrid;
@@ -30,6 +36,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 
 	@Override
 	public void awake() {
+		Commands.clientManagerRegister(name);
 		worldObjectGrid = GameGrid.getGameGrid(Common.gameId, "world_objects");
 		defaultGrid = GameGrid.getGameGrid(Common.gameId, "default");
 		load();
@@ -43,7 +50,12 @@ public class ConsumableItemHandler extends GameMessageActor {
 
 			for (WorldObject worldObject : gameMessage.worldObjects.worldObject) {
 				if (worldObject.action == 1) {
-					deploy(worldObject);
+					if (gameMessage.hasBounds()) {
+						deployInBounds(worldObject,gameMessage.bounds);
+					} else {
+						deploy(worldObject);
+					}
+					
 				} else if (worldObject.action == 2) {
 					updatePosition(worldObject);
 				} else if (worldObject.action == 3) {
@@ -88,6 +100,48 @@ public class ConsumableItemHandler extends GameMessageActor {
 		return WorldObject.db().findFirst("world_object_id = ?", id);
 	}
 
+	private void deployInBounds(WorldObject worldObject, Bounds bounds) {
+		if (!canSpawn(bounds)) {
+			logger.warning("Objects in way of deploying " + worldObject.playerItemId);
+			return;
+		}
+		
+		PlayerItem playerItem = PlayerItem.db().findFirst("player_item_id = ? and player_item_player_id = ?",
+				worldObject.playerItemId, worldObject.ownerId);
+		if (playerItem == null) {
+			logger.warning("Player does not own " + worldObject.playerItemId);
+			return;
+		}
+		
+		worldObject.id = worldObject.playerItemId + "_"+worldObject.ownerId;
+		if (worldObject.playerItemId.equals("ship")) {
+			if (playerAttached.containsKey(worldObject.id)) {
+				logger.warning("Player already has instance of " + worldObject.playerItemId);
+				return;
+			}
+			playerAttached.put(worldObject.id, worldObject);
+		}
+		GameMessage gameMessage = new GameMessage();
+		WorldObjects worldObjects = new WorldObjects();
+		worldObjects.addWorldObject(worldObject);
+		gameMessage.worldObjects = worldObjects;
+		PlayerCommands.sendGameMessage(gameMessage, playerId);
+	}
+	
+	private Boolean canSpawn(Bounds bounds) {
+		io.gamemachine.util.Vector3 min = new io.gamemachine.util.Vector3(bounds.min.x,bounds.min.y,0l);
+		io.gamemachine.util.Vector3 max = new io.gamemachine.util.Vector3(bounds.max.x,bounds.max.y,0l);
+		BoundingBox box = new BoundingBox(min,max);
+		io.gamemachine.util.Vector3 entityPosition;
+		for (TrackData trackData : defaultGrid.getAll()) {
+			entityPosition = Common.toVector3(trackData.x, trackData.y);
+			if (box.contains(entityPosition)) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	private void deploy(WorldObject worldObject) {
 		PlayerItem playerItem = PlayerItem.db().findFirst("player_item_id = ? and player_item_player_id = ?",
 				worldObject.playerItemId, worldObject.ownerId);
@@ -147,8 +201,26 @@ public class ConsumableItemHandler extends GameMessageActor {
 
 	@Override
 	public void onPlayerDisconnect(String playerId) {
-		// TODO Auto-generated method stub
+		logger.warning("Player disconnect " + playerId);
+		List<String> removed = new ArrayList<String>();
+		String characterId = PlayerService.getInstance().getCharacter(playerId);
+		for (WorldObject worldObject : playerAttached.values()) {
+			if (worldObject.ownerId.equals(characterId)) {
+				logger.warning("Removing  " + worldObject.id+" from grid");
+				defaultGrid.remove(worldObject.id);
+				removed.add(worldObject.id);
+			}
+		}
+		for (String id : removed) {
+			playerAttached.remove(id);
+		}
 
+	}
+
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

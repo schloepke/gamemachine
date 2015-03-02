@@ -95,4 +95,10 @@ public class UnityProxy extends GameMessageActor {
 		sel.tell(gameMessage, null);
 	}
 
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

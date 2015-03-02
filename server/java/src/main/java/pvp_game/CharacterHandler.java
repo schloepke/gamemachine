@@ -1,32 +1,28 @@
 package pvp_game;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
-import java.util.zip.DataFormatException;
-import java.util.zip.Inflater;
-
-import scala.concurrent.duration.Duration;
-
-import com.google.common.base.Splitter;
-import com.google.common.collect.Lists;
-
 import io.gamemachine.core.Commands;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PvpGameMessage;
 import io.gamemachine.messages.TrackData;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+
+import scala.concurrent.duration.Duration;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 
 public class CharacterHandler extends GameMessageActor {
 
@@ -178,6 +174,28 @@ public class CharacterHandler extends GameMessageActor {
 		return character;
 	}
 
+	public static Character cloneCharacter(String playerId, String characterId, String clonedPlayerId, String clonedId) {
+		Character base = Character.db().findFirst("character_player_id = ? and character_id = ?", playerId,
+				characterId);
+		if (base == null) {
+			return null;
+		}
+		
+		Character existing = Character.db().findFirst("character_player_id = ? and character_id = ?", clonedPlayerId,
+				clonedId);
+		
+		if (existing == null) {
+			Character cloned = base.clone();
+			cloned.setId(clonedId);
+			cloned.setPlayerId(clonedPlayerId);
+			cloned.setRecordId(null);
+			saveCharacter(cloned);
+			return cloned;
+		} else {
+			return existing;
+		}
+	}
+	
 	private static void saveCharacter(Character character) {
 		if (!Character.db().save(character)) {
 			throw new RuntimeException("Error saving Character " + character.id);
@@ -208,6 +226,12 @@ public class CharacterHandler extends GameMessageActor {
 				.scheduler()
 				.scheduleOnce(Duration.create(delay, TimeUnit.SECONDS), getSelf(), message, getContext().dispatcher(),
 						null);
+	}
+
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

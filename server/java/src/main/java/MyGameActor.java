@@ -22,4 +22,10 @@ public class MyGameActor extends GameMessageActor {
 
   }
 
+@Override
+public void onTick(String message) {
+	// TODO Auto-generated method stub
+	
+}
+
 }

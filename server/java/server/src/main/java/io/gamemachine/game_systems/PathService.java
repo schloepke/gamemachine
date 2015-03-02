@@ -93,4 +93,10 @@ public class PathService extends GameMessageActor {
 		return v2;
 	}
 
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

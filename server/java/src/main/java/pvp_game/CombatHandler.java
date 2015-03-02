@@ -109,5 +109,11 @@ public class CombatHandler extends GameMessageActor {
 
 	}
 
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 	
 }

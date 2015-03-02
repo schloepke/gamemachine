@@ -34,4 +34,10 @@ public class LatencyTest extends GameMessageActor {
 	public void onPlayerDisconnect(String playerId) {
 
 	}
+
+	@Override
+	public void onTick(String message) {
+		// TODO Auto-generated method stub
+		
+	}
 }

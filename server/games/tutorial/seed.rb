@@ -4,6 +4,7 @@ def add_items(items,player)
     player_item = GameMachine::MessageLib::PlayerItem.new
     player_item.set_player_id(player)
     player_item.set_id(item['id'])
+    player_item.set_type(item['type'])
     player_item.set_icon(item['icon'])
     player_item.set_weapon(item['weapon'])
     player_item.set_name(item['name'])
@@ -31,9 +32,21 @@ def add_items(items,player)
 end
 
 
+# Item types
+# consumable = 50
+# wearable = 7
+# ships = 2
+# general = 10
+# houses = 3
+# siege weapons = 1
+# weapon = 4
+# crafting resource = 15
+# currency = 20
+
 items = [
   {
     'id' => 'hp',
+    'type' => 50,
     'name' => 'Healing Potion',
     'quantity' => -1,
     'harvestable' => 0,
@@ -44,6 +57,7 @@ items = [
 
    {
     'id' => 'helm',
+    'type' => 7,
     'name' => 'Helm',
     'harvestable' => 0,
     'icon' => '',
@@ -52,15 +66,43 @@ items = [
 
 {
     'id' => 'ship',
+    'type' => 2,
     'name' => 'Ship',
     'harvestable' => 0,
     'craftable' => 1,
     'icon' => 'ship',
     'quantity' => 1000000
   },
-
+  {
+    'id' => 'pier',
+    'type' => 10,
+    'name' => 'Pier',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => 'pier',
+    'quantity' => 1000000
+  },
+  {
+    'id' => 'house_large1',
+    'type' => 3,
+    'name' => 'Large house',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => 'small_house',
+    'quantity' => 1000000
+  },
+  {
+    'id' => 'wood_shack1',
+    'type' => 3,
+    'name' => 'Wood shack',
+    'harvestable' => 0,
+    'craftable' => 1,
+    'icon' => 'small_house',
+    'quantity' => 1000000
+  },
   {
     'id' => 'catapult',
+    'type' => 1,
     'name' => 'Catapult',
     'harvestable' => 0,
     'craftable' => 1,
@@ -71,6 +113,7 @@ items = [
 
 {
     'id' => 'katana',
+    'type' => 4,
     'name' => 'Katana',
     'harvestable' => 0,
     'craftable' => 1,
@@ -84,6 +127,7 @@ items = [
 
   {
     'id' => '2hsword',
+    'type' => 4,
     'name' => '2h Sword',
     'harvestable' => 0,
     'craftable' => 1,
@@ -96,6 +140,7 @@ items = [
   },
   {
   'id' => 'staff',
+  'type' => 4,
     'name' => 'Staff',
     'harvestable' => 0,
     'craftable' => 1,
@@ -109,6 +154,7 @@ items = [
 
   {
     'id' => 'shoes',
+    'type' => 7,
     'name' => 'Shoes',
     'harvestable' => 0,
     'icon' => '',
@@ -117,6 +163,7 @@ items = [
 
   {
     'id' => 'iron_ore',
+    'type' => 15,
     'name' => 'Iron Ore',
     'harvestable' => 1,
     'icon' => 'iron_ore',
@@ -126,6 +173,7 @@ items = [
 
   {
     'id' => 'good_rock',
+    'type' => 15,
     'name' => 'Good Rock',
     'harvestable' => 1,
     'icon' => 'good_rock',
@@ -135,6 +183,7 @@ items = [
 
 {
     'id' => 'wood',
+    'type' => 15,
     'name' => 'Wood',
     'harvestable' => 1,
     'icon' => 'wood',
@@ -144,6 +193,7 @@ items = [
 
   {
     'id' => 'gold',
+    'type' => 20,
     'name' => 'Gold',
     'harvestable' => 0,
     'icon' => '',
@@ -152,6 +202,7 @@ items = [
 
   {
     'id' => 'copper',
+    'type' => 20,
     'name' => 'Copper',
     'harvestable' => 0,
     'icon' => '',
@@ -160,6 +211,7 @@ items = [
 
   {
     'id' => 'silver',
+    'type' => 20,
     'name' => 'silver',
     'harvestable' => 0,
     'icon' => '',
@@ -178,6 +230,27 @@ items = [
     'item1_quantity' => 2,
     'item2' => 'iron_ore',
     'item2_quantity' => 2
+  },
+  {
+    'id' => 'pier',
+    'item1' => 'wood',
+    'item1_quantity' => 30,
+    'item2' => 'iron_ore',
+    'item2_quantity' => 10
+  },
+  {
+    'id' => 'house_large1',
+    'item1' => 'wood',
+    'item1_quantity' => 20,
+    'item2' => 'iron_ore',
+    'item2_quantity' => 5
+  },
+  {
+    'id' => 'wood_shack1',
+    'item1' => 'wood',
+    'item1_quantity' => 18,
+    'item2' => 'iron_ore',
+    'item2_quantity' => 5
   },
   {
     'id' => 'catapult',

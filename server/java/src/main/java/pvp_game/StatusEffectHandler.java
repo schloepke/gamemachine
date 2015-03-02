@@ -162,7 +162,7 @@ public class StatusEffectHandler extends UntypedActor {
 		
 		int health = CharacterHandler.currentHealth(origin);
 		int value = getEffectValue(effect);
-		logger.warning("damage "+value+" type "+effect.type);
+		
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
 			if (vitals.id.equals(origin)) {
 				return 0;
@@ -177,7 +177,9 @@ public class StatusEffectHandler extends UntypedActor {
 				vitals.health = health;
 			}
 		}
+		
 		if (value > 0) {
+			logger.warning("target "+ vitals.id +" damage "+value+" type "+effect.type);
 			sendStatusEffectResult(effect.id,origin,target,value);
 		}
 		

@@ -53,7 +53,19 @@ public class PlayerService {
 		players.remove(player.id);
 	}
 	
+	public Boolean playerExists(String playerId) {
+		Player player = find(playerId);
+		if (player != null) {
+			return true;
+		}
+		return false;
+	}
+	
 	public Player create(String playerId, String gameId) {
+		return create(playerId,gameId,"player");
+	}
+	
+	public Player create(String playerId, String gameId, String role) {
 		Player player = find(playerId);
 		if (player != null) {
 			throw new RuntimeException("Player " + playerId + " exists");
@@ -62,7 +74,7 @@ public class PlayerService {
 		player = new Player();
 		player.setId(playerId);
 		player.setGameId(gameId);
-		player.setRole("player");
+		player.setRole(role);
 		player.setAuthenticated(false);
 		player.setAuthtoken(0);
 		player.setIp(0);

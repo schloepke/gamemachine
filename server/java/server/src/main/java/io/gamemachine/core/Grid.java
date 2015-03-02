@@ -216,6 +216,8 @@ public class Grid {
 				if (entityType == null || trackData.entityType == entityType) {
 					if (optsFlag == 2) {
 						result.add(trackData);
+					} else if (trackData.entityType == TrackData.EntityType.SHIP) {
+						result.add(trackData);
 					} else {
 
 						GridValue gridValue = playerGridValues.get(trackData.id);
@@ -359,9 +361,11 @@ public class Grid {
 			}
 		} else {
 			trackData = newTrackData;
-			trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
-			if (trackData.characterId == null) {
-				//logger.warn("Null characterId for "+trackData.id);
+			if (trackData.entityType == TrackData.EntityType.PLAYER) {
+				trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
+				if (trackData.characterId == null) {
+					//logger.warn("Null characterId for "+trackData.id);
+				}
 			}
 		}
 

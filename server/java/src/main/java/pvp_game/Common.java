@@ -54,6 +54,22 @@ public class Common {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
 	}
 	
+	public static io.gamemachine.util.Vector3 toVector3(Vector3 from) {
+		io.gamemachine.util.Vector3 to = new io.gamemachine.util.Vector3();
+		to.x = scale(from.xi);
+		to.y = scale(from.yi);
+		to.z = scale(from.zi);
+		return to;
+	}
+	
+	public static io.gamemachine.util.Vector3 toVector3(int x, int y) {
+		io.gamemachine.util.Vector3 to = new io.gamemachine.util.Vector3();
+		to.x = scale(x);
+		to.y = scale(y);
+		to.z = 0l;
+		return to;
+	}
+	
 	public static int randInt(int min, int max) {
 
 		// NOTE: Usually this should be a field rather than a method
