@@ -18,7 +18,7 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(SiegeHandler.class), SiegeHandler.name);
 		
 		Npc.CreateNpcs();
-		GameMachineLoader.getActorSystem().actorOf(Props.create(NpcHandler.class), NpcHandler.name);
+		//GameMachineLoader.getActorSystem().actorOf(Props.create(NpcHandler.class), NpcHandler.name);
 		
 		Commands.seedCharacterItem("wood", 50);
 		Commands.seedCharacterItem("iron_ore", 50);

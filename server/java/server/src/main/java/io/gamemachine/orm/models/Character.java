@@ -42,6 +42,8 @@ CREATE TABLE characters (
 
   character_magic integer DEFAULT NULL,
 
+  character_include_uma_data boolean DEFAULT NULL,
+
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
 alter table characters owner to gamemachine;
@@ -80,6 +82,8 @@ CREATE TABLE `characters` (
   `character_stamina` int(11) DEFAULT NULL,
 
   `character_magic` int(11) DEFAULT NULL,
+
+  `character_include_uma_data` tinyint(4) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

@@ -117,27 +117,56 @@ public class CharacterHandler extends GameMessageActor {
 		}
 	}
 
-	private void sendCharacter(Character character) {
-		character = getCharacter(character.playerId, character.id);
+	private void sendCharacter(Character requestedCharacter) {
+		Character character = getCharacter(requestedCharacter.playerId, requestedCharacter.id);
+		if (character == null) {
+			logger.warning("Unable to get character "+requestedCharacter.playerId+" "+requestedCharacter.id);
+			return;
+		}
+		
+		if (!requestedCharacter.hasIncludeUmaData()) {
+			sendComplete(character.clone());
+			return;
+		}
+		
+		if (character.umaData == null) {
+			logger.warning("umaData null for "+requestedCharacter.playerId+" "+requestedCharacter.id);
+			return;
+		}
 		Iterable<String> iter = Splitter.fixedLength(1000).split(character.umaData);
 
 		List<String> parts = Lists.newArrayList(iter.iterator());
 		int x = 0;
 		for (String part : parts) {
-			PvpGameMessage pvpGameMessage = new PvpGameMessage();
-			pvpGameMessage.command = 2;
-			pvpGameMessage.character = character.clone();
-			pvpGameMessage.character.umaData = part;
-			pvpGameMessage.character.part = x;
-			pvpGameMessage.character.parts = parts.size();
-			GameMessage msg = new GameMessage();
-			msg.pvpGameMessage = pvpGameMessage;
-			PlayerCommands.sendGameMessage(msg, playerId);
+			sendPart(character.clone(),part,x,parts.size());
 			logger.debug("sent part " + x + " for " + character.playerId);
 			x++;
 		}
 	}
 
+	private void sendComplete(Character character) {
+		PvpGameMessage pvpGameMessage = new PvpGameMessage();
+		pvpGameMessage.command = 2;
+		pvpGameMessage.character = character;
+		pvpGameMessage.character.umaData = null;
+		pvpGameMessage.character.includeUmaData = false;
+		GameMessage msg = new GameMessage();
+		msg.pvpGameMessage = pvpGameMessage;
+		PlayerCommands.sendGameMessage(msg, playerId);
+	}
+	
+	private void sendPart(Character character, String part, int idx, int total) {
+		PvpGameMessage pvpGameMessage = new PvpGameMessage();
+		pvpGameMessage.command = 2;
+		pvpGameMessage.character = character;
+		pvpGameMessage.character.umaData = part;
+		pvpGameMessage.character.part = idx;
+		pvpGameMessage.character.parts = total;
+		GameMessage msg = new GameMessage();
+		msg.pvpGameMessage = pvpGameMessage;
+		PlayerCommands.sendGameMessage(msg, playerId);
+	}
+	
 	public static int currentHealth(String playerId) {
 		return currentCharacter(playerId).health;
 	}

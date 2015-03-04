@@ -84,7 +84,7 @@ public class Grid {
 			this.trackData = cloneTrackData(trackData);
 			this.trackData.shortId = shortId;
 			this.trackData.id = null;
-			
+
 		}
 
 		private TrackData cloneTrackData(TrackData trackData) {
@@ -214,6 +214,9 @@ public class Grid {
 				}
 
 				if (entityType == null || trackData.entityType == entityType) {
+					Integer shortId = getShortId(trackData.id);
+					trackData.shortId = shortId;
+					
 					if (optsFlag == 2) {
 						result.add(trackData);
 					} else if (trackData.entityType == TrackData.EntityType.SHIP) {
@@ -223,12 +226,13 @@ public class Grid {
 						GridValue gridValue = playerGridValues.get(trackData.id);
 
 						if (gridValue == null) {
-							Integer shortId = getShortId(trackData.id);
+							
 							if (shortId == null) {
 								logger.warn("Unable to obtain short id");
 								continue;
 							}
-							trackData.shortId = shortId;
+							
+							
 							gridValue = new GridValue(trackData, shortId);
 							playerGridValues.put(trackData.id, gridValue);
 							result.add(trackData);
@@ -299,7 +303,7 @@ public class Grid {
 	public TrackData get(String id) {
 		return objectIndex.get(id);
 	}
-	
+
 	public void remove(String playerId) {
 		TrackData indexValue = objectIndex.get(playerId);
 		if (indexValue != null) {
@@ -361,11 +365,9 @@ public class Grid {
 			}
 		} else {
 			trackData = newTrackData;
-			if (trackData.entityType == TrackData.EntityType.PLAYER) {
-				trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
-				if (trackData.characterId == null) {
-					//logger.warn("Null characterId for "+trackData.id);
-				}
+			trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
+			if (trackData.characterId == null) {
+				// logger.warn("Null characterId for "+trackData.id);
 			}
 		}
 

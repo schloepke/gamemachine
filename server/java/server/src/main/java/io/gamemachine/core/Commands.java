@@ -6,6 +6,7 @@ import io.gamemachine.messages.AddPlayerItem;
 import io.gamemachine.messages.ClientManagerRegister;
 import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.RemovePlayerItem;
@@ -54,8 +55,11 @@ public class Commands {
 	
 	public static void seedCharacterItem(String id, int quantity) {
 		for (io.gamemachine.messages.Character character : getCharacters()) {
-			removePlayerItem(character.playerId,id,quantity);
-			addPlayerItem(character.playerId,id,quantity);
+			Player player = PlayerService.getInstance().find(character.playerId);
+			if (player.role.equals("player")) {
+				removePlayerItem(character.playerId,id,quantity);
+				addPlayerItem(character.playerId,id,quantity);
+			}
 		}
 	}
 

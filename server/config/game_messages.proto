@@ -58,6 +58,7 @@ persistent_message Character {
   optional string zone = 11;
   optional int32 stamina = 12;
   optional int32 magic = 13;
+  optional bool includeUmaData = 14;
 }
 
 message Characters {

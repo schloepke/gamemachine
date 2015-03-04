@@ -20,6 +20,11 @@ public class Npc {
 	public static void CreateNpcs() {
 		createNpc("npc_guard1","guard_male","Bob",new Vector3(-1144.03,-575.29,38.97));
 		createNpc("npc_guard2","guard_male","Andy",new Vector3(-1150.59,-545.95,38.97));
+		
+		for (int x = 3; x < 100; x++) {
+			createNpc("npc_guard"+x,"guard_male","Guard"+x,new Vector3(-1150.59,-545.95,38.97));
+		}
+		
 	}
 	
 	public static Npc createNpc(String playerId, String baseCharacter, String characterId, Vector3 position) {
