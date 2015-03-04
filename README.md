@@ -28,8 +28,25 @@ For the game itself we took the most challenging, complicated multiplayer game w
 Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
 
 Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Although we are making sure it retains the scalability, performance, and other features we want to highlight. 
+* Game Status Update
 
-Current status is that after just a couple of weeks we have functional combat, siege weapons with destructable structures, a very basis harvesting/crafting system, and ships/naval combat partly done.  Live dev server is already in place, and should be publically available shortly (as of Feb 14).
+- Dynamically loading terrains and associated objects.  Now working with 64-100 unity terrains per map.  Zoning is a thing, but the maps are huge.
 
-Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation, packaged downloads, and more.
+- Siege weapons working.  All server controlled so rotation/firing is all truely multiplayer
+
+- Boats working with moving platform support for multiple players on a boat.  Still some glitches, move too fast and you can get dumped now and then.
+
+- Functional combat system.  Handles single target and aoe damage all server controlled.
+
+- harvesting/Crafting system.  Everything in game is craftable.
+
+- Persistent structures (housing).  Craft a house plan, place it in the world and it persists.
+
+- Destructable structures.  Everything that's a mesh can be destructable.  Siege weapons can now destroy structures.
+
+- Npc ai.  Basic npc ai with pathfinding and basic leader/follow/patrol logic.  No npc combat yet.
+
+
+
+Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation.
 
