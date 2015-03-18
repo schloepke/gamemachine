@@ -93,8 +93,16 @@ public class CombatHandler extends GameMessageActor {
 		Vitals vitals = playerVitals.get(target.origin);
 		if (vitals != null) {
 			if (skill.resource.equals("stamina")) {
+				if (vitals.stamina < skill.resourceCost) {
+					logger.warning("Insufficient stamina needed "+skill.resourceCost);
+					return;
+				}
 				vitals.stamina -= skill.resourceCost;
 			} else if (skill.resource.equals("magic")) {
+				if (vitals.magic < skill.resourceCost) {
+					logger.warning("Insufficient magic needed "+skill.resourceCost);
+					return;
+				}
 				vitals.magic -= skill.resourceCost;
 			}
 		}

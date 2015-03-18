@@ -33,7 +33,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 	public static AtomicLong counter = new AtomicLong();
 	private Grid worldObjectGrid;
 	private Grid defaultGrid;
-
+	
 	@Override
 	public void awake() {
 		Commands.clientManagerRegister(name);
@@ -46,6 +46,14 @@ public class ConsumableItemHandler extends GameMessageActor {
 
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
+		if (gameMessage.hasUseItem()) {
+			logger.warning("use item ");
+			for (TrackData trackData : defaultGrid.getAll()) {
+				PlayerCommands.sendGameMessage(gameMessage, trackData.id);
+			}
+			return;	
+		}
+		
 		if (gameMessage.hasWorldObjects()) {
 
 			for (WorldObject worldObject : gameMessage.worldObjects.worldObject) {
@@ -76,10 +84,16 @@ public class ConsumableItemHandler extends GameMessageActor {
 		for (TrackData trackData : defaultGrid.getAll()) {
 			GameMessage gameMessage = new GameMessage();
 			WorldObjects worldObjects = new WorldObjects();
-			List<String> targets = Common.getTargetsInRange(-1, trackData.x, trackData.y, trackData.z, "world_objects");
+			List<String> targets = Common.getTargetsInRange(150, trackData.x, trackData.y, trackData.z, "world_objects");
 			for (String target : targets) {
 				if (wobjects.containsKey(target)) {
 					WorldObject worldObject = wobjects.get(target);
+					if (worldObject.hasHealth() && worldObject.health <= 0) {
+						if (worldObject.hasPlayerItemId()) {
+							remove(worldObject.id);
+							continue;
+						}
+					}
 					worldObjects.addWorldObject(worldObject);
 				}
 			}
@@ -93,9 +107,15 @@ public class ConsumableItemHandler extends GameMessageActor {
 	}
 
 	private void remove(String id, String ownerId) {
-		WorldObject.db().deleteWhere("world_object_id = ?", id);
+		remove(id);
 	}
 
+	public static void remove(String id) {
+		WorldObject.db().deleteWhere("world_object_id = ?", id);
+		wobjects.remove(id);
+		GameGrid.getGameGrid(Common.gameId, "world_objects").remove(id);
+	}
+	
 	private WorldObject find(String id) {
 		return WorldObject.db().findFirst("world_object_id = ?", id);
 	}
@@ -163,11 +183,23 @@ public class ConsumableItemHandler extends GameMessageActor {
 			worldObject.id = genId(worldObject);
 		}
 
+		
+		PlayerItem global = PlayerItemGlobal(worldObject.playerItemId);
+		if (global != null) {
+			worldObject.maxHealth = global.maxHealth;
+			worldObject.health = global.maxHealth;
+		}
+		
 		WorldObject.db().save(worldObject);
 		wobjects.put(worldObject.id, worldObject);
 		worldObjectGrid.set(toTrackData(worldObject));
 	}
 
+	private PlayerItem PlayerItemGlobal(String id) {
+		return PlayerItem.db().findFirst("player_item_id = ? and player_item_player_id = ?", id, "global");
+		
+	}
+	
 	private void updatePosition(WorldObject worldObject) {
 		WorldObject existing = find(worldObject.id);
 		existing.x = worldObject.x;
@@ -189,6 +221,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 		trackData.y = worldObject.y;
 		trackData.z = worldObject.z;
 		trackData.id = worldObject.id;
+		trackData.entityType = TrackData.EntityType.OTHER;
 		return trackData;
 	}
 
@@ -214,7 +247,6 @@ public class ConsumableItemHandler extends GameMessageActor {
 		for (String id : removed) {
 			playerAttached.remove(id);
 		}
-
 	}
 
 	@Override

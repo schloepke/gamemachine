@@ -130,6 +130,7 @@ public class EntityTracking extends UntypedActor {
 			broadcastTrackData.clientData = trackData.clientData;
 			broadcastTrackData.broadcast = 1;
 			broadcastTrackData.id = player.id;
+			broadcastTrackData.entityType = TrackData.EntityType.PLAYER;
 
 			for (TrackData tdata : trackDatas) {
 				if (tdata.entityType == TrackData.EntityType.PLAYER) {
@@ -139,7 +140,7 @@ public class EntityTracking extends UntypedActor {
 					neighbors.addTrackData(broadcastTrackData);
 					playerMessage.setNeighbors(neighbors);
 					PlayerCommands.sendToPlayer(playerMessage, tdata.id);
-					logger.debug("Broadcast sent to " + tdata.id);
+					//logger.warn("Broadcast sent to " + tdata.id);
 				}
 			}
 			return;
@@ -190,6 +191,7 @@ public class EntityTracking extends UntypedActor {
 		if (neighborType != null && neighborType == EntityType.ALL) {
 			// Only agents have access to entire grid
 			if (!isAgentController) {
+				logger.warn("Unauthorized attempt to get entire grid");
 				return;
 			}
 			trackDatas = grid.getAll();
@@ -234,6 +236,7 @@ public class EntityTracking extends UntypedActor {
 	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
 		if (trackData.x != null) {
+
 			if (trackData.x == -1 && trackData.y == -1) {
 				grid.remove(trackData.id);
 				PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.REMOVED);

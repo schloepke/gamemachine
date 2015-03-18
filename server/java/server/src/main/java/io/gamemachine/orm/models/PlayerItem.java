@@ -42,6 +42,10 @@ CREATE TABLE player_items (
 
   player_item_type integer DEFAULT NULL,
 
+  player_item_max_health integer DEFAULT NULL,
+
+  player_item_health integer DEFAULT NULL,
+
   consumable_type character varying(128) DEFAULT NULL,
   	
   consumable_size character varying(128) DEFAULT NULL,
@@ -112,6 +116,10 @@ CREATE TABLE `player_items` (
   `player_item_is_consumable` tinyint(4) DEFAULT NULL,
 
   `player_item_type` int(11) DEFAULT NULL,
+
+  `player_item_max_health` int(11) DEFAULT NULL,
+
+  `player_item_health` int(11) DEFAULT NULL,
 
   	  `consumable_type` varchar(128) DEFAULT NULL,
   	

@@ -11,6 +11,8 @@ import java.util.Random;
 
 public class Common {
 
+	public static Long npcdDeathTime = 60000L;
+	public static Long deathTime = 1L;
 	public static int worldOffset = 7000;
 	public static String gameId = "mygame";
 	

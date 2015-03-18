@@ -78,6 +78,13 @@ message UseSkill {
   optional Vector3 direction = 4;
 }
 
+message UseItem {
+  required string id = 1;
+  optional string targetId = 2;
+  optional string action = 3;
+  required string playerId = 4;
+}
+
 message StatusEffect {
   enum Type {
     AttributeDecrease = 0;
@@ -186,14 +193,15 @@ message TrackData {
   optional string gridName = 9;
   optional int32 getNeighbors = 10;
   enum EntityType {
-    PLAYER = 0;
-    NPC = 1;
-    OTHER = 2;
-    ALL = 3;
-    SHIP = 4;
+  	NONE = 0;
+    PLAYER = 1;
+    NPC = 2;
+    OTHER = 3;
+    ALL = 4;
+    SHIP = 5;
   }
   optional EntityType neighborEntityType = 11;
-  optional EntityType entityType = 12;
+  required EntityType entityType = 12;
 
   
   optional int32 shortId = 13;
@@ -262,6 +270,7 @@ message GameMessage {
   optional WorldObjects worldObjects = 27;
   optional SiegeCommand siegeCommand = 28;
   optional Bounds bounds = 29;
+  optional UseItem useItem = 30;
 }
 
 message GameMessages {
@@ -325,6 +334,8 @@ local_persistent_message PlayerItem {
   optional ModelInfo modelInfo = 15;
   optional bool isConsumable = 16;
   optional int32 type = 17;
+  optional int32 maxHealth = 18;
+  optional int32 health = 19;
 }
 
 local_message ModelInfo {

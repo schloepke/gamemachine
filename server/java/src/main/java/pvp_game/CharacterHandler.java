@@ -11,6 +11,7 @@ import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PvpGameMessage;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.Vitals;
 
 import java.util.List;
 import java.util.Map;
@@ -32,7 +33,7 @@ public class CharacterHandler extends GameMessageActor {
 	public static int defaultHealth = 1000;
 	public static int defaultStamina = 1000;
 	public static int defaultMagic = 1000;
-	
+	public static ConcurrentHashMap<String, Character> characters = new ConcurrentHashMap<String, Character>();
 
 	@Override
 	public void awake() {
@@ -46,7 +47,7 @@ public class CharacterHandler extends GameMessageActor {
 
 		if (exactlyOnce(gameMessage)) {
 			if (pvpGameMessage.command == 1) {
-				Character character = getCharacter(playerId, pvpGameMessage.character.id);
+				Character character = getCharacter(pvpGameMessage.character.id);
 				if (character != null) {
 					PlayerService.getInstance().setCharacter(playerId, pvpGameMessage.character.id);
 					logger.debug("Character " + pvpGameMessage.character.id + "set as current for " + playerId);
@@ -77,6 +78,9 @@ public class CharacterHandler extends GameMessageActor {
 						if (name.equals("default")) {
 							Grid grid = entry.getValue();
 							for (TrackData trackData : grid.getAll()) {
+								if (trackData.entityType != TrackData.EntityType.PLAYER) {
+									continue;
+								}
 								Character character = currentCharacter(trackData.id);
 								if (character != null) {
 									character.worldx = trackData.x;
@@ -96,7 +100,16 @@ public class CharacterHandler extends GameMessageActor {
 	}
 
 	public static void createCharacter(String playerId, String id, String umaData) {
-		Character character = getCharacter(playerId, id);
+		Character character = getCharacter(id);
+		if (character == null) {
+			character = new Character();
+			character.setId(id);
+			character.setPlayerId(playerId);
+			character.setHealth(defaultHealth);
+			character.setStamina(defaultStamina);
+			character.setMagic(defaultMagic);
+			saveCharacter(character);
+		}
 		character.setUmaData(umaData);
 		saveCharacter(character);
 	}
@@ -110,15 +123,9 @@ public class CharacterHandler extends GameMessageActor {
 		return gameMessage.toByteArray();
 	}
 
-	private void sendCharacters() {
-
-		for (Character character : Character.db().findAll()) {
-			sendCharacter(character);
-		}
-	}
-
+	
 	private void sendCharacter(Character requestedCharacter) {
-		Character character = getCharacter(requestedCharacter.playerId, requestedCharacter.id);
+		Character character = getCharacter(requestedCharacter.id);
 		if (character == null) {
 			logger.warning("Unable to get character "+requestedCharacter.playerId+" "+requestedCharacter.id);
 			return;
@@ -180,29 +187,28 @@ public class CharacterHandler extends GameMessageActor {
 	}
 	
 	public static Character currentCharacter(String playerId) {
+		Character character;
 		String id = PlayerService.getInstance().getCharacter(playerId);
-		if (id != null) {
-			return getCharacter(playerId, id);
+		if (id == null) {
+			throw new RuntimeException("No character id for player " + playerId);
+		}
+		return getCharacter(id);
+	}
+
+	public static Character getCharacter(String id) {
+		if (characters.containsKey(id)) {
+			return characters.get(id);
 		} else {
-			return null;
+			Character character = Character.db().findFirst("character_id = ?", id);
+			if (character != null) {
+				characters.put(id, character);
+				return character;
+			} else {
+				return null;
+			}
 		}
 	}
-
-	public static Character getCharacter(String playerId, String characterId) {
-		Character character = Character.db().findFirst("character_player_id = ? and character_id = ?", playerId,
-				characterId);
-		if (character == null) {
-			character = new Character();
-			character.setId(characterId);
-			character.setPlayerId(playerId);
-			character.setHealth(defaultHealth);
-			character.setStamina(defaultStamina);
-			character.setMagic(defaultMagic);
-			saveCharacter(character);
-		}
-		return character;
-	}
-
+	
 	public static Character cloneCharacter(String playerId, String characterId, String clonedPlayerId, String clonedId) {
 		Character base = Character.db().findFirst("character_player_id = ? and character_id = ?", playerId,
 				characterId);

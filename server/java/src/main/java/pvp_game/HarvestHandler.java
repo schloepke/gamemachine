@@ -62,6 +62,8 @@ public class HarvestHandler extends GameMessageActor {
 	private String nameToItemId(String name) {
 		if (name.startsWith("hv_")) {
 			return "iron_ore";
+		} else if (name.startsWith("Tree")) {
+			return "wood";
 		} else {
 			return null;
 		}

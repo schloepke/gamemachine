@@ -48,6 +48,7 @@ public class Grid {
 
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
 
+	private ConcurrentHashMap<String, Long> updateStatus = new ConcurrentHashMap<String, Long>();
 	private PriorityBlockingQueue<Integer> shortIdQueue = new PriorityBlockingQueue<Integer>();
 	private ConcurrentHashMap<String, Integer> shortIds = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>> gridValues = new ConcurrentHashMap<String, ConcurrentHashMap<String, GridValue>>();
@@ -297,7 +298,13 @@ public class Grid {
 	}
 
 	public List<TrackData> getAll() {
-		return new ArrayList<TrackData>(objectIndex.values());
+		List<TrackData> trackdatas = new ArrayList<TrackData>();
+		for (TrackData td : objectIndex.values()) {
+			Integer shortId = getShortId(td.id);
+			td.shortId = shortId;
+			trackdatas.add(td);
+		}
+		return trackdatas;
 	}
 
 	public TrackData get(String id) {
@@ -317,8 +324,28 @@ public class Grid {
 			gridValues.remove(playerId);
 			releaseShortId(playerId);
 		}
+		if (updateStatus.containsKey(playerId)) {
+			updateStatus.remove(playerId);
+		}
 	}
 
+	public void RemoveExpired(Long max) {
+		List<String> ids = new ArrayList<String>();
+		for (TrackData td : objectIndex.values()) {
+			ids.add(td.id);
+		}
+		
+		for (String id : ids) {
+			if (updateStatus.containsKey(id)) {
+				Long lastUpdate = updateStatus.get(id);
+				if ((System.currentTimeMillis() - lastUpdate) > max) {
+					remove(id);
+					logger.warn("Expired "+id);
+				}
+			}
+		}
+	}
+	
 	public Boolean set(String id, int x, int y, int z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.id = id;
@@ -356,6 +383,8 @@ public class Grid {
 			return false;
 		}
 
+		updateStatus.put(newTrackData.id, System.currentTimeMillis());
+		
 		TrackData trackData = null;
 		if (newTrackData.hasIx()) {
 			trackData = updateFromDelta(newTrackData);

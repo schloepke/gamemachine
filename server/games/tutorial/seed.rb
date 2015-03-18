@@ -4,6 +4,8 @@ def add_items(items,player)
     player_item = GameMachine::MessageLib::PlayerItem.new
     player_item.set_player_id(player)
     player_item.set_id(item['id'])
+    player_item.set_health(item['health'])
+    player_item.set_max_health(item['max_health'])
     player_item.set_type(item['type'])
     player_item.set_icon(item['icon'])
     player_item.set_weapon(item['weapon'])
@@ -42,6 +44,7 @@ end
 # weapon = 4
 # crafting resource = 15
 # currency = 20
+# internal = 30
 
 items = [
   {
@@ -52,7 +55,9 @@ items = [
     'harvestable' => 0,
     'icon' => '',
     'consumable' => GameMachine::MessageLib::Consumable.new.set_type('health').set_size('small'),
-     'cost' => GameMachine::MessageLib::Cost.new.set_amount(10).set_currency('silver')
+     'cost' => GameMachine::MessageLib::Cost.new.set_amount(10).set_currency('silver'),
+     'health' => 100,
+     'max_health' => 100
   },
 
    {
@@ -61,9 +66,21 @@ items = [
     'name' => 'Helm',
     'harvestable' => 0,
     'icon' => '',
-    'quantity' => 1000
+    'quantity' => 1000,
+     'health' => 100,
+     'max_health' => 100
   },
 
+  {
+      'id' => 'keep_wall',
+      'type' => 30,
+      'name' => 'keep_wall',
+      'harvestable' => 0,
+      'icon' => '',
+      'quantity' => 1000000,
+    'health' => 1000,
+    'max_health' => 1000
+    },
 {
     'id' => 'ship',
     'type' => 2,
@@ -71,7 +88,9 @@ items = [
     'harvestable' => 0,
     'craftable' => 1,
     'icon' => 'ship',
-    'quantity' => 1000000
+    'quantity' => 1000000,
+  'health' => 1000,
+  'max_health' => 1000
   },
   {
     'id' => 'pier',
@@ -80,7 +99,9 @@ items = [
     'harvestable' => 0,
     'craftable' => 1,
     'icon' => 'pier',
-    'quantity' => 1000000
+    'quantity' => 1000000,
+    'health' => 100,
+    'max_health' => 100
   },
   {
     'id' => 'house_large1',
@@ -89,7 +110,9 @@ items = [
     'harvestable' => 0,
     'craftable' => 1,
     'icon' => 'small_house',
-    'quantity' => 1000000
+    'quantity' => 1000000,
+    'health' => 1000,
+    'max_health' => 1000
   },
   {
     'id' => 'wood_shack1',
@@ -98,7 +121,9 @@ items = [
     'harvestable' => 0,
     'craftable' => 1,
     'icon' => 'small_house',
-    'quantity' => 1000000
+    'quantity' => 1000000,
+    'health' => 1000,
+    'max_health' => 1000
   },
   {
     'id' => 'catapult',
@@ -108,7 +133,9 @@ items = [
     'craftable' => 1,
     'icon' => 'catapult',
     'quantity' => 1000000,
-    'is_consumable' => true
+    'is_consumable' => true,
+    'health' => 1000,
+    'max_health' => 1000
   },
 
 {
@@ -122,8 +149,26 @@ items = [
     'weapon' => true,
     'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
     set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("Katana").set_weapon_type("1hsword")
+    set_resource("medieval_weapons").set_prefab("Katana").set_weapon_type("1hsword"),
+  'health' => 100,
+  'max_health' => 100
   },
+    
+  {
+      'id' => 'longbow',
+      'type' => 4,
+      'name' => 'Longbow',
+      'harvestable' => 0,
+      'craftable' => 1,
+      'icon' => 'longbow',
+      'quantity' => 1000000,
+      'weapon' => true,
+      'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.096).set_attach_y(-0.004).
+    set_attach_z(-0.017).set_rotate_x(30).set_rotate_y(-180).set_rotate_z(0).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+      set_resource("medieval_weapons").set_prefab("Long_bow_A").set_weapon_type("bow"),
+    'health' => 100,
+    'max_health' => 100
+    },
 
   {
     'id' => '2hsword',
@@ -136,7 +181,9 @@ items = [
     'weapon' => true,
     'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
     set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("2H_Sword_A").set_weapon_type("2hsword")
+    set_resource("medieval_weapons").set_prefab("2H_Sword_A").set_weapon_type("2hsword"),
+    'health' => 100,
+    'max_health' => 100
   },
   {
   'id' => 'staff',
@@ -149,7 +196,9 @@ items = [
     'weapon' => true,
     'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
     set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("Mage_Staff").set_weapon_type("staff")
+    set_resource("medieval_weapons").set_prefab("Mage_Staff").set_weapon_type("staff"),
+    'health' => 100,
+    'max_health' => 100
   },
 
   {
@@ -158,7 +207,9 @@ items = [
     'name' => 'Shoes',
     'harvestable' => 0,
     'icon' => '',
-    'quantity' => -1
+    'quantity' => -1,
+    'health' => 100,
+    'max_health' => 100
   },
 
   {
@@ -169,6 +220,8 @@ items = [
     'icon' => 'iron_ore',
     'quantity' => 1000000,
     'crafting_resource' => 1,
+    'health' => 100,
+    'max_health' => 100
   },
 
   {
@@ -179,6 +232,8 @@ items = [
     'icon' => 'good_rock',
     'quantity' => 1000000,
     'crafting_resource' => 1,
+    'health' => 100,
+    'max_health' => 100
   },
 
 {
@@ -189,6 +244,8 @@ items = [
     'icon' => 'wood',
     'quantity' => 1000000,
     'crafting_resource' => 1,
+  'health' => 100,
+  'max_health' => 100
   },
 
   {
@@ -197,7 +254,9 @@ items = [
     'name' => 'Gold',
     'harvestable' => 0,
     'icon' => '',
-    'quantity' => -1
+    'quantity' => -1,
+    'health' => 100,
+    'max_health' => 100
   },
 
   {
@@ -206,7 +265,9 @@ items = [
     'name' => 'Copper',
     'harvestable' => 0,
     'icon' => '',
-    'quantity' => -1
+    'quantity' => -1,
+    'health' => 100,
+    'max_health' => 100
   },
 
   {
@@ -215,7 +276,9 @@ items = [
     'name' => 'silver',
     'harvestable' => 0,
     'icon' => '',
-    'quantity' => -1
+    'quantity' => -1,
+    'health' => 100,
+    'max_health' => 100
   }
 ]
 
@@ -273,7 +336,12 @@ items = [
     'id' => 'staff',
     'item1' => 'wood',
     'item1_quantity' => 2
-  }
+  },
+  {
+      'id' => 'longbow',
+      'item1' => 'wood',
+      'item1_quantity' => 3
+    }
 ]
 
 items.each do |item|
@@ -296,6 +364,39 @@ end
 
 skills = [
   {
+          'id' => 'light_attack',
+          'name' => 'Light Attack',
+          'category' => 'weapon',
+          'weapon_type' => '1hsword',
+          'damage_type' => 'st',
+          'icon' => 'Icon.1_46',
+          'resource' => 'stamina',
+          'resource_cost' => 20,
+          'range' => 5,
+        },
+  {
+        'id' => 'deadly_attack',
+        'name' => 'Deadly Attack',
+        'category' => 'weapon',
+        'weapon_type' => 'bow',
+        'damage_type' => 'st',
+        'icon' => 'Icon.1_46',
+        'resource' => 'stamina',
+        'resource_cost' => 1,
+        'range' => 20,
+      },
+  {
+      'id' => 'poison_arrow',
+      'name' => 'Poison arrow',
+      'category' => 'weapon',
+      'weapon_type' => 'bow',
+      'damage_type' => 'st',
+      'icon' => 'Icon.1_46',
+      'resource' => 'stamina',
+      'resource_cost' => 200,
+      'range' => 20,
+    },
+  {
     'id' => 'poison_blade',
     'name' => 'Poison blade',
     'category' => 'weapon',
@@ -303,8 +404,8 @@ skills = [
     'damage_type' => 'st',
     'icon' => 'Icon.1_13',
     'resource' => 'magic',
-    'resource_cost' => 20,
-    'range' => 5,
+    'resource_cost' => 200,
+    'range' => 3,
   },
   {
     'id' => 'cleave',
@@ -314,8 +415,8 @@ skills = [
     'damage_type' => 'pbaoe',
     'icon' => 'Icon.1_13',
     'resource' => 'stamina',
-    'resource_cost' => 20,
-    'range' => 8,
+    'resource_cost' => 100,
+    'range' => 5,
   },
 
   {
@@ -326,8 +427,8 @@ skills = [
     'damage_type' => 'pbaoe',
     'icon' => 'Icon.1_13',
     'resource' => 'stamina',
-    'resource_cost' => 20,
-    'range' => 15,
+    'resource_cost' => 200,
+    'range' => 10,
   },
 
   {
@@ -338,8 +439,8 @@ skills = [
     'damage_type' => 'aoe',
     'icon' => 'Icon.3_35',
     'resource' => 'magic',
-    'resource_cost' => 80,
-    'range' => 14,
+    'resource_cost' => 300,
+    'range' => 10,
   },
   {
     'id' => 'fire_field',
@@ -349,8 +450,8 @@ skills = [
     'damage_type' => 'aoe',
     'icon' => 'Icon.3_35',
     'resource' => 'magic',
-    'resource_cost' => 80,
-    'range' => 14,
+    'resource_cost' => 300,
+    'range' => 10,
   },
   {
     'id' => 'lightning_bolt',
@@ -360,8 +461,8 @@ skills = [
     'damage_type' => 'aoe',
     'icon' => 'Icon.1_12',
     'resource' => 'magic',
-    'resource_cost' => 40,
-    'range' => 14,
+    'resource_cost' => 200,
+    'range' => 5,
   },
   {
     'id' => 'catapult_explosive',
@@ -371,7 +472,7 @@ skills = [
     'damage_type' => 'aoe',
     'icon' => 'Icon.1_12',
     'resource' => 'stamina',
-    'resource_cost' => 120,
+    'resource_cost' => 200,
     'range' => 15,
   }
   
@@ -403,3 +504,8 @@ characters.each do |char|
     end
   end
 end
+
+playerskills = GameMachine::MessageLib::PlayerSkills.new 
+playerskills.playerSkill = GameMachine::MessageLib::PlayerSkill.db.where("player_skill_character_id = ?", 'global')
+File.open(File.join(ENV['APP_ROOT'],'skills.proto'),'w') {|f| f.write playerskills.to_byte_array}
+  

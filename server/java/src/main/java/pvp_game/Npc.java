@@ -25,6 +25,14 @@ public class Npc {
 			createNpc("npc_guard"+x,"guard_male","Guard"+x,new Vector3(-1150.59,-545.95,38.97));
 		}
 		
+		for (int x = 3; x < 50; x++) {
+			createNpc("npc_bandit"+x,"bandit_male","Bandit"+x,new Vector3(-1150.59,-545.95,38.97));
+		}
+		
+		for (int x = 50; x < 100; x++) {
+			createNpc("npc_bandita"+x,"bandit_female","Bandita"+x,new Vector3(-1150.59,-545.95,38.97));
+		}
+		
 	}
 	
 	public static Npc createNpc(String playerId, String baseCharacter, String characterId, Vector3 position) {

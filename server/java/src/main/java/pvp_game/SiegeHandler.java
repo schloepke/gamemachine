@@ -41,10 +41,10 @@ public class SiegeHandler extends GameMessageActor {
 		WorldObject worldObject = WorldObject.db().findFirst("world_object_id = ?", id);
 		if (worldObject != null) {
 			if (!worldObject.hasHealth()) {
-				worldObject.maxHealth = 100;
-				worldObject.health = 100;
+				worldObject.maxHealth = 10000;
+				worldObject.health = 10000;
 			}
-			worldObject.health -= 25;
+			worldObject.health -= 1000;
 			WorldObject.db().save(worldObject);
 			ConsumableItemHandler.wobjects.put(worldObject.id, worldObject);
 		}
