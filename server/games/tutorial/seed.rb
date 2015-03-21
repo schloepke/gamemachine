@@ -15,7 +15,7 @@ def add_items(items,player)
     player_item.set_craftable(item['craftable'])
     player_item.set_crafting_resource(item['crafting_resource'])
     player_item.set_is_consumable(item['is_consumable'])
-
+          
     ['consumable','cost','model_info'].each do |component|
       if item[component]
         player_item.send("set_#{component}".to_sym,item[component])
@@ -48,16 +48,15 @@ end
 
 items = [
   {
-    'id' => 'hp',
+    'id' => 'spell_resist_potion',
     'type' => 50,
-    'name' => 'Healing Potion',
-    'quantity' => -1,
+    'name' => 'Spell Resist Potion',
+    'quantity' => 1000000,
     'harvestable' => 0,
+    'craftable' => 1,
     'icon' => '',
-    'consumable' => GameMachine::MessageLib::Consumable.new.set_type('health').set_size('small'),
-     'cost' => GameMachine::MessageLib::Cost.new.set_amount(10).set_currency('silver'),
      'health' => 100,
-     'max_health' => 100
+     'max_health' => 100,
   },
 
    {

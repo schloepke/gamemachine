@@ -6,8 +6,10 @@ import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.messages.Attack;
+import io.gamemachine.messages.Character;
 import io.gamemachine.messages.DataRequest;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
@@ -25,7 +27,7 @@ public class CombatHandler extends GameMessageActor {
 	public static String name = CombatHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	public static ConcurrentHashMap<String, PlayerSkill> playerSkills = new ConcurrentHashMap<String, PlayerSkill>();
+	
 	public static ConcurrentHashMap<String, Vitals> playerVitals = new ConcurrentHashMap<String, Vitals>();
 	
 	private ActorSelection effectHandler;
@@ -33,11 +35,6 @@ public class CombatHandler extends GameMessageActor {
 	@Override
 	public void awake() {
 		effectHandler = ActorUtil.getSelectionByName(StatusEffectHandler.name);
-		List<PlayerSkill> skills = PlayerSkill.db().where("player_skill_character_id = ?", "global");
-		for (PlayerSkill playerSkill : skills) {
-			playerSkills.put(playerSkill.id, playerSkill);
-			logger.warning("Loading skill "+playerSkill.id);
-		}
 	}
 
 	@Override
@@ -48,8 +45,7 @@ public class CombatHandler extends GameMessageActor {
 			effectHandler.tell(gameMessage.dataRequest, getSelf());
 		}
 	}
-
-
+	
 	private void sendAttack(Attack attack) {
 		GameMessage msg = new GameMessage();
 
@@ -64,7 +60,7 @@ public class CombatHandler extends GameMessageActor {
 
 	private void doAttack(Attack attack) {
 		logger.warning("Attack skill "+attack.skill);
-		PlayerSkill skill = playerSkills.get(attack.skill);
+		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
 		StatusEffectTarget target = new StatusEffectTarget();
 		target.location = attack.targetLocation;
 		target.range = skill.range;
@@ -111,6 +107,7 @@ public class CombatHandler extends GameMessageActor {
 		sendAttack(attack);
 	}
 
+	
 	@Override
 	public void onPlayerDisconnect(String playerId) {
 		// TODO Auto-generated method stub

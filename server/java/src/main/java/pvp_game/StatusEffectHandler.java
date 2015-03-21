@@ -1,10 +1,14 @@
 package pvp_game;
 
 import io.gamemachine.core.GameGrid;
+import io.gamemachine.messages.Character;
+import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.messages.DataRequest;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.PlayerItem;
+import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectResult;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -21,6 +25,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import scala.concurrent.duration.Duration;
+import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -43,6 +48,12 @@ public class StatusEffectHandler extends UntypedActor {
 		statusEffects = new ConcurrentHashMap<String, StatusEffect>();
 		skillEffects = new ConcurrentHashMap<String, List<StatusEffect>>();
 
+		// Passive
+		createStatusEffect("spell_resist_potion", StatusEffect.Type.SpellResistIncrease, "spell_resist_potion", 30,
+				"passive", 100, 100, null);
+		createStatusEffect("staff", StatusEffect.Type.ArmorIncrease, "staff", 120, "passive", 100, 100, null);
+
+		// Active
 		createStatusEffect("deadly_attack", StatusEffect.Type.AttributeDecrease, "deadly_attack", 1, "health", 500,
 				1000, null);
 		createStatusEffect("light_attack", StatusEffect.Type.AttributeDecrease, "light_attack", 1, "health", 50, 100,
@@ -67,6 +78,13 @@ public class StatusEffectHandler extends UntypedActor {
 		createStatusEffect("catapult_explosive", StatusEffect.Type.AttributeDecrease, "catapult_explosive", 1,
 				"health", 200, 300, null);
 
+		createStatusEffect("health_regen1", StatusEffect.Type.AttributeIncrease, "health_regen1", 120, "health", 5, 10,
+				null);
+		createStatusEffect("stamina_regen1", StatusEffect.Type.AttributeIncrease, "stamina_regen1", 120, "stamina", 5,
+				10, null);
+		createStatusEffect("magic_regen1", StatusEffect.Type.AttributeIncrease, "magic_regen1", 120, "magic", 5, 10,
+				null);
+
 	}
 
 	private static void createStatusEffect(String skill, StatusEffect.Type type, String id, int ticks,
@@ -90,9 +108,7 @@ public class StatusEffectHandler extends UntypedActor {
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof StatusEffectTarget) {
 			StatusEffectTarget target = (StatusEffectTarget) message;
-			setStatusEffects(target);
-			applyStatusEffects(target);
-			target.lastTick = System.currentTimeMillis();
+			useSkillOnTarget(target);
 			sendVitals();
 		} else if (message instanceof String) {
 			if (message.equals("vitals_tick")) {
@@ -101,7 +117,7 @@ public class StatusEffectHandler extends UntypedActor {
 			} else if (message.equals("effects_tick")) {
 				for (StatusEffectTarget target : targets.values()) {
 					if ((System.currentTimeMillis() - target.lastTick) >= 1000l) {
-						//logger.warning("Tick " + target.skill);
+						// logger.warning("Tick " + target.skill);
 						applyStatusEffects(target);
 
 						if (hasActiveEffect(target)) {
@@ -124,7 +140,77 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 	}
 
-	private void setStatusEffects(StatusEffectTarget target) {
+	private void skillUp(String id, String playerId) {
+		int chance = Common.randInt(1, 10);
+		if (chance < 5) {
+			return;
+		}
+
+		Character character = CharacterHandler.currentCharacter(playerId);
+		if (character == null) {
+			logger.warning("Unable to find character for " + playerId);
+			return;
+		}
+
+		PlayerSkill playerSkill = PlayerSkillHandler.PlayerSkill(id, character.id);
+		playerSkill.level += 1;
+		PlayerSkillHandler.savePlayerSkill(playerSkill);
+		logger.warning("Skill up " + playerSkill.id + " level " + playerSkill.level);
+	}
+
+	public static void useSkillOnTarget(String skillId, String origin, String targetId) {
+		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(skillId);
+		StatusEffectTarget target = new StatusEffectTarget();
+		target.range = skill.range;
+		target.skill = skill.id;
+		target.origin = origin;
+		target.target = targetId;
+		ActorSelection effectHandler = ActorUtil.getSelectionByName(StatusEffectHandler.name);
+		effectHandler.tell(target, null);
+	}
+
+	private long useSkillOnTarget(StatusEffectTarget target) {
+		long activeId = setStatusEffects(target);
+		applyStatusEffects(target);
+		target.lastTick = System.currentTimeMillis();
+		skillUp(target.skill, target.origin);
+		return activeId;
+	}
+
+	private void setPassiveEffect(StatusEffectTarget target, StatusEffect statusEffect) {
+		int value = statusEffect.minValue;
+		Vitals vitals = getVitals(target.target);
+
+		if (statusEffect.type == StatusEffect.Type.SpellResistIncrease) {
+			vitals.spellResist += value;
+		} else if (statusEffect.type == StatusEffect.Type.SpellResistDecrease) {
+			vitals.spellResist -= value;
+		} else if (statusEffect.type == StatusEffect.Type.ElementalResistIncrease) {
+			vitals.elementalResist += value;
+		} else if (statusEffect.type == StatusEffect.Type.ElementalResistDecrease) {
+			vitals.elementalResist -= value;
+		} else if (statusEffect.type == StatusEffect.Type.ArmorIncrease) {
+			vitals.armor += value;
+		} else if (statusEffect.type == StatusEffect.Type.ArmorDecrease) {
+			vitals.armor -= value;
+		} else if (statusEffect.type == StatusEffect.Type.SpellPenetrationIncrease) {
+			vitals.spellPenetration += value;
+		} else if (statusEffect.type == StatusEffect.Type.MagicRegenIncrease) {
+			vitals.magicRegen += value;
+		} else if (statusEffect.type == StatusEffect.Type.HealthRegenIncrease) {
+			vitals.healthRegen += value;
+		} else if (statusEffect.type == StatusEffect.Type.StaminaRegenIncrease) {
+			vitals.staminaRegen += value;
+		} else if (statusEffect.type == StatusEffect.Type.MagicRegenDecrease) {
+			vitals.magicRegen -= value;
+		} else if (statusEffect.type == StatusEffect.Type.HealthRegenDecrease) {
+			vitals.healthRegen -= value;
+		} else if (statusEffect.type == StatusEffect.Type.StaminaRegenDecrease) {
+			vitals.staminaRegen -= value;
+		}
+	}
+
+	private long setStatusEffects(StatusEffectTarget target) {
 		boolean multi = false;
 		for (StatusEffect effect : skillEffects.get(target.skill)) {
 			target.addStatusEffect(effect);
@@ -138,6 +224,9 @@ public class StatusEffectHandler extends UntypedActor {
 		if (multi) {
 			target.activeId = counter.getAndIncrement();
 			targets.put(target.activeId, target);
+			return target.activeId;
+		} else {
+			return 0l;
 		}
 	}
 
@@ -159,25 +248,27 @@ public class StatusEffectHandler extends UntypedActor {
 					}
 					for (String target : Common.getTargetsInRange(statusEffectTarget.range,
 							statusEffectTarget.location, "default")) {
-						applyStatusEffect(statusEffectTarget.origin, target, effect);
+						applyStatusEffect(statusEffectTarget, target, effect);
 					}
 					for (String target : Common.getTargetsInRange(statusEffectTarget.range,
 							statusEffectTarget.location, "world_objects")) {
-						applyStatusEffect(statusEffectTarget.origin, target, effect);
+						applyStatusEffect(statusEffectTarget, target, effect);
 					}
 				} else {
-					applyStatusEffect(statusEffectTarget.origin, statusEffectTarget.target, effect);
+					applyStatusEffect(statusEffectTarget, statusEffectTarget.target, effect);
 				}
 			}
 		}
 		statusEffectTarget.ticks++;
 	}
 
-	private int applyStatusEffectToWorldObject(String origin, String target, StatusEffect effect) {
+	private int applyStatusEffectToWorldObject(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
+
+		String origin = statusEffectTarget.origin;
 
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
 			WorldObject worldObject = ConsumableItemHandler.wobjects.get(target);
-			int damage = getEffectValue(effect);
+			int damage = getEffectValue(effect, statusEffectTarget.skill, origin);
 			if (damage > 0) {
 				damage = damage / 4;
 			}
@@ -199,10 +290,18 @@ public class StatusEffectHandler extends UntypedActor {
 
 	}
 
-	private int applyStatusEffect(String origin, String target, StatusEffect effect) {
-		if (ConsumableItemHandler.wobjects.containsKey(target)) {
-			return applyStatusEffectToWorldObject(origin, target, effect);
+	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
+
+		if (effect.type != StatusEffect.Type.AttributeIncrease && effect.type != StatusEffect.Type.AttributeDecrease) {
+			setPassiveEffect(statusEffectTarget, effect);
+			return 0;
 		}
+
+		if (ConsumableItemHandler.wobjects.containsKey(target)) {
+			return applyStatusEffectToWorldObject(statusEffectTarget, target, effect);
+		}
+
+		String origin = statusEffectTarget.origin;
 
 		Vitals vitals = getVitals(target);
 		if (vitals.dead == 1) {
@@ -214,7 +313,7 @@ public class StatusEffectHandler extends UntypedActor {
 		originVitals.lastCombat = System.currentTimeMillis();
 
 		int targetBaseHealth = CharacterHandler.currentHealth(vitals.id);
-		int value = getEffectValue(effect);
+		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
 
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
 			if (vitals.id.equals(origin)) {
@@ -232,15 +331,19 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 
 		if (value > 0) {
-			//logger.warning("target " + vitals.id + " damage " + value + " type " + effect.type + " health "+ vitals.health);
+			// logger.warning("target " + vitals.id + " damage " + value +
+			// " type " + effect.type + " health "+ vitals.health);
 			sendStatusEffectResult(effect.id, origin, target, value);
 		}
 
 		return value;
 	}
 
-	private int getEffectValue(StatusEffect effect) {
-		return Common.randInt(effect.minValue, effect.maxValue);
+	private int getEffectValue(StatusEffect effect, String skillId, String playerId) {
+		int base = Common.randInt(effect.minValue, effect.maxValue);
+		Character character = CharacterHandler.currentCharacter(playerId);
+		PlayerSkill playerSkill = PlayerSkillHandler.PlayerSkill(skillId, character.id);
+		return base + playerSkill.level;
 	}
 
 	private Vitals getVitals(String id) {
@@ -268,7 +371,6 @@ public class StatusEffectHandler extends UntypedActor {
 					regen = 20;
 				}
 			}
-			
 
 			int stamina = CharacterHandler.currentStamina(vitals.id);
 			int magic = CharacterHandler.currentMagic(vitals.id);
@@ -378,15 +480,18 @@ public class StatusEffectHandler extends UntypedActor {
 
 		for (Vitals vitals : CombatHandler.playerVitals.values()) {
 			int health = CharacterHandler.currentHealth(vitals.id);
+			int stamina = CharacterHandler.currentStamina(vitals.id);
+			int magic = CharacterHandler.currentMagic(vitals.id);
 			Boolean send = false;
-			if (vitals.health < health) {
+			if (vitals.health < health || vitals.magic < magic || vitals.stamina < stamina) {
 				resetVitalTick(vitals.id);
 				send = true;
 			} else {
 				int tick = nextVitalTick(vitals.id);
 				if (tick < 4) {
 					send = true;
-					//logger.warning("vitals tick " + vitals.id + " " + tick + " health " + vitals.health);
+					// logger.warning("vitals tick " + vitals.id + " " + tick +
+					// " health " + vitals.health);
 				}
 			}
 			if (send) {

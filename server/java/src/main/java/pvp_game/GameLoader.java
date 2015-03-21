@@ -17,6 +17,7 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(ConsumableItemHandler.class), ConsumableItemHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(SiegeHandler.class), SiegeHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(GridExpiration.class), GridExpiration.name);
+		GameMachineLoader.getActorSystem().actorOf(Props.create(TimeHandler.class), TimeHandler.name);
 		
 		Npc.CreateNpcs();
 		//GameMachineLoader.getActorSystem().actorOf(Props.create(NpcHandler.class), NpcHandler.name);

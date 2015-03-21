@@ -57,6 +57,11 @@ public class CharacterHandler extends GameMessageActor {
 				setReply(msg);
 			} else if (pvpGameMessage.command == 3) {
 
+			} else if (pvpGameMessage.command == 4) {
+				pvpGameMessage.character = getCharacter(pvpGameMessage.character.id);
+				GameMessage msg = new GameMessage();
+				msg.pvpGameMessage = pvpGameMessage;
+				setReply(msg);
 			}
 		} else {
 			

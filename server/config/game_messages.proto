@@ -59,6 +59,7 @@ persistent_message Character {
   optional int32 stamina = 12;
   optional int32 magic = 13;
   optional bool includeUmaData = 14;
+  
 }
 
 message Characters {
@@ -94,7 +95,21 @@ message StatusEffect {
     Stun = 4;
     Root = 5;
     Death = 6;
-  }
+    ArmorIncrease = 7;
+    SpellResistIncrease = 8;
+    ElementalResistIncrease = 9;
+    SpellPenetrationIncrease = 10;
+    MagicRegenIncrease = 11;
+    HealthRegenIncrease = 12;
+    StaminaRegenIncrease = 13;
+    ArmorDecrease = 14;
+    SpellResistDecrease = 15;
+    ElementalResistDecrease = 16;
+    MagicRegenDecrease = 17;
+    HealthRegenDecrease = 18;
+    StaminaRegenDecrease = 19;
+}
+  
   optional Type type = 1;
   optional string id = 2;
   optional int32 duration = 3;
@@ -103,6 +118,22 @@ message StatusEffect {
   optional int32 minValue = 6;
   optional int32 maxValue = 7;
   optional string particleEffect = 8;
+}
+
+message Vitals {
+  required string id = 1;
+  optional int32 health = 2;
+  optional int32 stamina = 3;
+  optional int32 magic = 4;
+  optional int64 lastCombat = 5;
+  optional int32 dead = 6;
+  optional int32 armor = 7;
+  optional int32 spellResist = 8;
+  optional int32 elementalResist = 9;
+  optional int32 spellPenetration = 10;
+  optional int32 magicRegen = 11;
+  optional int32 healthRegen = 12;
+  optional int32 staminaRegen = 13;
 }
 
 message VisualEffect {
@@ -133,14 +164,7 @@ message StatusEffectTarget {
   optional int64 lastTick = 9;
 }
 
-message Vitals {
-  required string id = 1;
-  optional int32 health = 2;
-  optional int32 stamina = 3;
-  optional int32 magic = 4;
-  optional int64 lastCombat = 5;
-  optional int32 dead = 6;
-}
+
 
 message Attack {
   required string attacker = 1;
@@ -238,7 +262,11 @@ message DataRequest {
   required string name = 2;
 }
 
-
+message TimeCycle {
+  optional float currentTime = 1;
+  optional float dayCycleLength = 2;
+}
+	
 message GameMessage {
   // Used internally, do not change
   optional string playerId = 1;
@@ -271,6 +299,7 @@ message GameMessage {
   optional SiegeCommand siegeCommand = 28;
   optional Bounds bounds = 29;
   optional UseItem useItem = 30;
+  optional TimeCycle timeCycle = 31;
 }
 
 message GameMessages {
@@ -296,6 +325,7 @@ local_persistent_message PlayerSkill {
   optional string weaponType = 11;
   optional int32 range = 12;
   optional string statusEffectId = 13;
+  optional int32 level = 14;
 }
 
 message PlayerSkills {

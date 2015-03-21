@@ -42,6 +42,8 @@ CREATE TABLE player_skills (
 
   player_skill_status_effect_id character varying(128) DEFAULT NULL,
 
+  player_skill_level integer DEFAULT NULL,
+
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
 alter table player_skills owner to gamemachine;
@@ -80,6 +82,8 @@ CREATE TABLE `player_skills` (
   `player_skill_range` int(11) DEFAULT NULL,
 
   `player_skill_status_effect_id` varchar(128) DEFAULT NULL,
+
+  `player_skill_level` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
