@@ -1,8 +1,11 @@
 package io.gamemachine.core;
 
+import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.AppConfig.GridConfig;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -14,27 +17,76 @@ public class GameGrid {
 	private static final Logger logger = LoggerFactory.getLogger(GameGrid.class);
 
 	private static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
+	private static ConcurrentHashMap<String, Integer> playerZone = new ConcurrentHashMap<String, Integer>();
+	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>> zoneToGridName = new ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>>();
 	
+	public static Grid getPlayerGrid(String gameId, String gridName, String playerId) {
+		return getGameGrid(gameId, gridName,playerId);
+	}
+
+	public static Grid getPlayerGrid(String gridName, String playerId) {
+		String gameId = AppConfig.getDefaultGameId();
+		return getGameGrid(gameId, gridName,playerId);
+	}
+	
+	public static int getPlayerZone(String playerId) {
+		if (playerZone.containsKey(playerId)) {
+			return playerZone.get(playerId);
+		} else {
+			return 0;
+		}
+	}
+
+	public static void setPlayerZone(String playerId, int zone) {
+		playerZone.put(playerId, zone);
+	}
+
 	public static void getGridCounts() {
 		for (String gameId : gameGrids.keySet()) {
 			Map<String, Grid> grids = gameGrids.get(gameId);
-			for (Map.Entry<String, Grid> entry : grids.entrySet())
-			{
+			for (Map.Entry<String, Grid> entry : grids.entrySet()) {
 				Grid grid = entry.getValue();
-				logger.debug("Grid "+gameId+":"+entry.getKey()+" count "+grid.getObjectCount()+" max="+grid.getMax()+" size="+grid.getCellSize());
-				//entry.getValue().dumpGrid();
+				logger.debug("Grid " + gameId + ":" + entry.getKey() + " count " + grid.getObjectCount() + " max="
+						+ grid.getMax() + " size=" + grid.getCellSize());
+				// entry.getValue().dumpGrid();
 			}
 		}
+	}
+
+	public static List<Grid> getGridList() {
+		List<Grid> allgrids = new ArrayList<Grid>();
+		for (String gameId : gameGrids.keySet()) {
+			Map<String, Grid> grids = gameGrids.get(gameId);
+			for (Map.Entry<String, Grid> entry : grids.entrySet()) {
+				Grid grid = entry.getValue();
+				allgrids.add(grid);
+			}
+		}
+		return allgrids;
+	}
+
+	public static List<Grid> gridsStartingWith(String name) {
+		List<Grid> allgrids = new ArrayList<Grid>();
+		for (String gameId : gameGrids.keySet()) {
+			Map<String, Grid> grids = gameGrids.get(gameId);
+			for (Map.Entry<String, Grid> entry : grids.entrySet()) {
+				Grid grid = entry.getValue();
+				if (grid.name.startsWith(name)) {
+					allgrids.add(grid);
+				}
+			}
+		}
+		return allgrids;
 	}
 	
 	public static Map<String, ConcurrentHashMap<String, Grid>> getGameGrids() {
 		return gameGrids;
 	}
-	
+
 	public static void removeGridsForGame(String gameId) {
 		gameGrids.remove(gameId);
 	}
-	
+
 	public static synchronized Grid loadGameGrid(String gameId, String gridName) {
 		GridConfig config = GameConfig.getGridConfig(gameId, gridName);
 		if (config == null) {
@@ -50,7 +102,7 @@ public class GameGrid {
 			gameGrids.put(gameId, new ConcurrentHashMap<String, Grid>());
 		}
 
-		if (gameGrids.get(gameId).size() >= 5) {
+		if (gameGrids.get(gameId).size() >= 50) {
 			logger.info("Grid limit exceeded");
 			return null;
 		}
@@ -63,13 +115,14 @@ public class GameGrid {
 			}
 		}
 
-		Grid gameGrid = new Grid(config.getGridSize(), config.getCellSize());
+		Grid gameGrid = new Grid(config.getName(), config.getGridSize(), config.getCellSize());
 		gameGrids.get(gameId).put(config.getName(), gameGrid);
 		logger.debug("Grid created for " + gameId + " " + config.getName());
 		return gameGrid;
 	}
 
-	public static Grid getGameGrid(String gameId, String gridName) {
+	public static Grid xgetGameGrid(String gridName) {
+		String gameId = AppConfig.getDefaultGameId();
 		if (gameGrids.containsKey(gameId)) {
 			if (gameGrids.get(gameId).containsKey(gridName)) {
 				return gameGrids.get(gameId).get(gridName);
@@ -79,5 +132,38 @@ public class GameGrid {
 		} else {
 			return loadGameGrid(gameId, gridName);
 		}
+	}
+	
+	public static Grid xgetGameGrid(String gameId, String gridName) {
+		if (gameGrids.containsKey(gameId)) {
+			if (gameGrids.get(gameId).containsKey(gridName)) {
+				return gameGrids.get(gameId).get(gridName);
+			} else {
+				return loadGameGrid(gameId, gridName);
+			}
+		} else {
+			return loadGameGrid(gameId, gridName);
+		}
+	}
+
+	public static Grid getGameGrid(String gameId, String gridName, int zone) {
+		String zgridName;
+
+		if (!zoneToGridName.containsKey(gridName)) {
+			zoneToGridName.put(gridName, new ConcurrentHashMap<Integer, String>());
+		}
+		
+		if (zoneToGridName.get(gridName).containsKey(zone)) {
+			zgridName = zoneToGridName.get(gridName).get(zone);
+		} else {
+			zgridName = gridName + zone;
+			zoneToGridName.get(gridName).put(zone, zgridName);
+		}
+		return xgetGameGrid(gameId, zgridName);
+	}
+	
+	public static Grid getGameGrid(String gameId, String gridName, String playerId) {
+		int zone = getPlayerZone(playerId);
+		return getGameGrid(gameId,gridName,zone);
 	}
 }

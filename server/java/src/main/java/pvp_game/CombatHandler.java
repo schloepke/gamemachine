@@ -5,19 +5,13 @@ import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerVitalsHandler;
 import io.gamemachine.messages.Attack;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.DataRequest;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-
-import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
-
 import akka.actor.ActorSelection;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -26,12 +20,9 @@ public class CombatHandler extends GameMessageActor {
 
 	public static String name = CombatHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
-	
-	
-	public static ConcurrentHashMap<String, Vitals> playerVitals = new ConcurrentHashMap<String, Vitals>();
-	
+
 	private ActorSelection effectHandler;
-	
+
 	@Override
 	public void awake() {
 		effectHandler = ActorUtil.getSelectionByName(StatusEffectHandler.name);
@@ -45,11 +36,11 @@ public class CombatHandler extends GameMessageActor {
 			effectHandler.tell(gameMessage.dataRequest, getSelf());
 		}
 	}
-	
+
 	private void sendAttack(Attack attack) {
 		GameMessage msg = new GameMessage();
 
-		Grid grid = GameGrid.getGameGrid("mygame", "default");
+		Grid grid = GameGrid.getGameGrid("mygame", "default", attack.attacker);
 		for (TrackData trackData : grid.getAll()) {
 			if (!attack.attacker.equals(trackData.id)) {
 				msg.attack = attack;
@@ -59,14 +50,16 @@ public class CombatHandler extends GameMessageActor {
 	}
 
 	private void doAttack(Attack attack) {
-		logger.warning("Attack skill "+attack.skill);
+		logger.warning("Attack skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
 		StatusEffectTarget target = new StatusEffectTarget();
+		target.action = StatusEffectTarget.Action.Apply;
+		target.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
 		target.location = attack.targetLocation;
 		target.range = skill.range;
 		target.skill = skill.id;
 		target.origin = attack.attacker;
-		
+
 		if (skill.damageType.equals("aoe")) {
 			target.target = "aoe";
 		} else if (skill.damageType.equals("pbaoe")) {
@@ -85,29 +78,26 @@ public class CombatHandler extends GameMessageActor {
 				target.location.zi = 0;
 			}
 		}
-		
-		Vitals vitals = playerVitals.get(target.origin);
-		if (vitals != null) {
-			if (skill.resource.equals("stamina")) {
-				if (vitals.stamina < skill.resourceCost) {
-					logger.warning("Insufficient stamina needed "+skill.resourceCost);
-					return;
-				}
-				vitals.stamina -= skill.resourceCost;
-			} else if (skill.resource.equals("magic")) {
-				if (vitals.magic < skill.resourceCost) {
-					logger.warning("Insufficient magic needed "+skill.resourceCost);
-					return;
-				}
-				vitals.magic -= skill.resourceCost;
+
+		Vitals vitals = PlayerVitalsHandler.getOrCreate("default", target.origin);
+		if (skill.resource.equals("stamina")) {
+			if (vitals.stamina < skill.resourceCost) {
+				logger.warning("Insufficient stamina needed " + skill.resourceCost);
+				return;
 			}
+			vitals.stamina -= skill.resourceCost;
+		} else if (skill.resource.equals("magic")) {
+			if (vitals.magic < skill.resourceCost) {
+				logger.warning("Insufficient magic needed " + skill.resourceCost);
+				return;
+			}
+			vitals.magic -= skill.resourceCost;
 		}
-		
+
 		effectHandler.tell(target, getSelf());
 		sendAttack(attack);
 	}
 
-	
 	@Override
 	public void onPlayerDisconnect(String playerId) {
 		// TODO Auto-generated method stub
@@ -117,8 +107,7 @@ public class CombatHandler extends GameMessageActor {
 	@Override
 	public void onTick(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
 }

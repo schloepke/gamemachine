@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 public class Grid {
 
+	public String name;
 	private int max;
 	private int cellSize = 0;
 	private float convFactor;
@@ -57,7 +58,8 @@ public class Grid {
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 
-	public Grid(int max, int cellSize) {
+	public Grid(String name, int max, int cellSize) {
+		this.name = name;
 		this.max = max;
 		this.cellSize = cellSize;
 		this.convFactor = 1.0f / this.cellSize;

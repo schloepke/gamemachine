@@ -27,7 +27,15 @@ public class PlayerSkillHandler extends GameMessageActor {
 		}
 	}
 
-	public static PlayerSkill PlayerSkill(String id, String characterId) {
+	public static boolean hasPlayerSkill(String id, String characterId) {
+		if (playerSkills.containsKey(characterId)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static PlayerSkill playerSkill(String id, String characterId) {
 		if (!playerSkills.containsKey(characterId)) {
 			throw new RuntimeException("cannot find player skills for "+characterId);
 		}

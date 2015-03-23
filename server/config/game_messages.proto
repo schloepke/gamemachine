@@ -22,6 +22,7 @@ persistent_message WorldObject {
   optional bool destructable = 16;
   optional string prefab = 17;
   optional int32 type = 18;
+  optional string grid = 19;
 }
 
 message Bounds {
@@ -134,6 +135,8 @@ message Vitals {
   optional int32 magicRegen = 11;
   optional int32 healthRegen = 12;
   optional int32 staminaRegen = 13;
+  optional int32 changed = 14;
+  optional string grid = 15;
 }
 
 message VisualEffect {
@@ -153,6 +156,15 @@ message StatusEffectResult {
 }
 
 message StatusEffectTarget {
+  enum Action {
+    Apply = 0;
+    Remove = 1;
+  }
+  enum PassiveFlag {
+    AutoRemove = 0;
+    ManualRemove = 1;
+    NA = 2;
+  }
   required string target = 1;
   required string skill = 2;
   optional Vector3 location = 3;
@@ -162,6 +174,8 @@ message StatusEffectTarget {
   optional int32 ticks = 7;
   optional int64 activeId = 8;
   optional int64 lastTick = 9;
+  required Action action = 10;
+  required PassiveFlag passiveFlag = 11;
 }
 
 
@@ -241,6 +255,7 @@ message TrackData {
   optional float speed = 23;
   optional float velX = 24;
   optional float velZ = 25;
+  optional int32 zone = 26;
 }
 
 message ClientData {
@@ -366,6 +381,7 @@ local_persistent_message PlayerItem {
   optional int32 type = 17;
   optional int32 maxHealth = 18;
   optional int32 health = 19;
+  optional int32 level = 20;
 }
 
 local_message ModelInfo {

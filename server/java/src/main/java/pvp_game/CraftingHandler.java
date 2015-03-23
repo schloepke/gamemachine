@@ -149,11 +149,11 @@ public class CraftingHandler extends GameMessageActor {
 	}
 
 	private void removeItem(String id, int quantity) {
-		Commands.removePlayerItem(playerId, id, quantity);
+		PlayerItemManager.removePlayerItem(playerId, id, quantity);
 	}
 
 	private void addItem(String id, int quantity) {
-		Commands.addPlayerItem(playerId, id, quantity);
+		PlayerItemManager.addPlayerItem(playerId, id, quantity);
 	}
 
 	@Override

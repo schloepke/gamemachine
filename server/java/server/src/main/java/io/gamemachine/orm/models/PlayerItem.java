@@ -46,7 +46,7 @@ CREATE TABLE player_items (
 
   player_item_health integer DEFAULT NULL,
 
-  player_item_status_effects character varying(128) DEFAULT NULL,
+  player_item_level integer DEFAULT NULL,
 
   consumable_type character varying(128) DEFAULT NULL,
   	
@@ -123,7 +123,7 @@ CREATE TABLE `player_items` (
 
   `player_item_health` int(11) DEFAULT NULL,
 
-  `player_item_status_effects` varchar(128) DEFAULT NULL,
+  `player_item_level` int(11) DEFAULT NULL,
 
   	  `consumable_type` varchar(128) DEFAULT NULL,
   	

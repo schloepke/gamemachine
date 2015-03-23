@@ -27,7 +27,7 @@ public class SiegeHandler extends GameMessageActor {
 			if (gameMessage.siegeCommand.hasHitId()) {
 				doHit(gameMessage.siegeCommand.hitId,gameMessage.siegeCommand.skillId);
 			} else {
-				Grid grid = GameGrid.getGameGrid("mygame", "default");
+				Grid grid = GameGrid.getGameGrid("mygame", "default", playerId);
 				for (TrackData trackData : grid.getAll()) {
 					PlayerCommands.sendGameMessage(gameMessage, trackData.id);
 				}

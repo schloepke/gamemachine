@@ -140,7 +140,7 @@ public class EntityTracking extends UntypedActor {
 					neighbors.addTrackData(broadcastTrackData);
 					playerMessage.setNeighbors(neighbors);
 					PlayerCommands.sendToPlayer(playerMessage, tdata.id);
-					//logger.warn("Broadcast sent to " + tdata.id);
+					// logger.warn("Broadcast sent to " + tdata.id);
 				}
 			}
 			return;
@@ -161,7 +161,7 @@ public class EntityTracking extends UntypedActor {
 		if (gameId == null) {
 			return null;
 		} else {
-			return GameGrid.getGameGrid(gameId, name);
+			return GameGrid.getGameGrid(gameId, name, playerId);
 		}
 	}
 
@@ -170,16 +170,9 @@ public class EntityTracking extends UntypedActor {
 		if (gameId == null) {
 			return;
 		}
-
-		Map<String, ConcurrentHashMap<String, Grid>> gameGrids = GameGrid.getGameGrids();
-		if (gameGrids.containsKey(gameId)) {
-			for (String name : gameGrids.get(gameId).keySet()) {
-				Grid grid = gameGrid(event.player_id, name);
-				if (grid != null) {
-					logger.debug("Removing " + event.player_id + " from grid " + name);
-					grid.remove(event.player_id);
-				}
-			}
+		for (Grid grid : GameGrid.getGridList()) {
+			logger.debug("Removing " + event.player_id + " from grid " + name);
+			grid.remove(event.player_id);
 		}
 
 	}
@@ -262,6 +255,10 @@ public class EntityTracking extends UntypedActor {
 		DynamicMessage dynamicMessage = cache.get(trackData.getId());
 		if (dynamicMessage != null) {
 			trackData.setDynamicMessage(dynamicMessage);
+		}
+
+		if (trackData.hasZone()) {
+			GameGrid.setPlayerZone(trackData.id, trackData.zone);
 		}
 
 		if (!grid.set(trackData)) {

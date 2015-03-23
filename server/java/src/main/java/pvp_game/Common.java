@@ -16,17 +16,24 @@ public class Common {
 	public static int worldOffset = 7000;
 	public static String gameId = "mygame";
 	
-	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName) {
+	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
 		Vector3 vec = new Vector3();
 		vec.xi = x;
 		vec.yi = y;
 		vec.zi = z;
-		return getTargetsInRange(range,vec,gridName);
+		return getTargetsInRange(range,vec,gridName, playerId);
 	}
 	
-	public static List<String> getTargetsInRange(int range, Vector3 location, String gridName) {
+	public static List<String> getTargetsInRange(int range, int x, int y, int z, Grid grid) {
+		Vector3 vec = new Vector3();
+		vec.xi = x;
+		vec.yi = y;
+		vec.zi = z;
+		return getTargetsInRange(range,vec,grid);
+	}
+	
+	public static List<String> getTargetsInRange(int range, Vector3 location, Grid grid) {
 		List<String> targets = new ArrayList<String>();
-		Grid grid = GameGrid.getGameGrid(gameId, gridName);
 		for (TrackData trackData : grid.getAll()) {
 			
 			// Lets you choose a specific radius, as the spatial query is not exact.
@@ -40,6 +47,11 @@ public class Common {
 			}
 		}
 		return targets;
+	}
+	
+	public static List<String> getTargetsInRange(int range, Vector3 location, String gridName, String playerId) {
+		Grid grid = GameGrid.getGameGrid(gameId, gridName, playerId);
+		return getTargetsInRange(range,location,grid);
 	}
 
 	private static double scale(int i) {

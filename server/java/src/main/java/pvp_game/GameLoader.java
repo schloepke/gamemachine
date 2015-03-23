@@ -20,9 +20,8 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(TimeHandler.class), TimeHandler.name);
 		
 		Npc.CreateNpcs();
-		//GameMachineLoader.getActorSystem().actorOf(Props.create(NpcHandler.class), NpcHandler.name);
 		
-		Commands.seedCharacterItem("wood", 50);
-		Commands.seedCharacterItem("iron_ore", 50);
+		PlayerItemManager.seedCharacterItem("wood", 50);
+		PlayerItemManager.seedCharacterItem("iron_ore", 50);
 	}
 }

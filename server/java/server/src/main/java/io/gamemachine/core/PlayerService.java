@@ -53,12 +53,20 @@ public class PlayerService {
 		players.remove(player.id);
 	}
 	
-	public Boolean playerExists(String playerId) {
-		Player player = find(playerId);
-		if (player != null) {
-			return true;
+	public Boolean playerExists(String playerId, boolean quick) {
+		if (quick) {
+			if (players.containsKey(playerId)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			Player player = find(playerId);
+			if (player != null) {
+				return true;
+			}
+			return false;
 		}
-		return false;
 	}
 	
 	public Player create(String playerId, String gameId) {

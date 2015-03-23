@@ -4,8 +4,8 @@ module GameMachine
 
       attr_reader
       def initialize
-        @aoe_grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe")
-        @grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default")
+        @aoe_grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"aoe",0)
+        @grid = JavaLib::GameGrid.get_game_grid(Application.config.default_game_id,"default",0)
       end
 
       def grid

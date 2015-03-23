@@ -41,7 +41,7 @@ public class Npc {
 		npc.characterBase = baseCharacter;
 		npc.characterId = characterId;
 		npc.position = position;
-		if (!PlayerService.getInstance().playerExists(npc.name)) {
+		if (!PlayerService.getInstance().playerExists(npc.name,false)) {
 			PlayerService.getInstance().create(npc.name, Common.gameId, "npc");
 		}
 		

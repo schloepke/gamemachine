@@ -15,6 +15,7 @@ def add_items(items,player)
     player_item.set_craftable(item['craftable'])
     player_item.set_crafting_resource(item['crafting_resource'])
     player_item.set_is_consumable(item['is_consumable'])
+    player_item.set_level(0)
           
     ['consumable','cost','model_info'].each do |component|
       if item[component]
@@ -472,7 +473,7 @@ skills = [
     'icon' => 'Icon.1_12',
     'resource' => 'stamina',
     'resource_cost' => 200,
-    'range' => 15,
+    'range' => 10,
   }
   
 ]
@@ -492,6 +493,7 @@ characters.each do |char|
     citem.set_resource_cost(item['resource_cost'])
     citem.set_range(item['range'])
     citem.set_character_id(char)
+    citem.set_level(0)
 
     where = 'player_skill_id = ? AND player_skill_character_id = ?'
     existing = GameMachine::MessageLib::PlayerSkill.db.find_first(where,citem.id,char)

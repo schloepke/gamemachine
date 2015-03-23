@@ -70,7 +70,7 @@ public class HarvestHandler extends GameMessageActor {
 	}
 	
 	private void broadcast(Harvest harvest) {
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default");
+		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", playerId);
 		List<TrackData> trackDatas = grid.getAll();
 
 		if (trackDatas != null) {

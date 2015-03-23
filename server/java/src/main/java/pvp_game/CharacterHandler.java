@@ -11,7 +11,6 @@ import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PvpGameMessage;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.Vitals;
 
 import java.util.List;
 import java.util.Map;
@@ -192,7 +191,6 @@ public class CharacterHandler extends GameMessageActor {
 	}
 	
 	public static Character currentCharacter(String playerId) {
-		Character character;
 		String id = PlayerService.getInstance().getCharacter(playerId);
 		if (id == null) {
 			throw new RuntimeException("No character id for player " + playerId);
