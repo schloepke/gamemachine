@@ -36,7 +36,7 @@ CREATE TABLE characters (
 
   character_worldz integer DEFAULT NULL,
 
-  character_zone character varying(128) DEFAULT NULL,
+  character_zone integer DEFAULT NULL,
 
   character_stamina integer DEFAULT NULL,
 
@@ -77,7 +77,7 @@ CREATE TABLE `characters` (
 
   `character_worldz` int(11) DEFAULT NULL,
 
-  `character_zone` varchar(128) DEFAULT NULL,
+  `character_zone` int(11) DEFAULT NULL,
 
   `character_stamina` int(11) DEFAULT NULL,
 

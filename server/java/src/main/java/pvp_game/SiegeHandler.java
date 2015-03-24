@@ -38,7 +38,8 @@ public class SiegeHandler extends GameMessageActor {
 	}
 
 	private void doHit(String id, String skillId) {
-		WorldObject worldObject = WorldObject.db().findFirst("world_object_id = ?", id);
+		WorldObject worldObject = ConsumableItemHandler.find(id);
+		logger.warning("Siege dohit "+id+" "+skillId);
 		if (worldObject != null) {
 			if (!worldObject.hasHealth()) {
 				worldObject.maxHealth = 10000;

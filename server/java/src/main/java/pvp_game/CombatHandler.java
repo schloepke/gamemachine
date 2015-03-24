@@ -66,6 +66,8 @@ public class CombatHandler extends GameMessageActor {
 			target.target = "aoe";
 		} else if (skill.damageType.equals("st")) {
 			target.target = attack.target;
+		} else if (skill.damageType.equals("self")) {
+			target.target = attack.target;
 		}
 		if (target.target.equals("aoe")) {
 			if (target.location.xi == null) {

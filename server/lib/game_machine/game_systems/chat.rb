@@ -218,6 +218,7 @@ module GameMachine
       end
 
       def join_channel(name,flags)
+        JavaLib::ChatSubscriptions.subscribe(chat_id,name)
         create_topic_handler(name)
         message = MessageLib::Subscribe.new.set_topic(name).set_game_id(game_id)
         message_queue.tell(message,topic_handler_for(name).actor)
@@ -236,6 +237,7 @@ module GameMachine
 
       def leave_channel(channel)
         if topic_handler = topic_handler_for(channel.name)
+          JavaLib::ChatSubscriptions.unsubscribe(chat_id,channel.name)
           message = MessageLib::Unsubscribe.new.set_topic(channel.name).set_game_id(game_id)
           message_queue.tell(message,topic_handler_for(channel.name).actor)
           @subscriptions.delete_if {|sub| sub == channel.name}

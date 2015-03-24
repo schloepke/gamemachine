@@ -1,5 +1,6 @@
 package pvp_game;
 
+import io.gamemachine.core.ChatSubscriptions;
 import io.gamemachine.core.Commands;
 import io.gamemachine.core.GameMachineLoader;
 import akka.actor.Props;
@@ -18,6 +19,8 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(SiegeHandler.class), SiegeHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(GridExpiration.class), GridExpiration.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(TimeHandler.class), TimeHandler.name);
+		
+		GameMachineLoader.getActorSystem().actorOf(Props.create(ChatSubscriptions.class), ChatSubscriptions.name);
 		
 		Npc.CreateNpcs();
 		

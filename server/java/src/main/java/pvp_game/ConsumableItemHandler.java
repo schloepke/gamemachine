@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.google.common.base.Strings;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
@@ -145,11 +147,11 @@ public class ConsumableItemHandler extends GameMessageActor {
 		GameGrid.getGameGrid(Common.gameId, "world_objects",playerId).remove(id);
 	}
 
-	private WorldObject find(String id) {
+	public static WorldObject find(String id) {
 		if (!wobjects.containsKey(id)) {
 			WorldObject worldObject = WorldObject.db().findFirst("world_object_id = ?", id);
 			if (worldObject == null) {
-				logger.warning("Cannot find worldobject with id " + id);
+				//logger.warning("Cannot find worldobject with id " + id);
 				return null;
 			} else {
 				wobjects.put(id, worldObject);
@@ -227,10 +229,17 @@ public class ConsumableItemHandler extends GameMessageActor {
 			}
 		}
 		
-		worldObject.grid = worldObjectGrid.name;
+		Grid grid;
+		if (Strings.isNullOrEmpty(worldObject.grid)) {
+			worldObject.grid = worldObjectGrid.name;
+			grid = worldObjectGrid;
+		} else {
+			grid = GameGrid.xgetGameGrid(worldObject.grid);
+		}
+		
 		WorldObject.db().save(worldObject);
 		wobjects.put(worldObject.id, worldObject);
-		worldObjectGrid.set(toTrackData(worldObject));
+		grid.set(toTrackData(worldObject));
 	}
 
 	private void updatePosition(WorldObject worldObject) {

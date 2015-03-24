@@ -1,6 +1,7 @@
 package pvp_game;
 
 import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.ChatSubscriptions;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
@@ -289,7 +290,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private boolean isPassive(StatusEffect effect) {
-		if (effect.type != StatusEffect.Type.AttributeIncrease && effect.type != StatusEffect.Type.AttributeDecrease) {
+		if (effect.type != StatusEffect.Type.Speed && effect.type != StatusEffect.Type.AttributeIncrease && effect.type != StatusEffect.Type.AttributeDecrease) {
 			return true;
 		} else {
 			return false;
@@ -389,10 +390,20 @@ public class StatusEffectHandler extends UntypedActor {
 		int targetBaseHealth = CharacterHandler.currentHealth(vitals.id);
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
 
+		String originGroup = ChatSubscriptions.playerGroup(origin);
+		
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
+			
+			// no damage to self
 			if (vitals.id.equals(origin)) {
 				return 0;
 			}
+			
+			// or group members
+			if (!originGroup.equals("nogroup") && ChatSubscriptions.playerGroup(vitals.id).equals(originGroup)) {
+				return 0;
+			}
+			
 			vitals.health -= value;
 			if (vitals.health < 0) {
 				vitals.health = 0;

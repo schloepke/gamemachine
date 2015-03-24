@@ -73,27 +73,19 @@ public class CharacterHandler extends GameMessageActor {
 						+ pvpGameMessage.character.playerId);
 				sendCharacter(pvpGameMessage.character);
 			} else if (pvpGameMessage.command == 10) {
-				Map<String, ConcurrentHashMap<String, Grid>> gameGrids = GameGrid.getGameGrids();
-
-				for (String gameId : gameGrids.keySet()) {
-					Map<String, Grid> grids = gameGrids.get(gameId);
-					for (Map.Entry<String, Grid> entry : grids.entrySet()) {
-						String name = entry.getKey();
-						if (name.equals("default")) {
-							Grid grid = entry.getValue();
-							for (TrackData trackData : grid.getAll()) {
-								if (trackData.entityType != TrackData.EntityType.PLAYER) {
-									continue;
-								}
-								Character character = currentCharacter(trackData.id);
-								if (character != null) {
-									character.worldx = trackData.x;
-									character.worldy = trackData.y;
-									character.worldz = trackData.z;
-									saveCharacter(character);
-									logger.debug("Update character world position " +character.id);
-								}
-							}
+				for (Grid grid : GameGrid.gridsStartingWith("default")) {
+					for (TrackData trackData : grid.getAll()) {
+						if (trackData.entityType != TrackData.EntityType.PLAYER) {
+							continue;
+						}
+						Character character = currentCharacter(trackData.id);
+						if (character != null) {
+							character.worldx = trackData.x;
+							character.worldy = trackData.y;
+							character.worldz = trackData.z;
+							character.zone = trackData.zone;
+							saveCharacter(character);
+							logger.debug("Update character world position " +character.id);
 						}
 					}
 				}

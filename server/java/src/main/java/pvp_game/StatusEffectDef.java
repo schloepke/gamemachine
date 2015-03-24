@@ -47,6 +47,9 @@ public class StatusEffectDef {
 				10, null);
 		createStatusEffect("magic_regen1", StatusEffect.Type.AttributeIncrease, "magic_regen1", 120, "magic", 5, 10,
 				null);
+		
+		createStatusEffect("speed", StatusEffect.Type.Speed, "speed", 1, "stamina", 5, 5,
+				null);
 
 	}
 
