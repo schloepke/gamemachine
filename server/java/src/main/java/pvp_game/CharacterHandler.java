@@ -204,6 +204,16 @@ public class CharacterHandler extends GameMessageActor {
 		}
 	}
 	
+	public static String PlayerIdFromCharacterId(String characterId) {
+		Character character = Character.db().findFirst("character_id = ?",characterId);
+		if (character == null) {
+			return null;
+		} else {
+			return character.playerId;
+		}
+	}
+	
+	
 	public static Character cloneCharacter(String playerId, String characterId, String clonedPlayerId, String clonedId) {
 		Character base = Character.db().findFirst("character_player_id = ? and character_id = ?", playerId,
 				characterId);

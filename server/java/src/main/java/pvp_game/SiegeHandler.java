@@ -1,5 +1,7 @@
 package pvp_game;
 
+import com.google.common.base.Strings;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameGrid;
@@ -14,7 +16,7 @@ public class SiegeHandler extends GameMessageActor {
 
 	public static String name = SiegeHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
-	
+
 	@Override
 	public void awake() {
 		// TODO Auto-generated method stub
@@ -25,21 +27,56 @@ public class SiegeHandler extends GameMessageActor {
 	public void onGameMessage(GameMessage gameMessage) {
 		if (gameMessage.hasSiegeCommand()) {
 			if (gameMessage.siegeCommand.hasHitId()) {
-				doHit(gameMessage.siegeCommand.hitId,gameMessage.siegeCommand.skillId);
+				doHit(gameMessage.siegeCommand.hitId, gameMessage.siegeCommand.skillId);
 			} else {
+				if (gameMessage.siegeCommand.hasStartUse()) {
+					setUser(gameMessage.siegeCommand.id, true);
+				} else if (gameMessage.siegeCommand.hasEndUse()) {
+					setUser(gameMessage.siegeCommand.id, false);
+				}
 				Grid grid = GameGrid.getGameGrid("mygame", "default", playerId);
 				for (TrackData trackData : grid.getAll()) {
 					PlayerCommands.sendGameMessage(gameMessage, trackData.id);
 				}
 			}
-			
+
 		}
 
 	}
 
+	private void setUser(String id, boolean inUse) {
+		WorldObject worldObject = ConsumableItemHandler.find(id);
+		if (worldObject == null) {
+			logger.warning("Siege find failed " + id + " " + playerId);
+			return;
+		}
+
+		if (inUse) {
+			if (Strings.isNullOrEmpty(worldObject.currentUser)) {
+				worldObject.currentUser = playerId;
+				logger.warning("Siege use " + playerId);
+			} else {
+				logger.warning("Siege use failed " + playerId);
+				return;
+			}
+
+		} else {
+			if (!Strings.isNullOrEmpty(worldObject.currentUser) && worldObject.currentUser.equals(playerId)) {
+				worldObject.currentUser = null;
+				logger.warning("Siege release " + playerId);
+			} else {
+				logger.warning("Siege release failed " + playerId);
+				return;
+			}
+
+		}
+		WorldObject.db().save(worldObject);
+		ConsumableItemHandler.wobjects.put(worldObject.id, worldObject);
+	}
+
 	private void doHit(String id, String skillId) {
 		WorldObject worldObject = ConsumableItemHandler.find(id);
-		logger.warning("Siege dohit "+id+" "+skillId);
+		logger.warning("Siege dohit " + id + " " + skillId);
 		if (worldObject != null) {
 			if (!worldObject.hasHealth()) {
 				worldObject.maxHealth = 10000;
@@ -50,7 +87,7 @@ public class SiegeHandler extends GameMessageActor {
 			ConsumableItemHandler.wobjects.put(worldObject.id, worldObject);
 		}
 	}
-	
+
 	@Override
 	public void onPlayerDisconnect(String playerId) {
 		// TODO Auto-generated method stub
@@ -60,7 +97,7 @@ public class SiegeHandler extends GameMessageActor {
 	@Override
 	public void onTick(String message) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

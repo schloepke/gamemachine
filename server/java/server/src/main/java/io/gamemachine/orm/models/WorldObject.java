@@ -54,6 +54,8 @@ CREATE TABLE world_objects (
 
   world_object_grid character varying(128) DEFAULT NULL,
 
+  world_object_current_user character varying(128) DEFAULT NULL,
+
   CONSTRAINT world_object_pkey PRIMARY KEY (id)
 );
 alter table world_objects owner to gamemachine;
@@ -104,6 +106,8 @@ CREATE TABLE `world_objects` (
   `world_object_type` int(11) DEFAULT NULL,
 
   `world_object_grid` varchar(128) DEFAULT NULL,
+
+  `world_object_current_user` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

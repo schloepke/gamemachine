@@ -50,7 +50,7 @@ public class CombatHandler extends GameMessageActor {
 	}
 
 	private void doAttack(Attack attack) {
-		logger.warning("Attack skill " + attack.skill);
+		logger.warning("Attack "+attack.attacker+" "+attack.target+" skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
 		StatusEffectTarget target = new StatusEffectTarget();
 		target.action = StatusEffectTarget.Action.Apply;

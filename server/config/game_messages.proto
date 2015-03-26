@@ -3,6 +3,37 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message Guild {
+  required string id = 1;
+  required string ownerId = 4;
+  optional int32 recordId = 5;
+}
+
+persistent_message GuildMembers {
+  required string guildId = 1;
+  required string playerId = 3;
+  optional int32 recordId = 2;
+}
+
+message GuildMemberList {
+  required string guildId = 1;
+  repeated string playerId = 2;
+}
+
+persistent_message GuildAction {
+  required string action = 1;
+  optional string to = 2;
+  optional string from = 3;
+  optional string response = 4;
+  optional string guildId = 5;
+  optional int32 recordId = 6;
+  optional string inviteId = 7;
+}
+
+message Guilds {
+  repeated Guild guild = 1;
+}
+  
 persistent_message WorldObject {
   optional string playerItemId = 1;
   optional int32 action = 2;
@@ -23,6 +54,7 @@ persistent_message WorldObject {
   optional string prefab = 17;
   optional int32 type = 18;
   optional string grid = 19;
+  optional string currentUser = 20;
 }
 
 message Bounds {
@@ -43,6 +75,9 @@ message SiegeCommand {
   optional string hitId = 5;
   optional Vector3 hit = 6;
   optional string skillId = 7;
+  optional int32 startUse = 8;
+  optional int32 endUse = 9;
+  optional string playerId = 10;
 }
 
 persistent_message Character {
@@ -316,6 +351,9 @@ message GameMessage {
   optional Bounds bounds = 29;
   optional UseItem useItem = 30;
   optional TimeCycle timeCycle = 31;
+  optional Guilds guilds = 32;
+  optional GuildAction guildAction = 33;
+  optional GuildMemberList guildMemberList = 34;
 }
 
 message GameMessages {

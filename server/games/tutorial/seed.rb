@@ -485,7 +485,18 @@ skills = [
       'resource' => 'stamina',
       'resource_cost' => 100,
       'range' => 1,
-    }
+    },
+  {
+        'id' => 'stealth',
+        'name' => 'stealth',
+        'category' => 'weapon',
+        'weapon_type' => 'bow',
+        'damage_type' => 'self',
+        'icon' => 'Icons8_87',
+        'resource' => 'stamina',
+        'resource_cost' => 100,
+        'range' => 1,
+      }
   
 ]
 

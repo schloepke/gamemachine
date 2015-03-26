@@ -17,4 +17,5 @@ GameMachine::Routes.game_messages do
   route 203, to: 'PlayerSkillHandler', distributed: false, name: 'PlayerSkillHandler'
   route 204, to: 'ConsumableItemHandler', distributed: false, name: 'ConsumableItemHandler'
   route 205, to: 'SiegeHandler', distributed: false, name: 'SiegeHandler'
+  route 206, to: 'GuildHandler', distributed: false, name: 'GuildHandler'
 end
