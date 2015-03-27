@@ -43,6 +43,7 @@ end
 # houses = 3
 # siege weapons = 1
 # weapon = 4
+# door = 5
 # crafting resource = 15
 # currency = 20
 # internal = 30

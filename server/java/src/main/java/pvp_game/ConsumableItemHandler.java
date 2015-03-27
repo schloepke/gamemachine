@@ -9,6 +9,7 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Bounds;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.Guild;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
@@ -78,6 +79,8 @@ public class ConsumableItemHandler extends GameMessageActor {
 					create(worldObject);
 				} else if (worldObject.action == 5) {
 					remove(worldObject.id, worldObject.ownerId);
+				} else if (worldObject.action == 6) {
+					updateState(worldObject);
 				}
 			}
 			sendWorldObjects();
@@ -136,7 +139,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 		}
 		
 	}
-
+	
 	private String genId(WorldObject worldObject) {
 		return worldObject.ownerId + System.currentTimeMillis() + counter.getAndIncrement();
 	}
@@ -255,6 +258,24 @@ public class ConsumableItemHandler extends GameMessageActor {
 		existing.ry = worldObject.ry;
 		existing.rz = worldObject.rz;
 		existing.rw = worldObject.rw;
+
+		WorldObject.db().save(existing);
+		wobjects.put(existing.id, existing);
+		worldObjectGrid.set(toTrackData(existing));
+	}
+	
+	private void updateState(WorldObject worldObject) {
+		WorldObject existing = find(worldObject.id);
+		if (existing == null) {
+			logger.warning("Worldobject with id "+worldObject.id+" not found");
+		}
+		
+		if (!existing.ownerId.equals(characterId) && !GuildHandler.inGuild(existing.ownerId,playerId)) {
+			logger.warning("Door "+worldObject.id+" access denied for "+characterId+" "+playerId);
+			return;
+		}
+		
+		existing.state = worldObject.state;
 
 		WorldObject.db().save(existing);
 		wobjects.put(existing.id, existing);

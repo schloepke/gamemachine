@@ -3,10 +3,22 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+persistent_message Territory {
+  required string id = 1;
+  required string owner = 2;
+  optional int32 recordId = 3;
+  optional string keep = 4;
+}
+
+message Territories {
+  repeated Territory territories = 1;
+}
+  
 persistent_message Guild {
   required string id = 1;
   required string ownerId = 4;
   optional int32 recordId = 5;
+  optional string name = 6;
 }
 
 persistent_message GuildMembers {
@@ -28,12 +40,13 @@ persistent_message GuildAction {
   optional string guildId = 5;
   optional int32 recordId = 6;
   optional string inviteId = 7;
+  optional string guildName = 8;
 }
 
 message Guilds {
   repeated Guild guild = 1;
 }
-  
+
 persistent_message WorldObject {
   optional string playerItemId = 1;
   optional int32 action = 2;
@@ -55,6 +68,7 @@ persistent_message WorldObject {
   optional int32 type = 18;
   optional string grid = 19;
   optional string currentUser = 20;
+  optional int32 state = 21;
 }
 
 message Bounds {
@@ -354,6 +368,8 @@ message GameMessage {
   optional Guilds guilds = 32;
   optional GuildAction guildAction = 33;
   optional GuildMemberList guildMemberList = 34;
+  optional Territory territory = 35;
+  optional Territories territories = 36;
 }
 
 message GameMessages {

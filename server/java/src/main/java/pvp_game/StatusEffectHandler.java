@@ -389,8 +389,6 @@ public class StatusEffectHandler extends UntypedActor {
 
 		int targetBaseHealth = CharacterHandler.currentHealth(vitals.id);
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
-
-		String originGroup = ChatSubscriptions.playerGroup(origin);
 		
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
 			
@@ -400,7 +398,7 @@ public class StatusEffectHandler extends UntypedActor {
 			}
 			
 			// or group members
-			if (!originGroup.equals("nogroup") && ChatSubscriptions.playerGroup(vitals.id).equals(originGroup)) {
+			if (inSameGroup(origin,vitals.id)) {
 				return 0;
 			}
 			
@@ -409,9 +407,15 @@ public class StatusEffectHandler extends UntypedActor {
 				vitals.health = 0;
 			}
 		} else if (effect.type == StatusEffect.Type.AttributeIncrease) {
-			vitals.health += value;
-			if (vitals.health > targetBaseHealth) {
-				vitals.health = targetBaseHealth;
+			
+			// only to self or group members
+			if (vitals.id.equals(origin) || inSameGroup(origin,vitals.id)) {
+				vitals.health += value;
+				if (vitals.health > targetBaseHealth) {
+					vitals.health = targetBaseHealth;
+				}
+			} else {
+				return 0;
 			}
 		}
 
@@ -425,6 +429,33 @@ public class StatusEffectHandler extends UntypedActor {
 		return value;
 	}
 
+	private boolean inGroup(String playerId) {
+		String playerGroup = ChatSubscriptions.playerGroup(playerId);
+		if (playerGroup.equals("nogroup")) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	private String playerGroup(String playerId) {
+		return ChatSubscriptions.playerGroup(playerId);
+	}
+	
+	private boolean inSameGroup(String playerId, String otherId) {
+		if (!inGroup(playerId)) {
+			return false;
+		}
+		
+		String otherGroup = ChatSubscriptions.playerGroup(otherId);
+		
+		if (playerGroup(playerId).equals(otherGroup)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	private int getEffectValue(StatusEffect effect, String skillId, String playerId) {
 		int base = Common.randInt(effect.minValue, effect.maxValue);
 		Character character = CharacterHandler.currentCharacter(playerId);

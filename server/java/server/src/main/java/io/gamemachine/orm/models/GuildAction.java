@@ -30,6 +30,8 @@ CREATE TABLE guild_actions (
 
   guild_action_invite_id character varying(128) DEFAULT NULL,
 
+  guild_action_guild_name character varying(128) DEFAULT NULL,
+
   CONSTRAINT guild_action_pkey PRIMARY KEY (id)
 );
 alter table guild_actions owner to gamemachine;
@@ -56,6 +58,8 @@ CREATE TABLE `guild_actions` (
   `guild_action_guild_id` varchar(128) DEFAULT NULL,
 
   `guild_action_invite_id` varchar(128) DEFAULT NULL,
+
+  `guild_action_guild_name` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

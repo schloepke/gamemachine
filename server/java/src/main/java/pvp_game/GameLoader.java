@@ -19,6 +19,7 @@ public class GameLoader {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(GridExpiration.class), GridExpiration.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(TimeHandler.class), TimeHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(GuildHandler.class), GuildHandler.name);
+		GameMachineLoader.getActorSystem().actorOf(Props.create(TerritoryHandler.class), TerritoryHandler.name);
 		GameMachineLoader.getActorSystem().actorOf(Props.create(ChatSubscriptions.class), ChatSubscriptions.name);
 		
 		Npc.CreateNpcs();

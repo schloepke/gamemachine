@@ -15,18 +15,18 @@ CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CRE
 CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
 
 Table
-CREATE TABLE guilds (
+CREATE TABLE territories (
   id bigserial NOT NULL,
 
-  guild_id character varying(128) NOT NULL,
+  territory_id character varying(128) NOT NULL,
 
-  guild_owner_id character varying(128) NOT NULL,
+  territory_owner character varying(128) NOT NULL,
 
-  guild_name character varying(128) DEFAULT NULL,
+  territory_keep character varying(128) DEFAULT NULL,
 
-  CONSTRAINT guild_pkey PRIMARY KEY (id)
+  CONSTRAINT territory_pkey PRIMARY KEY (id)
 );
-alter table guilds owner to gamemachine;
+alter table territories owner to gamemachine;
 
 Mysql
 
@@ -36,20 +36,20 @@ GRANT ALL PRIVILEGES ON gamemachine.* TO 'gamemachine'@'%' IDENTIFIED BY 'gamema
 FLUSH PRIVILEGES;
 
 Table
-CREATE TABLE `guilds` (
+CREATE TABLE `territories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
 
-  `guild_id` varchar(128) NOT NULL,
+  `territory_id` varchar(128) NOT NULL,
 
-  `guild_owner_id` varchar(128) NOT NULL,
+  `territory_owner` varchar(128) NOT NULL,
 
-  `guild_name` varchar(128) DEFAULT NULL,
+  `territory_keep` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 */
 
-public class Guild extends Model {
+public class Territory extends Model {
 	
 	public static void openTransaction() {
 		open();

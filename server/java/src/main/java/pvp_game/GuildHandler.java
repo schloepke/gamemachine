@@ -17,30 +17,82 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
 
-import com.google.common.base.Strings;
-
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
+import com.google.common.base.Strings;
 
 public class GuildHandler extends GameMessageActor {
 
 	public static ConcurrentHashMap<String, Guild> guilds = new ConcurrentHashMap<String, Guild>();
 	private Map<String,String> invites = new HashMap<String,String>();
+	public static String npcGuild = "new_dawn";
+	public static String npcGuildName = "New Dawn";
 	
 	public static String name = GuildHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	private boolean exists(String id) {
+	public static boolean exists(String id) {
 		return (find(id) != null);
 	}
+		
+	public static List<String> memberList(String id) {
+		List<String> members = new ArrayList<String>();
+		 for (GuildMembers member : GuildMembers.db().where("guild_members_guild_id = ?", id)) {
+			 members.add(member.playerId);
+		 }
+		 return members;
+	}
+		
+	public static boolean memberOf(String id, String playerId) {
+		if (exists(id)) {
+			if (memberList(id).contains(playerId)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 	
-	public Guild myguild() {
+	public static Guild find(String id) {
+		if (!guilds.containsKey(id)) {
+			Guild guild = Guild.db().findFirst("guild_id = ?", id);
+			if (guild == null) {
+				return null;
+			} else {
+				guilds.put(id, guild);
+			}
+		} 
+		return guilds.get(id);
+	}
+	
+	public static boolean inGuild(String guildId, String playerId) {
+		Guild guild = playerGuild(playerId);
+		if (guild != null && guild.id.equals(guildId)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	public static Guild playerGuild(String playerId) {
 		for (Guild guild : Guild.db().findAll()) {
-			if (memberOf(guild.id)) {
+			if (memberOf(guild.id,playerId)) {
 				return guild;
 			}
 		}
 		return null;
+	}
+	
+	private GuildMemberList members(String id) {
+		GuildMemberList gml = new GuildMemberList();
+		gml.guildId = id;
+		 for (String member : memberList(id)) {
+			 gml.addPlayerId(member);
+		 }
+		 return gml;
 	}
 	
 	private void addMember(String guildId, String memberId) {
@@ -57,53 +109,13 @@ public class GuildHandler extends GameMessageActor {
 		GuildMembers.db().deleteWhere("guild_members_player_id = ?", memberId);
 	}
 	
-	private List<String> memberList(String id) {
-		List<String> members = new ArrayList<String>();
-		 for (GuildMembers member : GuildMembers.db().where("guild_members_guild_id = ?", id)) {
-			 members.add(member.playerId);
-		 }
-		 return members;
-	}
-	
-	private GuildMemberList members(String id) {
-		GuildMemberList gml = new GuildMemberList();
-		gml.guildId = id;
-		 for (String member : memberList(id)) {
-			 gml.addPlayerId(member);
-		 }
-		 return gml;
-	}
-	
-	private boolean memberOf(String id) {
-		if (exists(id)) {
-			if (memberList(id).contains(playerId)) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			return false;
-		}
-	}
-	
-	private Guild find(String id) {
-		if (!guilds.containsKey(id)) {
-			Guild guild = Guild.db().findFirst("guild_id = ?", id);
-			if (guild == null) {
-				return null;
-			} else {
-				guilds.put(id, guild);
-			}
-		} 
-		return guilds.get(id);
-	}
-	
 	private void save(Guild guild) {
 		Guild.db().save(guild);
 		guilds.put(guild.id, guild);
 	}
 	
 	private void destroy(Guild guild) {
+		TerritoryHandler.removeOwner(guild.id);
 		Guild.db().deleteWhere("guild_id = ?", guild.id);
 		guilds.remove(guild.id);
 		GuildMembers.db().deleteWhere("guild_members_guild_id = ?", guild.id);
@@ -111,6 +123,16 @@ public class GuildHandler extends GameMessageActor {
 	
 	@Override
 	public void awake() {
+		
+		if (find(npcGuild) == null) {
+			Guild guild = new Guild();
+			guild.id = npcGuild;
+			guild.name = npcGuildName;
+			guild.ownerId = npcGuild;
+							
+			save(guild);
+		}
+		
 		for (Guild guild : Guild.db().findAll()) {
 			guilds.put(guild.id, guild);
 		}
@@ -130,7 +152,7 @@ public class GuildHandler extends GameMessageActor {
 				PlayerCommands.sendGameMessage(gameMessage, playerId);
 				
 			} else if (guildAction.action.equals("members")) {
-				guild = myguild();
+				guild = playerGuild(playerId);
 				if (guild != null) {
 					Guilds guilds = new Guilds();
 					guilds.addGuild(guild);
@@ -149,6 +171,7 @@ public class GuildHandler extends GameMessageActor {
 				
 				guild = new Guild();
 				guild.id = guildAction.guildId;
+				guild.name = guildAction.guildName;
 				guild.ownerId = playerId;
 								
 				save(guild);
@@ -178,7 +201,7 @@ public class GuildHandler extends GameMessageActor {
 								return;
 							}
 							
-							if (memberOf(guild.id)) {
+							if (memberOf(guild.id,playerId)) {
 								logger.warning(playerId+" is already in guild "+guild.id);
 								return;
 							}

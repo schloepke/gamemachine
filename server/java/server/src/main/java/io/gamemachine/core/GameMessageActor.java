@@ -19,7 +19,7 @@ public abstract class GameMessageActor extends GameActor {
 				onPlayerDisconnect(clientManagerEvent.player_id);
 			}
 		} else if (message instanceof String) {
-			
+			onTick((String)message);
 		} else {
 			unhandled(message);
 		}

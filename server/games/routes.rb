@@ -18,4 +18,5 @@ GameMachine::Routes.game_messages do
   route 204, to: 'ConsumableItemHandler', distributed: false, name: 'ConsumableItemHandler'
   route 205, to: 'SiegeHandler', distributed: false, name: 'SiegeHandler'
   route 206, to: 'GuildHandler', distributed: false, name: 'GuildHandler'
+  route 207, to: 'TerritoryHandler', distributed: false, name: 'TerritoryHandler'
 end

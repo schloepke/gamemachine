@@ -27,8 +27,8 @@ public class StatusEffectDef {
 		StatusEffect charge = createStatusEffect(StatusEffect.Type.AttributeDecrease, "charge", 1, "health", 50, 60, null);
 		StatusEffect poison = createStatusEffect(StatusEffect.Type.AttributeDecrease, "poison", 8, "health", 10, 15, null);
 		StatusEffect lightningBolt = createStatusEffect(StatusEffect.Type.AttributeDecrease, "lightning_bolt", 1, "health", 40,50, "Thunder");
-		StatusEffect healingRing = createStatusEffect(StatusEffect.Type.AttributeIncrease, "healing_ring", 5, "health", 20, 25,"Eternal Light");
-		StatusEffect fireField = createStatusEffect(StatusEffect.Type.AttributeDecrease, "fire_field", 5, "health", 20, 25,"Eternal Flame");
+		StatusEffect healingRing = createStatusEffect(StatusEffect.Type.AttributeIncrease, "healing_ring", 10, "health", 20, 25,"Eternal Light");
+		StatusEffect fireField = createStatusEffect(StatusEffect.Type.AttributeDecrease, "fire_field", 10, "health", 20, 25,"Eternal Flame");
 		StatusEffect catapultExplosive = createStatusEffect(StatusEffect.Type.AttributeDecrease, "catapult_explosive", 1,	"health", 200, 300, null);
 		StatusEffect speed = createStatusEffect(StatusEffect.Type.Speed, "speed", 1, "stamina", 5, 5, null);
 		StatusEffect lightAttack = createStatusEffect(StatusEffect.Type.AttributeDecrease, "light_attack", 1, "health", 40, 50, null);
