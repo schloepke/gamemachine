@@ -47,7 +47,7 @@ Should have a live demo up in the next few days now, working on getting a simple
 - Npc's.  Basica npc ai and combat is in.  Waypoint system for automating npc pathing with leaders/followers.  Have guards patrolling around, killing bandits they come across, and killing any players that perform hostile actions that they see.  Also tied into player owned structures so they can guard them for you.
 
 - Ship combat.  Ships themselves work, with multiple players on a ship.  Need to get cannons in game for the combat side to work.
-- 
+
 - Most everything in game is server driven.  If you perform an action in the world your client acts on the response from the server just like every other player.  If you open the door to your house, we send a request to the server, you get back a reply, and then it opens.  This has worked much better then having a system where we treat your client differently then other clients.  For example if you open a door, it persists server side and everyone see's it opening just like you do.  Siege weapons moving and firing is handled the same way.
 
 
