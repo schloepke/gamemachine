@@ -46,10 +46,12 @@ Should have a live demo up in the next few days now, working on getting a simple
 
 - Npc's.  Basica npc ai and combat is in.  Waypoint system for automating npc pathing with leaders/followers.  Have guards patrolling around, killing bandits they come across, and killing any players that perform hostile actions that they see.  Also tied into player owned structures so they can guard them for you.
 
+- Ship combat.  Ships themselves work, with multiple players on a ship.  Need to get cannons in game for the combat side to work.
+- 
 - Most everything in game is server driven.  If you perform an action in the world your client acts on the response from the server just like every other player.  If you open the door to your house, we send a request to the server, you get back a reply, and then it opens.  This has worked much better then having a system where we treat your client differently then other clients.  For example if you open a door, it persists server side and everyone see's it opening just like you do.  Siege weapons moving and firing is handled the same way.
 
 
-- More work then I wanted to do on the client side in Unity.  To support the map sizes I wanted (everything in this game is about being massive), I basically had to throw out a number of features in unity like their LOD system and such.  To be honest no engine is really designed for this kind of game.  On the good side I've got maps with 200,000 trees, 70,000 other misc objects, and frame rates still above 80 fps. 
+- Challenges.  All on the client actually.  Currently using the unity UMA framework for characters, but it's our main performance bottleneck right now.  The unity animation/character system in general is slow. Had to write my own LOD system for the terrain, with the unity built in system the game would be running at 10fps instead of the 80-100 it is now.  So much stuff in most client game engines just basically breaks/works differently at scale.  Doesn't matter what engine it is, none of them are optimized for this kind of game.
 
 
 - Client status.  Still been putting off getting the client source out.  With the way lots of assets are packaged in Unity, you need to leave them where the author's put them or stuff breaks.  So most of the git tools for handling large files just won't work because of this.  And although I don't have that many paid assets, there are enough where there is just no way to bulid the game without them.  Currently I'm looking at a couple of tools that will let me put the large files on amazon S3, which seems to be the best option I've found.  Hopefully I'll get around to this soon...
