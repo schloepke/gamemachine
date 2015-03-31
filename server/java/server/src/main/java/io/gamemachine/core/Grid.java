@@ -277,6 +277,7 @@ public class Grid {
 		gridValue.y = trackData.y;
 		gridValue.z = trackData.z;
 
+		gridValue.trackData.hidden = trackData.hidden;
 		gridValue.trackData.dynamicMessage = trackData.dynamicMessage;
 		gridValue.trackData.clientData = trackData.clientData;
 	}

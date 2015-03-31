@@ -7,6 +7,9 @@ import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 import io.gamemachine.authentication.Authable;
 import io.gamemachine.authentication.AuthorizedPlayers;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Player;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -47,6 +50,12 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	}
 
 	private Integer login(String playerId, String password) {
+		Player player = PlayerService.getInstance().find(playerId);
+		if (player == null) {
+			PlayerService.getInstance().create(playerId, AppConfig.getDefaultGameId());
+			PlayerService.getInstance().setPassword(playerId, password);
+		}
+		
 		return playerAuth.authorize(playerId, password);
 	}
 

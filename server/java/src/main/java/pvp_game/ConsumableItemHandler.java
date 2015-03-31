@@ -6,14 +6,11 @@ import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.core.PlayerVitalsHandler;
 import io.gamemachine.messages.Bounds;
-import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.Guild;
 import io.gamemachine.messages.PlayerItem;
-import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.UseItem;
 import io.gamemachine.messages.WorldObject;
 import io.gamemachine.messages.WorldObjects;
 import io.gamemachine.pathfinding.grid.BoundingBox;
@@ -23,16 +20,17 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import com.google.common.base.Strings;
-
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+
+import com.google.common.base.Strings;
 
 public class ConsumableItemHandler extends GameMessageActor {
 
 	public static String name = ConsumableItemHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
+	private ConcurrentHashMap<String, Long> toRemove = new ConcurrentHashMap<String, Long>();
 	public static ConcurrentHashMap<String, WorldObject> playerAttached = new ConcurrentHashMap<String, WorldObject>();
 	public static ConcurrentHashMap<String, WorldObject> wobjects = new ConcurrentHashMap<String, WorldObject>();
 	public static AtomicLong counter = new AtomicLong();
@@ -56,10 +54,24 @@ public class ConsumableItemHandler extends GameMessageActor {
 		
 		
 		if (gameMessage.hasUseItem()) {
-			handleUseItem(gameMessage.useItem);
+			
+			// Make PlayerItemManager into game message actor and move this there
+			//logger.warning(playerId+ " useItem "+gameMessage.useItem.id+" action "+gameMessage.useItem.action);
+			PlayerItemManager.handleUseItem(gameMessage.useItem,playerId);
 			for (TrackData trackData : defaultGrid.getAll()) {
 				PlayerCommands.sendGameMessage(gameMessage, trackData.id);
 			}
+			return;
+		}
+		
+		if (gameMessage.hasEquippedItem()) {
+			String itemId = PlayerItemManager.getEquippedItem(gameMessage.equippedItem.playerId);
+			if (itemId != null) {
+				//logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+ " equipped with "+itemId);
+				gameMessage.equippedItem.id = itemId;
+				PlayerCommands.sendGameMessage(gameMessage, playerId);
+			}
+			
 			return;
 		}
 
@@ -86,28 +98,43 @@ public class ConsumableItemHandler extends GameMessageActor {
 			sendWorldObjects();
 		} else {
 			sendWorldObjects();
+			removeDead();
 			scheduleOnce(5000l, new GameMessage());
 		}
 
 	}
 
-	private void handleUseItem(UseItem useItem) {
-		logger.warning("useItem "+useItem.id+" action "+useItem.action);
-		Character character = CharacterHandler.currentCharacter(playerId);
-		if (StatusEffectHandler.skillEffects.containsKey(useItem.id)) {
-			PlayerItem playerItem = PlayerItemManager.playerItem(useItem.id, character.id);
-			if (useItem.action.equals("equip")) {
-				StatusEffectHandler.setPassiveSkill(useItem.id, playerId, playerId,StatusEffectTarget.Action.Apply,StatusEffectTarget.PassiveFlag.ManualRemove);
-			} else if (useItem.action.equals("unequip")) {
-				StatusEffectHandler.setPassiveSkill(useItem.id, playerId, playerId,StatusEffectTarget.Action.Remove,StatusEffectTarget.PassiveFlag.NA);
-			} else if (useItem.action.equals("consume")) {
-				if (PlayerItemManager.hasPlayerItem(useItem.id, character.id)) {
-					PlayerItemManager.removePlayerItem(useItem.id, character.id, 1);
-					StatusEffectHandler.setPassiveSkill(useItem.id, playerId, playerId,StatusEffectTarget.Action.Apply,StatusEffectTarget.PassiveFlag.AutoRemove);
+	private void removeDead() {
+		List<String> idsToRemove = new ArrayList<String>();
+		for (WorldObject worldObject : wobjects.values()) {
+			if (worldObject.health <= 0 && worldObject.playerItemId != null) {
+				if (toRemove.containsKey(worldObject.id)) {
+					Long diedAt = toRemove.get(worldObject.id);
+					if (System.currentTimeMillis() - diedAt > 30l) {
+						idsToRemove.add(worldObject.id);
+						logger.warning("Added " + worldObject.id+" to dead queue");
+					}
+				} else {
+					toRemove.put(worldObject.id, System.currentTimeMillis());
 				}
 			}
 		}
+		
+		
+		for (String id : idsToRemove) {
+			WorldObject.db().deleteWhere("world_object_id = ?", id);
+			wobjects.remove(id);
+			toRemove.remove(id);
+			for (Grid grid : GameGrid.gridsStartingWith("default")) {
+				String objectGridName = grid.name.replaceAll("default", "world_objects");
+				Grid objectGrid = GameGrid.xgetGameGrid(objectGridName);
+				objectGrid.remove(id);
+			}
+			logger.warning("Removed " + id+" from worldObjects");
+		}
+		
 	}
+	
 
 	private void sendWorldObjects() {
 		
@@ -303,6 +330,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 	@Override
 	public void onPlayerDisconnect(String playerId) {
 		logger.warning("Player disconnect " + playerId);
+		PlayerVitalsHandler.remove(playerId);
 		List<String> removed = new ArrayList<String>();
 		String characterId = PlayerService.getInstance().getCharacter(playerId);
 		for (WorldObject worldObject : playerAttached.values()) {

@@ -29,7 +29,7 @@ public class Npc {
 			createNpc("npc_bandit"+x,"bandit_male","Bandit"+x,new Vector3(-1150.59,-545.95,38.97));
 		}
 		
-		for (int x = 50; x < 100; x++) {
+		for (int x = 50; x < 200; x++) {
 			createNpc("npc_bandita"+x,"bandit_female","Bandita"+x,new Vector3(-1150.59,-545.95,38.97));
 		}
 		

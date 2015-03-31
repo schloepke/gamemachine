@@ -227,6 +227,7 @@ public class GuildHandler extends GameMessageActor {
 						invites.put(to, inviteId);
 						if (!Strings.isNullOrEmpty(to)) {
 							PlayerCommands.sendGameMessage(gameMessage, to);
+							logger.warning("Invite sent from "+playerId+" to "+guildAction.to);
 						} else {
 							logger.warning("Player id not found for "+guildAction.to);
 						}

@@ -92,6 +92,8 @@ message SiegeCommand {
   optional int32 startUse = 8;
   optional int32 endUse = 9;
   optional string playerId = 10;
+  optional string targetType = 11;
+  optional string targetId = 12;
 }
 
 persistent_message Character {
@@ -136,6 +138,11 @@ message UseItem {
   required string playerId = 4;
 }
 
+message EquippedItem {
+  optional string id = 1;
+  optional string playerId = 2;
+}
+
 message StatusEffect {
   enum Type {
     AttributeDecrease = 0;
@@ -160,6 +167,13 @@ message StatusEffect {
     StaminaRegenDecrease = 19;
     Speed = 20;
 }
+
+  enum DamageType {
+    None = 0;
+    Physical = 1;
+    Magic = 2;
+    Elemental = 3;
+  }
   
   optional Type type = 1;
   optional string id = 2;
@@ -169,6 +183,7 @@ message StatusEffect {
   optional int32 minValue = 6;
   optional int32 maxValue = 7;
   optional string particleEffect = 8;
+  optional DamageType damageType = 9;
 }
 
 message Vitals {
@@ -187,6 +202,7 @@ message Vitals {
   optional int32 staminaRegen = 13;
   optional int32 changed = 14;
   optional string grid = 15;
+  optional int32 staminaDrain = 16;
 }
 
 message VisualEffect {
@@ -306,6 +322,7 @@ message TrackData {
   optional float velX = 24;
   optional float velZ = 25;
   optional int32 zone = 26;
+  optional int32 hidden = 27;
 }
 
 message ClientData {
@@ -370,6 +387,7 @@ message GameMessage {
   optional GuildMemberList guildMemberList = 34;
   optional Territory territory = 35;
   optional Territories territories = 36;
+  optional EquippedItem equippedItem = 37;
 }
 
 message GameMessages {

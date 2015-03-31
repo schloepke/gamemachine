@@ -15,6 +15,12 @@ public class PlayerVitalsHandler {
 		return playerVitals.get(id);
 	}
 	
+	public static void remove(String id) {
+		if (playerVitals.containsKey(id)) {
+			playerVitals.remove(id);
+		}
+	}
+	
 	public static Collection<Vitals> getVitals() {
 		return playerVitals.values();
 	}

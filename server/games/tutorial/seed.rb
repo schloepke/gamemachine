@@ -1,4 +1,3 @@
-
 def add_items(items,player)
   items.each do |item|
     player_item = GameMachine::MessageLib::PlayerItem.new
@@ -16,7 +15,7 @@ def add_items(items,player)
     player_item.set_crafting_resource(item['crafting_resource'])
     player_item.set_is_consumable(item['is_consumable'])
     player_item.set_level(0)
-          
+
     ['consumable','cost','model_info'].each do |component|
       if item[component]
         player_item.send("set_#{component}".to_sym,item[component])
@@ -34,7 +33,6 @@ def add_items(items,player)
   end
 end
 
-
 # Item types
 # consumable = 50
 # wearable = 7
@@ -50,236 +48,248 @@ end
 
 items = [
   {
-    'id' => 'spell_resist_potion',
-    'type' => 50,
-    'name' => 'Spell Resist Potion',
-    'quantity' => 1000000,
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => '',
-     'health' => 100,
-     'max_health' => 100,
-  },
-
-   {
-    'id' => 'helm',
-    'type' => 7,
-    'name' => 'Helm',
-    'harvestable' => 0,
-    'icon' => '',
-    'quantity' => 1000,
-     'health' => 100,
-     'max_health' => 100
+  'id' => 'spell_resist_potion',
+  'type' => 50,
+  'name' => 'Spell Resist Potion',
+  'quantity' => 1000000,
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => '',
+  'health' => 100,
+  'max_health' => 100,
   },
 
   {
-      'id' => 'keep_wall',
-      'type' => 30,
-      'name' => 'keep_wall',
-      'harvestable' => 0,
-      'icon' => '',
-      'quantity' => 1000000,
-    'health' => 1000,
-    'max_health' => 1000
-    },
-{
-    'id' => 'ship',
-    'type' => 2,
-    'name' => 'Ship',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'ship',
-    'quantity' => 1000000,
+  'id' => 'helm',
+  'type' => 7,
+  'name' => 'Helm',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => 1000,
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'keep_wall',
+  'type' => 30,
+  'name' => 'keep_wall',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => 1000000,
   'health' => 1000,
   'max_health' => 1000
   },
   {
-    'id' => 'pier',
-    'type' => 10,
-    'name' => 'Pier',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'pier',
-    'quantity' => 1000000,
-    'health' => 100,
-    'max_health' => 100
+  'id' => 'ship',
+  'type' => 2,
+  'name' => 'Ship',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'ship',
+  'quantity' => 1000000,
+  'health' => 1000,
+  'max_health' => 1000
   },
   {
-    'id' => 'house_large1',
-    'type' => 3,
-    'name' => 'Large house',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'small_house',
-    'quantity' => 1000000,
-    'health' => 1000,
-    'max_health' => 1000
-  },
-  {
-    'id' => 'wood_shack1',
-    'type' => 3,
-    'name' => 'Wood shack',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'small_house',
-    'quantity' => 1000000,
-    'health' => 1000,
-    'max_health' => 1000
-  },
-  {
-    'id' => 'catapult',
-    'type' => 1,
-    'name' => 'Catapult',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'catapult',
-    'quantity' => 1000000,
-    'is_consumable' => true,
-    'health' => 1000,
-    'max_health' => 1000
-  },
-
-{
-    'id' => 'katana',
-    'type' => 4,
-    'name' => 'Katana',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'katana',
-    'quantity' => 1000000,
-    'weapon' => true,
-    'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
-    set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("Katana").set_weapon_type("1hsword"),
+  'id' => 'pier',
+  'type' => 10,
+  'name' => 'Pier',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'pier',
+  'quantity' => 1000000,
   'health' => 100,
   'max_health' => 100
   },
-    
   {
-      'id' => 'longbow',
-      'type' => 4,
-      'name' => 'Longbow',
-      'harvestable' => 0,
-      'craftable' => 1,
-      'icon' => 'longbow',
-      'quantity' => 1000000,
-      'weapon' => true,
-      'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.096).set_attach_y(-0.004).
-    set_attach_z(-0.017).set_rotate_x(30).set_rotate_y(-180).set_rotate_z(0).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-      set_resource("medieval_weapons").set_prefab("Long_bow_A").set_weapon_type("bow"),
-    'health' => 100,
-    'max_health' => 100
-    },
+  'id' => 'house_large1',
+  'type' => 3,
+  'name' => 'Large house',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'small_house',
+  'quantity' => 1000000,
+  'health' => 1000,
+  'max_health' => 1000
+  },
+  {
+  'id' => 'wood_shack1',
+  'type' => 3,
+  'name' => 'Wood shack',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'small_house',
+  'quantity' => 1000000,
+  'health' => 1000,
+  'max_health' => 1000
+  },
+  {
+  'id' => 'catapult',
+  'type' => 1,
+  'name' => 'Catapult',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'catapult',
+  'quantity' => 1000000,
+  'is_consumable' => true,
+  'health' => 1000,
+  'max_health' => 1000
+  },
+  {
+  'id' => 'ballista',
+  'type' => 1,
+  'name' => 'Ballista',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'ballista',
+  'quantity' => 1000000,
+  'is_consumable' => true,
+  'health' => 1000,
+  'max_health' => 1000
+  },
 
   {
-    'id' => '2hsword',
-    'type' => 4,
-    'name' => '2h Sword',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => '2hsword',
-    'quantity' => 1000000,
-    'weapon' => true,
-    'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
-    set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("2H_Sword_A").set_weapon_type("2hsword"),
-    'health' => 100,
-    'max_health' => 100
+  'id' => 'katana',
+  'type' => 4,
+  'name' => 'Katana',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'katana',
+  'quantity' => 1000000,
+  'weapon' => true,
+  'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
+  set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+  set_resource("medieval_weapons").set_prefab("Katana").set_weapon_type("1hsword"),
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'longbow',
+  'type' => 4,
+  'name' => 'Longbow',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'longbow',
+  'quantity' => 1000000,
+  'weapon' => true,
+  'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.096).set_attach_y(-0.004).
+  set_attach_z(-0.017).set_rotate_x(30).set_rotate_y(-180).set_rotate_z(0).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+  set_resource("medieval_weapons").set_prefab("Long_bow_A").set_weapon_type("bow"),
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => '2hsword',
+  'type' => 4,
+  'name' => '2h Sword',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => '2hsword',
+  'quantity' => 1000000,
+  'weapon' => true,
+  'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
+  set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+  set_resource("medieval_weapons").set_prefab("2H_Sword_A").set_weapon_type("2hsword"),
+  'health' => 100,
+  'max_health' => 100
   },
   {
   'id' => 'staff',
   'type' => 4,
-    'name' => 'Staff',
-    'harvestable' => 0,
-    'craftable' => 1,
-    'icon' => 'staff',
-    'quantity' => 1000000,
-    'weapon' => true,
-    'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
-    set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
-    set_resource("medieval_weapons").set_prefab("Mage_Staff").set_weapon_type("staff"),
-    'health' => 100,
-    'max_health' => 100
-  },
-
-  {
-    'id' => 'shoes',
-    'type' => 7,
-    'name' => 'Shoes',
-    'harvestable' => 0,
-    'icon' => '',
-    'quantity' => -1,
-    'health' => 100,
-    'max_health' => 100
-  },
-
-  {
-    'id' => 'iron_ore',
-    'type' => 15,
-    'name' => 'Iron Ore',
-    'harvestable' => 1,
-    'icon' => 'iron_ore',
-    'quantity' => 1000000,
-    'crafting_resource' => 1,
-    'health' => 100,
-    'max_health' => 100
-  },
-
-  {
-    'id' => 'good_rock',
-    'type' => 15,
-    'name' => 'Good Rock',
-    'harvestable' => 1,
-    'icon' => 'good_rock',
-    'quantity' => 1000000,
-    'crafting_resource' => 1,
-    'health' => 100,
-    'max_health' => 100
-  },
-
-{
-    'id' => 'wood',
-    'type' => 15,
-    'name' => 'Wood',
-    'harvestable' => 1,
-    'icon' => 'wood',
-    'quantity' => 1000000,
-    'crafting_resource' => 1,
+  'name' => 'Staff',
+  'harvestable' => 0,
+  'craftable' => 1,
+  'icon' => 'staff',
+  'quantity' => 1000000,
+  'weapon' => true,
+  'model_info' => GameMachine::MessageLib::ModelInfo.new.set_attach_x(-0.099).set_attach_y(0.189).
+  set_attach_z(-0.024).set_rotate_x(0).set_rotate_y(0).set_rotate_z(-90).set_scale_x(1).set_scale_y(1).set_scale_z(1).
+  set_resource("medieval_weapons").set_prefab("Mage_Staff").set_weapon_type("staff"),
   'health' => 100,
   'max_health' => 100
   },
 
   {
-    'id' => 'gold',
-    'type' => 20,
-    'name' => 'Gold',
-    'harvestable' => 0,
-    'icon' => '',
-    'quantity' => -1,
-    'health' => 100,
-    'max_health' => 100
+  'id' => 'shoes',
+  'type' => 7,
+  'name' => 'Shoes',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => -1,
+  'health' => 100,
+  'max_health' => 100
   },
 
   {
-    'id' => 'copper',
-    'type' => 20,
-    'name' => 'Copper',
-    'harvestable' => 0,
-    'icon' => '',
-    'quantity' => -1,
-    'health' => 100,
-    'max_health' => 100
+  'id' => 'iron_ore',
+  'type' => 15,
+  'name' => 'Iron Ore',
+  'harvestable' => 1,
+  'icon' => 'iron_ore',
+  'quantity' => 1000000,
+  'crafting_resource' => 1,
+  'health' => 100,
+  'max_health' => 100
   },
 
   {
-    'id' => 'silver',
-    'type' => 20,
-    'name' => 'silver',
-    'harvestable' => 0,
-    'icon' => '',
-    'quantity' => -1,
-    'health' => 100,
-    'max_health' => 100
+  'id' => 'good_rock',
+  'type' => 15,
+  'name' => 'Good Rock',
+  'harvestable' => 1,
+  'icon' => 'good_rock',
+  'quantity' => 1000000,
+  'crafting_resource' => 1,
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'wood',
+  'type' => 15,
+  'name' => 'Wood',
+  'harvestable' => 1,
+  'icon' => 'wood',
+  'quantity' => 1000000,
+  'crafting_resource' => 1,
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'gold',
+  'type' => 20,
+  'name' => 'Gold',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => -1,
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'copper',
+  'type' => 20,
+  'name' => 'Copper',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => -1,
+  'health' => 100,
+  'max_health' => 100
+  },
+
+  {
+  'id' => 'silver',
+  'type' => 20,
+  'name' => 'silver',
+  'harvestable' => 0,
+  'icon' => '',
+  'quantity' => -1,
+  'health' => 100,
+  'max_health' => 100
   }
 ]
 
@@ -289,60 +299,67 @@ add_items(items,'global')
 
 items = [
   {
-    'id' => 'ship',
-    'item1' => 'wood',
-    'item1_quantity' => 2,
-    'item2' => 'iron_ore',
-    'item2_quantity' => 2
+  'id' => 'ship',
+  'item1' => 'wood',
+  'item1_quantity' => 2,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 2
   },
   {
-    'id' => 'pier',
-    'item1' => 'wood',
-    'item1_quantity' => 30,
-    'item2' => 'iron_ore',
-    'item2_quantity' => 10
+  'id' => 'pier',
+  'item1' => 'wood',
+  'item1_quantity' => 30,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 10
   },
   {
-    'id' => 'house_large1',
-    'item1' => 'wood',
-    'item1_quantity' => 20,
-    'item2' => 'iron_ore',
-    'item2_quantity' => 5
+  'id' => 'house_large1',
+  'item1' => 'wood',
+  'item1_quantity' => 20,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 5
   },
   {
-    'id' => 'wood_shack1',
-    'item1' => 'wood',
-    'item1_quantity' => 18,
-    'item2' => 'iron_ore',
-    'item2_quantity' => 5
+  'id' => 'wood_shack1',
+  'item1' => 'wood',
+  'item1_quantity' => 18,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 5
   },
   {
-    'id' => 'catapult',
-    'item1' => 'wood',
-    'item1_quantity' => 3,
-    'item2' => 'iron_ore',
-    'item2_quantity' => 1
+  'id' => 'catapult',
+  'item1' => 'wood',
+  'item1_quantity' => 3,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 1
   },
   {
-    'id' => 'katana',
-    'item1' => 'iron_ore',
-    'item1_quantity' => 2
+  'id' => 'ballista',
+  'item1' => 'wood',
+  'item1_quantity' => 4,
+  'item2' => 'iron_ore',
+  'item2_quantity' => 1
   },
   {
-    'id' => '2hsword',
-    'item1' => 'iron_ore',
-    'item1_quantity' => 4
+  'id' => 'katana',
+  'item1' => 'iron_ore',
+  'item1_quantity' => 2
   },
   {
-    'id' => 'staff',
-    'item1' => 'wood',
-    'item1_quantity' => 2
+  'id' => '2hsword',
+  'item1' => 'iron_ore',
+  'item1_quantity' => 4
   },
   {
-      'id' => 'longbow',
-      'item1' => 'wood',
-      'item1_quantity' => 3
-    }
+  'id' => 'staff',
+  'item1' => 'wood',
+  'item1_quantity' => 2
+  },
+  {
+  'id' => 'longbow',
+  'item1' => 'wood',
+  'item1_quantity' => 3
+  }
 ]
 
 items.each do |item|
@@ -365,140 +382,184 @@ end
 
 skills = [
   {
-          'id' => 'light_attack',
-          'name' => 'Light Attack',
-          'category' => 'weapon',
-          'weapon_type' => '1hsword',
-          'damage_type' => 'st',
-          'icon' => 'Icon.1_46',
-          'resource' => 'stamina',
-          'resource_cost' => 20,
-          'range' => 5,
-        },
+  'id' => 'light_attack',
+  'name' => 'Light Attack',
+  'category' => 'weapon',
+  'weapon_type' => '1hsword',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 20,
+  'range' => 2,
+  },
   {
-        'id' => 'deadly_attack',
-        'name' => 'Deadly Attack',
-        'category' => 'weapon',
-        'weapon_type' => 'bow',
-        'damage_type' => 'st',
-        'icon' => 'Icon.1_46',
-        'resource' => 'stamina',
-        'resource_cost' => 1,
-        'range' => 20,
-      },
+  'id' => '1hsword_auto_attack',
+  'name' => 'Auto Attack',
+  'category' => 'weapon',
+  'weapon_type' => '1hsword',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 5,
+  'range' => 2,
+  },
   {
-      'id' => 'poison_arrow',
-      'name' => 'Poison arrow',
-      'category' => 'weapon',
-      'weapon_type' => 'bow',
-      'damage_type' => 'st',
-      'icon' => 'Icon.1_46',
-      'resource' => 'stamina',
-      'resource_cost' => 200,
-      'range' => 20,
-    },
+   'id' => 'bow_auto_attack',
+   'name' => 'Auto Attack',
+   'category' => 'weapon',
+   'weapon_type' => 'bow',
+   'damage_type' => 'st',
+   'icon' => 'Icon.1_46',
+   'resource' => 'stamina',
+   'resource_cost' => 5,
+   'range' => 20,
+   },
   {
-    'id' => 'poison_blade',
-    'name' => 'Poison blade',
+   'id' => '2hsword_auto_attack',
+   'name' => 'Auto Attack',
+   'category' => 'weapon',
+   'weapon_type' => '2hsword',
+   'damage_type' => 'st',
+   'icon' => 'Icon.1_46',
+   'resource' => 'stamina',
+   'resource_cost' => 5,
+   'range' => 2,
+   },
+  {
+    'id' => 'staff_auto_attack',
+    'name' => 'Auto Attack',
     'category' => 'weapon',
-    'weapon_type' => '1hsword',
+    'weapon_type' => 'staff',
     'damage_type' => 'st',
-    'icon' => 'Icon.1_13',
-    'resource' => 'magic',
-    'resource_cost' => 200,
-    'range' => 3,
-  },
-  {
-    'id' => 'cleave',
-    'name' => 'Cleave',
-    'category' => 'weapon',
-    'weapon_type' => '2hsword',
-    'damage_type' => 'pbaoe',
-    'icon' => 'Icon.1_13',
+    'icon' => 'Icon.1_46',
     'resource' => 'stamina',
-    'resource_cost' => 100,
-    'range' => 5,
-  },
-
-  {
-    'id' => 'charge',
-    'name' => 'Charge',
-    'category' => 'weapon',
-    'weapon_type' => '2hsword',
-    'damage_type' => 'pbaoe',
-    'icon' => 'Icon.1_13',
-    'resource' => 'stamina',
-    'resource_cost' => 200,
-    'range' => 10,
-  },
-
-  {
-    'id' => 'staff_heal',
-    'name' => 'Staff heal',
-    'category' => 'weapon',
-    'weapon_type' => 'staff',
-    'damage_type' => 'aoe',
-    'icon' => 'Icon.3_35',
-    'resource' => 'magic',
-    'resource_cost' => 300,
-    'range' => 10,
-  },
-  {
-    'id' => 'fire_field',
-    'name' => 'Fire Field',
-    'category' => 'weapon',
-    'weapon_type' => 'staff',
-    'damage_type' => 'aoe',
-    'icon' => 'Icon.3_35',
-    'resource' => 'magic',
-    'resource_cost' => 300,
-    'range' => 10,
-  },
-  {
-    'id' => 'lightning_bolt',
-    'name' => 'Lightning bolt',
-    'category' => 'weapon',
-    'weapon_type' => 'staff',
-    'damage_type' => 'aoe',
-    'icon' => 'Icon.1_12',
-    'resource' => 'magic',
-    'resource_cost' => 200,
-    'range' => 5,
-  },
-  {
-    'id' => 'catapult_explosive',
-    'name' => 'Catapult explosive shot',
-    'category' => 'weapon',
-    'weapon_type' => 'siege',
-    'damage_type' => 'aoe',
-    'icon' => 'Icon.1_12',
-    'resource' => 'stamina',
-    'resource_cost' => 200,
-    'range' => 10,
-  },
-  {
-      'id' => 'speed',
-      'name' => 'speed',
-      'category' => 'weapon',
-      'weapon_type' => 'bow',
-      'damage_type' => 'self',
-      'icon' => 'Icons8_87',
-      'resource' => 'stamina',
-      'resource_cost' => 100,
-      'range' => 1,
+    'resource_cost' => 5,
+    'range' => 20,
     },
   {
-        'id' => 'stealth',
-        'name' => 'stealth',
-        'category' => 'weapon',
-        'weapon_type' => 'bow',
-        'damage_type' => 'self',
-        'icon' => 'Icons8_87',
-        'resource' => 'stamina',
-        'resource_cost' => 100,
-        'range' => 1,
-      }
-  
+  'id' => 'deadly_attack',
+  'name' => 'Deadly Attack',
+  'category' => 'weapon',
+  'weapon_type' => 'bow',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 1,
+  'range' => 20,
+  },
+  {
+  'id' => 'poison_arrow',
+  'name' => 'Poison arrow',
+  'category' => 'weapon',
+  'weapon_type' => 'bow',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 100,
+  'range' => 20,
+  },
+  {
+  'id' => 'poison_blade',
+  'name' => 'Poison blade',
+  'category' => 'weapon',
+  'weapon_type' => '1hsword',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_13',
+  'resource' => 'magic',
+  'resource_cost' => 100,
+  'range' => 2,
+  },
+  {
+  'id' => 'cleave',
+  'name' => 'Cleave',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'pbaoe',
+  'icon' => 'Icon.1_13',
+  'resource' => 'stamina',
+  'resource_cost' => 100,
+  'range' => 5,
+  },
+
+  {
+  'id' => 'charge',
+  'name' => 'Charge',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'pbaoe',
+  'icon' => 'Icon.1_13',
+  'resource' => 'stamina',
+  'resource_cost' => 150,
+  'range' => 10,
+  },
+
+  {
+  'id' => 'staff_heal',
+  'name' => 'Staff heal',
+  'category' => 'weapon',
+  'weapon_type' => 'staff',
+  'damage_type' => 'aoe',
+  'icon' => 'Icon.3_35',
+  'resource' => 'magic',
+  'resource_cost' => 200,
+  'range' => 10,
+  },
+  {
+  'id' => 'fire_field',
+  'name' => 'Fire Field',
+  'category' => 'weapon',
+  'weapon_type' => 'staff',
+  'damage_type' => 'aoe',
+  'icon' => 'Icon.3_35',
+  'resource' => 'magic',
+  'resource_cost' => 200,
+  'range' => 10,
+  },
+  {
+  'id' => 'lightning_bolt',
+  'name' => 'Lightning bolt',
+  'category' => 'weapon',
+  'weapon_type' => 'staff',
+  'damage_type' => 'aoe',
+  'icon' => 'Icon.1_12',
+  'resource' => 'magic',
+  'resource_cost' => 200,
+  'range' => 5,
+  },
+  {
+  'id' => 'catapult_explosive',
+  'name' => 'Catapult explosive shot',
+  'category' => 'weapon',
+  'weapon_type' => 'siege',
+  'damage_type' => 'aoe',
+  'icon' => 'Icon.1_12',
+  'resource' => 'stamina',
+  'resource_cost' => 50,
+  'range' => 10,
+  },
+  {
+  'id' => 'ballista_explosive',
+  'name' => 'Ballista explosive shot',
+  'category' => 'weapon',
+  'weapon_type' => 'siege',
+  'damage_type' => 'aoe',
+  'icon' => 'Icon.1_12',
+  'resource' => 'stamina',
+  'resource_cost' => 50,
+  'range' => 10,
+  },
+  {
+  'id' => 'speed',
+  'name' => 'speed',
+  'category' => 'weapon',
+  'weapon_type' => 'bow',
+  'damage_type' => 'self',
+  'icon' => 'Icons8_87',
+  'resource' => 'stamina',
+  'resource_cost' => 100,
+  'range' => 1,
+  }
+
 ]
 
 characters = GameMachine::JavaLib::Commands.get_characters.map {|c| c.id}
@@ -529,7 +590,7 @@ characters.each do |char|
   end
 end
 
-playerskills = GameMachine::MessageLib::PlayerSkills.new 
+playerskills = GameMachine::MessageLib::PlayerSkills.new
 playerskills.playerSkill = GameMachine::MessageLib::PlayerSkill.db.where("player_skill_character_id = ?", 'global')
 File.open(File.join(ENV['APP_ROOT'],'skills.proto'),'w') {|f| f.write playerskills.to_byte_array}
-  
+

@@ -14,25 +14,33 @@ public class StatusEffectDef {
 		
 		
 		// Passive
-		StatusEffect spellResistPotion = createStatusEffect(StatusEffect.Type.SpellResistIncrease, "spell_resist_potion", 30, "passive", 100, 100, null);
+		StatusEffect spellResistPotion = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.SpellResistIncrease, "spell_resist_potion", 30, "passive", 100, 100, null);
 		addSkill("spell_resist_potion",spellResistPotion);
 		
-		StatusEffect staff = createStatusEffect(StatusEffect.Type.ArmorIncrease, "staff", 120, "passive", 100, 100, null);
+		StatusEffect staff = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.ArmorIncrease, "staff", 120, "passive", 100, 100, null);
 		addSkill("staff",staff);
 		
 		
 		// Active
-		StatusEffect deadlyAttack = createStatusEffect(StatusEffect.Type.AttributeDecrease, "deadly_attack", 1, "health", 500, 1000, null);
-		StatusEffect cleave = createStatusEffect(StatusEffect.Type.AttributeDecrease, "cleave", 1, "health", 80, 100, null);
-		StatusEffect charge = createStatusEffect(StatusEffect.Type.AttributeDecrease, "charge", 1, "health", 50, 60, null);
-		StatusEffect poison = createStatusEffect(StatusEffect.Type.AttributeDecrease, "poison", 8, "health", 10, 15, null);
-		StatusEffect lightningBolt = createStatusEffect(StatusEffect.Type.AttributeDecrease, "lightning_bolt", 1, "health", 40,50, "Thunder");
-		StatusEffect healingRing = createStatusEffect(StatusEffect.Type.AttributeIncrease, "healing_ring", 10, "health", 20, 25,"Eternal Light");
-		StatusEffect fireField = createStatusEffect(StatusEffect.Type.AttributeDecrease, "fire_field", 10, "health", 20, 25,"Eternal Flame");
-		StatusEffect catapultExplosive = createStatusEffect(StatusEffect.Type.AttributeDecrease, "catapult_explosive", 1,	"health", 200, 300, null);
-		StatusEffect speed = createStatusEffect(StatusEffect.Type.Speed, "speed", 1, "stamina", 5, 5, null);
-		StatusEffect lightAttack = createStatusEffect(StatusEffect.Type.AttributeDecrease, "light_attack", 1, "health", 40, 50, null);
+		StatusEffect deadlyAttack = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "deadly_attack", 1, "health", 500, 1000, null);
+		StatusEffect cleave = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "cleave", 1, "health", 80, 100, null);
+		StatusEffect charge = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "charge", 1, "health", 50, 60, null);
+		StatusEffect poison = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "poison", 8, "health", 20, 30, null);
+		StatusEffect lightningBolt = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "lightning_bolt", 1, "health", 40,50, "Thunder");
+		StatusEffect healingRing = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeIncrease, "healing_ring", 10, "health", 20, 25,"Eternal Light");
+		StatusEffect fireField = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "fire_field", 10, "health", 20, 25,"Eternal Flame");
+		StatusEffect catapultExplosive = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "catapult_explosive", 1,	"health", 300, 500, null);
+		StatusEffect ballistaExplosive = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "ballista_explosive", 1,	"health", 300, 500, null);
+		StatusEffect speed = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.Speed, "speed", 1, "stamina", 5, 5, null);
+		StatusEffect lightAttack = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "light_attack", 1, "health", 40, 50, null);
+		StatusEffect meleeAutoAttack = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "melee_auto_attack", 1, "health", 40, 50, null);
+		StatusEffect rangedAutoAttack = createStatusEffect(StatusEffect.DamageType.None,StatusEffect.Type.AttributeDecrease, "ranged_auto_attack", 1, "health", 40, 50, null);
 				
+		
+		addSkill("1hsword_auto_attack", meleeAutoAttack);
+		addSkill("2hsword_auto_attack", meleeAutoAttack);
+		addSkill("bow_auto_attack", rangedAutoAttack);
+		addSkill("staff_auto_attack", rangedAutoAttack);
 		
 		addSkill("light_attack",lightAttack);
 		addSkill("deadly_attack",deadlyAttack);
@@ -46,6 +54,7 @@ public class StatusEffectDef {
 		addSkill("staff_heal",healingRing);
 		addSkill("fire_field",fireField);
 		addSkill("catapult_explosive",catapultExplosive);
+		addSkill("ballista_explosive",ballistaExplosive);
 		addSkill("speed",speed);
 		
 		
@@ -56,7 +65,7 @@ public class StatusEffectDef {
 	
 	}
 
-	private static StatusEffect createStatusEffect(StatusEffect.Type type, String id, int ticks,
+	private static StatusEffect createStatusEffect(StatusEffect.DamageType damageType, StatusEffect.Type type, String id, int ticks,
 			String attribute, int minValue, int maxValue, String particleEffect) {
 		StatusEffect e = new StatusEffect();
 		e.type = type;

@@ -558,6 +558,22 @@ public class StatusEffectHandler extends UntypedActor {
 					vitals.magic = magic;
 				}
 			}
+			
+			if (!vitals.id.startsWith("npc")) {
+				Grid grid = GameGrid.getPlayerGrid("default", vitals.id);
+				TrackData trackData = grid.get(vitals.id);
+				if (trackData != null) {
+					if (trackData.hasHidden()) {
+						int drain = 4;
+						if (vitals.stamina >= drain) {
+							vitals.stamina -= drain;
+						}
+					}
+				}
+				
+			}
+			
+			
 		}
 		sendVitals();
 	}
