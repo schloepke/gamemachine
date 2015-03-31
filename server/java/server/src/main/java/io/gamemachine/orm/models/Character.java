@@ -20,7 +20,7 @@ CREATE TABLE characters (
 
   character_id character varying(128) NOT NULL,
 
-  character_uma_data character varying(128) DEFAULT NULL,
+  character_uma_data character varying(10000) DEFAULT NULL,
 
   character_health integer DEFAULT NULL,
 

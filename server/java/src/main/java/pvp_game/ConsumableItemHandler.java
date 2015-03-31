@@ -67,7 +67,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 		if (gameMessage.hasEquippedItem()) {
 			String itemId = PlayerItemManager.getEquippedItem(gameMessage.equippedItem.playerId);
 			if (itemId != null) {
-				//logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+ " equipped with "+itemId);
+				logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+ " equipped with "+itemId);
 				gameMessage.equippedItem.id = itemId;
 				PlayerCommands.sendGameMessage(gameMessage, playerId);
 			}
