@@ -70,6 +70,8 @@ public class ConsumableItemHandler extends GameMessageActor {
 				logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+ " equipped with "+itemId);
 				gameMessage.equippedItem.id = itemId;
 				PlayerCommands.sendGameMessage(gameMessage, playerId);
+			} else {
+				logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+" failed");
 			}
 			
 			return;
