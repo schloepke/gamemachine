@@ -27,7 +27,8 @@ For the game itself we took the most challenging, complicated multiplayer game w
 
 Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
 
-Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Although we are making sure it retains the scalability, performance, and other features we want to highlight. 
+Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Some of the game logic is using static concurrent hashmaps for caching instead of the caching layers.  These things are easily moved over to the production caching system which is scalable across multiple nodes, but I'm leaving that until things solidify more as it does make it a bit more difficult to iterate on quickly (and things are moving fast right now).
+
 * Game Status Update (4/1/15)
 
 Just cut an early release of the game with most of the below functional.  It's running on a live server.  You can download a windows client here:
