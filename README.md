@@ -28,9 +28,11 @@ For the game itself we took the most challenging, complicated multiplayer game w
 Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
 
 Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Although we are making sure it retains the scalability, performance, and other features we want to highlight. 
-* Game Status Update (3/28/15)
+* Game Status Update (4/1/15)
 
-Should have a live demo up in the next few days now, working on getting a simple website setup for the game so folks can create accounts and try it out.  Here are some highlights of what's done so far.
+Just cut an early release of the game with most of the below functional.  It's running on a live server.  You can download a windows client here:
+
+https://s3.amazonaws.com/gamemachine/pvp_mmo.zip
 
 -  Complete combat system based on status effects that is 100% server driven.  Status effects can apply to players, npc's, or any static game object.  Single target and aoe damage.  Effects can be single shot or tick over time.  There are also passive and active effects, where passive effects last for a set duration, and active effects are either one time or tick for X number of ticks.  Items are also tied into this where items can be linked to effects.  Currently if you equip an item that is linked it automatically applies the effect, such as armor increase, etc..  And automatically removes it when you unequip.
 
