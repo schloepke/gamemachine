@@ -223,13 +223,14 @@ message StatusEffectResult {
 
 message StatusEffectTarget {
   enum Action {
-    Apply = 0;
-    Remove = 1;
+  	None = 0;
+    Apply = 1;
+    Remove = 2;
   }
   enum PassiveFlag {
-    AutoRemove = 0;
-    ManualRemove = 1;
-    NA = 2;
+  	NA = 0;
+    AutoRemove = 1;
+    ManualRemove = 2;
   }
   required string target = 1;
   required string skill = 2;
@@ -251,6 +252,11 @@ message Attack {
   required string target = 2;
   required string skill = 3;
   optional Vector3 targetLocation = 4;
+}
+
+message ComboAttack {
+  required string id = 1;
+  repeated Attack attack = 2;
 }
 
 message Harvest {
@@ -388,6 +394,7 @@ message GameMessage {
   optional Territory territory = 35;
   optional Territories territories = 36;
   optional EquippedItem equippedItem = 37;
+  optional ComboAttack comboAttack = 38;
 }
 
 message GameMessages {
@@ -414,6 +421,9 @@ local_persistent_message PlayerSkill {
   optional int32 range = 12;
   optional string statusEffectId = 13;
   optional int32 level = 14;
+  optional int32 resourceCostPerTick = 15;
+  optional int32 isComboPart = 16;
+  optional int32 isPassive = 17;
 }
 
 message PlayerSkills {

@@ -295,7 +295,7 @@ items = [
 
 add_items(items,'global')
 
-# Craftable items
+# Craftable itemsw
 
 items = [
   {
@@ -404,38 +404,87 @@ skills = [
   'range' => 2,
   },
   {
-   'id' => 'bow_auto_attack',
-   'name' => 'Auto Attack',
-   'category' => 'weapon',
-   'weapon_type' => 'bow',
-   'damage_type' => 'st',
-   'icon' => 'Icon.1_46',
-   'resource' => 'stamina',
-   'resource_cost' => 5,
-   'range' => 20,
-   },
+  'id' => 'bow_auto_attack',
+  'name' => 'Auto Attack',
+  'category' => 'weapon',
+  'weapon_type' => 'bow',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 5,
+  'range' => 20,
+  },
   {
-   'id' => '2hsword_auto_attack',
-   'name' => 'Auto Attack',
-   'category' => 'weapon',
-   'weapon_type' => '2hsword',
-   'damage_type' => 'st',
-   'icon' => 'Icon.1_46',
-   'resource' => 'stamina',
-   'resource_cost' => 5,
-   'range' => 2,
-   },
+  'id' => '2hsword_auto_attack',
+  'name' => 'Auto Attack',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 5,
+  'range' => 2,
+  },
   {
-    'id' => 'staff_auto_attack',
-    'name' => 'Auto Attack',
-    'category' => 'weapon',
-    'weapon_type' => 'staff',
-    'damage_type' => 'st',
-    'icon' => 'Icon.1_46',
-    'resource' => 'stamina',
-    'resource_cost' => 5,
-    'range' => 20,
-    },
+  'id' => 'fire_grasp',
+  'name' => 'Fire Grasp',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'combo',
+  'icon' => 'Icon.1_46',
+  'resource' => 'fire_grasp_damage,fire_grasp_resist,fire_grasp_root',
+  },
+  {
+  'id' => 'fire_grasp_damage',
+  'name' => 'Fire Grasp',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'self_aoe',
+  'icon' => 'Icon.1_46',
+  'resource' => 'magic',
+  'resource_cost' => 20,
+  'resource_cost_per_tick' => 5,
+  'range' => 4,
+  'is_combo_part' => 1
+  },
+  {
+  'id' => 'fire_grasp_resist',
+  'name' => 'Fire Grasp',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'self',
+  'icon' => 'Icon.1_46',
+  'resource' => 'magic',
+  'resource_cost' => 0,
+  'range' => 4,
+  'is_passive' => 1,
+    'is_combo_part' => 1,
+    
+  },
+  {
+  'id' => 'fire_grasp_root',
+  'name' => 'Fire Grasp',
+  'category' => 'weapon',
+  'weapon_type' => '2hsword',
+  'damage_type' => 'self_aoe',
+  'icon' => 'Icon.1_46',
+  'resource' => 'magic',
+  'resource_cost' => 0,
+  'range' => 4,
+    'is_passive' => 1,
+   'is_combo_part' => 1
+  },
+  {
+  'id' => 'staff_auto_attack',
+  'name' => 'Auto Attack',
+  'category' => 'weapon',
+  'weapon_type' => 'staff',
+  'damage_type' => 'st',
+  'icon' => 'Icon.1_46',
+  'resource' => 'stamina',
+  'resource_cost' => 5,
+  'range' => 20,
+  },
   {
   'id' => 'deadly_attack',
   'name' => 'Deadly Attack',
@@ -455,7 +504,8 @@ skills = [
   'damage_type' => 'st',
   'icon' => 'Icon.1_46',
   'resource' => 'stamina',
-  'resource_cost' => 100,
+  'resource_cost' => 40,
+  'resource_cost_per_tick' => 10,
   'range' => 20,
   },
   {
@@ -466,7 +516,8 @@ skills = [
   'damage_type' => 'st',
   'icon' => 'Icon.1_13',
   'resource' => 'magic',
-  'resource_cost' => 100,
+  'resource_cost' => 40,
+  'resource_cost_per_tick' => 5,
   'range' => 2,
   },
   {
@@ -501,7 +552,8 @@ skills = [
   'damage_type' => 'aoe',
   'icon' => 'Icon.3_35',
   'resource' => 'magic',
-  'resource_cost' => 200,
+  'resource_cost' => 100,
+  'resource_cost_per_tick' => 10,
   'range' => 10,
   },
   {
@@ -575,7 +627,10 @@ characters.each do |char|
     citem.set_icon(item['icon'])
     citem.set_resource(item['resource'])
     citem.set_resource_cost(item['resource_cost'])
+    citem.set_resource_cost_per_tick(item['resource_cost_per_tick'])
     citem.set_range(item['range'])
+    citem.set_is_combo_part(item['is_combo_part'])
+    citem.set_is_passive(item['is_passive'])
     citem.set_character_id(char)
     citem.set_level(0)
 

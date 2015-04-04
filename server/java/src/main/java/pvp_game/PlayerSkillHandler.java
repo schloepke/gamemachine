@@ -29,10 +29,11 @@ public class PlayerSkillHandler extends GameMessageActor {
 
 	public static boolean hasPlayerSkill(String id, String characterId) {
 		if (playerSkills.containsKey(characterId)) {
-			return true;
-		} else {
-			return false;
+			if (playerSkills.get(characterId).containsKey(id)) {
+				return true;
+			}
 		}
+		return false;
 	}
 	
 	public static PlayerSkill playerSkill(String id, String characterId) {

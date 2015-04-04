@@ -343,7 +343,7 @@ public class Grid {
 				Long lastUpdate = updateStatus.get(id);
 				if ((System.currentTimeMillis() - lastUpdate) > max) {
 					remove(id);
-					logger.warn("Expired "+id);
+					//logger.warn("Expired "+id);
 				}
 			}
 		}

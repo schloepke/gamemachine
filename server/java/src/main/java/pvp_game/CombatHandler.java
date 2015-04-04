@@ -7,6 +7,7 @@ import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerVitalsHandler;
 import io.gamemachine.messages.Attack;
+import io.gamemachine.messages.ComboAttack;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -49,21 +50,40 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 
+	private void doComboAttack(ComboAttack combo) {
+		for (Attack attack : combo.attack) {
+			PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
+			if (skill.hasIsPassive() && skill.isPassive == 1) {
+				StatusEffectHandler.setPassiveSkill(attack.skill, attack.attacker, attack.target,
+						StatusEffectTarget.Action.Apply, StatusEffectTarget.PassiveFlag.AutoRemove);
+			} else {
+				doAttack(attack);
+			}
+		}
+	}
+
 	private void doAttack(Attack attack) {
-		logger.warning("Attack "+attack.attacker+" "+attack.target+" skill " + attack.skill);
+		logger.warning("Attack " + attack.attacker + " " + attack.target + " skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
 		StatusEffectTarget target = new StatusEffectTarget();
-		target.action = StatusEffectTarget.Action.Apply;
-		target.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
 		target.location = attack.targetLocation;
 		target.range = skill.range;
 		target.skill = skill.id;
 		target.origin = attack.attacker;
 
+		if (skill.hasIsPassive() && skill.isPassive == 1) {
+			logger.warning("Set passive flags");
+			target.action = StatusEffectTarget.Action.Apply;
+			target.passiveFlag = StatusEffectTarget.PassiveFlag.AutoRemove;
+		} else {
+			target.action = StatusEffectTarget.Action.Apply;
+			target.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
+		}
+
 		if (skill.damageType.equals("aoe")) {
 			target.target = "aoe";
-		} else if (skill.damageType.equals("pbaoe")) {
-			target.target = "aoe";
+		} else if (skill.damageType.equals("self_aoe")) {
+			target.target = "self_aoe";
 		} else if (skill.damageType.equals("st")) {
 			target.target = attack.target;
 		} else if (skill.damageType.equals("self")) {

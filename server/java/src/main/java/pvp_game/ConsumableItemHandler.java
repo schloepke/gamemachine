@@ -51,8 +51,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 			worldObjectGrid = GameGrid.getGameGrid(Common.gameId, "world_objects",playerId);
 			defaultGrid = GameGrid.getGameGrid(Common.gameId, "default",playerId);
 		}
-		
-		
+				
 		if (gameMessage.hasUseItem()) {
 			
 			// Make PlayerItemManager into game message actor and move this there

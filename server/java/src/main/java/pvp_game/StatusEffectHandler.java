@@ -127,6 +127,7 @@ public class StatusEffectHandler extends UntypedActor {
 			if (target.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
 				StatusEffect effect = target.statusEffect.get(0);
 				setPassiveEffect(effect.type, vitals, effect.minValue, true);
+				logger.warning("Removing "+effect.type+" from "+vitals.id);
 			} else {
 				for (StatusEffect effect : skillEffects.get(target.skill)) {
 					setPassiveEffect(effect.type, vitals, effect.minValue, true);
@@ -179,6 +180,9 @@ public class StatusEffectHandler extends UntypedActor {
 			break;
 		case StaminaRegenDecrease:
 			reversed = Type.StaminaRegenIncrease;
+			break;
+		case Root:
+			reversed = Type.Root;
 			break;
 		default:
 			reversed = null;
@@ -239,23 +243,26 @@ public class StatusEffectHandler extends UntypedActor {
 
 	}
 
-	private void setPassiveEffect(StatusEffectTarget target, StatusEffect statusEffect) {
+	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect statusEffect) {
 		int value = statusEffect.minValue;
-		Vitals vitals = PlayerVitalsHandler.getOrCreate("default", target.target);
+		Vitals vitals = PlayerVitalsHandler.getOrCreate("default", target);
 		setPassiveEffect(statusEffect.type, vitals, value, false);
-
-		if (target.action == StatusEffectTarget.Action.Apply
-				&& target.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
-			target = target.clone();
+		sendStatusEffectResult(statusEffect.id, statusEffectTarget.origin, target, statusEffect.ticks);
+		
+		if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
+				&& statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
+			statusEffectTarget = statusEffectTarget.clone();
+			statusEffectTarget.target = target;
 			statusEffect = statusEffect.clone();
-			target.statusEffect.clear();
-			target.action = StatusEffectTarget.Action.Remove;
-			target.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
-			target.addStatusEffect(statusEffect);
+			statusEffectTarget.statusEffect.clear();
+			statusEffectTarget.action = StatusEffectTarget.Action.Remove;
+			//statusEffectTarget.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
+			statusEffectTarget.addStatusEffect(statusEffect);
+			logger.warning("scheduling removal of "+statusEffect.type+" from "+vitals.id+" in "+statusEffect.ticks);
 			getContext()
 					.system()
 					.scheduler()
-					.scheduleOnce(Duration.create((long) statusEffect.ticks, TimeUnit.SECONDS), getSelf(), target,
+					.scheduleOnce(Duration.create((long) statusEffect.ticks, TimeUnit.SECONDS), getSelf(), statusEffectTarget,
 							getContext().dispatcher(), null);
 		}
 	}
@@ -304,16 +311,32 @@ public class StatusEffectHandler extends UntypedActor {
 		
 		for (StatusEffect effect : statusEffectTarget.statusEffect) {
 			if (effect.ticks > statusEffectTarget.ticks) {
+				boolean aoe = false;
+				Vector3 location = null;
+				
 				if (statusEffectTarget.target.equals("aoe")) {
+					aoe = true;
+					location = statusEffectTarget.location;
+				}
+				
+				if (statusEffectTarget.target.equals("self_aoe")) {
+					aoe = true;
+					location = new Vector3();
+					TrackData td = defaultGrid.get(statusEffectTarget.origin);
+					location.xi = td.x;
+					location.yi = td.y;
+					location.zi = td.z;
+				}
+				
+				if (aoe) {
+					
 					if (statusEffectTarget.ticks == 0) {
 						sendVisualEffect(effect, statusEffectTarget.location,defaultGrid);
 					}
-					for (String target : Common.getTargetsInRange(statusEffectTarget.range,
-							statusEffectTarget.location, defaultGrid)) {
+					for (String target : Common.getTargetsInRange(statusEffectTarget.range,	location, defaultGrid)) {
 						applyStatusEffect(statusEffectTarget, target, effect);
 					}
-					for (String target : Common.getTargetsInRange(statusEffectTarget.range,
-							statusEffectTarget.location, worldObjectGrid)) {
+					for (String target : Common.getTargetsInRange(statusEffectTarget.range, location, worldObjectGrid)) {
 						applyStatusEffect(statusEffectTarget, target, effect);
 					}
 				} else {
@@ -368,7 +391,7 @@ public class StatusEffectHandler extends UntypedActor {
 	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
 
 		if (isPassive(effect)) {
-			setPassiveEffect(statusEffectTarget, effect);
+			setPassiveEffect(statusEffectTarget, target, effect);
 			return 0;
 		}
 
@@ -386,6 +409,10 @@ public class StatusEffectHandler extends UntypedActor {
 
 		Vitals originVitals = PlayerVitalsHandler.getOrCreate("default", origin);
 		originVitals.lastCombat = System.currentTimeMillis();
+		
+		if (!DeductCost(originVitals,statusEffectTarget.skill)) {
+			return 0;
+		}
 
 		int targetBaseHealth = CharacterHandler.currentHealth(vitals.id);
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
@@ -429,6 +456,28 @@ public class StatusEffectHandler extends UntypedActor {
 		return value;
 	}
 
+	private boolean DeductCost(Vitals vitals, String skillId) {
+		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(skillId);
+		if (!skill.hasResourceCostPerTick() || skill.resourceCostPerTick == 0) {
+			return true;
+		}
+		
+		if (skill.resource.equals("stamina")) {
+			if (vitals.stamina < skill.resourceCost) {
+				logger.warning("Insufficient stamina needed " + skill.resourceCost);
+				return false;
+			}
+			vitals.stamina -= skill.resourceCost;
+		} else if (skill.resource.equals("magic")) {
+			if (vitals.magic < skill.resourceCost) {
+				logger.warning("Insufficient magic needed " + skill.resourceCost);
+				return false;
+			}
+			vitals.magic -= skill.resourceCost;
+		}
+		return true;
+	}
+	
 	private boolean inGroup(String playerId) {
 		String playerGroup = ChatSubscriptions.playerGroup(playerId);
 		if (playerGroup.equals("nogroup")) {
