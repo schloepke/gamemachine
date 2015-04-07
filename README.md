@@ -1,6 +1,6 @@
 # Welcome to Game Machine
 
-The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games that is straight forward and simple to use, while also being inherently scalable and performant.
+The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games.  Our focus is on providing easy to use abstractions for hard problems, allowing even client side developers to write game logic that is concurrent and performant, without having to deal with low level concurrency.
 
 #### Highlights
 
@@ -19,6 +19,10 @@ The goal of Game Machine is to provide an inherently scalable, modern architectu
 -  Modular, pluggable systems for persistence and authentication.
 
 - Highly optimized spatial grid to track game entities and perform proximity queries.
+
+- UDP or TCP based on Netty
+
+- Chat system built on top of a distributed pub/sub architecture
 
 
 #### Roadmap
