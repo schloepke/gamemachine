@@ -14,7 +14,7 @@ The goal of Game Machine is to provide an inherently scalable, modern architectu
 
 - Multiple caching layers for various needs.  Fully atomic local caching with persistence write through plus distributed off heap caching.
 
-- Low latency persistence model.  Intelligent write behind cache that decreases write load on the database.  Popular databases such as Postgres, Mysql, and Couchbase supported out of the box.
+- Tunable write behind cache that decreases write load on the database.  Popular databases such as Postgres, Mysql, and Couchbase supported out of the box.
 
 -  Modular, pluggable systems for persistence and authentication.
 
