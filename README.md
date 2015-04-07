@@ -10,30 +10,31 @@ The goal of Game Machine is to provide an inherently scalable, modern architectu
  
 - Good abstractions for concurrency that are simple to understand and use.  Modern approach using the actor model and messaging.
 
-- Industry standard messaging formats.  Efficient bit packing without having to resort to bit fields or custom binary formats.
+- Fully integrated persistence.  Protocol buffer messages can be directly persisted to the the object store or sql database.  Database schema's auto generated from protocol buffer definitions.
 
-- A modern approach to reliable messaging that puts reliabilty back at the correct layer of abstraction.
+- Multiple caching layers for various needs.  Fully atomic local caching with persistence write through plus distributed off heap caching.
 
-- Low latency persistence model based on a distributed memory cache with intelligent write behind cache to disk storage.  Plus built in support for direct access to relational databases.
+- Low latency persistence model.  Intelligent write behind cache that decreases write load on the database.  Popular databases such as Postgres, Mysql, and Couchbase supported out of the box.
 
 -  Modular, pluggable systems for persistence and authentication.
+
+- Highly optimized spatial grid to track game entities and perform proximity queries.
 
 
 #### Roadmap
 
-With the core server fairly mature and stable at this point, we have started working on an actual game to showcase what Game Machine can do.  As much of the code as possible will be open source.  Which is to say all of the server code and a large chunk of the client code, minus a few commercial assets from the Unity asset store (which can all be purchased to make the client fully playable).
+With the core server fairly mature and stable at this point, we have started working on an actual game to both showcase what Game Machine is capable of, and provide additional functionality in the form of genre specific modules.  As much of the code as possible will be open source.  Which is to say all of the server code and a large chunk of the client code, minus a few commercial assets from the Unity asset store (which can all be purchased to make the client fully playable).
 
 For the game itself we took the most challenging, complicated multiplayer game we could think of, a massive pvp mmo with land/sea combat and siege warfare.  
 
-Server code is already being committed to master.  The client will be released in a separate repo once we figure out a good, clean way of keeping the free/commercial bits separate.
-
-Note that a primary goal of this side project is to show what can be done on a functional level in a very short period of time.  The code itself is not necessarily production quality in all aspects when it comes to general code quality, unit testing, etc..  Some of the game logic is using static concurrent hashmaps for caching instead of the caching layers.  These things are easily moved over to the production caching system which is scalable across multiple nodes, but I'm leaving that until things solidify more as it does make it a bit more difficult to iterate on quickly (and things are moving fast right now).
 
 * Game Status Update (4/1/15)
 
 Just cut an early release of the game with most of the below functional.  It's running on a live server.  You can download a windows client here:
 
 https://s3.amazonaws.com/gamemachine/pvp_mmo.zip
+
+The state of the code is that while it's not completely prototype, it's not yet production ready, so don't pull down master and start using it in your game.
 
 -  Complete combat system based on status effects that is 100% server driven.  Status effects can apply to players, npc's, or any static game object.  Single target and aoe damage.  Effects can be single shot or tick over time.  There are also passive and active effects, where passive effects last for a set duration, and active effects are either one time or tick for X number of ticks.  Items are also tied into this where items can be linked to effects.  Currently if you equip an item that is linked it automatically applies the effect, such as armor increase, etc..  And automatically removes it when you unequip.
 
@@ -52,13 +53,6 @@ https://s3.amazonaws.com/gamemachine/pvp_mmo.zip
 - Ship combat.  Ships themselves work, with multiple players on a ship.  Need to get cannons in game for the combat side to work.
 
 - Most everything in game is server driven.  If you perform an action in the world your client acts on the response from the server just like every other player.  If you open the door to your house, we send a request to the server, you get back a reply, and then it opens.  This has worked much better then having a system where we treat your client differently then other clients.  For example if you open a door, it persists server side and everyone see's it opening just like you do.  Siege weapons moving and firing is handled the same way.
-
-
-- Challenges.  All on the client actually.  Currently using the unity UMA framework for characters, but it's our main performance bottleneck right now.  The unity animation/character system in general is slow. Had to write my own LOD system for the terrain, with the unity built in system the game would be running at 10fps instead of the 80-100 it is now.  So much stuff in most client game engines just basically breaks/works differently at scale.  Doesn't matter what engine it is, none of them are optimized for this kind of game.
-
-
-- Client status.  Still been putting off getting the client source out.  With the way lots of assets are packaged in Unity, you need to leave them where the author's put them or stuff breaks.  So most of the git tools for handling large files just won't work because of this.  And although I don't have that many paid assets, there are enough where there is just no way to bulid the game without them.  Currently I'm looking at a couple of tools that will let me put the large files on amazon S3, which seems to be the best option I've found.  Hopefully I'll get around to this soon...
-
 
 
 Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation.
