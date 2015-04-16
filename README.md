@@ -27,9 +27,13 @@ The goal of Game Machine is to provide an inherently scalable, modern architectu
 
 #### Roadmap
 
-With the core server fairly mature and stable at this point, we have started working on an actual game to both showcase what Game Machine is capable of, and provide additional functionality in the form of genre specific modules.  As much of the code as possible will be open source.  Which is to say all of the server code and a large chunk of the client code, minus a few commercial assets from the Unity asset store (which can all be purchased to make the client fully playable).
+The next iteration in Game Machine will be to produce functional modules that solve genre specific problems end to end, including full  client side implementations.  Our approach to this will be to create real games, and as features mature package those up in official modules.  The plan is to actually release these games on Steam, as a way to stay as close as possible to the real problems game developers are trying to solve.
 
-For the game itself we took the most challenging, complicated multiplayer game we could think of, a massive pvp mmo with land/sea combat and siege warfare.  
+
+Some of the modules will be open source, and some will be paid extensions.  The core of Game Machine will always remain open source.
+
+
+For the first game we took the most challenging, complicated multiplayer game we could think of, a massive pvp mmo with land/sea combat and siege warfare.  We anticipate around half a dozen modular components coming out of this, all usable separately and in some cases across multiple genre's.  
 
 
 * Game Status Update (4/1/15)
