@@ -19,4 +19,6 @@ GameMachine::Routes.game_messages do
   route 205, to: 'SiegeHandler', distributed: false, name: 'SiegeHandler'
   route 206, to: 'GuildHandler', distributed: false, name: 'GuildHandler'
   route 207, to: 'TerritoryHandler', distributed: false, name: 'TerritoryHandler'
+  route 208, to: 'NpcManager', distributed: false, name: 'NpcManager'
+  route 209, to: 'WorldBuilderHandler', distributed: false, name: 'WorldBuilderHandler'
 end

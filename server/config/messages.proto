@@ -231,6 +231,11 @@ message ObjectdbDel {
   required string entityId = 1;
 }
 
+message ObjectdbStatus {
+  required string entityId = 1;
+  required string status = 2;
+}
+
 message ObjectdbGet {
   required string entityId = 1;
   optional string playerId = 2;
@@ -314,6 +319,7 @@ message PathData {
   optional Vector3 startPoint = 1;
   optional Vector3 endPoint = 2;
   repeated Vector3 nodes = 3;
+  optional string id = 4;
 }
 
 message EchoTest {
@@ -416,6 +422,8 @@ message Entity {
   optional TrackDataResponse trackDataResponse = 67;
   optional Mesh mesh = 68;
   optional PathData pathData = 69;
+  optional ObjectdbStatus objectdbStatus = 70;
+  
   //GAME_ENTITY_MESSAGES
 }
 

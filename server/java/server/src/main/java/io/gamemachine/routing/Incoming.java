@@ -123,6 +123,7 @@ public class Incoming extends UntypedActor {
 			Connection.removeConnection(clientMessage.player.id);
 			RequestHandler.unregisterClient(clientMessage);
 			PlayerService.getInstance().setAuthtoken(clientMessage.player.id, 0);
+			PlayerService.getInstance().setCharacter(clientMessage.player.id, null);
 		}
 	}
 	

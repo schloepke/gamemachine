@@ -1,19 +1,25 @@
 package io.gamemachine.core;
 
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.naming.OperationNotSupportedException;
+
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.gamemachine.messages.Character;
+
 public class PlayerService {
 
 	private int authType;
+	public static int timeout = 20;
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
 	public ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<String, Player>();
@@ -28,7 +34,7 @@ public class PlayerService {
 		}
 		logger.info("PlayerService starting authType="+authType);
 	}
-
+	
 	private static class LazyHolder {
 		private static final PlayerService INSTANCE = new PlayerService();
 	}
@@ -44,15 +50,16 @@ public class PlayerService {
 			return;
 		}
 		
+		CharacterService.getInstance().deleteForPlayer(player.id);
 		if (authType == OBJECT_DB) {
-			Player.store().delete(player.id);;
+			Player.store().delete(player.id);
 		} else if (authType == SQL_DB) {
 			Player.db().deleteWhere("player_id = ?", player.id);
 		}
 		
 		players.remove(player.id);
 	}
-	
+		
 	public Boolean playerExists(String playerId, boolean quick) {
 		if (quick) {
 			if (players.containsKey(playerId)) {
@@ -76,7 +83,7 @@ public class PlayerService {
 	public Player create(String playerId, String gameId, String role) {
 		Player player = find(playerId);
 		if (player != null) {
-			throw new RuntimeException("Player " + playerId + " exists");
+			return null;
 		}
 
 		player = new Player();
@@ -87,7 +94,9 @@ public class PlayerService {
 		player.setAuthtoken(0);
 		player.setIp(0);
 
+		
 		if (authType == OBJECT_DB) {
+			CharacterService.getInstance().findPlayerCharacters(player.id);
 			Player.store().set(player);
 		} else if (authType == SQL_DB) {
 			if (!Player.db().save(player)) {
@@ -99,7 +108,7 @@ public class PlayerService {
 
 		return player;
 	}
-
+		
 	public List<Player> search(String searchString) {
 		List<Player> players;
 	
@@ -115,7 +124,7 @@ public class PlayerService {
 		}
 		return players;
 	}
-	
+		
 	public Player find(String playerId) {
 		
 		if (players.containsKey(playerId)) {
@@ -124,7 +133,7 @@ public class PlayerService {
 			
 			Player player = null;
 			if (authType == OBJECT_DB) {
-				player = Player.store().get(playerId, 1000);
+				player = Player.store().get(playerId, timeout);
 			} else if (authType == SQL_DB) {
 				player = Player.db().findFirst("player_id = ?", playerId);
 			}
@@ -135,13 +144,26 @@ public class PlayerService {
 			return player;
 		}
 	}
-
+	
 	public boolean playerIsAgent(String playerId) {
 		Player player = find(playerId);
 		if (player == null) {
 			return false;
 		} else {
 			if (player.role.equals("agent_controller")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	}
+	
+	public boolean playerHasRole(String playerId, String role) {
+		Player player = find(playerId);
+		if (player == null) {
+			return false;
+		} else {
+			if (player.role.equals(role)) {
 				return true;
 			} else {
 				return false;

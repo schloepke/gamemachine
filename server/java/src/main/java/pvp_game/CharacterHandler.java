@@ -13,7 +13,6 @@ import io.gamemachine.messages.PvpGameMessage;
 import io.gamemachine.messages.TrackData;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -110,7 +109,9 @@ public class CharacterHandler extends GameMessageActor {
 		saveCharacter(character);
 	}
 
-	public static byte[] getCharacters(String playerId) {
+	
+	
+	public static byte[] getPvpCharacters(String playerId) {
 		GameMessage gameMessage = new GameMessage();
 		gameMessage.pvpGameMessage = new PvpGameMessage();
 		gameMessage.pvpGameMessage.characters = new Characters();

@@ -7,6 +7,10 @@ import java.util.concurrent.Executors;
 
 import javax.net.ssl.SSLException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import io.gamemachine.net.udp.NettyUdpServer;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelOption;
@@ -20,24 +24,27 @@ import io.netty.handler.ssl.util.SelfSignedCertificate;
 
 public final class HttpServer implements Runnable {
 
-	static final boolean SSL = System.getProperty("ssl") != null;
-
+	private static final Logger logger = LoggerFactory.getLogger(HttpServer.class);
+	
     private static ExecutorService executor = Executors.newCachedThreadPool();
     private String host;
     private int port;
+    private boolean useSsl;
     private HttpServerInitializer initializer;
     private Channel channel;
     private InetSocketAddress address;
     
-    public HttpServer(String host, int port, String actorName, HttpHelper httpHelper) {
+    public HttpServer(String host, int port, boolean useSsl,String actorName, HttpHelper httpHelper) {
     	this.host = host;
     	this.port = port;
+    	this.useSsl = useSsl;
     	SslContext sslCtx = getSslContext();
     	initializer = new HttpServerInitializer(sslCtx,actorName, httpHelper);
     	this.address = new InetSocketAddress(host,port);
     }
     
     public void start() {
+    	logger.info("Http Starting host "+host+" port "+port+" ssl "+useSsl);
     	executor.execute(this);
     }
     
@@ -52,10 +59,10 @@ public final class HttpServer implements Runnable {
     
     private SslContext getSslContext() {
     	SslContext sslCtx;
-        if (SSL) {
+        if (useSsl) {
             SelfSignedCertificate ssc;
 			try {
-				ssc = new SelfSignedCertificate();
+				ssc = new SelfSignedCertificate(host);
 				sslCtx = SslContext.newServerContext(ssc.certificate(), ssc.privateKey());
 			} catch (CertificateException | SSLException e) {
 				e.printStackTrace();

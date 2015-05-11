@@ -8,6 +8,7 @@ import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.ObjectdbDel;
 import io.gamemachine.messages.ObjectdbGet;
 import io.gamemachine.messages.ObjectdbPut;
+import io.gamemachine.messages.ObjectdbStatus;
 import io.gamemachine.messages.ObjectdbUpdate;
 
 import java.util.Map;
@@ -75,7 +76,7 @@ public class DbActor extends UntypedActor {
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof ObjectdbUpdate) {
 			ObjectdbUpdate update = (ObjectdbUpdate) message;
-			ActorSelection sel = ActorUtil.findDistributed("GameMachine::ObjectDb", update.getCurrentEntityId());
+			ActorSelection sel = ActorUtil.findDistributed("object_store", update.getCurrentEntityId());
 			sel.tell(message, getSelf());
 		} else if (message instanceof ObjectdbPut) {
 			ObjectdbPut put = (ObjectdbPut) message;
@@ -88,7 +89,12 @@ public class DbActor extends UntypedActor {
 				classname = "Entity";
 			}
 			Object obj = getEntity(get.getEntityId(), classname);
-			if (obj != null) {
+			if (obj == null) {
+				ObjectdbStatus status = new ObjectdbStatus();
+				status.entityId = get.getEntityId();
+				status.status = "notfound";
+				getSender().tell(status, getSelf());
+			} else {
 				getSender().tell(obj, getSelf());
 			}
 		} else if (message instanceof ObjectdbDel) {

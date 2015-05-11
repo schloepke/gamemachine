@@ -379,10 +379,16 @@ import io.gamemachine.core.CacheUpdate;
 			ActorSelection sel = ActorUtil.findDistributed("object_store", scopedId);
 			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
 			AskableActorSelection askable = new AskableActorSelection(sel);
-			<%=klass%> message;
+			<%=klass%> message = null;
+			Object result;
 			Future<Object> future = askable.ask(get,t);
 			try {
-				message = (<%=klass%>) Await.result(future, t.duration());
+				result = Await.result(future, t.duration());
+				if (result instanceof <%=klass%>) {
+					message = (<%=klass%>)result;
+				} else if (result instanceof ObjectdbStatus) {
+					return null;
+				}
 			} catch (Exception e) {
 				return null;
 			}

@@ -65,7 +65,8 @@ module GameMachine
       conf.http.enabled = config.get_boolean('http.enabled')
       conf.http.host = config.get_string('http.host')
       conf.http.port = config.get_int('http.port')
-
+      conf.http.ssl = config.get_boolean('http.ssl')
+      
       conf.tcp.enabled = config.get_boolean('tcp.enabled')
       conf.tcp.host = config.get_string('tcp.host')
       conf.tcp.port = config.get_int('tcp.port')

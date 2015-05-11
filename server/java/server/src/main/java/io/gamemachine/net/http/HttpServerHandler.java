@@ -6,10 +6,14 @@ import static io.netty.handler.codec.http.HttpMethod.POST;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
 import io.gamemachine.authentication.Authable;
+import io.gamemachine.authentication.Authentication;
 import io.gamemachine.authentication.AuthorizedPlayers;
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.Players;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,6 +39,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pvp_game.CharacterHandler;
+import pvp_game.WorldBuilderHandler;
+import io.gamemachine.messages.Character;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -52,10 +58,12 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	private Integer login(String playerId, String password) {
 		Player player = PlayerService.getInstance().find(playerId);
 		if (player == null) {
-			PlayerService.getInstance().create(playerId, AppConfig.getDefaultGameId());
-			PlayerService.getInstance().setPassword(playerId, password);
+			return null;
+			// PlayerService.getInstance().create(playerId,
+			// AppConfig.getDefaultGameId());
+			// PlayerService.getInstance().setPassword(playerId, password);
 		}
-		
+
 		return playerAuth.authorize(playerId, password);
 	}
 
@@ -94,27 +102,158 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 			}
 
-			if (req.getUri().startsWith("/api/client/login/")) {
-				Integer authtoken = login(params.get("username"), params.get("password"));
-				if (authtoken == null) {
-					NotAuthorized(ctx);
-				} else {
-					String json = httpHelper.client_auth_response(authtoken);
-					Ok(ctx, json);
+			if (req.getUri().startsWith("/api")) {
+
+				if (req.getUri().startsWith("/api/client/login/")) {
+					Integer authtoken = login(params.get("username"), params.get("password"));
+					if (authtoken == null) {
+						NotAuthorized(ctx);
+					} else {
+						String json = httpHelper.client_auth_response(authtoken);
+						Ok(ctx, json);
+					}
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/players/create")) {
+
+					String newPlayerId = params.get("new_player_id");
+					String newPlayerPassword = params.get("new_player_password");
+					Player player;
+
+					if (PlayerService.getInstance().playerExists(newPlayerId, false)) {
+						player = new Player();
+						player.id = "exists";
+					} else {
+						PlayerService.getInstance().create(newPlayerId, AppConfig.getDefaultGameId());
+						PlayerService.getInstance().setPassword(newPlayerId, newPlayerPassword);
+						player = PlayerService.getInstance().find(newPlayerId);
+					}
+
+					Ok(ctx, player.toByteArray());
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/players/change_password")) {
+					boolean authenticated = PlayerService.getInstance().authenticate(params.get("playerId"),
+							params.get("password"));
+					if (authenticated) {
+						if (params.get("new_password").equals(params.get("password"))) {
+							Ok(ctx, "Password must be different");
+						} else {
+							PlayerService.getInstance().setPassword(params.get("playerId"), params.get("new_password"));
+							Ok(ctx, "OK");
+						}
+					} else {
+						Ok(ctx, "Invalid Password");
+					}
+					return;
+				}
+
+				String playerId = params.get("playerId");
+				Integer authtoken = Integer.parseInt(params.get("authtoken"));
+				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, "admin");
+
+				if (!Authentication.isAuthenticated(playerId, authtoken)) {
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/players/get")) {
+					Player player = PlayerService.getInstance().find(params.get("playerId"));
+					Ok(ctx, player.toByteArray());
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/characters/list")) {
+					byte[] resp = CharacterService.getInstance().findPlayerCharacters(params.get("playerId"));
+					Ok(ctx, resp);
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/build_objects/get")) {
+					byte[] resp = WorldBuilderHandler.getBuildObjects();
+					Ok(ctx, resp);
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/characters/create")) {
+					Character character = CharacterService.getInstance().create(params.get("playerId"),	params.get("characterId"), params.get("umaData"));
+					if (character == null) {
+						character = new Character();
+						character.playerId = "na";
+						character.id = "exists";
+					}
+					Ok(ctx, character.toByteArray());
+					return;
+				}
+
+				if (req.getUri().startsWith("/api/characters/delete")) {
+					CharacterService.getInstance().delete(params.get("playerId"),params.get("characterId"));
+					Ok(ctx, params.get("characterId"));
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/characters/set_current")) {
+					PlayerService.getInstance().setCharacter(playerId,params.get("characterId"));
+					Ok(ctx, "OK");
+					return;
+				}
+
+				if (isAdmin) {
+					if (req.getUri().startsWith("/api/admin/characters/list")) {
+						byte[] resp = CharacterService.getInstance().findPlayerCharacters(params.get("get_playerId"));
+						Ok(ctx, resp);
+						return;
+					}
+					
+					if (req.getUri().startsWith("/api/admin/players/set_password")) {
+						PlayerService.getInstance().setPassword(params.get("set_player_id"), params.get("set_password"));
+						Ok(ctx, "OK");
+						return;
+					}
+
+					if (req.getUri().startsWith("/api/admin/players/delete")) {
+						PlayerService.getInstance().delete(params.get("delete_player_id"));
+						Ok(ctx, params.get("delete_player_id"));
+						return;
+					}
+
+					if (req.getUri().startsWith("/api/admin/characters/search")) {
+						List<Character> characterList = CharacterService.getInstance().search(params.get("search_string"));
+						if (characterList.size() > 40) {
+							characterList = characterList.subList(0, 40);
+						}
+						Characters characters = new Characters();
+						characters.setCharactersList(characterList.subList(0, 40));
+						Ok(ctx, characters.toByteArray());
+						return;
+					}
+
+					if (req.getUri().startsWith("/api/admin/players/search")) {
+						List<Player> playerList = PlayerService.getInstance().search(params.get("search_string"));
+						if (playerList.size() > 40) {
+							playerList = playerList.subList(0, 40);
+						}
+						Players players = new Players();
+						players.setPlayerList(playerList);
+						Ok(ctx, players.toByteArray());
+						return;
+					}
+
 				}
 			}
 
 			if (req.getUri().startsWith("/characters/create")) {
-				
 				CharacterHandler.createCharacter(params.get("playerId"), params.get("id"), params.get("umaData"));
-				byte[] resp = CharacterHandler.getCharacters(params.get("playerId"));
+				byte[] resp = CharacterHandler.getPvpCharacters(params.get("playerId"));
 				Ok(ctx, resp);
 			}
-			
+
 			if (req.getUri().startsWith("/characters/get")) {
-				byte[] resp = CharacterHandler.getCharacters(params.get("playerId"));
+				byte[] resp = CharacterHandler.getPvpCharacters(params.get("playerId"));
 				Ok(ctx, resp);
 			}
+
 		}
 
 	}

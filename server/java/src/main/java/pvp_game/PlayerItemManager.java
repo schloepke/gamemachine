@@ -122,6 +122,9 @@ public class PlayerItemManager {
 	public static void seedCharacterItem(String id, int quantity) {
 		for (io.gamemachine.messages.Character character : Commands.getCharacters()) {
 			Player player = PlayerService.getInstance().find(character.playerId);
+			if (player == null) {
+				continue;
+			}
 			if (player.role.equals("player")) {
 				PlayerItem playerItem = playerItem(id,character.id);
 				if (playerItem == null || playerItem.quantity < quantity) {

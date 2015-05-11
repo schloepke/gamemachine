@@ -1,5 +1,6 @@
 package io.gamemachine.core;
 
+import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PathData;
 import io.gamemachine.messages.Vector3;
@@ -31,6 +32,7 @@ public class UnityProxy extends GameMessageActor {
 	
 	@Override
 	public void awake() {
+		PlayerService.getInstance().create(unityPlayerId, AppConfig.getDefaultGameId());
 		logger.warning("UnityProxy awake");
 		GameMessage msg = new GameMessage();
 		msg.playerId = unityPlayerId;

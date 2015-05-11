@@ -20,6 +20,7 @@ module GameMachine
     end
 
     def set_java_config
+      JavaLib::AppConfig.set_env_root(ENV['APP_ROOT'])
       JavaLib::AppConfig.set_env(GameMachine.env)
       JavaLib::AppConfig.set_default_game_id(config.default_game_id)
       JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)

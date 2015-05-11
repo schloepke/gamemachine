@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 public class AppConfig {
 	
 	private static String env;
+	public static String envRoot;
 	private static String defaultGameId;
 	private static Config gameConfig;
 
@@ -19,6 +20,14 @@ public class AppConfig {
 		AppConfig.env = env;
 	}
 
+	public static String getEnvRoot() {
+		return envRoot;
+	}
+
+	public static void setEnvRoot(String envRoot) {
+		AppConfig.envRoot = envRoot;
+	}
+	
 	public static String getDefaultGameId() {
 		return defaultGameId;
 	}

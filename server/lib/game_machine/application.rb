@@ -108,7 +108,7 @@ module GameMachine
       end
 
       def start_http
-        http = NetLib::HttpServer.new(config.http.host,config.http.port,'message_gateway', HttpHelper.new)
+        http = NetLib::HttpServer.new(config.http.host,config.http.port,config.http.ssl,'message_gateway', HttpHelper.new)
         http.start
       end
 
@@ -195,8 +195,8 @@ module GameMachine
         Actor::Builder.new(GameSystems::ChatManager).start
 
         # Make sure shared hashmaps are initialized
-        team_handler = Application.config.handlers.team.constantize.new
-        Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
+        #team_handler = Application.config.handlers.team.constantize.new
+        #Actor::Builder.new(GameSystems::TeamManager).with_router(JavaLib::RoundRobinRouter,config.routers.game_handler).start
       end
 
     end

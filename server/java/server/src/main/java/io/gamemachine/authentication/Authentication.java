@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 public class Authentication {
 
 	private static ConcurrentHashMap<String, Integer> authenticatedUsers = new ConcurrentHashMap<String, Integer>();
@@ -19,6 +21,13 @@ public class Authentication {
 		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
 	}
 
+	public static boolean isAuthenticated(String playerId, int authtoken) {
+		Player player = new Player();
+		player.id = playerId;
+		player.authtoken = authtoken;
+		return Authentication.isAuthenticated(player);
+	}
+	
 	public static boolean isAuthenticated(Player player) {
 		if (authenticatedUsers.containsKey(player.getId())) {
 			int authtoken = authenticatedUsers.get(player.id);
@@ -68,6 +77,9 @@ public class Authentication {
 	}
 
 	public boolean authenticate(Player player) {
+		if (Strings.isNullOrEmpty(player.id)) {
+			return false;
+		}
 		if (authtokenIsValid(player)) {
 			registerPlayer(player);
 			player.setAuthenticated(true);

@@ -3,6 +3,32 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+message NpcData {
+  optional string id = 1;
+  optional Vector3 spawnpoint = 2;
+  optional string leader = 3;
+  repeated string followers = 4;
+  optional string patrolRoute = 5;
+  optional Waypoint waypoint = 6;
+  enum NpcType {
+    None = 0;
+    Guard = 1;
+    Bandit = 2;
+    Animal = 3;
+    Civilian = 4;
+  }
+  optional NpcType npcType = 7;
+}
+
+message NpcDatas {
+  repeated NpcData npcData = 1;
+}
+
+message Waypoint {
+  optional string id = 1;
+  repeated Vector3 position = 2;
+}
+
 persistent_message Territory {
   required string id = 1;
   required string owner = 2;
@@ -71,6 +97,34 @@ persistent_message WorldObject {
   optional int32 state = 21;
 }
 
+persistent_message BuildObject {
+  optional string playerItemId = 1;
+  optional int32 action = 2;
+  optional string id = 3;
+  optional int32 recordId = 4;
+  optional string ownerId = 5;
+  optional int32 x = 6;
+  optional int32 y = 7;
+  optional int32 z = 8;
+  optional int32 rx = 9;
+  optional int32 ry = 10;
+  optional int32 rz = 11;
+  optional int32 rw = 12;
+  optional int32 health = 14;
+  optional int32 type = 18;
+  optional string grid = 19;
+  optional int64 updatedAt = 22;
+  optional int32 state = 23;
+  optional int32 updateId = 24;
+}
+
+message BuildObjects {
+  repeated BuildObject buildObject = 1;
+  optional int32 action = 2;
+  optional int32 requestedUpdateId = 3;
+  optional int32 currentUpdate = 4;
+}
+  
 message Bounds {
   optional Vector3 min = 1;
   optional Vector3 max = 2;
@@ -116,6 +170,7 @@ persistent_message Character {
 
 message Characters {
   repeated Character characters = 1;
+  optional string id = 2;
 }
 
 message PvpGameMessage {
@@ -287,6 +342,7 @@ persistent_message Player {
   optional int32 ip = 9;
   optional int64 ipChangedAt = 10;
   optional string characterId = 11;
+  repeated Character characters = 12;
 }
 
 message TrackData {
@@ -395,6 +451,8 @@ message GameMessage {
   optional Territories territories = 36;
   optional EquippedItem equippedItem = 37;
   optional ComboAttack comboAttack = 38;
+  optional NpcData npcData = 39;
+  optional BuildObjects buildObjects = 40;
 }
 
 message GameMessages {
@@ -515,6 +573,10 @@ local_message RemovePlayerItem {
   required int32 quantity = 2;
 }
 
+message Players {
+  repeated Player player = 1;
+}
+  
 // For testing
 persistent_message TestObject {
   required string id = 12;
