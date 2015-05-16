@@ -5,7 +5,7 @@ import io.gamemachine.messages.Vitals;
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
-import pvp_game.CharacterHandler;
+import plugins.pvp_game.CharacterHandler;
 
 public class PlayerVitalsHandler {
 

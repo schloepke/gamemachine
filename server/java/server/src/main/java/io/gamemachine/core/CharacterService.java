@@ -2,7 +2,9 @@ package io.gamemachine.core;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.Character;
+import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.PlayerNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +12,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import akka.actor.ActorRef;
+import akka.contrib.pattern.DistributedPubSubMediator;
+
 public class CharacterService {
 
+	public static String channel = "character_notifications";
 	private String globalUser = "global_user";
 	private int authType;
 	public static int timeout = 20;
@@ -91,12 +97,22 @@ public class CharacterService {
 		}
 	}
 
+	private void sendNotification(String playerId, String characterId, String action) {
+		CharacterNotification characterNotification = new CharacterNotification();
+		characterNotification.characterId = characterId;
+		characterNotification.playerId = playerId;
+		characterNotification.action = action;
+		ActorRef ref = ChatMediator.getInstance().get(channel);
+		ref.tell(new DistributedPubSubMediator.Publish(channel,characterNotification),null);
+	}
+	
 	public void deleteForPlayer(String playerId) {
 		if (authType == OBJECT_DB) {
 			Characters.store().delete(playerId);
 		} else if (authType == SQL_DB) {
 			Character.db().deleteWhere("character_player_id = ?", playerId);
 		}
+		sendNotification(playerId,"all","delete");
 	}
 
 	public void delete(String playerId, String characterId) {
@@ -106,6 +122,7 @@ public class CharacterService {
 		} else if (authType == SQL_DB) {
 			Character.db().deleteWhere("character_id = ?", characterId);
 		}
+		sendNotification(playerId,characterId,"delete");
 	}
 
 	public Character create(String playerId, String id, String umaData) {
@@ -132,7 +149,7 @@ public class CharacterService {
 				throw new RuntimeException("Error saving Character " + character.id);
 			}
 		}
-
+		sendNotification(playerId,id,"create");
 		return character;
 	}
 

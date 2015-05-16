@@ -1,42 +1,66 @@
 package io.gamemachine.routing;
 
+import io.gamemachine.messages.GameMessage;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameMessageRoute {
 
-	public static final Map<String,GameMessageRoute> routes = new ConcurrentHashMap<String,GameMessageRoute>();
-	
-	private final String id;
-	private final String name;
-	private final String to;
-	private final boolean distributed;
-	
-	public GameMessageRoute(String id, String name, String to, boolean distributed) {
+	public static final Map<String, GameMessageRoute> namedRoutes = new ConcurrentHashMap<String, GameMessageRoute>();
+	public static final Map<Integer, GameMessageRoute> routes = new ConcurrentHashMap<Integer, GameMessageRoute>();
+
+	public final Integer id;
+	public final String name;
+	public final String to;
+	public final boolean distributed;
+
+	public GameMessageRoute(Integer id, String name, String to, boolean distributed) {
 		this.id = id;
 		this.name = name;
 		this.to = to;
 		this.distributed = distributed;
 	}
 
-	public static void add(String id, String name, String to, boolean distributed) {
-		GameMessageRoute route = new GameMessageRoute(id,name,to,distributed);
+	public static void add(int id, String to, boolean distributed) {
+		GameMessageRoute route = new GameMessageRoute(id, null, to, distributed);
 		routes.put(id, route);
 	}
-	
-	public String getId() {
-		return id;
+
+	public static void add(String name, String to, boolean distributed) {
+		GameMessageRoute nameRoute = new GameMessageRoute(null, name, to, distributed);
+		namedRoutes.put(name, nameRoute);
 	}
 
-	public String getName() {
-		return name;
+	public static void add(int id, String name, String to, boolean distributed) {
+		GameMessageRoute route = new GameMessageRoute(id, name, to, distributed);
+		routes.put(id, route);
+		namedRoutes.put(name, route);
 	}
 
-	public String getTo() {
-		return to;
+	public static GameMessageRoute routeFor(String name) {
+		if (namedRoutes.containsKey(name)) {
+			return namedRoutes.get(name);
+		} else {
+			return null;
+		}
 	}
 
-	public boolean isDistributed() {
-		return distributed;
+	public static GameMessageRoute routeFor(GameMessage gameMessage) {
+		if (gameMessage.hasDestinationId()) {
+			if (routes.containsKey(gameMessage.destinationId)) {
+				return routes.get(gameMessage.destinationId);
+			} else {
+				return null;
+			}
+		} else if (gameMessage.hasDestination()) {
+			if (namedRoutes.containsKey(gameMessage.destination)) {
+				return namedRoutes.get(gameMessage.destination);
+			} else {
+				return null;
+			}
+		}
+		return null;
 	}
+
 }

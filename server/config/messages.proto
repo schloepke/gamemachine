@@ -3,6 +3,17 @@ option optimize_for = SPEED;
 
 //GAME_MESSAGES
 
+message PlayerNotification {
+  required string playerId = 1;
+  required string action = 2;
+}
+
+message CharacterNotification {
+  required string playerId = 1;
+  required string action = 2;
+  required string characterId = 3;
+}
+
 message TrackDataUpdate {
   required string id = 1;
   required DynamicMessage dynamicMessage = 2;

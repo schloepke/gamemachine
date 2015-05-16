@@ -2,9 +2,13 @@ package io.gamemachine.core;
 
 import java.util.concurrent.TimeUnit;
 
+import akka.actor.ActorRef;
+import akka.contrib.pattern.DistributedPubSubMediator;
 import scala.concurrent.duration.Duration;
+import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.PlayerNotification;
 
 public abstract class GameMessageActor extends GameActor {
 
@@ -20,6 +24,12 @@ public abstract class GameMessageActor extends GameActor {
 			}
 		} else if (message instanceof String) {
 			onTick((String)message);
+		} else if (message instanceof PlayerNotification) {
+			PlayerNotification playerNotification = (PlayerNotification)message;
+			onPlayerNotification(playerNotification);
+		} else if (message instanceof CharacterNotification) {
+			CharacterNotification characterNotification = (CharacterNotification)message;
+			onCharacterNotification(characterNotification);
 		} else {
 			unhandled(message);
 		}
@@ -34,16 +44,29 @@ public abstract class GameMessageActor extends GameActor {
 
 	public abstract void onGameMessage(GameMessage gameMessage);
 	
-	public abstract void onTick(String message);
+	public void onTick(String message) {}
 
-	public void sendGameMessage(GameMessage gameMessage, String playerId) {
+	public final void sendGameMessage(GameMessage gameMessage, String playerId) {
 		PlayerCommands.sendGameMessage(gameMessage, playerId);
 	}
 
-	public abstract void onPlayerDisconnect(String playerId);
+	public void onPlayerDisconnect(String playerId){}
 	
-
-	public void scheduleOnce(long delay, String message) {
+	public void onPlayerNotification(PlayerNotification playerNotification) {}
+	
+	public void onCharacterNotification(CharacterNotification characterNotification) {}
+	
+	public final void subscribeToPlayerNotifications() {
+		ActorRef ref = ChatMediator.getInstance().get(PlayerService.channel);
+		ref.tell(new DistributedPubSubMediator.Subscribe(PlayerService.channel,getSelf()),getSelf());
+	}
+	
+	public final void subscribeToForCharacterNotifications() {
+		ActorRef ref = ChatMediator.getInstance().get(CharacterService.channel);
+		ref.tell(new DistributedPubSubMediator.Subscribe(CharacterService.channel,getSelf()),getSelf());
+	}
+	
+	public final void scheduleOnce(long delay, String message) {
 		getContext()
 				.system()
 				.scheduler()
@@ -51,7 +74,7 @@ public abstract class GameMessageActor extends GameActor {
 						null);
 	}
 	
-	public void scheduleOnce(long delay, GameMessage message) {
+	public final void scheduleOnce(long delay, GameMessage message) {
 		getContext()
 				.system()
 				.scheduler()

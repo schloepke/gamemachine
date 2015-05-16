@@ -12,13 +12,13 @@ import akka.actor.ActorSelection;
 public class PlayerCommands {
 
 	public static void SendLocal(GameMessage gameMessage, String destination) {
-		if (GameMessageRoute.routes.containsKey(destination)) {
-			GameMessageRoute route = GameMessageRoute.routes.get(destination);
+		GameMessageRoute route = GameMessageRoute.routeFor(destination);
+		if (route != null) {
 			ActorSelection sel;
-			if (route.isDistributed()) {
-				sel = ActorUtil.findDistributed(route.getTo(), gameMessage.playerId);
+			if (route.distributed) {
+				sel = ActorUtil.findDistributed(route.to, gameMessage.playerId);
 			} else {
-				sel = ActorUtil.getSelectionByName(route.getTo());
+				sel = ActorUtil.getSelectionByName(route.to);
 			}
 			sel.tell(gameMessage, null);
 		}

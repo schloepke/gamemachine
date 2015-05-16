@@ -16,6 +16,7 @@ module GameMachine
       conf = OpenStruct.new
       top.each {|t| conf.send("#{t}=",OpenStruct.new)}
 
+      conf.plugins = config.get_string_list('plugins').to_a
       conf.default_game_id = config.get_string('default_game_id')
       conf.environment = config.get_string('environment')
       conf.use_regions = config.get_boolean('use_regions')

@@ -116,6 +116,7 @@ persistent_message BuildObject {
   optional int64 updatedAt = 22;
   optional int32 state = 23;
   optional int32 updateId = 24;
+  optional bool isFloor = 25;
 }
 
 message BuildObjects {

@@ -44,9 +44,6 @@ public class Incoming extends UntypedActor {
 	private void handleIncoming(NetMessage netMessage) {
 		long clientId = netMessage.clientId;
 		ClientMessage clientMessage = netMessage.clientMessage;
-		
-		String gameId = playerService.getGameId(clientMessage.player.id);
-		GameLimits.incrementMessageCountIn(gameId);
 
 		if (clientMessage.hasPlayerLogout()) {
 			handleLogout(clientMessage, clientId);
@@ -60,6 +57,9 @@ public class Incoming extends UntypedActor {
 		}
 
 		if (clientMessage.hasPlayer()) {
+			String gameId = playerService.getGameId(clientMessage.player.id);
+			GameLimits.incrementMessageCountIn(gameId);
+			
 			if (!Authentication.isAuthenticated(clientMessage.getPlayer())) {
 				logger.debug("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());

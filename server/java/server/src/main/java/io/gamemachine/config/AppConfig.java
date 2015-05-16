@@ -1,5 +1,6 @@
 package io.gamemachine.config;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.typesafe.config.Config;
@@ -11,7 +12,16 @@ public class AppConfig {
 	public static String envRoot;
 	private static String defaultGameId;
 	private static Config gameConfig;
-
+	private static List<String> plugins = new ArrayList<String>();
+	
+	public static List<String> getPlugins() {
+		return plugins;
+	}
+	
+	public static void setPlugins(List<String> plugins) {
+		AppConfig.plugins = plugins;
+	}
+	
 	public static String getEnv() {
 		return env;
 	}

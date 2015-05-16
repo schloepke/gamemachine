@@ -71,7 +71,7 @@ dependencies {
   //compile 'redis.clients:jedis:2.2.1'
   compile 'org.mapdb:mapdb:1.0.6'
   compile 'org.postgresql:postgresql:9.3-1102-jdbc41'
-  compile 'io.netty:netty-all:4.0.23.Final'
+  compile 'io.netty:netty-all:4.0.28.Final'
   compile 'com.zaxxer:HikariCP-java6:2.1.0'
   compile 'mysql:mysql-connector-java:5.1.32'
   compile 'org.javalite:activejdbc:1.4.10'

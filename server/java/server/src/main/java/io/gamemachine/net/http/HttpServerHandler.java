@@ -38,8 +38,8 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pvp_game.CharacterHandler;
-import pvp_game.WorldBuilderHandler;
+import plugins.pvp_game.CharacterHandler;
+import plugins.world_builder.WorldBuilderHandler;
 import io.gamemachine.messages.Character;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -59,9 +59,6 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 		Player player = PlayerService.getInstance().find(playerId);
 		if (player == null) {
 			return null;
-			// PlayerService.getInstance().create(playerId,
-			// AppConfig.getDefaultGameId());
-			// PlayerService.getInstance().setPassword(playerId, password);
 		}
 
 		return playerAuth.authorize(playerId, password);
@@ -170,6 +167,12 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					return;
 				}
 
+				if (req.getUri().startsWith("/api/characters/get")) {
+					Character character = CharacterService.getInstance().find(params.get("otherPlayerId"),params.get("characterId"));
+					Ok(ctx, character.toByteArray());
+					return;
+				}
+				
 				if (req.getUri().startsWith("/api/build_objects/get")) {
 					byte[] resp = WorldBuilderHandler.getBuildObjects();
 					Ok(ctx, resp);

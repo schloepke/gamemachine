@@ -22,7 +22,7 @@ public class EntityRouter {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityRouter.class);
 	private Map<String, ActorSelection> destinations = new HashMap<String, ActorSelection>();
-	
+
 	final class PlayerDestination {
 		public final Player player;
 		public final String agent;
@@ -32,26 +32,26 @@ public class EntityRouter {
 			this.agent = agent;
 		}
 	}
-	
+
 	private ActorSelection entityTracking;
-	
+
 	public EntityRouter() {
 		entityTracking = ActorUtil.getSelectionByName(EntityTracking.name);
 	}
-	
+
 	public void routeTrackData(TrackData trackData) {
-		entityTracking.tell(trackData,null);
+		entityTracking.tell(trackData, null);
 	}
-	
+
 	public void route(List<Entity> entities, Player player) {
 		for (Entity entity : entities) {
 			entity.setPlayer(player);
-			
+
 			if (entity.hasTrackData() || entity.hasTrackDataUpdate() || entity.hasAgentTrackData()) {
-				entityTracking.tell(entity,null);
+				entityTracking.tell(entity, null);
 				continue;
 			}
-			
+
 			if (entity.hasDestination()) {
 				routeByDestination(entity);
 				continue;
@@ -77,7 +77,7 @@ public class EntityRouter {
 			sel.tell(entity, null);
 		}
 	}
-	
+
 	private void routeByDestination(Entity entity) {
 		String destination = entity.getDestination();
 		if (destination == null) {
@@ -114,12 +114,9 @@ public class EntityRouter {
 	}
 
 	private void routeByGameMessage(Entity entity) {
-		String destination = null;
 		for (GameMessage gameMessage : entity.getGameMessages().getGameMessageList()) {
-			if (gameMessage.hasDestinationId()) {
-				destination = Integer.toString(gameMessage.getDestinationId());
-			} else if (gameMessage.hasDestination()) {
-				destination = gameMessage.getDestination();
+			if (gameMessage.hasDestination()) {
+				String destination = gameMessage.getDestination();
 				logger.debug("GameMessage destination " + destination);
 				PlayerDestination pd = destinationToPlayer(destination, entity.getPlayer().getId());
 				if (pd != null) {
@@ -135,21 +132,21 @@ public class EntityRouter {
 				continue;
 			}
 
-			if (GameMessageRoute.routes.containsKey(destination)) {
-				GameMessageRoute route = GameMessageRoute.routes.get(destination);
+			GameMessageRoute route = GameMessageRoute.routeFor(gameMessage);
+			if (route != null) {
 				gameMessage.setPlayerId(entity.getPlayer().getId());
 				ActorSelection sel;
-				logger.debug("GameMessage route to=" + route.getTo() + " player=" + entity.getPlayer().getId());
-				if (route.isDistributed()) {
-					sel = ActorUtil.findDistributed(route.getTo(), entity.getPlayer().getId());
+				logger.debug("GameMessage route to=" + route.to + " player=" + entity.getPlayer().getId());
+				if (route.distributed) {
+					sel = ActorUtil.findDistributed(route.to, entity.getPlayer().getId());
 				} else {
-					sel = ActorUtil.getSelectionByName(route.getTo());
+					sel = ActorUtil.getSelectionByName(route.to);
 				}
 				sel.tell(gameMessage, null);
 			}
 		}
 	}
-	
+
 	private PlayerDestination destinationToPlayer(String destination, String senderId) {
 		if (destination == null || !destination.startsWith("player/")) {
 			return null;

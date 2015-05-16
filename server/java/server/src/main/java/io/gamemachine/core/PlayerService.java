@@ -3,6 +3,7 @@ package io.gamemachine.core;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.PlayerNotification;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,13 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import akka.actor.ActorRef;
+import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.messages.Character;
 
 public class PlayerService {
 
+	public static String channel = "player_notifications";
 	private int authType;
 	public static int timeout = 20;
 	public static final int OBJECT_DB = 0;
@@ -43,6 +47,14 @@ public class PlayerService {
 		return LazyHolder.INSTANCE;
 	}
 
+	private void sendNotification(String playerId, String action) {
+		PlayerNotification playerNotification = new PlayerNotification();
+		playerNotification.playerId = playerId;
+		playerNotification.action = action;
+		ActorRef ref = ChatMediator.getInstance().get(channel);
+		ref.tell(new DistributedPubSubMediator.Publish(channel,playerNotification),null);
+	}
+	
 	public void delete(String playerId) {
 		Player player = find(playerId);
 		if (player == null) {
@@ -58,6 +70,7 @@ public class PlayerService {
 		}
 		
 		players.remove(player.id);
+		sendNotification(player.id,"delete");
 	}
 		
 	public Boolean playerExists(String playerId, boolean quick) {
@@ -105,7 +118,8 @@ public class PlayerService {
 		}
 
 		players.put(playerId, player);
-
+		sendNotification(player.id,"create");
+		
 		return player;
 	}
 		

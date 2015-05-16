@@ -4,7 +4,6 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.game_systems.LatencyTest;
-import io.gamemachine.game_systems.PathService;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
@@ -14,7 +13,6 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import pvp_game.GameLoader;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
@@ -69,7 +67,7 @@ public class GameMachineLoader {
 
 	public static void startJavaGameActors() {
 		actorSystem.actorOf(Props.create(UnityProxy.class), UnityProxy.name);
-		GameLoader.load();
+		PluginManager.startAll();
 	}
 
 	public void run(ActorSystem newActorSystem) {

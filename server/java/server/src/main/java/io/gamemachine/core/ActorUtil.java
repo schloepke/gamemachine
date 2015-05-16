@@ -1,14 +1,22 @@
 package io.gamemachine.core;
 
+import io.gamemachine.objectdb.DbActor;
+import io.gamemachine.routing.GameMessageRoute;
+
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
+
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
+import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Address;
+import akka.actor.Props;
 import akka.cluster.Cluster;
 import akka.pattern.AskableActorSelection;
+import akka.routing.RoundRobinPool;
 import akka.util.Timeout;
 
 import com.typesafe.config.Config;
@@ -75,5 +83,28 @@ public class ActorUtil {
 				.withFallback(ConfigFactory.load());
 		return ActorSystem.create(name, customConfig);
 	}
-
+	
+	public static ActorRef createActor(Class<?> klass, String name) {
+		return GameMachineLoader.getActorSystem().actorOf(Props.create(klass), name);
+	}
+	
+	public static void createRoundRobinPool(Class<?> klass, String name, int poolSize) {
+		if (poolSize > 1) {
+			GameMachineLoader.getActorSystem().actorOf(new RoundRobinPool(poolSize).props(Props.create(klass)), name);
+		} else if (poolSize == 1) {
+			GameMachineLoader.getActorSystem().actorOf(Props.create(klass), name);
+		}
+	}
+	
+	public static void createDistributedPool(Class<?> klass, String name, int nodeCount) {
+		ArrayList<String> nodes = new ArrayList<String>();
+		for (int i = 1; i < nodeCount; i++) {
+			nodes.add(name + i);
+		}
+		Hashring ring = new Hashring(name, nodes, 3);
+		for (String node : ring.nodes) {
+			GameMachineLoader.getActorSystem().actorOf(Props.create(klass), node);
+		}
+	}
+	
 }

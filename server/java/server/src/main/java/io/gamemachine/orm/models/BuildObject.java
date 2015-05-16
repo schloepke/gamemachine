@@ -52,6 +52,8 @@ CREATE TABLE build_objects (
 
   build_object_update_id integer DEFAULT NULL,
 
+  build_object_is_floor boolean DEFAULT NULL,
+
   CONSTRAINT build_object_pkey PRIMARY KEY (id)
 );
 alter table build_objects owner to gamemachine;
@@ -100,6 +102,8 @@ CREATE TABLE `build_objects` (
   `build_object_state` int(11) DEFAULT NULL,
 
   `build_object_update_id` int(11) DEFAULT NULL,
+
+  `build_object_is_floor` tinyint(4) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
