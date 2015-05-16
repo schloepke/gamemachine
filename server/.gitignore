@@ -1,4 +1,3 @@
-.game_machine
 Makefile
 config/development.conf
 config/docker.conf
