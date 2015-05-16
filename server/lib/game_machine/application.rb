@@ -103,6 +103,7 @@ module GameMachine
       def load_games
         require_relative '../../games/routes.rb'
         require_relative '../../games/boot.rb'
+        require_relative '../../java/src/main/java/plugins/plugins.rb'
 
         JavaLib::GameMachineLoader.start_java_game_actors
       end

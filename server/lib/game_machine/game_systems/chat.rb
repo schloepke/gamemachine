@@ -1,12 +1,13 @@
 require 'digest'
+
 module GameMachine
   module GameSystems
     class Chat < Actor::Base
       include GameMachine::Commands
-
       def self.subscribers_for_topic(topic,game_id)
         datastore = GameMachine::Commands::DatastoreCommands.new
-        if entity = datastore.get("#{game_id}_chat_topic_#{topic}")
+        entity = datastore.get("#{game_id}_chat_topic_#{topic}")
+        if entity_valid(entity)
           entity.subscribers || MessageLib::Subscribers.new
         else
           MessageLib::Subscribers.new
@@ -14,6 +15,7 @@ module GameMachine
       end
 
       attr_reader :chat_id, :registered_as, :game_id
+
       def post_init(*args)
         @chat_id = args[0]
         @registered_as = args[1]
@@ -42,6 +44,7 @@ module GameMachine
 
       def on_receive(entity)
         self.class.logger.debug "Received #{entity}"
+
         if entity.is_a?(MessageLib::ChatDestroy)
           leave_all_channels
           return
@@ -140,7 +143,9 @@ module GameMachine
       def get_subscriptions
         subscriptions = Set.new
         entity_id = "subscriptions_#{chat_id}"
-        if entity = commands.datastore.get(entity_id)
+        entity = commands.datastore.get(entity_id)
+        if entity_valid(entity)
+
           if chat_channels = entity.chat_channels.get_chat_channel_list
             chat_channels.each do |channel|
               subscriptions.add(channel.name)
@@ -165,7 +170,8 @@ module GameMachine
       def get_flags
         {}.tap do |flags|
           @subscriptions.each do |name|
-            if entity = commands.datastore.get(channel_flags_id(name))
+            entity = commands.datastore.get(channel_flags_id(name))
+            if entity_valid(entity)
               flags[name] = parse_channel_flags(entity.params)
             end
           end
@@ -187,7 +193,12 @@ module GameMachine
 
       def invite_exists?(channel_name,invite_id)
         key = "invite_#{channel_name}_#{invite_id}"
-        commands.datastore.get(key)
+        entity = commands.datastore.get(key)
+        if !entity.nil? && entity_valid(entity)
+          true
+        else
+          false
+        end
       end
 
       def join_channels(chat_channels)
@@ -295,6 +306,19 @@ module GameMachine
           send_group_message(chat_message)
         elsif chat_message.type == 'private'
           send_private_message(chat_message)
+        end
+      end
+
+      def entity_valid(entity)
+        return self.class.entity_valid(entity)
+      end
+
+      def self.entity_valid(entity)
+        if (entity.is_a?(MessageLib::ObjectdbStatus))
+          self.class.logger.info("ObjectdbStatus")
+          return false
+        else
+          return true
         end
       end
 
