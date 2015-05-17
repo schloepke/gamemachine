@@ -11,4 +11,4 @@ set JAVA_OPTS=-Xmx%MAX_HEAP% -Xmn%NEW_SIZE% -XX:NewSize=%NEW_SIZE% -XX:MaxNewSiz
  -XX:+UnlockDiagnosticVMOptions -XX:ParGCCardsPerStrideChunk=32768 -XX:MaxTenuringThreshold=1^
  -XX:SurvivorRatio=190 -XX:TargetSurvivorRatio=90
 
-jruby -J-cp "%GM_CLASSPATH%" bin\game_machine %*
+"%GM_HOME%/jruby/bin/jruby" -J-cp "%GM_CLASSPATH%" "%JAVA_OPTS%"  "%GM_HOME%/bin/game_machine" %*

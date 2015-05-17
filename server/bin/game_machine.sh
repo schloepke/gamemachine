@@ -10,5 +10,5 @@ JAVA_OPTS="-J-Xmx$MAX_HEAP -J-Xmn$NEW_SIZE -J-XX:NewSize=$NEW_SIZE -J-XX:MaxNewS
  -J-XX:+UnlockDiagnosticVMOptions -J-XX:ParGCCardsPerStrideChunk=32768 -J-XX:MaxTenuringThreshold=1\
  -J-XX:SurvivorRatio=190 -J-XX:TargetSurvivorRatio=90"
 
-jruby -J-cp "$GM_HOME/java/server/lib/*" $JAVA_OPTS "$GM_HOME/bin/game_machine" "$@"
+jruby/bin/jruby -J-cp "$GM_HOME/java/server/lib/*" $JAVA_OPTS "$GM_HOME/bin/game_machine" "$@"
 
