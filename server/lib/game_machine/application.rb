@@ -65,21 +65,10 @@ module GameMachine
         load_games
         start_mono
 
-        
+        start_http
+
         GameMachine.logger.info("Game Machine start successful")
         
-        # When admin is disabled we use a minimal netty http server for auth
-        #  This is desired for production deployments where we have a separate
-        # system for managing users
-        if config.http.enabled
-          if config.admin_enabled
-            Thread.new do
-              start_admin
-            end
-          else
-            start_http
-          end
-        end
       end
 
       def orm_connect
@@ -111,10 +100,6 @@ module GameMachine
       def start_http
         http = NetLib::HttpServer.new(config.http.host,config.http.port,config.http.ssl,'message_gateway', HttpHelper.new)
         http.start
-      end
-
-      def start_admin
-        require_relative '../../web/app'
       end
 
       def start_mono

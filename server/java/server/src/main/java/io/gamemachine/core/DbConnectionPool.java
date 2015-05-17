@@ -34,7 +34,6 @@ public class DbConnectionPool {
 
 		try {
 			Class.forName(ds);
-			Class.forName("org.postgresql.Driver");
 		} catch (ClassNotFoundException e) {
 			logger.error(e.getMessage());
 			e.printStackTrace();
