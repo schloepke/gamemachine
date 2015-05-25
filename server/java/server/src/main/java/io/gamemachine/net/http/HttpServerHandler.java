@@ -174,7 +174,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 				
 				if (req.getUri().startsWith("/api/build_objects/get")) {
-					byte[] resp = WorldBuilderHandler.getBuildObjects();
+					int start = Integer.parseInt(params.get("start"));
+					int end = Integer.parseInt(params.get("end"));
+					byte[] resp = WorldBuilderHandler.getBuildObjects(start,end);
 					Ok(ctx, resp);
 					return;
 				}

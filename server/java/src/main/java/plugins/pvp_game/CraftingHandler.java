@@ -42,7 +42,7 @@ public class CraftingHandler extends GameMessageActor {
 		for (CraftableItem craftable : CraftableItem.db().findAll()) {
 			String idx = ciIndex(craftable);
 			craftableItems.put(idx, craftable);
-			logger.warning("Add craftable index " + idx);
+			logger.debug("Add craftable index " + idx);
 		}
 	}
 

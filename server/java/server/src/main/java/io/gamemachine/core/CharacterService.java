@@ -57,6 +57,8 @@ public class CharacterService {
 			}
 			chars.add(character);
 			Characters.store().set(characters);
+			
+			Character.store().set(character);
 			return true;
 		}
 
@@ -74,6 +76,10 @@ public class CharacterService {
 			return false;
 		}
 
+		public static Character getCharacter(String characterId) {
+			return Character.store().get(characterId, timeout);
+		}
+		
 		public static Characters getCharacters(String playerId) {
 			Characters characters = Characters.store().get(playerId, timeout);
 			if (characters == null) {
@@ -125,6 +131,16 @@ public class CharacterService {
 		sendNotification(playerId,characterId,"delete");
 	}
 
+	public void save(Character character) {
+		if (authType == OBJECT_DB) {
+			ObjectStoreHelper.update(character);
+		} else if (authType == SQL_DB) {
+			if (!Character.db().save(character)) {
+				throw new RuntimeException("Error saving Character " + character.id);
+			}
+		}
+	}
+	
 	public Character create(String playerId, String id, String umaData) {
 		Character global = find(globalUser, id);
 		if (global != null) {
@@ -169,6 +185,16 @@ public class CharacterService {
 		return characters;
 	}
 
+	public Character find(String characterId) {
+		if (authType == OBJECT_DB) {
+			return ObjectStoreHelper.getCharacter(characterId);
+		} else if (authType == SQL_DB) {
+			return Character.db().findFirst("character_id = ?", characterId);
+		} else {
+			return null;
+		}
+	}
+	
 	public Character find(String playerId, String id) {
 		if (authType == OBJECT_DB) {
 			return ObjectStoreHelper.find(playerId, id);

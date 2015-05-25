@@ -9,9 +9,11 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.ClientConnection;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.PlayerConnected;
 import io.gamemachine.net.Connection;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import akka.actor.ActorSelection;
 import akka.actor.Props;
@@ -21,6 +23,7 @@ import akka.event.LoggingAdapter;
 
 public class Incoming extends UntypedActor {
 
+	private static Map<String,Long> connectAttempts = new ConcurrentHashMap<String,Long>();
 	public static String name = "incoming";
 	private static Map<String, String> env = System.getenv();
 	private ActorSelection gameHandler;
@@ -51,7 +54,7 @@ public class Incoming extends UntypedActor {
 			handleConnect(netMessage, clientMessage, clientId);
 		} else {
 			if (!Connection.hasConnection(clientMessage.player.id)) {
-				logger.debug("Ignoring message before connection setup");
+				logger.warning("Ignoring message before connection setup");
 				return;
 			}
 		}
@@ -61,7 +64,7 @@ public class Incoming extends UntypedActor {
 			GameLimits.incrementMessageCountIn(gameId);
 			
 			if (!Authentication.isAuthenticated(clientMessage.getPlayer())) {
-				logger.debug("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
+				logger.warning("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());
 				return;
 			}
@@ -85,7 +88,7 @@ public class Incoming extends UntypedActor {
 
 		String gameId = playerService.getGameId(clientMessage.player.id);
 		if (GameLimits.isConnectionLimitReached(gameId)) {
-			logger.info("Connection limit reached for " + gameId);
+			logger.warning("Connection limit reached for " + gameId);
 			return;
 		}
 
@@ -94,8 +97,31 @@ public class Incoming extends UntypedActor {
 		// our new child tries to start, and fails because a child already exists.  This situation gets cleaned up by the idle timeout eventually.
 		// Only broken clients should have any issues, but we have to make sure they work also.
 		
-		destroyChild(clientMessage.player.id);
-		Connection.removeConnection(clientMessage.player.id);
+		if (connectAttempts.containsKey(clientMessage.player.id)) {
+			Long last = connectAttempts.get(clientMessage.player.id);
+			if (System.currentTimeMillis() - last < 2000l) {
+				logger.warning("duplicate connect attempt too fast for " + clientMessage.player.id);
+				return;
+			}
+		}
+		
+		connectAttempts.put(clientMessage.player.id, System.currentTimeMillis());
+		
+		if (Connection.hasConnection(clientMessage.player.id)) {
+			Connection existing = Connection.getConnection(clientMessage.player.id);
+			ClientMessage out = new ClientMessage();
+			Player player = new Player();
+			player.id = clientMessage.player.id;
+			out.player = player;
+			out.setClientConnection(existing.getClientConnection());
+			out.setPlayerConnected(new PlayerConnected());
+			existing.sendToClient(out);
+			logger.warning("Resending PlayerConnected to " + clientMessage.player.id);
+			return;
+		}
+		
+		//destroyChild(clientMessage.player.id);
+		//Connection.removeConnection(clientMessage.player.id);
 		
 		
 		ClientConnection clientConnection = createClientConnection(clientId, clientMessage);
@@ -168,8 +194,9 @@ public class Incoming extends UntypedActor {
 
 	private void destroyChild(String playerId) {
 		ActorSelection sel = ActorUtil.getSelectionByName(playerId);
-		sel.tell(akka.actor.PoisonPill.getInstance(), getSelf());
+		//sel.tell(akka.actor.PoisonPill.getInstance(), getSelf());
 		String gameId = playerService.getGameId(playerId);
+		sel.tell("die", getSelf());
 		GameLimits.decrementConnectionCount(gameId);
 		logger.debug("Stopping Outgoing actor " + playerId);
 	}

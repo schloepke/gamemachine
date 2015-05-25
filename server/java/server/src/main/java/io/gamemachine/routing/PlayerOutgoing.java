@@ -74,7 +74,7 @@ public class PlayerOutgoing extends UntypedActor {
 	}
 	
 	private void unregister() {
-		logger.info("Player "+playerId+" timed out");
+		logger.info("Player "+playerId+" killed");
 		ClientMessage clientMessage = createClientMessage();
 		clientMessage.setPlayer(new Player().setId(playerId));
 		Connection.removeConnection(playerId);
@@ -91,6 +91,8 @@ public class PlayerOutgoing extends UntypedActor {
 			if (msg.equals("idle_timeout")) {
 				unregisterIfIdle();
 			} else if (msg.equals(this.gameId)) {
+				unregister();
+			} else if (msg.equals("die")) {
 				unregister();
 			}
 		} else {

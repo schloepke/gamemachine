@@ -1,10 +1,16 @@
 package plugins.world_builder;
 
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.Grid;
+import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
+import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.TrackData;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -48,19 +54,6 @@ public class WorldBuilderHandler extends GameMessageActor {
 				if (buildObjects.action == 1) {
 					buildObjects.currentUpdate = getUpdateCount();
 					setReply(gameMessage);
-				} else if (buildObjects.action == 2) {
-					if (buildObjects.hasRequestedUpdateId()) {
-						if (updateJournal.containsKey(buildObjects.requestedUpdateId)) {
-							Update update = getUpdate(buildObjects.requestedUpdateId);
-							BuildObject buildObject = update.buildObject.clone();
-							buildObject.updateId = buildObjects.requestedUpdateId;
-							gameMessage.buildObjects.addBuildObject(buildObject);
-						} else {
-							logger.warning("requestedUpdateId not found: " + buildObjects.requestedUpdateId);
-						}
-					} else {
-						logger.warning("action 2 without requested update id");
-					}
 				}
 
 				setReply(gameMessage);
@@ -75,20 +68,66 @@ public class WorldBuilderHandler extends GameMessageActor {
 				} else if (bo.action == 5) {
 					removeAll();
 					setReply(gameMessage);
+				} else if (bo.action == 10) {
+					updateDoor(bo);
+					setReply(gameMessage);
 				}
 			}
 		}
 	}
 
-	public static byte[] getBuildObjects() {
+	public static byte[] getBuildObjects(int start, int end) {
 		BuildObjects buildObjects = new BuildObjects();
-		for (BuildObject buildObject : objectIndex.values()) {
-			buildObjects.getBuildObjectList().add(buildObject);
+		if (start == 0 && end == 0) {
+			for (BuildObject buildObject : objectIndex.values()) {
+				buildObjects.getBuildObjectList().add(buildObject);
+			}
+		} else {
+			for (int i = start; i<= end;i++) {
+				Update update = getUpdate(i);
+				if (update == null) {
+					System.out.println("Update not found with id "+i);
+					continue;
+				}
+				BuildObject buildObject = update.buildObject.clone();
+				buildObject.updateId = i;
+				buildObjects.addBuildObject(buildObject);
+			}
 		}
+		
 		return buildObjects.toByteArray();
 	}
 	
-	private Update getUpdate(int key) {
+	private void broadcast(GameMessage gameMessage) {
+		for (Grid grid : GameGrid.gridsStartingWith("default")) {
+			for (TrackData trackData : grid.getAll()) {
+				if (trackData.entityType != TrackData.EntityType.PLAYER) {
+					continue;
+				}
+				PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
+			}
+		}
+	}
+	
+	private void updateDoor(BuildObject buildObject) {
+		BuildObject existing = find(buildObject.id);
+		if (existing == null) {
+			return;
+		}
+
+		existing.doorStatus = buildObject.doorStatus;
+		existing.updatedAt = System.currentTimeMillis();
+		BuildObject.db().save(existing);
+		addUpdate(existing, 10);
+		
+		GameMessage gameMessage = new GameMessage();
+		gameMessage.buildObjects = new BuildObjects();
+		gameMessage.buildObjects.action = 10;
+		gameMessage.buildObjects.getBuildObjectList().add(existing);
+		broadcast(gameMessage);
+	}
+	
+	private static Update getUpdate(int key) {
 		if (updateJournal.containsKey(key)) {
 			return updateJournal.get(key);
 		} else {
@@ -127,10 +166,11 @@ public class WorldBuilderHandler extends GameMessageActor {
 		}
 	}
 
+	
+	
 	private void remove(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
 		if (existing == null) {
-			
 			return;
 		}
 

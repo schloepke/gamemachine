@@ -36,6 +36,10 @@ public class Connection {
 		playerService.setIp(this.playerId, this.ip);
 	}
 
+	public static Connection getConnection(String playerId) {
+		return connections.get(playerId);
+	}
+	
 	public static Set<String> getConnectedPlayerIds() {
 		return connections.keySet();
 	}

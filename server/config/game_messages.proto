@@ -111,12 +111,15 @@ persistent_message BuildObject {
   optional int32 rz = 11;
   optional int32 rw = 12;
   optional int32 health = 14;
-  optional int32 type = 18;
+  optional int32 templateId = 18;
   optional string grid = 19;
   optional int64 updatedAt = 22;
   optional int32 state = 23;
   optional int32 updateId = 24;
   optional bool isFloor = 25;
+  optional bool isDestructable = 26;
+  optional bool hasDoor = 27;
+  optional int32 doorStatus = 28;
 }
 
 message BuildObjects {
@@ -125,7 +128,22 @@ message BuildObjects {
   optional int32 requestedUpdateId = 3;
   optional int32 currentUpdate = 4;
 }
-  
+
+persistent_message BuildableArea {
+  required string ownerId = 1;
+  required float px = 2;
+  required float py = 3;
+  required float pz = 4;
+  required int32 sx = 5;
+  required int32 sy = 6;
+  required int32 sz = 7;
+  optional int32 recordId = 8;
+}
+
+message BuildableAreas {
+  repeated BuildableArea buildableArea = 1;
+}
+ 
 message Bounds {
   optional Vector3 min = 1;
   optional Vector3 max = 2;
@@ -454,6 +472,7 @@ message GameMessage {
   optional ComboAttack comboAttack = 38;
   optional NpcData npcData = 39;
   optional BuildObjects buildObjects = 40;
+  optional BuildableAreas buildableAreas = 41;
 }
 
 message GameMessages {

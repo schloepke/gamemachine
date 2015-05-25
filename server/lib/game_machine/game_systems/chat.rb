@@ -263,6 +263,21 @@ module GameMachine
       end
 
       def send_private_message(chat_message)
+        channel_name = chat_message.chat_channel.name
+        if channel_name.match(/^character_id__/)
+          channel_name.sub!("character_id__","")
+          char_service = JavaLib::CharacterService.get_instance
+          character = char_service.find(channel_name)
+          if character.nil?
+            self.class.logger.info "Can't find character #{channel_name}"
+            return
+          else
+            chat_message.chat_channel.name = character.player_id
+            self.class.logger.info "character #{channel_name} player #{chat_message.chat_channel.name}"
+          end
+          
+        end
+        
         self.class.logger.debug "Sending private chat message #{chat_message.message} from:#{chat_id} to:#{chat_message.chat_channel.name}"
         unless can_send_to_player?(chat_id,chat_message.chat_channel.name)
           self.class.logger.info "Private chat denied, mismatched game id"
@@ -281,7 +296,7 @@ module GameMachine
 
       def can_send_to_player?(sender_id,recipient_id)
         player_service = JavaLib::PlayerService.get_instance
-        if recipient_player = player_service.find(recipient)
+        if recipient_player = player_service.find(recipient_id)
           if recipient_player.get_game_id == game_id
             return true
           end
@@ -315,7 +330,7 @@ module GameMachine
 
       def self.entity_valid(entity)
         if (entity.is_a?(MessageLib::ObjectdbStatus))
-          self.class.logger.info("ObjectdbStatus")
+          logger.info("ObjectdbStatus")
           return false
         else
           return true

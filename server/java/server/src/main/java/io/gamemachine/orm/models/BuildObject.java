@@ -42,7 +42,7 @@ CREATE TABLE build_objects (
 
   build_object_health integer DEFAULT NULL,
 
-  build_object_type integer DEFAULT NULL,
+  build_object_template_id integer DEFAULT NULL,
 
   build_object_grid character varying(128) DEFAULT NULL,
 
@@ -53,6 +53,12 @@ CREATE TABLE build_objects (
   build_object_update_id integer DEFAULT NULL,
 
   build_object_is_floor boolean DEFAULT NULL,
+
+  build_object_is_destructable boolean DEFAULT NULL,
+
+  build_object_has_door boolean DEFAULT NULL,
+
+  build_object_door_status integer DEFAULT NULL,
 
   CONSTRAINT build_object_pkey PRIMARY KEY (id)
 );
@@ -93,7 +99,7 @@ CREATE TABLE `build_objects` (
 
   `build_object_health` int(11) DEFAULT NULL,
 
-  `build_object_type` int(11) DEFAULT NULL,
+  `build_object_template_id` int(11) DEFAULT NULL,
 
   `build_object_grid` varchar(128) DEFAULT NULL,
 
@@ -104,6 +110,12 @@ CREATE TABLE `build_objects` (
   `build_object_update_id` int(11) DEFAULT NULL,
 
   `build_object_is_floor` tinyint(4) DEFAULT NULL,
+
+  `build_object_is_destructable` tinyint(4) DEFAULT NULL,
+
+  `build_object_has_door` tinyint(4) DEFAULT NULL,
+
+  `build_object_door_status` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
