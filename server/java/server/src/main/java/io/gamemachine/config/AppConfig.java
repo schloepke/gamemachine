@@ -8,6 +8,7 @@ import com.typesafe.config.Config;
 
 public class AppConfig {
 	
+	private static boolean orm;
 	private static String env;
 	public static String envRoot;
 	private static String defaultGameId;
@@ -22,6 +23,13 @@ public class AppConfig {
 		AppConfig.plugins = plugins;
 	}
 	
+	public static boolean getOrm() {
+		return orm;
+	}
+	
+	public static void setOrm(boolean orm) {
+		AppConfig.orm = orm;
+	}
 	public static String getEnv() {
 		return env;
 	}

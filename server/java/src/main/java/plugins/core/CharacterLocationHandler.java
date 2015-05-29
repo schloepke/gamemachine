@@ -1,4 +1,4 @@
-package plugins.misc;
+package plugins.core;
 
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;

@@ -38,8 +38,8 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import plugins.landrush.BuildObjectHandler;
 import plugins.pvp_game.CharacterHandler;
-import plugins.world_builder.WorldBuilderHandler;
 import io.gamemachine.messages.Character;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -89,7 +89,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 		}
 
-		logger.info(req.getUri());
+		logger.debug(req.getUri());
 		if (req.getMethod() == POST) {
 			HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), req);
 			for (InterfaceHttpData data : decoder.getBodyHttpDatas()) {
@@ -151,7 +151,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				Integer authtoken = Integer.parseInt(params.get("authtoken"));
 				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, "admin");
 
-				if (!Authentication.isAuthenticated(playerId, authtoken)) {
+				if (!Authentication.hasValidAuthtoken(playerId, authtoken)) {
 					return;
 				}
 
@@ -169,6 +169,10 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
 				if (req.getUri().startsWith("/api/characters/get")) {
 					Character character = CharacterService.getInstance().find(params.get("otherPlayerId"),params.get("characterId"));
+					if (character == null) {
+						logger.info("no character for "+params.get("otherPlayerId")+" "+params.get("characterId"));
+						return;
+					}
 					Ok(ctx, character.toByteArray());
 					return;
 				}
@@ -176,7 +180,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				if (req.getUri().startsWith("/api/build_objects/get")) {
 					int start = Integer.parseInt(params.get("start"));
 					int end = Integer.parseInt(params.get("end"));
-					byte[] resp = WorldBuilderHandler.getBuildObjects(start,end);
+					byte[] resp = BuildObjectHandler.getBuildObjects(start,end);
 					Ok(ctx, resp);
 					return;
 				}

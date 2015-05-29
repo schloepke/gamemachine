@@ -21,14 +21,22 @@ public class Authentication {
 		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
 	}
 
-	public static boolean isAuthenticated(String playerId, int authtoken) {
+	public static boolean isAuthenticated(Player player) {
+		return (authenticatedUsers.containsKey(player.id));
+	}
+	
+	public static boolean isAuthenticated(String playerId) {
+		return (authenticatedUsers.containsKey(playerId));
+	}
+	
+	public static boolean hasValidAuthtoken(String playerId, int authtoken) {
 		Player player = new Player();
 		player.id = playerId;
 		player.authtoken = authtoken;
-		return Authentication.isAuthenticated(player);
+		return Authentication.hasValidAuthtoken(player);
 	}
 	
-	public static boolean isAuthenticated(Player player) {
+	public static boolean hasValidAuthtoken(Player player) {
 		if (authenticatedUsers.containsKey(player.getId())) {
 			int authtoken = authenticatedUsers.get(player.id);
 			if (authtoken == player.authtoken) {

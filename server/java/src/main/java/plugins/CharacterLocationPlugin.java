@@ -3,7 +3,7 @@ package plugins;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
-import plugins.misc.CharacterLocationHandler;
+import plugins.core.CharacterLocationHandler;
 
 public class CharacterLocationPlugin extends Plugin {
 

@@ -72,7 +72,7 @@ public class Connection {
 
 			// Don't count data transfers on local network
 			if (!playerIsAgent) {
-				GameLimits.addBytesTransferred(gameId, bytes.length);
+				GameLimits.addBytesTransferred(gameId, playerId,bytes.length);
 			}
 
 			if (protocol == NetMessage.SIMPLE_UDP) {

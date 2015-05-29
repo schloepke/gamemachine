@@ -80,10 +80,10 @@ public class GameMachineLoader {
 		// PathService.name);
 		
 		startCacheUpdateHandler();
-
+		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
+		
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
-			actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		}
 
 	}

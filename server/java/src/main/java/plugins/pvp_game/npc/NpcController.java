@@ -3,7 +3,7 @@ package plugins.pvp_game.npc;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
-import io.gamemachine.messages.ClientData;
+import io.gamemachine.messages.UserDefinedData;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.NpcData;
 import io.gamemachine.messages.TrackData;
@@ -61,7 +61,7 @@ public class NpcController extends GameMessageActor {
 		trackData = new TrackData();
 		trackData.id = id;
 		trackData.entityType = trackData.entityType.NPC;
-		trackData.clientData = new ClientData();
+		trackData.userDefinedData = new UserDefinedData();
 	}
 
 	private void initWaypoints() {
@@ -143,11 +143,11 @@ public class NpcController extends GameMessageActor {
 		trackData.setZ(toInt(Common.worldOffset));
 		trackData.setZone(1);
 		if (npcMovement.isWalking()) {
-			trackData.clientData.command2 = 2;
+			trackData.userDefinedData.userdefInt2 = 2;
 		} else if (npcMovement.isRunning()) {
-			trackData.clientData.command2 = 3;
+			trackData.userDefinedData.userdefInt2 = 3;
 		} else {
-			trackData.clientData.command2 = 1;
+			trackData.userDefinedData.userdefInt2 = 1;
 		}
 		grid.set(trackData);
 	}

@@ -20,7 +20,7 @@ public class CharacterService {
 	public static String channel = "character_notifications";
 	private String globalUser = "global_user";
 	private int authType;
-	public static int timeout = 20;
+	public static int timeout = 2000;
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);

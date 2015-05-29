@@ -12,13 +12,18 @@ public class ClientMessageEncoder extends MessageToMessageEncoder<ClientMessage>
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ClientMessage msg, List<Object> out) throws Exception {
 		if (msg instanceof ClientMessage) {
-			
+			String playerId;
 			// It has a game id if it's a normal client and not an agent
 			if (msg.hasGameId()) {
+				if (msg.hasPlayer()) {
+					playerId = msg.player.id;
+				} else {
+					playerId = "nobody";
+				}
 				String gameId = msg.getGameId();
 				msg.setGameId(null);
 				byte[] bytes = msg.toPrefixedByteArray();
-				GameLimits.addBytesTransferred(gameId, bytes.length);
+				GameLimits.addBytesTransferred(gameId, playerId,bytes.length);
 				out.add(wrappedBuffer(bytes));
 			} else {
 				out.add(wrappedBuffer(msg.toPrefixedByteArray()));

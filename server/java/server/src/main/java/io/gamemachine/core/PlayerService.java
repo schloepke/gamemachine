@@ -1,5 +1,6 @@
 package io.gamemachine.core;
 
+import io.gamemachine.authentication.Authentication;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
@@ -7,6 +8,7 @@ import io.gamemachine.messages.PlayerNotification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.naming.OperationNotSupportedException;
@@ -23,10 +25,10 @@ public class PlayerService {
 
 	public static String channel = "player_notifications";
 	private int authType;
-	public static int timeout = 20;
+	public static int timeout = 2000;
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
-	public ConcurrentHashMap<String, Player> players = new ConcurrentHashMap<String, Player>();
+	public Map<String, Player> players = new ConcurrentHashMap<String, Player>();
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 	
 	private PlayerService() {
@@ -96,7 +98,7 @@ public class PlayerService {
 	public Player create(String playerId, String gameId, String role) {
 		Player player = find(playerId);
 		if (player != null) {
-			return null;
+			return player;
 		}
 
 		player = new Player();
@@ -192,6 +194,14 @@ public class PlayerService {
 		} else {
 			return player.gameId;
 		}
+	}
+	
+	public boolean isAuthenticated(Player player) {
+		return Authentication.isAuthenticated(player);
+	}
+	
+	public boolean isAuthenticated(String playerId) {
+		return Authentication.isAuthenticated(playerId);
 	}
 	
 	public Integer getAuthtoken(String playerId) {

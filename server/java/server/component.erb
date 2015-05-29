@@ -390,7 +390,7 @@ import io.gamemachine.core.CacheUpdate;
 					return null;
 				}
 			} catch (Exception e) {
-				return null;
+				throw new RuntimeException("Operation timed out");
 			}
 			if (message == null) {
 				return null;

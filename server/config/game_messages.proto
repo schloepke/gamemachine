@@ -3,6 +3,19 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+message GmStats {
+  optional string id = 1;
+  optional string action = 2;
+  optional int64 messageCountIn = 3;
+  optional int64 messageCountOut = 4;
+  optional int64 messageCountInOut = 5;
+  optional int64 bytesOut = 6;
+  optional int32 connectionCount = 7;
+  optional int64 playerBytesOut = 8;
+  optional string playerId = 9;
+  optional int64 bytesPerMessageOut = 10;
+}
+
 message NpcData {
   optional string id = 1;
   optional Vector3 spawnpoint = 2;
@@ -390,7 +403,7 @@ message TrackData {
 
   
   optional int32 shortId = 13;
-  optional ClientData clientData = 14;
+  optional UserDefinedData userDefinedData = 14;
   optional int32 broadcast = 15;
   optional string characterId = 16;
   optional int32 rx = 17;
@@ -404,20 +417,35 @@ message TrackData {
   optional float velZ = 25;
   optional int32 zone = 26;
   optional int32 hidden = 27;
+  optional int32 yaxis = 28;
 }
 
-message ClientData {
+message UserDefinedData {
   optional int32 command = 1;
   optional int32 value = 2;
-  optional int32 command2 = 3;
-  optional int32 command3 = 4;
-  optional int32 command4 = 5;
-  optional int32 command5 = 6;
-  optional int32 command6 = 7;
-  optional int32 command7 = 8;
-  optional int32 command8 = 9;
-  optional int32 command9 = 10;
-  optional int32 command1 = 11;
+  optional int32 userdefInt2 = 3;
+  optional int32 userdefInt3 = 4;
+  optional int32 userdefInt4 = 5;
+  optional int32 userdefInt5 = 6;
+  optional int32 userdefInt6 = 7;
+  optional int32 userdefInt7 = 8;
+  optional int32 userdefInt8 = 9;
+  optional int32 userdefInt9 = 10;
+  optional int32 userdefInt1 = 11;
+  optional int32 rx = 12;
+  optional int32 ry = 13;
+  optional int32 rz = 14;
+  optional int32 rw = 15;
+  optional sint32 x = 16;
+  optional sint32 y = 17;
+  optional sint32 z = 18;
+  
+  optional int32 userdefInt10 = 19;
+  optional int32 userdefInt11 = 20;
+  optional int32 userdefInt12 = 21;
+  optional int32 userdefInt13 = 22;
+  optional int32 userdefInt14 = 23;
+  optional int32 userdefInt15 = 24;
 }
 
 message DataRequest {
@@ -473,6 +501,7 @@ message GameMessage {
   optional NpcData npcData = 39;
   optional BuildObjects buildObjects = 40;
   optional BuildableAreas buildableAreas = 41;
+  optional GmStats gmStats = 42;
 }
 
 message GameMessages {

@@ -26,12 +26,16 @@ public class EntityTracking extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
 	private static MovementVerifier movementVerifier = null;
-	private static ConcurrentHashMap<String, Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String, Cache<String, DynamicMessage>>();
+	private static Map<String, Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String, Cache<String, DynamicMessage>>();
 
 	public static String name = "fastpath_entity_tracking";
 
+	private PlayerService playerService;
+	private String role;
+	
 	public EntityTracking() {
 		Commands.clientManagerRegister(name);
+		playerService = PlayerService.getInstance();
 	}
 
 	private static Cache<String, DynamicMessage> getDynamicMessageCache(String gameId) {
@@ -44,7 +48,7 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void updateTrackData(TrackDataUpdate update, Player player) {
-		String gameId = PlayerService.getInstance().getGameId(player.id);
+		String gameId = playerService.getGameId(player.id);
 		// No access for clients
 		if (player.role.equals("player")) {
 			return;
@@ -53,17 +57,35 @@ public class EntityTracking extends UntypedActor {
 		cache.set(update.id, update.dynamicMessage);
 	}
 
+	private boolean isValid(TrackData trackData,Player player) {
+		if (!player.id.equals(trackData.id)) {
+			return false;
+		}
+		
+		if (playerService.isAuthenticated(player.id)) {
+			return true;
+		} else if (player.role.equals("agent_controller")) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	@Override
 	public void onReceive(Object message) throws Exception {
 		Player player;
 
 		if (message instanceof TrackData) {
 			TrackData trackData = (TrackData) message;
-			player = PlayerService.getInstance().find(trackData.id);
+			player = playerService.find(trackData.id);
 			if (player == null) {
 				logger.warn("Player for " + trackData.id + " is null");
 				return;
+			} else if (!isValid(trackData,player)) {
+				logger.warn("Invalid request trackdata.id=" + trackData.id + " playerId="+player.id);
+				return;
 			}
+			role = player.role;
 			handleTrackData(trackData, player);
 			return;
 		}
@@ -71,12 +93,13 @@ public class EntityTracking extends UntypedActor {
 		if (message instanceof Entity) {
 			Entity entity = (Entity) message;
 
-			player = PlayerService.getInstance().find(entity.player.id);
+			player = playerService.find(entity.player.id);
 			if (player == null) {
 				logger.warn("Player for " + entity.player.id + " is null");
 				return;
 			}
-
+			role = player.role;
+			
 			if (entity.hasAgentTrackData()) {
 				handleAgentTrackData(entity.agentTrackData, player);
 				return;
@@ -87,6 +110,11 @@ public class EntityTracking extends UntypedActor {
 				return;
 			}
 
+			if (!isValid(entity.trackData,player)) {
+				logger.warn("Invalid request trackdata.id=" + entity.trackData.id + " playerId="+player.id);
+				return;
+			}
+			
 			handleTrackData(entity.trackData, player);
 
 		} else if (message instanceof ClientManagerEvent) {
@@ -127,7 +155,7 @@ public class EntityTracking extends UntypedActor {
 			broadcastTrackData.x = trackData.x;
 			broadcastTrackData.y = trackData.y;
 			broadcastTrackData.z = trackData.z;
-			broadcastTrackData.clientData = trackData.clientData;
+			broadcastTrackData.userDefinedData = trackData.userDefinedData;
 			broadcastTrackData.broadcast = 1;
 			broadcastTrackData.id = player.id;
 			broadcastTrackData.entityType = TrackData.EntityType.PLAYER;
@@ -157,7 +185,7 @@ public class EntityTracking extends UntypedActor {
 		if (name == null) {
 			name = "default";
 		}
-		String gameId = PlayerService.getInstance().getGameId(playerId);
+		String gameId = playerService.getGameId(playerId);
 		if (gameId == null) {
 			return null;
 		} else {
@@ -166,7 +194,7 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void removePlayerData(ClientManagerEvent event) {
-		String gameId = PlayerService.getInstance().getGameId(event.player_id);
+		String gameId = playerService.getGameId(event.player_id);
 		if (gameId == null) {
 			return;
 		}
@@ -228,14 +256,6 @@ public class EntityTracking extends UntypedActor {
 
 	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
-		if (trackData.x != null) {
-
-			if (trackData.x == -1 && trackData.y == -1) {
-				grid.remove(trackData.id);
-				PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.REMOVED);
-				return;
-			}
-		}
 
 		if (trackData.entityType == EntityType.PLAYER) {
 			if (!trackData.id.equals(playerId)) {
@@ -250,7 +270,7 @@ public class EntityTracking extends UntypedActor {
 			}
 		}
 
-		String gameId = PlayerService.getInstance().getGameId(playerId);
+		String gameId = playerService.getGameId(playerId);
 		Cache<String, DynamicMessage> cache = getDynamicMessageCache(gameId);
 		DynamicMessage dynamicMessage = cache.get(trackData.getId());
 		if (dynamicMessage != null) {

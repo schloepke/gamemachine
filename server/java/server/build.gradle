@@ -42,7 +42,7 @@ repositories {
  configurations.all {
   resolutionStrategy {
     //cacheDynamicVersionsFor 0, 'seconds'
-    cacheChangingModulesFor 0, 'seconds'
+    //cacheChangingModulesFor 0, 'seconds'
   }
 }
 

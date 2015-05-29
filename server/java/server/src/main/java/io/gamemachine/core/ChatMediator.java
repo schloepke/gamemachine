@@ -26,7 +26,7 @@ public class ChatMediator {
 		return LazyHolder.INSTANCE;
 	}
 
-	public ActorRef get(String name) {
+	public synchronized ActorRef get(String name) {
 		if (!mediators.containsKey(name)) {
 			create(name);
 		}

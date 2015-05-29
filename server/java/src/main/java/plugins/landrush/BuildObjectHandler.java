@@ -1,4 +1,4 @@
-package plugins.world_builder;
+package plugins.landrush;
 
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;
@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
-public class WorldBuilderHandler extends GameMessageActor {
+public class BuildObjectHandler extends GameMessageActor {
 
 	public class Update {
 		BuildObject buildObject;
@@ -32,7 +32,7 @@ public class WorldBuilderHandler extends GameMessageActor {
 		}
 	}
 
-	public static String name = WorldBuilderHandler.class.getSimpleName();
+	public static String name = BuildObjectHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
 	public static ConcurrentHashMap<String, BuildObject> objectIndex = new ConcurrentHashMap<String, BuildObject>();

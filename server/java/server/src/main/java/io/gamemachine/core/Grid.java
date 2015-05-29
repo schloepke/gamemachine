@@ -45,7 +45,7 @@ public class Grid {
 	private int width;
 	private int cellCount;
 	private int scaleFactor = 100;
-	private int shortIdQueueSize = 1000;
+	private int shortIdQueueSize = 10000;
 
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
 
@@ -98,7 +98,7 @@ public class Grid {
 			clone.getNeighbors = null;
 			clone.characterId = null;
 			clone.dynamicMessage = trackData.dynamicMessage;
-			clone.clientData = trackData.clientData;
+			clone.userDefinedData = trackData.userDefinedData;
 			return clone;
 		}
 	}
@@ -277,9 +277,16 @@ public class Grid {
 		gridValue.y = trackData.y;
 		gridValue.z = trackData.z;
 
+		gridValue.trackData.vaxis = trackData.vaxis;
+		gridValue.trackData.haxis = trackData.haxis;
+		gridValue.trackData.yaxis = trackData.yaxis;
+		gridValue.trackData.velX = trackData.velX;
+		gridValue.trackData.velZ = trackData.velZ;
+		gridValue.trackData.speed = trackData.speed;
+		
 		gridValue.trackData.hidden = trackData.hidden;
 		gridValue.trackData.dynamicMessage = trackData.dynamicMessage;
-		gridValue.trackData.clientData = trackData.clientData;
+		gridValue.trackData.userDefinedData = trackData.userDefinedData;
 	}
 
 	public Collection<TrackData> gridValuesInCell(int cell) {
@@ -375,7 +382,7 @@ public class Grid {
 			trackData.dynamicMessage = deltaTrackData.dynamicMessage;
 		}
 
-		trackData.clientData = deltaTrackData.clientData;
+		trackData.userDefinedData = deltaTrackData.userDefinedData;
 
 		return trackData;
 	}

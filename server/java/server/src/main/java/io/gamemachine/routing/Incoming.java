@@ -63,7 +63,7 @@ public class Incoming extends UntypedActor {
 			String gameId = playerService.getGameId(clientMessage.player.id);
 			GameLimits.incrementMessageCountIn(gameId);
 			
-			if (!Authentication.isAuthenticated(clientMessage.getPlayer())) {
+			if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
 				logger.warning("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());
 				return;
@@ -74,33 +74,28 @@ public class Incoming extends UntypedActor {
 	}
 
 	private void handleConnect(NetMessage netMessage, ClientMessage clientMessage, long clientId) {
-		logger.debug("PlayerConnect from " + clientMessage.getPlayer().getId());
+		logger.info("PlayerConnect from " + clientMessage.getPlayer().getId());
 
 		if (env.containsKey("CLUSTER_TEST")) {
 			ensureTestUser(clientMessage.getPlayer());
 		}
 
 		if (!authentication.authenticate(clientMessage.getPlayer())) {
-			logger.warning("Authentication failed for " + clientMessage.player.id + " authtoken="
+			logger.info("Authentication failed for " + clientMessage.player.id + " authtoken="
 					+ clientMessage.getPlayer().getAuthtoken());
 			return;
 		}
 
 		String gameId = playerService.getGameId(clientMessage.player.id);
 		if (GameLimits.isConnectionLimitReached(gameId)) {
-			logger.warning("Connection limit reached for " + gameId);
+			logger.info("Connection limit reached for " + gameId);
 			return;
 		}
 
-		// We can't assume that a client logged out correctly, we might still have a connection for them.  Just destroy it if it exists
-		// and create a new one.  Under load it's possible that this can fail.  The existing child actor might not get the kill request before
-		// our new child tries to start, and fails because a child already exists.  This situation gets cleaned up by the idle timeout eventually.
-		// Only broken clients should have any issues, but we have to make sure they work also.
-		
 		if (connectAttempts.containsKey(clientMessage.player.id)) {
 			Long last = connectAttempts.get(clientMessage.player.id);
 			if (System.currentTimeMillis() - last < 2000l) {
-				logger.warning("duplicate connect attempt too fast for " + clientMessage.player.id);
+				logger.info("duplicate connect attempt too fast for " + clientMessage.player.id);
 				return;
 			}
 		}
@@ -116,7 +111,7 @@ public class Incoming extends UntypedActor {
 			out.setClientConnection(existing.getClientConnection());
 			out.setPlayerConnected(new PlayerConnected());
 			existing.sendToClient(out);
-			logger.warning("Resending PlayerConnected to " + clientMessage.player.id);
+			logger.info("Resending PlayerConnected to " + clientMessage.player.id);
 			return;
 		}
 		
@@ -131,6 +126,7 @@ public class Incoming extends UntypedActor {
 		Connection.addConnection(clientMessage.player.id, connection);
 		createChild(connection);
 		RequestHandler.registerClient(clientMessage);
+		logger.warning("Player registered " + clientMessage.player.id);
 	}
 
 	private void handleLogout(ClientMessage clientMessage, long clientId) {
@@ -139,7 +135,7 @@ public class Incoming extends UntypedActor {
 
 		logger.debug("PlayerLogout from " + clientMessage.getPlayer().getId());
 
-		if (!Authentication.isAuthenticated(clientMessage.getPlayer())) {
+		if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
 			logger.debug("Unauthenticated client " + clientMessage.getPlayer().getId() + " attempting to logout");
 			return;
 		}
