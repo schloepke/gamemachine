@@ -10,8 +10,8 @@ import io.gamemachine.routing.GameMessageRoute;
 import plugins.landrush.BuildObjectHandler;
 
 
-public class WorldBuilderPlugin extends Plugin {
-	private static final Logger logger = LoggerFactory.getLogger(WorldBuilderPlugin.class);
+public class LandRushPlugin extends Plugin {
+	private static final Logger logger = LoggerFactory.getLogger(LandRushPlugin.class);
 	
 	public void start() {
 		if (!AppConfig.getOrm()) {

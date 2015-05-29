@@ -54,7 +54,7 @@ public class Incoming extends UntypedActor {
 			handleConnect(netMessage, clientMessage, clientId);
 		} else {
 			if (!Connection.hasConnection(clientMessage.player.id)) {
-				logger.warning("Ignoring message before connection setup");
+				logger.debug("Ignoring message before connection setup");
 				return;
 			}
 		}
@@ -64,7 +64,7 @@ public class Incoming extends UntypedActor {
 			GameLimits.incrementMessageCountIn(gameId);
 			
 			if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
-				logger.warning("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
+				logger.info("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());
 				return;
 			}
@@ -74,7 +74,7 @@ public class Incoming extends UntypedActor {
 	}
 
 	private void handleConnect(NetMessage netMessage, ClientMessage clientMessage, long clientId) {
-		logger.info("PlayerConnect from " + clientMessage.getPlayer().getId());
+		logger.debug("PlayerConnect from " + clientMessage.getPlayer().getId());
 
 		if (env.containsKey("CLUSTER_TEST")) {
 			ensureTestUser(clientMessage.getPlayer());
@@ -95,7 +95,7 @@ public class Incoming extends UntypedActor {
 		if (connectAttempts.containsKey(clientMessage.player.id)) {
 			Long last = connectAttempts.get(clientMessage.player.id);
 			if (System.currentTimeMillis() - last < 2000l) {
-				logger.info("duplicate connect attempt too fast for " + clientMessage.player.id);
+				logger.debug("duplicate connect attempt too fast for " + clientMessage.player.id);
 				return;
 			}
 		}
@@ -114,10 +114,7 @@ public class Incoming extends UntypedActor {
 			logger.info("Resending PlayerConnected to " + clientMessage.player.id);
 			return;
 		}
-		
-		//destroyChild(clientMessage.player.id);
-		//Connection.removeConnection(clientMessage.player.id);
-		
+			
 		
 		ClientConnection clientConnection = createClientConnection(clientId, clientMessage);
 		clientMessage.setClientConnection(clientConnection);
@@ -126,7 +123,7 @@ public class Incoming extends UntypedActor {
 		Connection.addConnection(clientMessage.player.id, connection);
 		createChild(connection);
 		RequestHandler.registerClient(clientMessage);
-		logger.warning("Player registered " + clientMessage.player.id);
+		logger.debug("Player registered " + clientMessage.player.id);
 	}
 
 	private void handleLogout(ClientMessage clientMessage, long clientId) {
