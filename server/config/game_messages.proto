@@ -181,7 +181,7 @@ message SiegeCommand {
   optional string targetType = 11;
   optional string targetId = 12;
 }
-
+ 
 persistent_message Character {
   required string id = 1;
   optional string umaData = 2;
