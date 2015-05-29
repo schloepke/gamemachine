@@ -17,7 +17,7 @@ public class NpcEntity extends GameMessageActor {
 
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	private int worldOffset = 1;
+	private int worldOffset = 0;
 	private String id;
 	private Grid grid;
 	private Vector3 position;

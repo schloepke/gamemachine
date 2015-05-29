@@ -2,7 +2,7 @@
 
 ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','server')
-ENV['GAME_ENV'] = 'development' unless ENV['GAME_ENV']
+ENV['GAME_ENV'] = 'default' unless ENV['GAME_ENV']
 
 ARGV << '--help' if ARGV.empty?
 
@@ -31,41 +31,9 @@ def load_config
   GameMachine::AppConfig.instance.load_config
 end
 
-
-
 require_relative '../lib/game_machine/console'
 
-if command == 'start_testnode'
-  name = ARGV.shift
-  cluster = GameMachine::Console::TestCluster.new()
-  cluster.start_node(name)
- exit
-end
-
-if command == 'ping_testnode'
-  load_game_machine
-  name = ARGV.shift
-  cluster = GameMachine::Console::TestCluster.new()
-  cluster.ping_node(name)
- exit
-end
-
-if command == 'stop_testnode'
-  load_game_machine
-  name = ARGV.shift
-  cluster = GameMachine::Console::TestCluster.new()
-  cluster.stop_node(name)
- exit
-end
-
-if command == 'install' || command == 'upgrade'
-  bin_path = File.dirname(__FILE__)
-  install_source_path = File.expand_path(
-    File.join(bin_path,'../')
-  )
-  GameMachine::Console::Install.new(command,ARGV,install_source_path).run!
-
-elsif command == 'build' || command == 'bundle'
+if command == 'build' || command == 'bundle'
   require_relative '../lib/game_machine/protobuf/game_messages.rb'
   require_relative '../lib/game_machine/protobuf/generate.rb'
   if command == 'bundle'
@@ -98,12 +66,6 @@ puts <<EOF
   game_machine server               Start the server
 
   game_machine build  [clean]       Build java and protobuf messages
-
-  game_machine bundle               Build and bundle gems for deployment
-
-  game_machine install [path]       Install Game Machine to [path]
-
-  game_machine upgrade [path]       Upgrade the Game Machine installation at [path]
     
 EOF
 
