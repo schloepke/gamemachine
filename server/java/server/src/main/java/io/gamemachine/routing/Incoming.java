@@ -54,7 +54,7 @@ public class Incoming extends UntypedActor {
 			handleConnect(netMessage, clientMessage, clientId);
 		} else {
 			if (!Connection.hasConnection(clientMessage.player.id)) {
-				logger.debug("Ignoring message before connection setup");
+				logger.warning("Ignoring message before connection setup");
 				return;
 			}
 		}
@@ -64,11 +64,13 @@ public class Incoming extends UntypedActor {
 			GameLimits.incrementMessageCountIn(gameId);
 			
 			if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
-				logger.info("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
+				logger.warning("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());
 				return;
 			}
 			gameHandler.tell(clientMessage, getSelf());
+		} else {
+			logger.warning("No player");
 		}
 
 	}
@@ -81,7 +83,7 @@ public class Incoming extends UntypedActor {
 		}
 
 		if (!authentication.authenticate(clientMessage.getPlayer())) {
-			logger.info("Authentication failed for " + clientMessage.player.id + " authtoken="
+			logger.warning("Authentication failed for " + clientMessage.player.id + " authtoken="
 					+ clientMessage.getPlayer().getAuthtoken());
 			return;
 		}
@@ -133,7 +135,7 @@ public class Incoming extends UntypedActor {
 		logger.debug("PlayerLogout from " + clientMessage.getPlayer().getId());
 
 		if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
-			logger.debug("Unauthenticated client " + clientMessage.getPlayer().getId() + " attempting to logout");
+			logger.warning("Unauthenticated client " + clientMessage.getPlayer().getId() + " attempting to logout");
 			return;
 		}
 
@@ -182,7 +184,7 @@ public class Incoming extends UntypedActor {
 				connection.getPlayerId());
 		String gameId = playerService.getGameId(connection.getPlayerId());
 		GameLimits.incrementConnectionCount(gameId);
-		logger.debug("Starting Outgoing actor " + connection.getPlayerId());
+		logger.warning("Starting Outgoing actor " + connection.getPlayerId());
 	}
 
 	private void destroyChild(String playerId) {
@@ -191,7 +193,7 @@ public class Incoming extends UntypedActor {
 		String gameId = playerService.getGameId(playerId);
 		sel.tell("die", getSelf());
 		GameLimits.decrementConnectionCount(gameId);
-		logger.debug("Stopping Outgoing actor " + playerId);
+		logger.warning("Stopping Outgoing actor " + playerId);
 	}
 
 

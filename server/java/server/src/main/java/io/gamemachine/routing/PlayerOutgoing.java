@@ -39,7 +39,7 @@ public class PlayerOutgoing extends UntypedActor {
 		tick(1000l,"idle_timeout");
 		
 		sendConnectedMessage();
-		logger.debug("Player gateway created for "+playerId);
+		logger.warning("Player gateway created for "+playerId);
 	}
 	
 	private ClientMessage createClientMessage() {
@@ -74,7 +74,7 @@ public class PlayerOutgoing extends UntypedActor {
 	}
 	
 	private void unregister() {
-		logger.info("Player "+playerId+" killed");
+		logger.warning("Player "+playerId+" killed");
 		ClientMessage clientMessage = createClientMessage();
 		clientMessage.setPlayer(new Player().setId(playerId));
 		Connection.removeConnection(playerId);

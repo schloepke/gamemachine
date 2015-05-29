@@ -3,6 +3,9 @@ package io.gamemachine.net;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.core.NetMessage;
 import io.gamemachine.core.PlayerService;
@@ -15,6 +18,7 @@ import io.gamemachine.net.udp.SimpleUdpServer;
 public class Connection {
 
 	private static ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
+	private static final Logger logger = LoggerFactory.getLogger(Connection.class);
 	
 	public int protocol;
 	private ClientConnection clientConnection;
