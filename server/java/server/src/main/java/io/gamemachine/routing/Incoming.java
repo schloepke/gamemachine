@@ -97,7 +97,7 @@ public class Incoming extends UntypedActor {
 		if (connectAttempts.containsKey(clientMessage.player.id)) {
 			Long last = connectAttempts.get(clientMessage.player.id);
 			if (System.currentTimeMillis() - last < 2000l) {
-				logger.warning("duplicate connect attempt too fast for " + clientMessage.player.id);
+				logger.info("duplicate connect attempt too fast for " + clientMessage.player.id);
 				return;
 			}
 		}
@@ -113,7 +113,7 @@ public class Incoming extends UntypedActor {
 			out.setClientConnection(existing.getClientConnection());
 			out.setPlayerConnected(new PlayerConnected());
 			existing.sendToClient(out);
-			logger.warning("Resending PlayerConnected to " + clientMessage.player.id);
+			logger.info("Resending PlayerConnected to " + clientMessage.player.id);
 			return;
 		}
 			
@@ -184,7 +184,7 @@ public class Incoming extends UntypedActor {
 				connection.getPlayerId());
 		String gameId = playerService.getGameId(connection.getPlayerId());
 		GameLimits.incrementConnectionCount(gameId);
-		logger.warning("Starting Outgoing actor " + connection.getPlayerId());
+		logger.info("Starting Outgoing actor " + connection.getPlayerId());
 	}
 
 	private void destroyChild(String playerId) {
@@ -193,7 +193,7 @@ public class Incoming extends UntypedActor {
 		String gameId = playerService.getGameId(playerId);
 		sel.tell("die", getSelf());
 		GameLimits.decrementConnectionCount(gameId);
-		logger.warning("Stopping Outgoing actor " + playerId);
+		logger.info("Stopping Outgoing actor " + playerId);
 	}
 
 
