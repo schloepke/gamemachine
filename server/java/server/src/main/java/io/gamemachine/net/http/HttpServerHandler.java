@@ -38,6 +38,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import plugins.HttpHandler;
 import plugins.landrush.BuildObjectHandler;
 import plugins.pvp_game.CharacterHandler;
 import io.gamemachine.messages.Character;
@@ -150,11 +151,36 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				String playerId = params.get("playerId");
 				Integer authtoken = Integer.parseInt(params.get("authtoken"));
 				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, "admin");
+				boolean authenticated = Authentication.hasValidAuthtoken(playerId, authtoken);
 
-				if (!Authentication.hasValidAuthtoken(playerId, authtoken)) {
+				if (req.getUri().startsWith("/api/game")) {
+					HttpHandler.Response response = HttpHandler.processRequest(req.getUri(), params, authenticated);
+					if (response.status == HttpHandler.Response.Status.NOT_AUTHORIZED) {
+						NotAuthorized(ctx);
+						return;
+					}
+					if (response instanceof HttpHandler.StringResponse) {
+						HttpHandler.StringResponse sr = (HttpHandler.StringResponse)response;
+						Ok(ctx,sr.content);
+					} else if (response instanceof HttpHandler.StringResponse) {
+						HttpHandler.ByteResponse sr = (HttpHandler.ByteResponse)response;
+						Ok(ctx,sr.content);
+					} else {
+						logger.warn("Invalid response");
+					}
+					return;
+				}
+				
+				if (!authenticated) {
 					return;
 				}
 
+				if (req.getUri().startsWith("/api/players/get_other")) {
+					Player player = PlayerService.getInstance().find(params.get("otherPlayerId"));
+					Ok(ctx, player.toByteArray());
+					return;
+				}
+				
 				if (req.getUri().startsWith("/api/players/get")) {
 					Player player = PlayerService.getInstance().find(params.get("playerId"));
 					Ok(ctx, player.toByteArray());
@@ -168,9 +194,20 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/get")) {
-					Character character = CharacterService.getInstance().find(params.get("otherPlayerId"),params.get("characterId"));
+					Character character;
+					if (params.containsKey("otherPlayerId")) {
+						character = CharacterService.getInstance().find(params.get("otherPlayerId"),params.get("characterId"));
+					} else {
+						character = CharacterService.getInstance().find(params.get("characterId"));
+					}
+					
 					if (character == null) {
-						logger.info("no character for "+params.get("otherPlayerId")+" "+params.get("characterId"));
+						if (params.containsKey("otherPlayerId")) {
+							logger.info("no character for "+params.get("otherPlayerId")+" "+params.get("characterId"));
+						} else {
+							logger.info("no character for " +params.get("characterId"));
+						}
+						
 						return;
 					}
 					Ok(ctx, character.toByteArray());

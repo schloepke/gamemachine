@@ -10,7 +10,7 @@ WITH (
   OIDS=FALSE
 );
 ALTER TABLE entities
-  OWNER TO pvpgame;
+  OWNER TO gamemachine;
 
 -- Rule: entities_merge ON entities
 

@@ -458,55 +458,7 @@ message TimeCycle {
   optional float dayCycleLength = 2;
 }
 	
-message GameMessage {
-  // Used internally, do not change
-  optional string playerId = 1;
-  optional string messageId = 2;
-  optional int32 destinationId = 3;
-  optional string destination = 4;
-  optional string agentId = 5;
-  optional DynamicMessage dynamicMessage = 6;
-  optional PathData pathData = 7;
 
-  // User modifiable
-  optional PlayerItems playerItems = 10;
-  optional AddPlayerItem addPlayerItem = 11;
-  optional RemovePlayerItem removePlayerItem = 12;
-  optional RequestPlayerItems requestPlayerItems = 13;
-  optional PvpGameMessage pvpGameMessage = 14;
-  optional Harvest harvest = 15;
-  optional int64 authtoken = 16;
-  optional int64 unityMessageId = 17;
-  optional CraftItem craftItem = 18;
-  optional UseSkill useSkill = 19;
-  optional PlayerSkills playerSkills = 20;
-  optional Vitals vitals = 21;
-  optional Attack attack = 22;
-  optional StatusEffect statusEffect = 23;
-  optional StatusEffectResult statusEffectResult = 24;
-  optional DataRequest dataRequest = 25;
-  optional VisualEffect visualEffect = 26;
-  optional WorldObjects worldObjects = 27;
-  optional SiegeCommand siegeCommand = 28;
-  optional Bounds bounds = 29;
-  optional UseItem useItem = 30;
-  optional TimeCycle timeCycle = 31;
-  optional Guilds guilds = 32;
-  optional GuildAction guildAction = 33;
-  optional GuildMemberList guildMemberList = 34;
-  optional Territory territory = 35;
-  optional Territories territories = 36;
-  optional EquippedItem equippedItem = 37;
-  optional ComboAttack comboAttack = 38;
-  optional NpcData npcData = 39;
-  optional BuildObjects buildObjects = 40;
-  optional BuildableAreas buildableAreas = 41;
-  optional GmStats gmStats = 42;
-}
-
-message GameMessages {
-  repeated GameMessage gameMessage = 1;
-}
 
 message DynamicMessage {
   required string type = 1;
@@ -640,4 +592,54 @@ persistent_message TestObject {
   repeated Player player = 9;
   optional int32 recordId = 10;
   
+}
+
+message GameMessage {
+  // Used internally, do not change
+  optional string playerId = 1;
+  optional string messageId = 2;
+  optional int32 destinationId = 3;
+  optional string destination = 4;
+  optional string agentId = 5;
+  optional DynamicMessage dynamicMessage = 6;
+  optional PathData pathData = 7;
+
+  // User modifiable
+  optional PlayerItems playerItems = 10;
+  optional AddPlayerItem addPlayerItem = 11;
+  optional RemovePlayerItem removePlayerItem = 12;
+  optional RequestPlayerItems requestPlayerItems = 13;
+  optional PvpGameMessage pvpGameMessage = 14;
+  optional Harvest harvest = 15;
+  optional int64 authtoken = 16;
+  optional int64 unityMessageId = 17;
+  optional CraftItem craftItem = 18;
+  optional UseSkill useSkill = 19;
+  optional PlayerSkills playerSkills = 20;
+  optional Vitals vitals = 21;
+  optional Attack attack = 22;
+  optional StatusEffect statusEffect = 23;
+  optional StatusEffectResult statusEffectResult = 24;
+  optional DataRequest dataRequest = 25;
+  optional VisualEffect visualEffect = 26;
+  optional WorldObjects worldObjects = 27;
+  optional SiegeCommand siegeCommand = 28;
+  optional Bounds bounds = 29;
+  optional UseItem useItem = 30;
+  optional TimeCycle timeCycle = 31;
+  optional Guilds guilds = 32;
+  optional GuildAction guildAction = 33;
+  optional GuildMemberList guildMemberList = 34;
+  optional Territory territory = 35;
+  optional Territories territories = 36;
+  optional EquippedItem equippedItem = 37;
+  optional ComboAttack comboAttack = 38;
+  optional NpcData npcData = 39;
+  optional BuildObjects buildObjects = 40;
+  optional BuildableAreas buildableAreas = 41;
+  optional GmStats gmStats = 42;
+}
+
+message GameMessages {
+  repeated GameMessage gameMessage = 1;
 }

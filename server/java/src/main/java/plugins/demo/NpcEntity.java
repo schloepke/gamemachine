@@ -23,7 +23,7 @@ public class NpcEntity extends GameMessageActor {
 	private Vector3 position;
 	private TrackData trackData;
 	public long tickInterval = 40l;
-	public float width = 490f;
+	public float width = 990f;
 	public double speed = 6d;
 	public Vector3 target;
 	private Random rand;

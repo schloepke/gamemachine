@@ -96,6 +96,7 @@ module GameMachine
       def send_invite(chat_invite)
         invite_id = Uniqueid.generate_token(chat_invite.inviter)
         stored_id = "invite_#{chat_invite.channel_name}_#{invite_id}"
+        #puts "#{chat_invite.inviter} #{chat_invite.invitee}"
         commands.datastore.put(MessageLib::Entity.new.set_id(stored_id))
         chat_invite.set_invite_id(invite_id)
         commands.player.send_message(chat_invite,chat_invite.invitee)

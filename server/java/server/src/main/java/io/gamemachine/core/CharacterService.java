@@ -124,7 +124,7 @@ public class CharacterService {
 	public void delete(String playerId, String characterId) {
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.delete(playerId, characterId);
-			ObjectStoreHelper.delete(globalUser, characterId);
+			ObjectStoreHelper.delete(globalUser, characterId+"_global");
 		} else if (authType == SQL_DB) {
 			Character.db().deleteWhere("character_id = ?", characterId);
 		}
@@ -142,7 +142,8 @@ public class CharacterService {
 	}
 	
 	public Character create(String playerId, String id, String umaData) {
-		Character global = find(globalUser, id);
+		String globalCharacterId = id+"_global";
+		Character global = find(globalUser, globalCharacterId);
 		if (global != null) {
 			return null;
 		}
@@ -159,6 +160,7 @@ public class CharacterService {
 			ObjectStoreHelper.update(character);
 			global = character.clone();
 			global.playerId = globalUser;
+			global.id = globalCharacterId;
 			ObjectStoreHelper.update(global);
 		} else if (authType == SQL_DB) {
 			if (!Character.db().save(character)) {
