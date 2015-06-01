@@ -38,7 +38,7 @@ public class ExternalProcess implements Runnable {
     }
     
     public ExternalProcess(String commandName) {
-    	path = runnerPath+File.separator+commandName;
+    	path = commandName;
     }
 	@Override
 	public void run() {
