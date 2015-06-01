@@ -48,7 +48,7 @@ public class ExternalProcess implements Runnable {
 				} else {
 					command = "pkill -f \""+info.executable+"\"";
 				}
-				logger.warn("Killing "+info.executable+" with "+command);
+				logger.debug("Killing "+info.executable+" with "+command);
 				rt.exec(command);
 			} catch (IOException e) {
 				e.printStackTrace();

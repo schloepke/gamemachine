@@ -34,7 +34,7 @@ public class UnityManager extends GameMessageActor {
 			if (enabled) {
 				ExternalProcess.start(info);
 			} else {
-				logger.warning(info.executable+" not enabled, skipping");
+				logger.debug(info.executable+" not enabled, skipping");
 			}
 		}
 	}

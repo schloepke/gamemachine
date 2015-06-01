@@ -66,7 +66,6 @@ public class GameMachineLoader {
 	}
 
 	public static void startJavaGameActors() {
-		actorSystem.actorOf(Props.create(UnityProxy.class), UnityProxy.name);
 		PluginManager.startAll();
 	}
 
@@ -76,9 +75,7 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(LatencyTest.class)), LatencyTest.name);
-		// actorSystem.actorOf(Props.create(PathService.class),
-		// PathService.name);
-		
+	
 		startCacheUpdateHandler();
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		
@@ -88,7 +85,6 @@ public class GameMachineLoader {
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                System.out.println("Shutdown Hooks Running");
                 ExternalProcess.stopAll();
                 getActorSystem().shutdown();
                 System.exit(0);
