@@ -91,6 +91,7 @@ public class GameMachineLoader {
                 System.out.println("Shutdown Hooks Running");
                 ExternalProcess.stopAll();
                 getActorSystem().shutdown();
+                System.exit(0);
             }
         });
 
