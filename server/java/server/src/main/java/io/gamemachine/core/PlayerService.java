@@ -302,6 +302,21 @@ public class PlayerService {
 		}
 	}
 	
+	public void setRole(String playerId, String role) {
+		Player player = find(playerId);
+		if (player == null) {
+			logger.warn("Player " + playerId + " not found");
+			return;
+		}
+		player.setRole(role);
+
+		if (authType == OBJECT_DB) {
+			Player.store().set(player);
+		} else if (authType == SQL_DB) {
+			Player.db().save(player);
+		}
+	}
+	
 	public String getCharacter(String playerId) {
 		Player player = find(playerId);
 		if (player == null) {

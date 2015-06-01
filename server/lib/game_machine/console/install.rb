@@ -37,7 +37,7 @@ module GameMachine
       end
 
       def loader_out
-        File.join(plugins_dir,"#{@plugin}Loader.java")
+        File.join(plugins_dir,"#{@plugin}Plugin.java")
       end
 
       def plugin_dir

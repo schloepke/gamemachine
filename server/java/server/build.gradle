@@ -82,7 +82,7 @@ dependencies {
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
   compile 'io.gamemachine:common:1.1.0-SNAPSHOT'
   compile "com.badlogicgames.gdx:gdx-ai:1.5.0"
-  
+  compile 'org.zeroturnaround:zt-exec:1.8'
 }
 
 import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer

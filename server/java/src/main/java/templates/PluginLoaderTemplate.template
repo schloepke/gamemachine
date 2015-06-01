@@ -5,7 +5,7 @@ import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.PACKAGE.CLASS;
 
-public class CLASSLoader extends Plugin {
+public class CLASSPlugin extends Plugin {
 
 	@Override
 	public void start() {
