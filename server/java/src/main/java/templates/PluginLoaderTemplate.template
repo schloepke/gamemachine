@@ -1,0 +1,16 @@
+package plugins;
+
+import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.Plugin;
+import io.gamemachine.routing.GameMessageRoute;
+import plugins.PACKAGE.CLASS;
+
+public class CLASSLoader extends Plugin {
+
+	@Override
+	public void start() {
+		// TODO Auto-generated method stub
+		GameMessageRoute.add(CLASS.name,CLASS.name,false);
+		ActorUtil.createActor(CLASS.class,CLASS.name);
+	}
+}

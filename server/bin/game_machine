@@ -8,7 +8,8 @@ ARGV << '--help' if ARGV.empty?
 
 aliases = {
   "b"  => "build",
-  "s"  => "server"
+  "s"  => "server",
+  "p" => "plugin"
 }
 
 command = ARGV.shift
@@ -58,6 +59,9 @@ elsif command == 'server'
   # Run the server
   server.run!
 
+elsif command == 'plugin'
+  install = GameMachine::Console::Install.new(ARGV)
+  install.run
 else
 
 puts <<EOF
