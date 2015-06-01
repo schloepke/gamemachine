@@ -43,7 +43,7 @@ public class ExternalProcess implements Runnable {
 	@Override
 	public void run() {
 		try {
-			int rvalue = new ProcessExecutor().command(path).destroyOnExit().execute().getExitValue();
+			int rvalue = new ProcessExecutor().command(path).execute().getExitValue();
 			logger.warn("Process exit value was "+rvalue);
 		} catch (InvalidExitValueException | IOException | InterruptedException | TimeoutException e) {
 			e.printStackTrace();
