@@ -85,6 +85,14 @@ public class GameMachineLoader {
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
 		}
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                System.out.println("Shutdown Hooks Running");
+                ExternalProcess.stopAll();
+                getActorSystem().shutdown();
+            }
+        });
 
 	}
 

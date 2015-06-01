@@ -15,15 +15,27 @@ import com.typesafe.config.Config;
 
 public class UnityManager extends GameMessageActor {
 
+	
 	public static String name = UnityManager.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
 	@Override
 	public void awake() {
+		
 		Config config = Plugin.getConfig(UnityManager.class);
-		List<String> commands = config.getStringList("commands");
-		for (String command : commands) {
-			ExternalProcess.start(command);
+		List<? extends Config> values = config.getConfigList("unity_instances");
+		for (Config value : values) {
+			
+			ExternalProcess.ProcessInfo info = new ExternalProcess.ProcessInfo();
+			info.startScript = value.getString("start_script");
+			info.executable = value.getString("executable");
+			boolean enabled = value.getBoolean("enabled");
+			
+			if (enabled) {
+				ExternalProcess.start(info);
+			} else {
+				logger.warning(info.executable+" not enabled, skipping");
+			}
 		}
 	}
 
