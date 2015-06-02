@@ -92,7 +92,12 @@ public class GameMachineLoader {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
 		}
 		
-		ZoneManager.start();
+		if (AppConfig.getOrm()) {
+			ZoneManager.start();
+		} else {
+			logger.warn("Zone manager disabled (requires orm=true)");
+		}
+		
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
