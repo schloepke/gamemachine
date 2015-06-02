@@ -2,6 +2,7 @@ package io.gamemachine.core;
 
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.routing.GameMessageRoute;
+import io.gamemachine.zones.ZoneManager;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -13,8 +14,11 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.actor.Address;
+import akka.actor.PoisonPill;
 import akka.actor.Props;
 import akka.cluster.Cluster;
+import akka.contrib.pattern.ClusterSingletonManager;
+import akka.contrib.pattern.ClusterSingletonProxy;
 import akka.pattern.AskableActorSelection;
 import akka.routing.RoundRobinPool;
 import akka.util.Timeout;
@@ -35,6 +39,7 @@ public class ActorUtil {
 			return null;
 		}
 	}
+	
 	
 	public static void joinCluster(String protocol, String name, String host, int port) {
 		ActorSystem system = GameMachineLoader.getActorSystem();
@@ -105,6 +110,10 @@ public class ActorUtil {
 		for (String node : ring.nodes) {
 			GameMachineLoader.getActorSystem().actorOf(Props.create(klass), node);
 		}
+	}
+	
+	public static String selfAddress() {
+		return Cluster.get(GameMachineLoader.getActorSystem()).selfAddress().toString();
 	}
 	
 }

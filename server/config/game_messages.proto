@@ -3,7 +3,14 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
-message GmStats {
+local_message Ping {
+  optional string id = 1;
+}
+local_message Pong {
+  optional string id = 1;
+}
+
+local_message GmStats {
   optional string id = 1;
   optional string action = 2;
   optional int64 messageCountIn = 3;
@@ -16,7 +23,7 @@ message GmStats {
   optional int64 bytesPerMessageOut = 10;
 }
 
-message NpcData {
+local_message NpcData {
   optional string id = 1;
   optional Vector3 spawnpoint = 2;
   optional string leader = 3;
@@ -33,40 +40,40 @@ message NpcData {
   optional NpcType npcType = 7;
 }
 
-message NpcDatas {
+local_message NpcDatas {
   repeated NpcData npcData = 1;
 }
 
-message Waypoint {
+local_message Waypoint {
   optional string id = 1;
   repeated Vector3 position = 2;
 }
 
-persistent_message Territory {
+local_persistent_message Territory {
   required string id = 1;
   required string owner = 2;
   optional int32 recordId = 3;
   optional string keep = 4;
 }
 
-message Territories {
+local_message Territories {
   repeated Territory territories = 1;
 }
   
-persistent_message Guild {
+local_persistent_message Guild {
   required string id = 1;
   required string ownerId = 4;
   optional int32 recordId = 5;
   optional string name = 6;
 }
 
-persistent_message GuildMembers {
+local_persistent_message GuildMembers {
   required string guildId = 1;
   required string playerId = 3;
   optional int32 recordId = 2;
 }
 
-message GuildMemberList {
+local_message GuildMemberList {
   required string guildId = 1;
   repeated string playerId = 2;
 }
@@ -82,11 +89,11 @@ persistent_message GuildAction {
   optional string guildName = 8;
 }
 
-message Guilds {
+local_message Guilds {
   repeated Guild guild = 1;
 }
 
-persistent_message WorldObject {
+local_persistent_message WorldObject {
   optional string playerItemId = 1;
   optional int32 action = 2;
   optional string id = 3;
@@ -110,7 +117,7 @@ persistent_message WorldObject {
   optional int32 state = 21;
 }
 
-persistent_message BuildObject {
+local_persistent_message BuildObject {
   optional string playerItemId = 1;
   optional int32 action = 2;
   optional string id = 3;
@@ -135,14 +142,14 @@ persistent_message BuildObject {
   optional int32 doorStatus = 28;
 }
 
-message BuildObjects {
+local_message BuildObjects {
   repeated BuildObject buildObject = 1;
   optional int32 action = 2;
   optional int32 requestedUpdateId = 3;
   optional int32 currentUpdate = 4;
 }
 
-persistent_message BuildableArea {
+local_persistent_message BuildableArea {
   required string ownerId = 1;
   required float px = 2;
   required float py = 3;
@@ -153,21 +160,21 @@ persistent_message BuildableArea {
   optional int32 recordId = 8;
 }
 
-message BuildableAreas {
+local_message BuildableAreas {
   repeated BuildableArea buildableArea = 1;
 }
  
-message Bounds {
+local_message Bounds {
   optional Vector3 min = 1;
   optional Vector3 max = 2;
 }
 
 
-message WorldObjects {
+local_message WorldObjects {
   repeated WorldObject worldObject = 1;
 }
 
-message SiegeCommand {
+local_message SiegeCommand {
   optional int32 startLoad = 1;
   optional int32 fire = 2;
   optional float force = 3;
@@ -182,7 +189,7 @@ message SiegeCommand {
   optional string targetId = 12;
 }
  
-persistent_message Character {
+local_persistent_message Character {
   required string id = 1;
   optional string umaData = 2;
   optional int32 health = 3;
@@ -200,7 +207,7 @@ persistent_message Character {
   
 }
 
-message Characters {
+local_message Characters {
   repeated Character characters = 1;
   optional string id = 2;
 }
@@ -211,26 +218,26 @@ message PvpGameMessage {
   optional int32 command = 3;
 }
 
-message UseSkill {
+local_message UseSkill {
   required string id = 1;
   optional string targetId = 2;
   optional Vector3 location = 3;
   optional Vector3 direction = 4;
 }
 
-message UseItem {
+local_message UseItem {
   required string id = 1;
   optional string targetId = 2;
   optional string action = 3;
   required string playerId = 4;
 }
 
-message EquippedItem {
+local_message EquippedItem {
   optional string id = 1;
   optional string playerId = 2;
 }
 
-message StatusEffect {
+local_message StatusEffect {
   enum Type {
     AttributeDecrease = 0;
     AttributeIncrease = 1;
@@ -273,7 +280,7 @@ message StatusEffect {
   optional DamageType damageType = 9;
 }
 
-message Vitals {
+local_message Vitals {
   required string id = 1;
   optional int32 health = 2;
   optional int32 stamina = 3;
@@ -292,7 +299,7 @@ message Vitals {
   optional int32 staminaDrain = 16;
 }
 
-message VisualEffect {
+local_message VisualEffect {
   optional string id = 1;
   optional string prefab = 2;
   optional Vector3 startPosition = 3;
@@ -301,14 +308,14 @@ message VisualEffect {
   optional int32 duration = 6;
 }
 
-message StatusEffectResult {
+local_message StatusEffectResult {
   required string target = 1;
   required string origin = 2;
   required int32 value = 3;
   required string statusEffectId = 4;
 }
 
-message StatusEffectTarget {
+local_message StatusEffectTarget {
   enum Action {
   	None = 0;
     Apply = 1;
@@ -334,19 +341,19 @@ message StatusEffectTarget {
 
 
 
-message Attack {
+local_message Attack {
   required string attacker = 1;
   required string target = 2;
   required string skill = 3;
   optional Vector3 targetLocation = 4;
 }
 
-message ComboAttack {
+local_message ComboAttack {
   required string id = 1;
   repeated Attack attack = 2;
 }
 
-message Harvest {
+local_message Harvest {
   required string id = 1;
   optional int32 result = 2;
   optional int64 harvestedAt = 3;
@@ -354,7 +361,7 @@ message Harvest {
   optional string itemId = 5;
 }
 
-message CraftItem {
+local_message CraftItem {
   optional CraftableItem craftableItem = 1;
   optional int32 result = 2;
   optional string characterId = 3;
@@ -420,7 +427,7 @@ message TrackData {
   optional int32 yaxis = 28;
 }
 
-message UserDefinedData {
+local_message UserDefinedData {
   optional int32 command = 1;
   optional int32 value = 2;
   optional int32 userdefInt2 = 3;
@@ -448,12 +455,12 @@ message UserDefinedData {
   optional int32 userdefInt15 = 24;
 }
 
-message DataRequest {
+local_message DataRequest {
   required string requester = 1;
   required string name = 2;
 }
 
-message TimeCycle {
+local_message TimeCycle {
   optional float currentTime = 1;
   optional float dayCycleLength = 2;
 }
@@ -594,6 +601,39 @@ persistent_message TestObject {
   
 }
 
+message RpcMessage {
+  enum MessageType {
+  	NONE = 0;
+    TEST = 1;
+  }
+  required MessageType messageType = 1;
+  optional GameMessage gameMessage = 2;
+  optional int64 messageId = 3;
+  optional string playerId = 4;
+}
+
+message Zone {
+  enum Status {
+		NONE = 0;
+		UP = 1;
+		DOWN = 2;
+		REQUEST_UP = 3;
+		REQUEST_DOWN = 4;
+	}
+	optional string id = 1;
+	optional Status status = 2;
+	optional string name = 3;
+	optional string unityClient = 4;
+}
+
+persistent_message ZoneInfo {
+  required string id = 1;
+  optional int32 recordId = 2;
+  optional string node = 3;
+  required string actorName = 4;
+  optional bool assigned = 5;
+}
+
 message GameMessage {
   // Used internally, do not change
   optional string playerId = 1;
@@ -638,6 +678,7 @@ message GameMessage {
   optional BuildObjects buildObjects = 40;
   optional BuildableAreas buildableAreas = 41;
   optional GmStats gmStats = 42;
+  optional Zone zone = 43;
 }
 
 message GameMessages {

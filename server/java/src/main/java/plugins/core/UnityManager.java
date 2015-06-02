@@ -1,5 +1,5 @@
 
-package plugins.unitymanager;
+package plugins.core;
 
 import io.gamemachine.core.ExternalProcess;
 import io.gamemachine.core.GameMessageActor;

@@ -54,6 +54,7 @@ public class ExternalProcess implements Runnable {
 				e.printStackTrace();
 			}
 		}
+		executor.shutdownNow();
 	}
 
 	public static void start(ProcessInfo info) {

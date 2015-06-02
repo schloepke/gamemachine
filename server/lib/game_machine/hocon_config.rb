@@ -12,19 +12,17 @@ module GameMachine
       GameMachine.logger.info("Config file is #{file}")
       data = File.read(file)
       config = ConfigFactory.parseString(data).getConfig('gamemachine')
-      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :regions, :client]
+      top = [:handlers, :routers, :jdbc, :datastore, :gamecloud, :grids, :couchbase, :http, :udp, :tcp, :akka, :admin, :client]
       conf = OpenStruct.new
       top.each {|t| conf.send("#{t}=",OpenStruct.new)}
 
       conf.plugins = config.get_string_list('plugins').to_a
       conf.default_game_id = config.get_string('default_game_id')
       conf.environment = config.get_string('environment')
-      conf.use_regions = config.get_boolean('use_regions')
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')
       conf.seeds = config.get_string_list('seeds')
 
-      conf.regions = config.get_list('regions').map {|i| i.map(&:unwrapped)}
 
       conf.client.protocol = config.get_string('client.protocol')
       conf.client.idle_timeout = config.get_int('client.idle_timeout')

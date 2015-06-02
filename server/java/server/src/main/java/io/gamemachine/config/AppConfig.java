@@ -1,9 +1,11 @@
 package io.gamemachine.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
 
 
 public class AppConfig {
@@ -14,6 +16,12 @@ public class AppConfig {
 	private static String defaultGameId;
 	private static Config gameConfig;
 	private static List<String> plugins = new ArrayList<String>();
+	
+	public static Config getConfig() {
+		String path = AppConfig.envRoot+File.separator+"config"+File.separator+env+".conf";
+		File file = new File(path);
+		return ConfigFactory.parseFile(file);
+	}
 	
 	public static List<String> getPlugins() {
 		return plugins;

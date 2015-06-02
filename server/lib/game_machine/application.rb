@@ -160,10 +160,10 @@ module GameMachine
 
         if config.use_regions
           # Our cluster singleton for managing regions
-          Actor::Builder.new(GameSystems::RegionManager).singleton
+          #Actor::Builder.new(GameSystems::RegionManager).singleton
 
           # Hands out current region info to clients/other actors
-          Actor::Builder.new(GameSystems::RegionService).start
+          #Actor::Builder.new(GameSystems::RegionService).start
         end
 
         if ENV['CLUSTER_TEST']

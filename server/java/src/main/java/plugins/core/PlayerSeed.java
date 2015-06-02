@@ -48,7 +48,7 @@ public class PlayerSeed extends GameMessageActor {
 			ps.setPassword(id, password);
 			ps.setCharacter(id, charId);
 			ps.setRole(id, role);
-			logger.warning("Player "+id+" seeded with character "+charId+" role "+role);
+			logger.debug("Player "+id+" seeded with character "+charId+" role "+role);
 		}
 	}
 

@@ -3,14 +3,14 @@ package plugins;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
-import plugins.core.UnityManager;
+import plugins.zonemanager.ZoneHandler;
 
-public class UnityManagerPlugin extends Plugin {
+public class ZoneHandlerPlugin extends Plugin {
 
 	@Override
 	public void start() {
 		// TODO Auto-generated method stub
-		GameMessageRoute.add(UnityManager.name,UnityManager.name,false);
-		ActorUtil.createActor(UnityManager.class,UnityManager.name);
+		GameMessageRoute.add(ZoneHandler.name,ZoneHandler.name,false);
+		ActorUtil.createActor(ZoneHandler.class,ZoneHandler.name);
 	}
 }
