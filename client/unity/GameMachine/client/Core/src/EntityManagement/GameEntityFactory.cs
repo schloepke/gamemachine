@@ -9,7 +9,9 @@ namespace GameMachine {
 
             void Awake() {
                IGameEntity gameEntity = Create();
-               GameEntityManager.SetPlayerEntity(gameEntity);
+               if (gameEntity != null) {
+                   GameEntityManager.SetPlayerEntity(gameEntity);
+               }
             }
 
             void Start() {
@@ -20,7 +22,11 @@ namespace GameMachine {
                 if (NetworkSettings.instance == null) {
                     return Create(GameEntityType.Player);
                 } else {
-                    return Create(NetworkSettings.instance.username, NetworkSettings.instance.character, GameEntityType.Player);
+                    if (NetworkSettings.instance.serverClient) {
+                        return null;
+                    } else {
+                        return Create(NetworkSettings.instance.username, NetworkSettings.instance.character, GameEntityType.Player);
+                    }
                 }
             }
 

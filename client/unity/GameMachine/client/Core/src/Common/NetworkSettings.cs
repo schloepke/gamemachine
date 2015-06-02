@@ -32,6 +32,8 @@ namespace GameMachine {
             [Header("Region connections")]
             public bool useRegions = false;
 
+            [Header("Are we running as a server client/agent controller")]
+            public bool serverClient = false;
             private string httpPrefix;
 
             void Awake() {

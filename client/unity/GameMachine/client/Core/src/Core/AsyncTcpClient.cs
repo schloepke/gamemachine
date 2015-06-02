@@ -256,5 +256,9 @@ namespace GameMachine.Core
             message.playerConnect = new io.gamemachine.messages.PlayerConnect();
             Write(Serialize(message));
         }
+
+        public void Send(byte[] bytes) {
+            // noop
+        }
     }
 }

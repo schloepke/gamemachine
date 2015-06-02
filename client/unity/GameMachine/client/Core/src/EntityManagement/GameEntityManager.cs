@@ -179,6 +179,23 @@ namespace GameMachine {
                 return null;
             }
 
+            public void UpdateTracking(TrackData trackData) {
+                trackData.id = NetworkSettings.instance.username;
+                trackData.entityType = TrackData.EntityType.PLAYER;
+
+                if (badShortId != 0) {
+                    trackData.getNeighbors = 2;
+                    badShortId = 0;
+                } else {
+                    trackData.getNeighbors = 1;
+                }
+
+                Entity entity = new Entity();
+                entity.id = "0";
+                entity.trackData = trackData;
+                ActorSystem.Instance.client.SendEntity(entity);
+            }
+
             public void HandleTrackDataResponse(TrackDataResponse response) {
                 Debug.Log("TrackDataResponse=" + response.reason);
                 if (response.reason == TrackDataResponse.REASON.RESEND) {

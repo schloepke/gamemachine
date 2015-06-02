@@ -12,7 +12,7 @@ using UnityEngine;
 
 namespace GameMachine.Core {
     public sealed class ActorSystem {
-        public static bool sendImmediate = false;
+        public static bool sendImmediate = true;
         public Client client;
         private Client regionClient;
         private Dictionary<string, UntypedActor> actors = new Dictionary<string, UntypedActor>();

@@ -1012,6 +1012,10 @@ Prefab:
       propertyPath: hostname
       value: 127.0.0.1
       objectReference: {fileID: 0}
+    - target: {fileID: 11439188, guid: f90c8a428b8f6c5429b824e079d68afe, type: 2}
+      propertyPath: httpUseSSL
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f90c8a428b8f6c5429b824e079d68afe, type: 2}
   m_IsPrefabParent: 0

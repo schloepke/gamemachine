@@ -14,6 +14,7 @@ namespace GameMachine.Core
 		void SetConnectionType (int connectionType);
         bool ReceivedPlayerConnected();
         void SendPlayerConnect();
+        void Send(byte[] bytes);
 	}
 }
 
