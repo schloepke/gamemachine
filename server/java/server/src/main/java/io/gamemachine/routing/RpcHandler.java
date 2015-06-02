@@ -37,18 +37,14 @@ public class RpcHandler extends UntypedActor {
 	}
 	
 	public static RpcMessage call(RpcMessage message, String playerId) {
-		Long start = System.currentTimeMillis();
 		message.playerId = playerId;
 		ActorSelection sel = ActorUtil.getSelectionByName(name);
 		AskableActorSelection askable = new AskableActorSelection(sel);
 		Future<Object> future = askable.ask(message, t);
 		try {
 			Object result = Await.result(future, t.duration());
-			Long elapsed = System.currentTimeMillis() - start;
-			System.out.println("TIME "+elapsed);
 			return (RpcMessage)result;
 		} catch (Exception e) {
-			//e.printStackTrace();
 			return null;
 		}
 	}
@@ -58,7 +54,6 @@ public class RpcHandler extends UntypedActor {
 		RpcMessage rpcMessage = (RpcMessage)message;
 		
 		if (rpcMessage.hasMessageId()) {
-			logger.warning("Incoming RPC");
 			ActorRef ref = pending.get(rpcMessage.messageId);
 			ref.tell(rpcMessage,getSelf());
 			pending.remove(rpcMessage.messageId);
