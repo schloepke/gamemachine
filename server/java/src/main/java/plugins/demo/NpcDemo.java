@@ -34,7 +34,7 @@ public class NpcDemo extends GameMessageActor {
 		cs = CharacterService.getInstance();
 		gameId = AppConfig.getDefaultGameId();
 		createNpcs(npcCount,0,"z0");
-		createNpcs(npcCount*3,1,"z1");
+		//createNpcs(npcCount*3,1,"z1");
 	}
 
 	private void createNpcs(int count,int zone, String prefix) {
