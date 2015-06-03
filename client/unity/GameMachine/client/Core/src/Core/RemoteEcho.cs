@@ -40,14 +40,14 @@ namespace GameMachine.Core
 
         public void Echo ()
         {
-            ActorSystem.Instance.FindRemote ("GameMachine/GameSystems/RemoteEcho").Tell (EchoMessage ("cluster"));
+            ActorSystem.instance.FindRemote ("GameMachine/GameSystems/RemoteEcho").Tell (EchoMessage ("cluster"));
         }
        
         public void RegionEcho ()
         {
             // We dont' use FindRegional here because it falls back to FindRemote, which in this specific case
             // we don't want
-            ActorSystem.Instance.Find ("GameMachine/GameSystems/RemoteEcho", true, true).Tell (EchoMessage ("region"));
+            ActorSystem.instance.Find ("GameMachine/GameSystems/RemoteEcho", true, true).Tell (EchoMessage ("region"));
         }
 
         public override void OnReceive (object message)

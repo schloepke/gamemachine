@@ -173,7 +173,10 @@ namespace GameMachine {
                 Entity entity = new Entity();
                 entity.id = "0";
                 entity.trackData = trackData;
-                ActorSystem.Instance.client.SendEntity(entity);
+                if (ActorSystem.instance.client != null) {
+                    ActorSystem.instance.client.SendEntity(entity);
+                }
+               
                 //trackData.getNeighbors = 2;
                 //trackData.zone = ZoneHandler.instance.currentZoneNumber();
                 return null;
@@ -193,7 +196,7 @@ namespace GameMachine {
                 Entity entity = new Entity();
                 entity.id = "0";
                 entity.trackData = trackData;
-                ActorSystem.Instance.client.SendEntity(entity);
+                ActorSystem.instance.client.SendEntity(entity);
             }
 
             public void HandleTrackDataResponse(TrackDataResponse response) {

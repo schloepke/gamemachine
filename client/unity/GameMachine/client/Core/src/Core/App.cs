@@ -16,6 +16,7 @@ namespace GameMachine.Core {
         private AppStarted appStarted;
         private ConnectionTimeout connectionTimeout;
         private bool appStartedCalled = false;
+        private ActorSystem actorSystem;
 
         public Client client;
         public static RemoteEcho remoteEcho;
@@ -75,22 +76,17 @@ namespace GameMachine.Core {
             messenger.AddComponentSet("ChatMessage");
             messenger.AddComponentSet("ChatChannels");
             messenger.AddComponentSet("ChatInvite");
-            ActorSystem.Instance.RegisterActor(messenger);
+            ActorSystem.instance.RegisterActor(messenger);
 
             EntityTracking entityTracking = new EntityTracking();
             entityTracking.AddComponentSet("Neighbors");
-            ActorSystem.Instance.RegisterActor(entityTracking);
+            actorSystem.RegisterActor(entityTracking);
 
 
             remoteEcho = new RemoteEcho();
             remoteEcho.AddComponentSet("EchoTest");
-            ActorSystem.Instance.RegisterActor(remoteEcho);
-
-            RegionHandler regionHandler = new RegionHandler();
-            regionHandler.AddComponentSet("Regions");
-            ActorSystem.Instance.RegisterActor(regionHandler);
-
-
+            actorSystem.RegisterActor(remoteEcho);
+            
             RemoteEcho.EchoReceived callback = OnEchoReceived;
             remoteEcho.OnEchoReceived(callback);
 
@@ -103,10 +99,7 @@ namespace GameMachine.Core {
         void SetEchoInterval() {
             echoInterval = 0.60 / echosPerSecond;
         }
-        void UpdateRegions() {
-            RegionHandler.SendRequest();
-        }
-
+       
         void OnEchoReceived() {
 
 
@@ -115,7 +108,8 @@ namespace GameMachine.Core {
 
         void OnPlayerConnected() {
             Debug.Log("Player Connected");
-            ActorSystem.Instance.Start(client);
+            actorSystem = gameObject.GetComponent<ActorSystem>() as ActorSystem;
+            actorSystem.Activate(client);
 
             // Now create the actors
             StartCoreActors();
@@ -125,7 +119,6 @@ namespace GameMachine.Core {
             if (!appStartedCalled) {
                 appStarted();
                 appStartedCalled = true;
-                InvokeRepeating("UpdateRegions", 0.01f, 20.0F);
                 echosPerSecond = 0.20f;
                 SetEchoInterval();
             }
@@ -158,18 +151,14 @@ namespace GameMachine.Core {
         }
 
 
-        void Update() {
-            ActorSystem.Instance.DeliverQueuedMessages();
-        }
-
         void UpdateNetwork() {
             if (!running) {
                 return;
             }
 
 
-            if (running && ActorSystem.Instance.Running) {
-                ActorSystem.Instance.Update(connected);
+            if (running && ActorSystem.instance.running) {
+                ActorSystem.instance.AppUpdate(connected);
             }
 
             if (Time.time > (lastEcho + echoInterval)) {

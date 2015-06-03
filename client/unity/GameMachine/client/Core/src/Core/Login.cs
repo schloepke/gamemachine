@@ -17,7 +17,6 @@ namespace GameMachine
         }
 
         private GameMachine.Core.App app;
-        public static GameMachine.Core.RegionClient regionClient;
         private string authUri;
         private int port = 0;
         private string hostname;
@@ -97,8 +96,6 @@ namespace GameMachine
 
             NetworkSettings.instance.authtoken = Int32.Parse(authtoken);
             app.Run(NetworkSettings.instance.protocol, hostname, port, User.Instance.username, NetworkSettings.instance.authtoken);
-
-            StartRegionClient (authtoken);
         }
 
         public void OnAppStarted ()
@@ -111,28 +108,7 @@ namespace GameMachine
             Login.userApp.ConnectionTimeout ();
         }
 
-        public void OnRegionConnectionTimeout ()
-        {
-            Debug.Log ("Region Connection timed out");
-        }
-		
-        void OnRegionClientStarted ()
-        {
-            Debug.Log ("OnRegionClientStarted called");
-        }
-
-        void StartRegionClient (string authtoken)
-        {
-            regionClient = this.gameObject.AddComponent (Type.GetType ("GameMachine.Core.RegionClient")) as RegionClient;
-            RegionClient.ConnectionTimeout connectionCallback = OnRegionConnectionTimeout;
-            regionClient.OnConnectionTimeout (connectionCallback);
-			
-            RegionClient.RegionClientStarted callback = OnRegionClientStarted;
-            regionClient.OnRegionClientStarted (callback);
-			
-            regionClient.Init (port, User.Instance.username, Int32.Parse (authtoken));
-        }
-
+       
         void Start ()
         {
 

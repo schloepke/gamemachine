@@ -50,7 +50,7 @@ namespace GameMachine.Core
             running = false;
             regionStartedCalled = false;
             connected = false;
-            ActorSystem.Instance.SetRegionClient (null);
+            ActorSystem.instance.SetRegionClient (null);
             if (client != null && client.IsRunning ()) {
                 client.Stop ();
             }
@@ -78,7 +78,7 @@ namespace GameMachine.Core
 
             client.SetConnectionType (2);
             client.Start ();
-            ActorSystem.Instance.SetRegionClient (client);
+            ActorSystem.instance.SetRegionClient (client);
 
             RemoteEcho.RegionEchoReceived callback = OnEchoReceived;
             GameMachine.Core.App.remoteEcho.OnRegionEchoReceived (callback);

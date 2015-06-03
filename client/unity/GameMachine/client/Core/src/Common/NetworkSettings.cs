@@ -26,7 +26,6 @@ namespace GameMachine {
             public bool httpUseSSL = false;
             public int httpPort = 3000;
             public int udpPort = 24130;
-            public int udpRegionPort = 24130;
             public int tcpPort = 8910;
 
             [Header("Region connections")]

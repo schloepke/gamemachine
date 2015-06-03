@@ -22,7 +22,7 @@ namespace GameMachine.Core
             }
 
             string uri = prefix + hostname + ":" + httpPort + "/api/client/login/" + gameId;
-            Logger.Debug ("Authenticating via " + uri);
+            Debug.Log ("Authenticating via " + uri);
             var form = new WWWForm ();
             form.AddField ("username", username);
             form.AddField ("password", password);
@@ -30,6 +30,7 @@ namespace GameMachine.Core
             yield return www;
         
             if (www.error != null) {
+                Debug.Log(www.error);
                 error (www.error);
             } else {
                 Logger.Debug (www.text);

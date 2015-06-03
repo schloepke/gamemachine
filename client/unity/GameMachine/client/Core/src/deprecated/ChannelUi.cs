@@ -130,7 +130,7 @@ namespace GameMachine.Chat
 			windowLeft = Screen.width - 200;
 			windowTop = 200;
 			groupWindow = new Rect (windowLeft, windowTop, windowWidth, windowHeight);
-			messenger = ActorSystem.Instance.Find ("Messenger") as Messenger;
+			messenger = ActorSystem.instance.Find ("Messenger") as Messenger;
 		}
         
 		void Update ()

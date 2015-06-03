@@ -1,44 +1,34 @@
-﻿using  ProtoBuf;
+﻿using ProtoBuf;
 using Entity = io.gamemachine.messages.Entity;
 using GameMachine;
-using  System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 using System;
 
-namespace GameMachine.Core
-{
+namespace GameMachine.Core {
 
-    public class RemoteActorRef : UntypedActor
-    {
+    public class RemoteActorRef : UntypedActor {
         private string destination;
         private bool regional = false;
 
-        public RemoteActorRef (string _destination)
-        {
+        public RemoteActorRef(string _destination) {
             destination = _destination;
         }
 
-        public void SetRegional (bool regional)
-        {
+        public void SetRegional(bool regional) {
             this.regional = regional;
         }
-        
-        public bool isRegional ()
-        {
+
+        public bool isRegional() {
             return regional;
         }
 
-        public override void OnReceive (object message)
-        {
+        public override void OnReceive(object message) {
             Entity entity = message as Entity;
-            if (!String.IsNullOrEmpty (destination) && destination != "default") {
+            if (!String.IsNullOrEmpty(destination) && destination != "default") {
                 entity.destination = destination;
             }
 
-            if (isRegional ()) {
-                actorSystem.TellRemoteRegion (entity);
-            } else {
-                actorSystem.TellRemote (entity);
-            }
+            actorSystem.TellRemote(entity);
 
         }
     }

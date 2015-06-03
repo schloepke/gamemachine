@@ -52,7 +52,7 @@ namespace GameMachine.Chat {
 
             playerId = GameEntityManager.GetPlayerEntity().GetEntityId();
             characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
-            messenger = ActorSystem.Instance.Find("Messenger") as Messenger;
+            messenger = ActorSystem.instance.Find("Messenger") as Messenger;
 
             chatCommandHandler = new ChatCommandHandler(messenger, this, playerId);
 

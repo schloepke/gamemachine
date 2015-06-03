@@ -3684,6 +3684,55 @@ namespace io.gamemachine.messages
       get { return _assigned; }
       set { _assigned = value; }
     }
+    private int _number = default(int);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"number", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int number
+    {
+      get { return _number; }
+      set { _number = value; }
+    }
+    private string _hostname = "";
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"hostname", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string hostname
+    {
+      get { return _hostname; }
+      set { _hostname = value; }
+    }
+    private bool _current = default(bool);
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"current", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool current
+    {
+      get { return _current; }
+      set { _current = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ZoneInfos")]
+  public partial class ZoneInfos : global::ProtoBuf.IExtensible
+  {
+    public ZoneInfos() {}
+    
+    private string _id = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.ZoneInfo> _zoneInfo = new global::System.Collections.Generic.List<io.gamemachine.messages.ZoneInfo>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"zoneInfo", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.ZoneInfo> zoneInfo
+    {
+      get { return _zoneInfo; }
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -6438,24 +6487,8 @@ namespace io.gamemachine.messages
       get { return _rpcMessage; }
       set { _rpcMessage = value; }
     }
-    private io.gamemachine.messages.Zone _zone = null;
-    [global::ProtoBuf.ProtoMember(1010, IsRequired = false, Name=@"zone", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.Zone zone
-    {
-      get { return _zone; }
-      set { _zone = value; }
-    }
-    private io.gamemachine.messages.ZoneInfo _zoneInfo = null;
-    [global::ProtoBuf.ProtoMember(1011, IsRequired = false, Name=@"zoneInfo", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.ZoneInfo zoneInfo
-    {
-      get { return _zoneInfo; }
-      set { _zoneInfo = value; }
-    }
     private io.gamemachine.messages.GameMessage _gameMessage = null;
-    [global::ProtoBuf.ProtoMember(1012, IsRequired = false, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1010, IsRequired = false, Name=@"gameMessage", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public io.gamemachine.messages.GameMessage gameMessage
     {
@@ -6463,7 +6496,7 @@ namespace io.gamemachine.messages
       set { _gameMessage = value; }
     }
     private io.gamemachine.messages.GameMessages _gameMessages = null;
-    [global::ProtoBuf.ProtoMember(1013, IsRequired = false, Name=@"gameMessages", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(1011, IsRequired = false, Name=@"gameMessages", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
     public io.gamemachine.messages.GameMessages gameMessages
     {

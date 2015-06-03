@@ -40,7 +40,14 @@ namespace GameMachine.Chat {
             if (command.StartsWith("/speed")) {
                 command = command.Replace("/speed", "");
                 int speed = Int32.Parse(command);
-                
+                string characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
+                GameEntityController controller = GameObject.Find(characterId).GetComponent<GameEntityController>() as GameEntityController;
+                controller.runSpeed = speed;
+                return CommandResult.Ok;
+            } else if (command.StartsWith("/zone")) {
+                command = command.Replace("/zone", "").Trim();
+                GameMachine.DefaultClient.Client.instance.currentZone = command;
+                GameMachine.DefaultClient.Client.instance.setZone = true;
                 return CommandResult.Ok;
             } else if (command.StartsWith("/count")) {
                 chatUI.LocalMessage(Color.yellow, GameEntityManager.GameEntityCount().ToString());
@@ -209,7 +216,7 @@ namespace GameMachine.Chat {
         }
 
         public void OnCharacterGet(string playerId, io.gamemachine.messages.Character character) {
-            Messenger messenger = ActorSystem.Instance.Find("Messenger") as Messenger;
+            Messenger messenger = ActorSystem.instance.Find("Messenger") as Messenger;
             string myPlayerId = GameEntityManager.GetPlayerEntity().GetEntityId();
             messenger.InviteToChannel(myPlayerId, character.playerId, requestedGroup);
             Debug.Log("invite sent to " + character.playerId + " for channel " + requestedGroup);

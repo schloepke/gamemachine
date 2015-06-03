@@ -68,7 +68,7 @@ MonoBehaviour:
   gameId: mygame
   username: unity1
   password: pass
-  hostname: 192.168.1.8
+  hostname: 127.0.0.1
   characterId: 
   loggedIn: 0
   isAdmin: 0

@@ -465,7 +465,7 @@ namespace GameMachine {
                         io.gamemachine.messages.Entity entity = new io.gamemachine.messages.Entity();
                         entity.id = "0";
                         entity.trackData = trackData;
-                        ActorSystem.Instance.client.SendEntity(entity);
+                        ActorSystem.instance.client.SendEntity(entity);
                     } else {
                         inputData.remoteField.SetValue(trackData.userDefinedData, value, null);
                     }

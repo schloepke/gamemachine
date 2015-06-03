@@ -32,7 +32,7 @@ namespace GameMachine.Core
 		
 		GameMessageHandler ()
 		{
-			ActorSystem.Instance.InvokeRepeating (this, "SendGameMessages");
+			//ActorSystem.Instance.InvokeRepeating (this, "SendGameMessages");
 		}
 
 		public void SendGameMessages ()
@@ -68,7 +68,7 @@ namespace GameMachine.Core
 					}
 				}
 				gameMessages.Clear ();
-				ActorSystem.Instance.TellRemote (entity);
+				ActorSystem.instance.TellRemote (entity);
 			}
 
 		}

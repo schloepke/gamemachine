@@ -31,9 +31,9 @@ namespace GameMachine.Core
 		}
 		public static void Register (Trackable component)
 		{
-			EntityTracking entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
+			EntityTracking entityTracking = ActorSystem.instance.Find ("EntityTracking") as EntityTracking;
 			entityTracking.trackable = component;
-			ActorSystem.Instance.InvokeRepeating (entityTracking, "UpdateTracking");
+			ActorSystem.instance.InvokeRepeating (entityTracking, "UpdateTracking");
 		}
 
 		public void UpdateTracking ()
@@ -44,7 +44,7 @@ namespace GameMachine.Core
 
 		public static void SendTrackData (TrackData trackData)
 		{
-			EntityTracking entityTracking = ActorSystem.Instance.Find ("EntityTracking") as EntityTracking;
+			EntityTracking entityTracking = ActorSystem.instance.Find ("EntityTracking") as EntityTracking;
 			ActorSystem.sendImmediate = true;
 			entityTracking.Update (trackData);
 			ActorSystem.sendImmediate = false;
@@ -66,7 +66,7 @@ namespace GameMachine.Core
 			entity.trackData = trackData;
 
 			// Always regional
-			ActorSystem.Instance.FindRegional ("default").Tell (entity);
+			ActorSystem.instance.FindRegional ("default").Tell (entity);
 		}
 		public override void OnReceive (object message)
 		{

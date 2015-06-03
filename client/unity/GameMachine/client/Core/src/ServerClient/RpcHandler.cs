@@ -30,7 +30,7 @@ namespace GameMachine {
                 Debug.Log("Incoming");
                 ClientMessage clientMessage = new ClientMessage();
                 clientMessage.rpcMessage = message;
-                ActorSystem.Instance.client.Send(Serialize(clientMessage));
+                ActorSystem.instance.client.Send(Serialize(clientMessage));
             }
 
             private byte[] Serialize(ClientMessage message) {

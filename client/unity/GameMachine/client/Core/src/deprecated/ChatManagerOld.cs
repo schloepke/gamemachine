@@ -68,7 +68,7 @@ namespace GameMachine.Chat
             chatbox.CloseChatWindow();
 
             // The messaging actor
-            messenger = ActorSystem.Instance.Find("Messenger") as Messenger;
+            messenger = ActorSystem.instance.Find("Messenger") as Messenger;
 
             // Parses the chat language used by the gui and calls messenger
             // Feel free to provide your own implementation, this is mostly a starting point.

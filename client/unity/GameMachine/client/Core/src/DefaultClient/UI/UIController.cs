@@ -100,6 +100,14 @@ namespace GameMachine {
 
             public void OnCharacterSelected(Character character) {
                 NetworkSettings.instance.character = character;
+                if (character.zone != client.zoneInfo.number) {
+                    Debug.Log("Character zone != zoneinfo zone");
+                }
+                if (NetworkSettings.instance.hostname != client.zoneInfo.hostname) {
+                    Debug.Log("Not connected to right host for zone, reconnecting");
+                    client.ReconnectToZone();
+                }
+                
                 ResetUI();
                 Application.LoadLevel(mainScene);
             }

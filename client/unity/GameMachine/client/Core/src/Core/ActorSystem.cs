@@ -11,7 +11,7 @@ using ProtoBuf;
 using UnityEngine;
 
 namespace GameMachine.Core {
-    public sealed class ActorSystem {
+    public class ActorSystem : MonoBehaviour {
         public static bool sendImmediate = true;
         public Client client;
         private Client regionClient;
@@ -22,16 +22,12 @@ namespace GameMachine.Core {
         private List<Entity> regionEntities = new List<Entity>();
         private EntityTracking entityTracking;
 
-        public bool Running = false;
+        public bool running = false;
 
-        static readonly ActorSystem _instance = new ActorSystem();
-        public static ActorSystem Instance {
-            get {
-                return _instance;
-            }
-        }
+        public static ActorSystem instance;
 
-        ActorSystem() {
+        void Awake() {
+            instance = this;
         }
 
         public void InvokeRepeating(object target, string methodName) {
@@ -40,12 +36,12 @@ namespace GameMachine.Core {
             invokeRepeatingMethods[target] = m;
         }
 
-        public void Start(Client _client) {
+        public void Activate(Client _client) {
             client = _client;
             DeadLetters deadletters = new DeadLetters();
             RegisterActor(deadletters);
             CreateMethodCache();
-            Running = true;
+            running = true;
         }
 
         public void SetRegionClient(Client client) {
@@ -56,7 +52,7 @@ namespace GameMachine.Core {
             actor.SetActorSystem(this);
             string name = actor.GetType().Name;
             if (actors.ContainsKey(name)) {
-                Debug.Log("Actor " + name + " already registered");
+                //Debug.Log("Actor " + name + " already registered");
                 actors.Remove(name);
             }
             actors.Add(name, actor);
@@ -85,7 +81,6 @@ namespace GameMachine.Core {
             } else if (remote) {
                 RemoteActorRef remoteActorRef = new RemoteActorRef(name);
                 remoteActorRef.SetActorSystem(this);
-                remoteActorRef.SetRegional(regional);
                 return remoteActorRef;
             } else {
                 return actors["DeadLetters"];
@@ -94,32 +89,23 @@ namespace GameMachine.Core {
 
         public void TellRemote(Entity entity) {
             if (sendImmediate) {
-                client.SendEntity(entity);
+                if (client != null) {
+                    client.SendEntity(entity);
+                }
                 return;
             }
 
             entities.Add(entity);
         }
 
-        public void TellRemoteRegion(Entity entity) {
-            if (regionClient == null) {
-                Logger.Debug("No region client set!");
-            } else {
-                if (sendImmediate) {
-                    client.SendEntity(entity);
-                    return;
-                }
-                regionEntities.Add(entity);
-            }
-        }
-
+        
         private void CreateMethodCache() {
             Entity entity = new Entity();
             foreach (PropertyInfo info in entity.GetType().GetProperties()) {
                 MethodInfo minfo = info.GetGetMethod();
                 string name = info.Name;
                 if (methods.ContainsKey(name)) {
-                    Debug.Log("Method " + name + " already registered");
+                    //Debug.Log("Method " + name + " already registered");
                     methods.Remove(name);
                 }
                 methods.Add(name, minfo);
@@ -127,7 +113,7 @@ namespace GameMachine.Core {
             }
         }
 
-        public void Update(bool connected) {
+        public void AppUpdate(bool connected) {
             foreach (object target in invokeRepeatingMethods.Keys) {
                 invokeRepeatingMethods[target].Invoke(target, null);
             }
@@ -142,7 +128,11 @@ namespace GameMachine.Core {
             }
         }
 
-        public void DeliverQueuedMessages() {
+        void Update() {
+            DeliverQueuedMessages();
+        }
+
+        private void DeliverQueuedMessages() {
             if (entityTracking == null) {
                 if (actors.ContainsKey("EntityTracking")) {
                     entityTracking = actors["EntityTracking"] as EntityTracking;
