@@ -82,6 +82,7 @@ public class ZoneManager extends GameMessageActor {
 		for (Config value : values) {
 			String zoneName = value.getString("name");
 			String actorName = value.getString("actorName");
+			int number = value.getInt("number");
 			
 			ZoneInfo info;
 			info = ZoneInfo.db().findFirst("zone_info_id = ?", zoneName);
@@ -89,6 +90,7 @@ public class ZoneManager extends GameMessageActor {
 				info = new ZoneInfo();
 				info.id = zoneName;
 				info.actorName = actorName;
+				info.number = number;
 				info.assigned = false;
 				ZoneInfo.db().save(info);
 				logger.warning("Saving new zone to db: "+info.id);
@@ -136,6 +138,12 @@ public class ZoneManager extends GameMessageActor {
 		return false;
 	}
 	
+	private String addressToHostname(String address) {
+		address = address.replace("akka.tcp://cluster@","");
+		String[] parts = address.split(":");
+		return parts[0];
+	}
+	
 	private void updateStatus() {
 		state = Cluster.get(getContext().system()).state();
 		
@@ -156,6 +164,7 @@ public class ZoneManager extends GameMessageActor {
 				Member member = getBestNode();
 				if (member != null) {
 					info.node = member.address().toString();
+					info.hostname = addressToHostname(info.node);
 					info.assigned = true;
 					ZoneInfo.db().save(info);
 					logger.warning("Assigned zone "+info.id+" to node "+info.node);

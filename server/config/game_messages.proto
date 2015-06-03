@@ -612,7 +612,7 @@ message RpcMessage {
   optional string playerId = 4;
 }
 
-message Zone {
+local_message Zone {
   enum Status {
 		NONE = 0;
 		UP = 1;
@@ -626,12 +626,20 @@ message Zone {
 	optional string unityClient = 4;
 }
 
-persistent_message ZoneInfo {
+local_persistent_message ZoneInfo {
   required string id = 1;
   optional int32 recordId = 2;
   optional string node = 3;
   required string actorName = 4;
   optional bool assigned = 5;
+  optional int32 number = 6;
+  optional string hostname = 7;
+  optional bool current = 8;
+}
+
+local_message ZoneInfos {
+  optional string id = 2;
+  repeated ZoneInfo zoneInfo = 1;
 }
 
 message GameMessage {

@@ -5,6 +5,7 @@ import com.typesafe.config.Config;
 import io.gamemachine.messages.Character;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
@@ -32,13 +33,14 @@ public class NpcDemo extends GameMessageActor {
 		ps = PlayerService.getInstance();
 		cs = CharacterService.getInstance();
 		gameId = AppConfig.getDefaultGameId();
-		createNpcs();
+		createNpcs(npcCount,0,"z0");
+		createNpcs(npcCount*3,1,"z1");
 	}
 
-	private void createNpcs() {
-		for (int i = 1; i < npcCount; i++) {
-			String playerId = "demonpc" + i;
-			String characterId = "demochr" + i;
+	private void createNpcs(int count,int zone, String prefix) {
+		for (int i = 1; i < count; i++) {
+			String playerId = prefix+"demonpc" + i;
+			String characterId = prefix+"demochr" + i;
 			Character character = null;
 
 			Player player = ps.find(playerId);
@@ -47,6 +49,7 @@ public class NpcDemo extends GameMessageActor {
 				character = cs.create(playerId, characterId, null);
 			}
 
+			GameGrid.setPlayerZone(playerId, zone);
 			ps.setCharacter(playerId, characterId);
 			Props props = Props.create(NpcEntity.class, playerId, characterId);
 			ActorRef ref = getContext().actorOf(props, characterId);

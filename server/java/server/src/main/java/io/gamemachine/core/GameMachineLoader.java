@@ -101,10 +101,8 @@ public class GameMachineLoader {
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-            	log.warn("Shutdown started");
                 ExternalProcess.stopAll();
                 getActorSystem().shutdown();
-                log.warn("Shutdown finishing");
             }
         });
 

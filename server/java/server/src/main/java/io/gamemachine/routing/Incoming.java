@@ -64,7 +64,7 @@ public class Incoming extends UntypedActor {
 			GameLimits.incrementMessageCountIn(gameId);
 			
 			if (!Authentication.hasValidAuthtoken(clientMessage.getPlayer())) {
-				logger.warning("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
+				logger.info("Player not authenticated " + clientMessage.getPlayer().getId() + " authtoken="
 						+ clientMessage.getPlayer().getAuthtoken());
 				return;
 			}

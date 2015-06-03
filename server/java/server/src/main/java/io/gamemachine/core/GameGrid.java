@@ -3,6 +3,7 @@ package io.gamemachine.core;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.AppConfig.GridConfig;
+import io.gamemachine.messages.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
+
+import io.gamemachine.messages.Character;
 
 public class GameGrid {
 
@@ -33,12 +38,34 @@ public class GameGrid {
 		if (playerZone.containsKey(playerId)) {
 			return playerZone.get(playerId);
 		} else {
-			return 0;
+			int zone = 0;
+			String characterId = PlayerService.getInstance().getCharacter(playerId);
+			if (!Strings.isNullOrEmpty(characterId)) {
+				Character character = CharacterService.getInstance().find(playerId, characterId);
+				if (character.hasZone()) {
+					zone = character.zone;
+				}
+				setPlayerZone(playerId,zone);
+			}
+			
+			return zone;
 		}
 	}
 
 	public static void setPlayerZone(String playerId, int zone) {
 		playerZone.put(playerId, zone);
+		
+		// make sure player is removed from associated grid
+		for (Grid grid : GameGrid.getGridList()) {
+			grid.remove(playerId);
+		}
+				
+		String characterId = PlayerService.getInstance().getCharacter(playerId);
+		if (!Strings.isNullOrEmpty(characterId)) {
+			Character character = CharacterService.getInstance().find(playerId, characterId);
+			character.zone = zone;
+			CharacterService.getInstance().getInstance().save(character);
+		}
 	}
 
 	public static void getGridCounts() {

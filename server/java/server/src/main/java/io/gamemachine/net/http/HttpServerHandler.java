@@ -10,10 +10,13 @@ import io.gamemachine.authentication.Authentication;
 import io.gamemachine.authentication.AuthorizedPlayers;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
+import io.gamemachine.messages.ZoneInfo;
+import io.gamemachine.messages.ZoneInfos;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -37,6 +40,8 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 import plugins.HttpHandler;
 import plugins.landrush.BuildObjectHandler;
@@ -172,9 +177,35 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 				
 				if (!authenticated) {
+					logger.warn("Http attempt without authentication");
 					return;
 				}
 
+				if (req.getUri().startsWith("/api/players/get_zones")) {
+					List<ZoneInfo> infos = ZoneInfo.db().findAll();
+					ZoneInfos all = new ZoneInfos();
+					int current = GameGrid.getPlayerZone(playerId);
+					for (ZoneInfo info : infos) {
+						if (info.number == current) {
+							info.current = true;
+						}
+						all.addZoneInfo(info);
+					}
+					Ok(ctx, all.toByteArray());
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/players/set_zone")) {
+					if (params.get("zone") == null) {
+						NotAuthorized(ctx);
+						return;
+					}
+					ZoneInfo info = ZoneInfo.db().findFirst("zone_info_id = ?", params.get("zone"));
+					GameGrid.setPlayerZone(playerId, info.number);
+					Ok(ctx, info.toByteArray());
+					return;
+				}
+				
 				if (req.getUri().startsWith("/api/players/get_other")) {
 					Player player = PlayerService.getInstance().find(params.get("otherPlayerId"));
 					Ok(ctx, player.toByteArray());

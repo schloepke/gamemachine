@@ -74,7 +74,7 @@ public class PlayerOutgoing extends UntypedActor {
 	}
 	
 	private void unregister() {
-		logger.warning("Player "+playerId+" killed");
+		logger.info("Player "+playerId+" killed");
 		ClientMessage clientMessage = createClientMessage();
 		clientMessage.setPlayer(new Player().setId(playerId));
 		Connection.removeConnection(playerId);
