@@ -2,6 +2,10 @@
 
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games.  Our focus is on providing easy to use abstractions for hard problems, allowing even client side developers to write game logic that is concurrent and performant, without having to deal with low level concurrency.
 
+## Version 2 is now out with a much simpler installation, unity packages, new features, and new documentation.
+
+Visit our new [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
+
 #### Highlights
 
 - Fully distributed platform that is inherently scalable to thousands of nodes.
@@ -25,43 +29,5 @@ The goal of Game Machine is to provide an inherently scalable, modern architectu
 - Chat system built on top of a distributed pub/sub architecture
 
 
-#### Roadmap
 
-The next iteration in Game Machine will be to produce functional modules that solve genre specific problems end to end, including full  client side implementations.  Our approach to this will be to create real games, and as features mature package those up in official modules.  The plan is to actually release these games on Steam, as a way to stay as close as possible to the real problems game developers are trying to solve.
-
-
-Some of the modules will be open source, and some will be paid extensions.  The core of Game Machine will always remain open source.
-
-
-For the first game we took the most challenging, complicated multiplayer game we could think of, a massive pvp mmo with land/sea combat and siege warfare.  We anticipate around half a dozen modular components coming out of this, all usable separately and in some cases across multiple genre's.  
-
-
-* Game Status Update (4/1/15)
-
-Just cut an early release of the game with most of the below functional.  It's running on a live server.  You can download a windows client here:
-
-https://s3.amazonaws.com/gamemachine/pvp_mmo.zip
-
-The state of the code is that while it's not completely prototype, it's not yet production ready, so don't pull down master and start using it in your game.
-
--  Complete combat system based on status effects that is 100% server driven.  Status effects can apply to players, npc's, or any static game object.  Single target and aoe damage.  Effects can be single shot or tick over time.  There are also passive and active effects, where passive effects last for a set duration, and active effects are either one time or tick for X number of ticks.  Items are also tied into this where items can be linked to effects.  Currently if you equip an item that is linked it automatically applies the effect, such as armor increase, etc..  And automatically removes it when you unequip.
-
-- Siege warfare and the ability to capture objectives.  Nearly everything in game is destructable and it's status tracked server side.  Currently you can take out walls with catapults, capture the keep, and npc logic is working so when it flips the npc's flip with it from hostile to friendly.  When you capture a keep the structure goes back to full health.  This is linked into a new territory system that is now in place, where when you capture a keep you gain an influence in a certain radius that can be used for stuff like taxation, extra harvesting bonuses, etc..
-
--  Guilds.  Guilds can claim and own structures.  Core functionality in place, no ui yet all command line driven through the chat interface.
-
--  Housing.  Fairly basic but functional.
- 
--  Crafting system.  Everything in game is crafted.  System is based on a simple combination system right now.  Currently the starting map has around 9,000 harvestable resources on it.  
-
-- Inventory.  Basic inventory.  No trading yet, although that's basically a workflow thing as the db tables are setup to make that fairly straight forward.
-
-- Npc's.  Basica npc ai and combat is in.  Waypoint system for automating npc pathing with leaders/followers.  Have guards patrolling around, killing bandits they come across, and killing any players that perform hostile actions that they see.  Also tied into player owned structures so they can guard them for you.
-
-- Ship combat.  Ships themselves work, with multiple players on a ship.  Need to get cannons in game for the combat side to work.
-
-- Most everything in game is server driven.  If you perform an action in the world your client acts on the response from the server just like every other player.  If you open the door to your house, we send a request to the server, you get back a reply, and then it opens.  This has worked much better then having a system where we treat your client differently then other clients.  For example if you open a door, it persists server side and everyone see's it opening just like you do.  Siege weapons moving and firing is handled the same way.
-
-
-Visit [www.gamemachine.io](http://www.gamemachine.io) for documentation.
 
