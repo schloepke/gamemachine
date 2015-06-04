@@ -65,11 +65,12 @@ public class ExternalProcess implements Runnable {
 			} else {
 				command = "pkill -f \""+executable+"\"";
 			}
+			
 			logger.debug("Killing "+executable+" with "+command);
 			rt.exec(command);
 			return true;
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.info(e.getMessage(),e);
 			return false;
 		}
 	}
@@ -83,7 +84,7 @@ public class ExternalProcess implements Runnable {
 			status = Status.DOWN;
 			logger.warn("Process "+ startScript+" exit value was " + rvalue);
 		} catch (InvalidExitValueException | IOException | InterruptedException | TimeoutException e) {
-			e.printStackTrace();
+			logger.debug(e.getMessage(),e);
 		}
 	}
 	
@@ -102,21 +103,18 @@ public class ExternalProcess implements Runnable {
 	        }
 	        
 	        Process p = rt.exec(command);
-	        BufferedReader input =
-	                new BufferedReader(new InputStreamReader(p.getInputStream()));
+	        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
 	        while ((line = input.readLine()) != null) {
 	        	Matcher m = r.matcher(line);
 	        	if (m.find()) {
 	        		input.close();
 	        		return true;
 	        	}
-	            //logger.debug("Process line "+line);
-	            
 	        }
 	        input.close();
 	        return false;
 	    } catch (Exception err) {
-	        err.printStackTrace();
+	        logger.info(err.getMessage(),err);
 	        return false;
 	    }
 	}
