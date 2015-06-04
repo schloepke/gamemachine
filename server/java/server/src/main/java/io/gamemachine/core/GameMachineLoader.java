@@ -5,6 +5,7 @@ import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.game_systems.LatencyTest;
 import io.gamemachine.objectdb.DbActor;
+import io.gamemachine.process.ProcessManager;
 import io.gamemachine.routing.GameMessageRoute;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
@@ -88,6 +89,8 @@ public class GameMachineLoader {
 		startCacheUpdateHandler();
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		
+		actorSystem.actorOf(Props.create(ProcessManager.class), ProcessManager.name);
+		
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
 		}
@@ -101,7 +104,7 @@ public class GameMachineLoader {
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                ExternalProcess.stopAll();
+                ProcessManager.stopAll();
                 getActorSystem().shutdown();
             }
         });

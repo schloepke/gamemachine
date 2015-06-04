@@ -54,9 +54,9 @@ module GameMachine
 
       def build(clean=false)
         if clean
-          cmd = "cd #{java_root} && #{gradlew} clean build install_libs"
+          cmd = "cd #{java_root} && #{gradlew} clean assemble install_libs"
         else
-          cmd = "cd #{java_root} && #{gradlew} build install_libs"
+          cmd = "cd #{java_root} && #{gradlew} assemble install_libs"
         end
       end
 

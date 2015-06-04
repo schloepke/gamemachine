@@ -1,10 +1,11 @@
 
 package plugins.core;
 
-import io.gamemachine.core.ExternalProcess;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.process.ExternalProcess;
+import io.gamemachine.process.ProcessManager;
 
 import java.util.List;
 
@@ -26,13 +27,11 @@ public class UnityManager extends GameMessageActor {
 		List<? extends Config> values = config.getConfigList("unity_instances");
 		for (Config value : values) {
 			
-			ExternalProcess.ProcessInfo info = new ExternalProcess.ProcessInfo();
-			info.startScript = value.getString("start_script");
-			info.executable = value.getString("executable");
+			ExternalProcess info = new ExternalProcess(value.getString("start_script"),value.getString("executable"));
 			boolean enabled = value.getBoolean("enabled");
 			
 			if (enabled) {
-				ExternalProcess.start(info);
+				ProcessManager.add(info);
 			} else {
 				logger.debug(info.executable+" not enabled, skipping");
 			}
