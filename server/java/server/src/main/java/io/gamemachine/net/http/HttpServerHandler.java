@@ -12,6 +12,8 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.BuildObject;
+import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
@@ -46,6 +48,7 @@ import com.google.common.base.Strings;
 import plugins.HttpHandler;
 import plugins.landrush.BuildObjectHandler;
 import plugins.pvp_game.CharacterHandler;
+import sun.misc.BASE64Decoder;
 import io.gamemachine.messages.Character;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
@@ -250,6 +253,17 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					int end = Integer.parseInt(params.get("end"));
 					byte[] resp = BuildObjectHandler.getBuildObjects(start,end);
 					Ok(ctx, resp);
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/build_objects/put")) {
+					BASE64Decoder dec = new BASE64Decoder();
+					byte[] bytes = dec.decodeBuffer(params.get("build_objects"));
+					BuildObjects buildObjects = BuildObjects.parseFrom(bytes);
+					for (BuildObject buildObject : buildObjects.buildObject) {
+						BuildObject.db().save(buildObject);
+					}
+					Ok(ctx, "OK");
 					return;
 				}
 

@@ -130,6 +130,8 @@ module GameMachine
             "`#{sql_column_name(klass,field)}` int(11)"
           when 'String'
             "`#{sql_column_name(klass,field)}` varchar(128)"
+          when 'ByteString'
+           "`#{sql_column_name(klass,field)}` varbinary(2048)"
           end
         elsif dbtype == 'postgres'
           txt = case field.getJavaType.to_s
@@ -145,6 +147,8 @@ module GameMachine
             "#{sql_column_name(klass,field)} integer"
           when 'String'
             "#{sql_column_name(klass,field)} character varying(128)"
+          when 'ByteString'
+            "#{sql_column_name(klass,field)} bytea"
           end
         end
 
@@ -162,7 +166,7 @@ module GameMachine
       end
       
       def simple_value?(field)
-        if ['boolean','double','float','long','int','String'].include?(field.getJavaType.to_s)
+        if ['boolean','double','float','long','int','String','ByteString'].include?(field.getJavaType.to_s)
           true
         else
           false

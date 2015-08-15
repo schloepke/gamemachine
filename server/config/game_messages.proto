@@ -3,6 +3,55 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+local_message TerrainEdit {
+  enum Type {
+  NONE = 0;
+  DETAIL = 1;
+  ALPHA = 2;
+  HEIGHT = 3;
+  TREE = 4;
+  }
+  
+  optional  int32 x = 1;
+  optional int32 y = 2;
+  optional int32 detailLayer = 3;
+  optional int32 value = 4;
+  optional Type type = 5;
+  optional string id = 6;
+  optional int32 recordId = 7;
+  optional int32 texture = 8;
+  optional float height = 9;
+  optional int64 createdAt = 10;
+  optional string terrain = 11;
+}
+
+local_message TerrainEdits {
+  repeated TerrainEdit terrainEdit = 1;
+}
+
+local_message GroundBlockObject {
+  enum Status {
+    NONE = 0;
+    PLACED = 1;
+    CLEARED = 2;
+    TOP = 3;
+  }
+   
+  repeated Vector3 vertices = 1;
+  optional Vector3 position = 2;
+  optional Quaternion rotation = 3;
+  optional string id = 4;
+  optional int32 verticeCount = 5;
+  optional string tag = 6;
+  optional string layer = 7;
+  optional int32 gbLayer = 8;
+  optional bool molded = 9;
+  optional Status status = 10;
+  optional bool canRemove = 11;
+  optional bool isTop = 12;
+  optional int32 gbType = 13;
+}
+
 local_message Ping {
   optional string id = 1;
 }
@@ -140,14 +189,41 @@ local_persistent_message BuildObject {
   optional bool isDestructable = 26;
   optional bool hasDoor = 27;
   optional int32 doorStatus = 28;
+  optional bytes groundBlockObject = 29;
+  optional bool isGroundBlock = 30;
+  optional int32 chunk = 31;
+  optional bytes terrainEdit = 32;
+  optional bool isTerrainEdit = 33;
+  optional bytes customBytes = 34;
+  optional string customString = 35;
+  optional string textureId = 36;
+  optional bytes slots = 37;
 }
-
+ 
+ local_message BuildObjectSlot {
+   required string slotId = 1;
+   required string buildObjectId = 2;
+ }
+ 
+ local_message BuildObjectSlots {
+   repeated BuildObjectSlot buildObjectSlot = 1;
+ }
+ 
 local_message BuildObjects {
   repeated BuildObject buildObject = 1;
   optional int32 action = 2;
   optional int32 requestedUpdateId = 3;
   optional int32 currentUpdate = 4;
 }
+
+local_message BuildObjectChunk {
+  optional bytes data = 1;
+  optional int32 chunk = 2;
+}
+
+local_message BuildObjectChunks {
+  repeated BuildObjectChunk buildObjectChunk = 1;
+ }
 
 local_persistent_message BuildableArea {
   required string ownerId = 1;
@@ -687,6 +763,8 @@ message GameMessage {
   optional BuildableAreas buildableAreas = 41;
   optional GmStats gmStats = 42;
   optional Zone zone = 43;
+  optional BuildObjectChunks buildObjectChunks = 44;
+  optional TerrainEdits terrainEdits = 45;
 }
 
 message GameMessages {

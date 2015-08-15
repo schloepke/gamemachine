@@ -199,8 +199,8 @@ public class BuildObjectHandler extends GameMessageActor {
 	private void load() {
 		for (BuildObject buildObject : BuildObject.db().findAll()) {
 			objectIndex.put(buildObject.id, buildObject);
-
 		}
+		logger.warning(objectIndex.size()+" build objects loaded");
 	}
 
 	@Override

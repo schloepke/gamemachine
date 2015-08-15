@@ -30,7 +30,7 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
             p.addLast(sslCtx.newHandler(ch.alloc()));
         }
         p.addLast(new HttpServerCodec());
-        p.addLast(new HttpObjectAggregator(65536));
+        p.addLast(new HttpObjectAggregator(10000000));
         p.addLast(new ChunkedWriteHandler());
         p.addLast(new HttpServerHandler(actorName,httpHelper));
     }

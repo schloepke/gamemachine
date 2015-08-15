@@ -52,12 +52,14 @@ import akka.actor.TypedActor;
 import akka.actor.TypedProps;
 import akka.actor.ActorSystem;
 import org.javalite.activejdbc.Errors;
+
 <% end %>
 
 <% if persistent || has_id %>
 import io.gamemachine.core.ActorUtil;
 <% end %>
 
+import org.javalite.common.Convert;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -646,7 +648,12 @@ import io.gamemachine.core.CacheUpdate;
     	model.setInteger("id",recordId);
     	<% else %>
     	if (<%= field.name %> != null) {
-    		model.set<%=get_type(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
+    	   <% if get_type(field) == 'ByteString' %>
+    	    	model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	    <% else %>
+    	    	model.set<%=get_type(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
+    	    <% end %>
+    		
     	}
     	<% end %>
     	<% end %>
@@ -666,7 +673,18 @@ import io.gamemachine.core.CacheUpdate;
     		hasFields = true;
     	}
     	<% else %>
+    	<% if get_type(field) == 'ByteString' %>
+    	<%=get_type(field) %> <%= field.name %>Field = null;
+    	Object <%= field.name %>Value = model.get("<%=sql_column_name(klass,field)%>");
+    	if (<%= field.name %>Value != null) {
+    		byte[] <%= field.name %>Bytes = Convert.toBytes(<%= field.name %>Value);
+    		<%= field.name %>Field = ByteString.copyFrom(<%= field.name %>Bytes);
+    	}
+    	    	
+    	<% else %>
     	<%=get_type(field) %> <%= field.name %>Field = model.get<%=get_type(field) %>("<%=sql_column_name(klass,field)%>");
+    	<% end %>
+    	
     	if (<%= field.name %>Field != null) {
     		message.set<%= field_name %>(<%= field.name %>Field);
     		hasFields = true;
