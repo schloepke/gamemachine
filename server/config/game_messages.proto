@@ -37,9 +37,9 @@ local_message GroundBlockObject {
     TOP = 3;
   }
    
-  repeated Vector3 vertices = 1;
-  optional Vector3 position = 2;
-  optional Quaternion rotation = 3;
+  repeated GmVector3 vertices = 1;
+  optional GmVector3 position = 2;
+  optional GmQuaternion rotation = 3;
   optional string id = 4;
   optional int32 verticeCount = 5;
   optional string tag = 6;
@@ -74,7 +74,7 @@ local_message GmStats {
 
 local_message NpcData {
   optional string id = 1;
-  optional Vector3 spawnpoint = 2;
+  optional GmVector3 spawnpoint = 2;
   optional string leader = 3;
   repeated string followers = 4;
   optional string patrolRoute = 5;
@@ -95,7 +95,7 @@ local_message NpcDatas {
 
 local_message Waypoint {
   optional string id = 1;
-  repeated Vector3 position = 2;
+  repeated GmVector3 position = 2;
 }
 
 local_persistent_message Territory {
@@ -198,11 +198,21 @@ local_persistent_message BuildObject {
   optional string customString = 35;
   optional string textureId = 36;
   optional bytes slots = 37;
+  optional int64 placedAt = 38;
+  optional SlotInfo slotInfo = 40;
 }
+  
+ local_message SlotInfo {
+   required string placedBlockId = 1;
+   required string slotId = 2;
+ }
  
  local_message BuildObjectSlot {
    required string slotId = 1;
    required string buildObjectId = 2;
+   optional int64 placedAt = 3;
+   optional bool buildOverTime = 4;
+   optional int32 buildTime = 5;
  }
  
  local_message BuildObjectSlots {
@@ -240,9 +250,9 @@ local_message BuildableAreas {
   repeated BuildableArea buildableArea = 1;
 }
  
-local_message Bounds {
-  optional Vector3 min = 1;
-  optional Vector3 max = 2;
+local_message GmBounds {
+  optional GmVector3 min = 1;
+  optional GmVector3 max = 2;
 }
 
 
@@ -256,7 +266,7 @@ local_message SiegeCommand {
   optional float force = 3;
   optional string id = 4;
   optional string hitId = 5;
-  optional Vector3 hit = 6;
+  optional GmVector3 hit = 6;
   optional string skillId = 7;
   optional int32 startUse = 8;
   optional int32 endUse = 9;
@@ -297,8 +307,8 @@ message PvpGameMessage {
 local_message UseSkill {
   required string id = 1;
   optional string targetId = 2;
-  optional Vector3 location = 3;
-  optional Vector3 direction = 4;
+  optional GmVector3 location = 3;
+  optional GmVector3 direction = 4;
 }
 
 local_message UseItem {
@@ -378,8 +388,8 @@ local_message Vitals {
 local_message VisualEffect {
   optional string id = 1;
   optional string prefab = 2;
-  optional Vector3 startPosition = 3;
-  optional Vector3 endPosition = 4;
+  optional GmVector3 startPosition = 3;
+  optional GmVector3 endPosition = 4;
   optional string type = 5;
   optional int32 duration = 6;
 }
@@ -404,7 +414,7 @@ local_message StatusEffectTarget {
   }
   required string target = 1;
   required string skill = 2;
-  optional Vector3 location = 3;
+  optional GmVector3 location = 3;
   optional int32 range = 4;
   repeated StatusEffect statusEffect = 5;
   required string origin = 6;
@@ -421,7 +431,7 @@ local_message Attack {
   required string attacker = 1;
   required string target = 2;
   required string skill = 3;
-  optional Vector3 targetLocation = 4;
+  optional GmVector3 targetLocation = 4;
 }
 
 local_message ComboAttack {
@@ -585,6 +595,40 @@ local_persistent_message CraftableItem {
   optional int32 recordId = 10;
 }
 
+local_message CraftingRecipes {
+  repeated CraftingRecipe craftingRecipes = 1;
+  required string itemCatalog = 2;
+}
+
+local_message CraftingReward {
+  required string id = 1;
+  required int32 quantity = 2;
+  required int32 level = 3;
+}
+
+local_message CraftingRecipe {
+  required string id = 1;
+  repeated CraftingElement elements = 2;
+  optional CraftingTool tool = 3;
+  required bool orderMatters = 4;
+  required float timeToComplete = 5;
+  repeated CraftingReward rewards = 6;
+  required int32 maxUses = 7;
+  required bool active = 8;
+}
+
+local_message CraftingTool {
+  required string id = 1;
+  required int32 level = 2;
+}
+
+local_message CraftingElement {
+  required string id = 1;
+  required int32 quantity = 2;
+  required int32 level = 3;
+  required int32 order = 4;
+}
+
 // Inventory messages
 
 local_persistent_message PlayerItem {
@@ -607,6 +651,24 @@ local_persistent_message PlayerItem {
   optional int32 maxHealth = 18;
   optional int32 health = 19;
   optional int32 level = 20;
+  optional string characterId = 21;
+  optional string containerId = 22;
+  optional int32 updatedAt = 23;
+  optional string category = 24;
+  optional string locationId = 25;
+  optional int32 slotCount = 26;
+  required bool stackable = 27;
+  optional string locationType = 28;
+  optional int32 stackMax = 29;
+  optional int32 containerSlot = 30;
+  optional string icon_uuid = 31;
+  optional string icon_path = 32;
+  optional string referenceId = 33;
+  required bool hidden = 34;
+  optional int32 maxQuantity = 35;
+  required bool active = 36;
+  required float weight = 37;
+  optional int32 templateBlockId = 38;
 }
 
 local_message ModelInfo {
@@ -641,6 +703,10 @@ local_message Weapon {
 
 local_message RequestPlayerItems {
   optional bool catalog = 1;
+  optional string characterId = 2;
+  optional int32 result = 3;
+  optional PlayerItems playerItems = 4;
+  optional string query = 5;
 }
 
 message PlayerItems {
@@ -648,13 +714,25 @@ message PlayerItems {
   repeated PlayerItem playerItem = 2;
 }
 
+local_message UpdatePlayerItem {
+  optional int32 result = 1;
+  optional PlayerItem playerItem = 2;
+}
+
 local_message AddPlayerItem {
-  required PlayerItem playerItem = 1;
+  required string id = 1;
+  optional int32 quantity = 2;
+  optional int32 result = 3;
+  optional string characterId = 4;
+  optional PlayerItem playerItem = 5;
+  optional string containerId = 6;
 }
 
 local_message RemovePlayerItem {
   required string id = 1;
   required int32 quantity = 2;
+  optional int32 result = 3;
+  optional string characterId = 4;
 }
 
 message Players {
@@ -748,7 +826,7 @@ message GameMessage {
   optional VisualEffect visualEffect = 26;
   optional WorldObjects worldObjects = 27;
   optional SiegeCommand siegeCommand = 28;
-  optional Bounds bounds = 29;
+  optional GmBounds bounds = 29;
   optional UseItem useItem = 30;
   optional TimeCycle timeCycle = 31;
   optional Guilds guilds = 32;
@@ -765,6 +843,7 @@ message GameMessage {
   optional Zone zone = 43;
   optional BuildObjectChunks buildObjectChunks = 44;
   optional TerrainEdits terrainEdits = 45;
+  optional UpdatePlayerItem updatePlayerItem = 46;
 }
 
 message GameMessages {

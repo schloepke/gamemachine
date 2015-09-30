@@ -1,7 +1,8 @@
+puts "pvp seed start"
 def add_items(items,player)
   items.each do |item|
     player_item = GameMachine::MessageLib::PlayerItem.new
-    player_item.set_player_id(player)
+    player_item.set_character_id(player)
     player_item.set_id(item['id'])
     player_item.set_health(item['health'])
     player_item.set_max_health(item['max_health'])
@@ -22,8 +23,8 @@ def add_items(items,player)
       end
     end
 
-    where = 'player_item_id = ? AND player_item_player_id = ?'
-    existing = GameMachine::MessageLib::PlayerItem.db.find_first(where,player_item.id,player_item.player_id)
+    where = 'player_item_id = ? AND player_item_character_id = ?'
+    existing = GameMachine::MessageLib::PlayerItem.db.find_first(where,player_item.id,player_item.character_id)
 
     unless existing
       unless GameMachine::MessageLib::PlayerItem.db.save(player_item)
@@ -31,6 +32,10 @@ def add_items(items,player)
       end
     end
   end
+  
+  items = GameMachine::MessageLib::PlayerItems.new
+items.playerItem = GameMachine::MessageLib::PlayerItem.db.where("player_item_character_id = ?", 'global')
+File.open(File.join(ENV['APP_ROOT'],'items.proto'),'w') {|f| f.write items.to_byte_array}
 end
 
 # Item types
@@ -458,8 +463,8 @@ skills = [
   'resource_cost' => 0,
   'range' => 4,
   'is_passive' => 1,
-    'is_combo_part' => 1,
-    
+  'is_combo_part' => 1,
+
   },
   {
   'id' => 'fire_grasp_root',
@@ -471,8 +476,8 @@ skills = [
   'resource' => 'magic',
   'resource_cost' => 0,
   'range' => 4,
-    'is_passive' => 1,
-   'is_combo_part' => 1
+  'is_passive' => 1,
+  'is_combo_part' => 1
   },
   {
   'id' => 'staff_auto_attack',
@@ -648,3 +653,4 @@ end
 playerskills = GameMachine::MessageLib::PlayerSkills.new
 playerskills.playerSkill = GameMachine::MessageLib::PlayerSkill.db.where("player_skill_character_id = ?", 'global')
 File.open(File.join(ENV['APP_ROOT'],'skills.proto'),'w') {|f| f.write playerskills.to_byte_array}
+puts "Pvp seed complete"

@@ -17,7 +17,6 @@ import plugins.pvp_game.SiegeHandler;
 import plugins.pvp_game.StatusEffectHandler;
 import plugins.pvp_game.TerritoryHandler;
 import plugins.pvp_game.TimeHandler;
-import plugins.pvp_game.npc.NpcDef;
 
 public class PvpGamePlugin extends Plugin {
 
@@ -48,7 +47,7 @@ public class PvpGamePlugin extends Plugin {
 		ActorUtil.createActor(TerritoryHandler.class, TerritoryHandler.name);
 		ActorUtil.createActor(ChatSubscriptions.class, ChatSubscriptions.name);
 
-		NpcDef.createAll();
+		
 
 		PlayerItemManager.seedCharacterItem("wood", 50);
 		PlayerItemManager.seedCharacterItem("iron_ore", 50);

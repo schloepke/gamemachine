@@ -15,7 +15,7 @@ import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectResult;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.Vector3;
+import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.VisualEffect;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.WorldObject;
@@ -312,7 +312,7 @@ public class StatusEffectHandler extends UntypedActor {
 		for (StatusEffect effect : statusEffectTarget.statusEffect) {
 			if (effect.ticks > statusEffectTarget.ticks) {
 				boolean aoe = false;
-				Vector3 location = null;
+				GmVector3 location = null;
 				
 				if (statusEffectTarget.target.equals("aoe")) {
 					aoe = true;
@@ -321,7 +321,7 @@ public class StatusEffectHandler extends UntypedActor {
 				
 				if (statusEffectTarget.target.equals("self_aoe")) {
 					aoe = true;
-					location = new Vector3();
+					location = new GmVector3();
 					TrackData td = defaultGrid.get(statusEffectTarget.origin);
 					location.xi = td.x;
 					location.yi = td.y;
@@ -627,7 +627,7 @@ public class StatusEffectHandler extends UntypedActor {
 		sendVitals();
 	}
 
-	private void sendVisualEffect(StatusEffect effect, Vector3 location, Grid grid) {
+	private void sendVisualEffect(StatusEffect effect, GmVector3 location, Grid grid) {
 		GameMessage msg = new GameMessage();
 		VisualEffect v = new VisualEffect();
 		v.prefab = effect.particleEffect;

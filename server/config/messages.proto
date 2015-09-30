@@ -279,14 +279,14 @@ message Name {
   required string value = 1;
 }
 
-message Quaternion {
+message GmQuaternion {
   optional float x = 1;
   optional float y = 2;
   optional float z = 3;
   optional float w = 4;
 }
 
-message Vector3 {
+message GmVector3 {
   optional float x = 1;
   optional float y = 2;
   optional float z = 3;
@@ -304,7 +304,7 @@ message GridVerticle {
 }
 
 message GridNode {
-  required Vector3 point = 1;
+  required GmVector3 point = 1;
   optional float slope = 2;
 }
 
@@ -316,7 +316,7 @@ message GridData {
 }
 
 message TriangleMesh {
-  repeated Vector3 vertices = 1;
+  repeated GmVector3 vertices = 1;
   repeated int32 indices = 2;
 }
 
@@ -326,18 +326,18 @@ message TriangleMesh2 {
 }
 
 message MeshNode {
-  required Vector3 position = 1;
-  repeated Vector3 connections = 2;
+  required GmVector3 position = 1;
+  repeated GmVector3 connections = 2;
 }
 
-message Mesh {
+message GmMesh {
   repeated MeshNode nodes = 1;
 }
 
 message PathData {
-  optional Vector3 startPoint = 1;
-  optional Vector3 endPoint = 2;
-  repeated Vector3 nodes = 3;
+  optional GmVector3 startPoint = 1;
+  optional GmVector3 endPoint = 2;
+  repeated GmVector3 nodes = 3;
   optional string id = 4;
 }
 
@@ -351,7 +351,7 @@ message Neighbors {
 
 message Neighbor {
   optional TrackData trackData = 1;
-  required Vector3 location = 2;
+  required GmVector3 location = 2;
   required string id = 3;
 }
 
@@ -406,7 +406,7 @@ message Entity {
   optional ErrorMessage errorMessage = 17;
   optional NeighborsRequest neighborsRequest = 21;
   optional TrackEntity trackEntity = 22;
-  optional Vector3 vector3 = 25;
+  optional GmVector3 vector3 = 25;
   optional EntityList entityList = 27;
   optional bool  published = 29;
   optional string entityType = 30;
@@ -439,7 +439,7 @@ message Entity {
   optional TeamMemberSkill teamMemberSkill = 65;
   optional TrackDataUpdate trackDataUpdate = 66;
   optional TrackDataResponse trackDataResponse = 67;
-  optional Mesh mesh = 68;
+  optional GmMesh mesh = 68;
   optional PathData pathData = 69;
   optional ObjectdbStatus objectdbStatus = 70;
   

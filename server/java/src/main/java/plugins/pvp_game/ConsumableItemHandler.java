@@ -7,13 +7,12 @@ import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.PlayerVitalsHandler;
-import io.gamemachine.messages.Bounds;
+import io.gamemachine.messages.GmBounds;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.WorldObject;
 import io.gamemachine.messages.WorldObjects;
-import io.gamemachine.pathfinding.grid.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -191,7 +190,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 		return wobjects.get(id);
 	}
 
-	private void deployInBounds(WorldObject worldObject, Bounds bounds) {
+	private void deployInBounds(WorldObject worldObject, GmBounds bounds) {
 		if (!canSpawn(bounds)) {
 			logger.warning("Objects in way of deploying " + worldObject.playerItemId);
 			return;
@@ -218,17 +217,17 @@ public class ConsumableItemHandler extends GameMessageActor {
 		PlayerCommands.sendGameMessage(gameMessage, playerId);
 	}
 
-	private Boolean canSpawn(Bounds bounds) {
-		io.gamemachine.util.Vector3 min = new io.gamemachine.util.Vector3(bounds.min.x, bounds.min.y, 0l);
-		io.gamemachine.util.Vector3 max = new io.gamemachine.util.Vector3(bounds.max.x, bounds.max.y, 0l);
-		BoundingBox box = new BoundingBox(min, max);
-		io.gamemachine.util.Vector3 entityPosition;
-		for (TrackData trackData : defaultGrid.getAll()) {
-			entityPosition = Common.toVector3(trackData.x, trackData.y);
-			if (box.contains(entityPosition)) {
-				return false;
-			}
-		}
+	private Boolean canSpawn(GmBounds bounds) {
+//		io.gamemachine.util.Vector3 min = new io.gamemachine.util.Vector3(bounds.min.x, bounds.min.y, 0l);
+//		io.gamemachine.util.Vector3 max = new io.gamemachine.util.Vector3(bounds.max.x, bounds.max.y, 0l);
+//		BoundingBox box = new BoundingBox(min, max);
+//		io.gamemachine.util.Vector3 entityPosition;
+//		for (TrackData trackData : defaultGrid.getAll()) {
+//			entityPosition = Common.toVector3(trackData.x, trackData.y);
+//			if (box.contains(entityPosition)) {
+//				return false;
+//			}
+//		}
 		return true;
 	}
 

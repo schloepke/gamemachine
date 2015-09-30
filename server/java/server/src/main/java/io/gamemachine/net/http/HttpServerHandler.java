@@ -170,9 +170,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					if (response instanceof HttpHandler.StringResponse) {
 						HttpHandler.StringResponse sr = (HttpHandler.StringResponse)response;
 						Ok(ctx,sr.content);
-					} else if (response instanceof HttpHandler.StringResponse) {
-						HttpHandler.ByteResponse sr = (HttpHandler.ByteResponse)response;
-						Ok(ctx,sr.content);
+					} else if (response instanceof HttpHandler.ByteResponse) {
+						HttpHandler.ByteResponse br = (HttpHandler.ByteResponse)response;
+						Ok(ctx,br.content);
 					} else {
 						logger.warn("Invalid response");
 					}

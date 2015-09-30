@@ -3,7 +3,7 @@ package plugins.pvp_game;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.Vector3;
+import io.gamemachine.messages.GmVector3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ public class Common {
 	public static String gameId = "mygame";
 	
 	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
-		Vector3 vec = new Vector3();
+		GmVector3 vec = new GmVector3();
 		vec.xi = x;
 		vec.yi = y;
 		vec.zi = z;
@@ -25,14 +25,14 @@ public class Common {
 	}
 	
 	public static List<String> getTargetsInRange(int range, int x, int y, int z, Grid grid) {
-		Vector3 vec = new Vector3();
+		GmVector3 vec = new GmVector3();
 		vec.xi = x;
 		vec.yi = y;
 		vec.zi = z;
 		return getTargetsInRange(range,vec,grid);
 	}
 	
-	public static List<String> getTargetsInRange(int range, Vector3 location, Grid grid) {
+	public static List<String> getTargetsInRange(int range, GmVector3 location, Grid grid) {
 		List<String> targets = new ArrayList<String>();
 		for (TrackData trackData : grid.getAll()) {
 			
@@ -49,7 +49,7 @@ public class Common {
 		return targets;
 	}
 	
-	public static List<String> getTargetsInRange(int range, Vector3 location, String gridName, String playerId) {
+	public static List<String> getTargetsInRange(int range, GmVector3 location, String gridName, String playerId) {
 		Grid grid = GameGrid.getGameGrid(gameId, gridName, playerId);
 		return getTargetsInRange(range,location,grid);
 	}
@@ -68,7 +68,7 @@ public class Common {
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
 	}
 	
-	public static io.gamemachine.util.Vector3 toVector3(Vector3 from) {
+	public static io.gamemachine.util.Vector3 toVector3(GmVector3 from) {
 		io.gamemachine.util.Vector3 to = new io.gamemachine.util.Vector3();
 		to.x = scale(from.xi);
 		to.y = scale(from.yi);

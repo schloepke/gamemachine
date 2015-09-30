@@ -20,8 +20,8 @@ buildscript {
    }
   dependencies {
     classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
-    classpath 'org.javalite:activejdbc:1.4.10'
-    classpath 'org.javalite:activejdbc-instrumentation:1.4.10'
+    classpath 'org.javalite:activejdbc:1.4.11'
+    classpath 'org.javalite:activejdbc-instrumentation:1.4.11'
     //classpath "com.github.maiflai:gradle-scalatest:0.7"
   }
 }
@@ -88,11 +88,14 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
-  compile 'io.gamemachine:common:1.1.0-SNAPSHOT'
+  //compile 'io.gamemachine:common:1.1.0-SNAPSHOT'
   compile "com.badlogicgames.gdx:gdx-ai:1.5.0"
   compile 'org.zeroturnaround:zt-exec:1.8'
   //compile 'org.scalatest:scalatest_2.11:2.2.4'
   //compile 'junit:junit:4.12'
+  compile 'org.javalite:activejdbc:1.4.11'
+  compile 'org.javalite:activejdbc-instrumentation:1.4.11'
+    
   compile 'org.testng:testng:6.9.4'
   
   testCompile 'org.assertj:assertj-core:2.0.0'

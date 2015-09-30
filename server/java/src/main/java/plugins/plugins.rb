@@ -1,1 +1,1 @@
-#require_relative 'pvp_seed.rb'
+require_relative 'pvp_seed.rb'
