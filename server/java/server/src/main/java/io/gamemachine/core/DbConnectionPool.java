@@ -26,6 +26,35 @@ public class DbConnectionPool {
 		return LazyHolder.INSTANCE;
 	}
 
+	private HikariConfig getConfig(String hostname, int port, String dbname, String ds, String username,
+			String password) {
+		
+		HikariConfig config = new HikariConfig();
+		config.setDataSourceClassName(ds);
+		config.addDataSourceProperty("serverName", hostname);
+		config.addDataSourceProperty("portNumber", port);
+		config.addDataSourceProperty("databaseName", dbname);
+		config.addDataSourceProperty("user", username);
+		config.addDataSourceProperty("password", password);
+		config.setMaximumPoolSize(5);
+		config.setIdleTimeout(30000);
+		config.setLeakDetectionThreshold(10000);
+		return config;
+	}
+	
+	private HikariConfig getSqliteConfig(String url) {
+		
+		HikariConfig config = new HikariConfig();
+		config.setPoolName("SqlitePool");
+		config.setDriverClassName("org.sqlite.JDBC");
+		config.setJdbcUrl(url);
+		config.setConnectionTestQuery("SELECT 1");
+		config.setMaxLifetime(60000); // 60 Sec
+		config.setIdleTimeout(45000); // 45 Sec
+		config.setLeakDetectionThreshold(10000);
+		return config;
+	}
+	
 	public Boolean connect(String id, String hostname, int port, String dbname, String ds, String username,
 			String password) throws SQLException {
 		if (datasources.containsKey(id)) {
@@ -38,23 +67,25 @@ public class DbConnectionPool {
 			logger.error(e.getMessage());
 			e.printStackTrace();
 		}
-		HikariConfig config = new HikariConfig();
-		config.setDataSourceClassName(ds);
-		config.addDataSourceProperty("serverName", hostname);
-		config.addDataSourceProperty("portNumber", port);
-		config.addDataSourceProperty("databaseName", dbname);
-		config.addDataSourceProperty("user", username);
-		config.addDataSourceProperty("password", password);
-		config.setMaximumPoolSize(5);
-		config.setIdleTimeout(30000);
-		config.setLeakDetectionThreshold(10000);
+		
+		HikariConfig config = null;
+		
+		if (ds.equals("org.sqlite.JDBC")) {
+			config = getSqliteConfig(dbname);
+		} else {
+			config = getConfig(hostname, port, dbname, ds, username, password);
+		}
+		
 		// config.setAutoCommit(false);
 
 		HikariDataSource datasource = new HikariDataSource(config);
-
-		datasources.put(id, datasource);
-		return true;
-
+		
+		if (datasource == null) {
+			return false;
+		} else {
+			datasources.put(id, datasource);
+			return true;
+		}
 	}
 
 	public HikariDataSource getDataSource(String id) {

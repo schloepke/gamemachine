@@ -1,0 +1,461 @@
+
+CREATE TABLE territories (
+  id bigserial NOT NULL,
+
+  territory_id character varying(128) NOT NULL,
+
+  territory_owner character varying(128) NOT NULL,
+
+  territory_keep character varying(128) DEFAULT NULL,
+
+  CONSTRAINT territory_pkey PRIMARY KEY (id)
+);
+alter table territories owner to gamemachine;
+CREATE TABLE guilds (
+  id bigserial NOT NULL,
+
+  guild_id character varying(128) NOT NULL,
+
+  guild_owner_id character varying(128) NOT NULL,
+
+  guild_name character varying(128) DEFAULT NULL,
+
+  CONSTRAINT guild_pkey PRIMARY KEY (id)
+);
+alter table guilds owner to gamemachine;
+CREATE TABLE guild_members (
+  id bigserial NOT NULL,
+
+  guild_members_guild_id character varying(128) NOT NULL,
+
+  guild_members_player_id character varying(128) NOT NULL,
+
+  CONSTRAINT guild_members_pkey PRIMARY KEY (id)
+);
+alter table guild_members owner to gamemachine;
+CREATE TABLE guild_actions (
+  id bigserial NOT NULL,
+
+  guild_action_action character varying(128) NOT NULL,
+
+  guild_action_to character varying(128) DEFAULT NULL,
+
+  guild_action_from character varying(128) DEFAULT NULL,
+
+  guild_action_response character varying(128) DEFAULT NULL,
+
+  guild_action_guild_id character varying(128) DEFAULT NULL,
+
+  guild_action_invite_id character varying(128) DEFAULT NULL,
+
+  guild_action_guild_name character varying(128) DEFAULT NULL,
+
+  CONSTRAINT guild_action_pkey PRIMARY KEY (id)
+);
+alter table guild_actions owner to gamemachine;
+CREATE TABLE world_objects (
+  id bigserial NOT NULL,
+
+  world_object_player_item_id character varying(128) DEFAULT NULL,
+
+  world_object_action integer DEFAULT NULL,
+
+  world_object_id character varying(128) DEFAULT NULL,
+
+  world_object_owner_id character varying(128) DEFAULT NULL,
+
+  world_object_x integer DEFAULT NULL,
+
+  world_object_y integer DEFAULT NULL,
+
+  world_object_z integer DEFAULT NULL,
+
+  world_object_rx integer DEFAULT NULL,
+
+  world_object_ry integer DEFAULT NULL,
+
+  world_object_rz integer DEFAULT NULL,
+
+  world_object_rw integer DEFAULT NULL,
+
+  world_object_max_health integer DEFAULT NULL,
+
+  world_object_health integer DEFAULT NULL,
+
+  world_object_parent_id character varying(128) DEFAULT NULL,
+
+  world_object_destructable boolean DEFAULT NULL,
+
+  world_object_prefab character varying(128) DEFAULT NULL,
+
+  world_object_type integer DEFAULT NULL,
+
+  world_object_grid character varying(128) DEFAULT NULL,
+
+  world_object_current_user character varying(128) DEFAULT NULL,
+
+  world_object_state integer DEFAULT NULL,
+
+  CONSTRAINT world_object_pkey PRIMARY KEY (id)
+);
+alter table world_objects owner to gamemachine;
+CREATE TABLE build_objects (
+  id bigserial NOT NULL,
+
+  build_object_player_item_id character varying(128) DEFAULT NULL,
+
+  build_object_action integer DEFAULT NULL,
+
+  build_object_id character varying(128) DEFAULT NULL,
+
+  build_object_owner_id character varying(128) DEFAULT NULL,
+
+  build_object_x integer DEFAULT NULL,
+
+  build_object_y integer DEFAULT NULL,
+
+  build_object_z integer DEFAULT NULL,
+
+  build_object_rx integer DEFAULT NULL,
+
+  build_object_ry integer DEFAULT NULL,
+
+  build_object_rz integer DEFAULT NULL,
+
+  build_object_rw integer DEFAULT NULL,
+
+  build_object_health integer DEFAULT NULL,
+
+  build_object_template_id integer DEFAULT NULL,
+
+  build_object_grid character varying(128) DEFAULT NULL,
+
+  build_object_updated_at integer DEFAULT NULL,
+
+  build_object_state integer DEFAULT NULL,
+
+  build_object_update_id integer DEFAULT NULL,
+
+  build_object_is_floor boolean DEFAULT NULL,
+
+  build_object_is_destructable boolean DEFAULT NULL,
+
+  build_object_has_door boolean DEFAULT NULL,
+
+  build_object_door_status integer DEFAULT NULL,
+
+  build_object_ground_block_object bytea DEFAULT NULL,
+
+  build_object_is_ground_block boolean DEFAULT NULL,
+
+  build_object_chunk integer DEFAULT NULL,
+
+  build_object_terrain_edit bytea DEFAULT NULL,
+
+  build_object_is_terrain_edit boolean DEFAULT NULL,
+
+  build_object_custom_bytes bytea DEFAULT NULL,
+
+  build_object_custom_string character varying(128) DEFAULT NULL,
+
+  build_object_texture_id character varying(128) DEFAULT NULL,
+
+  build_object_slots bytea DEFAULT NULL,
+
+  build_object_placed_at integer DEFAULT NULL,
+
+  slot_info_placed_block_id character varying(128) DEFAULT NULL,
+    
+  slot_info_slot_id character varying(128) DEFAULT NULL,
+
+  CONSTRAINT build_object_pkey PRIMARY KEY (id)
+);
+alter table build_objects owner to gamemachine;
+CREATE TABLE buildable_areas (
+  id bigserial NOT NULL,
+
+  buildable_area_owner_id character varying(128) NOT NULL,
+
+  buildable_area_px double precision NOT NULL,
+
+  buildable_area_py double precision NOT NULL,
+
+  buildable_area_pz double precision NOT NULL,
+
+  buildable_area_sx integer NOT NULL,
+
+  buildable_area_sy integer NOT NULL,
+
+  buildable_area_sz integer NOT NULL,
+
+  CONSTRAINT buildable_area_pkey PRIMARY KEY (id)
+);
+alter table buildable_areas owner to gamemachine;
+CREATE TABLE characters (
+  id bigserial NOT NULL,
+
+  character_id character varying(128) NOT NULL,
+
+  character_uma_data character varying(128) DEFAULT NULL,
+
+  character_health integer DEFAULT NULL,
+
+  character_player_id character varying(128) NOT NULL,
+
+  character_part integer DEFAULT NULL,
+
+  character_parts integer DEFAULT NULL,
+
+  character_worldx integer DEFAULT NULL,
+
+  character_worldy integer DEFAULT NULL,
+
+  character_worldz integer DEFAULT NULL,
+
+  character_zone integer DEFAULT NULL,
+
+  character_stamina integer DEFAULT NULL,
+
+  character_magic integer DEFAULT NULL,
+
+  character_include_uma_data boolean DEFAULT NULL,
+
+  CONSTRAINT character_pkey PRIMARY KEY (id)
+);
+alter table characters owner to gamemachine;
+CREATE TABLE players (
+  id bigserial NOT NULL,
+
+  player_id character varying(128) NOT NULL,
+
+  player_authenticated boolean DEFAULT NULL,
+
+  player_authtoken integer DEFAULT NULL,
+
+  player_password_hash character varying(128) DEFAULT NULL,
+
+  player_game_id character varying(128) DEFAULT NULL,
+
+  player_role character varying(128) DEFAULT NULL,
+
+  player_locked boolean DEFAULT NULL,
+
+  player_ip integer DEFAULT NULL,
+
+  player_ip_changed_at integer DEFAULT NULL,
+
+  player_character_id character varying(128) DEFAULT NULL,
+
+  CONSTRAINT player_pkey PRIMARY KEY (id)
+);
+alter table players owner to gamemachine;
+CREATE TABLE player_skills (
+  id bigserial NOT NULL,
+
+  player_skill_id character varying(128) NOT NULL,
+
+  player_skill_name character varying(128) NOT NULL,
+
+  player_skill_category character varying(128) NOT NULL,
+
+  player_skill_damage_type character varying(128) DEFAULT NULL,
+
+  player_skill_icon character varying(128) NOT NULL,
+
+  player_skill_description character varying(128) DEFAULT NULL,
+
+  player_skill_resource character varying(128) DEFAULT NULL,
+
+  player_skill_resource_cost integer DEFAULT NULL,
+
+  player_skill_character_id character varying(128) NOT NULL,
+
+  player_skill_weapon_type character varying(128) DEFAULT NULL,
+
+  player_skill_range integer DEFAULT NULL,
+
+  player_skill_status_effect_id character varying(128) DEFAULT NULL,
+
+  player_skill_level integer DEFAULT NULL,
+
+  player_skill_resource_cost_per_tick integer DEFAULT NULL,
+
+  player_skill_is_combo_part integer DEFAULT NULL,
+
+  player_skill_is_passive integer DEFAULT NULL,
+
+  CONSTRAINT player_skill_pkey PRIMARY KEY (id)
+);
+alter table player_skills owner to gamemachine;
+CREATE TABLE craftable_items (
+  id bigserial NOT NULL,
+
+  craftable_item_id character varying(128) NOT NULL,
+
+  craftable_item_item1 character varying(128) DEFAULT NULL,
+
+  craftable_item_item1_quantity integer DEFAULT NULL,
+
+  craftable_item_item2 character varying(128) DEFAULT NULL,
+
+  craftable_item_item2_quantity integer DEFAULT NULL,
+
+  craftable_item_item3 character varying(128) DEFAULT NULL,
+
+  craftable_item_item3_quantity integer DEFAULT NULL,
+
+  craftable_item_item4 character varying(128) DEFAULT NULL,
+
+  craftable_item_item4_quantity integer DEFAULT NULL,
+
+  CONSTRAINT craftable_item_pkey PRIMARY KEY (id)
+);
+alter table craftable_items owner to gamemachine;
+CREATE TABLE player_items (
+  id bigserial NOT NULL,
+
+  player_item_id character varying(128) NOT NULL,
+
+  player_item_name character varying(128) NOT NULL,
+
+  player_item_quantity integer NOT NULL,
+
+  player_item_color character varying(128) DEFAULT NULL,
+
+  player_item_weapon boolean DEFAULT NULL,
+
+  player_item_player_id character varying(128) DEFAULT NULL,
+
+  player_item_icon character varying(128) DEFAULT NULL,
+
+  player_item_harvestable integer DEFAULT NULL,
+
+  player_item_crafting_resource integer DEFAULT NULL,
+
+  player_item_craftable integer DEFAULT NULL,
+
+  player_item_is_consumable boolean DEFAULT NULL,
+
+  player_item_type integer DEFAULT NULL,
+
+  player_item_max_health integer DEFAULT NULL,
+
+  player_item_health integer DEFAULT NULL,
+
+  player_item_level integer DEFAULT NULL,
+
+  player_item_character_id character varying(128) DEFAULT NULL,
+
+  player_item_container_id character varying(128) DEFAULT NULL,
+
+  player_item_updated_at integer DEFAULT NULL,
+
+  player_item_category character varying(128) DEFAULT NULL,
+
+  player_item_location_id character varying(128) DEFAULT NULL,
+
+  player_item_slot_count integer DEFAULT NULL,
+
+  player_item_stackable boolean NOT NULL,
+
+  player_item_location_type character varying(128) DEFAULT NULL,
+
+  player_item_stack_max integer DEFAULT NULL,
+
+  player_item_container_slot integer DEFAULT NULL,
+
+  player_item_icon_uuid character varying(128) DEFAULT NULL,
+
+  player_item_icon_path character varying(128) DEFAULT NULL,
+
+  player_item_reference_id character varying(128) DEFAULT NULL,
+
+  player_item_hidden boolean NOT NULL,
+
+  player_item_max_quantity integer DEFAULT NULL,
+
+  player_item_active boolean NOT NULL,
+
+  player_item_weight double precision NOT NULL,
+
+  player_item_template_block_id integer DEFAULT NULL,
+
+  consumable_type character varying(128) DEFAULT NULL,
+    
+  consumable_size character varying(128) DEFAULT NULL,
+
+  cost_amount double precision DEFAULT NULL,
+    
+  cost_currency character varying(128) DEFAULT NULL,
+
+  model_info_attach_x double precision DEFAULT NULL,
+    
+  model_info_attach_y double precision DEFAULT NULL,
+    
+  model_info_attach_z double precision DEFAULT NULL,
+    
+  model_info_rotate_x double precision DEFAULT NULL,
+    
+  model_info_rotate_y double precision DEFAULT NULL,
+    
+  model_info_rotate_z double precision DEFAULT NULL,
+    
+  model_info_scale_x double precision DEFAULT NULL,
+    
+  model_info_scale_y double precision DEFAULT NULL,
+    
+  model_info_scale_z double precision DEFAULT NULL,
+    
+  model_info_resource character varying(128) DEFAULT NULL,
+    
+  model_info_prefab character varying(128) DEFAULT NULL,
+    
+  model_info_weapon_type character varying(128) DEFAULT NULL,
+
+  CONSTRAINT player_item_pkey PRIMARY KEY (id)
+);
+alter table player_items owner to gamemachine;
+CREATE TABLE test_objects (
+  id bigserial NOT NULL,
+
+  test_object_optional_string character varying(128) DEFAULT NULL,
+
+  test_object_required_string character varying(128) NOT NULL,
+
+  test_object_numbers integer DEFAULT NULL,
+
+  test_object_bstring bytea DEFAULT NULL,
+
+  test_object_bvalue boolean DEFAULT NULL,
+
+  test_object_dvalue double precision DEFAULT NULL,
+
+  test_object_fvalue double precision DEFAULT NULL,
+
+  test_object_numbers64 integer DEFAULT NULL,
+
+  test_object_id character varying(128) NOT NULL,
+
+  CONSTRAINT test_object_pkey PRIMARY KEY (id)
+);
+alter table test_objects owner to gamemachine;
+CREATE TABLE zone_infos (
+  id bigserial NOT NULL,
+
+  zone_info_id character varying(128) NOT NULL,
+
+  zone_info_node character varying(128) DEFAULT NULL,
+
+  zone_info_actor_name character varying(128) NOT NULL,
+
+  zone_info_assigned boolean DEFAULT NULL,
+
+  zone_info_number integer DEFAULT NULL,
+
+  zone_info_hostname character varying(128) DEFAULT NULL,
+
+  zone_info_current boolean DEFAULT NULL,
+
+  CONSTRAINT zone_info_pkey PRIMARY KEY (id)
+);
+alter table zone_infos owner to gamemachine;

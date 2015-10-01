@@ -47,6 +47,14 @@ module GameMachine
         File.join(java_root,'model.erb')
       end
 
+      def sql_template(name)
+        File.join(java_root,"#{name}.rb")
+      end
+      
+      def sql_out(name)
+        File.join(config_path,'db',"#{name}.schema")
+      end
+      
       def model_src
         File.join(java_root,'src','main','java','io', 'gamemachine','orm','models')
       end
@@ -72,6 +80,8 @@ module GameMachine
         message_names = proto.getMessages.map {|m| m.get_name}
         messages_index = proto.getMessages.each_with_object({}) {|v,res| res[v.getName] = v}
 
+        sqlcontent = {}
+        
         proto.getMessages.each do |message|
           message_fields = []
           message.get_fields.each do |field|
@@ -102,12 +112,25 @@ module GameMachine
             out = out.gsub(/^(\s*\n){2,}/,"\n")
             src_file = File.join(model_src,"#{message.getName}.java")
             File.open(src_file,'w') {|f| f.write out}
+              
+            ['sqlite','postgres','mysql'].each do |dbtype|
+              sqlcontent[dbtype] ||= ''
+              
+              sql_out = ERB.new(File.read(sql_template(dbtype)),0,'<>').result(binding)
+              sql_out = sql_out.gsub(/^(\s*\r\n){2,}/,"\r\n")
+              sql_out = sql_out.gsub(/^(\s*\n){2,}/,"\n")
+              sqlcontent[dbtype] << sql_out
+            end
           end
           #message.getFields.each do |field|
           #  puts field.default_value_set
           #  puts field.getJavaType
           #  puts field.toString
           #end
+        end
+        
+        ['sqlite','postgres','mysql'].each do |dbtype|
+          File.open(sql_out(dbtype),'w') {|f| f.write sqlcontent[dbtype]}
         end
       end
 
@@ -149,6 +172,23 @@ module GameMachine
             "#{sql_column_name(klass,field)} character varying(128)"
           when 'ByteString'
             "#{sql_column_name(klass,field)} bytea"
+          end
+        elsif dbtype == 'sqlite'
+          txt = case field.getJavaType.to_s
+          when 'boolean'
+            "#{sql_column_name(klass,field)} boolean"
+          when 'double'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'float'
+            "#{sql_column_name(klass,field)} double precision"
+          when 'long'
+            "#{sql_column_name(klass,field)} integer"
+          when 'int'
+            "#{sql_column_name(klass,field)} integer"
+          when 'String'
+            "#{sql_column_name(klass,field)} varchar(128)"
+          when 'ByteString'
+            "#{sql_column_name(klass,field)} blob"
           end
         end
 

@@ -136,7 +136,7 @@ task install_libs(type: Copy) {
     
   from configurations.runtime
   from "$buildDir/libs"
-  //from "$buildDir/../local_lib/sigar"
+  from "$buildDir/../local_lib/sqlite"
 }
 
 def addUrlIfNotPresent( to, what ) {
