@@ -356,7 +356,7 @@ CREATE TABLE player_items (
 
   player_item_slot_count integer DEFAULT NULL,
 
-  player_item_stackable boolean NOT NULL,
+  player_item_stackable boolean DEFAULT NULL,
 
   player_item_location_type character varying(128) DEFAULT NULL,
 
@@ -380,37 +380,9 @@ CREATE TABLE player_items (
 
   player_item_template_block_id integer DEFAULT NULL,
 
-  consumable_type character varying(128) DEFAULT NULL,
-    
-  consumable_size character varying(128) DEFAULT NULL,
-
   cost_amount double precision DEFAULT NULL,
     
   cost_currency character varying(128) DEFAULT NULL,
-
-  model_info_attach_x double precision DEFAULT NULL,
-    
-  model_info_attach_y double precision DEFAULT NULL,
-    
-  model_info_attach_z double precision DEFAULT NULL,
-    
-  model_info_rotate_x double precision DEFAULT NULL,
-    
-  model_info_rotate_y double precision DEFAULT NULL,
-    
-  model_info_rotate_z double precision DEFAULT NULL,
-    
-  model_info_scale_x double precision DEFAULT NULL,
-    
-  model_info_scale_y double precision DEFAULT NULL,
-    
-  model_info_scale_z double precision DEFAULT NULL,
-    
-  model_info_resource character varying(128) DEFAULT NULL,
-    
-  model_info_prefab character varying(128) DEFAULT NULL,
-    
-  model_info_weapon_type character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_item_pkey PRIMARY KEY (id)
 );

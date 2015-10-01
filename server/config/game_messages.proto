@@ -637,7 +637,6 @@ local_persistent_message PlayerItem {
   required int32 quantity = 3;
   optional string color = 4;
   optional bool weapon = 5;
-  optional Consumable consumable = 6;
   optional Cost cost = 8;
   optional string playerId = 9;
   optional int32 recordId = 10;
@@ -645,7 +644,6 @@ local_persistent_message PlayerItem {
   optional int32 harvestable = 12;
   optional int32 craftingResource = 13;
   optional int32 craftable = 14;
-  optional ModelInfo modelInfo = 15;
   optional bool isConsumable = 16;
   optional int32 type = 17;
   optional int32 maxHealth = 18;
@@ -657,7 +655,7 @@ local_persistent_message PlayerItem {
   optional string category = 24;
   optional string locationId = 25;
   optional int32 slotCount = 26;
-  required bool stackable = 27;
+  optional bool stackable = 27;
   optional string locationType = 28;
   optional int32 stackMax = 29;
   optional int32 containerSlot = 30;
@@ -688,7 +686,7 @@ local_message ModelInfo {
 
 local_message Cost {
   required float amount = 1;
-  required string currency = 2;
+  optional string currency = 2;
 }
 
 local_message Consumable {

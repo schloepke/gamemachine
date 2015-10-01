@@ -228,8 +228,6 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
             output.writeFloat(1, message.amount, false);
     	    	
     	            	
-    	    	if(message.currency == null)
-            throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.currency != null)
             output.writeString(2, message.currency, false);
@@ -360,7 +358,7 @@ public byte[] toProtobuf() {
 	} catch (Exception e) {
 		buffer.clear();
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bytes;
 }
@@ -373,7 +371,7 @@ public ByteBuf toByteBuf() {
 		ProtobufIOUtil.writeTo(buffer, this, Cost.getSchema());
 	} catch (Exception e) {
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bb;
 }

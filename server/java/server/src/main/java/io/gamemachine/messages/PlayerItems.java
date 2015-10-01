@@ -229,7 +229,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         return this;
     }
     
-        	    	    	    	    	    	
+        	    	    	    	    	
     public PlayerItems removePlayerItemByPlayerId(PlayerItem playerItem)  {
     	if(this.playerItem == null)
            return this;
@@ -325,7 +325,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         return this;
     }
     
-        	    	    	    	    	
+        	    	    	    	
     public PlayerItems removePlayerItemByIsConsumable(PlayerItem playerItem)  {
     	if(this.playerItem == null)
            return this;
@@ -914,7 +914,7 @@ public byte[] toProtobuf() {
 	} catch (Exception e) {
 		buffer.clear();
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bytes;
 }
@@ -927,7 +927,7 @@ public ByteBuf toByteBuf() {
 		ProtobufIOUtil.writeTo(buffer, this, PlayerItems.getSchema());
 	} catch (Exception e) {
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bb;
 }

@@ -345,7 +345,7 @@ CREATE TABLE `player_items` (
 
   `player_item_slot_count` int(11) DEFAULT NULL,
 
-  `player_item_stackable` tinyint(4) NOT NULL,
+  `player_item_stackable` tinyint(4) DEFAULT NULL,
 
   `player_item_location_type` varchar(128) DEFAULT NULL,
 
@@ -369,37 +369,9 @@ CREATE TABLE `player_items` (
 
   `player_item_template_block_id` int(11) DEFAULT NULL,
 
-      `consumable_type` varchar(128) DEFAULT NULL,
-    
-      `consumable_size` varchar(128) DEFAULT NULL,
-
       `cost_amount` float DEFAULT NULL,
     
       `cost_currency` varchar(128) DEFAULT NULL,
-
-      `model_info_attach_x` float DEFAULT NULL,
-    
-      `model_info_attach_y` float DEFAULT NULL,
-    
-      `model_info_attach_z` float DEFAULT NULL,
-    
-      `model_info_rotate_x` float DEFAULT NULL,
-    
-      `model_info_rotate_y` float DEFAULT NULL,
-    
-      `model_info_rotate_z` float DEFAULT NULL,
-    
-      `model_info_scale_x` float DEFAULT NULL,
-    
-      `model_info_scale_y` float DEFAULT NULL,
-    
-      `model_info_scale_z` float DEFAULT NULL,
-    
-      `model_info_resource` varchar(128) DEFAULT NULL,
-    
-      `model_info_prefab` varchar(128) DEFAULT NULL,
-    
-      `model_info_weapon_type` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

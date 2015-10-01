@@ -186,7 +186,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         return this;
     }
     
-        	    	    	    	    	    	
+        	    	    	    	    	
     public PlayerItems removePlayerItemByPlayerId(PlayerItem playerItem)  {
     	if(this.playerItem == null)
            return this;
@@ -282,7 +282,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         return this;
     }
     
-        	    	    	    	    	
+        	    	    	    	
     public PlayerItems removePlayerItemByIsConsumable(PlayerItem playerItem)  {
     	if(this.playerItem == null)
            return this;

@@ -91,8 +91,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    
         			public Boolean weapon;
 	    
-        			public Consumable consumable;
-	    
         			public Cost cost;
 	    
         			public String playerId;
@@ -106,8 +104,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         			public Integer craftingResource;
 	    
         			public Integer craftable;
-	    
-        			public ModelInfo modelInfo;
 	    
         			public Boolean isConsumable;
 	    
@@ -508,20 +504,10 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	} else {
 	    		message.toModel(model);
 	    	}
-	    		    	if (message.hasConsumable()) {
-	    		message.consumable.toModel(model);
-	    	} else {
-	    		Consumable.clearModel(model);
-	    	}
 	    		    	if (message.hasCost()) {
 	    		message.cost.toModel(model);
 	    	} else {
 	    		Cost.clearModel(model);
-	    	}
-	    		    	if (message.hasModelInfo()) {
-	    		message.modelInfo.toModel(model);
-	    	} else {
-	    		ModelInfo.clearModel(model);
 	    	}
 	    		    	
 	    	Boolean res = model.save();
@@ -581,9 +567,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    		return null;
 	    	} else {
 	    		PlayerItem playerItem = fromModel(model);
-	    			    		playerItem.consumable = Consumable.fromModel(model);
 	    			    		playerItem.cost = Cost.fromModel(model);
-	    			    		playerItem.modelInfo = ModelInfo.fromModel(model);
 	    			    		return playerItem;
 	    	}
 	    }
@@ -596,9 +580,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    		return null;
 	    	} else {
 	    		PlayerItem playerItem = fromModel(model);
-	    			    		playerItem.consumable = Consumable.fromModel(model);
 	    			    		playerItem.cost = Cost.fromModel(model);
-	    			    		playerItem.modelInfo = ModelInfo.fromModel(model);
 	    			    		return playerItem;
 	    	}
 	    }
@@ -609,9 +591,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	List<PlayerItem> messages = new ArrayList<PlayerItem>();
 	    	for (io.gamemachine.orm.models.PlayerItem model : models) {
 	    		PlayerItem playerItem = fromModel(model);
-	    			    		playerItem.consumable = Consumable.fromModel(model);
 	    			    		playerItem.cost = Cost.fromModel(model);
-	    			    		playerItem.modelInfo = ModelInfo.fromModel(model);
 	    			    		messages.add(playerItem);
 	    	}
 	    	io.gamemachine.orm.models.PlayerItem.close();
@@ -630,9 +610,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	List<PlayerItem> messages = new ArrayList<PlayerItem>();
 	    	for (io.gamemachine.orm.models.PlayerItem model : models) {
 	    		PlayerItem playerItem = fromModel(model);
-	    			    		playerItem.consumable = Consumable.fromModel(model);
 	    			    		playerItem.cost = Cost.fromModel(model);
-	    			    		playerItem.modelInfo = ModelInfo.fromModel(model);
 	    			    		messages.add(playerItem);
 	    	}
 	    	if (!inTransaction) {
@@ -650,12 +628,12 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	    	    	    	    	model.set("player_item_quantity",null);
     	    	    	    	    	    	model.set("player_item_color",null);
     	    	    	    	    	    	model.set("player_item_weapon",null);
-    	    	    	    	    	    	    	    	model.set("player_item_player_id",null);
+    	    	    	    	    	    	    	model.set("player_item_player_id",null);
     	    	    	    	    	    	    	    	    	model.set("player_item_icon",null);
     	    	    	    	    	    	model.set("player_item_harvestable",null);
     	    	    	    	    	    	model.set("player_item_crafting_resource",null);
     	    	    	    	    	    	model.set("player_item_craftable",null);
-    	    	    	    	    	    	    	model.set("player_item_is_consumable",null);
+    	    	    	    	    	    	model.set("player_item_is_consumable",null);
     	    	    	    	    	    	model.set("player_item_type",null);
     	    	    	    	    	    	model.set("player_item_max_health",null);
     	    	    	    	    	    	model.set("player_item_health",null);
@@ -706,7 +684,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	       	    	model.setBoolean("player_item_weapon",weapon);
     	        		
     	}
-    	    	    	    	    	    	    	
+    	    	    	    	    	    	
     	    	    	if (playerId != null) {
     	       	    	model.setString("player_item_player_id",playerId);
     	        		
@@ -733,7 +711,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	       	    	model.setInteger("player_item_craftable",craftable);
     	        		
     	}
-    	    	    	    	    	    	
+    	    	    	    	    	
     	    	    	if (isConsumable != null) {
     	       	    	model.setBoolean("player_item_is_consumable",isConsumable);
     	        		
@@ -888,7 +866,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     		message.setWeapon(weaponField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	
+    	    	    	    	    	    	    	
     	    	    	String playerIdField = model.getString("player_item_player_id");
     	    	
     	if (playerIdField != null) {
@@ -928,7 +906,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     		message.setCraftable(craftableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
+    	    	    	    	    	    	
     	    	    	Boolean isConsumableField = model.getBoolean("player_item_is_consumable");
     	    	
     	if (isConsumableField != null) {
@@ -1163,19 +1141,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		return this;	}
 	
 		    
-    public Boolean hasConsumable()  {
-        return consumable == null ? false : true;
-    }
-        
-		public Consumable getConsumable() {
-		return consumable;
-	}
-	
-	public PlayerItem setConsumable(Consumable consumable) {
-		this.consumable = consumable;
-		return this;	}
-	
-		    
     public Boolean hasCost()  {
         return cost == null ? false : true;
     }
@@ -1264,19 +1229,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	
 	public PlayerItem setCraftable(Integer craftable) {
 		this.craftable = craftable;
-		return this;	}
-	
-		    
-    public Boolean hasModelInfo()  {
-        return modelInfo == null ? false : true;
-    }
-        
-		public ModelInfo getModelInfo() {
-		return modelInfo;
-	}
-	
-	public PlayerItem setModelInfo(ModelInfo modelInfo) {
-		this.modelInfo = modelInfo;
 		return this;	}
 	
 		    
@@ -1654,10 +1606,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
             	                	                	message.weapon = input.readBool();
                 	break;
                 	                	
-                            	            	case 6:
-            	                	                	message.consumable = input.mergeObject(message.consumable, Consumable.getSchema());
-                    break;
-                                    	
                             	            	case 8:
             	                	                	message.cost = input.mergeObject(message.cost, Cost.getSchema());
                     break;
@@ -1686,10 +1634,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
             	                	                	message.craftable = input.readInt32();
                 	break;
                 	                	
-                            	            	case 15:
-            	                	                	message.modelInfo = input.mergeObject(message.modelInfo, ModelInfo.getSchema());
-                    break;
-                                    	
                             	            	case 16:
             	                	                	message.isConsumable = input.readBool();
                 	break;
@@ -1825,11 +1769,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	
     	            	
     	    	
-    	    	    	if(message.consumable != null)
-    		output.writeObject(6, message.consumable, Consumable.getSchema(), false);
-    	    	
-    	            	
-    	    	
     	    	    	if(message.cost != null)
     		output.writeObject(8, message.cost, Cost.getSchema(), false);
     	    	
@@ -1862,11 +1801,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	
     	    	    	if(message.craftable != null)
             output.writeInt32(14, message.craftable, false);
-    	    	
-    	            	
-    	    	
-    	    	    	if(message.modelInfo != null)
-    		output.writeObject(15, message.modelInfo, ModelInfo.getSchema(), false);
     	    	
     	            	
     	    	
@@ -1924,8 +1858,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
             output.writeInt32(26, message.slotCount, false);
     	    	
     	            	
-    	    	if(message.stackable == null)
-            throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.stackable != null)
             output.writeBool(27, message.stackable, false);
@@ -2012,9 +1944,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	if(this.weapon != null) {
     		System.out.println("weapon="+this.weapon);
     	}
-    	    	if(this.consumable != null) {
-    		System.out.println("consumable="+this.consumable);
-    	}
     	    	if(this.cost != null) {
     		System.out.println("cost="+this.cost);
     	}
@@ -2035,9 +1964,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	}
     	    	if(this.craftable != null) {
     		System.out.println("craftable="+this.craftable);
-    	}
-    	    	if(this.modelInfo != null) {
-    		System.out.println("modelInfo="+this.modelInfo);
     	}
     	    	if(this.isConsumable != null) {
     		System.out.println("isConsumable="+this.isConsumable);
@@ -2120,7 +2046,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         	        	case 3: return "quantity";
         	        	case 4: return "color";
         	        	case 5: return "weapon";
-        	        	case 6: return "consumable";
         	        	case 8: return "cost";
         	        	case 9: return "playerId";
         	        	case 10: return "recordId";
@@ -2128,7 +2053,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         	        	case 12: return "harvestable";
         	        	case 13: return "craftingResource";
         	        	case 14: return "craftable";
-        	        	case 15: return "modelInfo";
         	        	case 16: return "isConsumable";
         	        	case 17: return "type";
         	        	case 18: return "maxHealth";
@@ -2170,7 +2094,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	__fieldMap.put("quantity", 3);
     	    	__fieldMap.put("color", 4);
     	    	__fieldMap.put("weapon", 5);
-    	    	__fieldMap.put("consumable", 6);
     	    	__fieldMap.put("cost", 8);
     	    	__fieldMap.put("playerId", 9);
     	    	__fieldMap.put("recordId", 10);
@@ -2178,7 +2101,6 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	__fieldMap.put("harvestable", 12);
     	    	__fieldMap.put("craftingResource", 13);
     	    	__fieldMap.put("craftable", 14);
-    	    	__fieldMap.put("modelInfo", 15);
     	    	__fieldMap.put("isConsumable", 16);
     	    	__fieldMap.put("type", 17);
     	    	__fieldMap.put("maxHealth", 18);
@@ -2292,7 +2214,7 @@ public byte[] toProtobuf() {
 	} catch (Exception e) {
 		buffer.clear();
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bytes;
 }
@@ -2305,7 +2227,7 @@ public ByteBuf toByteBuf() {
 		ProtobufIOUtil.writeTo(buffer, this, PlayerItem.getSchema());
 	} catch (Exception e) {
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bb;
 }

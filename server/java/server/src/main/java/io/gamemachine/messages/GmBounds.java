@@ -330,7 +330,7 @@ public byte[] toProtobuf() {
 	} catch (Exception e) {
 		buffer.clear();
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bytes;
 }
@@ -343,7 +343,7 @@ public ByteBuf toByteBuf() {
 		ProtobufIOUtil.writeTo(buffer, this, GmBounds.getSchema());
 	} catch (Exception e) {
 		e.printStackTrace();
-		throw new RuntimeException("Protobuf encoding failed");
+		throw new RuntimeException("Protobuf encoding failed "+e.getMessage());
 	}
 	return bb;
 }
