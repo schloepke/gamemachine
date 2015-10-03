@@ -9,10 +9,13 @@ GEM
       tzinfo (~> 1.1)
     bcrypt (3.1.7-java)
     dentaku (1.2.1)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
     ffi (1.9.3-java)
     i18n (0.6.11)
     json (1.8.1-java)
     minitest (5.4.1)
+    multipart-post (2.0.0)
     thread_safe (0.3.4-java)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
@@ -26,7 +29,11 @@ DEPENDENCIES
   bcrypt
   bundler
   dentaku
+  faraday
   ffi
   i18n
   json
   wavefront
+
+BUNDLED WITH
+   1.10.6

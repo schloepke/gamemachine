@@ -475,7 +475,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPvpGameMessage()) {
 			names.add(this.pvpGameMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPlayer()) {
+	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPlayer()) {
 			names.add(this.player.getClass().getSimpleName());
 		}
 	  		  		if (this.hasTrackData()) {

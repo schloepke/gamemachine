@@ -329,7 +329,39 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         return this;
     }
     
-        	        	
+        	    	    	    	    	
+    public StatusEffectTarget removeStatusEffectByIcon_path(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.icon_path.equals(obj.icon_path)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public StatusEffectTarget removeStatusEffectByIcon_uuid(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.icon_uuid.equals(obj.icon_uuid)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+            	
     
     
     

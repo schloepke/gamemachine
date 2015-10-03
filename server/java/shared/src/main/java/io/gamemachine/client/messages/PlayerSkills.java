@@ -172,7 +172,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
     }
     
         	    	    	    	
-    public PlayerSkills removePlayerSkillByIcon(PlayerSkill playerSkill)  {
+    public PlayerSkills removePlayerSkillByIcon_path(PlayerSkill playerSkill)  {
     	if(this.playerSkill == null)
            return this;
             
@@ -180,7 +180,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.icon.equals(obj.icon)) {
+    	    		if (playerSkill.icon_path.equals(obj.icon_path)) {
     	      			itr.remove();
     		}
 		}
@@ -357,6 +357,38 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
     	PlayerSkill obj = itr.next();
     	
     	    		if (playerSkill.isPassive.equals(obj.isPassive)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public PlayerSkills removePlayerSkillBySkillType(PlayerSkill playerSkill)  {
+    	if(this.playerSkill == null)
+           return this;
+            
+       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
+       	while (itr.hasNext()) {
+    	PlayerSkill obj = itr.next();
+    	
+    	    		if (playerSkill.skillType.equals(obj.skillType)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public PlayerSkills removePlayerSkillByIcon_uuid(PlayerSkill playerSkill)  {
+    	if(this.playerSkill == null)
+           return this;
+            
+       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
+       	while (itr.hasNext()) {
+    	PlayerSkill obj = itr.next();
+    	
+    	    		if (playerSkill.icon_uuid.equals(obj.icon_uuid)) {
     	      			itr.remove();
     		}
 		}

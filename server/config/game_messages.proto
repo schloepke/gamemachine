@@ -364,6 +364,12 @@ local_message StatusEffect {
   optional int32 maxValue = 7;
   optional string particleEffect = 8;
   optional DamageType damageType = 9;
+  optional string icon_path = 10;
+  optional string icon_uuid = 11;
+}
+
+local_message StatusEffects {
+  repeated StatusEffect statusEffect = 1;
 }
 
 local_message Vitals {
@@ -559,12 +565,46 @@ message DynamicMessage {
 }
 
 local_persistent_message PlayerSkill {
+  enum DamageType {
+	Aoe = 0;
+	SingleTarget = 1;
+	Pbaoe = 2;
+	SelfAoe = 3;
+  }
+  
+  enum SkillType {
+    Active = 0;
+    Passive = 1;
+  }
+  
+  enum Resource {
+    NoResource = 0;
+    Magic = 1;
+    Stamina = 2;
+  }
+  
+  enum Category {
+    Weapon = 0;
+    Crafting = 1;
+    CategoryOther = 2;
+  }
+  
+  enum WeaponType {
+    Bow = 0;
+    Sword2h = 1;
+    Sword1h = 2;
+    Staff = 3;
+    Gun = 4;
+    Siege = 5;
+    WeaponTypeOther = 6;
+  }
+  
   required string id = 1;
-  required string name = 2;
+  optional string name = 2;
   optional int32 recordId = 3;
-  required string category = 4;
+  optional string category = 4;
   optional string damageType = 5;
-  required string icon = 6;
+  optional string icon_path = 6;
   optional string description = 7;
   optional string resource = 8;
   optional int32 resourceCost = 9;
@@ -576,6 +616,9 @@ local_persistent_message PlayerSkill {
   optional int32 resourceCostPerTick = 15;
   optional int32 isComboPart = 16;
   optional int32 isPassive = 17;
+  optional string skillType = 18;
+  optional string icon_uuid = 19;
+  
 }
 
 message PlayerSkills {

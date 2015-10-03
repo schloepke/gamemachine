@@ -245,13 +245,13 @@ CREATE TABLE `player_skills` (
 
   `player_skill_id` varchar(128) NOT NULL,
 
-  `player_skill_name` varchar(128) NOT NULL,
+  `player_skill_name` varchar(128) DEFAULT NULL,
 
-  `player_skill_category` varchar(128) NOT NULL,
+  `player_skill_category` varchar(128) DEFAULT NULL,
 
   `player_skill_damage_type` varchar(128) DEFAULT NULL,
 
-  `player_skill_icon` varchar(128) NOT NULL,
+  `player_skill_icon_path` varchar(128) DEFAULT NULL,
 
   `player_skill_description` varchar(128) DEFAULT NULL,
 
@@ -274,6 +274,10 @@ CREATE TABLE `player_skills` (
   `player_skill_is_combo_part` int(11) DEFAULT NULL,
 
   `player_skill_is_passive` int(11) DEFAULT NULL,
+
+  `player_skill_skill_type` varchar(128) DEFAULT NULL,
+
+  `player_skill_icon_uuid` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

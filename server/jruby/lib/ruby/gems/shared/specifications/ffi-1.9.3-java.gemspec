@@ -14,8 +14,8 @@ Gem::Specification.new do |s|
   s.email = "wmeissner@gmail.com"
   s.homepage = "http://wiki.github.com/ffi/ffi"
   s.licenses = ["BSD"]
-  s.rubygems_version = "2.4.6"
+  s.rubygems_version = "2.4.8"
   s.summary = "Ruby FFI"
 
-  s.installed_by_version = "2.4.6" if s.respond_to? :installed_by_version
+  s.installed_by_version = "2.4.8" if s.respond_to? :installed_by_version
 end

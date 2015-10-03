@@ -78,14 +78,14 @@ module Jars
     end
 
     def setup_arguments( pom, *goals )
-      args = [ *goals,
-               '-DoutputAbsoluteArtifactFilename=true',
-               '-DincludeTypes=jar',
-               '-DoutputScope=true',
-               '-DuseRepositoryLayout=true',
-               "-DoutputDirectory=#{Jars.home}",
-               '-f', File.dirname( __FILE__ ) + '/' + pom,
-               "-Djars.specfile=#{@specfile}" ]
+      args = goals.dup
+      args << '-DoutputAbsoluteArtifactFilename=true'
+      args << '-DincludeTypes=jar'
+      args << '-DoutputScope=true'
+      args << '-DuseRepositoryLayout=true'
+      args << "-DoutputDirectory=#{Jars.home}"
+      args << '-f' << "#{File.dirname( __FILE__ )}/#{pom}"
+      args << "-Djars.specfile=#{@specfile}"
 
       if Jars.debug?
         args << '-X'
@@ -113,8 +113,8 @@ module Jars
     end
 
     def lazy_load_maven
-      add_gem_to_load_path( 'ruby-maven' )
       add_gem_to_load_path( 'ruby-maven-libs' )
+      add_gem_to_load_path( 'ruby-maven' )
       require 'maven/ruby/maven'
     end
 
@@ -130,8 +130,10 @@ module Jars
       # just install gem if needed and add it to the load_path
       # and leave activated gems as they are
       unless spec = find_spec_via_rubygems( name )
-        install_gem( name )
-        spec = find_spec_via_rubygems( name )
+        spec = install_gem( name )
+      end
+      unless spec
+        raise "failed to resolve gem '#{name}' if you're using Bundler add it as a dependency"
       end
       $LOAD_PATH << File.join( spec.full_gem_path, spec.require_path )
     end
@@ -142,7 +144,7 @@ module Jars
       dep = jars.dependencies.detect { |d| d.name == name }
       req = dep.nil? ? Gem::Requirement.create( '>0' ) : dep.requirement
       inst = Gem::DependencyInstaller.new( @options ||= {} )
-      inst.install name, req
+      inst.install( name, req ).first
     rescue => e
       warn e.backtrace.join( "\n" ) if Jars.verbose?
       raise "there was an error installing '#{name}'. please install it manually: #{e.inspect}"

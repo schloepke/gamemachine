@@ -15,8 +15,8 @@ Gem::Specification.new do |s|
   s.homepage = "http://json-jruby.rubyforge.org/"
   s.licenses = ["Ruby"]
   s.rubyforge_project = "json-jruby"
-  s.rubygems_version = "2.4.6"
+  s.rubygems_version = "2.4.8"
   s.summary = "JSON implementation for JRuby"
 
-  s.installed_by_version = "2.4.6" if s.respond_to? :installed_by_version
+  s.installed_by_version = "2.4.8" if s.respond_to? :installed_by_version
 end

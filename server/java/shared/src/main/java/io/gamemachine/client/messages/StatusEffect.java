@@ -142,6 +142,10 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	    
         			public DamageType damageType; // = None:0;
 	    
+        			public String icon_path;
+	    
+        			public String icon_uuid;
+	    
       
     public StatusEffect()
     {
@@ -268,6 +272,32 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.damageType = damageType;
 		return this;	}
 	
+		    
+    public Boolean hasIcon_path()  {
+        return icon_path == null ? false : true;
+    }
+        
+		public String getIcon_path() {
+		return icon_path;
+	}
+	
+	public StatusEffect setIcon_path(String icon_path) {
+		this.icon_path = icon_path;
+		return this;	}
+	
+		    
+    public Boolean hasIcon_uuid()  {
+        return icon_uuid == null ? false : true;
+    }
+        
+		public String getIcon_uuid() {
+		return icon_uuid;
+	}
+	
+	public StatusEffect setIcon_uuid(String icon_uuid) {
+		this.icon_uuid = icon_uuid;
+		return this;	}
+	
 	
   
     // java serialization
@@ -360,6 +390,14 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
             	                	                    message.damageType = DamageType.valueOf(input.readEnum());
                     break;
                 	                	
+                            	            	case 10:
+            	                	                	message.icon_path = input.readString();
+                	break;
+                	                	
+                            	            	case 11:
+            	                	                	message.icon_uuid = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -416,6 +454,16 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	 	output.writeEnum(9, message.damageType.number, false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.icon_path != null)
+            output.writeString(10, message.icon_path, false);
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.icon_uuid != null)
+            output.writeString(11, message.icon_uuid, false);
+    	    	
+    	            	
     }
 
     public String getFieldName(int number)
@@ -431,6 +479,8 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         	        	case 7: return "maxValue";
         	        	case 8: return "particleEffect";
         	        	case 9: return "damageType";
+        	        	case 10: return "icon_path";
+        	        	case 11: return "icon_uuid";
         	            default: return null;
         }
     }
@@ -453,6 +503,8 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	    	__fieldMap.put("maxValue", 7);
     	    	__fieldMap.put("particleEffect", 8);
     	    	__fieldMap.put("damageType", 9);
+    	    	__fieldMap.put("icon_path", 10);
+    	    	__fieldMap.put("icon_uuid", 11);
     	    }
    
    public static List<String> getFields() {

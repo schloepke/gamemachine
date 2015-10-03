@@ -15,6 +15,7 @@ import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.RemovePlayerItem;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.UseItem;
+import plugins.combat.StatusEffectHandler;
 import io.gamemachine.messages.Character;
 
 public class PlayerItemManager {

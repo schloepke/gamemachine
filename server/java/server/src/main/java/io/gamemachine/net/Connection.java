@@ -59,13 +59,16 @@ public class Connection {
 	public static void removeConnection(String playerId) {
 		if (connections.containsKey(playerId)) {
 			Connection connection = connections.get(playerId);
-			if (connection.protocol == NetMessage.SIMPLE_UDP) {
-				SimpleUdpServer.removeClient(connection.clientId);
-			} else if (connection.protocol == NetMessage.NETTY_UDP) {
-				NettyUdpServerHandler.removeClient(connection.clientId);
-			} else if (connection.protocol == NetMessage.TCP) {
-				TcpServerHandler.removeClient(connection.clientId);
+			if (connection != null) {
+				if (connection.protocol == NetMessage.SIMPLE_UDP) {
+					SimpleUdpServer.removeClient(connection.clientId);
+				} else if (connection.protocol == NetMessage.NETTY_UDP) {
+					NettyUdpServerHandler.removeClient(connection.clientId);
+				} else if (connection.protocol == NetMessage.TCP) {
+					TcpServerHandler.removeClient(connection.clientId);
+				}
 			}
+			
 			connections.remove(playerId);
 		}
 	}

@@ -66,6 +66,145 @@ import io.gamemachine.core.CacheUpdate;
 @SuppressWarnings("unused")
 public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, Schema<PlayerSkill>, PersistableMessage{
 
+	public enum DamageType implements io.protostuff.EnumLite<DamageType>
+    {
+    	
+    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3);    	        
+        public final int number;
+        
+        private DamageType (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static DamageType valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (Aoe);
+    			    			case 1: return (SingleTarget);
+    			    			case 2: return (Pbaoe);
+    			    			case 3: return (SelfAoe);
+    			                default: return null;
+            }
+        }
+    }
+	public enum SkillType implements io.protostuff.EnumLite<SkillType>
+    {
+    	
+    	    	Active(0),    	    	Passive(1);    	        
+        public final int number;
+        
+        private SkillType (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static SkillType valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (Active);
+    			    			case 1: return (Passive);
+    			                default: return null;
+            }
+        }
+    }
+	public enum Resource implements io.protostuff.EnumLite<Resource>
+    {
+    	
+    	    	NoResource(0),    	    	Magic(1),    	    	Stamina(2);    	        
+        public final int number;
+        
+        private Resource (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Resource valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (NoResource);
+    			    			case 1: return (Magic);
+    			    			case 2: return (Stamina);
+    			                default: return null;
+            }
+        }
+    }
+	public enum Category implements io.protostuff.EnumLite<Category>
+    {
+    	
+    	    	Weapon(0),    	    	Crafting(1),    	    	CategoryOther(2);    	        
+        public final int number;
+        
+        private Category (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Category valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (Weapon);
+    			    			case 1: return (Crafting);
+    			    			case 2: return (CategoryOther);
+    			                default: return null;
+            }
+        }
+    }
+	public enum WeaponType implements io.protostuff.EnumLite<WeaponType>
+    {
+    	
+    	    	Bow(0),    	    	Sword2h(1),    	    	Sword1h(2),    	    	Staff(3),    	    	Gun(4),    	    	Siege(5),    	    	WeaponTypeOther(6);    	        
+        public final int number;
+        
+        private WeaponType (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static WeaponType valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (Bow);
+    			    			case 1: return (Sword2h);
+    			    			case 2: return (Sword1h);
+    			    			case 3: return (Staff);
+    			    			case 4: return (Gun);
+    			    			case 5: return (Siege);
+    			    			case 6: return (WeaponTypeOther);
+    			                default: return null;
+            }
+        }
+    }
 
 
     public static Schema<PlayerSkill> getSchema()
@@ -91,7 +230,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	    
         			public String damageType;
 	    
-        			public String icon;
+        			public String icon_path;
 	    
         			public String description;
 	    
@@ -114,6 +253,10 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         			public Integer isComboPart;
 	    
         			public Integer isPassive;
+	    
+        			public String skillType;
+	    
+        			public String icon_uuid;
 	    
         
 	public static PlayerSkillCache cache() {
@@ -582,7 +725,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	    	    	    	    	model.set("player_skill_name",null);
     	    	    	    	    	    	    	    	    	model.set("player_skill_category",null);
     	    	    	    	    	    	model.set("player_skill_damage_type",null);
-    	    	    	    	    	    	model.set("player_skill_icon",null);
+    	    	    	    	    	    	model.set("player_skill_icon_path",null);
     	    	    	    	    	    	model.set("player_skill_description",null);
     	    	    	    	    	    	model.set("player_skill_resource",null);
     	    	    	    	    	    	model.set("player_skill_resource_cost",null);
@@ -594,6 +737,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	    	    	    	    	model.set("player_skill_resource_cost_per_tick",null);
     	    	    	    	    	    	model.set("player_skill_is_combo_part",null);
     	    	    	    	    	    	model.set("player_skill_is_passive",null);
+    	    	    	    	    	    	model.set("player_skill_skill_type",null);
+    	    	    	    	    	    	model.set("player_skill_icon_uuid",null);
     	    }
     
 	public void toModel(Model model) {
@@ -620,8 +765,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	        		
     	}
     	    	    	    	    	
-    	    	    	if (icon != null) {
-    	       	    	model.setString("player_skill_icon",icon);
+    	    	    	if (icon_path != null) {
+    	       	    	model.setString("player_skill_icon_path",icon_path);
     	        		
     	}
     	    	    	    	    	
@@ -679,6 +824,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	       	    	model.setInteger("player_skill_is_passive",isPassive);
     	        		
     	}
+    	    	    	    	    	
+    	    	    	if (skillType != null) {
+    	       	    	model.setString("player_skill_skill_type",skillType);
+    	        		
+    	}
+    	    	    	    	    	
+    	    	    	if (icon_uuid != null) {
+    	       	    	model.setString("player_skill_icon_uuid",icon_uuid);
+    	        		
+    	}
     	    	    }
     
 	public static PlayerSkill fromModel(Model model) {
@@ -718,10 +873,10 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     		hasFields = true;
     	}
     	    	    	    	    	    	
-    	    	    	String iconField = model.getString("player_skill_icon");
+    	    	    	String icon_pathField = model.getString("player_skill_icon_path");
     	    	
-    	if (iconField != null) {
-    		message.setIcon(iconField);
+    	if (icon_pathField != null) {
+    		message.setIcon_path(icon_pathField);
     		hasFields = true;
     	}
     	    	    	    	    	    	
@@ -801,6 +956,20 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     		message.setIsPassive(isPassiveField);
     		hasFields = true;
     	}
+    	    	    	    	    	    	
+    	    	    	String skillTypeField = model.getString("player_skill_skill_type");
+    	    	
+    	if (skillTypeField != null) {
+    		message.setSkillType(skillTypeField);
+    		hasFields = true;
+    	}
+    	    	    	    	    	    	
+    	    	    	String icon_uuidField = model.getString("player_skill_icon_uuid");
+    	    	
+    	if (icon_uuidField != null) {
+    		message.setIcon_uuid(icon_uuidField);
+    		hasFields = true;
+    	}
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -875,16 +1044,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		return this;	}
 	
 		    
-    public Boolean hasIcon()  {
-        return icon == null ? false : true;
+    public Boolean hasIcon_path()  {
+        return icon_path == null ? false : true;
     }
         
-		public String getIcon() {
-		return icon;
+		public String getIcon_path() {
+		return icon_path;
 	}
 	
-	public PlayerSkill setIcon(String icon) {
-		this.icon = icon;
+	public PlayerSkill setIcon_path(String icon_path) {
+		this.icon_path = icon_path;
 		return this;	}
 	
 		    
@@ -1030,6 +1199,32 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.isPassive = isPassive;
 		return this;	}
 	
+		    
+    public Boolean hasSkillType()  {
+        return skillType == null ? false : true;
+    }
+        
+		public String getSkillType() {
+		return skillType;
+	}
+	
+	public PlayerSkill setSkillType(String skillType) {
+		this.skillType = skillType;
+		return this;	}
+	
+		    
+    public Boolean hasIcon_uuid()  {
+        return icon_uuid == null ? false : true;
+    }
+        
+		public String getIcon_uuid() {
+		return icon_uuid;
+	}
+	
+	public PlayerSkill setIcon_uuid(String icon_uuid) {
+		this.icon_uuid = icon_uuid;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1107,7 +1302,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
                 	break;
                 	                	
                             	            	case 6:
-            	                	                	message.icon = input.readString();
+            	                	                	message.icon_path = input.readString();
                 	break;
                 	                	
                             	            	case 7:
@@ -1154,6 +1349,14 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             	                	                	message.isPassive = input.readInt32();
                 	break;
                 	                	
+                            	            	case 18:
+            	                	                	message.skillType = input.readString();
+                	break;
+                	                	
+                            	            	case 19:
+            	                	                	message.icon_uuid = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1172,8 +1375,6 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             output.writeString(1, message.id, false);
     	    	
     	            	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.name != null)
             output.writeString(2, message.name, false);
@@ -1184,8 +1385,6 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             output.writeInt32(3, message.recordId, false);
     	    	
     	            	
-    	    	if(message.category == null)
-            throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.category != null)
             output.writeString(4, message.category, false);
@@ -1196,11 +1395,9 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             output.writeString(5, message.damageType, false);
     	    	
     	            	
-    	    	if(message.icon == null)
-            throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.icon != null)
-            output.writeString(6, message.icon, false);
+    	    	    	if(message.icon_path != null)
+            output.writeString(6, message.icon_path, false);
     	    	
     	            	
     	    	
@@ -1260,6 +1457,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             output.writeInt32(17, message.isPassive, false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.skillType != null)
+            output.writeString(18, message.skillType, false);
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.icon_uuid != null)
+            output.writeString(19, message.icon_uuid, false);
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1280,8 +1487,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	if(this.damageType != null) {
     		System.out.println("damageType="+this.damageType);
     	}
-    	    	if(this.icon != null) {
-    		System.out.println("icon="+this.icon);
+    	    	if(this.icon_path != null) {
+    		System.out.println("icon_path="+this.icon_path);
     	}
     	    	if(this.description != null) {
     		System.out.println("description="+this.description);
@@ -1316,6 +1523,12 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	if(this.isPassive != null) {
     		System.out.println("isPassive="+this.isPassive);
     	}
+    	    	if(this.skillType != null) {
+    		System.out.println("skillType="+this.skillType);
+    	}
+    	    	if(this.icon_uuid != null) {
+    		System.out.println("icon_uuid="+this.icon_uuid);
+    	}
     	    	System.out.println("END PlayerSkill");
     }
     
@@ -1328,7 +1541,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         	        	case 3: return "recordId";
         	        	case 4: return "category";
         	        	case 5: return "damageType";
-        	        	case 6: return "icon";
+        	        	case 6: return "icon_path";
         	        	case 7: return "description";
         	        	case 8: return "resource";
         	        	case 9: return "resourceCost";
@@ -1340,6 +1553,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         	        	case 15: return "resourceCostPerTick";
         	        	case 16: return "isComboPart";
         	        	case 17: return "isPassive";
+        	        	case 18: return "skillType";
+        	        	case 19: return "icon_uuid";
         	            default: return null;
         }
     }
@@ -1358,7 +1573,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	__fieldMap.put("recordId", 3);
     	    	__fieldMap.put("category", 4);
     	    	__fieldMap.put("damageType", 5);
-    	    	__fieldMap.put("icon", 6);
+    	    	__fieldMap.put("icon_path", 6);
     	    	__fieldMap.put("description", 7);
     	    	__fieldMap.put("resource", 8);
     	    	__fieldMap.put("resourceCost", 9);
@@ -1370,6 +1585,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	__fieldMap.put("resourceCostPerTick", 15);
     	    	__fieldMap.put("isComboPart", 16);
     	    	__fieldMap.put("isPassive", 17);
+    	    	__fieldMap.put("skillType", 18);
+    	    	__fieldMap.put("icon_uuid", 19);
     	    }
    
    public static List<String> getFields() {
