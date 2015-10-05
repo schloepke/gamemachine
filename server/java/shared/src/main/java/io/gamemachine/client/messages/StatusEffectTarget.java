@@ -126,6 +126,8 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 	    
         			public PassiveFlag passiveFlag; // = NA:0;
 	    
+        			public String originPlayerId;
+	    
       
     public StatusEffectTarget()
     {
@@ -443,6 +445,19 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.passiveFlag = passiveFlag;
 		return this;	}
 	
+		    
+    public Boolean hasOriginPlayerId()  {
+        return originPlayerId == null ? false : true;
+    }
+        
+		public String getOriginPlayerId() {
+		return originPlayerId;
+	}
+	
+	public StatusEffectTarget setOriginPlayerId(String originPlayerId) {
+		this.originPlayerId = originPlayerId;
+		return this;	}
+	
 	
   
     // java serialization
@@ -544,6 +559,10 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
             	                	                    message.passiveFlag = PassiveFlag.valueOf(input.readEnum());
                     break;
                 	                	
+                            	            	case 12:
+            	                	                	message.originPlayerId = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -626,6 +645,11 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     	 	output.writeEnum(11, message.passiveFlag.number, false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.originPlayerId != null)
+            output.writeString(12, message.originPlayerId, false);
+    	    	
+    	            	
     }
 
     public String getFieldName(int number)
@@ -643,6 +667,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         	        	case 9: return "lastTick";
         	        	case 10: return "action";
         	        	case 11: return "passiveFlag";
+        	        	case 12: return "originPlayerId";
         	            default: return null;
         }
     }
@@ -667,6 +692,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     	    	__fieldMap.put("lastTick", 9);
     	    	__fieldMap.put("action", 10);
     	    	__fieldMap.put("passiveFlag", 11);
+    	    	__fieldMap.put("originPlayerId", 12);
     	    }
    
    public static List<String> getFields() {

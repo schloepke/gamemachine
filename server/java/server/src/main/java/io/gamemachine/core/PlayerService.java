@@ -328,6 +328,15 @@ public class PlayerService {
 		}
 	}
 	
+	public Player findByCharacterId(String characterId) {
+		for (Player player : players.values()) {
+			if (player.characterId.equals(characterId)) {
+				return player;
+			}
+		}
+		return null;
+	}
+	
 	public void clearCache(String playerId) {
 		if (players.containsKey(playerId)) {
 			players.remove(playerId);

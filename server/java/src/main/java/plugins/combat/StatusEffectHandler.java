@@ -307,8 +307,8 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private void applyStatusEffects(StatusEffectTarget statusEffectTarget) {
 		List<StatusEffect> effectsToRemove = null;
-		Grid defaultGrid = GameGrid.getPlayerGrid("default", statusEffectTarget.origin);
-		Grid worldObjectGrid = GameGrid.getPlayerGrid("world_objects", statusEffectTarget.origin);
+		
+		Grid grid = Common.gameGrid(statusEffectTarget.originPlayerId);
 		
 		for (StatusEffect effect : statusEffectTarget.statusEffect) {
 			if (effect.ticks > statusEffectTarget.ticks) {
@@ -323,18 +323,25 @@ public class StatusEffectHandler extends UntypedActor {
 				if (statusEffectTarget.target.equals(PlayerSkill.DamageType.SelfAoe.toString())) {
 					aoe = true;
 					location = new GmVector3();
-					TrackData td = defaultGrid.get(statusEffectTarget.origin);
+					TrackData td = grid.get(statusEffectTarget.origin);
 					location.xi = td.x;
 					location.yi = td.y;
 					location.zi = td.z;
 				}
 				
+				Vitals originVitals = PlayerVitalsHandler.getOrCreate("default", statusEffectTarget.origin);
+				originVitals.lastCombat = System.currentTimeMillis();
+				
+				if (!DeductCost(originVitals,statusEffectTarget.skill)) {
+					return;
+				}
+				
 				if (aoe) {
 					
 					if (statusEffectTarget.ticks == 0) {
-						sendVisualEffect(effect, statusEffectTarget.location,defaultGrid);
+						sendVisualEffect(effect, statusEffectTarget.location,grid);
 					}
-					for (String target : Common.getTargetsInRange(statusEffectTarget.range,	location, defaultGrid)) {
+					for (String target : Common.getTargetsInRange(statusEffectTarget.range,	location, grid)) {
 						Player player = PlayerService.getInstance().find(target);
 						if (player != null) {
 							String characterId = player.characterId;
@@ -368,44 +375,14 @@ public class StatusEffectHandler extends UntypedActor {
 		statusEffectTarget.ticks++;
 	}
 
-//	private int applyStatusEffectToWorldObject(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
-//
-//		String origin = statusEffectTarget.origin;
-//
-//		if (effect.type == StatusEffect.Type.AttributeDecrease) {
-//			WorldObject worldObject = ConsumableItemHandler.wobjects.get(target);
-//			int damage = getEffectValue(effect, statusEffectTarget.skill, origin);
-//			if (damage > 0) {
-//				damage = damage / 4;
-//			}
-//			worldObject.health -= damage;
-//			logger.warning("applyStatusEffectToWorldObject " + target + " damage " + damage);
-//
-//			if (worldObject.health <= 0) {
-//				if (worldObject.hasPlayerItemId()) {
-//					// ConsumableItemHandler.remove(worldObject.id);
-//				}
-//			}
-//
-//			WorldObject.db().saveAsync(worldObject);
-//
-//			return damage;
-//		} else {
-//			return 0;
-//		}
-//
-//	}
+
 
 	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
-
+		logger.warning("ApplyStatusEffect "+target);
 		if (isPassive(effect)) {
 			setPassiveEffect(statusEffectTarget, target, effect);
 			return 0;
 		}
-
-//		if (ConsumableItemHandler.wobjects.containsKey(target)) {
-//			return applyStatusEffectToWorldObject(statusEffectTarget, target, effect);
-//		}
 
 		String origin = statusEffectTarget.origin;
 
@@ -415,12 +392,6 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 		vitals.lastCombat = System.currentTimeMillis();
 
-		Vitals originVitals = PlayerVitalsHandler.getOrCreate("default", origin);
-		originVitals.lastCombat = System.currentTimeMillis();
-		
-		if (!DeductCost(originVitals,statusEffectTarget.skill)) {
-			return 0;
-		}
 
 		int targetBaseHealth = CharacterService.getInstance().find(vitals.id).health;
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);

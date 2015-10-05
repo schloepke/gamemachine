@@ -2,7 +2,9 @@ package plugins.combat;
 
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.TrackData;
+import scala.Console;
 import io.gamemachine.messages.GmVector3;
 
 import java.util.ArrayList;
@@ -13,8 +15,18 @@ public class Common {
 
 	public static Long npcdDeathTime = 180000L;
 	public static Long deathTime = 15000L;
-	public static int worldOffset = 7000;
+	public static int worldOffset = 1000;
 	public static String gameId = "mygame";
+	
+	public static Grid gameGrid(String playerId) {
+		String name = "default";
+		String gameId = PlayerService.getInstance().getGameId(playerId);
+		if (gameId == null) {
+			return null;
+		} else {
+			return GameGrid.getGameGrid(gameId, name, playerId);
+		}
+	}
 	
 	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
 		GmVector3 vec = new GmVector3();
@@ -65,6 +77,7 @@ public class Common {
 		double x1 = scale(x);
 		double y1 = scale(y);
 		double z1 = scale(z);
+		//Console.out().println(x1+"."+y1+"."+z1+" - "+x2+"."+y2+"."+z2);
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
 	}
 	

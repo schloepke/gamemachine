@@ -2,7 +2,9 @@ package plugins.combat;
 
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Character;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.net.http.HttpServerHandler;
 
@@ -31,21 +33,22 @@ public class PlayerVitalsHandler {
 		return playerVitals.values();
 	}
 	
-	public static Vitals getOrCreate(String gridName, String id) {
-		if (!playerVitals.containsKey(id)) {
+	public static Vitals getOrCreate(String gridName, String characterId) {
+		if (!playerVitals.containsKey(characterId)) {
 			Vitals vitals = new Vitals();
-			Character character = CharacterService.getInstance().find(id);
+			Character character = CharacterService.getInstance().find(characterId);
+			Player player = PlayerService.getInstance().findByCharacterId(characterId);
 			if (character == null) {
-				logger.error("No character found with id "+id);
+				logger.error("No character found with id "+characterId);
 				return null;
 			}
 			
 			vitals.changed = 1;
-			vitals.id = id;
+			vitals.id = characterId;
 			vitals.dead = 0;
-			vitals.health = CharacterService.getInstance().find(id).health;
-			vitals.stamina = CharacterService.getInstance().find(id).stamina;
-			vitals.magic = CharacterService.getInstance().find(id).magic;
+			vitals.health = character.health;
+			vitals.stamina = character.stamina;
+			vitals.magic = character.magic;
 			vitals.armor = 0;
 			vitals.elementalResist = 0;
 			vitals.spellResist = 0;
@@ -54,10 +57,11 @@ public class PlayerVitalsHandler {
 			vitals.healthRegen = 0;
 			vitals.staminaRegen = 0;
 			vitals.lastCombat = 0l;
-			vitals.grid = GameGrid.getPlayerGrid(gridName, id).name;
+			vitals.playerId = player.id;
+			vitals.grid = Common.gameGrid(player.id).name;
 			
 			playerVitals.put(vitals.id, vitals);
 		}
-		return playerVitals.get(id);
+		return playerVitals.get(characterId);
 	}
 }

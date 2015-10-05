@@ -28,12 +28,10 @@ public class StatusEffectDef {
 		
 		PlayerSkills playerSkills = ClientDbLoader.getPlayerSkills();
 		for (PlayerSkill playerSkill : playerSkills.playerSkill) {
-			//playerSkill.dumpObject();
 			if (!Strings.isNullOrEmpty(playerSkill.statusEffects)) {
 				for (String effectId : playerSkill.statusEffects.split(",")) {
 					for (StatusEffect effect : effects.statusEffect) {
 						if (effect.id.equals(effectId)) {
-							effect.dumpObject();
 							addSkill(playerSkill.id,effect);
 						}
 					}

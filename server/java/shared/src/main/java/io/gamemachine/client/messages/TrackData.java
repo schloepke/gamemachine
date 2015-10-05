@@ -40,7 +40,7 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 	public enum EntityType implements io.protostuff.EnumLite<EntityType>
     {
     	
-    	    	NONE(0),    	    	PLAYER(1),    	    	NPC(2),    	    	OTHER(3),    	    	ALL(4),    	    	SHIP(5);    	        
+    	    	NONE(0),    	    	PLAYER(1),    	    	NPC(2),    	    	OTHER(3),    	    	ALL(4),    	    	SHIP(5),    	    	ANY(6);    	        
         public final int number;
         
         private EntityType (int number)
@@ -63,6 +63,7 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     			    			case 3: return (OTHER);
     			    			case 4: return (ALL);
     			    			case 5: return (SHIP);
+    			    			case 6: return (ANY);
     			                default: return null;
             }
         }

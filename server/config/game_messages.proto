@@ -388,8 +388,9 @@ local_message Vitals {
   optional int32 healthRegen = 12;
   optional int32 staminaRegen = 13;
   optional int32 changed = 14;
-  optional string grid = 15;
+  optional string playerId = 15;
   optional int32 staminaDrain = 16;
+  optional string grid = 17;
 }
 
 local_message VisualEffect {
@@ -430,6 +431,7 @@ local_message StatusEffectTarget {
   optional int64 lastTick = 9;
   required Action action = 10;
   required PassiveFlag passiveFlag = 11;
+  optional string originPlayerId = 12;
 }
 
 
@@ -497,6 +499,7 @@ message TrackData {
     OTHER = 3;
     ALL = 4;
     SHIP = 5;
+    ANY = 6;
   }
   optional EntityType neighborEntityType = 11;
   required EntityType entityType = 12;

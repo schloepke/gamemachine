@@ -216,7 +216,7 @@ public class Grid {
 					continue;
 				}
 
-				if (entityType == null || trackData.entityType == entityType) {
+				if (entityType == TrackData.EntityType.ANY || trackData.entityType == entityType) {
 					Integer shortId = getShortId(trackData.id);
 					trackData.shortId = shortId;
 					

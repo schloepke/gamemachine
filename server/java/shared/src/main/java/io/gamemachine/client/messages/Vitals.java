@@ -79,9 +79,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 	    
         			public int changed;
 	    
-        			public String grid;
+        			public String playerId;
 	    
         			public int staminaDrain;
+	    
+        			public String grid;
 	    
       
     public Vitals()
@@ -275,16 +277,16 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 		return this;	}
 	
 		    
-    public Boolean hasGrid()  {
-        return grid == null ? false : true;
+    public Boolean hasPlayerId()  {
+        return playerId == null ? false : true;
     }
         
-		public String getGrid() {
-		return grid;
+		public String getPlayerId() {
+		return playerId;
 	}
 	
-	public Vitals setGrid(String grid) {
-		this.grid = grid;
+	public Vitals setPlayerId(String playerId) {
+		this.playerId = playerId;
 		return this;	}
 	
 		    
@@ -298,6 +300,19 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 	
 	public Vitals setStaminaDrain(int staminaDrain) {
 		this.staminaDrain = staminaDrain;
+		return this;	}
+	
+		    
+    public Boolean hasGrid()  {
+        return grid == null ? false : true;
+    }
+        
+		public String getGrid() {
+		return grid;
+	}
+	
+	public Vitals setGrid(String grid) {
+		this.grid = grid;
 		return this;	}
 	
 	
@@ -413,11 +428,15 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
                 	break;
                 	                	
                             	            	case 15:
-            	                	                	message.grid = input.readString();
+            	                	                	message.playerId = input.readString();
                 	break;
                 	                	
                             	            	case 16:
             	                	                	message.staminaDrain = input.readInt32();
+                	break;
+                	                	
+                            	            	case 17:
+            	                	                	message.grid = input.readString();
                 	break;
                 	                	
                             	            
@@ -504,13 +523,18 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	
     	            	
     	    	
-    	    	    	if(message.grid != null)
-            output.writeString(15, message.grid, false);
+    	    	    	if(message.playerId != null)
+            output.writeString(15, message.playerId, false);
     	    	
     	            	
     	    	
     	    	    	if(message.staminaDrain != null)
             output.writeInt32(16, message.staminaDrain, false);
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.grid != null)
+            output.writeString(17, message.grid, false);
     	    	
     	            	
     }
@@ -533,8 +557,9 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         	        	case 12: return "healthRegen";
         	        	case 13: return "staminaRegen";
         	        	case 14: return "changed";
-        	        	case 15: return "grid";
+        	        	case 15: return "playerId";
         	        	case 16: return "staminaDrain";
+        	        	case 17: return "grid";
         	            default: return null;
         }
     }
@@ -562,8 +587,9 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	__fieldMap.put("healthRegen", 12);
     	    	__fieldMap.put("staminaRegen", 13);
     	    	__fieldMap.put("changed", 14);
-    	    	__fieldMap.put("grid", 15);
+    	    	__fieldMap.put("playerId", 15);
     	    	__fieldMap.put("staminaDrain", 16);
+    	    	__fieldMap.put("grid", 17);
     	    }
    
    public static List<String> getFields() {

@@ -8,6 +8,7 @@ import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Attack;
 import io.gamemachine.messages.ComboAttack;
 import io.gamemachine.messages.GameMessage;
@@ -61,6 +62,8 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 
+	
+	
 	private void doAttack(Attack attack) {
 		logger.warning("Attack " + attack.attacker + " " + attack.target + " skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
@@ -69,6 +72,7 @@ public class CombatHandler extends GameMessageActor {
 		target.range = skill.range;
 		target.skill = skill.id;
 		target.origin = attack.attacker;
+		target.originPlayerId = playerId;
 
 		if (skill.skillType.equals(PlayerSkill.SkillType.Passive.toString())) {
 			logger.warning("Set passive flags");
