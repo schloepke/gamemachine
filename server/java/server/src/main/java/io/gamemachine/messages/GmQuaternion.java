@@ -61,14 +61,22 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
     static final GmQuaternion DEFAULT_INSTANCE = new GmQuaternion();
     static final String defaultScope = GmQuaternion.class.getSimpleName();
 
-    			public Float x;
-	    
-        			public Float y;
-	    
-        			public Float z;
-	    
-        			public Float w;
-	    
+    	
+	    	    public float x= 0F;
+	    		
+    
+        	
+	    	    public float y= 0F;
+	    		
+    
+        	
+	    	    public float z= 0F;
+	    		
+    
+        	
+	    	    public float w= 0F;
+	    		
+    
         
 
 
@@ -90,58 +98,66 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setFloat("gm_quaternion_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setFloat("gm_quaternion_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (z != null) {
+    	    	    	//if (z != null) {
     	       	    	model.setFloat("gm_quaternion_z",z);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (w != null) {
+    	    	    	//if (w != null) {
     	       	    	model.setFloat("gm_quaternion_w",w);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GmQuaternion fromModel(Model model) {
 		boolean hasFields = false;
     	GmQuaternion message = new GmQuaternion();
     	    	    	    	    	
-    	    	    	Float xField = model.getFloat("gm_quaternion_x");
-    	    	
-    	if (xField != null) {
+    	    	    	Float xTestField = model.getFloat("gm_quaternion_x");
+    	if (xTestField != null) {
+    		float xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float yField = model.getFloat("gm_quaternion_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Float yTestField = model.getFloat("gm_quaternion_y");
+    	if (yTestField != null) {
+    		float yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float zField = model.getFloat("gm_quaternion_z");
+    	
     	    	
-    	if (zField != null) {
+    	    	    	    	    	    	
+    	    	    	Float zTestField = model.getFloat("gm_quaternion_z");
+    	if (zTestField != null) {
+    		float zField = zTestField;
     		message.setZ(zField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float wField = model.getFloat("gm_quaternion_w");
+    	
     	    	
-    	if (wField != null) {
+    	    	    	    	    	    	
+    	    	    	Float wTestField = model.getFloat("gm_quaternion_w");
+    	if (wTestField != null) {
+    		float wField = wTestField;
     		message.setW(wField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,55 +166,39 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
     }
 
 
-	    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Float getX() {
+	            
+		public float getX() {
 		return x;
 	}
 	
-	public GmQuaternion setX(Float x) {
+	public GmQuaternion setX(float x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Float getY() {
+		            
+		public float getY() {
 		return y;
 	}
 	
-	public GmQuaternion setY(Float y) {
+	public GmQuaternion setY(float y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
-        
-		public Float getZ() {
+		            
+		public float getZ() {
 		return z;
 	}
 	
-	public GmQuaternion setZ(Float z) {
+	public GmQuaternion setZ(float z) {
 		this.z = z;
 		return this;	}
 	
-		    
-    public Boolean hasW()  {
-        return w == null ? false : true;
-    }
-        
-		public Float getW() {
+		            
+		public float getW() {
 		return w;
 	}
 	
-	public GmQuaternion setW(Float w) {
+	public GmQuaternion setW(float w) {
 		this.w = w;
 		return this;	}
 	
@@ -286,23 +286,27 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
     {
     	    	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Float)message.x != null) {
             output.writeFloat(1, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Float)message.y != null) {
             output.writeFloat(2, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.z != null)
+    	    	    	if( (Float)message.z != null) {
             output.writeFloat(3, message.z, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.w != null)
+    	    	    	if( (Float)message.w != null) {
             output.writeFloat(4, message.w, false);
+        }
     	    	
     	            	
     }
@@ -310,18 +314,18 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
 	public void dumpObject()
     {
     	System.out.println("START GmQuaternion");
-    	    	if(this.x != null) {
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.z != null) {
+    	//}
+    	    	//if(this.z != null) {
     		System.out.println("z="+this.z);
-    	}
-    	    	if(this.w != null) {
+    	//}
+    	    	//if(this.w != null) {
     		System.out.println("w="+this.w);
-    	}
+    	//}
     	    	System.out.println("END GmQuaternion");
     }
     

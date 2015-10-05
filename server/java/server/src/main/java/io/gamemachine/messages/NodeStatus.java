@@ -61,24 +61,42 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
     static final NodeStatus DEFAULT_INSTANCE = new NodeStatus();
     static final String defaultScope = NodeStatus.class.getSimpleName();
 
-    			public Integer containerId;
-	    
-        			public String clusterName;
-	    
-        			public Integer lastUpdated;
-	    
-        			public String hostname;
-	    
-        			public Integer port;
-	    
-        			public Integer clientCount;
-	    
-        			public Double loadAverage;
-	    
-        			public Integer heapUsed;
-	    
-        			public Statistics statistics;
-	    
+    	
+	    	    public int containerId= 0;
+	    		
+    
+        	
+	    	    public String clusterName= null;
+	    		
+    
+        	
+	    	    public int lastUpdated= 0;
+	    		
+    
+        	
+	    	    public String hostname= null;
+	    		
+    
+        	
+	    	    public int port= 0;
+	    		
+    
+        	
+	    	    public int clientCount= 0;
+	    		
+    
+        	
+	    	    public double loadAverage= 0D;
+	    		
+    
+        	
+	    	    public int heapUsed= 0;
+	    		
+    
+        	
+	    	    public Statistics statistics;
+	    		
+    
         
 
 
@@ -104,106 +122,122 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (containerId != null) {
+    	    	    	//if (containerId != null) {
     	       	    	model.setInteger("node_status_container_id",containerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (clusterName != null) {
+    	    	    	//if (clusterName != null) {
     	       	    	model.setString("node_status_cluster_name",clusterName);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (lastUpdated != null) {
+    	    	    	//if (lastUpdated != null) {
     	       	    	model.setInteger("node_status_last_updated",lastUpdated);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hostname != null) {
+    	    	    	//if (hostname != null) {
     	       	    	model.setString("node_status_hostname",hostname);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (port != null) {
+    	    	    	//if (port != null) {
     	       	    	model.setInteger("node_status_port",port);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (clientCount != null) {
+    	    	    	//if (clientCount != null) {
     	       	    	model.setInteger("node_status_client_count",clientCount);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (loadAverage != null) {
+    	    	    	//if (loadAverage != null) {
     	       	    	model.setDouble("node_status_load_average",loadAverage);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (heapUsed != null) {
+    	    	    	//if (heapUsed != null) {
     	       	    	model.setInteger("node_status_heap_used",heapUsed);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static NodeStatus fromModel(Model model) {
 		boolean hasFields = false;
     	NodeStatus message = new NodeStatus();
     	    	    	    	    	
-    	    	    	Integer containerIdField = model.getInteger("node_status_container_id");
-    	    	
-    	if (containerIdField != null) {
+    	    	    	Integer containerIdTestField = model.getInteger("node_status_container_id");
+    	if (containerIdTestField != null) {
+    		int containerIdField = containerIdTestField;
     		message.setContainerId(containerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String clusterNameField = model.getString("node_status_cluster_name");
+    	
     	    	
-    	if (clusterNameField != null) {
+    	    	    	    	    	    	
+    	    	    	String clusterNameTestField = model.getString("node_status_cluster_name");
+    	if (clusterNameTestField != null) {
+    		String clusterNameField = clusterNameTestField;
     		message.setClusterName(clusterNameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer lastUpdatedField = model.getInteger("node_status_last_updated");
+    	
     	    	
-    	if (lastUpdatedField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer lastUpdatedTestField = model.getInteger("node_status_last_updated");
+    	if (lastUpdatedTestField != null) {
+    		int lastUpdatedField = lastUpdatedTestField;
     		message.setLastUpdated(lastUpdatedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String hostnameField = model.getString("node_status_hostname");
+    	
     	    	
-    	if (hostnameField != null) {
+    	    	    	    	    	    	
+    	    	    	String hostnameTestField = model.getString("node_status_hostname");
+    	if (hostnameTestField != null) {
+    		String hostnameField = hostnameTestField;
     		message.setHostname(hostnameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer portField = model.getInteger("node_status_port");
+    	
     	    	
-    	if (portField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer portTestField = model.getInteger("node_status_port");
+    	if (portTestField != null) {
+    		int portField = portTestField;
     		message.setPort(portField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer clientCountField = model.getInteger("node_status_client_count");
+    	
     	    	
-    	if (clientCountField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer clientCountTestField = model.getInteger("node_status_client_count");
+    	if (clientCountTestField != null) {
+    		int clientCountField = clientCountTestField;
     		message.setClientCount(clientCountField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Double loadAverageField = model.getDouble("node_status_load_average");
+    	
     	    	
-    	if (loadAverageField != null) {
+    	    	    	    	    	    	
+    	    	    	Double loadAverageTestField = model.getDouble("node_status_load_average");
+    	if (loadAverageTestField != null) {
+    		double loadAverageField = loadAverageTestField;
     		message.setLoadAverage(loadAverageField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer heapUsedField = model.getInteger("node_status_heap_used");
+    	
     	    	
-    	if (heapUsedField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer heapUsedTestField = model.getInteger("node_status_heap_used");
+    	if (heapUsedTestField != null) {
+    		int heapUsedField = heapUsedTestField;
     		message.setHeapUsed(heapUsedField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -212,24 +246,16 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
     }
 
 
-	    
-    public Boolean hasContainerId()  {
-        return containerId == null ? false : true;
-    }
-        
-		public Integer getContainerId() {
+	            
+		public int getContainerId() {
 		return containerId;
 	}
 	
-	public NodeStatus setContainerId(Integer containerId) {
+	public NodeStatus setContainerId(int containerId) {
 		this.containerId = containerId;
 		return this;	}
 	
-		    
-    public Boolean hasClusterName()  {
-        return clusterName == null ? false : true;
-    }
-        
+		            
 		public String getClusterName() {
 		return clusterName;
 	}
@@ -238,24 +264,16 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
 		this.clusterName = clusterName;
 		return this;	}
 	
-		    
-    public Boolean hasLastUpdated()  {
-        return lastUpdated == null ? false : true;
-    }
-        
-		public Integer getLastUpdated() {
+		            
+		public int getLastUpdated() {
 		return lastUpdated;
 	}
 	
-	public NodeStatus setLastUpdated(Integer lastUpdated) {
+	public NodeStatus setLastUpdated(int lastUpdated) {
 		this.lastUpdated = lastUpdated;
 		return this;	}
 	
-		    
-    public Boolean hasHostname()  {
-        return hostname == null ? false : true;
-    }
-        
+		            
 		public String getHostname() {
 		return hostname;
 	}
@@ -264,63 +282,43 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
 		this.hostname = hostname;
 		return this;	}
 	
-		    
-    public Boolean hasPort()  {
-        return port == null ? false : true;
-    }
-        
-		public Integer getPort() {
+		            
+		public int getPort() {
 		return port;
 	}
 	
-	public NodeStatus setPort(Integer port) {
+	public NodeStatus setPort(int port) {
 		this.port = port;
 		return this;	}
 	
-		    
-    public Boolean hasClientCount()  {
-        return clientCount == null ? false : true;
-    }
-        
-		public Integer getClientCount() {
+		            
+		public int getClientCount() {
 		return clientCount;
 	}
 	
-	public NodeStatus setClientCount(Integer clientCount) {
+	public NodeStatus setClientCount(int clientCount) {
 		this.clientCount = clientCount;
 		return this;	}
 	
-		    
-    public Boolean hasLoadAverage()  {
-        return loadAverage == null ? false : true;
-    }
-        
-		public Double getLoadAverage() {
+		            
+		public double getLoadAverage() {
 		return loadAverage;
 	}
 	
-	public NodeStatus setLoadAverage(Double loadAverage) {
+	public NodeStatus setLoadAverage(double loadAverage) {
 		this.loadAverage = loadAverage;
 		return this;	}
 	
-		    
-    public Boolean hasHeapUsed()  {
-        return heapUsed == null ? false : true;
-    }
-        
-		public Integer getHeapUsed() {
+		            
+		public int getHeapUsed() {
 		return heapUsed;
 	}
 	
-	public NodeStatus setHeapUsed(Integer heapUsed) {
+	public NodeStatus setHeapUsed(int heapUsed) {
 		this.heapUsed = heapUsed;
 		return this;	}
 	
-		    
-    public Boolean hasStatistics()  {
-        return statistics == null ? false : true;
-    }
-        
+		            
 		public Statistics getStatistics() {
 		return statistics;
 	}
@@ -432,60 +430,68 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
     public void writeTo(Output output, NodeStatus message) throws IOException
     {
     	    	
-    	    	if(message.containerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.containerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.containerId != null)
+    	    	    	if( (Integer)message.containerId != null) {
             output.writeInt32(1, message.containerId, false);
+        }
     	    	
     	            	
-    	    	if(message.clusterName == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.clusterName == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.clusterName != null)
+    	    	    	if( (String)message.clusterName != null) {
             output.writeString(2, message.clusterName, false);
+        }
     	    	
     	            	
-    	    	if(message.lastUpdated == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.lastUpdated == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.lastUpdated != null)
+    	    	    	if( (Integer)message.lastUpdated != null) {
             output.writeInt32(3, message.lastUpdated, false);
+        }
     	    	
     	            	
-    	    	if(message.hostname == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.hostname == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.hostname != null)
+    	    	    	if( (String)message.hostname != null) {
             output.writeString(4, message.hostname, false);
+        }
     	    	
     	            	
-    	    	if(message.port == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.port == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.port != null)
+    	    	    	if( (Integer)message.port != null) {
             output.writeInt32(5, message.port, false);
+        }
     	    	
     	            	
-    	    	if(message.clientCount == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.clientCount == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.clientCount != null)
+    	    	    	if( (Integer)message.clientCount != null) {
             output.writeInt32(6, message.clientCount, false);
+        }
     	    	
     	            	
-    	    	if(message.loadAverage == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.loadAverage == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.loadAverage != null)
+    	    	    	if( (Double)message.loadAverage != null) {
             output.writeDouble(7, message.loadAverage, false);
+        }
     	    	
     	            	
-    	    	if(message.heapUsed == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.heapUsed == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.heapUsed != null)
+    	    	    	if( (Integer)message.heapUsed != null) {
             output.writeInt32(8, message.heapUsed, false);
+        }
     	    	
     	            	
     	    	
@@ -498,33 +504,33 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
 	public void dumpObject()
     {
     	System.out.println("START NodeStatus");
-    	    	if(this.containerId != null) {
+    	    	//if(this.containerId != null) {
     		System.out.println("containerId="+this.containerId);
-    	}
-    	    	if(this.clusterName != null) {
+    	//}
+    	    	//if(this.clusterName != null) {
     		System.out.println("clusterName="+this.clusterName);
-    	}
-    	    	if(this.lastUpdated != null) {
+    	//}
+    	    	//if(this.lastUpdated != null) {
     		System.out.println("lastUpdated="+this.lastUpdated);
-    	}
-    	    	if(this.hostname != null) {
+    	//}
+    	    	//if(this.hostname != null) {
     		System.out.println("hostname="+this.hostname);
-    	}
-    	    	if(this.port != null) {
+    	//}
+    	    	//if(this.port != null) {
     		System.out.println("port="+this.port);
-    	}
-    	    	if(this.clientCount != null) {
+    	//}
+    	    	//if(this.clientCount != null) {
     		System.out.println("clientCount="+this.clientCount);
-    	}
-    	    	if(this.loadAverage != null) {
+    	//}
+    	    	//if(this.loadAverage != null) {
     		System.out.println("loadAverage="+this.loadAverage);
-    	}
-    	    	if(this.heapUsed != null) {
+    	//}
+    	    	//if(this.heapUsed != null) {
     		System.out.println("heapUsed="+this.heapUsed);
-    	}
-    	    	if(this.statistics != null) {
+    	//}
+    	    	//if(this.statistics != null) {
     		System.out.println("statistics="+this.statistics);
-    	}
+    	//}
     	    	System.out.println("END NodeStatus");
     }
     

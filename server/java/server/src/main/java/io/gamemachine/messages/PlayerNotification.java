@@ -61,10 +61,14 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
     static final PlayerNotification DEFAULT_INSTANCE = new PlayerNotification();
     static final String defaultScope = PlayerNotification.class.getSimpleName();
 
-    			public String playerId;
-	    
-        			public String action;
-	    
+    	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public String action= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("player_notification_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setString("player_notification_action",action);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PlayerNotification fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerNotification message = new PlayerNotification();
     	    	    	    	    	
-    	    	    	String playerIdField = model.getString("player_notification_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("player_notification_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String actionField = model.getString("player_notification_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	String actionTestField = model.getString("player_notification_action");
+    	if (actionTestField != null) {
+    		String actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
     }
 
 
-	    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -133,11 +137,7 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+		            
 		public String getAction() {
 		return action;
 	}
@@ -221,18 +221,20 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
     public void writeTo(Output output, PlayerNotification message) throws IOException
     {
     	    	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(1, message.playerId, false);
+        }
     	    	
     	            	
-    	    	if(message.action == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.action == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (String)message.action != null) {
             output.writeString(2, message.action, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
 	public void dumpObject()
     {
     	System.out.println("START PlayerNotification");
-    	    	if(this.playerId != null) {
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
+    	//}
     	    	System.out.println("END PlayerNotification");
     }
     

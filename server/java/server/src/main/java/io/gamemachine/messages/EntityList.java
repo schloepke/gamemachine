@@ -91,11 +91,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
     }
 
 
-	    
-    public Boolean hasEntity()  {
-        return entity == null ? false : true;
-    }
-        
+	            
 		public List<Entity> getEntityList() {
 		if(this.entity == null)
             this.entity = new ArrayList<Entity>();
@@ -146,7 +142,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.published.equals(obj.published)) {
+    	    		if (entity.published == obj.published) {
     	      			itr.remove();
     		}
 		}
@@ -178,7 +174,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.sendToPlayer.equals(obj.sendToPlayer)) {
+    	    		if (entity.sendToPlayer == obj.sendToPlayer) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.save.equals(obj.save)) {
+    	    		if (entity.save == obj.save) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.json.equals(obj.json)) {
+    	    		if (entity.json == obj.json) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.fastpath.equals(obj.fastpath)) {
+    	    		if (entity.fastpath == obj.fastpath) {
     	      			itr.remove();
     		}
 		}
@@ -362,7 +358,7 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
         {
             for(Entity entity : message.entity)
             {
-                if(entity != null) {
+                if( (Entity) entity != null) {
                    	    				output.writeObject(1, entity, Entity.getSchema(), true);
     				    			}
             }
@@ -373,9 +369,9 @@ public final class EntityList implements Externalizable, Message<EntityList>, Sc
 	public void dumpObject()
     {
     	System.out.println("START EntityList");
-    	    	if(this.entity != null) {
+    	    	//if(this.entity != null) {
     		System.out.println("entity="+this.entity);
-    	}
+    	//}
     	    	System.out.println("END EntityList");
     }
     

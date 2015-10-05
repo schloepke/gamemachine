@@ -61,16 +61,26 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     static final RequestPlayerItems DEFAULT_INSTANCE = new RequestPlayerItems();
     static final String defaultScope = RequestPlayerItems.class.getSimpleName();
 
-    			public Boolean catalog;
-	    
-        			public String characterId;
-	    
-        			public Integer result;
-	    
-        			public PlayerItems playerItems;
-	    
-        			public String query;
-	    
+    	
+	    	    public boolean catalog= false;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public PlayerItems playerItems;
+	    		
+    
+        	
+	    	    public String query= null;
+	    		
+    
         
 
 
@@ -92,58 +102,66 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (catalog != null) {
+    	    	    	//if (catalog != null) {
     	       	    	model.setBoolean("request_player_items_catalog",catalog);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("request_player_items_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("request_player_items_result",result);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (query != null) {
+    	    	    	//if (query != null) {
     	       	    	model.setString("request_player_items_query",query);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static RequestPlayerItems fromModel(Model model) {
 		boolean hasFields = false;
     	RequestPlayerItems message = new RequestPlayerItems();
     	    	    	    	    	
-    	    	    	Boolean catalogField = model.getBoolean("request_player_items_catalog");
-    	    	
-    	if (catalogField != null) {
+    	    	    	Boolean catalogTestField = model.getBoolean("request_player_items_catalog");
+    	if (catalogTestField != null) {
+    		boolean catalogField = catalogTestField;
     		message.setCatalog(catalogField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("request_player_items_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("request_player_items_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("request_player_items_result");
+    	
     	    	
-    	if (resultField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resultTestField = model.getInteger("request_player_items_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String queryField = model.getString("request_player_items_query");
+    	
     	    	
-    	if (queryField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String queryTestField = model.getString("request_player_items_query");
+    	if (queryTestField != null) {
+    		String queryField = queryTestField;
     		message.setQuery(queryField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -152,24 +170,16 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     }
 
 
-	    
-    public Boolean hasCatalog()  {
-        return catalog == null ? false : true;
-    }
-        
-		public Boolean getCatalog() {
+	            
+		public boolean getCatalog() {
 		return catalog;
 	}
 	
-	public RequestPlayerItems setCatalog(Boolean catalog) {
+	public RequestPlayerItems setCatalog(boolean catalog) {
 		this.catalog = catalog;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -178,24 +188,16 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+		            
+		public int getResult() {
 		return result;
 	}
 	
-	public RequestPlayerItems setResult(Integer result) {
+	public RequestPlayerItems setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItems()  {
-        return playerItems == null ? false : true;
-    }
-        
+		            
 		public PlayerItems getPlayerItems() {
 		return playerItems;
 	}
@@ -204,11 +206,7 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
 		this.playerItems = playerItems;
 		return this;	}
 	
-		    
-    public Boolean hasQuery()  {
-        return query == null ? false : true;
-    }
-        
+		            
 		public String getQuery() {
 		return query;
 	}
@@ -305,18 +303,21 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     {
     	    	
     	    	
-    	    	    	if(message.catalog != null)
+    	    	    	if( (Boolean)message.catalog != null) {
             output.writeBool(1, message.catalog, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(2, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(3, message.result, false);
+        }
     	    	
     	            	
     	    	
@@ -325,8 +326,9 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     	    	
     	            	
     	    	
-    	    	    	if(message.query != null)
+    	    	    	if( (String)message.query != null) {
             output.writeString(5, message.query, false);
+        }
     	    	
     	            	
     }
@@ -334,21 +336,21 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
 	public void dumpObject()
     {
     	System.out.println("START RequestPlayerItems");
-    	    	if(this.catalog != null) {
+    	    	//if(this.catalog != null) {
     		System.out.println("catalog="+this.catalog);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.result != null) {
+    	//}
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.playerItems != null) {
+    	//}
+    	    	//if(this.playerItems != null) {
     		System.out.println("playerItems="+this.playerItems);
-    	}
-    	    	if(this.query != null) {
+    	//}
+    	    	//if(this.query != null) {
     		System.out.println("query="+this.query);
-    	}
+    	//}
     	    	System.out.println("END RequestPlayerItems");
     }
     

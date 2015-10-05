@@ -51,53 +51,53 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
 
     static final UserDefinedData DEFAULT_INSTANCE = new UserDefinedData();
 
-    			public Integer command;
+    			public int command;
 	    
-        			public Integer value;
+        			public int value;
 	    
-        			public Integer userdefInt2;
+        			public int userdefInt2;
 	    
-        			public Integer userdefInt3;
+        			public int userdefInt3;
 	    
-        			public Integer userdefInt4;
+        			public int userdefInt4;
 	    
-        			public Integer userdefInt5;
+        			public int userdefInt5;
 	    
-        			public Integer userdefInt6;
+        			public int userdefInt6;
 	    
-        			public Integer userdefInt7;
+        			public int userdefInt7;
 	    
-        			public Integer userdefInt8;
+        			public int userdefInt8;
 	    
-        			public Integer userdefInt9;
+        			public int userdefInt9;
 	    
-        			public Integer userdefInt1;
+        			public int userdefInt1;
 	    
-        			public Integer rx;
+        			public int rx;
 	    
-        			public Integer ry;
+        			public int ry;
 	    
-        			public Integer rz;
+        			public int rz;
 	    
-        			public Integer rw;
+        			public int rw;
 	    
-        			public Integer x;
+        			public int x;
 	    
-        			public Integer y;
+        			public int y;
 	    
-        			public Integer z;
+        			public int z;
 	    
-        			public Integer userdefInt10;
+        			public int userdefInt10;
 	    
-        			public Integer userdefInt11;
+        			public int userdefInt11;
 	    
-        			public Integer userdefInt12;
+        			public int userdefInt12;
 	    
-        			public Integer userdefInt13;
+        			public int userdefInt13;
 	    
-        			public Integer userdefInt14;
+        			public int userdefInt14;
 	    
-        			public Integer userdefInt15;
+        			public int userdefInt15;
 	    
       
     public UserDefinedData()
@@ -113,11 +113,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return command == null ? false : true;
     }
         
-		public Integer getCommand() {
+		public int getCommand() {
 		return command;
 	}
 	
-	public UserDefinedData setCommand(Integer command) {
+	public UserDefinedData setCommand(int command) {
 		this.command = command;
 		return this;	}
 	
@@ -126,11 +126,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return value == null ? false : true;
     }
         
-		public Integer getValue() {
+		public int getValue() {
 		return value;
 	}
 	
-	public UserDefinedData setValue(Integer value) {
+	public UserDefinedData setValue(int value) {
 		this.value = value;
 		return this;	}
 	
@@ -139,11 +139,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt2 == null ? false : true;
     }
         
-		public Integer getUserdefInt2() {
+		public int getUserdefInt2() {
 		return userdefInt2;
 	}
 	
-	public UserDefinedData setUserdefInt2(Integer userdefInt2) {
+	public UserDefinedData setUserdefInt2(int userdefInt2) {
 		this.userdefInt2 = userdefInt2;
 		return this;	}
 	
@@ -152,11 +152,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt3 == null ? false : true;
     }
         
-		public Integer getUserdefInt3() {
+		public int getUserdefInt3() {
 		return userdefInt3;
 	}
 	
-	public UserDefinedData setUserdefInt3(Integer userdefInt3) {
+	public UserDefinedData setUserdefInt3(int userdefInt3) {
 		this.userdefInt3 = userdefInt3;
 		return this;	}
 	
@@ -165,11 +165,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt4 == null ? false : true;
     }
         
-		public Integer getUserdefInt4() {
+		public int getUserdefInt4() {
 		return userdefInt4;
 	}
 	
-	public UserDefinedData setUserdefInt4(Integer userdefInt4) {
+	public UserDefinedData setUserdefInt4(int userdefInt4) {
 		this.userdefInt4 = userdefInt4;
 		return this;	}
 	
@@ -178,11 +178,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt5 == null ? false : true;
     }
         
-		public Integer getUserdefInt5() {
+		public int getUserdefInt5() {
 		return userdefInt5;
 	}
 	
-	public UserDefinedData setUserdefInt5(Integer userdefInt5) {
+	public UserDefinedData setUserdefInt5(int userdefInt5) {
 		this.userdefInt5 = userdefInt5;
 		return this;	}
 	
@@ -191,11 +191,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt6 == null ? false : true;
     }
         
-		public Integer getUserdefInt6() {
+		public int getUserdefInt6() {
 		return userdefInt6;
 	}
 	
-	public UserDefinedData setUserdefInt6(Integer userdefInt6) {
+	public UserDefinedData setUserdefInt6(int userdefInt6) {
 		this.userdefInt6 = userdefInt6;
 		return this;	}
 	
@@ -204,11 +204,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt7 == null ? false : true;
     }
         
-		public Integer getUserdefInt7() {
+		public int getUserdefInt7() {
 		return userdefInt7;
 	}
 	
-	public UserDefinedData setUserdefInt7(Integer userdefInt7) {
+	public UserDefinedData setUserdefInt7(int userdefInt7) {
 		this.userdefInt7 = userdefInt7;
 		return this;	}
 	
@@ -217,11 +217,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt8 == null ? false : true;
     }
         
-		public Integer getUserdefInt8() {
+		public int getUserdefInt8() {
 		return userdefInt8;
 	}
 	
-	public UserDefinedData setUserdefInt8(Integer userdefInt8) {
+	public UserDefinedData setUserdefInt8(int userdefInt8) {
 		this.userdefInt8 = userdefInt8;
 		return this;	}
 	
@@ -230,11 +230,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt9 == null ? false : true;
     }
         
-		public Integer getUserdefInt9() {
+		public int getUserdefInt9() {
 		return userdefInt9;
 	}
 	
-	public UserDefinedData setUserdefInt9(Integer userdefInt9) {
+	public UserDefinedData setUserdefInt9(int userdefInt9) {
 		this.userdefInt9 = userdefInt9;
 		return this;	}
 	
@@ -243,11 +243,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt1 == null ? false : true;
     }
         
-		public Integer getUserdefInt1() {
+		public int getUserdefInt1() {
 		return userdefInt1;
 	}
 	
-	public UserDefinedData setUserdefInt1(Integer userdefInt1) {
+	public UserDefinedData setUserdefInt1(int userdefInt1) {
 		this.userdefInt1 = userdefInt1;
 		return this;	}
 	
@@ -256,11 +256,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return rx == null ? false : true;
     }
         
-		public Integer getRx() {
+		public int getRx() {
 		return rx;
 	}
 	
-	public UserDefinedData setRx(Integer rx) {
+	public UserDefinedData setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
@@ -269,11 +269,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return ry == null ? false : true;
     }
         
-		public Integer getRy() {
+		public int getRy() {
 		return ry;
 	}
 	
-	public UserDefinedData setRy(Integer ry) {
+	public UserDefinedData setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
@@ -282,11 +282,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return rz == null ? false : true;
     }
         
-		public Integer getRz() {
+		public int getRz() {
 		return rz;
 	}
 	
-	public UserDefinedData setRz(Integer rz) {
+	public UserDefinedData setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
@@ -295,11 +295,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return rw == null ? false : true;
     }
         
-		public Integer getRw() {
+		public int getRw() {
 		return rw;
 	}
 	
-	public UserDefinedData setRw(Integer rw) {
+	public UserDefinedData setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
@@ -308,11 +308,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return x == null ? false : true;
     }
         
-		public Integer getX() {
+		public int getX() {
 		return x;
 	}
 	
-	public UserDefinedData setX(Integer x) {
+	public UserDefinedData setX(int x) {
 		this.x = x;
 		return this;	}
 	
@@ -321,11 +321,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return y == null ? false : true;
     }
         
-		public Integer getY() {
+		public int getY() {
 		return y;
 	}
 	
-	public UserDefinedData setY(Integer y) {
+	public UserDefinedData setY(int y) {
 		this.y = y;
 		return this;	}
 	
@@ -334,11 +334,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return z == null ? false : true;
     }
         
-		public Integer getZ() {
+		public int getZ() {
 		return z;
 	}
 	
-	public UserDefinedData setZ(Integer z) {
+	public UserDefinedData setZ(int z) {
 		this.z = z;
 		return this;	}
 	
@@ -347,11 +347,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt10 == null ? false : true;
     }
         
-		public Integer getUserdefInt10() {
+		public int getUserdefInt10() {
 		return userdefInt10;
 	}
 	
-	public UserDefinedData setUserdefInt10(Integer userdefInt10) {
+	public UserDefinedData setUserdefInt10(int userdefInt10) {
 		this.userdefInt10 = userdefInt10;
 		return this;	}
 	
@@ -360,11 +360,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt11 == null ? false : true;
     }
         
-		public Integer getUserdefInt11() {
+		public int getUserdefInt11() {
 		return userdefInt11;
 	}
 	
-	public UserDefinedData setUserdefInt11(Integer userdefInt11) {
+	public UserDefinedData setUserdefInt11(int userdefInt11) {
 		this.userdefInt11 = userdefInt11;
 		return this;	}
 	
@@ -373,11 +373,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt12 == null ? false : true;
     }
         
-		public Integer getUserdefInt12() {
+		public int getUserdefInt12() {
 		return userdefInt12;
 	}
 	
-	public UserDefinedData setUserdefInt12(Integer userdefInt12) {
+	public UserDefinedData setUserdefInt12(int userdefInt12) {
 		this.userdefInt12 = userdefInt12;
 		return this;	}
 	
@@ -386,11 +386,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt13 == null ? false : true;
     }
         
-		public Integer getUserdefInt13() {
+		public int getUserdefInt13() {
 		return userdefInt13;
 	}
 	
-	public UserDefinedData setUserdefInt13(Integer userdefInt13) {
+	public UserDefinedData setUserdefInt13(int userdefInt13) {
 		this.userdefInt13 = userdefInt13;
 		return this;	}
 	
@@ -399,11 +399,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt14 == null ? false : true;
     }
         
-		public Integer getUserdefInt14() {
+		public int getUserdefInt14() {
 		return userdefInt14;
 	}
 	
-	public UserDefinedData setUserdefInt14(Integer userdefInt14) {
+	public UserDefinedData setUserdefInt14(int userdefInt14) {
 		this.userdefInt14 = userdefInt14;
 		return this;	}
 	
@@ -412,11 +412,11 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
         return userdefInt15 == null ? false : true;
     }
         
-		public Integer getUserdefInt15() {
+		public int getUserdefInt15() {
 		return userdefInt15;
 	}
 	
-	public UserDefinedData setUserdefInt15(Integer userdefInt15) {
+	public UserDefinedData setUserdefInt15(int userdefInt15) {
 		this.userdefInt15 = userdefInt15;
 		return this;	}
 	

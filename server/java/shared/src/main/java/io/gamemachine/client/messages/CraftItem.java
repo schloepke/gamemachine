@@ -53,11 +53,11 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
 
     			public CraftableItem craftableItem;
 	    
-        			public Integer result;
+        			public int result;
 	    
         			public String characterId;
 	    
-        			public Integer craftedQuantity;
+        			public int craftedQuantity;
 	    
         			public String craftedId;
 	    
@@ -88,11 +88,11 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public CraftItem setResult(Integer result) {
+	public CraftItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	
@@ -114,11 +114,11 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
         return craftedQuantity == null ? false : true;
     }
         
-		public Integer getCraftedQuantity() {
+		public int getCraftedQuantity() {
 		return craftedQuantity;
 	}
 	
-	public CraftItem setCraftedQuantity(Integer craftedQuantity) {
+	public CraftItem setCraftedQuantity(int craftedQuantity) {
 		this.craftedQuantity = craftedQuantity;
 		return this;	}
 	

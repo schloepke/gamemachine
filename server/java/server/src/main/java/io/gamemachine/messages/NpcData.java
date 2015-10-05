@@ -104,19 +104,31 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     static final NpcData DEFAULT_INSTANCE = new NpcData();
     static final String defaultScope = NpcData.class.getSimpleName();
 
-    			public String id;
-	    
-        			public GmVector3 spawnpoint;
-	    
-        			public String leader;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public GmVector3 spawnpoint;
+	    		
+    
+        	
+	    	    public String leader= null;
+	    		
+    
             public List<String> followers;
-	    			public String patrolRoute;
-	    
-        			public Waypoint waypoint;
-	    
-        			public NpcType npcType; // = None:0;
-	    
+	    	
+	    	    public String patrolRoute= null;
+	    		
+    
+        	
+	    	    public Waypoint waypoint;
+	    		
+    
+        	
+	    	    public NpcType npcType;
+	    		
+    
         
 	public static NpcDataCache cache() {
 		return NpcDataCache.getInstance();
@@ -389,46 +401,52 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("npc_data_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (leader != null) {
+    	    	    	//if (leader != null) {
     	       	    	model.setString("npc_data_leader",leader);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	
-    	    	    	if (patrolRoute != null) {
+    	    	    	//if (patrolRoute != null) {
     	       	    	model.setString("npc_data_patrol_route",patrolRoute);
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static NpcData fromModel(Model model) {
 		boolean hasFields = false;
     	NpcData message = new NpcData();
     	    	    	    	    	
-    	    	    	String idField = model.getString("npc_data_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("npc_data_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String leaderField = model.getString("npc_data_leader");
+    	
     	    	
-    	if (leaderField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String leaderTestField = model.getString("npc_data_leader");
+    	if (leaderTestField != null) {
+    		String leaderField = leaderTestField;
     		message.setLeader(leaderField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	
-    	    	    	String patrolRouteField = model.getString("npc_data_patrol_route");
+    	
     	    	
-    	if (patrolRouteField != null) {
+    	    	    	    	    	    	    	    	
+    	    	    	String patrolRouteTestField = model.getString("npc_data_patrol_route");
+    	if (patrolRouteTestField != null) {
+    		String patrolRouteField = patrolRouteTestField;
     		message.setPatrolRoute(patrolRouteField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -437,11 +455,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -450,11 +464,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasSpawnpoint()  {
-        return spawnpoint == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getSpawnpoint() {
 		return spawnpoint;
 	}
@@ -463,11 +473,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 		this.spawnpoint = spawnpoint;
 		return this;	}
 	
-		    
-    public Boolean hasLeader()  {
-        return leader == null ? false : true;
-    }
-        
+		            
 		public String getLeader() {
 		return leader;
 	}
@@ -476,11 +482,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 		this.leader = leader;
 		return this;	}
 	
-		    
-    public Boolean hasFollowers()  {
-        return followers == null ? false : true;
-    }
-        
+		            
 		public List<String> getFollowersList() {
 		if(this.followers == null)
             this.followers = new ArrayList<String>();
@@ -510,11 +512,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     
     
     
-		    
-    public Boolean hasPatrolRoute()  {
-        return patrolRoute == null ? false : true;
-    }
-        
+		            
 		public String getPatrolRoute() {
 		return patrolRoute;
 	}
@@ -523,11 +521,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 		this.patrolRoute = patrolRoute;
 		return this;	}
 	
-		    
-    public Boolean hasWaypoint()  {
-        return waypoint == null ? false : true;
-    }
-        
+		            
 		public Waypoint getWaypoint() {
 		return waypoint;
 	}
@@ -536,11 +530,7 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 		this.waypoint = waypoint;
 		return this;	}
 	
-		    
-    public Boolean hasNpcType()  {
-        return npcType == null ? false : true;
-    }
-        
+		            
 		public NpcType getNpcType() {
 		return npcType;
 	}
@@ -646,8 +636,9 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -656,8 +647,9 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     	    	
     	            	
     	    	
-    	    	    	if(message.leader != null)
+    	    	    	if( (String)message.leader != null) {
             output.writeString(3, message.leader, false);
+        }
     	    	
     	            	
     	    	
@@ -665,15 +657,16 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
         {
             for(String followers : message.followers)
             {
-                if(followers != null) {
+                if( (String) followers != null) {
                    	            		output.writeString(4, followers, true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.patrolRoute != null)
+    	    	    	if( (String)message.patrolRoute != null) {
             output.writeString(5, message.patrolRoute, false);
+        }
     	    	
     	            	
     	    	
@@ -691,27 +684,27 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
 	public void dumpObject()
     {
     	System.out.println("START NpcData");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.spawnpoint != null) {
+    	//}
+    	    	//if(this.spawnpoint != null) {
     		System.out.println("spawnpoint="+this.spawnpoint);
-    	}
-    	    	if(this.leader != null) {
+    	//}
+    	    	//if(this.leader != null) {
     		System.out.println("leader="+this.leader);
-    	}
-    	    	if(this.followers != null) {
+    	//}
+    	    	//if(this.followers != null) {
     		System.out.println("followers="+this.followers);
-    	}
-    	    	if(this.patrolRoute != null) {
+    	//}
+    	    	//if(this.patrolRoute != null) {
     		System.out.println("patrolRoute="+this.patrolRoute);
-    	}
-    	    	if(this.waypoint != null) {
+    	//}
+    	    	//if(this.waypoint != null) {
     		System.out.println("waypoint="+this.waypoint);
-    	}
-    	    	if(this.npcType != null) {
+    	//}
+    	    	//if(this.npcType != null) {
     		System.out.println("npcType="+this.npcType);
-    	}
+    	//}
     	    	System.out.println("END NpcData");
     }
     

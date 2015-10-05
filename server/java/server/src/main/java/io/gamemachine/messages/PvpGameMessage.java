@@ -61,12 +61,18 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
     static final PvpGameMessage DEFAULT_INSTANCE = new PvpGameMessage();
     static final String defaultScope = PvpGameMessage.class.getSimpleName();
 
-    			public Character character;
-	    
-        			public Characters characters;
-	    
-        			public Integer command;
-	    
+    	
+	    	    public Character character;
+	    		
+    
+        	
+	    	    public Characters characters;
+	    		
+    
+        	
+	    	    public int command= 0;
+	    		
+    
         
 
 
@@ -85,22 +91,24 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
     
 	public void toModel(Model model) {
     	    	    	    	    	    	
-    	    	    	if (command != null) {
+    	    	    	//if (command != null) {
     	       	    	model.setInteger("pvp_game_message_command",command);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PvpGameMessage fromModel(Model model) {
 		boolean hasFields = false;
     	PvpGameMessage message = new PvpGameMessage();
     	    	    	    	    	    	    	
-    	    	    	Integer commandField = model.getInteger("pvp_game_message_command");
-    	    	
-    	if (commandField != null) {
+    	    	    	Integer commandTestField = model.getInteger("pvp_game_message_command");
+    	if (commandTestField != null) {
+    		int commandField = commandTestField;
     		message.setCommand(commandField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -109,11 +117,7 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
     }
 
 
-	    
-    public Boolean hasCharacter()  {
-        return character == null ? false : true;
-    }
-        
+	            
 		public Character getCharacter() {
 		return character;
 	}
@@ -122,11 +126,7 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
 		this.character = character;
 		return this;	}
 	
-		    
-    public Boolean hasCharacters()  {
-        return characters == null ? false : true;
-    }
-        
+		            
 		public Characters getCharacters() {
 		return characters;
 	}
@@ -135,16 +135,12 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
 		this.characters = characters;
 		return this;	}
 	
-		    
-    public Boolean hasCommand()  {
-        return command == null ? false : true;
-    }
-        
-		public Integer getCommand() {
+		            
+		public int getCommand() {
 		return command;
 	}
 	
-	public PvpGameMessage setCommand(Integer command) {
+	public PvpGameMessage setCommand(int command) {
 		this.command = command;
 		return this;	}
 	
@@ -238,8 +234,9 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
     	    	
     	            	
     	    	
-    	    	    	if(message.command != null)
+    	    	    	if( (Integer)message.command != null) {
             output.writeInt32(3, message.command, false);
+        }
     	    	
     	            	
     }
@@ -247,15 +244,15 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
 	public void dumpObject()
     {
     	System.out.println("START PvpGameMessage");
-    	    	if(this.character != null) {
+    	    	//if(this.character != null) {
     		System.out.println("character="+this.character);
-    	}
-    	    	if(this.characters != null) {
+    	//}
+    	    	//if(this.characters != null) {
     		System.out.println("characters="+this.characters);
-    	}
-    	    	if(this.command != null) {
+    	//}
+    	    	//if(this.command != null) {
     		System.out.println("command="+this.command);
-    	}
+    	//}
     	    	System.out.println("END PvpGameMessage");
     }
     

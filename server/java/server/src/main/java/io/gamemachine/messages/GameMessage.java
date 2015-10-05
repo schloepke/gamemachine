@@ -61,94 +61,182 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     static final GameMessage DEFAULT_INSTANCE = new GameMessage();
     static final String defaultScope = GameMessage.class.getSimpleName();
 
-    			public String playerId;
-	    
-        			public String messageId;
-	    
-        			public Integer destinationId;
-	    
-        			public String destination;
-	    
-        			public String agentId;
-	    
-        			public DynamicMessage dynamicMessage;
-	    
-        			public PathData pathData;
-	    
-        			public PlayerItems playerItems;
-	    
-        			public AddPlayerItem addPlayerItem;
-	    
-        			public RemovePlayerItem removePlayerItem;
-	    
-        			public RequestPlayerItems requestPlayerItems;
-	    
-        			public PvpGameMessage pvpGameMessage;
-	    
-        			public Harvest harvest;
-	    
-        			public Long authtoken;
-	    
-        			public Long unityMessageId;
-	    
-        			public CraftItem craftItem;
-	    
-        			public UseSkill useSkill;
-	    
-        			public PlayerSkills playerSkills;
-	    
-        			public Vitals vitals;
-	    
-        			public Attack attack;
-	    
-        			public StatusEffect statusEffect;
-	    
-        			public StatusEffectResult statusEffectResult;
-	    
-        			public DataRequest dataRequest;
-	    
-        			public VisualEffect visualEffect;
-	    
-        			public WorldObjects worldObjects;
-	    
-        			public SiegeCommand siegeCommand;
-	    
-        			public GmBounds bounds;
-	    
-        			public UseItem useItem;
-	    
-        			public TimeCycle timeCycle;
-	    
-        			public Guilds guilds;
-	    
-        			public GuildAction guildAction;
-	    
-        			public GuildMemberList guildMemberList;
-	    
-        			public Territory territory;
-	    
-        			public Territories territories;
-	    
-        			public EquippedItem equippedItem;
-	    
-        			public ComboAttack comboAttack;
-	    
-        			public NpcData npcData;
-	    
-        			public BuildObjects buildObjects;
-	    
-        			public BuildableAreas buildableAreas;
-	    
-        			public GmStats gmStats;
-	    
-        			public Zone zone;
-	    
-        			public BuildObjectChunks buildObjectChunks;
-	    
-        			public TerrainEdits terrainEdits;
-	    
-        			public UpdatePlayerItem updatePlayerItem;
-	    
+    	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public String messageId= null;
+	    		
+    
+        	
+	    	    public int destinationId= 0;
+	    		
+    
+        	
+	    	    public String destination= null;
+	    		
+    
+        	
+	    	    public String agentId= null;
+	    		
+    
+        	
+	    	    public DynamicMessage dynamicMessage;
+	    		
+    
+        	
+	    	    public PathData pathData;
+	    		
+    
+        	
+	    	    public PlayerItems playerItems;
+	    		
+    
+        	
+	    	    public AddPlayerItem addPlayerItem;
+	    		
+    
+        	
+	    	    public RemovePlayerItem removePlayerItem;
+	    		
+    
+        	
+	    	    public RequestPlayerItems requestPlayerItems;
+	    		
+    
+        	
+	    	    public PvpGameMessage pvpGameMessage;
+	    		
+    
+        	
+	    	    public Harvest harvest;
+	    		
+    
+        	
+	    	    public long authtoken= 0L;
+	    		
+    
+        	
+	    	    public long unityMessageId= 0L;
+	    		
+    
+        	
+	    	    public CraftItem craftItem;
+	    		
+    
+        	
+	    	    public UseSkill useSkill;
+	    		
+    
+        	
+	    	    public PlayerSkills playerSkills;
+	    		
+    
+        	
+	    	    public Vitals vitals;
+	    		
+    
+        	
+	    	    public Attack attack;
+	    		
+    
+        	
+	    	    public StatusEffect statusEffect;
+	    		
+    
+        	
+	    	    public StatusEffectResult statusEffectResult;
+	    		
+    
+        	
+	    	    public DataRequest dataRequest;
+	    		
+    
+        	
+	    	    public VisualEffect visualEffect;
+	    		
+    
+        	
+	    	    public WorldObjects worldObjects;
+	    		
+    
+        	
+	    	    public SiegeCommand siegeCommand;
+	    		
+    
+        	
+	    	    public GmBounds bounds;
+	    		
+    
+        	
+	    	    public UseItem useItem;
+	    		
+    
+        	
+	    	    public TimeCycle timeCycle;
+	    		
+    
+        	
+	    	    public Guilds guilds;
+	    		
+    
+        	
+	    	    public GuildAction guildAction;
+	    		
+    
+        	
+	    	    public GuildMemberList guildMemberList;
+	    		
+    
+        	
+	    	    public Territory territory;
+	    		
+    
+        	
+	    	    public Territories territories;
+	    		
+    
+        	
+	    	    public EquippedItem equippedItem;
+	    		
+    
+        	
+	    	    public ComboAttack comboAttack;
+	    		
+    
+        	
+	    	    public NpcData npcData;
+	    		
+    
+        	
+	    	    public BuildObjects buildObjects;
+	    		
+    
+        	
+	    	    public BuildableAreas buildableAreas;
+	    		
+    
+        	
+	    	    public GmStats gmStats;
+	    		
+    
+        	
+	    	    public Zone zone;
+	    		
+    
+        	
+	    	    public BuildObjectChunks buildObjectChunks;
+	    		
+    
+        	
+	    	    public TerrainEdits terrainEdits;
+	    		
+    
+        	
+	    	    public UpdatePlayerItem updatePlayerItem;
+	    		
+    
         
 
 
@@ -173,94 +261,108 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("game_message_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (messageId != null) {
+    	    	    	//if (messageId != null) {
     	       	    	model.setString("game_message_message_id",messageId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (destinationId != null) {
+    	    	    	//if (destinationId != null) {
     	       	    	model.setInteger("game_message_destination_id",destinationId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (destination != null) {
+    	    	    	//if (destination != null) {
     	       	    	model.setString("game_message_destination",destination);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (agentId != null) {
+    	    	    	//if (agentId != null) {
     	       	    	model.setString("game_message_agent_id",agentId);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	    	    	    	    	    	    	
-    	    	    	if (authtoken != null) {
+    	    	    	//if (authtoken != null) {
     	       	    	model.setLong("game_message_authtoken",authtoken);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (unityMessageId != null) {
+    	    	    	//if (unityMessageId != null) {
     	       	    	model.setLong("game_message_unity_message_id",unityMessageId);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
     
 	public static GameMessage fromModel(Model model) {
 		boolean hasFields = false;
     	GameMessage message = new GameMessage();
     	    	    	    	    	
-    	    	    	String playerIdField = model.getString("game_message_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("game_message_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String messageIdField = model.getString("game_message_message_id");
+    	
     	    	
-    	if (messageIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String messageIdTestField = model.getString("game_message_message_id");
+    	if (messageIdTestField != null) {
+    		String messageIdField = messageIdTestField;
     		message.setMessageId(messageIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer destinationIdField = model.getInteger("game_message_destination_id");
+    	
     	    	
-    	if (destinationIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer destinationIdTestField = model.getInteger("game_message_destination_id");
+    	if (destinationIdTestField != null) {
+    		int destinationIdField = destinationIdTestField;
     		message.setDestinationId(destinationIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String destinationField = model.getString("game_message_destination");
+    	
     	    	
-    	if (destinationField != null) {
+    	    	    	    	    	    	
+    	    	    	String destinationTestField = model.getString("game_message_destination");
+    	if (destinationTestField != null) {
+    		String destinationField = destinationTestField;
     		message.setDestination(destinationField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String agentIdField = model.getString("game_message_agent_id");
+    	
     	    	
-    	if (agentIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String agentIdTestField = model.getString("game_message_agent_id");
+    	if (agentIdTestField != null) {
+    		String agentIdField = agentIdTestField;
     		message.setAgentId(agentIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	
-    	    	    	Long authtokenField = model.getLong("game_message_authtoken");
+    	
     	    	
-    	if (authtokenField != null) {
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	
+    	    	    	Long authtokenTestField = model.getLong("game_message_authtoken");
+    	if (authtokenTestField != null) {
+    		long authtokenField = authtokenTestField;
     		message.setAuthtoken(authtokenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long unityMessageIdField = model.getLong("game_message_unity_message_id");
+    	
     	    	
-    	if (unityMessageIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Long unityMessageIdTestField = model.getLong("game_message_unity_message_id");
+    	if (unityMessageIdTestField != null) {
+    		long unityMessageIdField = unityMessageIdTestField;
     		message.setUnityMessageId(unityMessageIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -269,11 +371,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     }
 
 
-	    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -282,11 +380,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasMessageId()  {
-        return messageId == null ? false : true;
-    }
-        
+		            
 		public String getMessageId() {
 		return messageId;
 	}
@@ -295,24 +389,16 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.messageId = messageId;
 		return this;	}
 	
-		    
-    public Boolean hasDestinationId()  {
-        return destinationId == null ? false : true;
-    }
-        
-		public Integer getDestinationId() {
+		            
+		public int getDestinationId() {
 		return destinationId;
 	}
 	
-	public GameMessage setDestinationId(Integer destinationId) {
+	public GameMessage setDestinationId(int destinationId) {
 		this.destinationId = destinationId;
 		return this;	}
 	
-		    
-    public Boolean hasDestination()  {
-        return destination == null ? false : true;
-    }
-        
+		            
 		public String getDestination() {
 		return destination;
 	}
@@ -321,11 +407,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.destination = destination;
 		return this;	}
 	
-		    
-    public Boolean hasAgentId()  {
-        return agentId == null ? false : true;
-    }
-        
+		            
 		public String getAgentId() {
 		return agentId;
 	}
@@ -334,11 +416,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.agentId = agentId;
 		return this;	}
 	
-		    
-    public Boolean hasDynamicMessage()  {
-        return dynamicMessage == null ? false : true;
-    }
-        
+		            
 		public DynamicMessage getDynamicMessage() {
 		return dynamicMessage;
 	}
@@ -347,11 +425,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.dynamicMessage = dynamicMessage;
 		return this;	}
 	
-		    
-    public Boolean hasPathData()  {
-        return pathData == null ? false : true;
-    }
-        
+		            
 		public PathData getPathData() {
 		return pathData;
 	}
@@ -360,11 +434,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.pathData = pathData;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItems()  {
-        return playerItems == null ? false : true;
-    }
-        
+		            
 		public PlayerItems getPlayerItems() {
 		return playerItems;
 	}
@@ -373,11 +443,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.playerItems = playerItems;
 		return this;	}
 	
-		    
-    public Boolean hasAddPlayerItem()  {
-        return addPlayerItem == null ? false : true;
-    }
-        
+		            
 		public AddPlayerItem getAddPlayerItem() {
 		return addPlayerItem;
 	}
@@ -386,11 +452,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.addPlayerItem = addPlayerItem;
 		return this;	}
 	
-		    
-    public Boolean hasRemovePlayerItem()  {
-        return removePlayerItem == null ? false : true;
-    }
-        
+		            
 		public RemovePlayerItem getRemovePlayerItem() {
 		return removePlayerItem;
 	}
@@ -399,11 +461,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.removePlayerItem = removePlayerItem;
 		return this;	}
 	
-		    
-    public Boolean hasRequestPlayerItems()  {
-        return requestPlayerItems == null ? false : true;
-    }
-        
+		            
 		public RequestPlayerItems getRequestPlayerItems() {
 		return requestPlayerItems;
 	}
@@ -412,11 +470,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.requestPlayerItems = requestPlayerItems;
 		return this;	}
 	
-		    
-    public Boolean hasPvpGameMessage()  {
-        return pvpGameMessage == null ? false : true;
-    }
-        
+		            
 		public PvpGameMessage getPvpGameMessage() {
 		return pvpGameMessage;
 	}
@@ -425,11 +479,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.pvpGameMessage = pvpGameMessage;
 		return this;	}
 	
-		    
-    public Boolean hasHarvest()  {
-        return harvest == null ? false : true;
-    }
-        
+		            
 		public Harvest getHarvest() {
 		return harvest;
 	}
@@ -438,37 +488,25 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.harvest = harvest;
 		return this;	}
 	
-		    
-    public Boolean hasAuthtoken()  {
-        return authtoken == null ? false : true;
-    }
-        
-		public Long getAuthtoken() {
+		            
+		public long getAuthtoken() {
 		return authtoken;
 	}
 	
-	public GameMessage setAuthtoken(Long authtoken) {
+	public GameMessage setAuthtoken(long authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	
-		    
-    public Boolean hasUnityMessageId()  {
-        return unityMessageId == null ? false : true;
-    }
-        
-		public Long getUnityMessageId() {
+		            
+		public long getUnityMessageId() {
 		return unityMessageId;
 	}
 	
-	public GameMessage setUnityMessageId(Long unityMessageId) {
+	public GameMessage setUnityMessageId(long unityMessageId) {
 		this.unityMessageId = unityMessageId;
 		return this;	}
 	
-		    
-    public Boolean hasCraftItem()  {
-        return craftItem == null ? false : true;
-    }
-        
+		            
 		public CraftItem getCraftItem() {
 		return craftItem;
 	}
@@ -477,11 +515,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.craftItem = craftItem;
 		return this;	}
 	
-		    
-    public Boolean hasUseSkill()  {
-        return useSkill == null ? false : true;
-    }
-        
+		            
 		public UseSkill getUseSkill() {
 		return useSkill;
 	}
@@ -490,11 +524,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.useSkill = useSkill;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerSkills()  {
-        return playerSkills == null ? false : true;
-    }
-        
+		            
 		public PlayerSkills getPlayerSkills() {
 		return playerSkills;
 	}
@@ -503,11 +533,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.playerSkills = playerSkills;
 		return this;	}
 	
-		    
-    public Boolean hasVitals()  {
-        return vitals == null ? false : true;
-    }
-        
+		            
 		public Vitals getVitals() {
 		return vitals;
 	}
@@ -516,11 +542,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.vitals = vitals;
 		return this;	}
 	
-		    
-    public Boolean hasAttack()  {
-        return attack == null ? false : true;
-    }
-        
+		            
 		public Attack getAttack() {
 		return attack;
 	}
@@ -529,11 +551,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.attack = attack;
 		return this;	}
 	
-		    
-    public Boolean hasStatusEffect()  {
-        return statusEffect == null ? false : true;
-    }
-        
+		            
 		public StatusEffect getStatusEffect() {
 		return statusEffect;
 	}
@@ -542,11 +560,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.statusEffect = statusEffect;
 		return this;	}
 	
-		    
-    public Boolean hasStatusEffectResult()  {
-        return statusEffectResult == null ? false : true;
-    }
-        
+		            
 		public StatusEffectResult getStatusEffectResult() {
 		return statusEffectResult;
 	}
@@ -555,11 +569,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.statusEffectResult = statusEffectResult;
 		return this;	}
 	
-		    
-    public Boolean hasDataRequest()  {
-        return dataRequest == null ? false : true;
-    }
-        
+		            
 		public DataRequest getDataRequest() {
 		return dataRequest;
 	}
@@ -568,11 +578,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.dataRequest = dataRequest;
 		return this;	}
 	
-		    
-    public Boolean hasVisualEffect()  {
-        return visualEffect == null ? false : true;
-    }
-        
+		            
 		public VisualEffect getVisualEffect() {
 		return visualEffect;
 	}
@@ -581,11 +587,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.visualEffect = visualEffect;
 		return this;	}
 	
-		    
-    public Boolean hasWorldObjects()  {
-        return worldObjects == null ? false : true;
-    }
-        
+		            
 		public WorldObjects getWorldObjects() {
 		return worldObjects;
 	}
@@ -594,11 +596,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.worldObjects = worldObjects;
 		return this;	}
 	
-		    
-    public Boolean hasSiegeCommand()  {
-        return siegeCommand == null ? false : true;
-    }
-        
+		            
 		public SiegeCommand getSiegeCommand() {
 		return siegeCommand;
 	}
@@ -607,11 +605,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.siegeCommand = siegeCommand;
 		return this;	}
 	
-		    
-    public Boolean hasBounds()  {
-        return bounds == null ? false : true;
-    }
-        
+		            
 		public GmBounds getBounds() {
 		return bounds;
 	}
@@ -620,11 +614,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.bounds = bounds;
 		return this;	}
 	
-		    
-    public Boolean hasUseItem()  {
-        return useItem == null ? false : true;
-    }
-        
+		            
 		public UseItem getUseItem() {
 		return useItem;
 	}
@@ -633,11 +623,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.useItem = useItem;
 		return this;	}
 	
-		    
-    public Boolean hasTimeCycle()  {
-        return timeCycle == null ? false : true;
-    }
-        
+		            
 		public TimeCycle getTimeCycle() {
 		return timeCycle;
 	}
@@ -646,11 +632,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.timeCycle = timeCycle;
 		return this;	}
 	
-		    
-    public Boolean hasGuilds()  {
-        return guilds == null ? false : true;
-    }
-        
+		            
 		public Guilds getGuilds() {
 		return guilds;
 	}
@@ -659,11 +641,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.guilds = guilds;
 		return this;	}
 	
-		    
-    public Boolean hasGuildAction()  {
-        return guildAction == null ? false : true;
-    }
-        
+		            
 		public GuildAction getGuildAction() {
 		return guildAction;
 	}
@@ -672,11 +650,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.guildAction = guildAction;
 		return this;	}
 	
-		    
-    public Boolean hasGuildMemberList()  {
-        return guildMemberList == null ? false : true;
-    }
-        
+		            
 		public GuildMemberList getGuildMemberList() {
 		return guildMemberList;
 	}
@@ -685,11 +659,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.guildMemberList = guildMemberList;
 		return this;	}
 	
-		    
-    public Boolean hasTerritory()  {
-        return territory == null ? false : true;
-    }
-        
+		            
 		public Territory getTerritory() {
 		return territory;
 	}
@@ -698,11 +668,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.territory = territory;
 		return this;	}
 	
-		    
-    public Boolean hasTerritories()  {
-        return territories == null ? false : true;
-    }
-        
+		            
 		public Territories getTerritories() {
 		return territories;
 	}
@@ -711,11 +677,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.territories = territories;
 		return this;	}
 	
-		    
-    public Boolean hasEquippedItem()  {
-        return equippedItem == null ? false : true;
-    }
-        
+		            
 		public EquippedItem getEquippedItem() {
 		return equippedItem;
 	}
@@ -724,11 +686,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.equippedItem = equippedItem;
 		return this;	}
 	
-		    
-    public Boolean hasComboAttack()  {
-        return comboAttack == null ? false : true;
-    }
-        
+		            
 		public ComboAttack getComboAttack() {
 		return comboAttack;
 	}
@@ -737,11 +695,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.comboAttack = comboAttack;
 		return this;	}
 	
-		    
-    public Boolean hasNpcData()  {
-        return npcData == null ? false : true;
-    }
-        
+		            
 		public NpcData getNpcData() {
 		return npcData;
 	}
@@ -750,11 +704,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.npcData = npcData;
 		return this;	}
 	
-		    
-    public Boolean hasBuildObjects()  {
-        return buildObjects == null ? false : true;
-    }
-        
+		            
 		public BuildObjects getBuildObjects() {
 		return buildObjects;
 	}
@@ -763,11 +713,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.buildObjects = buildObjects;
 		return this;	}
 	
-		    
-    public Boolean hasBuildableAreas()  {
-        return buildableAreas == null ? false : true;
-    }
-        
+		            
 		public BuildableAreas getBuildableAreas() {
 		return buildableAreas;
 	}
@@ -776,11 +722,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.buildableAreas = buildableAreas;
 		return this;	}
 	
-		    
-    public Boolean hasGmStats()  {
-        return gmStats == null ? false : true;
-    }
-        
+		            
 		public GmStats getGmStats() {
 		return gmStats;
 	}
@@ -789,11 +731,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.gmStats = gmStats;
 		return this;	}
 	
-		    
-    public Boolean hasZone()  {
-        return zone == null ? false : true;
-    }
-        
+		            
 		public Zone getZone() {
 		return zone;
 	}
@@ -802,11 +740,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.zone = zone;
 		return this;	}
 	
-		    
-    public Boolean hasBuildObjectChunks()  {
-        return buildObjectChunks == null ? false : true;
-    }
-        
+		            
 		public BuildObjectChunks getBuildObjectChunks() {
 		return buildObjectChunks;
 	}
@@ -815,11 +749,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.buildObjectChunks = buildObjectChunks;
 		return this;	}
 	
-		    
-    public Boolean hasTerrainEdits()  {
-        return terrainEdits == null ? false : true;
-    }
-        
+		            
 		public TerrainEdits getTerrainEdits() {
 		return terrainEdits;
 	}
@@ -828,11 +758,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		this.terrainEdits = terrainEdits;
 		return this;	}
 	
-		    
-    public Boolean hasUpdatePlayerItem()  {
-        return updatePlayerItem == null ? false : true;
-    }
-        
+		            
 		public UpdatePlayerItem getUpdatePlayerItem() {
 		return updatePlayerItem;
 	}
@@ -1085,28 +1011,33 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     {
     	    	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(1, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.messageId != null)
+    	    	    	if( (String)message.messageId != null) {
             output.writeString(2, message.messageId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.destinationId != null)
+    	    	    	if( (Integer)message.destinationId != null) {
             output.writeInt32(3, message.destinationId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.destination != null)
+    	    	    	if( (String)message.destination != null) {
             output.writeString(4, message.destination, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.agentId != null)
+    	    	    	if( (String)message.agentId != null) {
             output.writeString(5, message.agentId, false);
+        }
     	    	
     	            	
     	    	
@@ -1150,13 +1081,15 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     	    	
     	            	
     	    	
-    	    	    	if(message.authtoken != null)
+    	    	    	if( (Long)message.authtoken != null) {
             output.writeInt64(16, message.authtoken, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.unityMessageId != null)
+    	    	    	if( (Long)message.unityMessageId != null) {
             output.writeInt64(17, message.unityMessageId, false);
+        }
     	    	
     	            	
     	    	
@@ -1309,138 +1242,138 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 	public void dumpObject()
     {
     	System.out.println("START GameMessage");
-    	    	if(this.playerId != null) {
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.messageId != null) {
+    	//}
+    	    	//if(this.messageId != null) {
     		System.out.println("messageId="+this.messageId);
-    	}
-    	    	if(this.destinationId != null) {
+    	//}
+    	    	//if(this.destinationId != null) {
     		System.out.println("destinationId="+this.destinationId);
-    	}
-    	    	if(this.destination != null) {
+    	//}
+    	    	//if(this.destination != null) {
     		System.out.println("destination="+this.destination);
-    	}
-    	    	if(this.agentId != null) {
+    	//}
+    	    	//if(this.agentId != null) {
     		System.out.println("agentId="+this.agentId);
-    	}
-    	    	if(this.dynamicMessage != null) {
+    	//}
+    	    	//if(this.dynamicMessage != null) {
     		System.out.println("dynamicMessage="+this.dynamicMessage);
-    	}
-    	    	if(this.pathData != null) {
+    	//}
+    	    	//if(this.pathData != null) {
     		System.out.println("pathData="+this.pathData);
-    	}
-    	    	if(this.playerItems != null) {
+    	//}
+    	    	//if(this.playerItems != null) {
     		System.out.println("playerItems="+this.playerItems);
-    	}
-    	    	if(this.addPlayerItem != null) {
+    	//}
+    	    	//if(this.addPlayerItem != null) {
     		System.out.println("addPlayerItem="+this.addPlayerItem);
-    	}
-    	    	if(this.removePlayerItem != null) {
+    	//}
+    	    	//if(this.removePlayerItem != null) {
     		System.out.println("removePlayerItem="+this.removePlayerItem);
-    	}
-    	    	if(this.requestPlayerItems != null) {
+    	//}
+    	    	//if(this.requestPlayerItems != null) {
     		System.out.println("requestPlayerItems="+this.requestPlayerItems);
-    	}
-    	    	if(this.pvpGameMessage != null) {
+    	//}
+    	    	//if(this.pvpGameMessage != null) {
     		System.out.println("pvpGameMessage="+this.pvpGameMessage);
-    	}
-    	    	if(this.harvest != null) {
+    	//}
+    	    	//if(this.harvest != null) {
     		System.out.println("harvest="+this.harvest);
-    	}
-    	    	if(this.authtoken != null) {
+    	//}
+    	    	//if(this.authtoken != null) {
     		System.out.println("authtoken="+this.authtoken);
-    	}
-    	    	if(this.unityMessageId != null) {
+    	//}
+    	    	//if(this.unityMessageId != null) {
     		System.out.println("unityMessageId="+this.unityMessageId);
-    	}
-    	    	if(this.craftItem != null) {
+    	//}
+    	    	//if(this.craftItem != null) {
     		System.out.println("craftItem="+this.craftItem);
-    	}
-    	    	if(this.useSkill != null) {
+    	//}
+    	    	//if(this.useSkill != null) {
     		System.out.println("useSkill="+this.useSkill);
-    	}
-    	    	if(this.playerSkills != null) {
+    	//}
+    	    	//if(this.playerSkills != null) {
     		System.out.println("playerSkills="+this.playerSkills);
-    	}
-    	    	if(this.vitals != null) {
+    	//}
+    	    	//if(this.vitals != null) {
     		System.out.println("vitals="+this.vitals);
-    	}
-    	    	if(this.attack != null) {
+    	//}
+    	    	//if(this.attack != null) {
     		System.out.println("attack="+this.attack);
-    	}
-    	    	if(this.statusEffect != null) {
+    	//}
+    	    	//if(this.statusEffect != null) {
     		System.out.println("statusEffect="+this.statusEffect);
-    	}
-    	    	if(this.statusEffectResult != null) {
+    	//}
+    	    	//if(this.statusEffectResult != null) {
     		System.out.println("statusEffectResult="+this.statusEffectResult);
-    	}
-    	    	if(this.dataRequest != null) {
+    	//}
+    	    	//if(this.dataRequest != null) {
     		System.out.println("dataRequest="+this.dataRequest);
-    	}
-    	    	if(this.visualEffect != null) {
+    	//}
+    	    	//if(this.visualEffect != null) {
     		System.out.println("visualEffect="+this.visualEffect);
-    	}
-    	    	if(this.worldObjects != null) {
+    	//}
+    	    	//if(this.worldObjects != null) {
     		System.out.println("worldObjects="+this.worldObjects);
-    	}
-    	    	if(this.siegeCommand != null) {
+    	//}
+    	    	//if(this.siegeCommand != null) {
     		System.out.println("siegeCommand="+this.siegeCommand);
-    	}
-    	    	if(this.bounds != null) {
+    	//}
+    	    	//if(this.bounds != null) {
     		System.out.println("bounds="+this.bounds);
-    	}
-    	    	if(this.useItem != null) {
+    	//}
+    	    	//if(this.useItem != null) {
     		System.out.println("useItem="+this.useItem);
-    	}
-    	    	if(this.timeCycle != null) {
+    	//}
+    	    	//if(this.timeCycle != null) {
     		System.out.println("timeCycle="+this.timeCycle);
-    	}
-    	    	if(this.guilds != null) {
+    	//}
+    	    	//if(this.guilds != null) {
     		System.out.println("guilds="+this.guilds);
-    	}
-    	    	if(this.guildAction != null) {
+    	//}
+    	    	//if(this.guildAction != null) {
     		System.out.println("guildAction="+this.guildAction);
-    	}
-    	    	if(this.guildMemberList != null) {
+    	//}
+    	    	//if(this.guildMemberList != null) {
     		System.out.println("guildMemberList="+this.guildMemberList);
-    	}
-    	    	if(this.territory != null) {
+    	//}
+    	    	//if(this.territory != null) {
     		System.out.println("territory="+this.territory);
-    	}
-    	    	if(this.territories != null) {
+    	//}
+    	    	//if(this.territories != null) {
     		System.out.println("territories="+this.territories);
-    	}
-    	    	if(this.equippedItem != null) {
+    	//}
+    	    	//if(this.equippedItem != null) {
     		System.out.println("equippedItem="+this.equippedItem);
-    	}
-    	    	if(this.comboAttack != null) {
+    	//}
+    	    	//if(this.comboAttack != null) {
     		System.out.println("comboAttack="+this.comboAttack);
-    	}
-    	    	if(this.npcData != null) {
+    	//}
+    	    	//if(this.npcData != null) {
     		System.out.println("npcData="+this.npcData);
-    	}
-    	    	if(this.buildObjects != null) {
+    	//}
+    	    	//if(this.buildObjects != null) {
     		System.out.println("buildObjects="+this.buildObjects);
-    	}
-    	    	if(this.buildableAreas != null) {
+    	//}
+    	    	//if(this.buildableAreas != null) {
     		System.out.println("buildableAreas="+this.buildableAreas);
-    	}
-    	    	if(this.gmStats != null) {
+    	//}
+    	    	//if(this.gmStats != null) {
     		System.out.println("gmStats="+this.gmStats);
-    	}
-    	    	if(this.zone != null) {
+    	//}
+    	    	//if(this.zone != null) {
     		System.out.println("zone="+this.zone);
-    	}
-    	    	if(this.buildObjectChunks != null) {
+    	//}
+    	    	//if(this.buildObjectChunks != null) {
     		System.out.println("buildObjectChunks="+this.buildObjectChunks);
-    	}
-    	    	if(this.terrainEdits != null) {
+    	//}
+    	    	//if(this.terrainEdits != null) {
     		System.out.println("terrainEdits="+this.terrainEdits);
-    	}
-    	    	if(this.updatePlayerItem != null) {
+    	//}
+    	    	//if(this.updatePlayerItem != null) {
     		System.out.println("updatePlayerItem="+this.updatePlayerItem);
-    	}
+    	//}
     	    	System.out.println("END GameMessage");
     }
     

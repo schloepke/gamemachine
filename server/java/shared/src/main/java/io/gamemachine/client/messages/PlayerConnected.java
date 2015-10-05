@@ -51,7 +51,7 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
 
     static final PlayerConnected DEFAULT_INSTANCE = new PlayerConnected();
 
-    			public Integer notused;
+    			public int notused;
 	    
       
     public PlayerConnected()
@@ -67,11 +67,11 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
         return notused == null ? false : true;
     }
         
-		public Integer getNotused() {
+		public int getNotused() {
 		return notused;
 	}
 	
-	public PlayerConnected setNotused(Integer notused) {
+	public PlayerConnected setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	

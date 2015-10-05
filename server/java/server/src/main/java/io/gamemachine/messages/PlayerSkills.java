@@ -91,11 +91,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
     }
 
 
-	    
-    public Boolean hasPlayerSkill()  {
-        return playerSkill == null ? false : true;
-    }
-        
+	            
 		public List<PlayerSkill> getPlayerSkillList() {
 		if(this.playerSkill == null)
             this.playerSkill = new ArrayList<PlayerSkill>();
@@ -162,7 +158,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.recordId.equals(obj.recordId)) {
+    	    		if (playerSkill.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.resourceCost.equals(obj.resourceCost)) {
+    	    		if (playerSkill.resourceCost == obj.resourceCost) {
     	      			itr.remove();
     		}
 		}
@@ -306,7 +302,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.range.equals(obj.range)) {
+    	    		if (playerSkill.range == obj.range) {
     	      			itr.remove();
     		}
 		}
@@ -338,7 +334,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.level.equals(obj.level)) {
+    	    		if (playerSkill.level == obj.level) {
     	      			itr.remove();
     		}
 		}
@@ -354,7 +350,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.resourceCostPerTick.equals(obj.resourceCostPerTick)) {
+    	    		if (playerSkill.resourceCostPerTick == obj.resourceCostPerTick) {
     	      			itr.remove();
     		}
 		}
@@ -370,7 +366,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.isComboPart.equals(obj.isComboPart)) {
+    	    		if (playerSkill.isComboPart == obj.isComboPart) {
     	      			itr.remove();
     		}
 		}
@@ -386,7 +382,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
        	while (itr.hasNext()) {
     	PlayerSkill obj = itr.next();
     	
-    	    		if (playerSkill.isPassive.equals(obj.isPassive)) {
+    	    		if (playerSkill.isPassive == obj.isPassive) {
     	      			itr.remove();
     		}
 		}
@@ -419,6 +415,22 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
     	PlayerSkill obj = itr.next();
     	
     	    		if (playerSkill.icon_uuid.equals(obj.icon_uuid)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public PlayerSkills removePlayerSkillByStatusEffects(PlayerSkill playerSkill)  {
+    	if(this.playerSkill == null)
+           return this;
+            
+       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
+       	while (itr.hasNext()) {
+    	PlayerSkill obj = itr.next();
+    	
+    	    		if (playerSkill.statusEffects.equals(obj.statusEffects)) {
     	      			itr.remove();
     		}
 		}
@@ -506,7 +518,7 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
         {
             for(PlayerSkill playerSkill : message.playerSkill)
             {
-                if(playerSkill != null) {
+                if( (PlayerSkill) playerSkill != null) {
                    	    				output.writeObject(1, playerSkill, PlayerSkill.getSchema(), true);
     				    			}
             }
@@ -517,9 +529,9 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
 	public void dumpObject()
     {
     	System.out.println("START PlayerSkills");
-    	    	if(this.playerSkill != null) {
+    	    	//if(this.playerSkill != null) {
     		System.out.println("playerSkill="+this.playerSkill);
-    	}
+    	//}
     	    	System.out.println("END PlayerSkills");
     }
     

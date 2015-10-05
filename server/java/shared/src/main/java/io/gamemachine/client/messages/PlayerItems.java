@@ -51,7 +51,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
 
     static final PlayerItems DEFAULT_INSTANCE = new PlayerItems();
 
-    			public Boolean catalog;
+    			public boolean catalog;
 	    
             public List<PlayerItem> playerItem;
 	  
@@ -68,11 +68,11 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         return catalog == null ? false : true;
     }
         
-		public Boolean getCatalog() {
+		public boolean getCatalog() {
 		return catalog;
 	}
 	
-	public PlayerItems setCatalog(Boolean catalog) {
+	public PlayerItems setCatalog(boolean catalog) {
 		this.catalog = catalog;
 		return this;	}
 	

@@ -75,8 +75,10 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
     static final Pong DEFAULT_INSTANCE = new Pong();
     static final String defaultScope = Pong.class.getSimpleName();
 
-    			public String id;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
         
 	public static PongCache cache() {
 		return PongCache.getInstance();
@@ -347,22 +349,24 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("pong_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Pong fromModel(Model model) {
 		boolean hasFields = false;
     	Pong message = new Pong();
     	    	    	    	    	
-    	    	    	String idField = model.getString("pong_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("pong_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -371,11 +375,7 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -456,8 +456,9 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     }
@@ -465,9 +466,9 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
 	public void dumpObject()
     {
     	System.out.println("START Pong");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END Pong");
     }
     

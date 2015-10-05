@@ -61,12 +61,18 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
     static final TeamMemberSkill DEFAULT_INSTANCE = new TeamMemberSkill();
     static final String defaultScope = TeamMemberSkill.class.getSimpleName();
 
-    			public String name;
-	    
-        			public Integer value;
-	    
-        			public String playerId;
-	    
+    	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public int value= 0;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("team_member_skill_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setInteger("team_member_skill_value",value);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("team_member_skill_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static TeamMemberSkill fromModel(Model model) {
 		boolean hasFields = false;
     	TeamMemberSkill message = new TeamMemberSkill();
     	    	    	    	    	
-    	    	    	String nameField = model.getString("team_member_skill_name");
-    	    	
-    	if (nameField != null) {
+    	    	    	String nameTestField = model.getString("team_member_skill_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer valueField = model.getInteger("team_member_skill_value");
+    	
     	    	
-    	if (valueField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer valueTestField = model.getInteger("team_member_skill_value");
+    	if (valueTestField != null) {
+    		int valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("team_member_skill_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("team_member_skill_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
     }
 
 
-	    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+	            
 		public String getName() {
 		return name;
 	}
@@ -148,24 +156,16 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
-		public Integer getValue() {
+		            
+		public int getValue() {
 		return value;
 	}
 	
-	public TeamMemberSkill setValue(Integer value) {
+	public TeamMemberSkill setValue(int value) {
 		this.value = value;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -253,25 +253,28 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
     public void writeTo(Output output, TeamMemberSkill message) throws IOException
     {
     	    	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.name == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(1, message.name, false);
+        }
     	    	
     	            	
-    	    	if(message.value == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.value == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (Integer)message.value != null) {
             output.writeInt32(2, message.value, false);
+        }
     	    	
     	            	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(3, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -279,15 +282,15 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
 	public void dumpObject()
     {
     	System.out.println("START TeamMemberSkill");
-    	    	if(this.name != null) {
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.value != null) {
+    	//}
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END TeamMemberSkill");
     }
     

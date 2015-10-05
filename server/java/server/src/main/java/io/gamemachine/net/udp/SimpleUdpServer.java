@@ -104,7 +104,7 @@ public class SimpleUdpServer implements Runnable {
 				ClientAddress clientAddress = new ClientAddress(inp.getAddress(), inp.getPort());
 				ClientMessage clientMessage = ClientMessage.parseFrom(received);
 				
-				if (clientMessage.hasSentAt()) {
+				if (clientMessage.sentAt > 0) {
 					long latency = System.currentTimeMillis() - clientMessage.getSentAt();
 					if (latency >= 4) {
 						logger.info("ClientMessage latency " + latency);

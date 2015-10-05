@@ -61,10 +61,14 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     static final DynamicMessage DEFAULT_INSTANCE = new DynamicMessage();
     static final String defaultScope = DynamicMessage.class.getSimpleName();
 
-    			public String type;
-	    
-        			public ByteString message;
-	    
+    	
+	    	    public String type= null;
+	    		
+    
+        	
+	    	    public ByteString message;
+	    		
+    
         
 
 
@@ -84,27 +88,29 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("dynamic_message_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (message != null) {
+    	    	    	//if (message != null) {
     	       	    	model.set("dynamic_message_message",message.toByteArray());
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static DynamicMessage fromModel(Model model) {
 		boolean hasFields = false;
     	DynamicMessage message = new DynamicMessage();
     	    	    	    	    	
-    	    	    	String typeField = model.getString("dynamic_message_type");
-    	    	
-    	if (typeField != null) {
+    	    	    	String typeTestField = model.getString("dynamic_message_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
     	    	    	ByteString messageField = null;
     	Object messageValue = model.get("dynamic_message_message");
@@ -114,10 +120,6 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     	}
     	    	
     	    	
-    	if (messageField != null) {
-    		message.setMessage(messageField);
-    		hasFields = true;
-    	}
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -126,11 +128,7 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     }
 
 
-	    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+	            
 		public String getType() {
 		return type;
 	}
@@ -139,11 +137,7 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasMessage()  {
-        return message == null ? false : true;
-    }
-        
+		            
 		public ByteString getMessage() {
 		return message;
 	}
@@ -227,18 +221,20 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     public void writeTo(Output output, DynamicMessage message) throws IOException
     {
     	    	
-    	    	if(message.type == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.type == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(1, message.type, false);
+        }
     	    	
     	            	
-    	    	if(message.message == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.message == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.message != null)
+    	    	    	if( (ByteString)message.message != null) {
             output.writeBytes(2, message.message, false);
+        }
     	    	
     	            	
     }
@@ -246,12 +242,12 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
 	public void dumpObject()
     {
     	System.out.println("START DynamicMessage");
-    	    	if(this.type != null) {
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.message != null) {
+    	//}
+    	    	//if(this.message != null) {
     		System.out.println("message="+this.message);
-    	}
+    	//}
     	    	System.out.println("END DynamicMessage");
     }
     

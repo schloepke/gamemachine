@@ -395,6 +395,22 @@ public final class PlayerSkills implements Externalizable, Message<PlayerSkills>
         return this;
     }
     
+        	    	    	    	
+    public PlayerSkills removePlayerSkillByStatusEffects(PlayerSkill playerSkill)  {
+    	if(this.playerSkill == null)
+           return this;
+            
+       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
+       	while (itr.hasNext()) {
+    	PlayerSkill obj = itr.next();
+    	
+    	    		if (playerSkill.statusEffects.equals(obj.statusEffects)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
             	
     
     

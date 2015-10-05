@@ -1,30 +1,5 @@
 package plugins.combat;
 
-import io.gamemachine.core.ActorUtil;
-import io.gamemachine.core.ChatSubscriptions;
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.Grid;
-import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.core.PlayerVitalsHandler;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.DataRequest;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.PlayerItem;
-import io.gamemachine.messages.PlayerSkill;
-import io.gamemachine.messages.StatusEffect;
-import io.gamemachine.messages.StatusEffectResult;
-import io.gamemachine.messages.StatusEffectTarget;
-import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.GmVector3;
-import io.gamemachine.messages.VisualEffect;
-import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.WorldObject;
-import plugins.pvp_game.CharacterHandler;
-import plugins.pvp_game.Common;
-import plugins.pvp_game.ConsumableItemHandler;
-import plugins.pvp_game.PlayerItemManager;
-import plugins.pvp_game.PlayerSkillHandler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,12 +8,31 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
-import scala.concurrent.duration.Duration;
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import static io.gamemachine.messages.StatusEffect.Type;
+import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.ChatSubscriptions;
+import io.gamemachine.core.GameGrid;
+import io.gamemachine.core.Grid;
+import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.messages.Character;
+import io.gamemachine.messages.DataRequest;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.PlayerItem;
+import io.gamemachine.messages.PlayerSkill;
+import io.gamemachine.messages.StatusEffect;
+import io.gamemachine.messages.StatusEffect.Type;
+import io.gamemachine.messages.StatusEffectResult;
+import io.gamemachine.messages.StatusEffectTarget;
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.VisualEffect;
+import io.gamemachine.messages.Vitals;
+import plugins.inventoryservice.InventoryService;
+import scala.concurrent.duration.Duration;
 
 public class StatusEffectHandler extends UntypedActor {
 
@@ -90,15 +84,15 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 	}
 
-	private void skillUp(String id, String playerId) {
+	private void skillUp(String id, String characterId) {
 		int chance = Common.randInt(1, 10);
 		if (chance < 5) {
 			return;
 		}
 
-		Character character = CharacterHandler.currentCharacter(playerId);
+		Character character = CharacterService.getInstance().find(characterId);
 		if (character == null) {
-			logger.warning("Unable to find character for " + playerId);
+			logger.warning("Unable to find character for " + characterId);
 			return;
 		}
 
@@ -319,12 +313,12 @@ public class StatusEffectHandler extends UntypedActor {
 				boolean aoe = false;
 				GmVector3 location = null;
 				
-				if (statusEffectTarget.target.equals("aoe")) {
+				if (statusEffectTarget.target.equals(PlayerSkill.DamageType.Aoe.toString())) {
 					aoe = true;
 					location = statusEffectTarget.location;
 				}
 				
-				if (statusEffectTarget.target.equals("self_aoe")) {
+				if (statusEffectTarget.target.equals(PlayerSkill.DamageType.SelfAoe.toString())) {
 					aoe = true;
 					location = new GmVector3();
 					TrackData td = defaultGrid.get(statusEffectTarget.origin);
@@ -365,33 +359,33 @@ public class StatusEffectHandler extends UntypedActor {
 		statusEffectTarget.ticks++;
 	}
 
-	private int applyStatusEffectToWorldObject(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
-
-		String origin = statusEffectTarget.origin;
-
-		if (effect.type == StatusEffect.Type.AttributeDecrease) {
-			WorldObject worldObject = ConsumableItemHandler.wobjects.get(target);
-			int damage = getEffectValue(effect, statusEffectTarget.skill, origin);
-			if (damage > 0) {
-				damage = damage / 4;
-			}
-			worldObject.health -= damage;
-			logger.warning("applyStatusEffectToWorldObject " + target + " damage " + damage);
-
-			if (worldObject.health <= 0) {
-				if (worldObject.hasPlayerItemId()) {
-					// ConsumableItemHandler.remove(worldObject.id);
-				}
-			}
-
-			WorldObject.db().saveAsync(worldObject);
-
-			return damage;
-		} else {
-			return 0;
-		}
-
-	}
+//	private int applyStatusEffectToWorldObject(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
+//
+//		String origin = statusEffectTarget.origin;
+//
+//		if (effect.type == StatusEffect.Type.AttributeDecrease) {
+//			WorldObject worldObject = ConsumableItemHandler.wobjects.get(target);
+//			int damage = getEffectValue(effect, statusEffectTarget.skill, origin);
+//			if (damage > 0) {
+//				damage = damage / 4;
+//			}
+//			worldObject.health -= damage;
+//			logger.warning("applyStatusEffectToWorldObject " + target + " damage " + damage);
+//
+//			if (worldObject.health <= 0) {
+//				if (worldObject.hasPlayerItemId()) {
+//					// ConsumableItemHandler.remove(worldObject.id);
+//				}
+//			}
+//
+//			WorldObject.db().saveAsync(worldObject);
+//
+//			return damage;
+//		} else {
+//			return 0;
+//		}
+//
+//	}
 
 	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
 
@@ -400,9 +394,9 @@ public class StatusEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		if (ConsumableItemHandler.wobjects.containsKey(target)) {
-			return applyStatusEffectToWorldObject(statusEffectTarget, target, effect);
-		}
+//		if (ConsumableItemHandler.wobjects.containsKey(target)) {
+//			return applyStatusEffectToWorldObject(statusEffectTarget, target, effect);
+//		}
 
 		String origin = statusEffectTarget.origin;
 
@@ -419,7 +413,7 @@ public class StatusEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		int targetBaseHealth = CharacterHandler.currentHealth(vitals.id);
+		int targetBaseHealth = CharacterService.getInstance().find(vitals.id).health;
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
 		
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
@@ -463,17 +457,17 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private boolean DeductCost(Vitals vitals, String skillId) {
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(skillId);
-		if (!skill.hasResourceCostPerTick() || skill.resourceCostPerTick == 0) {
+		if (skill.resourceCostPerTick == 0) {
 			return true;
 		}
 		
-		if (skill.resource.equals("stamina")) {
+		if (skill.resource.equals(PlayerSkill.Resource.Stamina.toString())) {
 			if (vitals.stamina < skill.resourceCost) {
 				logger.warning("Insufficient stamina needed " + skill.resourceCost);
 				return false;
 			}
 			vitals.stamina -= skill.resourceCost;
-		} else if (skill.resource.equals("magic")) {
+		} else if (skill.resource.equals(PlayerSkill.Resource.Magic.toString())) {
 			if (vitals.magic < skill.resourceCost) {
 				logger.warning("Insufficient magic needed " + skill.resourceCost);
 				return false;
@@ -510,9 +504,9 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 	}
 	
-	private int getEffectValue(StatusEffect effect, String skillId, String playerId) {
+	private int getEffectValue(StatusEffect effect, String skillId, String characterId) {
 		int base = Common.randInt(effect.minValue, effect.maxValue);
-		Character character = CharacterHandler.currentCharacter(playerId);
+		Character character = CharacterService.getInstance().find(characterId);
 		int level = skillLevel(skillId, character.id);
 		return base + level;
 	}
@@ -522,8 +516,8 @@ public class StatusEffectHandler extends UntypedActor {
 		if (PlayerSkillHandler.hasPlayerSkill(id, characterId)) {
 			PlayerSkill playerSkill = PlayerSkillHandler.playerSkill(id, characterId);
 			return playerSkill.level;
-		} else if (PlayerItemManager.hasPlayerItem(id, characterId)) {
-			PlayerItem playerItem = PlayerItemManager.playerItem(id, characterId);
+		} else if (InventoryService.getInstance().hasItem(id, characterId)) {
+			PlayerItem playerItem =InventoryService.getInstance().find(id, characterId);
 			return playerItem.level;
 		} else {
 			return 0;
@@ -560,7 +554,7 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			Character character = CharacterHandler.currentCharacter(vitals.id);
+			Character character = CharacterService.getInstance().find(vitals.id);
 
 			int stamina = character.stamina;
 			int magic = character.magic;
@@ -617,7 +611,7 @@ public class StatusEffectHandler extends UntypedActor {
 				Grid grid = GameGrid.getPlayerGrid("default", vitals.id);
 				TrackData trackData = grid.get(vitals.id);
 				if (trackData != null) {
-					if (trackData.hasHidden()) {
+					if (trackData.hidden == 1) {
 						int drain = 4;
 						if (vitals.stamina >= drain) {
 							vitals.stamina -= drain;
@@ -681,9 +675,9 @@ public class StatusEffectHandler extends UntypedActor {
 		Map<String, List<GameMessage>> gridMap = new HashMap<String, List<GameMessage>>();
 
 		for (Vitals vitals : PlayerVitalsHandler.getVitals()) {
-			int health = CharacterHandler.currentHealth(vitals.id);
-			int stamina = CharacterHandler.currentStamina(vitals.id);
-			int magic = CharacterHandler.currentMagic(vitals.id);
+			int health = CharacterService.getInstance().find(vitals.id).health;
+			int stamina = CharacterService.getInstance().find(vitals.id).stamina;
+			int magic = CharacterService.getInstance().find(vitals.id).magic;
 			Boolean send = false;
 			if (vitals.changed == 1 || vitals.health < health || vitals.magic < magic || vitals.stamina < stamina) {
 				resetVitalTick(vitals.id);

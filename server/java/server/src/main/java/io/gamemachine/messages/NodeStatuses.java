@@ -91,11 +91,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
     }
 
 
-	    
-    public Boolean hasNodeStatus()  {
-        return nodeStatus == null ? false : true;
-    }
-        
+	            
 		public List<NodeStatus> getNodeStatusList() {
 		if(this.nodeStatus == null)
             this.nodeStatus = new ArrayList<NodeStatus>();
@@ -130,7 +126,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.containerId.equals(obj.containerId)) {
+    	    		if (nodeStatus.containerId == obj.containerId) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.lastUpdated.equals(obj.lastUpdated)) {
+    	    		if (nodeStatus.lastUpdated == obj.lastUpdated) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.port.equals(obj.port)) {
+    	    		if (nodeStatus.port == obj.port) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.clientCount.equals(obj.clientCount)) {
+    	    		if (nodeStatus.clientCount == obj.clientCount) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.loadAverage.equals(obj.loadAverage)) {
+    	    		if (nodeStatus.loadAverage == obj.loadAverage) {
     	      			itr.remove();
     		}
 		}
@@ -242,7 +238,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
        	while (itr.hasNext()) {
     	NodeStatus obj = itr.next();
     	
-    	    		if (nodeStatus.heapUsed.equals(obj.heapUsed)) {
+    	    		if (nodeStatus.heapUsed == obj.heapUsed) {
     	      			itr.remove();
     		}
 		}
@@ -330,7 +326,7 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
         {
             for(NodeStatus nodeStatus : message.nodeStatus)
             {
-                if(nodeStatus != null) {
+                if( (NodeStatus) nodeStatus != null) {
                    	    				output.writeObject(1, nodeStatus, NodeStatus.getSchema(), true);
     				    			}
             }
@@ -341,9 +337,9 @@ public final class NodeStatuses implements Externalizable, Message<NodeStatuses>
 	public void dumpObject()
     {
     	System.out.println("START NodeStatuses");
-    	    	if(this.nodeStatus != null) {
+    	    	//if(this.nodeStatus != null) {
     		System.out.println("nodeStatus="+this.nodeStatus);
-    	}
+    	//}
     	    	System.out.println("END NodeStatuses");
     }
     

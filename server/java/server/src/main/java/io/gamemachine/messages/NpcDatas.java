@@ -91,11 +91,7 @@ public final class NpcDatas implements Externalizable, Message<NpcDatas>, Schema
     }
 
 
-	    
-    public Boolean hasNpcData()  {
-        return npcData == null ? false : true;
-    }
-        
+	            
 		public List<NpcData> getNpcDataList() {
 		if(this.npcData == null)
             this.npcData = new ArrayList<NpcData>();
@@ -250,7 +246,7 @@ public final class NpcDatas implements Externalizable, Message<NpcDatas>, Schema
         {
             for(NpcData npcData : message.npcData)
             {
-                if(npcData != null) {
+                if( (NpcData) npcData != null) {
                    	    				output.writeObject(1, npcData, NpcData.getSchema(), true);
     				    			}
             }
@@ -261,9 +257,9 @@ public final class NpcDatas implements Externalizable, Message<NpcDatas>, Schema
 	public void dumpObject()
     {
     	System.out.println("START NpcDatas");
-    	    	if(this.npcData != null) {
+    	    	//if(this.npcData != null) {
     		System.out.println("npcData="+this.npcData);
-    	}
+    	//}
     	    	System.out.println("END NpcDatas");
     }
     

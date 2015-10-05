@@ -55,7 +55,7 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
 	    
         			public String origin;
 	    
-        			public Integer value;
+        			public int value;
 	    
         			public String statusEffectId;
 	    
@@ -99,11 +99,11 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
         return value == null ? false : true;
     }
         
-		public Integer getValue() {
+		public int getValue() {
 		return value;
 	}
 	
-	public StatusEffectResult setValue(Integer value) {
+	public StatusEffectResult setValue(int value) {
 		this.value = value;
 		return this;	}
 	

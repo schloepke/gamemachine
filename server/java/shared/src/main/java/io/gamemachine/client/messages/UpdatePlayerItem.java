@@ -51,7 +51,7 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
 
     static final UpdatePlayerItem DEFAULT_INSTANCE = new UpdatePlayerItem();
 
-    			public Integer result;
+    			public int result;
 	    
         			public PlayerItem playerItem;
 	    
@@ -69,11 +69,11 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public UpdatePlayerItem setResult(Integer result) {
+	public UpdatePlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	

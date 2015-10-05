@@ -75,8 +75,10 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
     static final Waypoint DEFAULT_INSTANCE = new Waypoint();
     static final String defaultScope = Waypoint.class.getSimpleName();
 
-    			public String id;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
             public List<GmVector3> position;
 	    
 	public static WaypointCache cache() {
@@ -348,22 +350,24 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("waypoint_id",id);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static Waypoint fromModel(Model model) {
 		boolean hasFields = false;
     	Waypoint message = new Waypoint();
     	    	    	    	    	
-    	    	    	String idField = model.getString("waypoint_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("waypoint_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -372,11 +376,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -385,11 +385,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasPosition()  {
-        return position == null ? false : true;
-    }
-        
+		            
 		public List<GmVector3> getPositionList() {
 		if(this.position == null)
             this.position = new ArrayList<GmVector3>();
@@ -424,7 +420,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.x.equals(obj.x)) {
+    	    		if (position.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -440,7 +436,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.y.equals(obj.y)) {
+    	    		if (position.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -456,7 +452,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.z.equals(obj.z)) {
+    	    		if (position.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -472,7 +468,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.xi.equals(obj.xi)) {
+    	    		if (position.xi == obj.xi) {
     	      			itr.remove();
     		}
 		}
@@ -488,7 +484,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.yi.equals(obj.yi)) {
+    	    		if (position.yi == obj.yi) {
     	      			itr.remove();
     		}
 		}
@@ -504,7 +500,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.zi.equals(obj.zi)) {
+    	    		if (position.zi == obj.zi) {
     	      			itr.remove();
     		}
 		}
@@ -520,7 +516,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (position.vertice.equals(obj.vertice)) {
+    	    		if (position.vertice == obj.vertice) {
     	      			itr.remove();
     		}
 		}
@@ -608,8 +604,9 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -617,7 +614,7 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
         {
             for(GmVector3 position : message.position)
             {
-                if(position != null) {
+                if( (GmVector3) position != null) {
                    	    				output.writeObject(2, position, GmVector3.getSchema(), true);
     				    			}
             }
@@ -628,12 +625,12 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
 	public void dumpObject()
     {
     	System.out.println("START Waypoint");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.position != null) {
+    	//}
+    	    	//if(this.position != null) {
     		System.out.println("position="+this.position);
-    	}
+    	//}
     	    	System.out.println("END Waypoint");
     }
     

@@ -51,23 +51,23 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
 
     static final ModelInfo DEFAULT_INSTANCE = new ModelInfo();
 
-    			public Float attachX;
+    			public float attachX;
 	    
-        			public Float attachY;
+        			public float attachY;
 	    
-        			public Float attachZ;
+        			public float attachZ;
 	    
-        			public Float rotateX;
+        			public float rotateX;
 	    
-        			public Float rotateY;
+        			public float rotateY;
 	    
-        			public Float rotateZ;
+        			public float rotateZ;
 	    
-        			public Float scaleX;
+        			public float scaleX;
 	    
-        			public Float scaleY;
+        			public float scaleY;
 	    
-        			public Float scaleZ;
+        			public float scaleZ;
 	    
         			public String resource;
 	    
@@ -89,11 +89,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return attachX == null ? false : true;
     }
         
-		public Float getAttachX() {
+		public float getAttachX() {
 		return attachX;
 	}
 	
-	public ModelInfo setAttachX(Float attachX) {
+	public ModelInfo setAttachX(float attachX) {
 		this.attachX = attachX;
 		return this;	}
 	
@@ -102,11 +102,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return attachY == null ? false : true;
     }
         
-		public Float getAttachY() {
+		public float getAttachY() {
 		return attachY;
 	}
 	
-	public ModelInfo setAttachY(Float attachY) {
+	public ModelInfo setAttachY(float attachY) {
 		this.attachY = attachY;
 		return this;	}
 	
@@ -115,11 +115,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return attachZ == null ? false : true;
     }
         
-		public Float getAttachZ() {
+		public float getAttachZ() {
 		return attachZ;
 	}
 	
-	public ModelInfo setAttachZ(Float attachZ) {
+	public ModelInfo setAttachZ(float attachZ) {
 		this.attachZ = attachZ;
 		return this;	}
 	
@@ -128,11 +128,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return rotateX == null ? false : true;
     }
         
-		public Float getRotateX() {
+		public float getRotateX() {
 		return rotateX;
 	}
 	
-	public ModelInfo setRotateX(Float rotateX) {
+	public ModelInfo setRotateX(float rotateX) {
 		this.rotateX = rotateX;
 		return this;	}
 	
@@ -141,11 +141,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return rotateY == null ? false : true;
     }
         
-		public Float getRotateY() {
+		public float getRotateY() {
 		return rotateY;
 	}
 	
-	public ModelInfo setRotateY(Float rotateY) {
+	public ModelInfo setRotateY(float rotateY) {
 		this.rotateY = rotateY;
 		return this;	}
 	
@@ -154,11 +154,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return rotateZ == null ? false : true;
     }
         
-		public Float getRotateZ() {
+		public float getRotateZ() {
 		return rotateZ;
 	}
 	
-	public ModelInfo setRotateZ(Float rotateZ) {
+	public ModelInfo setRotateZ(float rotateZ) {
 		this.rotateZ = rotateZ;
 		return this;	}
 	
@@ -167,11 +167,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return scaleX == null ? false : true;
     }
         
-		public Float getScaleX() {
+		public float getScaleX() {
 		return scaleX;
 	}
 	
-	public ModelInfo setScaleX(Float scaleX) {
+	public ModelInfo setScaleX(float scaleX) {
 		this.scaleX = scaleX;
 		return this;	}
 	
@@ -180,11 +180,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return scaleY == null ? false : true;
     }
         
-		public Float getScaleY() {
+		public float getScaleY() {
 		return scaleY;
 	}
 	
-	public ModelInfo setScaleY(Float scaleY) {
+	public ModelInfo setScaleY(float scaleY) {
 		this.scaleY = scaleY;
 		return this;	}
 	
@@ -193,11 +193,11 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
         return scaleZ == null ? false : true;
     }
         
-		public Float getScaleZ() {
+		public float getScaleZ() {
 		return scaleZ;
 	}
 	
-	public ModelInfo setScaleZ(Float scaleZ) {
+	public ModelInfo setScaleZ(float scaleZ) {
 		this.scaleZ = scaleZ;
 		return this;	}
 	

@@ -75,14 +75,22 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
     static final RemovePlayerItem DEFAULT_INSTANCE = new RemovePlayerItem();
     static final String defaultScope = RemovePlayerItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer quantity;
-	    
-        			public Integer result;
-	    
-        			public String characterId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int quantity= 0;
+	    		
+    
+        	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
         
 	public static RemovePlayerItemCache cache() {
 		return RemovePlayerItemCache.getInstance();
@@ -356,58 +364,66 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("remove_player_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (quantity != null) {
+    	    	    	//if (quantity != null) {
     	       	    	model.setInteger("remove_player_item_quantity",quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("remove_player_item_result",result);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("remove_player_item_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static RemovePlayerItem fromModel(Model model) {
 		boolean hasFields = false;
     	RemovePlayerItem message = new RemovePlayerItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("remove_player_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("remove_player_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer quantityField = model.getInteger("remove_player_item_quantity");
+    	
     	    	
-    	if (quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer quantityTestField = model.getInteger("remove_player_item_quantity");
+    	if (quantityTestField != null) {
+    		int quantityField = quantityTestField;
     		message.setQuantity(quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("remove_player_item_result");
+    	
     	    	
-    	if (resultField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resultTestField = model.getInteger("remove_player_item_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("remove_player_item_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("remove_player_item_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -416,11 +432,7 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -429,37 +441,25 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasQuantity()  {
-        return quantity == null ? false : true;
-    }
-        
-		public Integer getQuantity() {
+		            
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public RemovePlayerItem setQuantity(Integer quantity) {
+	public RemovePlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
-		    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+		            
+		public int getResult() {
 		return result;
 	}
 	
-	public RemovePlayerItem setResult(Integer result) {
+	public RemovePlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -551,28 +551,32 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
     public void writeTo(Output output, RemovePlayerItem message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.quantity == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.quantity == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.quantity != null)
+    	    	    	if( (Integer)message.quantity != null) {
             output.writeInt32(2, message.quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(3, message.result, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(4, message.characterId, false);
+        }
     	    	
     	            	
     }
@@ -580,18 +584,18 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
 	public void dumpObject()
     {
     	System.out.println("START RemovePlayerItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.quantity != null) {
+    	//}
+    	    	//if(this.quantity != null) {
     		System.out.println("quantity="+this.quantity);
-    	}
-    	    	if(this.result != null) {
+    	//}
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
+    	//}
     	    	System.out.println("END RemovePlayerItem");
     }
     

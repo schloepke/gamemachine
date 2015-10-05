@@ -1,4 +1,4 @@
-package plugins.pvp_game;
+package plugins.combat;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -8,6 +8,7 @@ import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerSkill;
+import plugins.clientDbLoader.ClientDbLoader;
 
 public class PlayerSkillHandler extends GameMessageActor {
 
@@ -20,7 +21,7 @@ public class PlayerSkillHandler extends GameMessageActor {
 		
 	@Override
 	public void awake() {
-		List<PlayerSkill> skills = PlayerSkill.db().where("player_skill_character_id = ?", "global");
+		List<PlayerSkill> skills = ClientDbLoader.getPlayerSkills().getPlayerSkillList();
 		for (PlayerSkill playerSkill : skills) {
 			globalPlayerSkills.put(playerSkill.id, playerSkill);
 			logger.warning("Loading skill "+playerSkill.id);
@@ -56,7 +57,7 @@ public class PlayerSkillHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (exactlyOnce(gameMessage)) {
-			if (gameMessage.hasPlayerSkills()) {
+			if (gameMessage.playerSkills != null) {
 				gameMessage.playerSkills.playerSkill = PlayerSkill.db().where("player_skill_character_id = ?", characterId);
 				setReply(gameMessage);
 			}

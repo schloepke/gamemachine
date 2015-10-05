@@ -87,14 +87,22 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     static final RpcMessage DEFAULT_INSTANCE = new RpcMessage();
     static final String defaultScope = RpcMessage.class.getSimpleName();
 
-    			public MessageType messageType; // = NONE:0;
-	    
-        			public GameMessage gameMessage;
-	    
-        			public Long messageId;
-	    
-        			public String playerId;
-	    
+    	
+	    	    public MessageType messageType;
+	    		
+    
+        	
+	    	    public GameMessage gameMessage;
+	    		
+    
+        	
+	    	    public long messageId= 0L;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
         
 
 
@@ -114,34 +122,38 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	    	    	
-    	    	    	if (messageId != null) {
+    	    	    	//if (messageId != null) {
     	       	    	model.setLong("rpc_message_message_id",messageId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("rpc_message_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static RpcMessage fromModel(Model model) {
 		boolean hasFields = false;
     	RpcMessage message = new RpcMessage();
     	    	    	    	    	    	    	
-    	    	    	Long messageIdField = model.getLong("rpc_message_message_id");
-    	    	
-    	if (messageIdField != null) {
+    	    	    	Long messageIdTestField = model.getLong("rpc_message_message_id");
+    	if (messageIdTestField != null) {
+    		long messageIdField = messageIdTestField;
     		message.setMessageId(messageIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("rpc_message_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("rpc_message_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,11 +162,7 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     }
 
 
-	    
-    public Boolean hasMessageType()  {
-        return messageType == null ? false : true;
-    }
-        
+	            
 		public MessageType getMessageType() {
 		return messageType;
 	}
@@ -163,11 +171,7 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
 		this.messageType = messageType;
 		return this;	}
 	
-		    
-    public Boolean hasGameMessage()  {
-        return gameMessage == null ? false : true;
-    }
-        
+		            
 		public GameMessage getGameMessage() {
 		return gameMessage;
 	}
@@ -176,24 +180,16 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
 		this.gameMessage = gameMessage;
 		return this;	}
 	
-		    
-    public Boolean hasMessageId()  {
-        return messageId == null ? false : true;
-    }
-        
-		public Long getMessageId() {
+		            
+		public long getMessageId() {
 		return messageId;
 	}
 	
-	public RpcMessage setMessageId(Long messageId) {
+	public RpcMessage setMessageId(long messageId) {
 		this.messageId = messageId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -285,8 +281,8 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     public void writeTo(Output output, RpcMessage message) throws IOException
     {
     	    	
-    	    	if(message.messageType == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.messageType == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.messageType != null)
     	 	output.writeEnum(1, message.messageType.number, false);
@@ -298,13 +294,15 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     	    	
     	            	
     	    	
-    	    	    	if(message.messageId != null)
+    	    	    	if( (Long)message.messageId != null) {
             output.writeInt64(3, message.messageId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(4, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -312,18 +310,18 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
 	public void dumpObject()
     {
     	System.out.println("START RpcMessage");
-    	    	if(this.messageType != null) {
+    	    	//if(this.messageType != null) {
     		System.out.println("messageType="+this.messageType);
-    	}
-    	    	if(this.gameMessage != null) {
+    	//}
+    	    	//if(this.gameMessage != null) {
     		System.out.println("gameMessage="+this.gameMessage);
-    	}
-    	    	if(this.messageId != null) {
+    	//}
+    	    	//if(this.messageId != null) {
     		System.out.println("messageId="+this.messageId);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END RpcMessage");
     }
     

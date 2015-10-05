@@ -86,23 +86,23 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 	    
         			public String id;
 	    
-        			public Integer verticeCount;
+        			public int verticeCount;
 	    
         			public String tag;
 	    
         			public String layer;
 	    
-        			public Integer gbLayer;
+        			public int gbLayer;
 	    
-        			public Boolean molded;
+        			public boolean molded;
 	    
         			public Status status; // = NONE:0;
 	    
-        			public Boolean canRemove;
+        			public boolean canRemove;
 	    
-        			public Boolean isTop;
+        			public boolean isTop;
 	    
-        			public Integer gbType;
+        			public int gbType;
 	    
       
     public GroundBlockObject()
@@ -303,11 +303,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return verticeCount == null ? false : true;
     }
         
-		public Integer getVerticeCount() {
+		public int getVerticeCount() {
 		return verticeCount;
 	}
 	
-	public GroundBlockObject setVerticeCount(Integer verticeCount) {
+	public GroundBlockObject setVerticeCount(int verticeCount) {
 		this.verticeCount = verticeCount;
 		return this;	}
 	
@@ -342,11 +342,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return gbLayer == null ? false : true;
     }
         
-		public Integer getGbLayer() {
+		public int getGbLayer() {
 		return gbLayer;
 	}
 	
-	public GroundBlockObject setGbLayer(Integer gbLayer) {
+	public GroundBlockObject setGbLayer(int gbLayer) {
 		this.gbLayer = gbLayer;
 		return this;	}
 	
@@ -355,11 +355,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return molded == null ? false : true;
     }
         
-		public Boolean getMolded() {
+		public boolean getMolded() {
 		return molded;
 	}
 	
-	public GroundBlockObject setMolded(Boolean molded) {
+	public GroundBlockObject setMolded(boolean molded) {
 		this.molded = molded;
 		return this;	}
 	
@@ -381,11 +381,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return canRemove == null ? false : true;
     }
         
-		public Boolean getCanRemove() {
+		public boolean getCanRemove() {
 		return canRemove;
 	}
 	
-	public GroundBlockObject setCanRemove(Boolean canRemove) {
+	public GroundBlockObject setCanRemove(boolean canRemove) {
 		this.canRemove = canRemove;
 		return this;	}
 	
@@ -394,11 +394,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return isTop == null ? false : true;
     }
         
-		public Boolean getIsTop() {
+		public boolean getIsTop() {
 		return isTop;
 	}
 	
-	public GroundBlockObject setIsTop(Boolean isTop) {
+	public GroundBlockObject setIsTop(boolean isTop) {
 		this.isTop = isTop;
 		return this;	}
 	
@@ -407,11 +407,11 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         return gbType == null ? false : true;
     }
         
-		public Integer getGbType() {
+		public int getGbType() {
 		return gbType;
 	}
 	
-	public GroundBlockObject setGbType(Integer gbType) {
+	public GroundBlockObject setGbType(int gbType) {
 		this.gbType = gbType;
 		return this;	}
 	

@@ -50,7 +50,7 @@ module GameMachine
     end
 
     def publish(mediator,publish)
-      if publish.message.has_chat_message
+      if publish.message.chat_message != nil
         publish_message = publish.message #publish.message.chat_message.message
       else
         publish_message = publish.message

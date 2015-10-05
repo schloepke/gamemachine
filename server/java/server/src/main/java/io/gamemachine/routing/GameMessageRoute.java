@@ -5,6 +5,8 @@ import io.gamemachine.messages.GameMessage;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.base.Strings;
+
 public class GameMessageRoute {
 
 	public static final Map<String, GameMessageRoute> namedRoutes = new ConcurrentHashMap<String, GameMessageRoute>();
@@ -47,13 +49,13 @@ public class GameMessageRoute {
 	}
 
 	public static GameMessageRoute routeFor(GameMessage gameMessage) {
-		if (gameMessage.hasDestinationId()) {
+		if (gameMessage.destinationId > 0) {
 			if (routes.containsKey(gameMessage.destinationId)) {
 				return routes.get(gameMessage.destinationId);
 			} else {
 				return null;
 			}
-		} else if (gameMessage.hasDestination()) {
+		} else if (!Strings.isNullOrEmpty(gameMessage.destination)) {
 			if (namedRoutes.containsKey(gameMessage.destination)) {
 				return namedRoutes.get(gameMessage.destination);
 			} else {

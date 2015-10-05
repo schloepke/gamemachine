@@ -75,8 +75,10 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
     static final Ping DEFAULT_INSTANCE = new Ping();
     static final String defaultScope = Ping.class.getSimpleName();
 
-    			public String id;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
         
 	public static PingCache cache() {
 		return PingCache.getInstance();
@@ -347,22 +349,24 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("ping_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Ping fromModel(Model model) {
 		boolean hasFields = false;
     	Ping message = new Ping();
     	    	    	    	    	
-    	    	    	String idField = model.getString("ping_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("ping_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -371,11 +375,7 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -456,8 +456,9 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     }
@@ -465,9 +466,9 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
 	public void dumpObject()
     {
     	System.out.println("START Ping");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END Ping");
     }
     

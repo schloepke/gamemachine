@@ -51,7 +51,7 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
 
     static final ObjectdbGetResponse DEFAULT_INSTANCE = new ObjectdbGetResponse();
 
-    			public Boolean entityFound;
+    			public boolean entityFound;
 	    
       
     public ObjectdbGetResponse()
@@ -67,11 +67,11 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
         return entityFound == null ? false : true;
     }
         
-		public Boolean getEntityFound() {
+		public boolean getEntityFound() {
 		return entityFound;
 	}
 	
-	public ObjectdbGetResponse setEntityFound(Boolean entityFound) {
+	public ObjectdbGetResponse setEntityFound(boolean entityFound) {
 		this.entityFound = entityFound;
 		return this;	}
 	

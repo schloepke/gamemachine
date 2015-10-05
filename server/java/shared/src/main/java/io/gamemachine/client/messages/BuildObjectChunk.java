@@ -53,7 +53,7 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
 
     			public ByteString data;
 	    
-        			public Integer chunk;
+        			public int chunk;
 	    
       
     public BuildObjectChunk()
@@ -82,11 +82,11 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
         return chunk == null ? false : true;
     }
         
-		public Integer getChunk() {
+		public int getChunk() {
 		return chunk;
 	}
 	
-	public BuildObjectChunk setChunk(Integer chunk) {
+	public BuildObjectChunk setChunk(int chunk) {
 		this.chunk = chunk;
 		return this;	}
 	

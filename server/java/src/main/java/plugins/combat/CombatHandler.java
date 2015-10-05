@@ -1,11 +1,13 @@
 package plugins.combat;
 
+import akka.actor.ActorSelection;
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.core.PlayerVitalsHandler;
 import io.gamemachine.messages.Attack;
 import io.gamemachine.messages.ComboAttack;
 import io.gamemachine.messages.GameMessage;
@@ -13,10 +15,6 @@ import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-import plugins.pvp_game.PlayerSkillHandler;
-import akka.actor.ActorSelection;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class CombatHandler extends GameMessageActor {
 
@@ -32,9 +30,9 @@ public class CombatHandler extends GameMessageActor {
 
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
-		if (gameMessage.hasAttack()) {
+		if (gameMessage.attack != null) {
 			doAttack(gameMessage.attack);
-		} else if (gameMessage.hasDataRequest()) {
+		} else if (gameMessage.dataRequest != null) {
 			effectHandler.tell(gameMessage.dataRequest, getSelf());
 		}
 	}
@@ -54,7 +52,7 @@ public class CombatHandler extends GameMessageActor {
 	private void doComboAttack(ComboAttack combo) {
 		for (Attack attack : combo.attack) {
 			PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
-			if (skill.hasIsPassive() && skill.isPassive == 1) {
+			if (skill.isPassive == 1) {
 				StatusEffectHandler.setPassiveSkill(attack.skill, attack.attacker, attack.target,
 						StatusEffectTarget.Action.Apply, StatusEffectTarget.PassiveFlag.AutoRemove);
 			} else {
@@ -72,7 +70,7 @@ public class CombatHandler extends GameMessageActor {
 		target.skill = skill.id;
 		target.origin = attack.attacker;
 
-		if (skill.hasIsPassive() && skill.isPassive == 1) {
+		if (skill.skillType.equals(PlayerSkill.SkillType.Passive.toString())) {
 			logger.warning("Set passive flags");
 			target.action = StatusEffectTarget.Action.Apply;
 			target.passiveFlag = StatusEffectTarget.PassiveFlag.AutoRemove;
@@ -81,35 +79,25 @@ public class CombatHandler extends GameMessageActor {
 			target.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
 		}
 
-		if (skill.damageType.equals("aoe")) {
-			target.target = "aoe";
-		} else if (skill.damageType.equals("self_aoe")) {
-			target.target = "self_aoe";
-		} else if (skill.damageType.equals("st")) {
+		if (skill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())) {
+			target.target = PlayerSkill.DamageType.Aoe.toString();
+		} else if (skill.damageType.equals(PlayerSkill.DamageType.SelfAoe.toString())) {
+			target.target = PlayerSkill.DamageType.SelfAoe.toString();
+		} else if (skill.damageType.equals(PlayerSkill.DamageType.SingleTarget.toString())) {
 			target.target = attack.target;
-		} else if (skill.damageType.equals("self")) {
+		} else if (skill.damageType.equals(PlayerSkill.DamageType.Self.toString())) {
 			target.target = attack.target;
 		}
-		if (target.target.equals("aoe")) {
-			if (target.location.xi == null) {
-				target.location.xi = 0;
-			}
-			if (target.location.yi == null) {
-				target.location.yi = 0;
-			}
-			if (target.location.zi == null) {
-				target.location.zi = 0;
-			}
-		}
+		
 
 		Vitals vitals = PlayerVitalsHandler.getOrCreate("default", target.origin);
-		if (skill.resource.equals("stamina")) {
+		if (skill.resource.equals(PlayerSkill.Resource.Stamina.toString())) {
 			if (vitals.stamina < skill.resourceCost) {
 				logger.warning("Insufficient stamina needed " + skill.resourceCost);
 				return;
 			}
 			vitals.stamina -= skill.resourceCost;
-		} else if (skill.resource.equals("magic")) {
+		} else if (skill.resource.equals(PlayerSkill.Resource.Magic.toString())) {
 			if (vitals.magic < skill.resourceCost) {
 				logger.warning("Insufficient magic needed " + skill.resourceCost);
 				return;

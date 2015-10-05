@@ -61,10 +61,14 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
     static final ObjectdbStatus DEFAULT_INSTANCE = new ObjectdbStatus();
     static final String defaultScope = ObjectdbStatus.class.getSimpleName();
 
-    			public String entityId;
-	    
-        			public String status;
-	    
+    	
+	    	    public String entityId= null;
+	    		
+    
+        	
+	    	    public String status= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (entityId != null) {
+    	    	    	//if (entityId != null) {
     	       	    	model.setString("objectdb_status_entity_id",entityId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (status != null) {
+    	    	    	//if (status != null) {
     	       	    	model.setString("objectdb_status_status",status);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ObjectdbStatus fromModel(Model model) {
 		boolean hasFields = false;
     	ObjectdbStatus message = new ObjectdbStatus();
     	    	    	    	    	
-    	    	    	String entityIdField = model.getString("objectdb_status_entity_id");
-    	    	
-    	if (entityIdField != null) {
+    	    	    	String entityIdTestField = model.getString("objectdb_status_entity_id");
+    	if (entityIdTestField != null) {
+    		String entityIdField = entityIdTestField;
     		message.setEntityId(entityIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String statusField = model.getString("objectdb_status_status");
+    	
     	    	
-    	if (statusField != null) {
+    	    	    	    	    	    	
+    	    	    	String statusTestField = model.getString("objectdb_status_status");
+    	if (statusTestField != null) {
+    		String statusField = statusTestField;
     		message.setStatus(statusField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
     }
 
 
-	    
-    public Boolean hasEntityId()  {
-        return entityId == null ? false : true;
-    }
-        
+	            
 		public String getEntityId() {
 		return entityId;
 	}
@@ -133,11 +137,7 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
 		this.entityId = entityId;
 		return this;	}
 	
-		    
-    public Boolean hasStatus()  {
-        return status == null ? false : true;
-    }
-        
+		            
 		public String getStatus() {
 		return status;
 	}
@@ -221,18 +221,20 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
     public void writeTo(Output output, ObjectdbStatus message) throws IOException
     {
     	    	
-    	    	if(message.entityId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entityId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.entityId != null)
+    	    	    	if( (String)message.entityId != null) {
             output.writeString(1, message.entityId, false);
+        }
     	    	
     	            	
-    	    	if(message.status == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.status == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.status != null)
+    	    	    	if( (String)message.status != null) {
             output.writeString(2, message.status, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbStatus");
-    	    	if(this.entityId != null) {
+    	    	//if(this.entityId != null) {
     		System.out.println("entityId="+this.entityId);
-    	}
-    	    	if(this.status != null) {
+    	//}
+    	    	//if(this.status != null) {
     		System.out.println("status="+this.status);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbStatus");
     }
     

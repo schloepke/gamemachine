@@ -148,28 +148,50 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     static final StatusEffect DEFAULT_INSTANCE = new StatusEffect();
     static final String defaultScope = StatusEffect.class.getSimpleName();
 
-    			public Type type; // = AttributeDecrease:0;
-	    
-        			public String id;
-	    
-        			public Integer duration;
-	    
-        			public Integer ticks;
-	    
-        			public String attribute;
-	    
-        			public Integer minValue;
-	    
-        			public Integer maxValue;
-	    
-        			public String particleEffect;
-	    
-        			public DamageType damageType; // = None:0;
-	    
-        			public String icon_path;
-	    
-        			public String icon_uuid;
-	    
+    	
+	    	    public Type type;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int duration= 0;
+	    		
+    
+        	
+	    	    public int ticks= 0;
+	    		
+    
+        	
+	    	    public String attribute= null;
+	    		
+    
+        	
+	    	    public int minValue= 0;
+	    		
+    
+        	
+	    	    public int maxValue= 0;
+	    		
+    
+        	
+	    	    public String particleEffect= null;
+	    		
+    
+        	
+	    	    public DamageType damageType;
+	    		
+    
+        	
+	    	    public String icon_path= null;
+	    		
+    
+        	
+	    	    public String icon_uuid= null;
+	    		
+    
         
 	public static StatusEffectCache cache() {
 		return StatusEffectCache.getInstance();
@@ -448,118 +470,136 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("status_effect_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (duration != null) {
+    	    	    	//if (duration != null) {
     	       	    	model.setInteger("status_effect_duration",duration);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ticks != null) {
+    	    	    	//if (ticks != null) {
     	       	    	model.setInteger("status_effect_ticks",ticks);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (attribute != null) {
+    	    	    	//if (attribute != null) {
     	       	    	model.setString("status_effect_attribute",attribute);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (minValue != null) {
+    	    	    	//if (minValue != null) {
     	       	    	model.setInteger("status_effect_min_value",minValue);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (maxValue != null) {
+    	    	    	//if (maxValue != null) {
     	       	    	model.setInteger("status_effect_max_value",maxValue);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (particleEffect != null) {
+    	    	    	//if (particleEffect != null) {
     	       	    	model.setString("status_effect_particle_effect",particleEffect);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (icon_path != null) {
+    	    	    	//if (icon_path != null) {
     	       	    	model.setString("status_effect_icon_path",icon_path);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (icon_uuid != null) {
+    	    	    	//if (icon_uuid != null) {
     	       	    	model.setString("status_effect_icon_uuid",icon_uuid);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static StatusEffect fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffect message = new StatusEffect();
     	    	    	    	    	    	
-    	    	    	String idField = model.getString("status_effect_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("status_effect_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer durationField = model.getInteger("status_effect_duration");
+    	
     	    	
-    	if (durationField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer durationTestField = model.getInteger("status_effect_duration");
+    	if (durationTestField != null) {
+    		int durationField = durationTestField;
     		message.setDuration(durationField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ticksField = model.getInteger("status_effect_ticks");
+    	
     	    	
-    	if (ticksField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ticksTestField = model.getInteger("status_effect_ticks");
+    	if (ticksTestField != null) {
+    		int ticksField = ticksTestField;
     		message.setTicks(ticksField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String attributeField = model.getString("status_effect_attribute");
+    	
     	    	
-    	if (attributeField != null) {
+    	    	    	    	    	    	
+    	    	    	String attributeTestField = model.getString("status_effect_attribute");
+    	if (attributeTestField != null) {
+    		String attributeField = attributeTestField;
     		message.setAttribute(attributeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer minValueField = model.getInteger("status_effect_min_value");
+    	
     	    	
-    	if (minValueField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer minValueTestField = model.getInteger("status_effect_min_value");
+    	if (minValueTestField != null) {
+    		int minValueField = minValueTestField;
     		message.setMinValue(minValueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer maxValueField = model.getInteger("status_effect_max_value");
+    	
     	    	
-    	if (maxValueField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer maxValueTestField = model.getInteger("status_effect_max_value");
+    	if (maxValueTestField != null) {
+    		int maxValueField = maxValueTestField;
     		message.setMaxValue(maxValueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String particleEffectField = model.getString("status_effect_particle_effect");
+    	
     	    	
-    	if (particleEffectField != null) {
+    	    	    	    	    	    	
+    	    	    	String particleEffectTestField = model.getString("status_effect_particle_effect");
+    	if (particleEffectTestField != null) {
+    		String particleEffectField = particleEffectTestField;
     		message.setParticleEffect(particleEffectField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String icon_pathField = model.getString("status_effect_icon_path");
+    	
     	    	
-    	if (icon_pathField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String icon_pathTestField = model.getString("status_effect_icon_path");
+    	if (icon_pathTestField != null) {
+    		String icon_pathField = icon_pathTestField;
     		message.setIcon_path(icon_pathField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String icon_uuidField = model.getString("status_effect_icon_uuid");
+    	
     	    	
-    	if (icon_uuidField != null) {
+    	    	    	    	    	    	
+    	    	    	String icon_uuidTestField = model.getString("status_effect_icon_uuid");
+    	if (icon_uuidTestField != null) {
+    		String icon_uuidField = icon_uuidTestField;
     		message.setIcon_uuid(icon_uuidField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -568,11 +608,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     }
 
 
-	    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+	            
 		public Type getType() {
 		return type;
 	}
@@ -581,11 +617,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -594,37 +626,25 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasDuration()  {
-        return duration == null ? false : true;
-    }
-        
-		public Integer getDuration() {
+		            
+		public int getDuration() {
 		return duration;
 	}
 	
-	public StatusEffect setDuration(Integer duration) {
+	public StatusEffect setDuration(int duration) {
 		this.duration = duration;
 		return this;	}
 	
-		    
-    public Boolean hasTicks()  {
-        return ticks == null ? false : true;
-    }
-        
-		public Integer getTicks() {
+		            
+		public int getTicks() {
 		return ticks;
 	}
 	
-	public StatusEffect setTicks(Integer ticks) {
+	public StatusEffect setTicks(int ticks) {
 		this.ticks = ticks;
 		return this;	}
 	
-		    
-    public Boolean hasAttribute()  {
-        return attribute == null ? false : true;
-    }
-        
+		            
 		public String getAttribute() {
 		return attribute;
 	}
@@ -633,37 +653,25 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.attribute = attribute;
 		return this;	}
 	
-		    
-    public Boolean hasMinValue()  {
-        return minValue == null ? false : true;
-    }
-        
-		public Integer getMinValue() {
+		            
+		public int getMinValue() {
 		return minValue;
 	}
 	
-	public StatusEffect setMinValue(Integer minValue) {
+	public StatusEffect setMinValue(int minValue) {
 		this.minValue = minValue;
 		return this;	}
 	
-		    
-    public Boolean hasMaxValue()  {
-        return maxValue == null ? false : true;
-    }
-        
-		public Integer getMaxValue() {
+		            
+		public int getMaxValue() {
 		return maxValue;
 	}
 	
-	public StatusEffect setMaxValue(Integer maxValue) {
+	public StatusEffect setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
 		return this;	}
 	
-		    
-    public Boolean hasParticleEffect()  {
-        return particleEffect == null ? false : true;
-    }
-        
+		            
 		public String getParticleEffect() {
 		return particleEffect;
 	}
@@ -672,11 +680,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.particleEffect = particleEffect;
 		return this;	}
 	
-		    
-    public Boolean hasDamageType()  {
-        return damageType == null ? false : true;
-    }
-        
+		            
 		public DamageType getDamageType() {
 		return damageType;
 	}
@@ -685,11 +689,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.damageType = damageType;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_path()  {
-        return icon_path == null ? false : true;
-    }
-        
+		            
 		public String getIcon_path() {
 		return icon_path;
 	}
@@ -698,11 +698,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 		this.icon_path = icon_path;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_uuid()  {
-        return icon_uuid == null ? false : true;
-    }
-        
+		            
 		public String getIcon_uuid() {
 		return icon_uuid;
 	}
@@ -828,38 +824,45 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(2, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.duration != null)
+    	    	    	if( (Integer)message.duration != null) {
             output.writeInt32(3, message.duration, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ticks != null)
+    	    	    	if( (Integer)message.ticks != null) {
             output.writeInt32(4, message.ticks, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.attribute != null)
+    	    	    	if( (String)message.attribute != null) {
             output.writeString(5, message.attribute, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.minValue != null)
+    	    	    	if( (Integer)message.minValue != null) {
             output.writeInt32(6, message.minValue, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.maxValue != null)
+    	    	    	if( (Integer)message.maxValue != null) {
             output.writeInt32(7, message.maxValue, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.particleEffect != null)
+    	    	    	if( (String)message.particleEffect != null) {
             output.writeString(8, message.particleEffect, false);
+        }
     	    	
     	            	
     	    	
@@ -868,13 +871,15 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_path != null)
+    	    	    	if( (String)message.icon_path != null) {
             output.writeString(10, message.icon_path, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_uuid != null)
+    	    	    	if( (String)message.icon_uuid != null) {
             output.writeString(11, message.icon_uuid, false);
+        }
     	    	
     	            	
     }
@@ -882,39 +887,39 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	public void dumpObject()
     {
     	System.out.println("START StatusEffect");
-    	    	if(this.type != null) {
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.duration != null) {
+    	//}
+    	    	//if(this.duration != null) {
     		System.out.println("duration="+this.duration);
-    	}
-    	    	if(this.ticks != null) {
+    	//}
+    	    	//if(this.ticks != null) {
     		System.out.println("ticks="+this.ticks);
-    	}
-    	    	if(this.attribute != null) {
+    	//}
+    	    	//if(this.attribute != null) {
     		System.out.println("attribute="+this.attribute);
-    	}
-    	    	if(this.minValue != null) {
+    	//}
+    	    	//if(this.minValue != null) {
     		System.out.println("minValue="+this.minValue);
-    	}
-    	    	if(this.maxValue != null) {
+    	//}
+    	    	//if(this.maxValue != null) {
     		System.out.println("maxValue="+this.maxValue);
-    	}
-    	    	if(this.particleEffect != null) {
+    	//}
+    	    	//if(this.particleEffect != null) {
     		System.out.println("particleEffect="+this.particleEffect);
-    	}
-    	    	if(this.damageType != null) {
+    	//}
+    	    	//if(this.damageType != null) {
     		System.out.println("damageType="+this.damageType);
-    	}
-    	    	if(this.icon_path != null) {
+    	//}
+    	    	//if(this.icon_path != null) {
     		System.out.println("icon_path="+this.icon_path);
-    	}
-    	    	if(this.icon_uuid != null) {
+    	//}
+    	    	//if(this.icon_uuid != null) {
     		System.out.println("icon_uuid="+this.icon_uuid);
-    	}
+    	//}
     	    	System.out.println("END StatusEffect");
     }
     

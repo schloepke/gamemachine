@@ -1,5 +1,7 @@
-package io.gamemachine.core;
+package plugins.combat;
 
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameGrid;
 import io.gamemachine.messages.Vitals;
 
 import java.util.Collection;
@@ -32,9 +34,9 @@ public class PlayerVitalsHandler {
 			vitals.changed = 1;
 			vitals.id = id;
 			vitals.dead = 0;
-			vitals.health = CharacterHandler.currentHealth(id);
-			vitals.stamina = CharacterHandler.currentStamina(id);
-			vitals.magic = CharacterHandler.currentMagic(id);
+			vitals.health = CharacterService.getInstance().find(id).health;
+			vitals.stamina = CharacterService.getInstance().find(id).stamina;
+			vitals.magic = CharacterService.getInstance().find(id).magic;
 			vitals.armor = 0;
 			vitals.elementalResist = 0;
 			vitals.spellResist = 0;

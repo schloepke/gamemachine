@@ -75,30 +75,54 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     static final SiegeCommand DEFAULT_INSTANCE = new SiegeCommand();
     static final String defaultScope = SiegeCommand.class.getSimpleName();
 
-    			public Integer startLoad;
-	    
-        			public Integer fire;
-	    
-        			public Float force;
-	    
-        			public String id;
-	    
-        			public String hitId;
-	    
-        			public GmVector3 hit;
-	    
-        			public String skillId;
-	    
-        			public Integer startUse;
-	    
-        			public Integer endUse;
-	    
-        			public String playerId;
-	    
-        			public String targetType;
-	    
-        			public String targetId;
-	    
+    	
+	    	    public int startLoad= 0;
+	    		
+    
+        	
+	    	    public int fire= 0;
+	    		
+    
+        	
+	    	    public float force= 0F;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String hitId= null;
+	    		
+    
+        	
+	    	    public GmVector3 hit;
+	    		
+    
+        	
+	    	    public String skillId= null;
+	    		
+    
+        	
+	    	    public int startUse= 0;
+	    		
+    
+        	
+	    	    public int endUse= 0;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public String targetType= null;
+	    		
+    
+        	
+	    	    public String targetId= null;
+	    		
+    
         
 	public static SiegeCommandCache cache() {
 		return SiegeCommandCache.getInstance();
@@ -379,142 +403,164 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (startLoad != null) {
+    	    	    	//if (startLoad != null) {
     	       	    	model.setInteger("siege_command_start_load",startLoad);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (fire != null) {
+    	    	    	//if (fire != null) {
     	       	    	model.setInteger("siege_command_fire",fire);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (force != null) {
+    	    	    	//if (force != null) {
     	       	    	model.setFloat("siege_command_force",force);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("siege_command_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hitId != null) {
+    	    	    	//if (hitId != null) {
     	       	    	model.setString("siege_command_hit_id",hitId);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (skillId != null) {
+    	    	    	//if (skillId != null) {
     	       	    	model.setString("siege_command_skill_id",skillId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (startUse != null) {
+    	    	    	//if (startUse != null) {
     	       	    	model.setInteger("siege_command_start_use",startUse);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (endUse != null) {
+    	    	    	//if (endUse != null) {
     	       	    	model.setInteger("siege_command_end_use",endUse);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("siege_command_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (targetType != null) {
+    	    	    	//if (targetType != null) {
     	       	    	model.setString("siege_command_target_type",targetType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (targetId != null) {
+    	    	    	//if (targetId != null) {
     	       	    	model.setString("siege_command_target_id",targetId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static SiegeCommand fromModel(Model model) {
 		boolean hasFields = false;
     	SiegeCommand message = new SiegeCommand();
     	    	    	    	    	
-    	    	    	Integer startLoadField = model.getInteger("siege_command_start_load");
-    	    	
-    	if (startLoadField != null) {
+    	    	    	Integer startLoadTestField = model.getInteger("siege_command_start_load");
+    	if (startLoadTestField != null) {
+    		int startLoadField = startLoadTestField;
     		message.setStartLoad(startLoadField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer fireField = model.getInteger("siege_command_fire");
+    	
     	    	
-    	if (fireField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer fireTestField = model.getInteger("siege_command_fire");
+    	if (fireTestField != null) {
+    		int fireField = fireTestField;
     		message.setFire(fireField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float forceField = model.getFloat("siege_command_force");
+    	
     	    	
-    	if (forceField != null) {
+    	    	    	    	    	    	
+    	    	    	Float forceTestField = model.getFloat("siege_command_force");
+    	if (forceTestField != null) {
+    		float forceField = forceTestField;
     		message.setForce(forceField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String idField = model.getString("siege_command_id");
+    	
     	    	
-    	if (idField != null) {
+    	    	    	    	    	    	
+    	    	    	String idTestField = model.getString("siege_command_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String hitIdField = model.getString("siege_command_hit_id");
+    	
     	    	
-    	if (hitIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String hitIdTestField = model.getString("siege_command_hit_id");
+    	if (hitIdTestField != null) {
+    		String hitIdField = hitIdTestField;
     		message.setHitId(hitIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String skillIdField = model.getString("siege_command_skill_id");
+    	
     	    	
-    	if (skillIdField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String skillIdTestField = model.getString("siege_command_skill_id");
+    	if (skillIdTestField != null) {
+    		String skillIdField = skillIdTestField;
     		message.setSkillId(skillIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer startUseField = model.getInteger("siege_command_start_use");
+    	
     	    	
-    	if (startUseField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer startUseTestField = model.getInteger("siege_command_start_use");
+    	if (startUseTestField != null) {
+    		int startUseField = startUseTestField;
     		message.setStartUse(startUseField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer endUseField = model.getInteger("siege_command_end_use");
+    	
     	    	
-    	if (endUseField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer endUseTestField = model.getInteger("siege_command_end_use");
+    	if (endUseTestField != null) {
+    		int endUseField = endUseTestField;
     		message.setEndUse(endUseField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("siege_command_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("siege_command_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String targetTypeField = model.getString("siege_command_target_type");
+    	
     	    	
-    	if (targetTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String targetTypeTestField = model.getString("siege_command_target_type");
+    	if (targetTypeTestField != null) {
+    		String targetTypeField = targetTypeTestField;
     		message.setTargetType(targetTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String targetIdField = model.getString("siege_command_target_id");
+    	
     	    	
-    	if (targetIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String targetIdTestField = model.getString("siege_command_target_id");
+    	if (targetIdTestField != null) {
+    		String targetIdField = targetIdTestField;
     		message.setTargetId(targetIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -523,50 +569,34 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     }
 
 
-	    
-    public Boolean hasStartLoad()  {
-        return startLoad == null ? false : true;
-    }
-        
-		public Integer getStartLoad() {
+	            
+		public int getStartLoad() {
 		return startLoad;
 	}
 	
-	public SiegeCommand setStartLoad(Integer startLoad) {
+	public SiegeCommand setStartLoad(int startLoad) {
 		this.startLoad = startLoad;
 		return this;	}
 	
-		    
-    public Boolean hasFire()  {
-        return fire == null ? false : true;
-    }
-        
-		public Integer getFire() {
+		            
+		public int getFire() {
 		return fire;
 	}
 	
-	public SiegeCommand setFire(Integer fire) {
+	public SiegeCommand setFire(int fire) {
 		this.fire = fire;
 		return this;	}
 	
-		    
-    public Boolean hasForce()  {
-        return force == null ? false : true;
-    }
-        
-		public Float getForce() {
+		            
+		public float getForce() {
 		return force;
 	}
 	
-	public SiegeCommand setForce(Float force) {
+	public SiegeCommand setForce(float force) {
 		this.force = force;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -575,11 +605,7 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasHitId()  {
-        return hitId == null ? false : true;
-    }
-        
+		            
 		public String getHitId() {
 		return hitId;
 	}
@@ -588,11 +614,7 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.hitId = hitId;
 		return this;	}
 	
-		    
-    public Boolean hasHit()  {
-        return hit == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getHit() {
 		return hit;
 	}
@@ -601,11 +623,7 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.hit = hit;
 		return this;	}
 	
-		    
-    public Boolean hasSkillId()  {
-        return skillId == null ? false : true;
-    }
-        
+		            
 		public String getSkillId() {
 		return skillId;
 	}
@@ -614,37 +632,25 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.skillId = skillId;
 		return this;	}
 	
-		    
-    public Boolean hasStartUse()  {
-        return startUse == null ? false : true;
-    }
-        
-		public Integer getStartUse() {
+		            
+		public int getStartUse() {
 		return startUse;
 	}
 	
-	public SiegeCommand setStartUse(Integer startUse) {
+	public SiegeCommand setStartUse(int startUse) {
 		this.startUse = startUse;
 		return this;	}
 	
-		    
-    public Boolean hasEndUse()  {
-        return endUse == null ? false : true;
-    }
-        
-		public Integer getEndUse() {
+		            
+		public int getEndUse() {
 		return endUse;
 	}
 	
-	public SiegeCommand setEndUse(Integer endUse) {
+	public SiegeCommand setEndUse(int endUse) {
 		this.endUse = endUse;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -653,11 +659,7 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasTargetType()  {
-        return targetType == null ? false : true;
-    }
-        
+		            
 		public String getTargetType() {
 		return targetType;
 	}
@@ -666,11 +668,7 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		this.targetType = targetType;
 		return this;	}
 	
-		    
-    public Boolean hasTargetId()  {
-        return targetId == null ? false : true;
-    }
-        
+		            
 		public String getTargetId() {
 		return targetId;
 	}
@@ -795,28 +793,33 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     {
     	    	
     	    	
-    	    	    	if(message.startLoad != null)
+    	    	    	if( (Integer)message.startLoad != null) {
             output.writeInt32(1, message.startLoad, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.fire != null)
+    	    	    	if( (Integer)message.fire != null) {
             output.writeInt32(2, message.fire, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.force != null)
+    	    	    	if( (Float)message.force != null) {
             output.writeFloat(3, message.force, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(4, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.hitId != null)
+    	    	    	if( (String)message.hitId != null) {
             output.writeString(5, message.hitId, false);
+        }
     	    	
     	            	
     	    	
@@ -825,33 +828,39 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     	    	
     	            	
     	    	
-    	    	    	if(message.skillId != null)
+    	    	    	if( (String)message.skillId != null) {
             output.writeString(7, message.skillId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.startUse != null)
+    	    	    	if( (Integer)message.startUse != null) {
             output.writeInt32(8, message.startUse, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.endUse != null)
+    	    	    	if( (Integer)message.endUse != null) {
             output.writeInt32(9, message.endUse, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(10, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.targetType != null)
+    	    	    	if( (String)message.targetType != null) {
             output.writeString(11, message.targetType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.targetId != null)
+    	    	    	if( (String)message.targetId != null) {
             output.writeString(12, message.targetId, false);
+        }
     	    	
     	            	
     }
@@ -859,42 +868,42 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 	public void dumpObject()
     {
     	System.out.println("START SiegeCommand");
-    	    	if(this.startLoad != null) {
+    	    	//if(this.startLoad != null) {
     		System.out.println("startLoad="+this.startLoad);
-    	}
-    	    	if(this.fire != null) {
+    	//}
+    	    	//if(this.fire != null) {
     		System.out.println("fire="+this.fire);
-    	}
-    	    	if(this.force != null) {
+    	//}
+    	    	//if(this.force != null) {
     		System.out.println("force="+this.force);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.hitId != null) {
+    	//}
+    	    	//if(this.hitId != null) {
     		System.out.println("hitId="+this.hitId);
-    	}
-    	    	if(this.hit != null) {
+    	//}
+    	    	//if(this.hit != null) {
     		System.out.println("hit="+this.hit);
-    	}
-    	    	if(this.skillId != null) {
+    	//}
+    	    	//if(this.skillId != null) {
     		System.out.println("skillId="+this.skillId);
-    	}
-    	    	if(this.startUse != null) {
+    	//}
+    	    	//if(this.startUse != null) {
     		System.out.println("startUse="+this.startUse);
-    	}
-    	    	if(this.endUse != null) {
+    	//}
+    	    	//if(this.endUse != null) {
     		System.out.println("endUse="+this.endUse);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.targetType != null) {
+    	//}
+    	    	//if(this.targetType != null) {
     		System.out.println("targetType="+this.targetType);
-    	}
-    	    	if(this.targetId != null) {
+    	//}
+    	    	//if(this.targetId != null) {
     		System.out.println("targetId="+this.targetId);
-    	}
+    	//}
     	    	System.out.println("END SiegeCommand");
     }
     

@@ -93,7 +93,7 @@ public class TerritoryHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (exactlyOnce(gameMessage)) {
-			if (gameMessage.hasTerritory()) {
+			if (gameMessage.territory != null) {
 				Territory territory = find(gameMessage.territory.id, gameMessage.territory.keep);
 				if (territory != null) {
 					territory.owner = gameMessage.territory.owner;

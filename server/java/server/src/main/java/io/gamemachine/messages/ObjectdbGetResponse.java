@@ -61,8 +61,10 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
     static final ObjectdbGetResponse DEFAULT_INSTANCE = new ObjectdbGetResponse();
     static final String defaultScope = ObjectdbGetResponse.class.getSimpleName();
 
-    			public Boolean entityFound;
-	    
+    	
+	    	    public boolean entityFound= false;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (entityFound != null) {
+    	    	    	//if (entityFound != null) {
     	       	    	model.setBoolean("objectdb_get_response_entity_found",entityFound);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ObjectdbGetResponse fromModel(Model model) {
 		boolean hasFields = false;
     	ObjectdbGetResponse message = new ObjectdbGetResponse();
     	    	    	    	    	
-    	    	    	Boolean entityFoundField = model.getBoolean("objectdb_get_response_entity_found");
-    	    	
-    	if (entityFoundField != null) {
+    	    	    	Boolean entityFoundTestField = model.getBoolean("objectdb_get_response_entity_found");
+    	if (entityFoundTestField != null) {
+    		boolean entityFoundField = entityFoundTestField;
     		message.setEntityFound(entityFoundField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,16 +109,12 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
     }
 
 
-	    
-    public Boolean hasEntityFound()  {
-        return entityFound == null ? false : true;
-    }
-        
-		public Boolean getEntityFound() {
+	            
+		public boolean getEntityFound() {
 		return entityFound;
 	}
 	
-	public ObjectdbGetResponse setEntityFound(Boolean entityFound) {
+	public ObjectdbGetResponse setEntityFound(boolean entityFound) {
 		this.entityFound = entityFound;
 		return this;	}
 	
@@ -189,11 +189,12 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
     public void writeTo(Output output, ObjectdbGetResponse message) throws IOException
     {
     	    	
-    	    	if(message.entityFound == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entityFound == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.entityFound != null)
+    	    	    	if( (Boolean)message.entityFound != null) {
             output.writeBool(1, message.entityFound, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbGetResponse");
-    	    	if(this.entityFound != null) {
+    	    	//if(this.entityFound != null) {
     		System.out.println("entityFound="+this.entityFound);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbGetResponse");
     }
     

@@ -61,12 +61,18 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
     static final GameConfig DEFAULT_INSTANCE = new GameConfig();
     static final String defaultScope = GameConfig.class.getSimpleName();
 
-    			public String config;
-	    
-        			public Integer version;
-	    
-        			public String gameId;
-	    
+    	
+	    	    public String config= null;
+	    		
+    
+        	
+	    	    public int version= 0;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (config != null) {
+    	    	    	//if (config != null) {
     	       	    	model.setString("game_config_config",config);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (version != null) {
+    	    	    	//if (version != null) {
     	       	    	model.setInteger("game_config_version",version);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("game_config_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GameConfig fromModel(Model model) {
 		boolean hasFields = false;
     	GameConfig message = new GameConfig();
     	    	    	    	    	
-    	    	    	String configField = model.getString("game_config_config");
-    	    	
-    	if (configField != null) {
+    	    	    	String configTestField = model.getString("game_config_config");
+    	if (configTestField != null) {
+    		String configField = configTestField;
     		message.setConfig(configField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer versionField = model.getInteger("game_config_version");
+    	
     	    	
-    	if (versionField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer versionTestField = model.getInteger("game_config_version");
+    	if (versionTestField != null) {
+    		int versionField = versionTestField;
     		message.setVersion(versionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("game_config_game_id");
+    	
     	    	
-    	if (gameIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String gameIdTestField = model.getString("game_config_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
     }
 
 
-	    
-    public Boolean hasConfig()  {
-        return config == null ? false : true;
-    }
-        
+	            
 		public String getConfig() {
 		return config;
 	}
@@ -148,24 +156,16 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
 		this.config = config;
 		return this;	}
 	
-		    
-    public Boolean hasVersion()  {
-        return version == null ? false : true;
-    }
-        
-		public Integer getVersion() {
+		            
+		public int getVersion() {
 		return version;
 	}
 	
-	public GameConfig setVersion(Integer version) {
+	public GameConfig setVersion(int version) {
 		this.version = version;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -253,25 +253,28 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
     public void writeTo(Output output, GameConfig message) throws IOException
     {
     	    	
-    	    	if(message.config == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.config == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.config != null)
+    	    	    	if( (String)message.config != null) {
             output.writeString(1, message.config, false);
+        }
     	    	
     	            	
-    	    	if(message.version == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.version == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.version != null)
+    	    	    	if( (Integer)message.version != null) {
             output.writeInt32(2, message.version, false);
+        }
     	    	
     	            	
-    	    	if(message.gameId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.gameId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(3, message.gameId, false);
+        }
     	    	
     	            	
     }
@@ -279,15 +282,15 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
 	public void dumpObject()
     {
     	System.out.println("START GameConfig");
-    	    	if(this.config != null) {
+    	    	//if(this.config != null) {
     		System.out.println("config="+this.config);
-    	}
-    	    	if(this.version != null) {
+    	//}
+    	    	//if(this.version != null) {
     		System.out.println("version="+this.version);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
+    	//}
     	    	System.out.println("END GameConfig");
     }
     

@@ -92,11 +92,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
     }
 
 
-	    
-    public Boolean hasVertices()  {
-        return vertices == null ? false : true;
-    }
-        
+	            
 		public List<Float> getVerticesList() {
 		if(this.vertices == null)
             this.vertices = new ArrayList<Float>();
@@ -108,7 +104,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
 		return this;
 	}
 
-	public Float getVertices(int index)  {
+	public float getVertices(int index)  {
         return vertices == null ? null : vertices.get(index);
     }
 
@@ -116,7 +112,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
         return vertices == null ? 0 : vertices.size();
     }
 
-    public TriangleMesh2 addVertices(Float vertices)  {
+    public TriangleMesh2 addVertices(float vertices)  {
         if(this.vertices == null)
             this.vertices = new ArrayList<Float>();
         this.vertices.add(vertices);
@@ -126,11 +122,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
     
     
     
-		    
-    public Boolean hasIndices()  {
-        return indices == null ? false : true;
-    }
-        
+		            
 		public List<Integer> getIndicesList() {
 		if(this.indices == null)
             this.indices = new ArrayList<Integer>();
@@ -142,7 +134,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
 		return this;
 	}
 
-	public Integer getIndices(int index)  {
+	public int getIndices(int index)  {
         return indices == null ? null : indices.get(index);
     }
 
@@ -150,7 +142,7 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
         return indices == null ? 0 : indices.size();
     }
 
-    public TriangleMesh2 addIndices(Integer indices)  {
+    public TriangleMesh2 addIndices(int indices)  {
         if(this.indices == null)
             this.indices = new ArrayList<Integer>();
         this.indices.add(indices);
@@ -240,9 +232,9 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
     	    	
     	    	if(message.vertices != null)
         {
-            for(Float vertices : message.vertices)
+            for(float vertices : message.vertices)
             {
-                if(vertices != null) {
+                if( (Float) vertices != null) {
                    	            		output.writeFloat(1, vertices, true);
     				    			}
             }
@@ -251,9 +243,9 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
     	    	
     	    	if(message.indices != null)
         {
-            for(Integer indices : message.indices)
+            for(int indices : message.indices)
             {
-                if(indices != null) {
+                if( (Integer) indices != null) {
                    	            		output.writeInt32(2, indices, true);
     				    			}
             }
@@ -264,12 +256,12 @@ public final class TriangleMesh2 implements Externalizable, Message<TriangleMesh
 	public void dumpObject()
     {
     	System.out.println("START TriangleMesh2");
-    	    	if(this.vertices != null) {
+    	    	//if(this.vertices != null) {
     		System.out.println("vertices="+this.vertices);
-    	}
-    	    	if(this.indices != null) {
+    	//}
+    	    	//if(this.indices != null) {
     		System.out.println("indices="+this.indices);
-    	}
+    	//}
     	    	System.out.println("END TriangleMesh2");
     }
     

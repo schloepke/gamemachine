@@ -76,8 +76,10 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     static final String defaultScope = Characters.class.getSimpleName();
 
         public List<Character> characters;
-	    			public String id;
-	    
+	    	
+	    	    public String id= null;
+	    		
+    
         
 	public static CharactersCache cache() {
 		return CharactersCache.getInstance();
@@ -348,22 +350,24 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("characters_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Characters fromModel(Model model) {
 		boolean hasFields = false;
     	Characters message = new Characters();
     	    	    	    	    	    	
-    	    	    	String idField = model.getString("characters_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("characters_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -372,11 +376,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     }
 
 
-	    
-    public Boolean hasCharacters()  {
-        return characters == null ? false : true;
-    }
-        
+	            
 		public List<Character> getCharactersList() {
 		if(this.characters == null)
             this.characters = new ArrayList<Character>();
@@ -443,7 +443,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.health.equals(obj.health)) {
+    	    		if (characters.health == obj.health) {
     	      			itr.remove();
     		}
 		}
@@ -459,7 +459,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.recordId.equals(obj.recordId)) {
+    	    		if (characters.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -491,7 +491,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.part.equals(obj.part)) {
+    	    		if (characters.part == obj.part) {
     	      			itr.remove();
     		}
 		}
@@ -507,7 +507,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.parts.equals(obj.parts)) {
+    	    		if (characters.parts == obj.parts) {
     	      			itr.remove();
     		}
 		}
@@ -523,7 +523,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldx.equals(obj.worldx)) {
+    	    		if (characters.worldx == obj.worldx) {
     	      			itr.remove();
     		}
 		}
@@ -539,7 +539,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldy.equals(obj.worldy)) {
+    	    		if (characters.worldy == obj.worldy) {
     	      			itr.remove();
     		}
 		}
@@ -555,7 +555,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldz.equals(obj.worldz)) {
+    	    		if (characters.worldz == obj.worldz) {
     	      			itr.remove();
     		}
 		}
@@ -571,7 +571,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.zone.equals(obj.zone)) {
+    	    		if (characters.zone == obj.zone) {
     	      			itr.remove();
     		}
 		}
@@ -587,7 +587,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.stamina.equals(obj.stamina)) {
+    	    		if (characters.stamina == obj.stamina) {
     	      			itr.remove();
     		}
 		}
@@ -603,7 +603,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.magic.equals(obj.magic)) {
+    	    		if (characters.magic == obj.magic) {
     	      			itr.remove();
     		}
 		}
@@ -619,7 +619,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.includeUmaData.equals(obj.includeUmaData)) {
+    	    		if (characters.includeUmaData == obj.includeUmaData) {
     	      			itr.remove();
     		}
 		}
@@ -630,11 +630,7 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     
     
     
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -724,15 +720,16 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
         {
             for(Character characters : message.characters)
             {
-                if(characters != null) {
+                if( (Character) characters != null) {
                    	    				output.writeObject(1, characters, Character.getSchema(), true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(2, message.id, false);
+        }
     	    	
     	            	
     }
@@ -740,12 +737,12 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
 	public void dumpObject()
     {
     	System.out.println("START Characters");
-    	    	if(this.characters != null) {
+    	    	//if(this.characters != null) {
     		System.out.println("characters="+this.characters);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END Characters");
     }
     

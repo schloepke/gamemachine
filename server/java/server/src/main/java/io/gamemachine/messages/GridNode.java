@@ -61,10 +61,14 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
     static final GridNode DEFAULT_INSTANCE = new GridNode();
     static final String defaultScope = GridNode.class.getSimpleName();
 
-    			public GmVector3 point;
-	    
-        			public Float slope;
-	    
+    	
+	    	    public GmVector3 point;
+	    		
+    
+        	
+	    	    public float slope= 0F;
+	    		
+    
         
 
 
@@ -83,22 +87,24 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (slope != null) {
+    	    	    	//if (slope != null) {
     	       	    	model.setFloat("grid_node_slope",slope);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GridNode fromModel(Model model) {
 		boolean hasFields = false;
     	GridNode message = new GridNode();
     	    	    	    	    	    	
-    	    	    	Float slopeField = model.getFloat("grid_node_slope");
-    	    	
-    	if (slopeField != null) {
+    	    	    	Float slopeTestField = model.getFloat("grid_node_slope");
+    	if (slopeTestField != null) {
+    		float slopeField = slopeTestField;
     		message.setSlope(slopeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -107,11 +113,7 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
     }
 
 
-	    
-    public Boolean hasPoint()  {
-        return point == null ? false : true;
-    }
-        
+	            
 		public GmVector3 getPoint() {
 		return point;
 	}
@@ -120,16 +122,12 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
 		this.point = point;
 		return this;	}
 	
-		    
-    public Boolean hasSlope()  {
-        return slope == null ? false : true;
-    }
-        
-		public Float getSlope() {
+		            
+		public float getSlope() {
 		return slope;
 	}
 	
-	public GridNode setSlope(Float slope) {
+	public GridNode setSlope(float slope) {
 		this.slope = slope;
 		return this;	}
 	
@@ -208,16 +206,17 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
     public void writeTo(Output output, GridNode message) throws IOException
     {
     	    	
-    	    	if(message.point == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.point == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.point != null)
     		output.writeObject(1, message.point, GmVector3.getSchema(), false);
     	    	
     	            	
     	    	
-    	    	    	if(message.slope != null)
+    	    	    	if( (Float)message.slope != null) {
             output.writeFloat(2, message.slope, false);
+        }
     	    	
     	            	
     }
@@ -225,12 +224,12 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
 	public void dumpObject()
     {
     	System.out.println("START GridNode");
-    	    	if(this.point != null) {
+    	    	//if(this.point != null) {
     		System.out.println("point="+this.point);
-    	}
-    	    	if(this.slope != null) {
+    	//}
+    	    	//if(this.slope != null) {
     		System.out.println("slope="+this.slope);
-    	}
+    	//}
     	    	System.out.println("END GridNode");
     }
     

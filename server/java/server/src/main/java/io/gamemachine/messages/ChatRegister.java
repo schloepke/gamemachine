@@ -61,10 +61,14 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
     static final ChatRegister DEFAULT_INSTANCE = new ChatRegister();
     static final String defaultScope = ChatRegister.class.getSimpleName();
 
-    			public String chatId;
-	    
-        			public String registerAs;
-	    
+    	
+	    	    public String chatId= null;
+	    		
+    
+        	
+	    	    public String registerAs= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (chatId != null) {
+    	    	    	//if (chatId != null) {
     	       	    	model.setString("chat_register_chat_id",chatId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (registerAs != null) {
+    	    	    	//if (registerAs != null) {
     	       	    	model.setString("chat_register_register_as",registerAs);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatRegister fromModel(Model model) {
 		boolean hasFields = false;
     	ChatRegister message = new ChatRegister();
     	    	    	    	    	
-    	    	    	String chatIdField = model.getString("chat_register_chat_id");
-    	    	
-    	if (chatIdField != null) {
+    	    	    	String chatIdTestField = model.getString("chat_register_chat_id");
+    	if (chatIdTestField != null) {
+    		String chatIdField = chatIdTestField;
     		message.setChatId(chatIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String registerAsField = model.getString("chat_register_register_as");
+    	
     	    	
-    	if (registerAsField != null) {
+    	    	    	    	    	    	
+    	    	    	String registerAsTestField = model.getString("chat_register_register_as");
+    	if (registerAsTestField != null) {
+    		String registerAsField = registerAsTestField;
     		message.setRegisterAs(registerAsField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
     }
 
 
-	    
-    public Boolean hasChatId()  {
-        return chatId == null ? false : true;
-    }
-        
+	            
 		public String getChatId() {
 		return chatId;
 	}
@@ -133,11 +137,7 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
 		this.chatId = chatId;
 		return this;	}
 	
-		    
-    public Boolean hasRegisterAs()  {
-        return registerAs == null ? false : true;
-    }
-        
+		            
 		public String getRegisterAs() {
 		return registerAs;
 	}
@@ -221,18 +221,20 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
     public void writeTo(Output output, ChatRegister message) throws IOException
     {
     	    	
-    	    	if(message.chatId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.chatId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.chatId != null)
+    	    	    	if( (String)message.chatId != null) {
             output.writeString(1, message.chatId, false);
+        }
     	    	
     	            	
-    	    	if(message.registerAs == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.registerAs == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.registerAs != null)
+    	    	    	if( (String)message.registerAs != null) {
             output.writeString(2, message.registerAs, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
 	public void dumpObject()
     {
     	System.out.println("START ChatRegister");
-    	    	if(this.chatId != null) {
+    	    	//if(this.chatId != null) {
     		System.out.println("chatId="+this.chatId);
-    	}
-    	    	if(this.registerAs != null) {
+    	//}
+    	    	//if(this.registerAs != null) {
     		System.out.println("registerAs="+this.registerAs);
-    	}
+    	//}
     	    	System.out.println("END ChatRegister");
     }
     

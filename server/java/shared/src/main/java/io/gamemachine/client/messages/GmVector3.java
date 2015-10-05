@@ -51,19 +51,19 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
 
     static final GmVector3 DEFAULT_INSTANCE = new GmVector3();
 
-    			public Float x;
+    			public float x;
 	    
-        			public Float y;
+        			public float y;
 	    
-        			public Float z;
+        			public float z;
 	    
-        			public Integer xi;
+        			public int xi;
 	    
-        			public Integer yi;
+        			public int yi;
 	    
-        			public Integer zi;
+        			public int zi;
 	    
-        			public Integer vertice;
+        			public int vertice;
 	    
       
     public GmVector3()
@@ -79,11 +79,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return x == null ? false : true;
     }
         
-		public Float getX() {
+		public float getX() {
 		return x;
 	}
 	
-	public GmVector3 setX(Float x) {
+	public GmVector3 setX(float x) {
 		this.x = x;
 		return this;	}
 	
@@ -92,11 +92,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return y == null ? false : true;
     }
         
-		public Float getY() {
+		public float getY() {
 		return y;
 	}
 	
-	public GmVector3 setY(Float y) {
+	public GmVector3 setY(float y) {
 		this.y = y;
 		return this;	}
 	
@@ -105,11 +105,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return z == null ? false : true;
     }
         
-		public Float getZ() {
+		public float getZ() {
 		return z;
 	}
 	
-	public GmVector3 setZ(Float z) {
+	public GmVector3 setZ(float z) {
 		this.z = z;
 		return this;	}
 	
@@ -118,11 +118,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return xi == null ? false : true;
     }
         
-		public Integer getXi() {
+		public int getXi() {
 		return xi;
 	}
 	
-	public GmVector3 setXi(Integer xi) {
+	public GmVector3 setXi(int xi) {
 		this.xi = xi;
 		return this;	}
 	
@@ -131,11 +131,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return yi == null ? false : true;
     }
         
-		public Integer getYi() {
+		public int getYi() {
 		return yi;
 	}
 	
-	public GmVector3 setYi(Integer yi) {
+	public GmVector3 setYi(int yi) {
 		this.yi = yi;
 		return this;	}
 	
@@ -144,11 +144,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return zi == null ? false : true;
     }
         
-		public Integer getZi() {
+		public int getZi() {
 		return zi;
 	}
 	
-	public GmVector3 setZi(Integer zi) {
+	public GmVector3 setZi(int zi) {
 		this.zi = zi;
 		return this;	}
 	
@@ -157,11 +157,11 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
         return vertice == null ? false : true;
     }
         
-		public Integer getVertice() {
+		public int getVertice() {
 		return vertice;
 	}
 	
-	public GmVector3 setVertice(Integer vertice) {
+	public GmVector3 setVertice(int vertice) {
 		this.vertice = vertice;
 		return this;	}
 	

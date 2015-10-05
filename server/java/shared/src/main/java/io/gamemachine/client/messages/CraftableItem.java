@@ -55,21 +55,21 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 	    
         			public String item1;
 	    
-        			public Integer item1_quantity;
+        			public int item1_quantity;
 	    
         			public String item2;
 	    
-        			public Integer item2_quantity;
+        			public int item2_quantity;
 	    
         			public String item3;
 	    
-        			public Integer item3_quantity;
+        			public int item3_quantity;
 	    
         			public String item4;
 	    
-        			public Integer item4_quantity;
+        			public int item4_quantity;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
       
     public CraftableItem()
@@ -111,11 +111,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
         return item1_quantity == null ? false : true;
     }
         
-		public Integer getItem1_quantity() {
+		public int getItem1_quantity() {
 		return item1_quantity;
 	}
 	
-	public CraftableItem setItem1_quantity(Integer item1_quantity) {
+	public CraftableItem setItem1_quantity(int item1_quantity) {
 		this.item1_quantity = item1_quantity;
 		return this;	}
 	
@@ -137,11 +137,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
         return item2_quantity == null ? false : true;
     }
         
-		public Integer getItem2_quantity() {
+		public int getItem2_quantity() {
 		return item2_quantity;
 	}
 	
-	public CraftableItem setItem2_quantity(Integer item2_quantity) {
+	public CraftableItem setItem2_quantity(int item2_quantity) {
 		this.item2_quantity = item2_quantity;
 		return this;	}
 	
@@ -163,11 +163,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
         return item3_quantity == null ? false : true;
     }
         
-		public Integer getItem3_quantity() {
+		public int getItem3_quantity() {
 		return item3_quantity;
 	}
 	
-	public CraftableItem setItem3_quantity(Integer item3_quantity) {
+	public CraftableItem setItem3_quantity(int item3_quantity) {
 		this.item3_quantity = item3_quantity;
 		return this;	}
 	
@@ -189,11 +189,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
         return item4_quantity == null ? false : true;
     }
         
-		public Integer getItem4_quantity() {
+		public int getItem4_quantity() {
 		return item4_quantity;
 	}
 	
-	public CraftableItem setItem4_quantity(Integer item4_quantity) {
+	public CraftableItem setItem4_quantity(int item4_quantity) {
 		this.item4_quantity = item4_quantity;
 		return this;	}
 	
@@ -202,11 +202,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public CraftableItem setRecordId(Integer recordId) {
+	public CraftableItem setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	

@@ -61,8 +61,10 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
     static final JsonStorage DEFAULT_INSTANCE = new JsonStorage();
     static final String defaultScope = JsonStorage.class.getSimpleName();
 
-    			public String json;
-	    
+    	
+	    	    public String json= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (json != null) {
+    	    	    	//if (json != null) {
     	       	    	model.setString("json_storage_json",json);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static JsonStorage fromModel(Model model) {
 		boolean hasFields = false;
     	JsonStorage message = new JsonStorage();
     	    	    	    	    	
-    	    	    	String jsonField = model.getString("json_storage_json");
-    	    	
-    	if (jsonField != null) {
+    	    	    	String jsonTestField = model.getString("json_storage_json");
+    	if (jsonTestField != null) {
+    		String jsonField = jsonTestField;
     		message.setJson(jsonField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
     }
 
 
-	    
-    public Boolean hasJson()  {
-        return json == null ? false : true;
-    }
-        
+	            
 		public String getJson() {
 		return json;
 	}
@@ -189,11 +189,12 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
     public void writeTo(Output output, JsonStorage message) throws IOException
     {
     	    	
-    	    	if(message.json == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.json == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.json != null)
+    	    	    	if( (String)message.json != null) {
             output.writeString(1, message.json, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
 	public void dumpObject()
     {
     	System.out.println("START JsonStorage");
-    	    	if(this.json != null) {
+    	    	//if(this.json != null) {
     		System.out.println("json="+this.json);
-    	}
+    	//}
     	    	System.out.println("END JsonStorage");
     }
     

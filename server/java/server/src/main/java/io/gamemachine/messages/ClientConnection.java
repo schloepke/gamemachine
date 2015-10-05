@@ -75,14 +75,22 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
     static final ClientConnection DEFAULT_INSTANCE = new ClientConnection();
     static final String defaultScope = ClientConnection.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String gateway;
-	    
-        			public String server;
-	    
-        			public String type;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String gateway= null;
+	    		
+    
+        	
+	    	    public String server= null;
+	    		
+    
+        	
+	    	    public String type= null;
+	    		
+    
         
 	public static ClientConnectionCache cache() {
 		return ClientConnectionCache.getInstance();
@@ -356,58 +364,66 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("client_connection_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gateway != null) {
+    	    	    	//if (gateway != null) {
     	       	    	model.setString("client_connection_gateway",gateway);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (server != null) {
+    	    	    	//if (server != null) {
     	       	    	model.setString("client_connection_server",server);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("client_connection_type",type);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ClientConnection fromModel(Model model) {
 		boolean hasFields = false;
     	ClientConnection message = new ClientConnection();
     	    	    	    	    	
-    	    	    	String idField = model.getString("client_connection_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("client_connection_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gatewayField = model.getString("client_connection_gateway");
+    	
     	    	
-    	if (gatewayField != null) {
+    	    	    	    	    	    	
+    	    	    	String gatewayTestField = model.getString("client_connection_gateway");
+    	if (gatewayTestField != null) {
+    		String gatewayField = gatewayTestField;
     		message.setGateway(gatewayField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String serverField = model.getString("client_connection_server");
+    	
     	    	
-    	if (serverField != null) {
+    	    	    	    	    	    	
+    	    	    	String serverTestField = model.getString("client_connection_server");
+    	if (serverTestField != null) {
+    		String serverField = serverTestField;
     		message.setServer(serverField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String typeField = model.getString("client_connection_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	
+    	    	    	String typeTestField = model.getString("client_connection_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -416,11 +432,7 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -429,11 +441,7 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasGateway()  {
-        return gateway == null ? false : true;
-    }
-        
+		            
 		public String getGateway() {
 		return gateway;
 	}
@@ -442,11 +450,7 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
 		this.gateway = gateway;
 		return this;	}
 	
-		    
-    public Boolean hasServer()  {
-        return server == null ? false : true;
-    }
-        
+		            
 		public String getServer() {
 		return server;
 	}
@@ -455,11 +459,7 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
 		this.server = server;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+		            
 		public String getType() {
 		return type;
 	}
@@ -551,26 +551,30 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
     public void writeTo(Output output, ClientConnection message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.gateway != null)
+    	    	    	if( (String)message.gateway != null) {
             output.writeString(2, message.gateway, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.server != null)
+    	    	    	if( (String)message.server != null) {
             output.writeString(3, message.server, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(4, message.type, false);
+        }
     	    	
     	            	
     }
@@ -578,18 +582,18 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
 	public void dumpObject()
     {
     	System.out.println("START ClientConnection");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.gateway != null) {
+    	//}
+    	    	//if(this.gateway != null) {
     		System.out.println("gateway="+this.gateway);
-    	}
-    	    	if(this.server != null) {
+    	//}
+    	    	//if(this.server != null) {
     		System.out.println("server="+this.server);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
+    	//}
     	    	System.out.println("END ClientConnection");
     }
     

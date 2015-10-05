@@ -107,7 +107,7 @@ public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<Dat
 			clients.put(clientId, clientAddress);
 		}
 		
-		if (clientMessage.hasRpcMessage()) {
+		if (clientMessage.rpcMessage != null) {
 			rpc.tell(clientMessage.rpcMessage, null);
 			return;
 		}

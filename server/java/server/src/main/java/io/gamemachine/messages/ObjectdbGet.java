@@ -61,12 +61,18 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
     static final ObjectdbGet DEFAULT_INSTANCE = new ObjectdbGet();
     static final String defaultScope = ObjectdbGet.class.getSimpleName();
 
-    			public String entityId;
-	    
-        			public String playerId;
-	    
-        			public String klass;
-	    
+    	
+	    	    public String entityId= null;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public String klass= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (entityId != null) {
+    	    	    	//if (entityId != null) {
     	       	    	model.setString("objectdb_get_entity_id",entityId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("objectdb_get_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (klass != null) {
+    	    	    	//if (klass != null) {
     	       	    	model.setString("objectdb_get_klass",klass);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ObjectdbGet fromModel(Model model) {
 		boolean hasFields = false;
     	ObjectdbGet message = new ObjectdbGet();
     	    	    	    	    	
-    	    	    	String entityIdField = model.getString("objectdb_get_entity_id");
-    	    	
-    	if (entityIdField != null) {
+    	    	    	String entityIdTestField = model.getString("objectdb_get_entity_id");
+    	if (entityIdTestField != null) {
+    		String entityIdField = entityIdTestField;
     		message.setEntityId(entityIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("objectdb_get_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("objectdb_get_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String klassField = model.getString("objectdb_get_klass");
+    	
     	    	
-    	if (klassField != null) {
+    	    	    	    	    	    	
+    	    	    	String klassTestField = model.getString("objectdb_get_klass");
+    	if (klassTestField != null) {
+    		String klassField = klassTestField;
     		message.setKlass(klassField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
     }
 
 
-	    
-    public Boolean hasEntityId()  {
-        return entityId == null ? false : true;
-    }
-        
+	            
 		public String getEntityId() {
 		return entityId;
 	}
@@ -148,11 +156,7 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
 		this.entityId = entityId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -161,11 +165,7 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasKlass()  {
-        return klass == null ? false : true;
-    }
-        
+		            
 		public String getKlass() {
 		return klass;
 	}
@@ -253,21 +253,24 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
     public void writeTo(Output output, ObjectdbGet message) throws IOException
     {
     	    	
-    	    	if(message.entityId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entityId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.entityId != null)
+    	    	    	if( (String)message.entityId != null) {
             output.writeString(1, message.entityId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(2, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.klass != null)
+    	    	    	if( (String)message.klass != null) {
             output.writeString(3, message.klass, false);
+        }
     	    	
     	            	
     }
@@ -275,15 +278,15 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbGet");
-    	    	if(this.entityId != null) {
+    	    	//if(this.entityId != null) {
     		System.out.println("entityId="+this.entityId);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.klass != null) {
+    	//}
+    	    	//if(this.klass != null) {
     		System.out.println("klass="+this.klass);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbGet");
     }
     

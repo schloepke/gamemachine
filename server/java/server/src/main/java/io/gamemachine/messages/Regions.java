@@ -61,8 +61,10 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
     static final Regions DEFAULT_INSTANCE = new Regions();
     static final String defaultScope = Regions.class.getSimpleName();
 
-    			public String regions;
-	    
+    	
+	    	    public String regions= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (regions != null) {
+    	    	    	//if (regions != null) {
     	       	    	model.setString("regions_regions",regions);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Regions fromModel(Model model) {
 		boolean hasFields = false;
     	Regions message = new Regions();
     	    	    	    	    	
-    	    	    	String regionsField = model.getString("regions_regions");
-    	    	
-    	if (regionsField != null) {
+    	    	    	String regionsTestField = model.getString("regions_regions");
+    	if (regionsTestField != null) {
+    		String regionsField = regionsTestField;
     		message.setRegions(regionsField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
     }
 
 
-	    
-    public Boolean hasRegions()  {
-        return regions == null ? false : true;
-    }
-        
+	            
 		public String getRegions() {
 		return regions;
 	}
@@ -189,11 +189,12 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
     public void writeTo(Output output, Regions message) throws IOException
     {
     	    	
-    	    	if(message.regions == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.regions == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.regions != null)
+    	    	    	if( (String)message.regions != null) {
             output.writeString(1, message.regions, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
 	public void dumpObject()
     {
     	System.out.println("START Regions");
-    	    	if(this.regions != null) {
+    	    	//if(this.regions != null) {
     		System.out.println("regions="+this.regions);
-    	}
+    	//}
     	    	System.out.println("END Regions");
     }
     

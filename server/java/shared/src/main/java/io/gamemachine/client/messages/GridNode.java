@@ -53,7 +53,7 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
 
     			public GmVector3 point;
 	    
-        			public Float slope;
+        			public float slope;
 	    
       
     public GridNode()
@@ -82,11 +82,11 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
         return slope == null ? false : true;
     }
         
-		public Float getSlope() {
+		public float getSlope() {
 		return slope;
 	}
 	
-	public GridNode setSlope(Float slope) {
+	public GridNode setSlope(float slope) {
 		this.slope = slope;
 		return this;	}
 	

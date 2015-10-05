@@ -55,11 +55,11 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
 	    
         			public String buildObjectId;
 	    
-        			public Long placedAt;
+        			public long placedAt;
 	    
-        			public Boolean buildOverTime;
+        			public boolean buildOverTime;
 	    
-        			public Integer buildTime;
+        			public int buildTime;
 	    
       
     public BuildObjectSlot()
@@ -101,11 +101,11 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
         return placedAt == null ? false : true;
     }
         
-		public Long getPlacedAt() {
+		public long getPlacedAt() {
 		return placedAt;
 	}
 	
-	public BuildObjectSlot setPlacedAt(Long placedAt) {
+	public BuildObjectSlot setPlacedAt(long placedAt) {
 		this.placedAt = placedAt;
 		return this;	}
 	
@@ -114,11 +114,11 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
         return buildOverTime == null ? false : true;
     }
         
-		public Boolean getBuildOverTime() {
+		public boolean getBuildOverTime() {
 		return buildOverTime;
 	}
 	
-	public BuildObjectSlot setBuildOverTime(Boolean buildOverTime) {
+	public BuildObjectSlot setBuildOverTime(boolean buildOverTime) {
 		this.buildOverTime = buildOverTime;
 		return this;	}
 	
@@ -127,11 +127,11 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
         return buildTime == null ? false : true;
     }
         
-		public Integer getBuildTime() {
+		public int getBuildTime() {
 		return buildTime;
 	}
 	
-	public BuildObjectSlot setBuildTime(Integer buildTime) {
+	public BuildObjectSlot setBuildTime(int buildTime) {
 		this.buildTime = buildTime;
 		return this;	}
 	

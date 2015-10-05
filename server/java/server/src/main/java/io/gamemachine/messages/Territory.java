@@ -81,14 +81,22 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     static final Territory DEFAULT_INSTANCE = new Territory();
     static final String defaultScope = Territory.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String owner;
-	    
-        			public Integer recordId;
-	    
-        			public String keep;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String owner= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String keep= null;
+	    		
+    
         
 	public static TerritoryCache cache() {
 		return TerritoryCache.getInstance();
@@ -432,9 +440,9 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 	    	}
 	    	
 	    	io.gamemachine.orm.models.Territory model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.Territory.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.Territory();
@@ -559,53 +567,59 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("territory_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (owner != null) {
+    	    	    	//if (owner != null) {
     	       	    	model.setString("territory_owner",owner);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (keep != null) {
+    	    	    	//if (keep != null) {
     	       	    	model.setString("territory_keep",keep);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Territory fromModel(Model model) {
 		boolean hasFields = false;
     	Territory message = new Territory();
     	    	    	    	    	
-    	    	    	String idField = model.getString("territory_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("territory_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String ownerField = model.getString("territory_owner");
+    	
     	    	
-    	if (ownerField != null) {
+    	    	    	    	    	    	
+    	    	    	String ownerTestField = model.getString("territory_owner");
+    	if (ownerTestField != null) {
+    		String ownerField = ownerTestField;
     		message.setOwner(ownerField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String keepField = model.getString("territory_keep");
-    	    	
-    	if (keepField != null) {
+    	    	    	String keepTestField = model.getString("territory_keep");
+    	if (keepTestField != null) {
+    		String keepField = keepTestField;
     		message.setKeep(keepField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -614,11 +628,7 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -627,11 +637,7 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasOwner()  {
-        return owner == null ? false : true;
-    }
-        
+		            
 		public String getOwner() {
 		return owner;
 	}
@@ -640,24 +646,16 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 		this.owner = owner;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Territory setRecordId(Integer recordId) {
+	public Territory setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasKeep()  {
-        return keep == null ? false : true;
-    }
-        
+		            
 		public String getKeep() {
 		return keep;
 	}
@@ -749,28 +747,32 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     public void writeTo(Output output, Territory message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.owner == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.owner == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.owner != null)
+    	    	    	if( (String)message.owner != null) {
             output.writeString(2, message.owner, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(3, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.keep != null)
+    	    	    	if( (String)message.keep != null) {
             output.writeString(4, message.keep, false);
+        }
     	    	
     	            	
     }
@@ -778,18 +780,18 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 	public void dumpObject()
     {
     	System.out.println("START Territory");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.owner != null) {
+    	//}
+    	    	//if(this.owner != null) {
     		System.out.println("owner="+this.owner);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.keep != null) {
+    	//}
+    	    	//if(this.keep != null) {
     		System.out.println("keep="+this.keep);
-    	}
+    	//}
     	    	System.out.println("END Territory");
     }
     

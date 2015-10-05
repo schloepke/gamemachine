@@ -61,8 +61,10 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
     static final GuildMemberList DEFAULT_INSTANCE = new GuildMemberList();
     static final String defaultScope = GuildMemberList.class.getSimpleName();
 
-    			public String guildId;
-	    
+    	
+	    	    public String guildId= null;
+	    		
+    
             public List<String> playerId;
 	    
 
@@ -82,22 +84,24 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (guildId != null) {
+    	    	    	//if (guildId != null) {
     	       	    	model.setString("guild_member_list_guild_id",guildId);
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static GuildMemberList fromModel(Model model) {
 		boolean hasFields = false;
     	GuildMemberList message = new GuildMemberList();
     	    	    	    	    	
-    	    	    	String guildIdField = model.getString("guild_member_list_guild_id");
-    	    	
-    	if (guildIdField != null) {
+    	    	    	String guildIdTestField = model.getString("guild_member_list_guild_id");
+    	if (guildIdTestField != null) {
+    		String guildIdField = guildIdTestField;
     		message.setGuildId(guildIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -106,11 +110,7 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
     }
 
 
-	    
-    public Boolean hasGuildId()  {
-        return guildId == null ? false : true;
-    }
-        
+	            
 		public String getGuildId() {
 		return guildId;
 	}
@@ -119,11 +119,7 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
 		this.guildId = guildId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public List<String> getPlayerIdList() {
 		if(this.playerId == null)
             this.playerId = new ArrayList<String>();
@@ -229,11 +225,12 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
     public void writeTo(Output output, GuildMemberList message) throws IOException
     {
     	    	
-    	    	if(message.guildId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.guildId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.guildId != null)
+    	    	    	if( (String)message.guildId != null) {
             output.writeString(1, message.guildId, false);
+        }
     	    	
     	            	
     	    	
@@ -241,7 +238,7 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
         {
             for(String playerId : message.playerId)
             {
-                if(playerId != null) {
+                if( (String) playerId != null) {
                    	            		output.writeString(2, playerId, true);
     				    			}
             }
@@ -252,12 +249,12 @@ public final class GuildMemberList implements Externalizable, Message<GuildMembe
 	public void dumpObject()
     {
     	System.out.println("START GuildMemberList");
-    	    	if(this.guildId != null) {
+    	    	//if(this.guildId != null) {
     		System.out.println("guildId="+this.guildId);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END GuildMemberList");
     }
     

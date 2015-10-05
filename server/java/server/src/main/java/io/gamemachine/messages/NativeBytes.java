@@ -61,8 +61,10 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     static final NativeBytes DEFAULT_INSTANCE = new NativeBytes();
     static final String defaultScope = NativeBytes.class.getSimpleName();
 
-    			public ByteString bytes;
-	    
+    	
+	    	    public ByteString bytes;
+	    		
+    
             public List<ByteString> byteArray;
 	    
 
@@ -82,10 +84,10 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (bytes != null) {
+    	    	    	//if (bytes != null) {
     	       	    	model.set("native_bytes_bytes",bytes.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static NativeBytes fromModel(Model model) {
@@ -100,10 +102,6 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     	}
     	    	
     	    	
-    	if (bytesField != null) {
-    		message.setBytes(bytesField);
-    		hasFields = true;
-    	}
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -112,11 +110,7 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     }
 
 
-	    
-    public Boolean hasBytes()  {
-        return bytes == null ? false : true;
-    }
-        
+	            
 		public ByteString getBytes() {
 		return bytes;
 	}
@@ -125,11 +119,7 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
 		this.bytes = bytes;
 		return this;	}
 	
-		    
-    public Boolean hasByteArray()  {
-        return byteArray == null ? false : true;
-    }
-        
+		            
 		public List<ByteString> getByteArrayList() {
 		if(this.byteArray == null)
             this.byteArray = new ArrayList<ByteString>();
@@ -236,8 +226,9 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     {
     	    	
     	    	
-    	    	    	if(message.bytes != null)
+    	    	    	if( (ByteString)message.bytes != null) {
             output.writeBytes(1, message.bytes, false);
+        }
     	    	
     	            	
     	    	
@@ -245,7 +236,7 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
         {
             for(ByteString byteArray : message.byteArray)
             {
-                if(byteArray != null) {
+                if( (ByteString) byteArray != null) {
                    	            		output.writeBytes(2, byteArray, true);
     				    			}
             }
@@ -256,12 +247,12 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
 	public void dumpObject()
     {
     	System.out.println("START NativeBytes");
-    	    	if(this.bytes != null) {
+    	    	//if(this.bytes != null) {
     		System.out.println("bytes="+this.bytes);
-    	}
-    	    	if(this.byteArray != null) {
+    	//}
+    	    	//if(this.byteArray != null) {
     		System.out.println("byteArray="+this.byteArray);
-    	}
+    	//}
     	    	System.out.println("END NativeBytes");
     }
     

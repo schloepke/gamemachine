@@ -61,10 +61,14 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     static final BuildObjectChunk DEFAULT_INSTANCE = new BuildObjectChunk();
     static final String defaultScope = BuildObjectChunk.class.getSimpleName();
 
-    			public ByteString data;
-	    
-        			public Integer chunk;
-	    
+    	
+	    	    public ByteString data;
+	    		
+    
+        	
+	    	    public int chunk= 0;
+	    		
+    
         
 
 
@@ -84,15 +88,15 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (data != null) {
+    	    	    	//if (data != null) {
     	       	    	model.set("build_object_chunk_data",data.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (chunk != null) {
+    	    	    	//if (chunk != null) {
     	       	    	model.setInteger("build_object_chunk_chunk",chunk);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static BuildObjectChunk fromModel(Model model) {
@@ -107,17 +111,15 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     	}
     	    	
     	    	
-    	if (dataField != null) {
-    		message.setData(dataField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	Integer chunkField = model.getInteger("build_object_chunk_chunk");
-    	    	
-    	if (chunkField != null) {
+    	    	    	Integer chunkTestField = model.getInteger("build_object_chunk_chunk");
+    	if (chunkTestField != null) {
+    		int chunkField = chunkTestField;
     		message.setChunk(chunkField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -126,11 +128,7 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     }
 
 
-	    
-    public Boolean hasData()  {
-        return data == null ? false : true;
-    }
-        
+	            
 		public ByteString getData() {
 		return data;
 	}
@@ -139,16 +137,12 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
 		this.data = data;
 		return this;	}
 	
-		    
-    public Boolean hasChunk()  {
-        return chunk == null ? false : true;
-    }
-        
-		public Integer getChunk() {
+		            
+		public int getChunk() {
 		return chunk;
 	}
 	
-	public BuildObjectChunk setChunk(Integer chunk) {
+	public BuildObjectChunk setChunk(int chunk) {
 		this.chunk = chunk;
 		return this;	}
 	
@@ -228,13 +222,15 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     {
     	    	
     	    	
-    	    	    	if(message.data != null)
+    	    	    	if( (ByteString)message.data != null) {
             output.writeBytes(1, message.data, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.chunk != null)
+    	    	    	if( (Integer)message.chunk != null) {
             output.writeInt32(2, message.chunk, false);
+        }
     	    	
     	            	
     }
@@ -242,12 +238,12 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
 	public void dumpObject()
     {
     	System.out.println("START BuildObjectChunk");
-    	    	if(this.data != null) {
+    	    	//if(this.data != null) {
     		System.out.println("data="+this.data);
-    	}
-    	    	if(this.chunk != null) {
+    	//}
+    	    	//if(this.chunk != null) {
     		System.out.println("chunk="+this.chunk);
-    	}
+    	//}
     	    	System.out.println("END BuildObjectChunk");
     }
     

@@ -53,23 +53,23 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 
     			public String id;
 	    
-        			public Boolean authenticated;
+        			public boolean authenticated;
 	    
-        			public Integer authtoken;
+        			public int authtoken;
 	    
         			public String passwordHash;
 	    
         			public String gameId;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String role;
 	    
-        			public Boolean locked;
+        			public boolean locked;
 	    
-        			public Integer ip;
+        			public int ip;
 	    
-        			public Long ipChangedAt;
+        			public long ipChangedAt;
 	    
         			public String characterId;
 	    
@@ -101,11 +101,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return authenticated == null ? false : true;
     }
         
-		public Boolean getAuthenticated() {
+		public boolean getAuthenticated() {
 		return authenticated;
 	}
 	
-	public Player setAuthenticated(Boolean authenticated) {
+	public Player setAuthenticated(boolean authenticated) {
 		this.authenticated = authenticated;
 		return this;	}
 	
@@ -114,11 +114,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return authtoken == null ? false : true;
     }
         
-		public Integer getAuthtoken() {
+		public int getAuthtoken() {
 		return authtoken;
 	}
 	
-	public Player setAuthtoken(Integer authtoken) {
+	public Player setAuthtoken(int authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	
@@ -153,11 +153,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Player setRecordId(Integer recordId) {
+	public Player setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -179,11 +179,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return locked == null ? false : true;
     }
         
-		public Boolean getLocked() {
+		public boolean getLocked() {
 		return locked;
 	}
 	
-	public Player setLocked(Boolean locked) {
+	public Player setLocked(boolean locked) {
 		this.locked = locked;
 		return this;	}
 	
@@ -192,11 +192,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return ip == null ? false : true;
     }
         
-		public Integer getIp() {
+		public int getIp() {
 		return ip;
 	}
 	
-	public Player setIp(Integer ip) {
+	public Player setIp(int ip) {
 		this.ip = ip;
 		return this;	}
 	
@@ -205,11 +205,11 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         return ipChangedAt == null ? false : true;
     }
         
-		public Long getIpChangedAt() {
+		public long getIpChangedAt() {
 		return ipChangedAt;
 	}
 	
-	public Player setIpChangedAt(Long ipChangedAt) {
+	public Player setIpChangedAt(long ipChangedAt) {
 		this.ipChangedAt = ipChangedAt;
 		return this;	}
 	

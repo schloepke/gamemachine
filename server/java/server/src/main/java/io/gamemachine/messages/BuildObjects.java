@@ -62,12 +62,18 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
     static final String defaultScope = BuildObjects.class.getSimpleName();
 
         public List<BuildObject> buildObject;
-	    			public Integer action;
-	    
-        			public Integer requestedUpdateId;
-	    
-        			public Integer currentUpdate;
-	    
+	    	
+	    	    public int action= 0;
+	    		
+    
+        	
+	    	    public int requestedUpdateId= 0;
+	    		
+    
+        	
+	    	    public int currentUpdate= 0;
+	    		
+    
         
 
 
@@ -88,46 +94,52 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setInteger("build_objects_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (requestedUpdateId != null) {
+    	    	    	//if (requestedUpdateId != null) {
     	       	    	model.setInteger("build_objects_requested_update_id",requestedUpdateId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (currentUpdate != null) {
+    	    	    	//if (currentUpdate != null) {
     	       	    	model.setInteger("build_objects_current_update",currentUpdate);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static BuildObjects fromModel(Model model) {
 		boolean hasFields = false;
     	BuildObjects message = new BuildObjects();
     	    	    	    	    	    	
-    	    	    	Integer actionField = model.getInteger("build_objects_action");
-    	    	
-    	if (actionField != null) {
+    	    	    	Integer actionTestField = model.getInteger("build_objects_action");
+    	if (actionTestField != null) {
+    		int actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer requestedUpdateIdField = model.getInteger("build_objects_requested_update_id");
+    	
     	    	
-    	if (requestedUpdateIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer requestedUpdateIdTestField = model.getInteger("build_objects_requested_update_id");
+    	if (requestedUpdateIdTestField != null) {
+    		int requestedUpdateIdField = requestedUpdateIdTestField;
     		message.setRequestedUpdateId(requestedUpdateIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer currentUpdateField = model.getInteger("build_objects_current_update");
+    	
     	    	
-    	if (currentUpdateField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer currentUpdateTestField = model.getInteger("build_objects_current_update");
+    	if (currentUpdateTestField != null) {
+    		int currentUpdateField = currentUpdateTestField;
     		message.setCurrentUpdate(currentUpdateField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -136,11 +148,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
     }
 
 
-	    
-    public Boolean hasBuildObject()  {
-        return buildObject == null ? false : true;
-    }
-        
+	            
 		public List<BuildObject> getBuildObjectList() {
 		if(this.buildObject == null)
             this.buildObject = new ArrayList<BuildObject>();
@@ -191,7 +199,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.action.equals(obj.action)) {
+    	    		if (buildObject.action == obj.action) {
     	      			itr.remove();
     		}
 		}
@@ -223,7 +231,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.recordId.equals(obj.recordId)) {
+    	    		if (buildObject.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -255,7 +263,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.x.equals(obj.x)) {
+    	    		if (buildObject.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -271,7 +279,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.y.equals(obj.y)) {
+    	    		if (buildObject.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -287,7 +295,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.z.equals(obj.z)) {
+    	    		if (buildObject.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -303,7 +311,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.rx.equals(obj.rx)) {
+    	    		if (buildObject.rx == obj.rx) {
     	      			itr.remove();
     		}
 		}
@@ -319,7 +327,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.ry.equals(obj.ry)) {
+    	    		if (buildObject.ry == obj.ry) {
     	      			itr.remove();
     		}
 		}
@@ -335,7 +343,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.rz.equals(obj.rz)) {
+    	    		if (buildObject.rz == obj.rz) {
     	      			itr.remove();
     		}
 		}
@@ -351,7 +359,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.rw.equals(obj.rw)) {
+    	    		if (buildObject.rw == obj.rw) {
     	      			itr.remove();
     		}
 		}
@@ -367,7 +375,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.health.equals(obj.health)) {
+    	    		if (buildObject.health == obj.health) {
     	      			itr.remove();
     		}
 		}
@@ -383,7 +391,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.templateId.equals(obj.templateId)) {
+    	    		if (buildObject.templateId == obj.templateId) {
     	      			itr.remove();
     		}
 		}
@@ -415,7 +423,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.updatedAt.equals(obj.updatedAt)) {
+    	    		if (buildObject.updatedAt == obj.updatedAt) {
     	      			itr.remove();
     		}
 		}
@@ -431,7 +439,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.state.equals(obj.state)) {
+    	    		if (buildObject.state == obj.state) {
     	      			itr.remove();
     		}
 		}
@@ -447,7 +455,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.updateId.equals(obj.updateId)) {
+    	    		if (buildObject.updateId == obj.updateId) {
     	      			itr.remove();
     		}
 		}
@@ -463,7 +471,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.isFloor.equals(obj.isFloor)) {
+    	    		if (buildObject.isFloor == obj.isFloor) {
     	      			itr.remove();
     		}
 		}
@@ -479,7 +487,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.isDestructable.equals(obj.isDestructable)) {
+    	    		if (buildObject.isDestructable == obj.isDestructable) {
     	      			itr.remove();
     		}
 		}
@@ -495,7 +503,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.hasDoor.equals(obj.hasDoor)) {
+    	    		if (buildObject.hasDoor == obj.hasDoor) {
     	      			itr.remove();
     		}
 		}
@@ -511,7 +519,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.doorStatus.equals(obj.doorStatus)) {
+    	    		if (buildObject.doorStatus == obj.doorStatus) {
     	      			itr.remove();
     		}
 		}
@@ -527,7 +535,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.groundBlockObject.equals(obj.groundBlockObject)) {
+    	    		if (buildObject.groundBlockObject == obj.groundBlockObject) {
     	      			itr.remove();
     		}
 		}
@@ -543,7 +551,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.isGroundBlock.equals(obj.isGroundBlock)) {
+    	    		if (buildObject.isGroundBlock == obj.isGroundBlock) {
     	      			itr.remove();
     		}
 		}
@@ -559,7 +567,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.chunk.equals(obj.chunk)) {
+    	    		if (buildObject.chunk == obj.chunk) {
     	      			itr.remove();
     		}
 		}
@@ -575,7 +583,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.terrainEdit.equals(obj.terrainEdit)) {
+    	    		if (buildObject.terrainEdit == obj.terrainEdit) {
     	      			itr.remove();
     		}
 		}
@@ -591,7 +599,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.isTerrainEdit.equals(obj.isTerrainEdit)) {
+    	    		if (buildObject.isTerrainEdit == obj.isTerrainEdit) {
     	      			itr.remove();
     		}
 		}
@@ -607,7 +615,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.customBytes.equals(obj.customBytes)) {
+    	    		if (buildObject.customBytes == obj.customBytes) {
     	      			itr.remove();
     		}
 		}
@@ -655,7 +663,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.slots.equals(obj.slots)) {
+    	    		if (buildObject.slots == obj.slots) {
     	      			itr.remove();
     		}
 		}
@@ -671,7 +679,7 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
        	while (itr.hasNext()) {
     	BuildObject obj = itr.next();
     	
-    	    		if (buildObject.placedAt.equals(obj.placedAt)) {
+    	    		if (buildObject.placedAt == obj.placedAt) {
     	      			itr.remove();
     		}
 		}
@@ -682,42 +690,30 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
     
     
     
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
-		public Integer getAction() {
+		            
+		public int getAction() {
 		return action;
 	}
 	
-	public BuildObjects setAction(Integer action) {
+	public BuildObjects setAction(int action) {
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasRequestedUpdateId()  {
-        return requestedUpdateId == null ? false : true;
-    }
-        
-		public Integer getRequestedUpdateId() {
+		            
+		public int getRequestedUpdateId() {
 		return requestedUpdateId;
 	}
 	
-	public BuildObjects setRequestedUpdateId(Integer requestedUpdateId) {
+	public BuildObjects setRequestedUpdateId(int requestedUpdateId) {
 		this.requestedUpdateId = requestedUpdateId;
 		return this;	}
 	
-		    
-    public Boolean hasCurrentUpdate()  {
-        return currentUpdate == null ? false : true;
-    }
-        
-		public Integer getCurrentUpdate() {
+		            
+		public int getCurrentUpdate() {
 		return currentUpdate;
 	}
 	
-	public BuildObjects setCurrentUpdate(Integer currentUpdate) {
+	public BuildObjects setCurrentUpdate(int currentUpdate) {
 		this.currentUpdate = currentUpdate;
 		return this;	}
 	
@@ -810,25 +806,28 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
         {
             for(BuildObject buildObject : message.buildObject)
             {
-                if(buildObject != null) {
+                if( (BuildObject) buildObject != null) {
                    	    				output.writeObject(1, buildObject, BuildObject.getSchema(), true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (Integer)message.action != null) {
             output.writeInt32(2, message.action, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.requestedUpdateId != null)
+    	    	    	if( (Integer)message.requestedUpdateId != null) {
             output.writeInt32(3, message.requestedUpdateId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.currentUpdate != null)
+    	    	    	if( (Integer)message.currentUpdate != null) {
             output.writeInt32(4, message.currentUpdate, false);
+        }
     	    	
     	            	
     }
@@ -836,18 +835,18 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
 	public void dumpObject()
     {
     	System.out.println("START BuildObjects");
-    	    	if(this.buildObject != null) {
+    	    	//if(this.buildObject != null) {
     		System.out.println("buildObject="+this.buildObject);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.requestedUpdateId != null) {
+    	//}
+    	    	//if(this.requestedUpdateId != null) {
     		System.out.println("requestedUpdateId="+this.requestedUpdateId);
-    	}
-    	    	if(this.currentUpdate != null) {
+    	//}
+    	    	//if(this.currentUpdate != null) {
     		System.out.println("currentUpdate="+this.currentUpdate);
-    	}
+    	//}
     	    	System.out.println("END BuildObjects");
     }
     

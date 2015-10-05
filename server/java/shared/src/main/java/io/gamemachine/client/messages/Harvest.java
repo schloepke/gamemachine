@@ -53,9 +53,9 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
 
     			public String id;
 	    
-        			public Integer result;
+        			public int result;
 	    
-        			public Long harvestedAt;
+        			public long harvestedAt;
 	    
         			public String characterId;
 	    
@@ -88,11 +88,11 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public Harvest setResult(Integer result) {
+	public Harvest setResult(int result) {
 		this.result = result;
 		return this;	}
 	
@@ -101,11 +101,11 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
         return harvestedAt == null ? false : true;
     }
         
-		public Long getHarvestedAt() {
+		public long getHarvestedAt() {
 		return harvestedAt;
 	}
 	
-	public Harvest setHarvestedAt(Long harvestedAt) {
+	public Harvest setHarvestedAt(long harvestedAt) {
 		this.harvestedAt = harvestedAt;
 		return this;	}
 	

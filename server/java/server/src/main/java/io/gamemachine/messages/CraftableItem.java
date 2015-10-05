@@ -81,26 +81,46 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     static final CraftableItem DEFAULT_INSTANCE = new CraftableItem();
     static final String defaultScope = CraftableItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String item1;
-	    
-        			public Integer item1_quantity;
-	    
-        			public String item2;
-	    
-        			public Integer item2_quantity;
-	    
-        			public String item3;
-	    
-        			public Integer item3_quantity;
-	    
-        			public String item4;
-	    
-        			public Integer item4_quantity;
-	    
-        			public Integer recordId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String item1= null;
+	    		
+    
+        	
+	    	    public int item1_quantity= 0;
+	    		
+    
+        	
+	    	    public String item2= null;
+	    		
+    
+        	
+	    	    public int item2_quantity= 0;
+	    		
+    
+        	
+	    	    public String item3= null;
+	    		
+    
+        	
+	    	    public int item3_quantity= 0;
+	    		
+    
+        	
+	    	    public String item4= null;
+	    		
+    
+        	
+	    	    public int item4_quantity= 0;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
         
 	public static CraftableItemCache cache() {
 		return CraftableItemCache.getInstance();
@@ -444,9 +464,9 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 	    	}
 	    	
 	    	io.gamemachine.orm.models.CraftableItem model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.CraftableItem.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.CraftableItem();
@@ -577,50 +597,50 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("craftable_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item1 != null) {
+    	    	    	//if (item1 != null) {
     	       	    	model.setString("craftable_item_item1",item1);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item1_quantity != null) {
+    	    	    	//if (item1_quantity != null) {
     	       	    	model.setInteger("craftable_item_item1_quantity",item1_quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item2 != null) {
+    	    	    	//if (item2 != null) {
     	       	    	model.setString("craftable_item_item2",item2);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item2_quantity != null) {
+    	    	    	//if (item2_quantity != null) {
     	       	    	model.setInteger("craftable_item_item2_quantity",item2_quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item3 != null) {
+    	    	    	//if (item3 != null) {
     	       	    	model.setString("craftable_item_item3",item3);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item3_quantity != null) {
+    	    	    	//if (item3_quantity != null) {
     	       	    	model.setInteger("craftable_item_item3_quantity",item3_quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item4 != null) {
+    	    	    	//if (item4 != null) {
     	       	    	model.setString("craftable_item_item4",item4);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (item4_quantity != null) {
+    	    	    	//if (item4_quantity != null) {
     	       	    	model.setInteger("craftable_item_item4_quantity",item4_quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    }
@@ -629,73 +649,91 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		boolean hasFields = false;
     	CraftableItem message = new CraftableItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("craftable_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("craftable_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String item1Field = model.getString("craftable_item_item1");
+    	
     	    	
-    	if (item1Field != null) {
+    	    	    	    	    	    	
+    	    	    	String item1TestField = model.getString("craftable_item_item1");
+    	if (item1TestField != null) {
+    		String item1Field = item1TestField;
     		message.setItem1(item1Field);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer item1_quantityField = model.getInteger("craftable_item_item1_quantity");
+    	
     	    	
-    	if (item1_quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer item1_quantityTestField = model.getInteger("craftable_item_item1_quantity");
+    	if (item1_quantityTestField != null) {
+    		int item1_quantityField = item1_quantityTestField;
     		message.setItem1_quantity(item1_quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String item2Field = model.getString("craftable_item_item2");
+    	
     	    	
-    	if (item2Field != null) {
+    	    	    	    	    	    	
+    	    	    	String item2TestField = model.getString("craftable_item_item2");
+    	if (item2TestField != null) {
+    		String item2Field = item2TestField;
     		message.setItem2(item2Field);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer item2_quantityField = model.getInteger("craftable_item_item2_quantity");
+    	
     	    	
-    	if (item2_quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer item2_quantityTestField = model.getInteger("craftable_item_item2_quantity");
+    	if (item2_quantityTestField != null) {
+    		int item2_quantityField = item2_quantityTestField;
     		message.setItem2_quantity(item2_quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String item3Field = model.getString("craftable_item_item3");
+    	
     	    	
-    	if (item3Field != null) {
+    	    	    	    	    	    	
+    	    	    	String item3TestField = model.getString("craftable_item_item3");
+    	if (item3TestField != null) {
+    		String item3Field = item3TestField;
     		message.setItem3(item3Field);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer item3_quantityField = model.getInteger("craftable_item_item3_quantity");
+    	
     	    	
-    	if (item3_quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer item3_quantityTestField = model.getInteger("craftable_item_item3_quantity");
+    	if (item3_quantityTestField != null) {
+    		int item3_quantityField = item3_quantityTestField;
     		message.setItem3_quantity(item3_quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String item4Field = model.getString("craftable_item_item4");
+    	
     	    	
-    	if (item4Field != null) {
+    	    	    	    	    	    	
+    	    	    	String item4TestField = model.getString("craftable_item_item4");
+    	if (item4TestField != null) {
+    		String item4Field = item4TestField;
     		message.setItem4(item4Field);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer item4_quantityField = model.getInteger("craftable_item_item4_quantity");
+    	
     	    	
-    	if (item4_quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer item4_quantityTestField = model.getInteger("craftable_item_item4_quantity");
+    	if (item4_quantityTestField != null) {
+    		int item4_quantityField = item4_quantityTestField;
     		message.setItem4_quantity(item4_quantityField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -704,11 +742,7 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -717,11 +751,7 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasItem1()  {
-        return item1 == null ? false : true;
-    }
-        
+		            
 		public String getItem1() {
 		return item1;
 	}
@@ -730,24 +760,16 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		this.item1 = item1;
 		return this;	}
 	
-		    
-    public Boolean hasItem1_quantity()  {
-        return item1_quantity == null ? false : true;
-    }
-        
-		public Integer getItem1_quantity() {
+		            
+		public int getItem1_quantity() {
 		return item1_quantity;
 	}
 	
-	public CraftableItem setItem1_quantity(Integer item1_quantity) {
+	public CraftableItem setItem1_quantity(int item1_quantity) {
 		this.item1_quantity = item1_quantity;
 		return this;	}
 	
-		    
-    public Boolean hasItem2()  {
-        return item2 == null ? false : true;
-    }
-        
+		            
 		public String getItem2() {
 		return item2;
 	}
@@ -756,24 +778,16 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		this.item2 = item2;
 		return this;	}
 	
-		    
-    public Boolean hasItem2_quantity()  {
-        return item2_quantity == null ? false : true;
-    }
-        
-		public Integer getItem2_quantity() {
+		            
+		public int getItem2_quantity() {
 		return item2_quantity;
 	}
 	
-	public CraftableItem setItem2_quantity(Integer item2_quantity) {
+	public CraftableItem setItem2_quantity(int item2_quantity) {
 		this.item2_quantity = item2_quantity;
 		return this;	}
 	
-		    
-    public Boolean hasItem3()  {
-        return item3 == null ? false : true;
-    }
-        
+		            
 		public String getItem3() {
 		return item3;
 	}
@@ -782,24 +796,16 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		this.item3 = item3;
 		return this;	}
 	
-		    
-    public Boolean hasItem3_quantity()  {
-        return item3_quantity == null ? false : true;
-    }
-        
-		public Integer getItem3_quantity() {
+		            
+		public int getItem3_quantity() {
 		return item3_quantity;
 	}
 	
-	public CraftableItem setItem3_quantity(Integer item3_quantity) {
+	public CraftableItem setItem3_quantity(int item3_quantity) {
 		this.item3_quantity = item3_quantity;
 		return this;	}
 	
-		    
-    public Boolean hasItem4()  {
-        return item4 == null ? false : true;
-    }
-        
+		            
 		public String getItem4() {
 		return item4;
 	}
@@ -808,29 +814,21 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 		this.item4 = item4;
 		return this;	}
 	
-		    
-    public Boolean hasItem4_quantity()  {
-        return item4_quantity == null ? false : true;
-    }
-        
-		public Integer getItem4_quantity() {
+		            
+		public int getItem4_quantity() {
 		return item4_quantity;
 	}
 	
-	public CraftableItem setItem4_quantity(Integer item4_quantity) {
+	public CraftableItem setItem4_quantity(int item4_quantity) {
 		this.item4_quantity = item4_quantity;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public CraftableItem setRecordId(Integer recordId) {
+	public CraftableItem setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -941,56 +939,66 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     public void writeTo(Output output, CraftableItem message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item1 != null)
+    	    	    	if( (String)message.item1 != null) {
             output.writeString(2, message.item1, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item1_quantity != null)
+    	    	    	if( (Integer)message.item1_quantity != null) {
             output.writeInt32(3, message.item1_quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item2 != null)
+    	    	    	if( (String)message.item2 != null) {
             output.writeString(4, message.item2, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item2_quantity != null)
+    	    	    	if( (Integer)message.item2_quantity != null) {
             output.writeInt32(5, message.item2_quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item3 != null)
+    	    	    	if( (String)message.item3 != null) {
             output.writeString(6, message.item3, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item3_quantity != null)
+    	    	    	if( (Integer)message.item3_quantity != null) {
             output.writeInt32(7, message.item3_quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item4 != null)
+    	    	    	if( (String)message.item4 != null) {
             output.writeString(8, message.item4, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.item4_quantity != null)
+    	    	    	if( (Integer)message.item4_quantity != null) {
             output.writeInt32(9, message.item4_quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(10, message.recordId, false);
+        }
     	    	
     	            	
     }
@@ -998,36 +1006,36 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 	public void dumpObject()
     {
     	System.out.println("START CraftableItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.item1 != null) {
+    	//}
+    	    	//if(this.item1 != null) {
     		System.out.println("item1="+this.item1);
-    	}
-    	    	if(this.item1_quantity != null) {
+    	//}
+    	    	//if(this.item1_quantity != null) {
     		System.out.println("item1_quantity="+this.item1_quantity);
-    	}
-    	    	if(this.item2 != null) {
+    	//}
+    	    	//if(this.item2 != null) {
     		System.out.println("item2="+this.item2);
-    	}
-    	    	if(this.item2_quantity != null) {
+    	//}
+    	    	//if(this.item2_quantity != null) {
     		System.out.println("item2_quantity="+this.item2_quantity);
-    	}
-    	    	if(this.item3 != null) {
+    	//}
+    	    	//if(this.item3 != null) {
     		System.out.println("item3="+this.item3);
-    	}
-    	    	if(this.item3_quantity != null) {
+    	//}
+    	    	//if(this.item3_quantity != null) {
     		System.out.println("item3_quantity="+this.item3_quantity);
-    	}
-    	    	if(this.item4 != null) {
+    	//}
+    	    	//if(this.item4 != null) {
     		System.out.println("item4="+this.item4);
-    	}
-    	    	if(this.item4_quantity != null) {
+    	//}
+    	    	//if(this.item4_quantity != null) {
     		System.out.println("item4_quantity="+this.item4_quantity);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
+    	//}
     	    	System.out.println("END CraftableItem");
     }
     

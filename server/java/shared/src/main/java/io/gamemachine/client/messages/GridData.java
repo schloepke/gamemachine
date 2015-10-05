@@ -52,9 +52,9 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
     static final GridData DEFAULT_INSTANCE = new GridData();
 
         public List<GridNode> nodes;
-	    			public Integer w;
+	    			public int w;
 	    
-        			public Integer h;
+        			public int h;
 	    
             public List<GridVerticle> gridVerticles;
 	  
@@ -121,11 +121,11 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
         return w == null ? false : true;
     }
         
-		public Integer getW() {
+		public int getW() {
 		return w;
 	}
 	
-	public GridData setW(Integer w) {
+	public GridData setW(int w) {
 		this.w = w;
 		return this;	}
 	
@@ -134,11 +134,11 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
         return h == null ? false : true;
     }
         
-		public Integer getH() {
+		public int getH() {
 		return h;
 	}
 	
-	public GridData setH(Integer h) {
+	public GridData setH(int h) {
 		this.h = h;
 		return this;	}
 	

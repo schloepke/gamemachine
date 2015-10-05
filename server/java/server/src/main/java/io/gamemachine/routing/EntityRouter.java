@@ -16,6 +16,8 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import akka.actor.ActorSelection;
 
 public class EntityRouter {
@@ -47,17 +49,17 @@ public class EntityRouter {
 		for (Entity entity : entities) {
 			entity.setPlayer(player);
 
-			if (entity.hasTrackData() || entity.hasTrackDataUpdate() || entity.hasAgentTrackData()) {
+			if (entity.trackData != null || entity.trackDataUpdate != null || entity.agentTrackData != null) {
 				entityTracking.tell(entity, null);
 				continue;
 			}
 
-			if (entity.hasDestination()) {
+			if (!Strings.isNullOrEmpty(entity.destination)) {
 				routeByDestination(entity);
 				continue;
 			}
 
-			if (entity.hasGameMessages()) {
+			if (entity.gameMessages != null) {
 				routeByGameMessage(entity);
 			}
 
@@ -67,12 +69,12 @@ public class EntityRouter {
 
 	private void routeByComponent(Entity entity) {
 		ActorSelection sel;
-		if (entity.hasEchoTest()) {
+		if (entity.echoTest != null) {
 			sel = ActorUtil.getSelectionByName("GameMachine::GameSystems::RemoteEcho");
 			sel.tell(entity, null);
 		}
-		if (entity.hasChatInvite() || entity.hasChatMessage() || entity.hasChatStatus() || entity.hasLeaveChat()
-				|| entity.hasJoinChat()) {
+		if (entity.chatInvite != null || entity.chatMessage != null || entity.chatStatus != null || entity.leaveChat != null
+				|| entity.joinChat != null) {
 			sel = ActorUtil.getSelectionByName("GameMachine::GameSystems::ChatManager");
 			sel.tell(entity, null);
 		}
@@ -115,7 +117,7 @@ public class EntityRouter {
 
 	private void routeByGameMessage(Entity entity) {
 		for (GameMessage gameMessage : entity.getGameMessages().getGameMessageList()) {
-			if (gameMessage.hasDestination()) {
+			if (!Strings.isNullOrEmpty(gameMessage.destination)) {
 				String destination = gameMessage.getDestination();
 				logger.debug("GameMessage destination " + destination);
 				PlayerDestination pd = destinationToPlayer(destination, entity.getPlayer().getId());

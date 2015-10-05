@@ -51,7 +51,7 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
 
     static final PoisonPill DEFAULT_INSTANCE = new PoisonPill();
 
-    			public Integer notused;
+    			public int notused;
 	    
       
     public PoisonPill()
@@ -67,11 +67,11 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
         return notused == null ? false : true;
     }
         
-		public Integer getNotused() {
+		public int getNotused() {
 		return notused;
 	}
 	
-	public PoisonPill setNotused(Integer notused) {
+	public PoisonPill setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	

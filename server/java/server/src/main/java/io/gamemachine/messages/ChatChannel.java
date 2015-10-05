@@ -61,14 +61,22 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     static final ChatChannel DEFAULT_INSTANCE = new ChatChannel();
     static final String defaultScope = ChatChannel.class.getSimpleName();
 
-    			public String name;
-	    
-        			public Subscribers subscribers;
-	    
-        			public String flags;
-	    
-        			public String invite_id;
-	    
+    	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public Subscribers subscribers;
+	    		
+    
+        	
+	    	    public String flags= null;
+	    		
+    
+        	
+	    	    public String invite_id= null;
+	    		
+    
         
 
 
@@ -89,46 +97,52 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("chat_channel_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (flags != null) {
+    	    	    	//if (flags != null) {
     	       	    	model.setString("chat_channel_flags",flags);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (invite_id != null) {
+    	    	    	//if (invite_id != null) {
     	       	    	model.setString("chat_channel_invite_id",invite_id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatChannel fromModel(Model model) {
 		boolean hasFields = false;
     	ChatChannel message = new ChatChannel();
     	    	    	    	    	
-    	    	    	String nameField = model.getString("chat_channel_name");
-    	    	
-    	if (nameField != null) {
+    	    	    	String nameTestField = model.getString("chat_channel_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String flagsField = model.getString("chat_channel_flags");
+    	
     	    	
-    	if (flagsField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String flagsTestField = model.getString("chat_channel_flags");
+    	if (flagsTestField != null) {
+    		String flagsField = flagsTestField;
     		message.setFlags(flagsField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String invite_idField = model.getString("chat_channel_invite_id");
+    	
     	    	
-    	if (invite_idField != null) {
+    	    	    	    	    	    	
+    	    	    	String invite_idTestField = model.getString("chat_channel_invite_id");
+    	if (invite_idTestField != null) {
+    		String invite_idField = invite_idTestField;
     		message.setInvite_id(invite_idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -137,11 +151,7 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     }
 
 
-	    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+	            
 		public String getName() {
 		return name;
 	}
@@ -150,11 +160,7 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasSubscribers()  {
-        return subscribers == null ? false : true;
-    }
-        
+		            
 		public Subscribers getSubscribers() {
 		return subscribers;
 	}
@@ -163,11 +169,7 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
 		this.subscribers = subscribers;
 		return this;	}
 	
-		    
-    public Boolean hasFlags()  {
-        return flags == null ? false : true;
-    }
-        
+		            
 		public String getFlags() {
 		return flags;
 	}
@@ -176,11 +178,7 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
 		this.flags = flags;
 		return this;	}
 	
-		    
-    public Boolean hasInvite_id()  {
-        return invite_id == null ? false : true;
-    }
-        
+		            
 		public String getInvite_id() {
 		return invite_id;
 	}
@@ -272,11 +270,12 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     public void writeTo(Output output, ChatChannel message) throws IOException
     {
     	    	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.name == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(1, message.name, false);
+        }
     	    	
     	            	
     	    	
@@ -285,13 +284,15 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     	    	
     	            	
     	    	
-    	    	    	if(message.flags != null)
+    	    	    	if( (String)message.flags != null) {
             output.writeString(3, message.flags, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.invite_id != null)
+    	    	    	if( (String)message.invite_id != null) {
             output.writeString(5, message.invite_id, false);
+        }
     	    	
     	            	
     }
@@ -299,18 +300,18 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
 	public void dumpObject()
     {
     	System.out.println("START ChatChannel");
-    	    	if(this.name != null) {
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.subscribers != null) {
+    	//}
+    	    	//if(this.subscribers != null) {
     		System.out.println("subscribers="+this.subscribers);
-    	}
-    	    	if(this.flags != null) {
+    	//}
+    	    	//if(this.flags != null) {
     		System.out.println("flags="+this.flags);
-    	}
-    	    	if(this.invite_id != null) {
+    	//}
+    	    	//if(this.invite_id != null) {
     		System.out.println("invite_id="+this.invite_id);
-    	}
+    	//}
     	    	System.out.println("END ChatChannel");
     }
     

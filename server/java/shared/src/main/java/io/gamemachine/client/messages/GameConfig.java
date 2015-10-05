@@ -53,7 +53,7 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
 
     			public String config;
 	    
-        			public Integer version;
+        			public int version;
 	    
         			public String gameId;
 	    
@@ -84,11 +84,11 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
         return version == null ? false : true;
     }
         
-		public Integer getVersion() {
+		public int getVersion() {
 		return version;
 	}
 	
-	public GameConfig setVersion(Integer version) {
+	public GameConfig setVersion(int version) {
 		this.version = version;
 		return this;	}
 	

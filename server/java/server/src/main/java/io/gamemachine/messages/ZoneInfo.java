@@ -81,22 +81,38 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
     static final ZoneInfo DEFAULT_INSTANCE = new ZoneInfo();
     static final String defaultScope = ZoneInfo.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer recordId;
-	    
-        			public String node;
-	    
-        			public String actorName;
-	    
-        			public Boolean assigned;
-	    
-        			public Integer number;
-	    
-        			public String hostname;
-	    
-        			public Boolean current;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String node= null;
+	    		
+    
+        	
+	    	    public String actorName= null;
+	    		
+    
+        	
+	    	    public boolean assigned= false;
+	    		
+    
+        	
+	    	    public int number= 0;
+	    		
+    
+        	
+	    	    public String hostname= null;
+	    		
+    
+        	
+	    	    public boolean current= false;
+	    		
+    
         
 	public static ZoneInfoCache cache() {
 		return ZoneInfoCache.getInstance();
@@ -440,9 +456,9 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 	    	}
 	    	
 	    	io.gamemachine.orm.models.ZoneInfo model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.ZoneInfo.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.ZoneInfo();
@@ -571,101 +587,115 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("zone_info_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (node != null) {
+    	    	    	//if (node != null) {
     	       	    	model.setString("zone_info_node",node);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (actorName != null) {
+    	    	    	//if (actorName != null) {
     	       	    	model.setString("zone_info_actor_name",actorName);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (assigned != null) {
+    	    	    	//if (assigned != null) {
     	       	    	model.setBoolean("zone_info_assigned",assigned);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (number != null) {
+    	    	    	//if (number != null) {
     	       	    	model.setInteger("zone_info_number",number);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hostname != null) {
+    	    	    	//if (hostname != null) {
     	       	    	model.setString("zone_info_hostname",hostname);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (current != null) {
+    	    	    	//if (current != null) {
     	       	    	model.setBoolean("zone_info_current",current);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ZoneInfo fromModel(Model model) {
 		boolean hasFields = false;
     	ZoneInfo message = new ZoneInfo();
     	    	    	    	    	
-    	    	    	String idField = model.getString("zone_info_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("zone_info_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String nodeField = model.getString("zone_info_node");
-    	    	
-    	if (nodeField != null) {
+    	    	    	String nodeTestField = model.getString("zone_info_node");
+    	if (nodeTestField != null) {
+    		String nodeField = nodeTestField;
     		message.setNode(nodeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String actorNameField = model.getString("zone_info_actor_name");
+    	
     	    	
-    	if (actorNameField != null) {
+    	    	    	    	    	    	
+    	    	    	String actorNameTestField = model.getString("zone_info_actor_name");
+    	if (actorNameTestField != null) {
+    		String actorNameField = actorNameTestField;
     		message.setActorName(actorNameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean assignedField = model.getBoolean("zone_info_assigned");
+    	
     	    	
-    	if (assignedField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean assignedTestField = model.getBoolean("zone_info_assigned");
+    	if (assignedTestField != null) {
+    		boolean assignedField = assignedTestField;
     		message.setAssigned(assignedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer numberField = model.getInteger("zone_info_number");
+    	
     	    	
-    	if (numberField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer numberTestField = model.getInteger("zone_info_number");
+    	if (numberTestField != null) {
+    		int numberField = numberTestField;
     		message.setNumber(numberField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String hostnameField = model.getString("zone_info_hostname");
+    	
     	    	
-    	if (hostnameField != null) {
+    	    	    	    	    	    	
+    	    	    	String hostnameTestField = model.getString("zone_info_hostname");
+    	if (hostnameTestField != null) {
+    		String hostnameField = hostnameTestField;
     		message.setHostname(hostnameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean currentField = model.getBoolean("zone_info_current");
+    	
     	    	
-    	if (currentField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean currentTestField = model.getBoolean("zone_info_current");
+    	if (currentTestField != null) {
+    		boolean currentField = currentTestField;
     		message.setCurrent(currentField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -674,11 +704,7 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -687,24 +713,16 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public ZoneInfo setRecordId(Integer recordId) {
+	public ZoneInfo setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasNode()  {
-        return node == null ? false : true;
-    }
-        
+		            
 		public String getNode() {
 		return node;
 	}
@@ -713,11 +731,7 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 		this.node = node;
 		return this;	}
 	
-		    
-    public Boolean hasActorName()  {
-        return actorName == null ? false : true;
-    }
-        
+		            
 		public String getActorName() {
 		return actorName;
 	}
@@ -726,37 +740,25 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 		this.actorName = actorName;
 		return this;	}
 	
-		    
-    public Boolean hasAssigned()  {
-        return assigned == null ? false : true;
-    }
-        
-		public Boolean getAssigned() {
+		            
+		public boolean getAssigned() {
 		return assigned;
 	}
 	
-	public ZoneInfo setAssigned(Boolean assigned) {
+	public ZoneInfo setAssigned(boolean assigned) {
 		this.assigned = assigned;
 		return this;	}
 	
-		    
-    public Boolean hasNumber()  {
-        return number == null ? false : true;
-    }
-        
-		public Integer getNumber() {
+		            
+		public int getNumber() {
 		return number;
 	}
 	
-	public ZoneInfo setNumber(Integer number) {
+	public ZoneInfo setNumber(int number) {
 		this.number = number;
 		return this;	}
 	
-		    
-    public Boolean hasHostname()  {
-        return hostname == null ? false : true;
-    }
-        
+		            
 		public String getHostname() {
 		return hostname;
 	}
@@ -765,16 +767,12 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 		this.hostname = hostname;
 		return this;	}
 	
-		    
-    public Boolean hasCurrent()  {
-        return current == null ? false : true;
-    }
-        
-		public Boolean getCurrent() {
+		            
+		public boolean getCurrent() {
 		return current;
 	}
 	
-	public ZoneInfo setCurrent(Boolean current) {
+	public ZoneInfo setCurrent(boolean current) {
 		this.current = current;
 		return this;	}
 	
@@ -877,48 +875,56 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
     public void writeTo(Output output, ZoneInfo message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(2, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.node != null)
+    	    	    	if( (String)message.node != null) {
             output.writeString(3, message.node, false);
+        }
     	    	
     	            	
-    	    	if(message.actorName == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.actorName == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.actorName != null)
+    	    	    	if( (String)message.actorName != null) {
             output.writeString(4, message.actorName, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.assigned != null)
+    	    	    	if( (Boolean)message.assigned != null) {
             output.writeBool(5, message.assigned, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.number != null)
+    	    	    	if( (Integer)message.number != null) {
             output.writeInt32(6, message.number, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.hostname != null)
+    	    	    	if( (String)message.hostname != null) {
             output.writeString(7, message.hostname, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.current != null)
+    	    	    	if( (Boolean)message.current != null) {
             output.writeBool(8, message.current, false);
+        }
     	    	
     	            	
     }
@@ -926,30 +932,30 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 	public void dumpObject()
     {
     	System.out.println("START ZoneInfo");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.node != null) {
+    	//}
+    	    	//if(this.node != null) {
     		System.out.println("node="+this.node);
-    	}
-    	    	if(this.actorName != null) {
+    	//}
+    	    	//if(this.actorName != null) {
     		System.out.println("actorName="+this.actorName);
-    	}
-    	    	if(this.assigned != null) {
+    	//}
+    	    	//if(this.assigned != null) {
     		System.out.println("assigned="+this.assigned);
-    	}
-    	    	if(this.number != null) {
+    	//}
+    	    	//if(this.number != null) {
     		System.out.println("number="+this.number);
-    	}
-    	    	if(this.hostname != null) {
+    	//}
+    	    	//if(this.hostname != null) {
     		System.out.println("hostname="+this.hostname);
-    	}
-    	    	if(this.current != null) {
+    	//}
+    	    	//if(this.current != null) {
     		System.out.println("current="+this.current);
-    	}
+    	//}
     	    	System.out.println("END ZoneInfo");
     }
     

@@ -61,12 +61,18 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
     static final TrackEntity DEFAULT_INSTANCE = new TrackEntity();
     static final String defaultScope = TrackEntity.class.getSimpleName();
 
-    			public Boolean value;
-	    
-        			public Boolean internal;
-	    
-        			public TrackData trackData;
-	    
+    	
+	    	    public boolean value= false;
+	    		
+    
+        	
+	    	    public boolean internal= false;
+	    		
+    
+        	
+	    	    public TrackData trackData;
+	    		
+    
         
 
 
@@ -86,34 +92,38 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setBoolean("track_entity_value",value);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (internal != null) {
+    	    	    	//if (internal != null) {
     	       	    	model.setBoolean("track_entity_internal",internal);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static TrackEntity fromModel(Model model) {
 		boolean hasFields = false;
     	TrackEntity message = new TrackEntity();
     	    	    	    	    	
-    	    	    	Boolean valueField = model.getBoolean("track_entity_value");
-    	    	
-    	if (valueField != null) {
+    	    	    	Boolean valueTestField = model.getBoolean("track_entity_value");
+    	if (valueTestField != null) {
+    		boolean valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean internalField = model.getBoolean("track_entity_internal");
+    	
     	    	
-    	if (internalField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean internalTestField = model.getBoolean("track_entity_internal");
+    	if (internalTestField != null) {
+    		boolean internalField = internalTestField;
     		message.setInternal(internalField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -122,37 +132,25 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
     }
 
 
-	    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
-		public Boolean getValue() {
+	            
+		public boolean getValue() {
 		return value;
 	}
 	
-	public TrackEntity setValue(Boolean value) {
+	public TrackEntity setValue(boolean value) {
 		this.value = value;
 		return this;	}
 	
-		    
-    public Boolean hasInternal()  {
-        return internal == null ? false : true;
-    }
-        
-		public Boolean getInternal() {
+		            
+		public boolean getInternal() {
 		return internal;
 	}
 	
-	public TrackEntity setInternal(Boolean internal) {
+	public TrackEntity setInternal(boolean internal) {
 		this.internal = internal;
 		return this;	}
 	
-		    
-    public Boolean hasTrackData()  {
-        return trackData == null ? false : true;
-    }
-        
+		            
 		public TrackData getTrackData() {
 		return trackData;
 	}
@@ -240,16 +238,18 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
     public void writeTo(Output output, TrackEntity message) throws IOException
     {
     	    	
-    	    	if(message.value == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.value == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (Boolean)message.value != null) {
             output.writeBool(1, message.value, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.internal != null)
+    	    	    	if( (Boolean)message.internal != null) {
             output.writeBool(2, message.internal, false);
+        }
     	    	
     	            	
     	    	
@@ -262,15 +262,15 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
 	public void dumpObject()
     {
     	System.out.println("START TrackEntity");
-    	    	if(this.value != null) {
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
-    	    	if(this.internal != null) {
+    	//}
+    	    	//if(this.internal != null) {
     		System.out.println("internal="+this.internal);
-    	}
-    	    	if(this.trackData != null) {
+    	//}
+    	    	//if(this.trackData != null) {
     		System.out.println("trackData="+this.trackData);
-    	}
+    	//}
     	    	System.out.println("END TrackEntity");
     }
     

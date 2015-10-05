@@ -51,9 +51,9 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
 
     static final TrackEntity DEFAULT_INSTANCE = new TrackEntity();
 
-    			public Boolean value;
+    			public boolean value;
 	    
-        			public Boolean internal;
+        			public boolean internal;
 	    
         			public TrackData trackData;
 	    
@@ -71,11 +71,11 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
         return value == null ? false : true;
     }
         
-		public Boolean getValue() {
+		public boolean getValue() {
 		return value;
 	}
 	
-	public TrackEntity setValue(Boolean value) {
+	public TrackEntity setValue(boolean value) {
 		this.value = value;
 		return this;	}
 	
@@ -84,11 +84,11 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
         return internal == null ? false : true;
     }
         
-		public Boolean getInternal() {
+		public boolean getInternal() {
 		return internal;
 	}
 	
-	public TrackEntity setInternal(Boolean internal) {
+	public TrackEntity setInternal(boolean internal) {
 		this.internal = internal;
 		return this;	}
 	

@@ -61,8 +61,10 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
     static final Name DEFAULT_INSTANCE = new Name();
     static final String defaultScope = Name.class.getSimpleName();
 
-    			public String value;
-	    
+    	
+	    	    public String value= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setString("name_value",value);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Name fromModel(Model model) {
 		boolean hasFields = false;
     	Name message = new Name();
     	    	    	    	    	
-    	    	    	String valueField = model.getString("name_value");
-    	    	
-    	if (valueField != null) {
+    	    	    	String valueTestField = model.getString("name_value");
+    	if (valueTestField != null) {
+    		String valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
     }
 
 
-	    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
+	            
 		public String getValue() {
 		return value;
 	}
@@ -189,11 +189,12 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
     public void writeTo(Output output, Name message) throws IOException
     {
     	    	
-    	    	if(message.value == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.value == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (String)message.value != null) {
             output.writeString(1, message.value, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
 	public void dumpObject()
     {
     	System.out.println("START Name");
-    	    	if(this.value != null) {
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
+    	//}
     	    	System.out.println("END Name");
     }
     

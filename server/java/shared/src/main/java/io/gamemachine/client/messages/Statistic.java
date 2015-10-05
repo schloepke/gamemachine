@@ -53,7 +53,7 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
 
     			public String name;
 	    
-        			public Float value;
+        			public float value;
 	    
         			public String type;
 	    
@@ -84,11 +84,11 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
         return value == null ? false : true;
     }
         
-		public Float getValue() {
+		public float getValue() {
 		return value;
 	}
 	
-	public Statistic setValue(Float value) {
+	public Statistic setValue(float value) {
 		this.value = value;
 		return this;	}
 	

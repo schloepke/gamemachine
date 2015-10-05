@@ -53,7 +53,7 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
 
     			public String playerId;
 	    
-        			public Integer authtoken;
+        			public int authtoken;
 	    
       
     public PlayerLogout()
@@ -82,11 +82,11 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
         return authtoken == null ? false : true;
     }
         
-		public Integer getAuthtoken() {
+		public int getAuthtoken() {
 		return authtoken;
 	}
 	
-	public PlayerLogout setAuthtoken(Integer authtoken) {
+	public PlayerLogout setAuthtoken(int authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	

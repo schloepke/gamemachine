@@ -61,14 +61,22 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
     static final ClientEvent DEFAULT_INSTANCE = new ClientEvent();
     static final String defaultScope = ClientEvent.class.getSimpleName();
 
-    			public String event;
-	    
-        			public String clientId;
-	    
-        			public String senderId;
-	    
-        			public String playerId;
-	    
+    	
+	    	    public String event= null;
+	    		
+    
+        	
+	    	    public String clientId= null;
+	    		
+    
+        	
+	    	    public String senderId= null;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
         
 
 
@@ -90,58 +98,66 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (event != null) {
+    	    	    	//if (event != null) {
     	       	    	model.setString("client_event_event",event);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (clientId != null) {
+    	    	    	//if (clientId != null) {
     	       	    	model.setString("client_event_client_id",clientId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (senderId != null) {
+    	    	    	//if (senderId != null) {
     	       	    	model.setString("client_event_sender_id",senderId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("client_event_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ClientEvent fromModel(Model model) {
 		boolean hasFields = false;
     	ClientEvent message = new ClientEvent();
     	    	    	    	    	
-    	    	    	String eventField = model.getString("client_event_event");
-    	    	
-    	if (eventField != null) {
+    	    	    	String eventTestField = model.getString("client_event_event");
+    	if (eventTestField != null) {
+    		String eventField = eventTestField;
     		message.setEvent(eventField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String clientIdField = model.getString("client_event_client_id");
+    	
     	    	
-    	if (clientIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String clientIdTestField = model.getString("client_event_client_id");
+    	if (clientIdTestField != null) {
+    		String clientIdField = clientIdTestField;
     		message.setClientId(clientIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String senderIdField = model.getString("client_event_sender_id");
+    	
     	    	
-    	if (senderIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String senderIdTestField = model.getString("client_event_sender_id");
+    	if (senderIdTestField != null) {
+    		String senderIdField = senderIdTestField;
     		message.setSenderId(senderIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("client_event_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("client_event_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,11 +166,7 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
     }
 
 
-	    
-    public Boolean hasEvent()  {
-        return event == null ? false : true;
-    }
-        
+	            
 		public String getEvent() {
 		return event;
 	}
@@ -163,11 +175,7 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
 		this.event = event;
 		return this;	}
 	
-		    
-    public Boolean hasClientId()  {
-        return clientId == null ? false : true;
-    }
-        
+		            
 		public String getClientId() {
 		return clientId;
 	}
@@ -176,11 +184,7 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
 		this.clientId = clientId;
 		return this;	}
 	
-		    
-    public Boolean hasSenderId()  {
-        return senderId == null ? false : true;
-    }
-        
+		            
 		public String getSenderId() {
 		return senderId;
 	}
@@ -189,11 +193,7 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
 		this.senderId = senderId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -285,30 +285,34 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
     public void writeTo(Output output, ClientEvent message) throws IOException
     {
     	    	
-    	    	if(message.event == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.event == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.event != null)
+    	    	    	if( (String)message.event != null) {
             output.writeString(1, message.event, false);
+        }
     	    	
     	            	
-    	    	if(message.clientId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.clientId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.clientId != null)
+    	    	    	if( (String)message.clientId != null) {
             output.writeString(2, message.clientId, false);
+        }
     	    	
     	            	
-    	    	if(message.senderId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.senderId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.senderId != null)
+    	    	    	if( (String)message.senderId != null) {
             output.writeString(3, message.senderId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(4, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -316,18 +320,18 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
 	public void dumpObject()
     {
     	System.out.println("START ClientEvent");
-    	    	if(this.event != null) {
+    	    	//if(this.event != null) {
     		System.out.println("event="+this.event);
-    	}
-    	    	if(this.clientId != null) {
+    	//}
+    	    	//if(this.clientId != null) {
     		System.out.println("clientId="+this.clientId);
-    	}
-    	    	if(this.senderId != null) {
+    	//}
+    	    	//if(this.senderId != null) {
     		System.out.println("senderId="+this.senderId);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END ClientEvent");
     }
     

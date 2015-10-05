@@ -91,11 +91,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
     }
 
 
-	    
-    public Boolean hasPlayer()  {
-        return player == null ? false : true;
-    }
-        
+	            
 		public List<Player> getPlayerList() {
 		if(this.player == null)
             this.player = new ArrayList<Player>();
@@ -146,7 +142,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.authenticated.equals(obj.authenticated)) {
+    	    		if (player.authenticated == obj.authenticated) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.authtoken.equals(obj.authtoken)) {
+    	    		if (player.authtoken == obj.authtoken) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.recordId.equals(obj.recordId)) {
+    	    		if (player.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -242,7 +238,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.locked.equals(obj.locked)) {
+    	    		if (player.locked == obj.locked) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.ip.equals(obj.ip)) {
+    	    		if (player.ip == obj.ip) {
     	      			itr.remove();
     		}
 		}
@@ -274,7 +270,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.ipChangedAt.equals(obj.ipChangedAt)) {
+    	    		if (player.ipChangedAt == obj.ipChangedAt) {
     	      			itr.remove();
     		}
 		}
@@ -378,7 +374,7 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
         {
             for(Player player : message.player)
             {
-                if(player != null) {
+                if( (Player) player != null) {
                    	    				output.writeObject(1, player, Player.getSchema(), true);
     				    			}
             }
@@ -389,9 +385,9 @@ public final class Players implements Externalizable, Message<Players>, Schema<P
 	public void dumpObject()
     {
     	System.out.println("START Players");
-    	    	if(this.player != null) {
+    	    	//if(this.player != null) {
     		System.out.println("player="+this.player);
-    	}
+    	//}
     	    	System.out.println("END Players");
     }
     

@@ -61,10 +61,14 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
     static final DataRequest DEFAULT_INSTANCE = new DataRequest();
     static final String defaultScope = DataRequest.class.getSimpleName();
 
-    			public String requester;
-	    
-        			public String name;
-	    
+    	
+	    	    public String requester= null;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (requester != null) {
+    	    	    	//if (requester != null) {
     	       	    	model.setString("data_request_requester",requester);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("data_request_name",name);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static DataRequest fromModel(Model model) {
 		boolean hasFields = false;
     	DataRequest message = new DataRequest();
     	    	    	    	    	
-    	    	    	String requesterField = model.getString("data_request_requester");
-    	    	
-    	if (requesterField != null) {
+    	    	    	String requesterTestField = model.getString("data_request_requester");
+    	if (requesterTestField != null) {
+    		String requesterField = requesterTestField;
     		message.setRequester(requesterField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("data_request_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("data_request_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
     }
 
 
-	    
-    public Boolean hasRequester()  {
-        return requester == null ? false : true;
-    }
-        
+	            
 		public String getRequester() {
 		return requester;
 	}
@@ -133,11 +137,7 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
 		this.requester = requester;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -221,18 +221,20 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
     public void writeTo(Output output, DataRequest message) throws IOException
     {
     	    	
-    	    	if(message.requester == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.requester == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.requester != null)
+    	    	    	if( (String)message.requester != null) {
             output.writeString(1, message.requester, false);
+        }
     	    	
     	            	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.name == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(2, message.name, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
 	public void dumpObject()
     {
     	System.out.println("START DataRequest");
-    	    	if(this.requester != null) {
+    	    	//if(this.requester != null) {
     		System.out.println("requester="+this.requester);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
+    	//}
     	    	System.out.println("END DataRequest");
     }
     

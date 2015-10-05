@@ -53,7 +53,7 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
 
     			public String name;
 	    
-        			public Integer value;
+        			public int value;
 	    
         			public String playerId;
 	    
@@ -84,11 +84,11 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
         return value == null ? false : true;
     }
         
-		public Integer getValue() {
+		public int getValue() {
 		return value;
 	}
 	
-	public TeamMemberSkill setValue(Integer value) {
+	public TeamMemberSkill setValue(int value) {
 		this.value = value;
 		return this;	}
 	

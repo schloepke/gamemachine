@@ -61,12 +61,18 @@ public final class CharacterNotification implements Externalizable, Message<Char
     static final CharacterNotification DEFAULT_INSTANCE = new CharacterNotification();
     static final String defaultScope = CharacterNotification.class.getSimpleName();
 
-    			public String playerId;
-	    
-        			public String action;
-	    
-        			public String characterId;
-	    
+    	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public String action= null;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class CharacterNotification implements Externalizable, Message<Char
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("character_notification_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setString("character_notification_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("character_notification_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CharacterNotification fromModel(Model model) {
 		boolean hasFields = false;
     	CharacterNotification message = new CharacterNotification();
     	    	    	    	    	
-    	    	    	String playerIdField = model.getString("character_notification_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("character_notification_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String actionField = model.getString("character_notification_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	String actionTestField = model.getString("character_notification_action");
+    	if (actionTestField != null) {
+    		String actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("character_notification_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("character_notification_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class CharacterNotification implements Externalizable, Message<Char
     }
 
 
-	    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -148,11 +156,7 @@ public final class CharacterNotification implements Externalizable, Message<Char
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+		            
 		public String getAction() {
 		return action;
 	}
@@ -161,11 +165,7 @@ public final class CharacterNotification implements Externalizable, Message<Char
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -253,25 +253,28 @@ public final class CharacterNotification implements Externalizable, Message<Char
     public void writeTo(Output output, CharacterNotification message) throws IOException
     {
     	    	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(1, message.playerId, false);
+        }
     	    	
     	            	
-    	    	if(message.action == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.action == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (String)message.action != null) {
             output.writeString(2, message.action, false);
+        }
     	    	
     	            	
-    	    	if(message.characterId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.characterId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(3, message.characterId, false);
+        }
     	    	
     	            	
     }
@@ -279,15 +282,15 @@ public final class CharacterNotification implements Externalizable, Message<Char
 	public void dumpObject()
     {
     	System.out.println("START CharacterNotification");
-    	    	if(this.playerId != null) {
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
+    	//}
     	    	System.out.println("END CharacterNotification");
     }
     

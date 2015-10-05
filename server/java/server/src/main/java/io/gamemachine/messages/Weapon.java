@@ -61,10 +61,14 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
     static final Weapon DEFAULT_INSTANCE = new Weapon();
     static final String defaultScope = Weapon.class.getSimpleName();
 
-    			public Integer attack;
-	    
-        			public Integer delay;
-	    
+    	
+	    	    public int attack= 0;
+	    		
+    
+        	
+	    	    public int delay= 0;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (attack != null) {
+    	    	    	//if (attack != null) {
     	       	    	model.setInteger("weapon_attack",attack);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (delay != null) {
+    	    	    	//if (delay != null) {
     	       	    	model.setInteger("weapon_delay",delay);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Weapon fromModel(Model model) {
 		boolean hasFields = false;
     	Weapon message = new Weapon();
     	    	    	    	    	
-    	    	    	Integer attackField = model.getInteger("weapon_attack");
-    	    	
-    	if (attackField != null) {
+    	    	    	Integer attackTestField = model.getInteger("weapon_attack");
+    	if (attackTestField != null) {
+    		int attackField = attackTestField;
     		message.setAttack(attackField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer delayField = model.getInteger("weapon_delay");
+    	
     	    	
-    	if (delayField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer delayTestField = model.getInteger("weapon_delay");
+    	if (delayTestField != null) {
+    		int delayField = delayTestField;
     		message.setDelay(delayField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,29 +128,21 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
     }
 
 
-	    
-    public Boolean hasAttack()  {
-        return attack == null ? false : true;
-    }
-        
-		public Integer getAttack() {
+	            
+		public int getAttack() {
 		return attack;
 	}
 	
-	public Weapon setAttack(Integer attack) {
+	public Weapon setAttack(int attack) {
 		this.attack = attack;
 		return this;	}
 	
-		    
-    public Boolean hasDelay()  {
-        return delay == null ? false : true;
-    }
-        
-		public Integer getDelay() {
+		            
+		public int getDelay() {
 		return delay;
 	}
 	
-	public Weapon setDelay(Integer delay) {
+	public Weapon setDelay(int delay) {
 		this.delay = delay;
 		return this;	}
 	
@@ -221,18 +221,20 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
     public void writeTo(Output output, Weapon message) throws IOException
     {
     	    	
-    	    	if(message.attack == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.attack == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.attack != null)
+    	    	    	if( (Integer)message.attack != null) {
             output.writeInt32(1, message.attack, false);
+        }
     	    	
     	            	
-    	    	if(message.delay == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.delay == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.delay != null)
+    	    	    	if( (Integer)message.delay != null) {
             output.writeInt32(2, message.delay, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
 	public void dumpObject()
     {
     	System.out.println("START Weapon");
-    	    	if(this.attack != null) {
+    	    	//if(this.attack != null) {
     		System.out.println("attack="+this.attack);
-    	}
-    	    	if(this.delay != null) {
+    	//}
+    	    	//if(this.delay != null) {
     		System.out.println("delay="+this.delay);
-    	}
+    	//}
     	    	System.out.println("END Weapon");
     }
     

@@ -81,76 +81,146 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     static final PlayerItem DEFAULT_INSTANCE = new PlayerItem();
     static final String defaultScope = PlayerItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String name;
-	    
-        			public Integer quantity;
-	    
-        			public String color;
-	    
-        			public Boolean weapon;
-	    
-        			public Cost cost;
-	    
-        			public String playerId;
-	    
-        			public Integer recordId;
-	    
-        			public String icon;
-	    
-        			public Integer harvestable;
-	    
-        			public Integer craftingResource;
-	    
-        			public Integer craftable;
-	    
-        			public Boolean isConsumable;
-	    
-        			public Integer type;
-	    
-        			public Integer maxHealth;
-	    
-        			public Integer health;
-	    
-        			public Integer level;
-	    
-        			public String characterId;
-	    
-        			public String containerId;
-	    
-        			public Integer updatedAt;
-	    
-        			public String category;
-	    
-        			public String locationId;
-	    
-        			public Integer slotCount;
-	    
-        			public Boolean stackable;
-	    
-        			public String locationType;
-	    
-        			public Integer stackMax;
-	    
-        			public Integer containerSlot;
-	    
-        			public String icon_uuid;
-	    
-        			public String icon_path;
-	    
-        			public String referenceId;
-	    
-        			public Boolean hidden;
-	    
-        			public Integer maxQuantity;
-	    
-        			public Boolean active;
-	    
-        			public Float weight;
-	    
-        			public Integer templateBlockId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public int quantity= 0;
+	    		
+    
+        	
+	    	    public String color= null;
+	    		
+    
+        	
+	    	    public boolean weapon= false;
+	    		
+    
+        	
+	    	    public Cost cost;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String icon= null;
+	    		
+    
+        	
+	    	    public int harvestable= 0;
+	    		
+    
+        	
+	    	    public int craftingResource= 0;
+	    		
+    
+        	
+	    	    public int craftable= 0;
+	    		
+    
+        	
+	    	    public boolean isConsumable= false;
+	    		
+    
+        	
+	    	    public int type= 0;
+	    		
+    
+        	
+	    	    public int maxHealth= 0;
+	    		
+    
+        	
+	    	    public int health= 0;
+	    		
+    
+        	
+	    	    public int level= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public String containerId= null;
+	    		
+    
+        	
+	    	    public int updatedAt= 0;
+	    		
+    
+        	
+	    	    public String category= null;
+	    		
+    
+        	
+	    	    public String locationId= null;
+	    		
+    
+        	
+	    	    public int slotCount= 0;
+	    		
+    
+        	
+	    	    public boolean stackable= false;
+	    		
+    
+        	
+	    	    public String locationType= null;
+	    		
+    
+        	
+	    	    public int stackMax= 0;
+	    		
+    
+        	
+	    	    public int containerSlot= 0;
+	    		
+    
+        	
+	    	    public String icon_uuid= null;
+	    		
+    
+        	
+	    	    public String icon_path= null;
+	    		
+    
+        	
+	    	    public String referenceId= null;
+	    		
+    
+        	
+	    	    public boolean hidden= false;
+	    		
+    
+        	
+	    	    public int maxQuantity= 0;
+	    		
+    
+        	
+	    	    public boolean active= false;
+	    		
+    
+        	
+	    	    public float weight= 0F;
+	    		
+    
+        	
+	    	    public int templateBlockId= 0;
+	    		
+    
         
 	public static PlayerItemCache cache() {
 		return PlayerItemCache.getInstance();
@@ -494,9 +564,9 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	}
 	    	
 	    	io.gamemachine.orm.models.PlayerItem model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.PlayerItem.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.PlayerItem();
@@ -504,7 +574,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	} else {
 	    		message.toModel(model);
 	    	}
-	    		    	if (message.hasCost()) {
+	    		    	if (message.cost != null) {
 	    		message.cost.toModel(model);
 	    	} else {
 	    		Cost.clearModel(model);
@@ -660,413 +730,479 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("player_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("player_item_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (quantity != null) {
+    	    	    	//if (quantity != null) {
     	       	    	model.setInteger("player_item_quantity",quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (color != null) {
+    	    	    	//if (color != null) {
     	       	    	model.setString("player_item_color",color);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (weapon != null) {
+    	    	    	//if (weapon != null) {
     	       	    	model.setBoolean("player_item_weapon",weapon);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("player_item_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (icon != null) {
+    	    	    	//if (icon != null) {
     	       	    	model.setString("player_item_icon",icon);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (harvestable != null) {
+    	    	    	//if (harvestable != null) {
     	       	    	model.setInteger("player_item_harvestable",harvestable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (craftingResource != null) {
+    	    	    	//if (craftingResource != null) {
     	       	    	model.setInteger("player_item_crafting_resource",craftingResource);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (craftable != null) {
+    	    	    	//if (craftable != null) {
     	       	    	model.setInteger("player_item_craftable",craftable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isConsumable != null) {
+    	    	    	//if (isConsumable != null) {
     	       	    	model.setBoolean("player_item_is_consumable",isConsumable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setInteger("player_item_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (maxHealth != null) {
+    	    	    	//if (maxHealth != null) {
     	       	    	model.setInteger("player_item_max_health",maxHealth);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (health != null) {
+    	    	    	//if (health != null) {
     	       	    	model.setInteger("player_item_health",health);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (level != null) {
+    	    	    	//if (level != null) {
     	       	    	model.setInteger("player_item_level",level);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("player_item_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (containerId != null) {
+    	    	    	//if (containerId != null) {
     	       	    	model.setString("player_item_container_id",containerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (updatedAt != null) {
+    	    	    	//if (updatedAt != null) {
     	       	    	model.setInteger("player_item_updated_at",updatedAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (category != null) {
+    	    	    	//if (category != null) {
     	       	    	model.setString("player_item_category",category);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (locationId != null) {
+    	    	    	//if (locationId != null) {
     	       	    	model.setString("player_item_location_id",locationId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (slotCount != null) {
+    	    	    	//if (slotCount != null) {
     	       	    	model.setInteger("player_item_slot_count",slotCount);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (stackable != null) {
+    	    	    	//if (stackable != null) {
     	       	    	model.setBoolean("player_item_stackable",stackable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (locationType != null) {
+    	    	    	//if (locationType != null) {
     	       	    	model.setString("player_item_location_type",locationType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (stackMax != null) {
+    	    	    	//if (stackMax != null) {
     	       	    	model.setInteger("player_item_stack_max",stackMax);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (containerSlot != null) {
+    	    	    	//if (containerSlot != null) {
     	       	    	model.setInteger("player_item_container_slot",containerSlot);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (icon_uuid != null) {
+    	    	    	//if (icon_uuid != null) {
     	       	    	model.setString("player_item_icon_uuid",icon_uuid);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (icon_path != null) {
+    	    	    	//if (icon_path != null) {
     	       	    	model.setString("player_item_icon_path",icon_path);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (referenceId != null) {
+    	    	    	//if (referenceId != null) {
     	       	    	model.setString("player_item_reference_id",referenceId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hidden != null) {
+    	    	    	//if (hidden != null) {
     	       	    	model.setBoolean("player_item_hidden",hidden);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (maxQuantity != null) {
+    	    	    	//if (maxQuantity != null) {
     	       	    	model.setInteger("player_item_max_quantity",maxQuantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (active != null) {
+    	    	    	//if (active != null) {
     	       	    	model.setBoolean("player_item_active",active);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (weight != null) {
+    	    	    	//if (weight != null) {
     	       	    	model.setFloat("player_item_weight",weight);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (templateBlockId != null) {
+    	    	    	//if (templateBlockId != null) {
     	       	    	model.setInteger("player_item_template_block_id",templateBlockId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PlayerItem fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerItem message = new PlayerItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("player_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("player_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("player_item_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("player_item_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer quantityField = model.getInteger("player_item_quantity");
+    	
     	    	
-    	if (quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer quantityTestField = model.getInteger("player_item_quantity");
+    	if (quantityTestField != null) {
+    		int quantityField = quantityTestField;
     		message.setQuantity(quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String colorField = model.getString("player_item_color");
+    	
     	    	
-    	if (colorField != null) {
+    	    	    	    	    	    	
+    	    	    	String colorTestField = model.getString("player_item_color");
+    	if (colorTestField != null) {
+    		String colorField = colorTestField;
     		message.setColor(colorField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean weaponField = model.getBoolean("player_item_weapon");
+    	
     	    	
-    	if (weaponField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean weaponTestField = model.getBoolean("player_item_weapon");
+    	if (weaponTestField != null) {
+    		boolean weaponField = weaponTestField;
     		message.setWeapon(weaponField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("player_item_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("player_item_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String iconField = model.getString("player_item_icon");
-    	    	
-    	if (iconField != null) {
+    	    	    	String iconTestField = model.getString("player_item_icon");
+    	if (iconTestField != null) {
+    		String iconField = iconTestField;
     		message.setIcon(iconField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer harvestableField = model.getInteger("player_item_harvestable");
+    	
     	    	
-    	if (harvestableField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer harvestableTestField = model.getInteger("player_item_harvestable");
+    	if (harvestableTestField != null) {
+    		int harvestableField = harvestableTestField;
     		message.setHarvestable(harvestableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer craftingResourceField = model.getInteger("player_item_crafting_resource");
+    	
     	    	
-    	if (craftingResourceField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer craftingResourceTestField = model.getInteger("player_item_crafting_resource");
+    	if (craftingResourceTestField != null) {
+    		int craftingResourceField = craftingResourceTestField;
     		message.setCraftingResource(craftingResourceField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer craftableField = model.getInteger("player_item_craftable");
+    	
     	    	
-    	if (craftableField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer craftableTestField = model.getInteger("player_item_craftable");
+    	if (craftableTestField != null) {
+    		int craftableField = craftableTestField;
     		message.setCraftable(craftableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean isConsumableField = model.getBoolean("player_item_is_consumable");
+    	
     	    	
-    	if (isConsumableField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean isConsumableTestField = model.getBoolean("player_item_is_consumable");
+    	if (isConsumableTestField != null) {
+    		boolean isConsumableField = isConsumableTestField;
     		message.setIsConsumable(isConsumableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer typeField = model.getInteger("player_item_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer typeTestField = model.getInteger("player_item_type");
+    	if (typeTestField != null) {
+    		int typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer maxHealthField = model.getInteger("player_item_max_health");
+    	
     	    	
-    	if (maxHealthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer maxHealthTestField = model.getInteger("player_item_max_health");
+    	if (maxHealthTestField != null) {
+    		int maxHealthField = maxHealthTestField;
     		message.setMaxHealth(maxHealthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthField = model.getInteger("player_item_health");
+    	
     	    	
-    	if (healthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthTestField = model.getInteger("player_item_health");
+    	if (healthTestField != null) {
+    		int healthField = healthTestField;
     		message.setHealth(healthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer levelField = model.getInteger("player_item_level");
+    	
     	    	
-    	if (levelField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer levelTestField = model.getInteger("player_item_level");
+    	if (levelTestField != null) {
+    		int levelField = levelTestField;
     		message.setLevel(levelField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("player_item_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("player_item_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String containerIdField = model.getString("player_item_container_id");
+    	
     	    	
-    	if (containerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String containerIdTestField = model.getString("player_item_container_id");
+    	if (containerIdTestField != null) {
+    		String containerIdField = containerIdTestField;
     		message.setContainerId(containerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer updatedAtField = model.getInteger("player_item_updated_at");
+    	
     	    	
-    	if (updatedAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer updatedAtTestField = model.getInteger("player_item_updated_at");
+    	if (updatedAtTestField != null) {
+    		int updatedAtField = updatedAtTestField;
     		message.setUpdatedAt(updatedAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String categoryField = model.getString("player_item_category");
+    	
     	    	
-    	if (categoryField != null) {
+    	    	    	    	    	    	
+    	    	    	String categoryTestField = model.getString("player_item_category");
+    	if (categoryTestField != null) {
+    		String categoryField = categoryTestField;
     		message.setCategory(categoryField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String locationIdField = model.getString("player_item_location_id");
+    	
     	    	
-    	if (locationIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String locationIdTestField = model.getString("player_item_location_id");
+    	if (locationIdTestField != null) {
+    		String locationIdField = locationIdTestField;
     		message.setLocationId(locationIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer slotCountField = model.getInteger("player_item_slot_count");
+    	
     	    	
-    	if (slotCountField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer slotCountTestField = model.getInteger("player_item_slot_count");
+    	if (slotCountTestField != null) {
+    		int slotCountField = slotCountTestField;
     		message.setSlotCount(slotCountField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean stackableField = model.getBoolean("player_item_stackable");
+    	
     	    	
-    	if (stackableField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean stackableTestField = model.getBoolean("player_item_stackable");
+    	if (stackableTestField != null) {
+    		boolean stackableField = stackableTestField;
     		message.setStackable(stackableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String locationTypeField = model.getString("player_item_location_type");
+    	
     	    	
-    	if (locationTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String locationTypeTestField = model.getString("player_item_location_type");
+    	if (locationTypeTestField != null) {
+    		String locationTypeField = locationTypeTestField;
     		message.setLocationType(locationTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer stackMaxField = model.getInteger("player_item_stack_max");
+    	
     	    	
-    	if (stackMaxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer stackMaxTestField = model.getInteger("player_item_stack_max");
+    	if (stackMaxTestField != null) {
+    		int stackMaxField = stackMaxTestField;
     		message.setStackMax(stackMaxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer containerSlotField = model.getInteger("player_item_container_slot");
+    	
     	    	
-    	if (containerSlotField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer containerSlotTestField = model.getInteger("player_item_container_slot");
+    	if (containerSlotTestField != null) {
+    		int containerSlotField = containerSlotTestField;
     		message.setContainerSlot(containerSlotField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String icon_uuidField = model.getString("player_item_icon_uuid");
+    	
     	    	
-    	if (icon_uuidField != null) {
+    	    	    	    	    	    	
+    	    	    	String icon_uuidTestField = model.getString("player_item_icon_uuid");
+    	if (icon_uuidTestField != null) {
+    		String icon_uuidField = icon_uuidTestField;
     		message.setIcon_uuid(icon_uuidField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String icon_pathField = model.getString("player_item_icon_path");
+    	
     	    	
-    	if (icon_pathField != null) {
+    	    	    	    	    	    	
+    	    	    	String icon_pathTestField = model.getString("player_item_icon_path");
+    	if (icon_pathTestField != null) {
+    		String icon_pathField = icon_pathTestField;
     		message.setIcon_path(icon_pathField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String referenceIdField = model.getString("player_item_reference_id");
+    	
     	    	
-    	if (referenceIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String referenceIdTestField = model.getString("player_item_reference_id");
+    	if (referenceIdTestField != null) {
+    		String referenceIdField = referenceIdTestField;
     		message.setReferenceId(referenceIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean hiddenField = model.getBoolean("player_item_hidden");
+    	
     	    	
-    	if (hiddenField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean hiddenTestField = model.getBoolean("player_item_hidden");
+    	if (hiddenTestField != null) {
+    		boolean hiddenField = hiddenTestField;
     		message.setHidden(hiddenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer maxQuantityField = model.getInteger("player_item_max_quantity");
+    	
     	    	
-    	if (maxQuantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer maxQuantityTestField = model.getInteger("player_item_max_quantity");
+    	if (maxQuantityTestField != null) {
+    		int maxQuantityField = maxQuantityTestField;
     		message.setMaxQuantity(maxQuantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean activeField = model.getBoolean("player_item_active");
+    	
     	    	
-    	if (activeField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean activeTestField = model.getBoolean("player_item_active");
+    	if (activeTestField != null) {
+    		boolean activeField = activeTestField;
     		message.setActive(activeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float weightField = model.getFloat("player_item_weight");
+    	
     	    	
-    	if (weightField != null) {
+    	    	    	    	    	    	
+    	    	    	Float weightTestField = model.getFloat("player_item_weight");
+    	if (weightTestField != null) {
+    		float weightField = weightTestField;
     		message.setWeight(weightField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer templateBlockIdField = model.getInteger("player_item_template_block_id");
+    	
     	    	
-    	if (templateBlockIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer templateBlockIdTestField = model.getInteger("player_item_template_block_id");
+    	if (templateBlockIdTestField != null) {
+    		int templateBlockIdField = templateBlockIdTestField;
     		message.setTemplateBlockId(templateBlockIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -1075,11 +1211,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -1088,11 +1220,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -1101,24 +1229,16 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasQuantity()  {
-        return quantity == null ? false : true;
-    }
-        
-		public Integer getQuantity() {
+		            
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public PlayerItem setQuantity(Integer quantity) {
+	public PlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
-		    
-    public Boolean hasColor()  {
-        return color == null ? false : true;
-    }
-        
+		            
 		public String getColor() {
 		return color;
 	}
@@ -1127,24 +1247,16 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.color = color;
 		return this;	}
 	
-		    
-    public Boolean hasWeapon()  {
-        return weapon == null ? false : true;
-    }
-        
-		public Boolean getWeapon() {
+		            
+		public boolean getWeapon() {
 		return weapon;
 	}
 	
-	public PlayerItem setWeapon(Boolean weapon) {
+	public PlayerItem setWeapon(boolean weapon) {
 		this.weapon = weapon;
 		return this;	}
 	
-		    
-    public Boolean hasCost()  {
-        return cost == null ? false : true;
-    }
-        
+		            
 		public Cost getCost() {
 		return cost;
 	}
@@ -1153,11 +1265,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.cost = cost;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -1166,24 +1274,16 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public PlayerItem setRecordId(Integer recordId) {
+	public PlayerItem setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasIcon()  {
-        return icon == null ? false : true;
-    }
-        
+		            
 		public String getIcon() {
 		return icon;
 	}
@@ -1192,115 +1292,79 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.icon = icon;
 		return this;	}
 	
-		    
-    public Boolean hasHarvestable()  {
-        return harvestable == null ? false : true;
-    }
-        
-		public Integer getHarvestable() {
+		            
+		public int getHarvestable() {
 		return harvestable;
 	}
 	
-	public PlayerItem setHarvestable(Integer harvestable) {
+	public PlayerItem setHarvestable(int harvestable) {
 		this.harvestable = harvestable;
 		return this;	}
 	
-		    
-    public Boolean hasCraftingResource()  {
-        return craftingResource == null ? false : true;
-    }
-        
-		public Integer getCraftingResource() {
+		            
+		public int getCraftingResource() {
 		return craftingResource;
 	}
 	
-	public PlayerItem setCraftingResource(Integer craftingResource) {
+	public PlayerItem setCraftingResource(int craftingResource) {
 		this.craftingResource = craftingResource;
 		return this;	}
 	
-		    
-    public Boolean hasCraftable()  {
-        return craftable == null ? false : true;
-    }
-        
-		public Integer getCraftable() {
+		            
+		public int getCraftable() {
 		return craftable;
 	}
 	
-	public PlayerItem setCraftable(Integer craftable) {
+	public PlayerItem setCraftable(int craftable) {
 		this.craftable = craftable;
 		return this;	}
 	
-		    
-    public Boolean hasIsConsumable()  {
-        return isConsumable == null ? false : true;
-    }
-        
-		public Boolean getIsConsumable() {
+		            
+		public boolean getIsConsumable() {
 		return isConsumable;
 	}
 	
-	public PlayerItem setIsConsumable(Boolean isConsumable) {
+	public PlayerItem setIsConsumable(boolean isConsumable) {
 		this.isConsumable = isConsumable;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
-		public Integer getType() {
+		            
+		public int getType() {
 		return type;
 	}
 	
-	public PlayerItem setType(Integer type) {
+	public PlayerItem setType(int type) {
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasMaxHealth()  {
-        return maxHealth == null ? false : true;
-    }
-        
-		public Integer getMaxHealth() {
+		            
+		public int getMaxHealth() {
 		return maxHealth;
 	}
 	
-	public PlayerItem setMaxHealth(Integer maxHealth) {
+	public PlayerItem setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 		return this;	}
 	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public Integer getHealth() {
+		            
+		public int getHealth() {
 		return health;
 	}
 	
-	public PlayerItem setHealth(Integer health) {
+	public PlayerItem setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
-		    
-    public Boolean hasLevel()  {
-        return level == null ? false : true;
-    }
-        
-		public Integer getLevel() {
+		            
+		public int getLevel() {
 		return level;
 	}
 	
-	public PlayerItem setLevel(Integer level) {
+	public PlayerItem setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -1309,11 +1373,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasContainerId()  {
-        return containerId == null ? false : true;
-    }
-        
+		            
 		public String getContainerId() {
 		return containerId;
 	}
@@ -1322,24 +1382,16 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.containerId = containerId;
 		return this;	}
 	
-		    
-    public Boolean hasUpdatedAt()  {
-        return updatedAt == null ? false : true;
-    }
-        
-		public Integer getUpdatedAt() {
+		            
+		public int getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public PlayerItem setUpdatedAt(Integer updatedAt) {
+	public PlayerItem setUpdatedAt(int updatedAt) {
 		this.updatedAt = updatedAt;
 		return this;	}
 	
-		    
-    public Boolean hasCategory()  {
-        return category == null ? false : true;
-    }
-        
+		            
 		public String getCategory() {
 		return category;
 	}
@@ -1348,11 +1400,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.category = category;
 		return this;	}
 	
-		    
-    public Boolean hasLocationId()  {
-        return locationId == null ? false : true;
-    }
-        
+		            
 		public String getLocationId() {
 		return locationId;
 	}
@@ -1361,37 +1409,25 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.locationId = locationId;
 		return this;	}
 	
-		    
-    public Boolean hasSlotCount()  {
-        return slotCount == null ? false : true;
-    }
-        
-		public Integer getSlotCount() {
+		            
+		public int getSlotCount() {
 		return slotCount;
 	}
 	
-	public PlayerItem setSlotCount(Integer slotCount) {
+	public PlayerItem setSlotCount(int slotCount) {
 		this.slotCount = slotCount;
 		return this;	}
 	
-		    
-    public Boolean hasStackable()  {
-        return stackable == null ? false : true;
-    }
-        
-		public Boolean getStackable() {
+		            
+		public boolean getStackable() {
 		return stackable;
 	}
 	
-	public PlayerItem setStackable(Boolean stackable) {
+	public PlayerItem setStackable(boolean stackable) {
 		this.stackable = stackable;
 		return this;	}
 	
-		    
-    public Boolean hasLocationType()  {
-        return locationType == null ? false : true;
-    }
-        
+		            
 		public String getLocationType() {
 		return locationType;
 	}
@@ -1400,37 +1436,25 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.locationType = locationType;
 		return this;	}
 	
-		    
-    public Boolean hasStackMax()  {
-        return stackMax == null ? false : true;
-    }
-        
-		public Integer getStackMax() {
+		            
+		public int getStackMax() {
 		return stackMax;
 	}
 	
-	public PlayerItem setStackMax(Integer stackMax) {
+	public PlayerItem setStackMax(int stackMax) {
 		this.stackMax = stackMax;
 		return this;	}
 	
-		    
-    public Boolean hasContainerSlot()  {
-        return containerSlot == null ? false : true;
-    }
-        
-		public Integer getContainerSlot() {
+		            
+		public int getContainerSlot() {
 		return containerSlot;
 	}
 	
-	public PlayerItem setContainerSlot(Integer containerSlot) {
+	public PlayerItem setContainerSlot(int containerSlot) {
 		this.containerSlot = containerSlot;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_uuid()  {
-        return icon_uuid == null ? false : true;
-    }
-        
+		            
 		public String getIcon_uuid() {
 		return icon_uuid;
 	}
@@ -1439,11 +1463,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.icon_uuid = icon_uuid;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_path()  {
-        return icon_path == null ? false : true;
-    }
-        
+		            
 		public String getIcon_path() {
 		return icon_path;
 	}
@@ -1452,11 +1472,7 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.icon_path = icon_path;
 		return this;	}
 	
-		    
-    public Boolean hasReferenceId()  {
-        return referenceId == null ? false : true;
-    }
-        
+		            
 		public String getReferenceId() {
 		return referenceId;
 	}
@@ -1465,68 +1481,48 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		this.referenceId = referenceId;
 		return this;	}
 	
-		    
-    public Boolean hasHidden()  {
-        return hidden == null ? false : true;
-    }
-        
-		public Boolean getHidden() {
+		            
+		public boolean getHidden() {
 		return hidden;
 	}
 	
-	public PlayerItem setHidden(Boolean hidden) {
+	public PlayerItem setHidden(boolean hidden) {
 		this.hidden = hidden;
 		return this;	}
 	
-		    
-    public Boolean hasMaxQuantity()  {
-        return maxQuantity == null ? false : true;
-    }
-        
-		public Integer getMaxQuantity() {
+		            
+		public int getMaxQuantity() {
 		return maxQuantity;
 	}
 	
-	public PlayerItem setMaxQuantity(Integer maxQuantity) {
+	public PlayerItem setMaxQuantity(int maxQuantity) {
 		this.maxQuantity = maxQuantity;
 		return this;	}
 	
-		    
-    public Boolean hasActive()  {
-        return active == null ? false : true;
-    }
-        
-		public Boolean getActive() {
+		            
+		public boolean getActive() {
 		return active;
 	}
 	
-	public PlayerItem setActive(Boolean active) {
+	public PlayerItem setActive(boolean active) {
 		this.active = active;
 		return this;	}
 	
-		    
-    public Boolean hasWeight()  {
-        return weight == null ? false : true;
-    }
-        
-		public Float getWeight() {
+		            
+		public float getWeight() {
 		return weight;
 	}
 	
-	public PlayerItem setWeight(Float weight) {
+	public PlayerItem setWeight(float weight) {
 		this.weight = weight;
 		return this;	}
 	
-		    
-    public Boolean hasTemplateBlockId()  {
-        return templateBlockId == null ? false : true;
-    }
-        
-		public Integer getTemplateBlockId() {
+		            
+		public int getTemplateBlockId() {
 		return templateBlockId;
 	}
 	
-	public PlayerItem setTemplateBlockId(Integer templateBlockId) {
+	public PlayerItem setTemplateBlockId(int templateBlockId) {
 		this.templateBlockId = templateBlockId;
 		return this;	}
 	
@@ -1737,35 +1733,40 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     public void writeTo(Output output, PlayerItem message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.name == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(2, message.name, false);
+        }
     	    	
     	            	
-    	    	if(message.quantity == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.quantity == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.quantity != null)
+    	    	    	if( (Integer)message.quantity != null) {
             output.writeInt32(3, message.quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.color != null)
+    	    	    	if( (String)message.color != null) {
             output.writeString(4, message.color, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.weapon != null)
+    	    	    	if( (Boolean)message.weapon != null) {
             output.writeBool(5, message.weapon, false);
+        }
     	    	
     	            	
     	    	
@@ -1774,154 +1775,183 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(9, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(10, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon != null)
+    	    	    	if( (String)message.icon != null) {
             output.writeString(11, message.icon, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.harvestable != null)
+    	    	    	if( (Integer)message.harvestable != null) {
             output.writeInt32(12, message.harvestable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.craftingResource != null)
+    	    	    	if( (Integer)message.craftingResource != null) {
             output.writeInt32(13, message.craftingResource, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.craftable != null)
+    	    	    	if( (Integer)message.craftable != null) {
             output.writeInt32(14, message.craftable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isConsumable != null)
+    	    	    	if( (Boolean)message.isConsumable != null) {
             output.writeBool(16, message.isConsumable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (Integer)message.type != null) {
             output.writeInt32(17, message.type, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.maxHealth != null)
+    	    	    	if( (Integer)message.maxHealth != null) {
             output.writeInt32(18, message.maxHealth, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.health != null)
+    	    	    	if( (Integer)message.health != null) {
             output.writeInt32(19, message.health, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.level != null)
+    	    	    	if( (Integer)message.level != null) {
             output.writeInt32(20, message.level, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(21, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.containerId != null)
+    	    	    	if( (String)message.containerId != null) {
             output.writeString(22, message.containerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.updatedAt != null)
+    	    	    	if( (Integer)message.updatedAt != null) {
             output.writeInt32(23, message.updatedAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.category != null)
+    	    	    	if( (String)message.category != null) {
             output.writeString(24, message.category, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.locationId != null)
+    	    	    	if( (String)message.locationId != null) {
             output.writeString(25, message.locationId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.slotCount != null)
+    	    	    	if( (Integer)message.slotCount != null) {
             output.writeInt32(26, message.slotCount, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.stackable != null)
+    	    	    	if( (Boolean)message.stackable != null) {
             output.writeBool(27, message.stackable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.locationType != null)
+    	    	    	if( (String)message.locationType != null) {
             output.writeString(28, message.locationType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.stackMax != null)
+    	    	    	if( (Integer)message.stackMax != null) {
             output.writeInt32(29, message.stackMax, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.containerSlot != null)
+    	    	    	if( (Integer)message.containerSlot != null) {
             output.writeInt32(30, message.containerSlot, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_uuid != null)
+    	    	    	if( (String)message.icon_uuid != null) {
             output.writeString(31, message.icon_uuid, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_path != null)
+    	    	    	if( (String)message.icon_path != null) {
             output.writeString(32, message.icon_path, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.referenceId != null)
+    	    	    	if( (String)message.referenceId != null) {
             output.writeString(33, message.referenceId, false);
+        }
     	    	
     	            	
-    	    	if(message.hidden == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.hidden == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.hidden != null)
+    	    	    	if( (Boolean)message.hidden != null) {
             output.writeBool(34, message.hidden, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.maxQuantity != null)
+    	    	    	if( (Integer)message.maxQuantity != null) {
             output.writeInt32(35, message.maxQuantity, false);
+        }
     	    	
     	            	
-    	    	if(message.active == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.active == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.active != null)
+    	    	    	if( (Boolean)message.active != null) {
             output.writeBool(36, message.active, false);
+        }
     	    	
     	            	
-    	    	if(message.weight == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.weight == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.weight != null)
+    	    	    	if( (Float)message.weight != null) {
             output.writeFloat(37, message.weight, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.templateBlockId != null)
+    	    	    	if( (Integer)message.templateBlockId != null) {
             output.writeInt32(38, message.templateBlockId, false);
+        }
     	    	
     	            	
     }
@@ -1929,111 +1959,111 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	public void dumpObject()
     {
     	System.out.println("START PlayerItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.quantity != null) {
+    	//}
+    	    	//if(this.quantity != null) {
     		System.out.println("quantity="+this.quantity);
-    	}
-    	    	if(this.color != null) {
+    	//}
+    	    	//if(this.color != null) {
     		System.out.println("color="+this.color);
-    	}
-    	    	if(this.weapon != null) {
+    	//}
+    	    	//if(this.weapon != null) {
     		System.out.println("weapon="+this.weapon);
-    	}
-    	    	if(this.cost != null) {
+    	//}
+    	    	//if(this.cost != null) {
     		System.out.println("cost="+this.cost);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.icon != null) {
+    	//}
+    	    	//if(this.icon != null) {
     		System.out.println("icon="+this.icon);
-    	}
-    	    	if(this.harvestable != null) {
+    	//}
+    	    	//if(this.harvestable != null) {
     		System.out.println("harvestable="+this.harvestable);
-    	}
-    	    	if(this.craftingResource != null) {
+    	//}
+    	    	//if(this.craftingResource != null) {
     		System.out.println("craftingResource="+this.craftingResource);
-    	}
-    	    	if(this.craftable != null) {
+    	//}
+    	    	//if(this.craftable != null) {
     		System.out.println("craftable="+this.craftable);
-    	}
-    	    	if(this.isConsumable != null) {
+    	//}
+    	    	//if(this.isConsumable != null) {
     		System.out.println("isConsumable="+this.isConsumable);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.maxHealth != null) {
+    	//}
+    	    	//if(this.maxHealth != null) {
     		System.out.println("maxHealth="+this.maxHealth);
-    	}
-    	    	if(this.health != null) {
+    	//}
+    	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
-    	}
-    	    	if(this.level != null) {
+    	//}
+    	    	//if(this.level != null) {
     		System.out.println("level="+this.level);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.containerId != null) {
+    	//}
+    	    	//if(this.containerId != null) {
     		System.out.println("containerId="+this.containerId);
-    	}
-    	    	if(this.updatedAt != null) {
+    	//}
+    	    	//if(this.updatedAt != null) {
     		System.out.println("updatedAt="+this.updatedAt);
-    	}
-    	    	if(this.category != null) {
+    	//}
+    	    	//if(this.category != null) {
     		System.out.println("category="+this.category);
-    	}
-    	    	if(this.locationId != null) {
+    	//}
+    	    	//if(this.locationId != null) {
     		System.out.println("locationId="+this.locationId);
-    	}
-    	    	if(this.slotCount != null) {
+    	//}
+    	    	//if(this.slotCount != null) {
     		System.out.println("slotCount="+this.slotCount);
-    	}
-    	    	if(this.stackable != null) {
+    	//}
+    	    	//if(this.stackable != null) {
     		System.out.println("stackable="+this.stackable);
-    	}
-    	    	if(this.locationType != null) {
+    	//}
+    	    	//if(this.locationType != null) {
     		System.out.println("locationType="+this.locationType);
-    	}
-    	    	if(this.stackMax != null) {
+    	//}
+    	    	//if(this.stackMax != null) {
     		System.out.println("stackMax="+this.stackMax);
-    	}
-    	    	if(this.containerSlot != null) {
+    	//}
+    	    	//if(this.containerSlot != null) {
     		System.out.println("containerSlot="+this.containerSlot);
-    	}
-    	    	if(this.icon_uuid != null) {
+    	//}
+    	    	//if(this.icon_uuid != null) {
     		System.out.println("icon_uuid="+this.icon_uuid);
-    	}
-    	    	if(this.icon_path != null) {
+    	//}
+    	    	//if(this.icon_path != null) {
     		System.out.println("icon_path="+this.icon_path);
-    	}
-    	    	if(this.referenceId != null) {
+    	//}
+    	    	//if(this.referenceId != null) {
     		System.out.println("referenceId="+this.referenceId);
-    	}
-    	    	if(this.hidden != null) {
+    	//}
+    	    	//if(this.hidden != null) {
     		System.out.println("hidden="+this.hidden);
-    	}
-    	    	if(this.maxQuantity != null) {
+    	//}
+    	    	//if(this.maxQuantity != null) {
     		System.out.println("maxQuantity="+this.maxQuantity);
-    	}
-    	    	if(this.active != null) {
+    	//}
+    	    	//if(this.active != null) {
     		System.out.println("active="+this.active);
-    	}
-    	    	if(this.weight != null) {
+    	//}
+    	    	//if(this.weight != null) {
     		System.out.println("weight="+this.weight);
-    	}
-    	    	if(this.templateBlockId != null) {
+    	//}
+    	    	//if(this.templateBlockId != null) {
     		System.out.println("templateBlockId="+this.templateBlockId);
-    	}
+    	//}
     	    	System.out.println("END PlayerItem");
     }
     

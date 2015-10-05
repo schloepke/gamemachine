@@ -17,6 +17,8 @@ import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.messages.Character;
@@ -223,12 +225,12 @@ public class PlayerService {
 			return false;
 		}
 		
-		if (player.hasLocked() && player.locked) {
+		if (player.locked) {
 			logger.info("Player " + playerId + " is locked");
 			return false;
 		}
 		
-		if (player.hasPasswordHash()) {
+		if (!Strings.isNullOrEmpty(player.passwordHash)) {
 			return BCrypt.checkpw(password, player.getPasswordHash());
 		} else {
 			return false;

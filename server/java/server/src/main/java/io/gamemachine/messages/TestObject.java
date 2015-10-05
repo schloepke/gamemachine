@@ -81,26 +81,44 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     static final TestObject DEFAULT_INSTANCE = new TestObject();
     static final String defaultScope = TestObject.class.getSimpleName();
 
-    			public String optionalString;
-	    
-        			public String requiredString;
-	    
+    	
+	    	    public String optionalString= null;
+	    		
+    
+        	
+	    	    public String requiredString= null;
+	    		
+    
             public List<Integer> numbers;
-	    			public ByteString bstring;
-	    
-        			public Boolean bvalue;
-	    
-        			public Double dvalue;
-	    
-        			public Float fvalue;
-	    
-        			public Long numbers64;
-	    
+	    	
+	    	    public ByteString bstring;
+	    		
+    
+        	
+	    	    public boolean bvalue= false;
+	    		
+    
+        	
+	    	    public double dvalue= 0D;
+	    		
+    
+        	
+	    	    public float fvalue= 0F;
+	    		
+    
+        	
+	    	    public long numbers64= 0L;
+	    		
+    
             public List<Player> player;
-	    			public Integer recordId;
-	    
-        			public String id;
-	    
+	    	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
         
 	public static TestObjectCache cache() {
 		return TestObjectCache.getInstance();
@@ -444,9 +462,9 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 	    	}
 	    	
 	    	io.gamemachine.orm.models.TestObject model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.TestObject.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.TestObject();
@@ -576,66 +594,70 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (optionalString != null) {
+    	    	    	//if (optionalString != null) {
     	       	    	model.setString("test_object_optional_string",optionalString);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (requiredString != null) {
+    	    	    	//if (requiredString != null) {
     	       	    	model.setString("test_object_required_string",requiredString);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	
-    	    	    	if (bstring != null) {
+    	    	    	//if (bstring != null) {
     	       	    	model.set("test_object_bstring",bstring.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (bvalue != null) {
+    	    	    	//if (bvalue != null) {
     	       	    	model.setBoolean("test_object_bvalue",bvalue);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (dvalue != null) {
+    	    	    	//if (dvalue != null) {
     	       	    	model.setDouble("test_object_dvalue",dvalue);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (fvalue != null) {
+    	    	    	//if (fvalue != null) {
     	       	    	model.setFloat("test_object_fvalue",fvalue);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (numbers64 != null) {
+    	    	    	//if (numbers64 != null) {
     	       	    	model.setLong("test_object_numbers64",numbers64);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("test_object_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static TestObject fromModel(Model model) {
 		boolean hasFields = false;
     	TestObject message = new TestObject();
     	    	    	    	    	
-    	    	    	String optionalStringField = model.getString("test_object_optional_string");
-    	    	
-    	if (optionalStringField != null) {
+    	    	    	String optionalStringTestField = model.getString("test_object_optional_string");
+    	if (optionalStringTestField != null) {
+    		String optionalStringField = optionalStringTestField;
     		message.setOptionalString(optionalStringField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String requiredStringField = model.getString("test_object_required_string");
+    	
     	    	
-    	if (requiredStringField != null) {
+    	    	    	    	    	    	
+    	    	    	String requiredStringTestField = model.getString("test_object_required_string");
+    	if (requiredStringTestField != null) {
+    		String requiredStringField = requiredStringTestField;
     		message.setRequiredString(requiredStringField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	    	    	
     	    	    	ByteString bstringField = null;
     	Object bstringValue = model.get("test_object_bstring");
@@ -645,50 +667,56 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     	}
     	    	
     	    	
-    	if (bstringField != null) {
-    		message.setBstring(bstringField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	Boolean bvalueField = model.getBoolean("test_object_bvalue");
-    	    	
-    	if (bvalueField != null) {
+    	    	    	Boolean bvalueTestField = model.getBoolean("test_object_bvalue");
+    	if (bvalueTestField != null) {
+    		boolean bvalueField = bvalueTestField;
     		message.setBvalue(bvalueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Double dvalueField = model.getDouble("test_object_dvalue");
+    	
     	    	
-    	if (dvalueField != null) {
+    	    	    	    	    	    	
+    	    	    	Double dvalueTestField = model.getDouble("test_object_dvalue");
+    	if (dvalueTestField != null) {
+    		double dvalueField = dvalueTestField;
     		message.setDvalue(dvalueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float fvalueField = model.getFloat("test_object_fvalue");
+    	
     	    	
-    	if (fvalueField != null) {
+    	    	    	    	    	    	
+    	    	    	Float fvalueTestField = model.getFloat("test_object_fvalue");
+    	if (fvalueTestField != null) {
+    		float fvalueField = fvalueTestField;
     		message.setFvalue(fvalueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long numbers64Field = model.getLong("test_object_numbers64");
+    	
     	    	
-    	if (numbers64Field != null) {
+    	    	    	    	    	    	
+    	    	    	Long numbers64TestField = model.getLong("test_object_numbers64");
+    	if (numbers64TestField != null) {
+    		long numbers64Field = numbers64TestField;
     		message.setNumbers64(numbers64Field);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String idField = model.getString("test_object_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("test_object_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -697,11 +725,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     }
 
 
-	    
-    public Boolean hasOptionalString()  {
-        return optionalString == null ? false : true;
-    }
-        
+	            
 		public String getOptionalString() {
 		return optionalString;
 	}
@@ -710,11 +734,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 		this.optionalString = optionalString;
 		return this;	}
 	
-		    
-    public Boolean hasRequiredString()  {
-        return requiredString == null ? false : true;
-    }
-        
+		            
 		public String getRequiredString() {
 		return requiredString;
 	}
@@ -723,11 +743,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 		this.requiredString = requiredString;
 		return this;	}
 	
-		    
-    public Boolean hasNumbers()  {
-        return numbers == null ? false : true;
-    }
-        
+		            
 		public List<Integer> getNumbersList() {
 		if(this.numbers == null)
             this.numbers = new ArrayList<Integer>();
@@ -739,7 +755,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 		return this;
 	}
 
-	public Integer getNumbers(int index)  {
+	public int getNumbers(int index)  {
         return numbers == null ? null : numbers.get(index);
     }
 
@@ -747,7 +763,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return numbers == null ? 0 : numbers.size();
     }
 
-    public TestObject addNumbers(Integer numbers)  {
+    public TestObject addNumbers(int numbers)  {
         if(this.numbers == null)
             this.numbers = new ArrayList<Integer>();
         this.numbers.add(numbers);
@@ -757,11 +773,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     
     
     
-		    
-    public Boolean hasBstring()  {
-        return bstring == null ? false : true;
-    }
-        
+		            
 		public ByteString getBstring() {
 		return bstring;
 	}
@@ -770,63 +782,43 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 		this.bstring = bstring;
 		return this;	}
 	
-		    
-    public Boolean hasBvalue()  {
-        return bvalue == null ? false : true;
-    }
-        
-		public Boolean getBvalue() {
+		            
+		public boolean getBvalue() {
 		return bvalue;
 	}
 	
-	public TestObject setBvalue(Boolean bvalue) {
+	public TestObject setBvalue(boolean bvalue) {
 		this.bvalue = bvalue;
 		return this;	}
 	
-		    
-    public Boolean hasDvalue()  {
-        return dvalue == null ? false : true;
-    }
-        
-		public Double getDvalue() {
+		            
+		public double getDvalue() {
 		return dvalue;
 	}
 	
-	public TestObject setDvalue(Double dvalue) {
+	public TestObject setDvalue(double dvalue) {
 		this.dvalue = dvalue;
 		return this;	}
 	
-		    
-    public Boolean hasFvalue()  {
-        return fvalue == null ? false : true;
-    }
-        
-		public Float getFvalue() {
+		            
+		public float getFvalue() {
 		return fvalue;
 	}
 	
-	public TestObject setFvalue(Float fvalue) {
+	public TestObject setFvalue(float fvalue) {
 		this.fvalue = fvalue;
 		return this;	}
 	
-		    
-    public Boolean hasNumbers64()  {
-        return numbers64 == null ? false : true;
-    }
-        
-		public Long getNumbers64() {
+		            
+		public long getNumbers64() {
 		return numbers64;
 	}
 	
-	public TestObject setNumbers64(Long numbers64) {
+	public TestObject setNumbers64(long numbers64) {
 		this.numbers64 = numbers64;
 		return this;	}
 	
-		    
-    public Boolean hasPlayer()  {
-        return player == null ? false : true;
-    }
-        
+		            
 		public List<Player> getPlayerList() {
 		if(this.player == null)
             this.player = new ArrayList<Player>();
@@ -877,7 +869,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.authenticated.equals(obj.authenticated)) {
+    	    		if (player.authenticated == obj.authenticated) {
     	      			itr.remove();
     		}
 		}
@@ -893,7 +885,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.authtoken.equals(obj.authtoken)) {
+    	    		if (player.authtoken == obj.authtoken) {
     	      			itr.remove();
     		}
 		}
@@ -941,7 +933,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.recordId.equals(obj.recordId)) {
+    	    		if (player.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -973,7 +965,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.locked.equals(obj.locked)) {
+    	    		if (player.locked == obj.locked) {
     	      			itr.remove();
     		}
 		}
@@ -989,7 +981,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.ip.equals(obj.ip)) {
+    	    		if (player.ip == obj.ip) {
     	      			itr.remove();
     		}
 		}
@@ -1005,7 +997,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
        	while (itr.hasNext()) {
     	Player obj = itr.next();
     	
-    	    		if (player.ipChangedAt.equals(obj.ipChangedAt)) {
+    	    		if (player.ipChangedAt == obj.ipChangedAt) {
     	      			itr.remove();
     		}
 		}
@@ -1032,24 +1024,16 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     
     
     
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public TestObject setRecordId(Integer recordId) {
+	public TestObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -1172,51 +1156,58 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     {
     	    	
     	    	
-    	    	    	if(message.optionalString != null)
+    	    	    	if( (String)message.optionalString != null) {
             output.writeString(1, message.optionalString, false);
+        }
     	    	
     	            	
-    	    	if(message.requiredString == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.requiredString == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.requiredString != null)
+    	    	    	if( (String)message.requiredString != null) {
             output.writeString(2, message.requiredString, false);
+        }
     	    	
     	            	
     	    	
     	    	if(message.numbers != null)
         {
-            for(Integer numbers : message.numbers)
+            for(int numbers : message.numbers)
             {
-                if(numbers != null) {
+                if( (Integer) numbers != null) {
                    	            		output.writeInt32(3, numbers, true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.bstring != null)
+    	    	    	if( (ByteString)message.bstring != null) {
             output.writeBytes(4, message.bstring, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.bvalue != null)
+    	    	    	if( (Boolean)message.bvalue != null) {
             output.writeBool(5, message.bvalue, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.dvalue != null)
+    	    	    	if( (Double)message.dvalue != null) {
             output.writeDouble(6, message.dvalue, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.fvalue != null)
+    	    	    	if( (Float)message.fvalue != null) {
             output.writeFloat(7, message.fvalue, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.numbers64 != null)
+    	    	    	if( (Long)message.numbers64 != null) {
             output.writeInt64(8, message.numbers64, false);
+        }
     	    	
     	            	
     	    	
@@ -1224,22 +1215,24 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         {
             for(Player player : message.player)
             {
-                if(player != null) {
+                if( (Player) player != null) {
                    	    				output.writeObject(9, player, Player.getSchema(), true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(10, message.recordId, false);
+        }
     	    	
     	            	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(12, message.id, false);
+        }
     	    	
     	            	
     }
@@ -1247,39 +1240,39 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 	public void dumpObject()
     {
     	System.out.println("START TestObject");
-    	    	if(this.optionalString != null) {
+    	    	//if(this.optionalString != null) {
     		System.out.println("optionalString="+this.optionalString);
-    	}
-    	    	if(this.requiredString != null) {
+    	//}
+    	    	//if(this.requiredString != null) {
     		System.out.println("requiredString="+this.requiredString);
-    	}
-    	    	if(this.numbers != null) {
+    	//}
+    	    	//if(this.numbers != null) {
     		System.out.println("numbers="+this.numbers);
-    	}
-    	    	if(this.bstring != null) {
+    	//}
+    	    	//if(this.bstring != null) {
     		System.out.println("bstring="+this.bstring);
-    	}
-    	    	if(this.bvalue != null) {
+    	//}
+    	    	//if(this.bvalue != null) {
     		System.out.println("bvalue="+this.bvalue);
-    	}
-    	    	if(this.dvalue != null) {
+    	//}
+    	    	//if(this.dvalue != null) {
     		System.out.println("dvalue="+this.dvalue);
-    	}
-    	    	if(this.fvalue != null) {
+    	//}
+    	    	//if(this.fvalue != null) {
     		System.out.println("fvalue="+this.fvalue);
-    	}
-    	    	if(this.numbers64 != null) {
+    	//}
+    	    	//if(this.numbers64 != null) {
     		System.out.println("numbers64="+this.numbers64);
-    	}
-    	    	if(this.player != null) {
+    	//}
+    	    	//if(this.player != null) {
     		System.out.println("player="+this.player);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END TestObject");
     }
     

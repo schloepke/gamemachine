@@ -75,134 +75,262 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     static final Entity DEFAULT_INSTANCE = new Entity();
     static final String defaultScope = Entity.class.getSimpleName();
 
-    			public Neighbors neighbors;
-	    
-        			public ChatMessage chatMessage;
-	    
-        			public ClientConnection clientConnection;
-	    
-        			public EchoTest echoTest;
-	    
-        			public String id;
-	    
-        			public Subscribe subscribe;
-	    
-        			public Publish publish;
-	    
-        			public ChatChannel chatChannel;
-	    
-        			public JoinChat joinChat;
-	    
-        			public LeaveChat leaveChat;
-	    
-        			public Unsubscribe unsubscribe;
-	    
-        			public ChatRegister chatRegister;
-	    
-        			public ChatChannels chatChannels;
-	    
-        			public ErrorMessage errorMessage;
-	    
-        			public NeighborsRequest neighborsRequest;
-	    
-        			public TrackEntity trackEntity;
-	    
-        			public GmVector3 vector3;
-	    
-        			public EntityList entityList;
-	    
-        			public Boolean published;
-	    
-        			public String entityType;
-	    
-        			public PlayerAuthenticated playerAuthenticated;
-	    
-        			public PlayerLogout playerLogout;
-	    
-        			public Boolean sendToPlayer;
-	    
-        			public Subscribers subscribers;
-	    
-        			public Boolean save;
-	    
-        			public ObjectdbGetResponse objectdbGetResponse;
-	    
-        			public NativeBytes nativeBytes;
-	    
-        			public ObjectdbGet objectdbGet;
-	    
-        			public JsonEntity jsonEntity;
-	    
-        			public String destination;
-	    
-        			public Boolean json;
-	    
-        			public String params;
-	    
-        			public ChatStatus chatStatus;
-	    
-        			public ChatBannedList chatBannedList;
-	    
-        			public ChatInvite chatInvite;
-	    
-        			public ClientManagerRegister clientManagerRegister;
-	    
-        			public ClientManagerUnregister clientManagerUnregister;
-	    
-        			public ClientEvent clientEvent;
-	    
-        			public ClientEvents clientEvents;
-	    
-        			public JsonStorage jsonStorage;
-	    
-        			public ClientManagerEvent clientManagerEvent;
-	    
-        			public Regions regions;
-	    
-        			public Boolean fastpath;
-	    
-        			public PoisonPill poisonPill;
-	    
-        			public String senderId;
-	    
-        			public AgentTrackData agentTrackData;
-	    
-        			public TeamMemberSkill teamMemberSkill;
-	    
-        			public TrackDataUpdate trackDataUpdate;
-	    
-        			public TrackDataResponse trackDataResponse;
-	    
-        			public GmMesh mesh;
-	    
-        			public PathData pathData;
-	    
-        			public ObjectdbStatus objectdbStatus;
-	    
-        			public GuildAction guildAction;
-	    
-        			public PvpGameMessage pvpGameMessage;
-	    
-        			public Player player;
-	    
-        			public TrackData trackData;
-	    
-        			public DynamicMessage dynamicMessage;
-	    
-        			public PlayerSkills playerSkills;
-	    
-        			public PlayerItems playerItems;
-	    
-        			public Players players;
-	    
-        			public TestObject testObject;
-	    
-        			public RpcMessage rpcMessage;
-	    
-        			public GameMessage gameMessage;
-	    
-        			public GameMessages gameMessages;
-	    
+    	
+	    	    public Neighbors neighbors;
+	    		
+    
+        	
+	    	    public ChatMessage chatMessage;
+	    		
+    
+        	
+	    	    public ClientConnection clientConnection;
+	    		
+    
+        	
+	    	    public EchoTest echoTest;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public Subscribe subscribe;
+	    		
+    
+        	
+	    	    public Publish publish;
+	    		
+    
+        	
+	    	    public ChatChannel chatChannel;
+	    		
+    
+        	
+	    	    public JoinChat joinChat;
+	    		
+    
+        	
+	    	    public LeaveChat leaveChat;
+	    		
+    
+        	
+	    	    public Unsubscribe unsubscribe;
+	    		
+    
+        	
+	    	    public ChatRegister chatRegister;
+	    		
+    
+        	
+	    	    public ChatChannels chatChannels;
+	    		
+    
+        	
+	    	    public ErrorMessage errorMessage;
+	    		
+    
+        	
+	    	    public NeighborsRequest neighborsRequest;
+	    		
+    
+        	
+	    	    public TrackEntity trackEntity;
+	    		
+    
+        	
+	    	    public GmVector3 vector3;
+	    		
+    
+        	
+	    	    public EntityList entityList;
+	    		
+    
+        	
+	    	    public boolean published= false;
+	    		
+    
+        	
+	    	    public String entityType= null;
+	    		
+    
+        	
+	    	    public PlayerAuthenticated playerAuthenticated;
+	    		
+    
+        	
+	    	    public PlayerLogout playerLogout;
+	    		
+    
+        	
+	    	    public boolean sendToPlayer= false;
+	    		
+    
+        	
+	    	    public Subscribers subscribers;
+	    		
+    
+        	
+	    	    public boolean save= false;
+	    		
+    
+        	
+	    	    public ObjectdbGetResponse objectdbGetResponse;
+	    		
+    
+        	
+	    	    public NativeBytes nativeBytes;
+	    		
+    
+        	
+	    	    public ObjectdbGet objectdbGet;
+	    		
+    
+        	
+	    	    public JsonEntity jsonEntity;
+	    		
+    
+        	
+	    	    public String destination= null;
+	    		
+    
+        	
+	    	    public boolean json= false;
+	    		
+    
+        	
+	    	    public String params= null;
+	    		
+    
+        	
+	    	    public ChatStatus chatStatus;
+	    		
+    
+        	
+	    	    public ChatBannedList chatBannedList;
+	    		
+    
+        	
+	    	    public ChatInvite chatInvite;
+	    		
+    
+        	
+	    	    public ClientManagerRegister clientManagerRegister;
+	    		
+    
+        	
+	    	    public ClientManagerUnregister clientManagerUnregister;
+	    		
+    
+        	
+	    	    public ClientEvent clientEvent;
+	    		
+    
+        	
+	    	    public ClientEvents clientEvents;
+	    		
+    
+        	
+	    	    public JsonStorage jsonStorage;
+	    		
+    
+        	
+	    	    public ClientManagerEvent clientManagerEvent;
+	    		
+    
+        	
+	    	    public Regions regions;
+	    		
+    
+        	
+	    	    public boolean fastpath= false;
+	    		
+    
+        	
+	    	    public PoisonPill poisonPill;
+	    		
+    
+        	
+	    	    public String senderId= null;
+	    		
+    
+        	
+	    	    public AgentTrackData agentTrackData;
+	    		
+    
+        	
+	    	    public TeamMemberSkill teamMemberSkill;
+	    		
+    
+        	
+	    	    public TrackDataUpdate trackDataUpdate;
+	    		
+    
+        	
+	    	    public TrackDataResponse trackDataResponse;
+	    		
+    
+        	
+	    	    public GmMesh mesh;
+	    		
+    
+        	
+	    	    public PathData pathData;
+	    		
+    
+        	
+	    	    public ObjectdbStatus objectdbStatus;
+	    		
+    
+        	
+	    	    public GuildAction guildAction;
+	    		
+    
+        	
+	    	    public PvpGameMessage pvpGameMessage;
+	    		
+    
+        	
+	    	    public Player player;
+	    		
+    
+        	
+	    	    public TrackData trackData;
+	    		
+    
+        	
+	    	    public DynamicMessage dynamicMessage;
+	    		
+    
+        	
+	    	    public PlayerSkills playerSkills;
+	    		
+    
+        	
+	    	    public PlayerItems playerItems;
+	    		
+    
+        	
+	    	    public Players players;
+	    		
+    
+        	
+	    	    public TestObject testObject;
+	    		
+    
+        	
+	    	    public RpcMessage rpcMessage;
+	    		
+    
+        	
+	    	    public GameMessage gameMessage;
+	    		
+    
+        	
+	    	    public GameMessages gameMessages;
+	    		
+    
         
 	public static EntityCache cache() {
 		return EntityCache.getInstance();
@@ -469,170 +597,166 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasGuildAction()) {
+		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.guildAction != null) {
 			names.add(this.guildAction.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPvpGameMessage()) {
+	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.pvpGameMessage != null) {
 			names.add(this.pvpGameMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPlayer()) {
+	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.player != null) {
 			names.add(this.player.getClass().getSimpleName());
 		}
-	  		  		if (this.hasTrackData()) {
+	  		  		if (this.trackData != null) {
 			names.add(this.trackData.getClass().getSimpleName());
 		}
-	  		  		  		  		  		if (this.hasDynamicMessage()) {
+	  		  		  		  		  		if (this.dynamicMessage != null) {
 			names.add(this.dynamicMessage.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasPlayerSkills()) {
+	  		  		  		if (this.playerSkills != null) {
 			names.add(this.playerSkills.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPlayerItems()) {
+	  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.playerItems != null) {
 			names.add(this.playerItems.getClass().getSimpleName());
 		}
-	  		  		  		  		  		if (this.hasPlayers()) {
+	  		  		  		  		  		if (this.players != null) {
 			names.add(this.players.getClass().getSimpleName());
 		}
-	  		  		if (this.hasTestObject()) {
+	  		  		if (this.testObject != null) {
 			names.add(this.testObject.getClass().getSimpleName());
 		}
-	  		  		if (this.hasRpcMessage()) {
+	  		  		if (this.rpcMessage != null) {
 			names.add(this.rpcMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		if (this.hasGameMessage()) {
+	  		  		  		  		  		if (this.gameMessage != null) {
 			names.add(this.gameMessage.getClass().getSimpleName());
 		}
-	  		  		if (this.hasGameMessages()) {
+	  		  		if (this.gameMessages != null) {
 			names.add(this.gameMessages.getClass().getSimpleName());
 		}
-	  		  		  		  		if (this.hasTrackDataUpdate()) {
+	  		  		  		  		if (this.trackDataUpdate != null) {
 			names.add(this.trackDataUpdate.getClass().getSimpleName());
 		}
-	  		  		if (this.hasTrackDataResponse()) {
+	  		  		if (this.trackDataResponse != null) {
 			names.add(this.trackDataResponse.getClass().getSimpleName());
 		}
-	  		  		  		  		if (this.hasTeamMemberSkill()) {
+	  		  		  		  		if (this.teamMemberSkill != null) {
 			names.add(this.teamMemberSkill.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		if (this.hasAgentTrackData()) {
+	  		  		  		  		  		  		if (this.agentTrackData != null) {
 			names.add(this.agentTrackData.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		if (this.hasTrackEntity()) {
+	  		  		  		  		  		  		if (this.trackEntity != null) {
 			names.add(this.trackEntity.getClass().getSimpleName());
 		}
-	  		  		if (this.hasPlayerLogout()) {
+	  		  		if (this.playerLogout != null) {
 			names.add(this.playerLogout.getClass().getSimpleName());
 		}
-	  		  		  		  		if (this.hasPlayerAuthenticated()) {
+	  		  		  		  		if (this.playerAuthenticated != null) {
 			names.add(this.playerAuthenticated.getClass().getSimpleName());
 		}
-	  		  		if (this.hasErrorMessage()) {
+	  		  		if (this.errorMessage != null) {
 			names.add(this.errorMessage.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatInvite()) {
+	  		  		if (this.chatInvite != null) {
 			names.add(this.chatInvite.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasChatBannedList()) {
+	  		  		  		if (this.chatBannedList != null) {
 			names.add(this.chatBannedList.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatChannels()) {
+	  		  		if (this.chatChannels != null) {
 			names.add(this.chatChannels.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatChannel()) {
+	  		  		if (this.chatChannel != null) {
 			names.add(this.chatChannel.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatRegister()) {
+	  		  		if (this.chatRegister != null) {
 			names.add(this.chatRegister.getClass().getSimpleName());
 		}
-	  		  		if (this.hasJoinChat()) {
+	  		  		if (this.joinChat != null) {
 			names.add(this.joinChat.getClass().getSimpleName());
 		}
-	  		  		if (this.hasLeaveChat()) {
+	  		  		if (this.leaveChat != null) {
 			names.add(this.leaveChat.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatMessage()) {
+	  		  		if (this.chatMessage != null) {
 			names.add(this.chatMessage.getClass().getSimpleName());
 		}
-	  		  		if (this.hasChatStatus()) {
+	  		  		if (this.chatStatus != null) {
 			names.add(this.chatStatus.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasClientEvent()) {
+	  		  		  		if (this.clientEvent != null) {
 			names.add(this.clientEvent.getClass().getSimpleName());
 		}
-	  		  		if (this.hasClientEvents()) {
+	  		  		if (this.clientEvents != null) {
 			names.add(this.clientEvents.getClass().getSimpleName());
 		}
-	  		  		if (this.hasClientManagerUnregister()) {
+	  		  		if (this.clientManagerUnregister != null) {
 			names.add(this.clientManagerUnregister.getClass().getSimpleName());
 		}
-	  		  		if (this.hasClientManagerRegister()) {
+	  		  		if (this.clientManagerRegister != null) {
 			names.add(this.clientManagerRegister.getClass().getSimpleName());
 		}
-	  		  		if (this.hasClientManagerEvent()) {
+	  		  		if (this.clientManagerEvent != null) {
 			names.add(this.clientManagerEvent.getClass().getSimpleName());
 		}
-	  		  		if (this.hasSubscribers()) {
+	  		  		if (this.subscribers != null) {
 			names.add(this.subscribers.getClass().getSimpleName());
 		}
-	  		  		if (this.hasSubscribe()) {
+	  		  		if (this.subscribe != null) {
 			names.add(this.subscribe.getClass().getSimpleName());
 		}
-	  		  		if (this.hasUnsubscribe()) {
+	  		  		if (this.unsubscribe != null) {
 			names.add(this.unsubscribe.getClass().getSimpleName());
 		}
-	  		  		if (this.hasPublish()) {
+	  		  		if (this.publish != null) {
 			names.add(this.publish.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasObjectdbStatus()) {
+	  		  		  		if (this.objectdbStatus != null) {
 			names.add(this.objectdbStatus.getClass().getSimpleName());
 		}
-	  		  		if (this.hasObjectdbGet()) {
+	  		  		if (this.objectdbGet != null) {
 			names.add(this.objectdbGet.getClass().getSimpleName());
 		}
-	  		  		if (this.hasObjectdbGetResponse()) {
+	  		  		if (this.objectdbGetResponse != null) {
 			names.add(this.objectdbGetResponse.getClass().getSimpleName());
 		}
-	  		  		  		  		if (this.hasClientConnection()) {
+	  		  		  		  		if (this.clientConnection != null) {
 			names.add(this.clientConnection.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		if (this.hasPathData()) {
+	  		  		  		  		  		  		  		  		  		  		  		  		if (this.pathData != null) {
 			names.add(this.pathData.getClass().getSimpleName());
 		}
-	  		  		if (this.hasEchoTest()) {
+	  		  		if (this.echoTest != null) {
 			names.add(this.echoTest.getClass().getSimpleName());
 		}
-	  		  		if (this.hasNeighbors()) {
+	  		  		if (this.neighbors != null) {
 			names.add(this.neighbors.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasNeighborsRequest()) {
+	  		  		  		if (this.neighborsRequest != null) {
 			names.add(this.neighborsRequest.getClass().getSimpleName());
 		}
-	  		  		if (this.hasNativeBytes()) {
+	  		  		if (this.nativeBytes != null) {
 			names.add(this.nativeBytes.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasJsonEntity()) {
+	  		  		  		if (this.jsonEntity != null) {
 			names.add(this.jsonEntity.getClass().getSimpleName());
 		}
-	  		  		if (this.hasJsonStorage()) {
+	  		  		if (this.jsonStorage != null) {
 			names.add(this.jsonStorage.getClass().getSimpleName());
 		}
-	  		  		if (this.hasRegions()) {
+	  		  		if (this.regions != null) {
 			names.add(this.regions.getClass().getSimpleName());
 		}
-	  		  		if (this.hasPoisonPill()) {
+	  		  		if (this.poisonPill != null) {
 			names.add(this.poisonPill.getClass().getSimpleName());
 		}
-	  		  		  		if (this.hasEntityList()) {
+	  		  		  		if (this.entityList != null) {
 			names.add(this.entityList.getClass().getSimpleName());
 		}
 	  		  			return names;
 	}
 
-	    
-    public Boolean hasNeighbors()  {
-        return neighbors == null ? false : true;
-    }
-        
+	            
 		public Neighbors getNeighbors() {
 		return neighbors;
 	}
@@ -641,11 +765,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.neighbors = neighbors;
 		return this;	}
 	
-		    
-    public Boolean hasChatMessage()  {
-        return chatMessage == null ? false : true;
-    }
-        
+		            
 		public ChatMessage getChatMessage() {
 		return chatMessage;
 	}
@@ -654,11 +774,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatMessage = chatMessage;
 		return this;	}
 	
-		    
-    public Boolean hasClientConnection()  {
-        return clientConnection == null ? false : true;
-    }
-        
+		            
 		public ClientConnection getClientConnection() {
 		return clientConnection;
 	}
@@ -667,11 +783,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientConnection = clientConnection;
 		return this;	}
 	
-		    
-    public Boolean hasEchoTest()  {
-        return echoTest == null ? false : true;
-    }
-        
+		            
 		public EchoTest getEchoTest() {
 		return echoTest;
 	}
@@ -680,11 +792,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.echoTest = echoTest;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -693,11 +801,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasSubscribe()  {
-        return subscribe == null ? false : true;
-    }
-        
+		            
 		public Subscribe getSubscribe() {
 		return subscribe;
 	}
@@ -706,11 +810,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.subscribe = subscribe;
 		return this;	}
 	
-		    
-    public Boolean hasPublish()  {
-        return publish == null ? false : true;
-    }
-        
+		            
 		public Publish getPublish() {
 		return publish;
 	}
@@ -719,11 +819,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.publish = publish;
 		return this;	}
 	
-		    
-    public Boolean hasChatChannel()  {
-        return chatChannel == null ? false : true;
-    }
-        
+		            
 		public ChatChannel getChatChannel() {
 		return chatChannel;
 	}
@@ -732,11 +828,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatChannel = chatChannel;
 		return this;	}
 	
-		    
-    public Boolean hasJoinChat()  {
-        return joinChat == null ? false : true;
-    }
-        
+		            
 		public JoinChat getJoinChat() {
 		return joinChat;
 	}
@@ -745,11 +837,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.joinChat = joinChat;
 		return this;	}
 	
-		    
-    public Boolean hasLeaveChat()  {
-        return leaveChat == null ? false : true;
-    }
-        
+		            
 		public LeaveChat getLeaveChat() {
 		return leaveChat;
 	}
@@ -758,11 +846,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.leaveChat = leaveChat;
 		return this;	}
 	
-		    
-    public Boolean hasUnsubscribe()  {
-        return unsubscribe == null ? false : true;
-    }
-        
+		            
 		public Unsubscribe getUnsubscribe() {
 		return unsubscribe;
 	}
@@ -771,11 +855,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.unsubscribe = unsubscribe;
 		return this;	}
 	
-		    
-    public Boolean hasChatRegister()  {
-        return chatRegister == null ? false : true;
-    }
-        
+		            
 		public ChatRegister getChatRegister() {
 		return chatRegister;
 	}
@@ -784,11 +864,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatRegister = chatRegister;
 		return this;	}
 	
-		    
-    public Boolean hasChatChannels()  {
-        return chatChannels == null ? false : true;
-    }
-        
+		            
 		public ChatChannels getChatChannels() {
 		return chatChannels;
 	}
@@ -797,11 +873,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatChannels = chatChannels;
 		return this;	}
 	
-		    
-    public Boolean hasErrorMessage()  {
-        return errorMessage == null ? false : true;
-    }
-        
+		            
 		public ErrorMessage getErrorMessage() {
 		return errorMessage;
 	}
@@ -810,11 +882,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.errorMessage = errorMessage;
 		return this;	}
 	
-		    
-    public Boolean hasNeighborsRequest()  {
-        return neighborsRequest == null ? false : true;
-    }
-        
+		            
 		public NeighborsRequest getNeighborsRequest() {
 		return neighborsRequest;
 	}
@@ -823,11 +891,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.neighborsRequest = neighborsRequest;
 		return this;	}
 	
-		    
-    public Boolean hasTrackEntity()  {
-        return trackEntity == null ? false : true;
-    }
-        
+		            
 		public TrackEntity getTrackEntity() {
 		return trackEntity;
 	}
@@ -836,11 +900,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.trackEntity = trackEntity;
 		return this;	}
 	
-		    
-    public Boolean hasVector3()  {
-        return vector3 == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getVector3() {
 		return vector3;
 	}
@@ -849,11 +909,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.vector3 = vector3;
 		return this;	}
 	
-		    
-    public Boolean hasEntityList()  {
-        return entityList == null ? false : true;
-    }
-        
+		            
 		public EntityList getEntityList() {
 		return entityList;
 	}
@@ -862,24 +918,16 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.entityList = entityList;
 		return this;	}
 	
-		    
-    public Boolean hasPublished()  {
-        return published == null ? false : true;
-    }
-        
-		public Boolean getPublished() {
+		            
+		public boolean getPublished() {
 		return published;
 	}
 	
-	public Entity setPublished(Boolean published) {
+	public Entity setPublished(boolean published) {
 		this.published = published;
 		return this;	}
 	
-		    
-    public Boolean hasEntityType()  {
-        return entityType == null ? false : true;
-    }
-        
+		            
 		public String getEntityType() {
 		return entityType;
 	}
@@ -888,11 +936,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.entityType = entityType;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerAuthenticated()  {
-        return playerAuthenticated == null ? false : true;
-    }
-        
+		            
 		public PlayerAuthenticated getPlayerAuthenticated() {
 		return playerAuthenticated;
 	}
@@ -901,11 +945,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.playerAuthenticated = playerAuthenticated;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerLogout()  {
-        return playerLogout == null ? false : true;
-    }
-        
+		            
 		public PlayerLogout getPlayerLogout() {
 		return playerLogout;
 	}
@@ -914,24 +954,16 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.playerLogout = playerLogout;
 		return this;	}
 	
-		    
-    public Boolean hasSendToPlayer()  {
-        return sendToPlayer == null ? false : true;
-    }
-        
-		public Boolean getSendToPlayer() {
+		            
+		public boolean getSendToPlayer() {
 		return sendToPlayer;
 	}
 	
-	public Entity setSendToPlayer(Boolean sendToPlayer) {
+	public Entity setSendToPlayer(boolean sendToPlayer) {
 		this.sendToPlayer = sendToPlayer;
 		return this;	}
 	
-		    
-    public Boolean hasSubscribers()  {
-        return subscribers == null ? false : true;
-    }
-        
+		            
 		public Subscribers getSubscribers() {
 		return subscribers;
 	}
@@ -940,24 +972,16 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.subscribers = subscribers;
 		return this;	}
 	
-		    
-    public Boolean hasSave()  {
-        return save == null ? false : true;
-    }
-        
-		public Boolean getSave() {
+		            
+		public boolean getSave() {
 		return save;
 	}
 	
-	public Entity setSave(Boolean save) {
+	public Entity setSave(boolean save) {
 		this.save = save;
 		return this;	}
 	
-		    
-    public Boolean hasObjectdbGetResponse()  {
-        return objectdbGetResponse == null ? false : true;
-    }
-        
+		            
 		public ObjectdbGetResponse getObjectdbGetResponse() {
 		return objectdbGetResponse;
 	}
@@ -966,11 +990,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.objectdbGetResponse = objectdbGetResponse;
 		return this;	}
 	
-		    
-    public Boolean hasNativeBytes()  {
-        return nativeBytes == null ? false : true;
-    }
-        
+		            
 		public NativeBytes getNativeBytes() {
 		return nativeBytes;
 	}
@@ -979,11 +999,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.nativeBytes = nativeBytes;
 		return this;	}
 	
-		    
-    public Boolean hasObjectdbGet()  {
-        return objectdbGet == null ? false : true;
-    }
-        
+		            
 		public ObjectdbGet getObjectdbGet() {
 		return objectdbGet;
 	}
@@ -992,11 +1008,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.objectdbGet = objectdbGet;
 		return this;	}
 	
-		    
-    public Boolean hasJsonEntity()  {
-        return jsonEntity == null ? false : true;
-    }
-        
+		            
 		public JsonEntity getJsonEntity() {
 		return jsonEntity;
 	}
@@ -1005,11 +1017,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.jsonEntity = jsonEntity;
 		return this;	}
 	
-		    
-    public Boolean hasDestination()  {
-        return destination == null ? false : true;
-    }
-        
+		            
 		public String getDestination() {
 		return destination;
 	}
@@ -1018,24 +1026,16 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.destination = destination;
 		return this;	}
 	
-		    
-    public Boolean hasJson()  {
-        return json == null ? false : true;
-    }
-        
-		public Boolean getJson() {
+		            
+		public boolean getJson() {
 		return json;
 	}
 	
-	public Entity setJson(Boolean json) {
+	public Entity setJson(boolean json) {
 		this.json = json;
 		return this;	}
 	
-		    
-    public Boolean hasParams()  {
-        return params == null ? false : true;
-    }
-        
+		            
 		public String getParams() {
 		return params;
 	}
@@ -1044,11 +1044,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.params = params;
 		return this;	}
 	
-		    
-    public Boolean hasChatStatus()  {
-        return chatStatus == null ? false : true;
-    }
-        
+		            
 		public ChatStatus getChatStatus() {
 		return chatStatus;
 	}
@@ -1057,11 +1053,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatStatus = chatStatus;
 		return this;	}
 	
-		    
-    public Boolean hasChatBannedList()  {
-        return chatBannedList == null ? false : true;
-    }
-        
+		            
 		public ChatBannedList getChatBannedList() {
 		return chatBannedList;
 	}
@@ -1070,11 +1062,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatBannedList = chatBannedList;
 		return this;	}
 	
-		    
-    public Boolean hasChatInvite()  {
-        return chatInvite == null ? false : true;
-    }
-        
+		            
 		public ChatInvite getChatInvite() {
 		return chatInvite;
 	}
@@ -1083,11 +1071,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.chatInvite = chatInvite;
 		return this;	}
 	
-		    
-    public Boolean hasClientManagerRegister()  {
-        return clientManagerRegister == null ? false : true;
-    }
-        
+		            
 		public ClientManagerRegister getClientManagerRegister() {
 		return clientManagerRegister;
 	}
@@ -1096,11 +1080,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientManagerRegister = clientManagerRegister;
 		return this;	}
 	
-		    
-    public Boolean hasClientManagerUnregister()  {
-        return clientManagerUnregister == null ? false : true;
-    }
-        
+		            
 		public ClientManagerUnregister getClientManagerUnregister() {
 		return clientManagerUnregister;
 	}
@@ -1109,11 +1089,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientManagerUnregister = clientManagerUnregister;
 		return this;	}
 	
-		    
-    public Boolean hasClientEvent()  {
-        return clientEvent == null ? false : true;
-    }
-        
+		            
 		public ClientEvent getClientEvent() {
 		return clientEvent;
 	}
@@ -1122,11 +1098,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientEvent = clientEvent;
 		return this;	}
 	
-		    
-    public Boolean hasClientEvents()  {
-        return clientEvents == null ? false : true;
-    }
-        
+		            
 		public ClientEvents getClientEvents() {
 		return clientEvents;
 	}
@@ -1135,11 +1107,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientEvents = clientEvents;
 		return this;	}
 	
-		    
-    public Boolean hasJsonStorage()  {
-        return jsonStorage == null ? false : true;
-    }
-        
+		            
 		public JsonStorage getJsonStorage() {
 		return jsonStorage;
 	}
@@ -1148,11 +1116,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.jsonStorage = jsonStorage;
 		return this;	}
 	
-		    
-    public Boolean hasClientManagerEvent()  {
-        return clientManagerEvent == null ? false : true;
-    }
-        
+		            
 		public ClientManagerEvent getClientManagerEvent() {
 		return clientManagerEvent;
 	}
@@ -1161,11 +1125,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.clientManagerEvent = clientManagerEvent;
 		return this;	}
 	
-		    
-    public Boolean hasRegions()  {
-        return regions == null ? false : true;
-    }
-        
+		            
 		public Regions getRegions() {
 		return regions;
 	}
@@ -1174,24 +1134,16 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.regions = regions;
 		return this;	}
 	
-		    
-    public Boolean hasFastpath()  {
-        return fastpath == null ? false : true;
-    }
-        
-		public Boolean getFastpath() {
+		            
+		public boolean getFastpath() {
 		return fastpath;
 	}
 	
-	public Entity setFastpath(Boolean fastpath) {
+	public Entity setFastpath(boolean fastpath) {
 		this.fastpath = fastpath;
 		return this;	}
 	
-		    
-    public Boolean hasPoisonPill()  {
-        return poisonPill == null ? false : true;
-    }
-        
+		            
 		public PoisonPill getPoisonPill() {
 		return poisonPill;
 	}
@@ -1200,11 +1152,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.poisonPill = poisonPill;
 		return this;	}
 	
-		    
-    public Boolean hasSenderId()  {
-        return senderId == null ? false : true;
-    }
-        
+		            
 		public String getSenderId() {
 		return senderId;
 	}
@@ -1213,11 +1161,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.senderId = senderId;
 		return this;	}
 	
-		    
-    public Boolean hasAgentTrackData()  {
-        return agentTrackData == null ? false : true;
-    }
-        
+		            
 		public AgentTrackData getAgentTrackData() {
 		return agentTrackData;
 	}
@@ -1226,11 +1170,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.agentTrackData = agentTrackData;
 		return this;	}
 	
-		    
-    public Boolean hasTeamMemberSkill()  {
-        return teamMemberSkill == null ? false : true;
-    }
-        
+		            
 		public TeamMemberSkill getTeamMemberSkill() {
 		return teamMemberSkill;
 	}
@@ -1239,11 +1179,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.teamMemberSkill = teamMemberSkill;
 		return this;	}
 	
-		    
-    public Boolean hasTrackDataUpdate()  {
-        return trackDataUpdate == null ? false : true;
-    }
-        
+		            
 		public TrackDataUpdate getTrackDataUpdate() {
 		return trackDataUpdate;
 	}
@@ -1252,11 +1188,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.trackDataUpdate = trackDataUpdate;
 		return this;	}
 	
-		    
-    public Boolean hasTrackDataResponse()  {
-        return trackDataResponse == null ? false : true;
-    }
-        
+		            
 		public TrackDataResponse getTrackDataResponse() {
 		return trackDataResponse;
 	}
@@ -1265,11 +1197,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.trackDataResponse = trackDataResponse;
 		return this;	}
 	
-		    
-    public Boolean hasMesh()  {
-        return mesh == null ? false : true;
-    }
-        
+		            
 		public GmMesh getMesh() {
 		return mesh;
 	}
@@ -1278,11 +1206,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.mesh = mesh;
 		return this;	}
 	
-		    
-    public Boolean hasPathData()  {
-        return pathData == null ? false : true;
-    }
-        
+		            
 		public PathData getPathData() {
 		return pathData;
 	}
@@ -1291,11 +1215,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.pathData = pathData;
 		return this;	}
 	
-		    
-    public Boolean hasObjectdbStatus()  {
-        return objectdbStatus == null ? false : true;
-    }
-        
+		            
 		public ObjectdbStatus getObjectdbStatus() {
 		return objectdbStatus;
 	}
@@ -1304,11 +1224,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.objectdbStatus = objectdbStatus;
 		return this;	}
 	
-		    
-    public Boolean hasGuildAction()  {
-        return guildAction == null ? false : true;
-    }
-        
+		            
 		public GuildAction getGuildAction() {
 		return guildAction;
 	}
@@ -1317,11 +1233,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.guildAction = guildAction;
 		return this;	}
 	
-		    
-    public Boolean hasPvpGameMessage()  {
-        return pvpGameMessage == null ? false : true;
-    }
-        
+		            
 		public PvpGameMessage getPvpGameMessage() {
 		return pvpGameMessage;
 	}
@@ -1330,11 +1242,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.pvpGameMessage = pvpGameMessage;
 		return this;	}
 	
-		    
-    public Boolean hasPlayer()  {
-        return player == null ? false : true;
-    }
-        
+		            
 		public Player getPlayer() {
 		return player;
 	}
@@ -1343,11 +1251,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.player = player;
 		return this;	}
 	
-		    
-    public Boolean hasTrackData()  {
-        return trackData == null ? false : true;
-    }
-        
+		            
 		public TrackData getTrackData() {
 		return trackData;
 	}
@@ -1356,11 +1260,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.trackData = trackData;
 		return this;	}
 	
-		    
-    public Boolean hasDynamicMessage()  {
-        return dynamicMessage == null ? false : true;
-    }
-        
+		            
 		public DynamicMessage getDynamicMessage() {
 		return dynamicMessage;
 	}
@@ -1369,11 +1269,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.dynamicMessage = dynamicMessage;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerSkills()  {
-        return playerSkills == null ? false : true;
-    }
-        
+		            
 		public PlayerSkills getPlayerSkills() {
 		return playerSkills;
 	}
@@ -1382,11 +1278,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.playerSkills = playerSkills;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItems()  {
-        return playerItems == null ? false : true;
-    }
-        
+		            
 		public PlayerItems getPlayerItems() {
 		return playerItems;
 	}
@@ -1395,11 +1287,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.playerItems = playerItems;
 		return this;	}
 	
-		    
-    public Boolean hasPlayers()  {
-        return players == null ? false : true;
-    }
-        
+		            
 		public Players getPlayers() {
 		return players;
 	}
@@ -1408,11 +1296,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.players = players;
 		return this;	}
 	
-		    
-    public Boolean hasTestObject()  {
-        return testObject == null ? false : true;
-    }
-        
+		            
 		public TestObject getTestObject() {
 		return testObject;
 	}
@@ -1421,11 +1305,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.testObject = testObject;
 		return this;	}
 	
-		    
-    public Boolean hasRpcMessage()  {
-        return rpcMessage == null ? false : true;
-    }
-        
+		            
 		public RpcMessage getRpcMessage() {
 		return rpcMessage;
 	}
@@ -1434,11 +1314,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.rpcMessage = rpcMessage;
 		return this;	}
 	
-		    
-    public Boolean hasGameMessage()  {
-        return gameMessage == null ? false : true;
-    }
-        
+		            
 		public GameMessage getGameMessage() {
 		return gameMessage;
 	}
@@ -1447,11 +1323,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 		this.gameMessage = gameMessage;
 		return this;	}
 	
-		    
-    public Boolean hasGameMessages()  {
-        return gameMessages == null ? false : true;
-    }
-        
+		            
 		public GameMessages getGameMessages() {
 		return gameMessages;
 	}
@@ -1803,11 +1675,12 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     		output.writeObject(6, message.echoTest, EchoTest.getSchema(), false);
     	    	
     	            	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(7, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -1876,13 +1749,15 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.published != null)
+    	    	    	if( (Boolean)message.published != null) {
             output.writeBool(29, message.published, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.entityType != null)
+    	    	    	if( (String)message.entityType != null) {
             output.writeString(30, message.entityType, false);
+        }
     	    	
     	            	
     	    	
@@ -1896,8 +1771,9 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.sendToPlayer != null)
+    	    	    	if( (Boolean)message.sendToPlayer != null) {
             output.writeBool(39, message.sendToPlayer, false);
+        }
     	    	
     	            	
     	    	
@@ -1906,8 +1782,9 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.save != null)
+    	    	    	if( (Boolean)message.save != null) {
             output.writeBool(42, message.save, false);
+        }
     	    	
     	            	
     	    	
@@ -1931,18 +1808,21 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.destination != null)
+    	    	    	if( (String)message.destination != null) {
             output.writeString(48, message.destination, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.json != null)
+    	    	    	if( (Boolean)message.json != null) {
             output.writeBool(49, message.json, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.params != null)
+    	    	    	if( (String)message.params != null) {
             output.writeString(50, message.params, false);
+        }
     	    	
     	            	
     	    	
@@ -1996,8 +1876,9 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.fastpath != null)
+    	    	    	if( (Boolean)message.fastpath != null) {
             output.writeBool(61, message.fastpath, false);
+        }
     	    	
     	            	
     	    	
@@ -2006,8 +1887,9 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     	    	
     	            	
     	    	
-    	    	    	if(message.senderId != null)
+    	    	    	if( (String)message.senderId != null) {
             output.writeString(63, message.senderId, false);
+        }
     	    	
     	            	
     	    	
@@ -2110,198 +1992,198 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	public void dumpObject()
     {
     	System.out.println("START Entity");
-    	    	if(this.neighbors != null) {
+    	    	//if(this.neighbors != null) {
     		System.out.println("neighbors="+this.neighbors);
-    	}
-    	    	if(this.chatMessage != null) {
+    	//}
+    	    	//if(this.chatMessage != null) {
     		System.out.println("chatMessage="+this.chatMessage);
-    	}
-    	    	if(this.clientConnection != null) {
+    	//}
+    	    	//if(this.clientConnection != null) {
     		System.out.println("clientConnection="+this.clientConnection);
-    	}
-    	    	if(this.echoTest != null) {
+    	//}
+    	    	//if(this.echoTest != null) {
     		System.out.println("echoTest="+this.echoTest);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.subscribe != null) {
+    	//}
+    	    	//if(this.subscribe != null) {
     		System.out.println("subscribe="+this.subscribe);
-    	}
-    	    	if(this.publish != null) {
+    	//}
+    	    	//if(this.publish != null) {
     		System.out.println("publish="+this.publish);
-    	}
-    	    	if(this.chatChannel != null) {
+    	//}
+    	    	//if(this.chatChannel != null) {
     		System.out.println("chatChannel="+this.chatChannel);
-    	}
-    	    	if(this.joinChat != null) {
+    	//}
+    	    	//if(this.joinChat != null) {
     		System.out.println("joinChat="+this.joinChat);
-    	}
-    	    	if(this.leaveChat != null) {
+    	//}
+    	    	//if(this.leaveChat != null) {
     		System.out.println("leaveChat="+this.leaveChat);
-    	}
-    	    	if(this.unsubscribe != null) {
+    	//}
+    	    	//if(this.unsubscribe != null) {
     		System.out.println("unsubscribe="+this.unsubscribe);
-    	}
-    	    	if(this.chatRegister != null) {
+    	//}
+    	    	//if(this.chatRegister != null) {
     		System.out.println("chatRegister="+this.chatRegister);
-    	}
-    	    	if(this.chatChannels != null) {
+    	//}
+    	    	//if(this.chatChannels != null) {
     		System.out.println("chatChannels="+this.chatChannels);
-    	}
-    	    	if(this.errorMessage != null) {
+    	//}
+    	    	//if(this.errorMessage != null) {
     		System.out.println("errorMessage="+this.errorMessage);
-    	}
-    	    	if(this.neighborsRequest != null) {
+    	//}
+    	    	//if(this.neighborsRequest != null) {
     		System.out.println("neighborsRequest="+this.neighborsRequest);
-    	}
-    	    	if(this.trackEntity != null) {
+    	//}
+    	    	//if(this.trackEntity != null) {
     		System.out.println("trackEntity="+this.trackEntity);
-    	}
-    	    	if(this.vector3 != null) {
+    	//}
+    	    	//if(this.vector3 != null) {
     		System.out.println("vector3="+this.vector3);
-    	}
-    	    	if(this.entityList != null) {
+    	//}
+    	    	//if(this.entityList != null) {
     		System.out.println("entityList="+this.entityList);
-    	}
-    	    	if(this.published != null) {
+    	//}
+    	    	//if(this.published != null) {
     		System.out.println("published="+this.published);
-    	}
-    	    	if(this.entityType != null) {
+    	//}
+    	    	//if(this.entityType != null) {
     		System.out.println("entityType="+this.entityType);
-    	}
-    	    	if(this.playerAuthenticated != null) {
+    	//}
+    	    	//if(this.playerAuthenticated != null) {
     		System.out.println("playerAuthenticated="+this.playerAuthenticated);
-    	}
-    	    	if(this.playerLogout != null) {
+    	//}
+    	    	//if(this.playerLogout != null) {
     		System.out.println("playerLogout="+this.playerLogout);
-    	}
-    	    	if(this.sendToPlayer != null) {
+    	//}
+    	    	//if(this.sendToPlayer != null) {
     		System.out.println("sendToPlayer="+this.sendToPlayer);
-    	}
-    	    	if(this.subscribers != null) {
+    	//}
+    	    	//if(this.subscribers != null) {
     		System.out.println("subscribers="+this.subscribers);
-    	}
-    	    	if(this.save != null) {
+    	//}
+    	    	//if(this.save != null) {
     		System.out.println("save="+this.save);
-    	}
-    	    	if(this.objectdbGetResponse != null) {
+    	//}
+    	    	//if(this.objectdbGetResponse != null) {
     		System.out.println("objectdbGetResponse="+this.objectdbGetResponse);
-    	}
-    	    	if(this.nativeBytes != null) {
+    	//}
+    	    	//if(this.nativeBytes != null) {
     		System.out.println("nativeBytes="+this.nativeBytes);
-    	}
-    	    	if(this.objectdbGet != null) {
+    	//}
+    	    	//if(this.objectdbGet != null) {
     		System.out.println("objectdbGet="+this.objectdbGet);
-    	}
-    	    	if(this.jsonEntity != null) {
+    	//}
+    	    	//if(this.jsonEntity != null) {
     		System.out.println("jsonEntity="+this.jsonEntity);
-    	}
-    	    	if(this.destination != null) {
+    	//}
+    	    	//if(this.destination != null) {
     		System.out.println("destination="+this.destination);
-    	}
-    	    	if(this.json != null) {
+    	//}
+    	    	//if(this.json != null) {
     		System.out.println("json="+this.json);
-    	}
-    	    	if(this.params != null) {
+    	//}
+    	    	//if(this.params != null) {
     		System.out.println("params="+this.params);
-    	}
-    	    	if(this.chatStatus != null) {
+    	//}
+    	    	//if(this.chatStatus != null) {
     		System.out.println("chatStatus="+this.chatStatus);
-    	}
-    	    	if(this.chatBannedList != null) {
+    	//}
+    	    	//if(this.chatBannedList != null) {
     		System.out.println("chatBannedList="+this.chatBannedList);
-    	}
-    	    	if(this.chatInvite != null) {
+    	//}
+    	    	//if(this.chatInvite != null) {
     		System.out.println("chatInvite="+this.chatInvite);
-    	}
-    	    	if(this.clientManagerRegister != null) {
+    	//}
+    	    	//if(this.clientManagerRegister != null) {
     		System.out.println("clientManagerRegister="+this.clientManagerRegister);
-    	}
-    	    	if(this.clientManagerUnregister != null) {
+    	//}
+    	    	//if(this.clientManagerUnregister != null) {
     		System.out.println("clientManagerUnregister="+this.clientManagerUnregister);
-    	}
-    	    	if(this.clientEvent != null) {
+    	//}
+    	    	//if(this.clientEvent != null) {
     		System.out.println("clientEvent="+this.clientEvent);
-    	}
-    	    	if(this.clientEvents != null) {
+    	//}
+    	    	//if(this.clientEvents != null) {
     		System.out.println("clientEvents="+this.clientEvents);
-    	}
-    	    	if(this.jsonStorage != null) {
+    	//}
+    	    	//if(this.jsonStorage != null) {
     		System.out.println("jsonStorage="+this.jsonStorage);
-    	}
-    	    	if(this.clientManagerEvent != null) {
+    	//}
+    	    	//if(this.clientManagerEvent != null) {
     		System.out.println("clientManagerEvent="+this.clientManagerEvent);
-    	}
-    	    	if(this.regions != null) {
+    	//}
+    	    	//if(this.regions != null) {
     		System.out.println("regions="+this.regions);
-    	}
-    	    	if(this.fastpath != null) {
+    	//}
+    	    	//if(this.fastpath != null) {
     		System.out.println("fastpath="+this.fastpath);
-    	}
-    	    	if(this.poisonPill != null) {
+    	//}
+    	    	//if(this.poisonPill != null) {
     		System.out.println("poisonPill="+this.poisonPill);
-    	}
-    	    	if(this.senderId != null) {
+    	//}
+    	    	//if(this.senderId != null) {
     		System.out.println("senderId="+this.senderId);
-    	}
-    	    	if(this.agentTrackData != null) {
+    	//}
+    	    	//if(this.agentTrackData != null) {
     		System.out.println("agentTrackData="+this.agentTrackData);
-    	}
-    	    	if(this.teamMemberSkill != null) {
+    	//}
+    	    	//if(this.teamMemberSkill != null) {
     		System.out.println("teamMemberSkill="+this.teamMemberSkill);
-    	}
-    	    	if(this.trackDataUpdate != null) {
+    	//}
+    	    	//if(this.trackDataUpdate != null) {
     		System.out.println("trackDataUpdate="+this.trackDataUpdate);
-    	}
-    	    	if(this.trackDataResponse != null) {
+    	//}
+    	    	//if(this.trackDataResponse != null) {
     		System.out.println("trackDataResponse="+this.trackDataResponse);
-    	}
-    	    	if(this.mesh != null) {
+    	//}
+    	    	//if(this.mesh != null) {
     		System.out.println("mesh="+this.mesh);
-    	}
-    	    	if(this.pathData != null) {
+    	//}
+    	    	//if(this.pathData != null) {
     		System.out.println("pathData="+this.pathData);
-    	}
-    	    	if(this.objectdbStatus != null) {
+    	//}
+    	    	//if(this.objectdbStatus != null) {
     		System.out.println("objectdbStatus="+this.objectdbStatus);
-    	}
-    	    	if(this.guildAction != null) {
+    	//}
+    	    	//if(this.guildAction != null) {
     		System.out.println("guildAction="+this.guildAction);
-    	}
-    	    	if(this.pvpGameMessage != null) {
+    	//}
+    	    	//if(this.pvpGameMessage != null) {
     		System.out.println("pvpGameMessage="+this.pvpGameMessage);
-    	}
-    	    	if(this.player != null) {
+    	//}
+    	    	//if(this.player != null) {
     		System.out.println("player="+this.player);
-    	}
-    	    	if(this.trackData != null) {
+    	//}
+    	    	//if(this.trackData != null) {
     		System.out.println("trackData="+this.trackData);
-    	}
-    	    	if(this.dynamicMessage != null) {
+    	//}
+    	    	//if(this.dynamicMessage != null) {
     		System.out.println("dynamicMessage="+this.dynamicMessage);
-    	}
-    	    	if(this.playerSkills != null) {
+    	//}
+    	    	//if(this.playerSkills != null) {
     		System.out.println("playerSkills="+this.playerSkills);
-    	}
-    	    	if(this.playerItems != null) {
+    	//}
+    	    	//if(this.playerItems != null) {
     		System.out.println("playerItems="+this.playerItems);
-    	}
-    	    	if(this.players != null) {
+    	//}
+    	    	//if(this.players != null) {
     		System.out.println("players="+this.players);
-    	}
-    	    	if(this.testObject != null) {
+    	//}
+    	    	//if(this.testObject != null) {
     		System.out.println("testObject="+this.testObject);
-    	}
-    	    	if(this.rpcMessage != null) {
+    	//}
+    	    	//if(this.rpcMessage != null) {
     		System.out.println("rpcMessage="+this.rpcMessage);
-    	}
-    	    	if(this.gameMessage != null) {
+    	//}
+    	    	//if(this.gameMessage != null) {
     		System.out.println("gameMessage="+this.gameMessage);
-    	}
-    	    	if(this.gameMessages != null) {
+    	//}
+    	    	//if(this.gameMessages != null) {
     		System.out.println("gameMessages="+this.gameMessages);
-    	}
+    	//}
     	    	System.out.println("END Entity");
     }
     

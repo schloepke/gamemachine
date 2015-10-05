@@ -53,7 +53,7 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
 
     			public String id;
 	    
-        			public Integer level;
+        			public int level;
 	    
       
     public CraftingTool()
@@ -82,11 +82,11 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
         return level == null ? false : true;
     }
         
-		public Integer getLevel() {
+		public int getLevel() {
 		return level;
 	}
 	
-	public CraftingTool setLevel(Integer level) {
+	public CraftingTool setLevel(int level) {
 		this.level = level;
 		return this;	}
 	

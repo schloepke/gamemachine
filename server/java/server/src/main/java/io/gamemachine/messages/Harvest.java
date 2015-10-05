@@ -75,16 +75,26 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
     static final Harvest DEFAULT_INSTANCE = new Harvest();
     static final String defaultScope = Harvest.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer result;
-	    
-        			public Long harvestedAt;
-	    
-        			public String characterId;
-	    
-        			public String itemId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public long harvestedAt= 0L;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public String itemId= null;
+	    		
+    
         
 	public static HarvestCache cache() {
 		return HarvestCache.getInstance();
@@ -359,70 +369,80 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("harvest_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("harvest_result",result);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (harvestedAt != null) {
+    	    	    	//if (harvestedAt != null) {
     	       	    	model.setLong("harvest_harvested_at",harvestedAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("harvest_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (itemId != null) {
+    	    	    	//if (itemId != null) {
     	       	    	model.setString("harvest_item_id",itemId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Harvest fromModel(Model model) {
 		boolean hasFields = false;
     	Harvest message = new Harvest();
     	    	    	    	    	
-    	    	    	String idField = model.getString("harvest_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("harvest_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("harvest_result");
+    	
     	    	
-    	if (resultField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resultTestField = model.getInteger("harvest_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long harvestedAtField = model.getLong("harvest_harvested_at");
+    	
     	    	
-    	if (harvestedAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long harvestedAtTestField = model.getLong("harvest_harvested_at");
+    	if (harvestedAtTestField != null) {
+    		long harvestedAtField = harvestedAtTestField;
     		message.setHarvestedAt(harvestedAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("harvest_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("harvest_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String itemIdField = model.getString("harvest_item_id");
+    	
     	    	
-    	if (itemIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String itemIdTestField = model.getString("harvest_item_id");
+    	if (itemIdTestField != null) {
+    		String itemIdField = itemIdTestField;
     		message.setItemId(itemIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -431,11 +451,7 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -444,37 +460,25 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+		            
+		public int getResult() {
 		return result;
 	}
 	
-	public Harvest setResult(Integer result) {
+	public Harvest setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasHarvestedAt()  {
-        return harvestedAt == null ? false : true;
-    }
-        
-		public Long getHarvestedAt() {
+		            
+		public long getHarvestedAt() {
 		return harvestedAt;
 	}
 	
-	public Harvest setHarvestedAt(Long harvestedAt) {
+	public Harvest setHarvestedAt(long harvestedAt) {
 		this.harvestedAt = harvestedAt;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -483,11 +487,7 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasItemId()  {
-        return itemId == null ? false : true;
-    }
-        
+		            
 		public String getItemId() {
 		return itemId;
 	}
@@ -583,31 +583,36 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
     public void writeTo(Output output, Harvest message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(2, message.result, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.harvestedAt != null)
+    	    	    	if( (Long)message.harvestedAt != null) {
             output.writeInt64(3, message.harvestedAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(4, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.itemId != null)
+    	    	    	if( (String)message.itemId != null) {
             output.writeString(5, message.itemId, false);
+        }
     	    	
     	            	
     }
@@ -615,21 +620,21 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
 	public void dumpObject()
     {
     	System.out.println("START Harvest");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.result != null) {
+    	//}
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.harvestedAt != null) {
+    	//}
+    	    	//if(this.harvestedAt != null) {
     		System.out.println("harvestedAt="+this.harvestedAt);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.itemId != null) {
+    	//}
+    	    	//if(this.itemId != null) {
     		System.out.println("itemId="+this.itemId);
-    	}
+    	//}
     	    	System.out.println("END Harvest");
     }
     

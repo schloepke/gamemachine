@@ -75,8 +75,10 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
     static final ComboAttack DEFAULT_INSTANCE = new ComboAttack();
     static final String defaultScope = ComboAttack.class.getSimpleName();
 
-    			public String id;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
             public List<Attack> attack;
 	    
 	public static ComboAttackCache cache() {
@@ -348,22 +350,24 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("combo_attack_id",id);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static ComboAttack fromModel(Model model) {
 		boolean hasFields = false;
     	ComboAttack message = new ComboAttack();
     	    	    	    	    	
-    	    	    	String idField = model.getString("combo_attack_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("combo_attack_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -372,11 +376,7 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -385,11 +385,7 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasAttack()  {
-        return attack == null ? false : true;
-    }
-        
+		            
 		public List<Attack> getAttackList() {
 		if(this.attack == null)
             this.attack = new ArrayList<Attack>();
@@ -543,11 +539,12 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
     public void writeTo(Output output, ComboAttack message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -555,7 +552,7 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
         {
             for(Attack attack : message.attack)
             {
-                if(attack != null) {
+                if( (Attack) attack != null) {
                    	    				output.writeObject(2, attack, Attack.getSchema(), true);
     				    			}
             }
@@ -566,12 +563,12 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
 	public void dumpObject()
     {
     	System.out.println("START ComboAttack");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.attack != null) {
+    	//}
+    	    	//if(this.attack != null) {
     		System.out.println("attack="+this.attack);
-    	}
+    	//}
     	    	System.out.println("END ComboAttack");
     }
     

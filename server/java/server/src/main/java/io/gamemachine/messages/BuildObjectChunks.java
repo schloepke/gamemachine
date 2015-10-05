@@ -91,11 +91,7 @@ public final class BuildObjectChunks implements Externalizable, Message<BuildObj
     }
 
 
-	    
-    public Boolean hasBuildObjectChunk()  {
-        return buildObjectChunk == null ? false : true;
-    }
-        
+	            
 		public List<BuildObjectChunk> getBuildObjectChunkList() {
 		if(this.buildObjectChunk == null)
             this.buildObjectChunk = new ArrayList<BuildObjectChunk>();
@@ -130,7 +126,7 @@ public final class BuildObjectChunks implements Externalizable, Message<BuildObj
        	while (itr.hasNext()) {
     	BuildObjectChunk obj = itr.next();
     	
-    	    		if (buildObjectChunk.data.equals(obj.data)) {
+    	    		if (buildObjectChunk.data == obj.data) {
     	      			itr.remove();
     		}
 		}
@@ -146,7 +142,7 @@ public final class BuildObjectChunks implements Externalizable, Message<BuildObj
        	while (itr.hasNext()) {
     	BuildObjectChunk obj = itr.next();
     	
-    	    		if (buildObjectChunk.chunk.equals(obj.chunk)) {
+    	    		if (buildObjectChunk.chunk == obj.chunk) {
     	      			itr.remove();
     		}
 		}
@@ -234,7 +230,7 @@ public final class BuildObjectChunks implements Externalizable, Message<BuildObj
         {
             for(BuildObjectChunk buildObjectChunk : message.buildObjectChunk)
             {
-                if(buildObjectChunk != null) {
+                if( (BuildObjectChunk) buildObjectChunk != null) {
                    	    				output.writeObject(1, buildObjectChunk, BuildObjectChunk.getSchema(), true);
     				    			}
             }
@@ -245,9 +241,9 @@ public final class BuildObjectChunks implements Externalizable, Message<BuildObj
 	public void dumpObject()
     {
     	System.out.println("START BuildObjectChunks");
-    	    	if(this.buildObjectChunk != null) {
+    	    	//if(this.buildObjectChunk != null) {
     		System.out.println("buildObjectChunk="+this.buildObjectChunk);
-    	}
+    	//}
     	    	System.out.println("END BuildObjectChunks");
     }
     

@@ -53,57 +53,57 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 
     			public String playerItemId;
 	    
-        			public Integer action;
+        			public int action;
 	    
         			public String id;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String ownerId;
 	    
-        			public Integer x;
+        			public int x;
 	    
-        			public Integer y;
+        			public int y;
 	    
-        			public Integer z;
+        			public int z;
 	    
-        			public Integer rx;
+        			public int rx;
 	    
-        			public Integer ry;
+        			public int ry;
 	    
-        			public Integer rz;
+        			public int rz;
 	    
-        			public Integer rw;
+        			public int rw;
 	    
-        			public Integer health;
+        			public int health;
 	    
-        			public Integer templateId;
+        			public int templateId;
 	    
         			public String grid;
 	    
-        			public Long updatedAt;
+        			public long updatedAt;
 	    
-        			public Integer state;
+        			public int state;
 	    
-        			public Integer updateId;
+        			public int updateId;
 	    
-        			public Boolean isFloor;
+        			public boolean isFloor;
 	    
-        			public Boolean isDestructable;
+        			public boolean isDestructable;
 	    
-        			public Boolean hasDoor;
+        			public boolean hasDoor;
 	    
-        			public Integer doorStatus;
+        			public int doorStatus;
 	    
         			public ByteString groundBlockObject;
 	    
-        			public Boolean isGroundBlock;
+        			public boolean isGroundBlock;
 	    
-        			public Integer chunk;
+        			public int chunk;
 	    
         			public ByteString terrainEdit;
 	    
-        			public Boolean isTerrainEdit;
+        			public boolean isTerrainEdit;
 	    
         			public ByteString customBytes;
 	    
@@ -113,7 +113,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 	    
         			public ByteString slots;
 	    
-        			public Long placedAt;
+        			public long placedAt;
 	    
         			public SlotInfo slotInfo;
 	    
@@ -144,11 +144,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return action == null ? false : true;
     }
         
-		public Integer getAction() {
+		public int getAction() {
 		return action;
 	}
 	
-	public BuildObject setAction(Integer action) {
+	public BuildObject setAction(int action) {
 		this.action = action;
 		return this;	}
 	
@@ -170,11 +170,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public BuildObject setRecordId(Integer recordId) {
+	public BuildObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -196,11 +196,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return x == null ? false : true;
     }
         
-		public Integer getX() {
+		public int getX() {
 		return x;
 	}
 	
-	public BuildObject setX(Integer x) {
+	public BuildObject setX(int x) {
 		this.x = x;
 		return this;	}
 	
@@ -209,11 +209,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return y == null ? false : true;
     }
         
-		public Integer getY() {
+		public int getY() {
 		return y;
 	}
 	
-	public BuildObject setY(Integer y) {
+	public BuildObject setY(int y) {
 		this.y = y;
 		return this;	}
 	
@@ -222,11 +222,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return z == null ? false : true;
     }
         
-		public Integer getZ() {
+		public int getZ() {
 		return z;
 	}
 	
-	public BuildObject setZ(Integer z) {
+	public BuildObject setZ(int z) {
 		this.z = z;
 		return this;	}
 	
@@ -235,11 +235,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return rx == null ? false : true;
     }
         
-		public Integer getRx() {
+		public int getRx() {
 		return rx;
 	}
 	
-	public BuildObject setRx(Integer rx) {
+	public BuildObject setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
@@ -248,11 +248,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return ry == null ? false : true;
     }
         
-		public Integer getRy() {
+		public int getRy() {
 		return ry;
 	}
 	
-	public BuildObject setRy(Integer ry) {
+	public BuildObject setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
@@ -261,11 +261,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return rz == null ? false : true;
     }
         
-		public Integer getRz() {
+		public int getRz() {
 		return rz;
 	}
 	
-	public BuildObject setRz(Integer rz) {
+	public BuildObject setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
@@ -274,11 +274,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return rw == null ? false : true;
     }
         
-		public Integer getRw() {
+		public int getRw() {
 		return rw;
 	}
 	
-	public BuildObject setRw(Integer rw) {
+	public BuildObject setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
@@ -287,11 +287,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return health == null ? false : true;
     }
         
-		public Integer getHealth() {
+		public int getHealth() {
 		return health;
 	}
 	
-	public BuildObject setHealth(Integer health) {
+	public BuildObject setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
@@ -300,11 +300,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return templateId == null ? false : true;
     }
         
-		public Integer getTemplateId() {
+		public int getTemplateId() {
 		return templateId;
 	}
 	
-	public BuildObject setTemplateId(Integer templateId) {
+	public BuildObject setTemplateId(int templateId) {
 		this.templateId = templateId;
 		return this;	}
 	
@@ -326,11 +326,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return updatedAt == null ? false : true;
     }
         
-		public Long getUpdatedAt() {
+		public long getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public BuildObject setUpdatedAt(Long updatedAt) {
+	public BuildObject setUpdatedAt(long updatedAt) {
 		this.updatedAt = updatedAt;
 		return this;	}
 	
@@ -339,11 +339,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return state == null ? false : true;
     }
         
-		public Integer getState() {
+		public int getState() {
 		return state;
 	}
 	
-	public BuildObject setState(Integer state) {
+	public BuildObject setState(int state) {
 		this.state = state;
 		return this;	}
 	
@@ -352,11 +352,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return updateId == null ? false : true;
     }
         
-		public Integer getUpdateId() {
+		public int getUpdateId() {
 		return updateId;
 	}
 	
-	public BuildObject setUpdateId(Integer updateId) {
+	public BuildObject setUpdateId(int updateId) {
 		this.updateId = updateId;
 		return this;	}
 	
@@ -365,11 +365,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return isFloor == null ? false : true;
     }
         
-		public Boolean getIsFloor() {
+		public boolean getIsFloor() {
 		return isFloor;
 	}
 	
-	public BuildObject setIsFloor(Boolean isFloor) {
+	public BuildObject setIsFloor(boolean isFloor) {
 		this.isFloor = isFloor;
 		return this;	}
 	
@@ -378,11 +378,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return isDestructable == null ? false : true;
     }
         
-		public Boolean getIsDestructable() {
+		public boolean getIsDestructable() {
 		return isDestructable;
 	}
 	
-	public BuildObject setIsDestructable(Boolean isDestructable) {
+	public BuildObject setIsDestructable(boolean isDestructable) {
 		this.isDestructable = isDestructable;
 		return this;	}
 	
@@ -391,11 +391,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return hasDoor == null ? false : true;
     }
         
-		public Boolean getHasDoor() {
+		public boolean getHasDoor() {
 		return hasDoor;
 	}
 	
-	public BuildObject setHasDoor(Boolean hasDoor) {
+	public BuildObject setHasDoor(boolean hasDoor) {
 		this.hasDoor = hasDoor;
 		return this;	}
 	
@@ -404,11 +404,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return doorStatus == null ? false : true;
     }
         
-		public Integer getDoorStatus() {
+		public int getDoorStatus() {
 		return doorStatus;
 	}
 	
-	public BuildObject setDoorStatus(Integer doorStatus) {
+	public BuildObject setDoorStatus(int doorStatus) {
 		this.doorStatus = doorStatus;
 		return this;	}
 	
@@ -430,11 +430,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return isGroundBlock == null ? false : true;
     }
         
-		public Boolean getIsGroundBlock() {
+		public boolean getIsGroundBlock() {
 		return isGroundBlock;
 	}
 	
-	public BuildObject setIsGroundBlock(Boolean isGroundBlock) {
+	public BuildObject setIsGroundBlock(boolean isGroundBlock) {
 		this.isGroundBlock = isGroundBlock;
 		return this;	}
 	
@@ -443,11 +443,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return chunk == null ? false : true;
     }
         
-		public Integer getChunk() {
+		public int getChunk() {
 		return chunk;
 	}
 	
-	public BuildObject setChunk(Integer chunk) {
+	public BuildObject setChunk(int chunk) {
 		this.chunk = chunk;
 		return this;	}
 	
@@ -469,11 +469,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return isTerrainEdit == null ? false : true;
     }
         
-		public Boolean getIsTerrainEdit() {
+		public boolean getIsTerrainEdit() {
 		return isTerrainEdit;
 	}
 	
-	public BuildObject setIsTerrainEdit(Boolean isTerrainEdit) {
+	public BuildObject setIsTerrainEdit(boolean isTerrainEdit) {
 		this.isTerrainEdit = isTerrainEdit;
 		return this;	}
 	
@@ -534,11 +534,11 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
         return placedAt == null ? false : true;
     }
         
-		public Long getPlacedAt() {
+		public long getPlacedAt() {
 		return placedAt;
 	}
 	
-	public BuildObject setPlacedAt(Long placedAt) {
+	public BuildObject setPlacedAt(long placedAt) {
 		this.placedAt = placedAt;
 		return this;	}
 	

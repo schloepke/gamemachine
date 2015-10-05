@@ -51,9 +51,9 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
 
     static final TimeCycle DEFAULT_INSTANCE = new TimeCycle();
 
-    			public Float currentTime;
+    			public float currentTime;
 	    
-        			public Float dayCycleLength;
+        			public float dayCycleLength;
 	    
       
     public TimeCycle()
@@ -69,11 +69,11 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
         return currentTime == null ? false : true;
     }
         
-		public Float getCurrentTime() {
+		public float getCurrentTime() {
 		return currentTime;
 	}
 	
-	public TimeCycle setCurrentTime(Float currentTime) {
+	public TimeCycle setCurrentTime(float currentTime) {
 		this.currentTime = currentTime;
 		return this;	}
 	
@@ -82,11 +82,11 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
         return dayCycleLength == null ? false : true;
     }
         
-		public Float getDayCycleLength() {
+		public float getDayCycleLength() {
 		return dayCycleLength;
 	}
 	
-	public TimeCycle setDayCycleLength(Float dayCycleLength) {
+	public TimeCycle setDayCycleLength(float dayCycleLength) {
 		this.dayCycleLength = dayCycleLength;
 		return this;	}
 	

@@ -52,7 +52,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
     static final TriangleMesh DEFAULT_INSTANCE = new TriangleMesh();
 
         public List<GmVector3> vertices;
-	        public List<Integer> indices;
+	        public List<int> indices;
 	  
     public TriangleMesh()
     {
@@ -213,18 +213,18 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
         return indices == null ? false : true;
     }
         
-		public List<Integer> getIndicesList() {
+		public List<int> getIndicesList() {
 		if(this.indices == null)
-            this.indices = new ArrayList<Integer>();
+            this.indices = new ArrayList<int>();
 		return indices;
 	}
 
-	public TriangleMesh setIndicesList(List<Integer> indices) {
+	public TriangleMesh setIndicesList(List<int> indices) {
 		this.indices = indices;
 		return this;
 	}
 
-	public Integer getIndices(int index)  {
+	public int getIndices(int index)  {
         return indices == null ? null : indices.get(index);
     }
 
@@ -232,9 +232,9 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
         return indices == null ? 0 : indices.size();
     }
 
-    public TriangleMesh addIndices(Integer indices)  {
+    public TriangleMesh addIndices(int indices)  {
         if(this.indices == null)
-            this.indices = new ArrayList<Integer>();
+            this.indices = new ArrayList<int>();
         this.indices.add(indices);
         return this;
     }
@@ -305,7 +305,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
                                         break;
                             	            	case 2:
             	            		if(message.indices == null)
-                        message.indices = new ArrayList<Integer>();
+                        message.indices = new ArrayList<int>();
                                     	message.indices.add(input.readInt32());
                 	                    break;
                             	            
@@ -333,7 +333,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
     	    	
     	    	if(message.indices != null)
         {
-            for(Integer indices : message.indices)
+            for(int indices : message.indices)
             {
                 if(indices != null) {
                    	            		output.writeInt32(2, indices, true);

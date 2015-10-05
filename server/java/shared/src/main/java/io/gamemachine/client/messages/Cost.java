@@ -51,7 +51,7 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
 
     static final Cost DEFAULT_INSTANCE = new Cost();
 
-    			public Float amount;
+    			public float amount;
 	    
         			public String currency;
 	    
@@ -69,11 +69,11 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
         return amount == null ? false : true;
     }
         
-		public Float getAmount() {
+		public float getAmount() {
 		return amount;
 	}
 	
-	public Cost setAmount(Float amount) {
+	public Cost setAmount(float amount) {
 		this.amount = amount;
 		return this;	}
 	

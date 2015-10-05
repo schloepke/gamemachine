@@ -40,7 +40,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
     	
-    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3);    	        
+    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3),    	    	Self(4);    	        
         public final int number;
         
         private DamageType (int number)
@@ -61,6 +61,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     			    			case 1: return (SingleTarget);
     			    			case 2: return (Pbaoe);
     			    			case 3: return (SelfAoe);
+    			    			case 4: return (Self);
     			                default: return null;
             }
         }
@@ -194,7 +195,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	    
         			public String name;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String category;
 	    
@@ -206,27 +207,29 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	    
         			public String resource;
 	    
-        			public Integer resourceCost;
+        			public int resourceCost;
 	    
         			public String characterId;
 	    
         			public String weaponType;
 	    
-        			public Integer range;
+        			public int range;
 	    
         			public String statusEffectId;
 	    
-        			public Integer level;
+        			public int level;
 	    
-        			public Integer resourceCostPerTick;
+        			public int resourceCostPerTick;
 	    
-        			public Integer isComboPart;
+        			public int isComboPart;
 	    
-        			public Integer isPassive;
+        			public int isPassive;
 	    
         			public String skillType;
 	    
         			public String icon_uuid;
+	    
+        			public String statusEffects;
 	    
       
     public PlayerSkill()
@@ -268,11 +271,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public PlayerSkill setRecordId(Integer recordId) {
+	public PlayerSkill setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -346,11 +349,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return resourceCost == null ? false : true;
     }
         
-		public Integer getResourceCost() {
+		public int getResourceCost() {
 		return resourceCost;
 	}
 	
-	public PlayerSkill setResourceCost(Integer resourceCost) {
+	public PlayerSkill setResourceCost(int resourceCost) {
 		this.resourceCost = resourceCost;
 		return this;	}
 	
@@ -385,11 +388,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return range == null ? false : true;
     }
         
-		public Integer getRange() {
+		public int getRange() {
 		return range;
 	}
 	
-	public PlayerSkill setRange(Integer range) {
+	public PlayerSkill setRange(int range) {
 		this.range = range;
 		return this;	}
 	
@@ -411,11 +414,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return level == null ? false : true;
     }
         
-		public Integer getLevel() {
+		public int getLevel() {
 		return level;
 	}
 	
-	public PlayerSkill setLevel(Integer level) {
+	public PlayerSkill setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
@@ -424,11 +427,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return resourceCostPerTick == null ? false : true;
     }
         
-		public Integer getResourceCostPerTick() {
+		public int getResourceCostPerTick() {
 		return resourceCostPerTick;
 	}
 	
-	public PlayerSkill setResourceCostPerTick(Integer resourceCostPerTick) {
+	public PlayerSkill setResourceCostPerTick(int resourceCostPerTick) {
 		this.resourceCostPerTick = resourceCostPerTick;
 		return this;	}
 	
@@ -437,11 +440,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return isComboPart == null ? false : true;
     }
         
-		public Integer getIsComboPart() {
+		public int getIsComboPart() {
 		return isComboPart;
 	}
 	
-	public PlayerSkill setIsComboPart(Integer isComboPart) {
+	public PlayerSkill setIsComboPart(int isComboPart) {
 		this.isComboPart = isComboPart;
 		return this;	}
 	
@@ -450,11 +453,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         return isPassive == null ? false : true;
     }
         
-		public Integer getIsPassive() {
+		public int getIsPassive() {
 		return isPassive;
 	}
 	
-	public PlayerSkill setIsPassive(Integer isPassive) {
+	public PlayerSkill setIsPassive(int isPassive) {
 		this.isPassive = isPassive;
 		return this;	}
 	
@@ -482,6 +485,19 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	
 	public PlayerSkill setIcon_uuid(String icon_uuid) {
 		this.icon_uuid = icon_uuid;
+		return this;	}
+	
+		    
+    public Boolean hasStatusEffects()  {
+        return statusEffects == null ? false : true;
+    }
+        
+		public String getStatusEffects() {
+		return statusEffects;
+	}
+	
+	public PlayerSkill setStatusEffects(String statusEffects) {
+		this.statusEffects = statusEffects;
 		return this;	}
 	
 	
@@ -616,6 +632,10 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             	                	                	message.icon_uuid = input.readString();
                 	break;
                 	                	
+                            	            	case 20:
+            	                	                	message.statusEffects = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -726,6 +746,11 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             output.writeString(19, message.icon_uuid, false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.statusEffects != null)
+            output.writeString(20, message.statusEffects, false);
+    	    	
+    	            	
     }
 
     public String getFieldName(int number)
@@ -751,6 +776,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         	        	case 17: return "isPassive";
         	        	case 18: return "skillType";
         	        	case 19: return "icon_uuid";
+        	        	case 20: return "statusEffects";
         	            default: return null;
         }
     }
@@ -783,6 +809,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	__fieldMap.put("isPassive", 17);
     	    	__fieldMap.put("skillType", 18);
     	    	__fieldMap.put("icon_uuid", 19);
+    	    	__fieldMap.put("statusEffects", 20);
     	    }
    
    public static List<String> getFields() {

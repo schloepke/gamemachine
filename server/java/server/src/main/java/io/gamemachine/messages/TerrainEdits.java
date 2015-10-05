@@ -91,11 +91,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
     }
 
 
-	    
-    public Boolean hasTerrainEdit()  {
-        return terrainEdit == null ? false : true;
-    }
-        
+	            
 		public List<TerrainEdit> getTerrainEditList() {
 		if(this.terrainEdit == null)
             this.terrainEdit = new ArrayList<TerrainEdit>();
@@ -130,7 +126,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.x.equals(obj.x)) {
+    	    		if (terrainEdit.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -146,7 +142,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.y.equals(obj.y)) {
+    	    		if (terrainEdit.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.detailLayer.equals(obj.detailLayer)) {
+    	    		if (terrainEdit.detailLayer == obj.detailLayer) {
     	      			itr.remove();
     		}
 		}
@@ -178,7 +174,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.value.equals(obj.value)) {
+    	    		if (terrainEdit.value == obj.value) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.recordId.equals(obj.recordId)) {
+    	    		if (terrainEdit.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.texture.equals(obj.texture)) {
+    	    		if (terrainEdit.texture == obj.texture) {
     	      			itr.remove();
     		}
 		}
@@ -242,7 +238,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.height.equals(obj.height)) {
+    	    		if (terrainEdit.height == obj.height) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
        	while (itr.hasNext()) {
     	TerrainEdit obj = itr.next();
     	
-    	    		if (terrainEdit.createdAt.equals(obj.createdAt)) {
+    	    		if (terrainEdit.createdAt == obj.createdAt) {
     	      			itr.remove();
     		}
 		}
@@ -362,7 +358,7 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
         {
             for(TerrainEdit terrainEdit : message.terrainEdit)
             {
-                if(terrainEdit != null) {
+                if( (TerrainEdit) terrainEdit != null) {
                    	    				output.writeObject(1, terrainEdit, TerrainEdit.getSchema(), true);
     				    			}
             }
@@ -373,9 +369,9 @@ public final class TerrainEdits implements Externalizable, Message<TerrainEdits>
 	public void dumpObject()
     {
     	System.out.println("START TerrainEdits");
-    	    	if(this.terrainEdit != null) {
+    	    	//if(this.terrainEdit != null) {
     		System.out.println("terrainEdit="+this.terrainEdit);
-    	}
+    	//}
     	    	System.out.println("END TerrainEdits");
     }
     

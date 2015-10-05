@@ -55,7 +55,7 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
 	    
         			public Characters characters;
 	    
-        			public Integer command;
+        			public int command;
 	    
       
     public PvpGameMessage()
@@ -97,11 +97,11 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
         return command == null ? false : true;
     }
         
-		public Integer getCommand() {
+		public int getCommand() {
 		return command;
 	}
 	
-	public PvpGameMessage setCommand(Integer command) {
+	public PvpGameMessage setCommand(int command) {
 		this.command = command;
 		return this;	}
 	

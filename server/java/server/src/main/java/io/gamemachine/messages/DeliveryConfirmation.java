@@ -61,8 +61,10 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
     static final DeliveryConfirmation DEFAULT_INSTANCE = new DeliveryConfirmation();
     static final String defaultScope = DeliveryConfirmation.class.getSimpleName();
 
-    			public String messageId;
-	    
+    	
+	    	    public String messageId= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (messageId != null) {
+    	    	    	//if (messageId != null) {
     	       	    	model.setString("delivery_confirmation_message_id",messageId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static DeliveryConfirmation fromModel(Model model) {
 		boolean hasFields = false;
     	DeliveryConfirmation message = new DeliveryConfirmation();
     	    	    	    	    	
-    	    	    	String messageIdField = model.getString("delivery_confirmation_message_id");
-    	    	
-    	if (messageIdField != null) {
+    	    	    	String messageIdTestField = model.getString("delivery_confirmation_message_id");
+    	if (messageIdTestField != null) {
+    		String messageIdField = messageIdTestField;
     		message.setMessageId(messageIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
     }
 
 
-	    
-    public Boolean hasMessageId()  {
-        return messageId == null ? false : true;
-    }
-        
+	            
 		public String getMessageId() {
 		return messageId;
 	}
@@ -189,11 +189,12 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
     public void writeTo(Output output, DeliveryConfirmation message) throws IOException
     {
     	    	
-    	    	if(message.messageId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.messageId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.messageId != null)
+    	    	    	if( (String)message.messageId != null) {
             output.writeString(1, message.messageId, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
 	public void dumpObject()
     {
     	System.out.println("START DeliveryConfirmation");
-    	    	if(this.messageId != null) {
+    	    	//if(this.messageId != null) {
     		System.out.println("messageId="+this.messageId);
-    	}
+    	//}
     	    	System.out.println("END DeliveryConfirmation");
     }
     

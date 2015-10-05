@@ -75,14 +75,22 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
     static final UseSkill DEFAULT_INSTANCE = new UseSkill();
     static final String defaultScope = UseSkill.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String targetId;
-	    
-        			public GmVector3 location;
-	    
-        			public GmVector3 direction;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String targetId= null;
+	    		
+    
+        	
+	    	    public GmVector3 location;
+	    		
+    
+        	
+	    	    public GmVector3 direction;
+	    		
+    
         
 	public static UseSkillCache cache() {
 		return UseSkillCache.getInstance();
@@ -354,34 +362,38 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("use_skill_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (targetId != null) {
+    	    	    	//if (targetId != null) {
     	       	    	model.setString("use_skill_target_id",targetId);
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static UseSkill fromModel(Model model) {
 		boolean hasFields = false;
     	UseSkill message = new UseSkill();
     	    	    	    	    	
-    	    	    	String idField = model.getString("use_skill_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("use_skill_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String targetIdField = model.getString("use_skill_target_id");
+    	
     	    	
-    	if (targetIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String targetIdTestField = model.getString("use_skill_target_id");
+    	if (targetIdTestField != null) {
+    		String targetIdField = targetIdTestField;
     		message.setTargetId(targetIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -390,11 +402,7 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -403,11 +411,7 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasTargetId()  {
-        return targetId == null ? false : true;
-    }
-        
+		            
 		public String getTargetId() {
 		return targetId;
 	}
@@ -416,11 +420,7 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
 		this.targetId = targetId;
 		return this;	}
 	
-		    
-    public Boolean hasLocation()  {
-        return location == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getLocation() {
 		return location;
 	}
@@ -429,11 +429,7 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
 		this.location = location;
 		return this;	}
 	
-		    
-    public Boolean hasDirection()  {
-        return direction == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getDirection() {
 		return direction;
 	}
@@ -525,16 +521,18 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
     public void writeTo(Output output, UseSkill message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.targetId != null)
+    	    	    	if( (String)message.targetId != null) {
             output.writeString(2, message.targetId, false);
+        }
     	    	
     	            	
     	    	
@@ -552,18 +550,18 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
 	public void dumpObject()
     {
     	System.out.println("START UseSkill");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.targetId != null) {
+    	//}
+    	    	//if(this.targetId != null) {
     		System.out.println("targetId="+this.targetId);
-    	}
-    	    	if(this.location != null) {
+    	//}
+    	    	//if(this.location != null) {
     		System.out.println("location="+this.location);
-    	}
-    	    	if(this.direction != null) {
+    	//}
+    	    	//if(this.direction != null) {
     		System.out.println("direction="+this.direction);
-    	}
+    	//}
     	    	System.out.println("END UseSkill");
     }
     

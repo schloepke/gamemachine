@@ -288,6 +288,8 @@ CREATE TABLE player_skills (
 
   player_skill_icon_uuid character varying(128) DEFAULT NULL,
 
+  player_skill_status_effects character varying(128) DEFAULT NULL,
+
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
 alter table player_skills owner to gamemachine;

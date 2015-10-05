@@ -61,14 +61,22 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
     static final Publish DEFAULT_INSTANCE = new Publish();
     static final String defaultScope = Publish.class.getSimpleName();
 
-    			public String topic;
-	    
-        			public Entity message;
-	    
-        			public String path;
-	    
-        			public String gameId;
-	    
+    	
+	    	    public String topic= null;
+	    		
+    
+        	
+	    	    public Entity message;
+	    		
+    
+        	
+	    	    public String path= null;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
         
 
 
@@ -89,46 +97,52 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (topic != null) {
+    	    	    	//if (topic != null) {
     	       	    	model.setString("publish_topic",topic);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (path != null) {
+    	    	    	//if (path != null) {
     	       	    	model.setString("publish_path",path);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("publish_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Publish fromModel(Model model) {
 		boolean hasFields = false;
     	Publish message = new Publish();
     	    	    	    	    	
-    	    	    	String topicField = model.getString("publish_topic");
-    	    	
-    	if (topicField != null) {
+    	    	    	String topicTestField = model.getString("publish_topic");
+    	if (topicTestField != null) {
+    		String topicField = topicTestField;
     		message.setTopic(topicField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String pathField = model.getString("publish_path");
+    	
     	    	
-    	if (pathField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String pathTestField = model.getString("publish_path");
+    	if (pathTestField != null) {
+    		String pathField = pathTestField;
     		message.setPath(pathField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("publish_game_id");
+    	
     	    	
-    	if (gameIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String gameIdTestField = model.getString("publish_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -137,11 +151,7 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
     }
 
 
-	    
-    public Boolean hasTopic()  {
-        return topic == null ? false : true;
-    }
-        
+	            
 		public String getTopic() {
 		return topic;
 	}
@@ -150,11 +160,7 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
 		this.topic = topic;
 		return this;	}
 	
-		    
-    public Boolean hasMessage()  {
-        return message == null ? false : true;
-    }
-        
+		            
 		public Entity getMessage() {
 		return message;
 	}
@@ -163,11 +169,7 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
 		this.message = message;
 		return this;	}
 	
-		    
-    public Boolean hasPath()  {
-        return path == null ? false : true;
-    }
-        
+		            
 		public String getPath() {
 		return path;
 	}
@@ -176,11 +178,7 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
 		this.path = path;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -273,27 +271,30 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
     {
     	    	
     	    	
-    	    	    	if(message.topic != null)
+    	    	    	if( (String)message.topic != null) {
             output.writeString(1, message.topic, false);
+        }
     	    	
     	            	
-    	    	if(message.message == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.message == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.message != null)
     		output.writeObject(2, message.message, Entity.getSchema(), false);
     	    	
     	            	
     	    	
-    	    	    	if(message.path != null)
+    	    	    	if( (String)message.path != null) {
             output.writeString(3, message.path, false);
+        }
     	    	
     	            	
-    	    	if(message.gameId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.gameId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(4, message.gameId, false);
+        }
     	    	
     	            	
     }
@@ -301,18 +302,18 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
 	public void dumpObject()
     {
     	System.out.println("START Publish");
-    	    	if(this.topic != null) {
+    	    	//if(this.topic != null) {
     		System.out.println("topic="+this.topic);
-    	}
-    	    	if(this.message != null) {
+    	//}
+    	    	//if(this.message != null) {
     		System.out.println("message="+this.message);
-    	}
-    	    	if(this.path != null) {
+    	//}
+    	    	//if(this.path != null) {
     		System.out.println("path="+this.path);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
+    	//}
     	    	System.out.println("END Publish");
     }
     

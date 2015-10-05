@@ -75,12 +75,18 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
     static final Neighbor DEFAULT_INSTANCE = new Neighbor();
     static final String defaultScope = Neighbor.class.getSimpleName();
 
-    			public TrackData trackData;
-	    
-        			public GmVector3 location;
-	    
-        			public String id;
-	    
+    	
+	    	    public TrackData trackData;
+	    		
+    
+        	
+	    	    public GmVector3 location;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
         
 	public static NeighborCache cache() {
 		return NeighborCache.getInstance();
@@ -351,22 +357,24 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("neighbor_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Neighbor fromModel(Model model) {
 		boolean hasFields = false;
     	Neighbor message = new Neighbor();
     	    	    	    	    	    	    	
-    	    	    	String idField = model.getString("neighbor_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("neighbor_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -375,11 +383,7 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
     }
 
 
-	    
-    public Boolean hasTrackData()  {
-        return trackData == null ? false : true;
-    }
-        
+	            
 		public TrackData getTrackData() {
 		return trackData;
 	}
@@ -388,11 +392,7 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
 		this.trackData = trackData;
 		return this;	}
 	
-		    
-    public Boolean hasLocation()  {
-        return location == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getLocation() {
 		return location;
 	}
@@ -401,11 +401,7 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
 		this.location = location;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -498,18 +494,19 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
     		output.writeObject(1, message.trackData, TrackData.getSchema(), false);
     	    	
     	            	
-    	    	if(message.location == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.location == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.location != null)
     		output.writeObject(2, message.location, GmVector3.getSchema(), false);
     	    	
     	            	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(3, message.id, false);
+        }
     	    	
     	            	
     }
@@ -517,15 +514,15 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
 	public void dumpObject()
     {
     	System.out.println("START Neighbor");
-    	    	if(this.trackData != null) {
+    	    	//if(this.trackData != null) {
     		System.out.println("trackData="+this.trackData);
-    	}
-    	    	if(this.location != null) {
+    	//}
+    	    	//if(this.location != null) {
     		System.out.println("location="+this.location);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END Neighbor");
     }
     

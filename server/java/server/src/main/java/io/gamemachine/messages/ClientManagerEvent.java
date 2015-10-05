@@ -61,12 +61,18 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
     static final ClientManagerEvent DEFAULT_INSTANCE = new ClientManagerEvent();
     static final String defaultScope = ClientManagerEvent.class.getSimpleName();
 
-    			public String client_id;
-	    
-        			public String player_id;
-	    
-        			public String event;
-	    
+    	
+	    	    public String client_id= null;
+	    		
+    
+        	
+	    	    public String player_id= null;
+	    		
+    
+        	
+	    	    public String event= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (client_id != null) {
+    	    	    	//if (client_id != null) {
     	       	    	model.setString("client_manager_event_client_id",client_id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (player_id != null) {
+    	    	    	//if (player_id != null) {
     	       	    	model.setString("client_manager_event_player_id",player_id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (event != null) {
+    	    	    	//if (event != null) {
     	       	    	model.setString("client_manager_event_event",event);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ClientManagerEvent fromModel(Model model) {
 		boolean hasFields = false;
     	ClientManagerEvent message = new ClientManagerEvent();
     	    	    	    	    	
-    	    	    	String client_idField = model.getString("client_manager_event_client_id");
-    	    	
-    	if (client_idField != null) {
+    	    	    	String client_idTestField = model.getString("client_manager_event_client_id");
+    	if (client_idTestField != null) {
+    		String client_idField = client_idTestField;
     		message.setClient_id(client_idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String player_idField = model.getString("client_manager_event_player_id");
+    	
     	    	
-    	if (player_idField != null) {
+    	    	    	    	    	    	
+    	    	    	String player_idTestField = model.getString("client_manager_event_player_id");
+    	if (player_idTestField != null) {
+    		String player_idField = player_idTestField;
     		message.setPlayer_id(player_idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String eventField = model.getString("client_manager_event_event");
+    	
     	    	
-    	if (eventField != null) {
+    	    	    	    	    	    	
+    	    	    	String eventTestField = model.getString("client_manager_event_event");
+    	if (eventTestField != null) {
+    		String eventField = eventTestField;
     		message.setEvent(eventField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
     }
 
 
-	    
-    public Boolean hasClient_id()  {
-        return client_id == null ? false : true;
-    }
-        
+	            
 		public String getClient_id() {
 		return client_id;
 	}
@@ -148,11 +156,7 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
 		this.client_id = client_id;
 		return this;	}
 	
-		    
-    public Boolean hasPlayer_id()  {
-        return player_id == null ? false : true;
-    }
-        
+		            
 		public String getPlayer_id() {
 		return player_id;
 	}
@@ -161,11 +165,7 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
 		this.player_id = player_id;
 		return this;	}
 	
-		    
-    public Boolean hasEvent()  {
-        return event == null ? false : true;
-    }
-        
+		            
 		public String getEvent() {
 		return event;
 	}
@@ -253,25 +253,28 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
     public void writeTo(Output output, ClientManagerEvent message) throws IOException
     {
     	    	
-    	    	if(message.client_id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.client_id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.client_id != null)
+    	    	    	if( (String)message.client_id != null) {
             output.writeString(1, message.client_id, false);
+        }
     	    	
     	            	
-    	    	if(message.player_id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.player_id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.player_id != null)
+    	    	    	if( (String)message.player_id != null) {
             output.writeString(2, message.player_id, false);
+        }
     	    	
     	            	
-    	    	if(message.event == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.event == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.event != null)
+    	    	    	if( (String)message.event != null) {
             output.writeString(3, message.event, false);
+        }
     	    	
     	            	
     }
@@ -279,15 +282,15 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
 	public void dumpObject()
     {
     	System.out.println("START ClientManagerEvent");
-    	    	if(this.client_id != null) {
+    	    	//if(this.client_id != null) {
     		System.out.println("client_id="+this.client_id);
-    	}
-    	    	if(this.player_id != null) {
+    	//}
+    	    	//if(this.player_id != null) {
     		System.out.println("player_id="+this.player_id);
-    	}
-    	    	if(this.event != null) {
+    	//}
+    	    	//if(this.event != null) {
     		System.out.println("event="+this.event);
-    	}
+    	//}
     	    	System.out.println("END ClientManagerEvent");
     }
     

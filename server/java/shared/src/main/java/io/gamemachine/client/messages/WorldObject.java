@@ -53,45 +53,45 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 
     			public String playerItemId;
 	    
-        			public Integer action;
+        			public int action;
 	    
         			public String id;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String ownerId;
 	    
-        			public Integer x;
+        			public int x;
 	    
-        			public Integer y;
+        			public int y;
 	    
-        			public Integer z;
+        			public int z;
 	    
-        			public Integer rx;
+        			public int rx;
 	    
-        			public Integer ry;
+        			public int ry;
 	    
-        			public Integer rz;
+        			public int rz;
 	    
-        			public Integer rw;
+        			public int rw;
 	    
-        			public Integer maxHealth;
+        			public int maxHealth;
 	    
-        			public Integer health;
+        			public int health;
 	    
         			public String parentId;
 	    
-        			public Boolean destructable;
+        			public boolean destructable;
 	    
         			public String prefab;
 	    
-        			public Integer type;
+        			public int type;
 	    
         			public String grid;
 	    
         			public String currentUser;
 	    
-        			public Integer state;
+        			public int state;
 	    
       
     public WorldObject()
@@ -120,11 +120,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return action == null ? false : true;
     }
         
-		public Integer getAction() {
+		public int getAction() {
 		return action;
 	}
 	
-	public WorldObject setAction(Integer action) {
+	public WorldObject setAction(int action) {
 		this.action = action;
 		return this;	}
 	
@@ -146,11 +146,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public WorldObject setRecordId(Integer recordId) {
+	public WorldObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -172,11 +172,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return x == null ? false : true;
     }
         
-		public Integer getX() {
+		public int getX() {
 		return x;
 	}
 	
-	public WorldObject setX(Integer x) {
+	public WorldObject setX(int x) {
 		this.x = x;
 		return this;	}
 	
@@ -185,11 +185,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return y == null ? false : true;
     }
         
-		public Integer getY() {
+		public int getY() {
 		return y;
 	}
 	
-	public WorldObject setY(Integer y) {
+	public WorldObject setY(int y) {
 		this.y = y;
 		return this;	}
 	
@@ -198,11 +198,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return z == null ? false : true;
     }
         
-		public Integer getZ() {
+		public int getZ() {
 		return z;
 	}
 	
-	public WorldObject setZ(Integer z) {
+	public WorldObject setZ(int z) {
 		this.z = z;
 		return this;	}
 	
@@ -211,11 +211,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return rx == null ? false : true;
     }
         
-		public Integer getRx() {
+		public int getRx() {
 		return rx;
 	}
 	
-	public WorldObject setRx(Integer rx) {
+	public WorldObject setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
@@ -224,11 +224,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return ry == null ? false : true;
     }
         
-		public Integer getRy() {
+		public int getRy() {
 		return ry;
 	}
 	
-	public WorldObject setRy(Integer ry) {
+	public WorldObject setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
@@ -237,11 +237,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return rz == null ? false : true;
     }
         
-		public Integer getRz() {
+		public int getRz() {
 		return rz;
 	}
 	
-	public WorldObject setRz(Integer rz) {
+	public WorldObject setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
@@ -250,11 +250,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return rw == null ? false : true;
     }
         
-		public Integer getRw() {
+		public int getRw() {
 		return rw;
 	}
 	
-	public WorldObject setRw(Integer rw) {
+	public WorldObject setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
@@ -263,11 +263,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return maxHealth == null ? false : true;
     }
         
-		public Integer getMaxHealth() {
+		public int getMaxHealth() {
 		return maxHealth;
 	}
 	
-	public WorldObject setMaxHealth(Integer maxHealth) {
+	public WorldObject setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 		return this;	}
 	
@@ -276,11 +276,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return health == null ? false : true;
     }
         
-		public Integer getHealth() {
+		public int getHealth() {
 		return health;
 	}
 	
-	public WorldObject setHealth(Integer health) {
+	public WorldObject setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
@@ -302,11 +302,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return destructable == null ? false : true;
     }
         
-		public Boolean getDestructable() {
+		public boolean getDestructable() {
 		return destructable;
 	}
 	
-	public WorldObject setDestructable(Boolean destructable) {
+	public WorldObject setDestructable(boolean destructable) {
 		this.destructable = destructable;
 		return this;	}
 	
@@ -328,11 +328,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return type == null ? false : true;
     }
         
-		public Integer getType() {
+		public int getType() {
 		return type;
 	}
 	
-	public WorldObject setType(Integer type) {
+	public WorldObject setType(int type) {
 		this.type = type;
 		return this;	}
 	
@@ -367,11 +367,11 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
         return state == null ? false : true;
     }
         
-		public Integer getState() {
+		public int getState() {
 		return state;
 	}
 	
-	public WorldObject setState(Integer state) {
+	public WorldObject setState(int state) {
 		this.state = state;
 		return this;	}
 	

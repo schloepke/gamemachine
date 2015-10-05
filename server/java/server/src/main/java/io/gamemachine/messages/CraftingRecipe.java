@@ -75,20 +75,32 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     static final CraftingRecipe DEFAULT_INSTANCE = new CraftingRecipe();
     static final String defaultScope = CraftingRecipe.class.getSimpleName();
 
-    			public String id;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
             public List<CraftingElement> elements;
-	    			public CraftingTool tool;
-	    
-        			public Boolean orderMatters;
-	    
-        			public Float timeToComplete;
-	    
+	    	
+	    	    public CraftingTool tool;
+	    		
+    
+        	
+	    	    public boolean orderMatters= false;
+	    		
+    
+        	
+	    	    public float timeToComplete= 0F;
+	    		
+    
             public List<CraftingReward> rewards;
-	    			public Integer maxUses;
-	    
-        			public Boolean active;
-	    
+	    	
+	    	    public int maxUses= 0;
+	    		
+    
+        	
+	    	    public boolean active= false;
+	    		
+    
         
 	public static CraftingRecipeCache cache() {
 		return CraftingRecipeCache.getInstance();
@@ -363,70 +375,80 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("crafting_recipe_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	
-    	    	    	if (orderMatters != null) {
+    	    	    	//if (orderMatters != null) {
     	       	    	model.setBoolean("crafting_recipe_order_matters",orderMatters);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (timeToComplete != null) {
+    	    	    	//if (timeToComplete != null) {
     	       	    	model.setFloat("crafting_recipe_time_to_complete",timeToComplete);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (maxUses != null) {
+    	    	    	//if (maxUses != null) {
     	       	    	model.setInteger("crafting_recipe_max_uses",maxUses);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (active != null) {
+    	    	    	//if (active != null) {
     	       	    	model.setBoolean("crafting_recipe_active",active);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CraftingRecipe fromModel(Model model) {
 		boolean hasFields = false;
     	CraftingRecipe message = new CraftingRecipe();
     	    	    	    	    	
-    	    	    	String idField = model.getString("crafting_recipe_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("crafting_recipe_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	
-    	    	    	Boolean orderMattersField = model.getBoolean("crafting_recipe_order_matters");
+    	
     	    	
-    	if (orderMattersField != null) {
+    	    	    	    	    	    	    	    	
+    	    	    	Boolean orderMattersTestField = model.getBoolean("crafting_recipe_order_matters");
+    	if (orderMattersTestField != null) {
+    		boolean orderMattersField = orderMattersTestField;
     		message.setOrderMatters(orderMattersField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float timeToCompleteField = model.getFloat("crafting_recipe_time_to_complete");
+    	
     	    	
-    	if (timeToCompleteField != null) {
+    	    	    	    	    	    	
+    	    	    	Float timeToCompleteTestField = model.getFloat("crafting_recipe_time_to_complete");
+    	if (timeToCompleteTestField != null) {
+    		float timeToCompleteField = timeToCompleteTestField;
     		message.setTimeToComplete(timeToCompleteField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	Integer maxUsesField = model.getInteger("crafting_recipe_max_uses");
+    	
     	    	
-    	if (maxUsesField != null) {
+    	    	    	    	    	    	    	
+    	    	    	Integer maxUsesTestField = model.getInteger("crafting_recipe_max_uses");
+    	if (maxUsesTestField != null) {
+    		int maxUsesField = maxUsesTestField;
     		message.setMaxUses(maxUsesField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean activeField = model.getBoolean("crafting_recipe_active");
+    	
     	    	
-    	if (activeField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean activeTestField = model.getBoolean("crafting_recipe_active");
+    	if (activeTestField != null) {
+    		boolean activeField = activeTestField;
     		message.setActive(activeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -435,11 +457,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -448,11 +466,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasElements()  {
-        return elements == null ? false : true;
-    }
-        
+		            
 		public List<CraftingElement> getElementsList() {
 		if(this.elements == null)
             this.elements = new ArrayList<CraftingElement>();
@@ -503,7 +517,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
        	while (itr.hasNext()) {
     	CraftingElement obj = itr.next();
     	
-    	    		if (elements.quantity.equals(obj.quantity)) {
+    	    		if (elements.quantity == obj.quantity) {
     	      			itr.remove();
     		}
 		}
@@ -519,7 +533,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
        	while (itr.hasNext()) {
     	CraftingElement obj = itr.next();
     	
-    	    		if (elements.level.equals(obj.level)) {
+    	    		if (elements.level == obj.level) {
     	      			itr.remove();
     		}
 		}
@@ -535,7 +549,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
        	while (itr.hasNext()) {
     	CraftingElement obj = itr.next();
     	
-    	    		if (elements.order.equals(obj.order)) {
+    	    		if (elements.order == obj.order) {
     	      			itr.remove();
     		}
 		}
@@ -546,11 +560,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     
     
     
-		    
-    public Boolean hasTool()  {
-        return tool == null ? false : true;
-    }
-        
+		            
 		public CraftingTool getTool() {
 		return tool;
 	}
@@ -559,37 +569,25 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
 		this.tool = tool;
 		return this;	}
 	
-		    
-    public Boolean hasOrderMatters()  {
-        return orderMatters == null ? false : true;
-    }
-        
-		public Boolean getOrderMatters() {
+		            
+		public boolean getOrderMatters() {
 		return orderMatters;
 	}
 	
-	public CraftingRecipe setOrderMatters(Boolean orderMatters) {
+	public CraftingRecipe setOrderMatters(boolean orderMatters) {
 		this.orderMatters = orderMatters;
 		return this;	}
 	
-		    
-    public Boolean hasTimeToComplete()  {
-        return timeToComplete == null ? false : true;
-    }
-        
-		public Float getTimeToComplete() {
+		            
+		public float getTimeToComplete() {
 		return timeToComplete;
 	}
 	
-	public CraftingRecipe setTimeToComplete(Float timeToComplete) {
+	public CraftingRecipe setTimeToComplete(float timeToComplete) {
 		this.timeToComplete = timeToComplete;
 		return this;	}
 	
-		    
-    public Boolean hasRewards()  {
-        return rewards == null ? false : true;
-    }
-        
+		            
 		public List<CraftingReward> getRewardsList() {
 		if(this.rewards == null)
             this.rewards = new ArrayList<CraftingReward>();
@@ -640,7 +638,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
        	while (itr.hasNext()) {
     	CraftingReward obj = itr.next();
     	
-    	    		if (rewards.quantity.equals(obj.quantity)) {
+    	    		if (rewards.quantity == obj.quantity) {
     	      			itr.remove();
     		}
 		}
@@ -656,7 +654,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
        	while (itr.hasNext()) {
     	CraftingReward obj = itr.next();
     	
-    	    		if (rewards.level.equals(obj.level)) {
+    	    		if (rewards.level == obj.level) {
     	      			itr.remove();
     		}
 		}
@@ -667,29 +665,21 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     
     
     
-		    
-    public Boolean hasMaxUses()  {
-        return maxUses == null ? false : true;
-    }
-        
-		public Integer getMaxUses() {
+		            
+		public int getMaxUses() {
 		return maxUses;
 	}
 	
-	public CraftingRecipe setMaxUses(Integer maxUses) {
+	public CraftingRecipe setMaxUses(int maxUses) {
 		this.maxUses = maxUses;
 		return this;	}
 	
-		    
-    public Boolean hasActive()  {
-        return active == null ? false : true;
-    }
-        
-		public Boolean getActive() {
+		            
+		public boolean getActive() {
 		return active;
 	}
 	
-	public CraftingRecipe setActive(Boolean active) {
+	public CraftingRecipe setActive(boolean active) {
 		this.active = active;
 		return this;	}
 	
@@ -794,11 +784,12 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     public void writeTo(Output output, CraftingRecipe message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -806,7 +797,7 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         {
             for(CraftingElement elements : message.elements)
             {
-                if(elements != null) {
+                if( (CraftingElement) elements != null) {
                    	    				output.writeObject(2, elements, CraftingElement.getSchema(), true);
     				    			}
             }
@@ -817,18 +808,20 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     		output.writeObject(3, message.tool, CraftingTool.getSchema(), false);
     	    	
     	            	
-    	    	if(message.orderMatters == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.orderMatters == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.orderMatters != null)
+    	    	    	if( (Boolean)message.orderMatters != null) {
             output.writeBool(4, message.orderMatters, false);
+        }
     	    	
     	            	
-    	    	if(message.timeToComplete == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.timeToComplete == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.timeToComplete != null)
+    	    	    	if( (Float)message.timeToComplete != null) {
             output.writeFloat(5, message.timeToComplete, false);
+        }
     	    	
     	            	
     	    	
@@ -836,24 +829,26 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         {
             for(CraftingReward rewards : message.rewards)
             {
-                if(rewards != null) {
+                if( (CraftingReward) rewards != null) {
                    	    				output.writeObject(6, rewards, CraftingReward.getSchema(), true);
     				    			}
             }
         }
     	            	
-    	    	if(message.maxUses == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.maxUses == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.maxUses != null)
+    	    	    	if( (Integer)message.maxUses != null) {
             output.writeInt32(7, message.maxUses, false);
+        }
     	    	
     	            	
-    	    	if(message.active == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.active == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.active != null)
+    	    	    	if( (Boolean)message.active != null) {
             output.writeBool(8, message.active, false);
+        }
     	    	
     	            	
     }
@@ -861,30 +856,30 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
 	public void dumpObject()
     {
     	System.out.println("START CraftingRecipe");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.elements != null) {
+    	//}
+    	    	//if(this.elements != null) {
     		System.out.println("elements="+this.elements);
-    	}
-    	    	if(this.tool != null) {
+    	//}
+    	    	//if(this.tool != null) {
     		System.out.println("tool="+this.tool);
-    	}
-    	    	if(this.orderMatters != null) {
+    	//}
+    	    	//if(this.orderMatters != null) {
     		System.out.println("orderMatters="+this.orderMatters);
-    	}
-    	    	if(this.timeToComplete != null) {
+    	//}
+    	    	//if(this.timeToComplete != null) {
     		System.out.println("timeToComplete="+this.timeToComplete);
-    	}
-    	    	if(this.rewards != null) {
+    	//}
+    	    	//if(this.rewards != null) {
     		System.out.println("rewards="+this.rewards);
-    	}
-    	    	if(this.maxUses != null) {
+    	//}
+    	    	//if(this.maxUses != null) {
     		System.out.println("maxUses="+this.maxUses);
-    	}
-    	    	if(this.active != null) {
+    	//}
+    	    	//if(this.active != null) {
     		System.out.println("active="+this.active);
-    	}
+    	//}
     	    	System.out.println("END CraftingRecipe");
     }
     

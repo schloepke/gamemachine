@@ -53,19 +53,19 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
 
     			public String id;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String node;
 	    
         			public String actorName;
 	    
-        			public Boolean assigned;
+        			public boolean assigned;
 	    
-        			public Integer number;
+        			public int number;
 	    
         			public String hostname;
 	    
-        			public Boolean current;
+        			public boolean current;
 	    
       
     public ZoneInfo()
@@ -94,11 +94,11 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public ZoneInfo setRecordId(Integer recordId) {
+	public ZoneInfo setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -133,11 +133,11 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
         return assigned == null ? false : true;
     }
         
-		public Boolean getAssigned() {
+		public boolean getAssigned() {
 		return assigned;
 	}
 	
-	public ZoneInfo setAssigned(Boolean assigned) {
+	public ZoneInfo setAssigned(boolean assigned) {
 		this.assigned = assigned;
 		return this;	}
 	
@@ -146,11 +146,11 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
         return number == null ? false : true;
     }
         
-		public Integer getNumber() {
+		public int getNumber() {
 		return number;
 	}
 	
-	public ZoneInfo setNumber(Integer number) {
+	public ZoneInfo setNumber(int number) {
 		this.number = number;
 		return this;	}
 	
@@ -172,11 +172,11 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
         return current == null ? false : true;
     }
         
-		public Boolean getCurrent() {
+		public boolean getCurrent() {
 		return current;
 	}
 	
-	public ZoneInfo setCurrent(Boolean current) {
+	public ZoneInfo setCurrent(boolean current) {
 		this.current = current;
 		return this;	}
 	

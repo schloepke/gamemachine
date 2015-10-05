@@ -61,14 +61,22 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
     static final ObjectdbUpdate DEFAULT_INSTANCE = new ObjectdbUpdate();
     static final String defaultScope = ObjectdbUpdate.class.getSimpleName();
 
-    			public String currentEntityId;
-	    
-        			public String updateClass;
-	    
-        			public String updateMethod;
-	    
-        			public Entity updateEntity;
-	    
+    	
+	    	    public String currentEntityId= null;
+	    		
+    
+        	
+	    	    public String updateClass= null;
+	    		
+    
+        	
+	    	    public String updateMethod= null;
+	    		
+    
+        	
+	    	    public Entity updateEntity;
+	    		
+    
         
 
 
@@ -89,46 +97,52 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (currentEntityId != null) {
+    	    	    	//if (currentEntityId != null) {
     	       	    	model.setString("objectdb_update_current_entity_id",currentEntityId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (updateClass != null) {
+    	    	    	//if (updateClass != null) {
     	       	    	model.setString("objectdb_update_update_class",updateClass);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (updateMethod != null) {
+    	    	    	//if (updateMethod != null) {
     	       	    	model.setString("objectdb_update_update_method",updateMethod);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static ObjectdbUpdate fromModel(Model model) {
 		boolean hasFields = false;
     	ObjectdbUpdate message = new ObjectdbUpdate();
     	    	    	    	    	
-    	    	    	String currentEntityIdField = model.getString("objectdb_update_current_entity_id");
-    	    	
-    	if (currentEntityIdField != null) {
+    	    	    	String currentEntityIdTestField = model.getString("objectdb_update_current_entity_id");
+    	if (currentEntityIdTestField != null) {
+    		String currentEntityIdField = currentEntityIdTestField;
     		message.setCurrentEntityId(currentEntityIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String updateClassField = model.getString("objectdb_update_update_class");
+    	
     	    	
-    	if (updateClassField != null) {
+    	    	    	    	    	    	
+    	    	    	String updateClassTestField = model.getString("objectdb_update_update_class");
+    	if (updateClassTestField != null) {
+    		String updateClassField = updateClassTestField;
     		message.setUpdateClass(updateClassField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String updateMethodField = model.getString("objectdb_update_update_method");
+    	
     	    	
-    	if (updateMethodField != null) {
+    	    	    	    	    	    	
+    	    	    	String updateMethodTestField = model.getString("objectdb_update_update_method");
+    	if (updateMethodTestField != null) {
+    		String updateMethodField = updateMethodTestField;
     		message.setUpdateMethod(updateMethodField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -137,11 +151,7 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
     }
 
 
-	    
-    public Boolean hasCurrentEntityId()  {
-        return currentEntityId == null ? false : true;
-    }
-        
+	            
 		public String getCurrentEntityId() {
 		return currentEntityId;
 	}
@@ -150,11 +160,7 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
 		this.currentEntityId = currentEntityId;
 		return this;	}
 	
-		    
-    public Boolean hasUpdateClass()  {
-        return updateClass == null ? false : true;
-    }
-        
+		            
 		public String getUpdateClass() {
 		return updateClass;
 	}
@@ -163,11 +169,7 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
 		this.updateClass = updateClass;
 		return this;	}
 	
-		    
-    public Boolean hasUpdateMethod()  {
-        return updateMethod == null ? false : true;
-    }
-        
+		            
 		public String getUpdateMethod() {
 		return updateMethod;
 	}
@@ -176,11 +178,7 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
 		this.updateMethod = updateMethod;
 		return this;	}
 	
-		    
-    public Boolean hasUpdateEntity()  {
-        return updateEntity == null ? false : true;
-    }
-        
+		            
 		public Entity getUpdateEntity() {
 		return updateEntity;
 	}
@@ -272,27 +270,30 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
     public void writeTo(Output output, ObjectdbUpdate message) throws IOException
     {
     	    	
-    	    	if(message.currentEntityId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.currentEntityId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.currentEntityId != null)
+    	    	    	if( (String)message.currentEntityId != null) {
             output.writeString(1, message.currentEntityId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.updateClass != null)
+    	    	    	if( (String)message.updateClass != null) {
             output.writeString(2, message.updateClass, false);
+        }
     	    	
     	            	
-    	    	if(message.updateMethod == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.updateMethod == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.updateMethod != null)
+    	    	    	if( (String)message.updateMethod != null) {
             output.writeString(3, message.updateMethod, false);
+        }
     	    	
     	            	
-    	    	if(message.updateEntity == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.updateEntity == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.updateEntity != null)
     		output.writeObject(4, message.updateEntity, Entity.getSchema(), false);
@@ -303,18 +304,18 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbUpdate");
-    	    	if(this.currentEntityId != null) {
+    	    	//if(this.currentEntityId != null) {
     		System.out.println("currentEntityId="+this.currentEntityId);
-    	}
-    	    	if(this.updateClass != null) {
+    	//}
+    	    	//if(this.updateClass != null) {
     		System.out.println("updateClass="+this.updateClass);
-    	}
-    	    	if(this.updateMethod != null) {
+    	//}
+    	    	//if(this.updateMethod != null) {
     		System.out.println("updateMethod="+this.updateMethod);
-    	}
-    	    	if(this.updateEntity != null) {
+    	//}
+    	    	//if(this.updateEntity != null) {
     		System.out.println("updateEntity="+this.updateEntity);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbUpdate");
     }
     

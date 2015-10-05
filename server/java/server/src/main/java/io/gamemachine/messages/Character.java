@@ -81,34 +81,62 @@ public final class Character implements Externalizable, Message<Character>, Sche
     static final Character DEFAULT_INSTANCE = new Character();
     static final String defaultScope = Character.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String umaData;
-	    
-        			public Integer health;
-	    
-        			public Integer recordId;
-	    
-        			public String playerId;
-	    
-        			public Integer part;
-	    
-        			public Integer parts;
-	    
-        			public Integer worldx;
-	    
-        			public Integer worldy;
-	    
-        			public Integer worldz;
-	    
-        			public Integer zone;
-	    
-        			public Integer stamina;
-	    
-        			public Integer magic;
-	    
-        			public Boolean includeUmaData;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String umaData= null;
+	    		
+    
+        	
+	    	    public int health= 0;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public int part= 0;
+	    		
+    
+        	
+	    	    public int parts= 0;
+	    		
+    
+        	
+	    	    public int worldx= 0;
+	    		
+    
+        	
+	    	    public int worldy= 0;
+	    		
+    
+        	
+	    	    public int worldz= 0;
+	    		
+    
+        	
+	    	    public int zone= 0;
+	    		
+    
+        	
+	    	    public int stamina= 0;
+	    		
+    
+        	
+	    	    public int magic= 0;
+	    		
+    
+        	
+	    	    public boolean includeUmaData= false;
+	    		
+    
         
 	public static CharacterCache cache() {
 		return CharacterCache.getInstance();
@@ -452,9 +480,9 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	    	}
 	    	
 	    	io.gamemachine.orm.models.Character model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.Character.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.Character();
@@ -589,173 +617,199 @@ public final class Character implements Externalizable, Message<Character>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("character_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (umaData != null) {
+    	    	    	//if (umaData != null) {
     	       	    	model.setString("character_uma_data",umaData);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (health != null) {
+    	    	    	//if (health != null) {
     	       	    	model.setInteger("character_health",health);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("character_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (part != null) {
+    	    	    	//if (part != null) {
     	       	    	model.setInteger("character_part",part);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (parts != null) {
+    	    	    	//if (parts != null) {
     	       	    	model.setInteger("character_parts",parts);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (worldx != null) {
+    	    	    	//if (worldx != null) {
     	       	    	model.setInteger("character_worldx",worldx);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (worldy != null) {
+    	    	    	//if (worldy != null) {
     	       	    	model.setInteger("character_worldy",worldy);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (worldz != null) {
+    	    	    	//if (worldz != null) {
     	       	    	model.setInteger("character_worldz",worldz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (zone != null) {
+    	    	    	//if (zone != null) {
     	       	    	model.setInteger("character_zone",zone);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (stamina != null) {
+    	    	    	//if (stamina != null) {
     	       	    	model.setInteger("character_stamina",stamina);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (magic != null) {
+    	    	    	//if (magic != null) {
     	       	    	model.setInteger("character_magic",magic);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (includeUmaData != null) {
+    	    	    	//if (includeUmaData != null) {
     	       	    	model.setBoolean("character_include_uma_data",includeUmaData);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Character fromModel(Model model) {
 		boolean hasFields = false;
     	Character message = new Character();
     	    	    	    	    	
-    	    	    	String idField = model.getString("character_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("character_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String umaDataField = model.getString("character_uma_data");
+    	
     	    	
-    	if (umaDataField != null) {
+    	    	    	    	    	    	
+    	    	    	String umaDataTestField = model.getString("character_uma_data");
+    	if (umaDataTestField != null) {
+    		String umaDataField = umaDataTestField;
     		message.setUmaData(umaDataField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthField = model.getInteger("character_health");
+    	
     	    	
-    	if (healthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthTestField = model.getInteger("character_health");
+    	if (healthTestField != null) {
+    		int healthField = healthTestField;
     		message.setHealth(healthField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("character_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("character_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer partField = model.getInteger("character_part");
+    	
     	    	
-    	if (partField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer partTestField = model.getInteger("character_part");
+    	if (partTestField != null) {
+    		int partField = partTestField;
     		message.setPart(partField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer partsField = model.getInteger("character_parts");
+    	
     	    	
-    	if (partsField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer partsTestField = model.getInteger("character_parts");
+    	if (partsTestField != null) {
+    		int partsField = partsTestField;
     		message.setParts(partsField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer worldxField = model.getInteger("character_worldx");
+    	
     	    	
-    	if (worldxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer worldxTestField = model.getInteger("character_worldx");
+    	if (worldxTestField != null) {
+    		int worldxField = worldxTestField;
     		message.setWorldx(worldxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer worldyField = model.getInteger("character_worldy");
+    	
     	    	
-    	if (worldyField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer worldyTestField = model.getInteger("character_worldy");
+    	if (worldyTestField != null) {
+    		int worldyField = worldyTestField;
     		message.setWorldy(worldyField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer worldzField = model.getInteger("character_worldz");
+    	
     	    	
-    	if (worldzField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer worldzTestField = model.getInteger("character_worldz");
+    	if (worldzTestField != null) {
+    		int worldzField = worldzTestField;
     		message.setWorldz(worldzField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer zoneField = model.getInteger("character_zone");
+    	
     	    	
-    	if (zoneField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer zoneTestField = model.getInteger("character_zone");
+    	if (zoneTestField != null) {
+    		int zoneField = zoneTestField;
     		message.setZone(zoneField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer staminaField = model.getInteger("character_stamina");
+    	
     	    	
-    	if (staminaField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer staminaTestField = model.getInteger("character_stamina");
+    	if (staminaTestField != null) {
+    		int staminaField = staminaTestField;
     		message.setStamina(staminaField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer magicField = model.getInteger("character_magic");
+    	
     	    	
-    	if (magicField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer magicTestField = model.getInteger("character_magic");
+    	if (magicTestField != null) {
+    		int magicField = magicTestField;
     		message.setMagic(magicField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean includeUmaDataField = model.getBoolean("character_include_uma_data");
+    	
     	    	
-    	if (includeUmaDataField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean includeUmaDataTestField = model.getBoolean("character_include_uma_data");
+    	if (includeUmaDataTestField != null) {
+    		boolean includeUmaDataField = includeUmaDataTestField;
     		message.setIncludeUmaData(includeUmaDataField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -764,11 +818,7 @@ public final class Character implements Externalizable, Message<Character>, Sche
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -777,11 +827,7 @@ public final class Character implements Externalizable, Message<Character>, Sche
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasUmaData()  {
-        return umaData == null ? false : true;
-    }
-        
+		            
 		public String getUmaData() {
 		return umaData;
 	}
@@ -790,37 +836,25 @@ public final class Character implements Externalizable, Message<Character>, Sche
 		this.umaData = umaData;
 		return this;	}
 	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public Integer getHealth() {
+		            
+		public int getHealth() {
 		return health;
 	}
 	
-	public Character setHealth(Integer health) {
+	public Character setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Character setRecordId(Integer recordId) {
+	public Character setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -829,120 +863,84 @@ public final class Character implements Externalizable, Message<Character>, Sche
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasPart()  {
-        return part == null ? false : true;
-    }
-        
-		public Integer getPart() {
+		            
+		public int getPart() {
 		return part;
 	}
 	
-	public Character setPart(Integer part) {
+	public Character setPart(int part) {
 		this.part = part;
 		return this;	}
 	
-		    
-    public Boolean hasParts()  {
-        return parts == null ? false : true;
-    }
-        
-		public Integer getParts() {
+		            
+		public int getParts() {
 		return parts;
 	}
 	
-	public Character setParts(Integer parts) {
+	public Character setParts(int parts) {
 		this.parts = parts;
 		return this;	}
 	
-		    
-    public Boolean hasWorldx()  {
-        return worldx == null ? false : true;
-    }
-        
-		public Integer getWorldx() {
+		            
+		public int getWorldx() {
 		return worldx;
 	}
 	
-	public Character setWorldx(Integer worldx) {
+	public Character setWorldx(int worldx) {
 		this.worldx = worldx;
 		return this;	}
 	
-		    
-    public Boolean hasWorldy()  {
-        return worldy == null ? false : true;
-    }
-        
-		public Integer getWorldy() {
+		            
+		public int getWorldy() {
 		return worldy;
 	}
 	
-	public Character setWorldy(Integer worldy) {
+	public Character setWorldy(int worldy) {
 		this.worldy = worldy;
 		return this;	}
 	
-		    
-    public Boolean hasWorldz()  {
-        return worldz == null ? false : true;
-    }
-        
-		public Integer getWorldz() {
+		            
+		public int getWorldz() {
 		return worldz;
 	}
 	
-	public Character setWorldz(Integer worldz) {
+	public Character setWorldz(int worldz) {
 		this.worldz = worldz;
 		return this;	}
 	
-		    
-    public Boolean hasZone()  {
-        return zone == null ? false : true;
-    }
-        
-		public Integer getZone() {
+		            
+		public int getZone() {
 		return zone;
 	}
 	
-	public Character setZone(Integer zone) {
+	public Character setZone(int zone) {
 		this.zone = zone;
 		return this;	}
 	
-		    
-    public Boolean hasStamina()  {
-        return stamina == null ? false : true;
-    }
-        
-		public Integer getStamina() {
+		            
+		public int getStamina() {
 		return stamina;
 	}
 	
-	public Character setStamina(Integer stamina) {
+	public Character setStamina(int stamina) {
 		this.stamina = stamina;
 		return this;	}
 	
-		    
-    public Boolean hasMagic()  {
-        return magic == null ? false : true;
-    }
-        
-		public Integer getMagic() {
+		            
+		public int getMagic() {
 		return magic;
 	}
 	
-	public Character setMagic(Integer magic) {
+	public Character setMagic(int magic) {
 		this.magic = magic;
 		return this;	}
 	
-		    
-    public Boolean hasIncludeUmaData()  {
-        return includeUmaData == null ? false : true;
-    }
-        
-		public Boolean getIncludeUmaData() {
+		            
+		public boolean getIncludeUmaData() {
 		return includeUmaData;
 	}
 	
-	public Character setIncludeUmaData(Boolean includeUmaData) {
+	public Character setIncludeUmaData(boolean includeUmaData) {
 		this.includeUmaData = includeUmaData;
 		return this;	}
 	
@@ -1069,78 +1067,92 @@ public final class Character implements Externalizable, Message<Character>, Sche
     public void writeTo(Output output, Character message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.umaData != null)
+    	    	    	if( (String)message.umaData != null) {
             output.writeString(2, message.umaData, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.health != null)
+    	    	    	if( (Integer)message.health != null) {
             output.writeInt32(3, message.health, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(4, message.recordId, false);
+        }
     	    	
     	            	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(5, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.part != null)
+    	    	    	if( (Integer)message.part != null) {
             output.writeInt32(6, message.part, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.parts != null)
+    	    	    	if( (Integer)message.parts != null) {
             output.writeInt32(7, message.parts, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.worldx != null)
+    	    	    	if( (Integer)message.worldx != null) {
             output.writeInt32(8, message.worldx, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.worldy != null)
+    	    	    	if( (Integer)message.worldy != null) {
             output.writeInt32(9, message.worldy, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.worldz != null)
+    	    	    	if( (Integer)message.worldz != null) {
             output.writeInt32(10, message.worldz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.zone != null)
+    	    	    	if( (Integer)message.zone != null) {
             output.writeInt32(11, message.zone, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.stamina != null)
+    	    	    	if( (Integer)message.stamina != null) {
             output.writeInt32(12, message.stamina, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.magic != null)
+    	    	    	if( (Integer)message.magic != null) {
             output.writeInt32(13, message.magic, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.includeUmaData != null)
+    	    	    	if( (Boolean)message.includeUmaData != null) {
             output.writeBool(14, message.includeUmaData, false);
+        }
     	    	
     	            	
     }
@@ -1148,48 +1160,48 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	public void dumpObject()
     {
     	System.out.println("START Character");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.umaData != null) {
+    	//}
+    	    	//if(this.umaData != null) {
     		System.out.println("umaData="+this.umaData);
-    	}
-    	    	if(this.health != null) {
+    	//}
+    	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.part != null) {
+    	//}
+    	    	//if(this.part != null) {
     		System.out.println("part="+this.part);
-    	}
-    	    	if(this.parts != null) {
+    	//}
+    	    	//if(this.parts != null) {
     		System.out.println("parts="+this.parts);
-    	}
-    	    	if(this.worldx != null) {
+    	//}
+    	    	//if(this.worldx != null) {
     		System.out.println("worldx="+this.worldx);
-    	}
-    	    	if(this.worldy != null) {
+    	//}
+    	    	//if(this.worldy != null) {
     		System.out.println("worldy="+this.worldy);
-    	}
-    	    	if(this.worldz != null) {
+    	//}
+    	    	//if(this.worldz != null) {
     		System.out.println("worldz="+this.worldz);
-    	}
-    	    	if(this.zone != null) {
+    	//}
+    	    	//if(this.zone != null) {
     		System.out.println("zone="+this.zone);
-    	}
-    	    	if(this.stamina != null) {
+    	//}
+    	    	//if(this.stamina != null) {
     		System.out.println("stamina="+this.stamina);
-    	}
-    	    	if(this.magic != null) {
+    	//}
+    	    	//if(this.magic != null) {
     		System.out.println("magic="+this.magic);
-    	}
-    	    	if(this.includeUmaData != null) {
+    	//}
+    	    	//if(this.includeUmaData != null) {
     		System.out.println("includeUmaData="+this.includeUmaData);
-    	}
+    	//}
     	    	System.out.println("END Character");
     }
     

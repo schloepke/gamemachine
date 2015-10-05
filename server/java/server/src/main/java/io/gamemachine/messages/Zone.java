@@ -104,14 +104,22 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     static final Zone DEFAULT_INSTANCE = new Zone();
     static final String defaultScope = Zone.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Status status; // = NONE:0;
-	    
-        			public String name;
-	    
-        			public String unityClient;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public Status status;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public String unityClient= null;
+	    		
+    
         
 	public static ZoneCache cache() {
 		return ZoneCache.getInstance();
@@ -384,46 +392,52 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("zone_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("zone_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (unityClient != null) {
+    	    	    	//if (unityClient != null) {
     	       	    	model.setString("zone_unity_client",unityClient);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Zone fromModel(Model model) {
 		boolean hasFields = false;
     	Zone message = new Zone();
     	    	    	    	    	
-    	    	    	String idField = model.getString("zone_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("zone_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("zone_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("zone_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String unityClientField = model.getString("zone_unity_client");
+    	
     	    	
-    	if (unityClientField != null) {
+    	    	    	    	    	    	
+    	    	    	String unityClientTestField = model.getString("zone_unity_client");
+    	if (unityClientTestField != null) {
+    		String unityClientField = unityClientTestField;
     		message.setUnityClient(unityClientField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -432,11 +446,7 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -445,11 +455,7 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasStatus()  {
-        return status == null ? false : true;
-    }
-        
+		            
 		public Status getStatus() {
 		return status;
 	}
@@ -458,11 +464,7 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
 		this.status = status;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -471,11 +473,7 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasUnityClient()  {
-        return unityClient == null ? false : true;
-    }
-        
+		            
 		public String getUnityClient() {
 		return unityClient;
 	}
@@ -568,8 +566,9 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -578,13 +577,15 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     	    	
     	            	
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(3, message.name, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.unityClient != null)
+    	    	    	if( (String)message.unityClient != null) {
             output.writeString(4, message.unityClient, false);
+        }
     	    	
     	            	
     }
@@ -592,18 +593,18 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
 	public void dumpObject()
     {
     	System.out.println("START Zone");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.status != null) {
+    	//}
+    	    	//if(this.status != null) {
     		System.out.println("status="+this.status);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.unityClient != null) {
+    	//}
+    	    	//if(this.unityClient != null) {
     		System.out.println("unityClient="+this.unityClient);
-    	}
+    	//}
     	    	System.out.println("END Zone");
     }
     

@@ -44,7 +44,7 @@ public class PlayerCommands {
 	}
 
 	public static void sendToPlayer(Entity entity, String playerId) {
-		if (!entity.hasPlayer()) {
+		if (entity.player == null) {
 			Player player = new Player();
 			player.setId(playerId);
 			entity.setPlayer(player);

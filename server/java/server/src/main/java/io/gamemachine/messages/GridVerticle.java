@@ -61,10 +61,14 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
     static final GridVerticle DEFAULT_INSTANCE = new GridVerticle();
     static final String defaultScope = GridVerticle.class.getSimpleName();
 
-    			public Float x;
-	    
-        			public Float y;
-	    
+    	
+	    	    public float x= 0F;
+	    		
+    
+        	
+	    	    public float y= 0F;
+	    		
+    
             public List<GridNode> gridNodes;
 	    
 
@@ -85,34 +89,38 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setFloat("grid_verticle_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setFloat("grid_verticle_y",y);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static GridVerticle fromModel(Model model) {
 		boolean hasFields = false;
     	GridVerticle message = new GridVerticle();
     	    	    	    	    	
-    	    	    	Float xField = model.getFloat("grid_verticle_x");
-    	    	
-    	if (xField != null) {
+    	    	    	Float xTestField = model.getFloat("grid_verticle_x");
+    	if (xTestField != null) {
+    		float xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float yField = model.getFloat("grid_verticle_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Float yTestField = model.getFloat("grid_verticle_y");
+    	if (yTestField != null) {
+    		float yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -121,37 +129,25 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
     }
 
 
-	    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Float getX() {
+	            
+		public float getX() {
 		return x;
 	}
 	
-	public GridVerticle setX(Float x) {
+	public GridVerticle setX(float x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Float getY() {
+		            
+		public float getY() {
 		return y;
 	}
 	
-	public GridVerticle setY(Float y) {
+	public GridVerticle setY(float y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasGridNodes()  {
-        return gridNodes == null ? false : true;
-    }
-        
+		            
 		public List<GridNode> getGridNodesList() {
 		if(this.gridNodes == null)
             this.gridNodes = new ArrayList<GridNode>();
@@ -186,7 +182,7 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
        	while (itr.hasNext()) {
     	GridNode obj = itr.next();
     	
-    	    		if (gridNodes.slope.equals(obj.slope)) {
+    	    		if (gridNodes.slope == obj.slope) {
     	      			itr.remove();
     		}
 		}
@@ -277,18 +273,20 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
     public void writeTo(Output output, GridVerticle message) throws IOException
     {
     	    	
-    	    	if(message.x == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.x == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Float)message.x != null) {
             output.writeFloat(1, message.x, false);
+        }
     	    	
     	            	
-    	    	if(message.y == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.y == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Float)message.y != null) {
             output.writeFloat(2, message.y, false);
+        }
     	    	
     	            	
     	    	
@@ -296,7 +294,7 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
         {
             for(GridNode gridNodes : message.gridNodes)
             {
-                if(gridNodes != null) {
+                if( (GridNode) gridNodes != null) {
                    	    				output.writeObject(4, gridNodes, GridNode.getSchema(), true);
     				    			}
             }
@@ -307,15 +305,15 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
 	public void dumpObject()
     {
     	System.out.println("START GridVerticle");
-    	    	if(this.x != null) {
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.gridNodes != null) {
+    	//}
+    	    	//if(this.gridNodes != null) {
     		System.out.println("gridNodes="+this.gridNodes);
-    	}
+    	//}
     	    	System.out.println("END GridVerticle");
     }
     

@@ -75,13 +75,19 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
     static final PathData DEFAULT_INSTANCE = new PathData();
     static final String defaultScope = PathData.class.getSimpleName();
 
-    			public GmVector3 startPoint;
-	    
-        			public GmVector3 endPoint;
-	    
+    	
+	    	    public GmVector3 startPoint;
+	    		
+    
+        	
+	    	    public GmVector3 endPoint;
+	    		
+    
             public List<GmVector3> nodes;
-	    			public String id;
-	    
+	    	
+	    	    public String id= null;
+	    		
+    
         
 	public static PathDataCache cache() {
 		return PathDataCache.getInstance();
@@ -352,22 +358,24 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("path_data_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PathData fromModel(Model model) {
 		boolean hasFields = false;
     	PathData message = new PathData();
     	    	    	    	    	    	    	    	
-    	    	    	String idField = model.getString("path_data_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("path_data_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -376,11 +384,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
     }
 
 
-	    
-    public Boolean hasStartPoint()  {
-        return startPoint == null ? false : true;
-    }
-        
+	            
 		public GmVector3 getStartPoint() {
 		return startPoint;
 	}
@@ -389,11 +393,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
 		this.startPoint = startPoint;
 		return this;	}
 	
-		    
-    public Boolean hasEndPoint()  {
-        return endPoint == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getEndPoint() {
 		return endPoint;
 	}
@@ -402,11 +402,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
 		this.endPoint = endPoint;
 		return this;	}
 	
-		    
-    public Boolean hasNodes()  {
-        return nodes == null ? false : true;
-    }
-        
+		            
 		public List<GmVector3> getNodesList() {
 		if(this.nodes == null)
             this.nodes = new ArrayList<GmVector3>();
@@ -441,7 +437,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.x.equals(obj.x)) {
+    	    		if (nodes.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -457,7 +453,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.y.equals(obj.y)) {
+    	    		if (nodes.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -473,7 +469,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.z.equals(obj.z)) {
+    	    		if (nodes.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -489,7 +485,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.xi.equals(obj.xi)) {
+    	    		if (nodes.xi == obj.xi) {
     	      			itr.remove();
     		}
 		}
@@ -505,7 +501,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.yi.equals(obj.yi)) {
+    	    		if (nodes.yi == obj.yi) {
     	      			itr.remove();
     		}
 		}
@@ -521,7 +517,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.zi.equals(obj.zi)) {
+    	    		if (nodes.zi == obj.zi) {
     	      			itr.remove();
     		}
 		}
@@ -537,7 +533,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (nodes.vertice.equals(obj.vertice)) {
+    	    		if (nodes.vertice == obj.vertice) {
     	      			itr.remove();
     		}
 		}
@@ -548,11 +544,7 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
     
     
     
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -660,15 +652,16 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
         {
             for(GmVector3 nodes : message.nodes)
             {
-                if(nodes != null) {
+                if( (GmVector3) nodes != null) {
                    	    				output.writeObject(3, nodes, GmVector3.getSchema(), true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(4, message.id, false);
+        }
     	    	
     	            	
     }
@@ -676,18 +669,18 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
 	public void dumpObject()
     {
     	System.out.println("START PathData");
-    	    	if(this.startPoint != null) {
+    	    	//if(this.startPoint != null) {
     		System.out.println("startPoint="+this.startPoint);
-    	}
-    	    	if(this.endPoint != null) {
+    	//}
+    	    	//if(this.endPoint != null) {
     		System.out.println("endPoint="+this.endPoint);
-    	}
-    	    	if(this.nodes != null) {
+    	//}
+    	    	//if(this.nodes != null) {
     		System.out.println("nodes="+this.nodes);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END PathData");
     }
     

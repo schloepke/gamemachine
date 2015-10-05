@@ -91,11 +91,7 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
     }
 
 
-	    
-    public Boolean hasGameMessage()  {
-        return gameMessage == null ? false : true;
-    }
-        
+	            
 		public List<GameMessage> getGameMessageList() {
 		if(this.gameMessage == null)
             this.gameMessage = new ArrayList<GameMessage>();
@@ -162,7 +158,7 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
        	while (itr.hasNext()) {
     	GameMessage obj = itr.next();
     	
-    	    		if (gameMessage.destinationId.equals(obj.destinationId)) {
+    	    		if (gameMessage.destinationId == obj.destinationId) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
        	while (itr.hasNext()) {
     	GameMessage obj = itr.next();
     	
-    	    		if (gameMessage.authtoken.equals(obj.authtoken)) {
+    	    		if (gameMessage.authtoken == obj.authtoken) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
        	while (itr.hasNext()) {
     	GameMessage obj = itr.next();
     	
-    	    		if (gameMessage.unityMessageId.equals(obj.unityMessageId)) {
+    	    		if (gameMessage.unityMessageId == obj.unityMessageId) {
     	      			itr.remove();
     		}
 		}
@@ -314,7 +310,7 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
         {
             for(GameMessage gameMessage : message.gameMessage)
             {
-                if(gameMessage != null) {
+                if( (GameMessage) gameMessage != null) {
                    	    				output.writeObject(1, gameMessage, GameMessage.getSchema(), true);
     				    			}
             }
@@ -325,9 +321,9 @@ public final class GameMessages implements Externalizable, Message<GameMessages>
 	public void dumpObject()
     {
     	System.out.println("START GameMessages");
-    	    	if(this.gameMessage != null) {
+    	    	//if(this.gameMessage != null) {
     		System.out.println("gameMessage="+this.gameMessage);
-    	}
+    	//}
     	    	System.out.println("END GameMessages");
     }
     

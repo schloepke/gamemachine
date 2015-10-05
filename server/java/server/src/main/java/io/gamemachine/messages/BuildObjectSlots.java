@@ -91,11 +91,7 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
     }
 
 
-	    
-    public Boolean hasBuildObjectSlot()  {
-        return buildObjectSlot == null ? false : true;
-    }
-        
+	            
 		public List<BuildObjectSlot> getBuildObjectSlotList() {
 		if(this.buildObjectSlot == null)
             this.buildObjectSlot = new ArrayList<BuildObjectSlot>();
@@ -162,7 +158,7 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
        	while (itr.hasNext()) {
     	BuildObjectSlot obj = itr.next();
     	
-    	    		if (buildObjectSlot.placedAt.equals(obj.placedAt)) {
+    	    		if (buildObjectSlot.placedAt == obj.placedAt) {
     	      			itr.remove();
     		}
 		}
@@ -178,7 +174,7 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
        	while (itr.hasNext()) {
     	BuildObjectSlot obj = itr.next();
     	
-    	    		if (buildObjectSlot.buildOverTime.equals(obj.buildOverTime)) {
+    	    		if (buildObjectSlot.buildOverTime == obj.buildOverTime) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
        	while (itr.hasNext()) {
     	BuildObjectSlot obj = itr.next();
     	
-    	    		if (buildObjectSlot.buildTime.equals(obj.buildTime)) {
+    	    		if (buildObjectSlot.buildTime == obj.buildTime) {
     	      			itr.remove();
     		}
 		}
@@ -282,7 +278,7 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
         {
             for(BuildObjectSlot buildObjectSlot : message.buildObjectSlot)
             {
-                if(buildObjectSlot != null) {
+                if( (BuildObjectSlot) buildObjectSlot != null) {
                    	    				output.writeObject(1, buildObjectSlot, BuildObjectSlot.getSchema(), true);
     				    			}
             }
@@ -293,9 +289,9 @@ public final class BuildObjectSlots implements Externalizable, Message<BuildObje
 	public void dumpObject()
     {
     	System.out.println("START BuildObjectSlots");
-    	    	if(this.buildObjectSlot != null) {
+    	    	//if(this.buildObjectSlot != null) {
     		System.out.println("buildObjectSlot="+this.buildObjectSlot);
-    	}
+    	//}
     	    	System.out.println("END BuildObjectSlots");
     }
     

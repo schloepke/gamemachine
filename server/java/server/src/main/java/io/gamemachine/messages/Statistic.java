@@ -61,12 +61,18 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
     static final Statistic DEFAULT_INSTANCE = new Statistic();
     static final String defaultScope = Statistic.class.getSimpleName();
 
-    			public String name;
-	    
-        			public Float value;
-	    
-        			public String type;
-	    
+    	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public float value= 0F;
+	    		
+    
+        	
+	    	    public String type= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("statistic_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setFloat("statistic_value",value);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("statistic_type",type);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Statistic fromModel(Model model) {
 		boolean hasFields = false;
     	Statistic message = new Statistic();
     	    	    	    	    	
-    	    	    	String nameField = model.getString("statistic_name");
-    	    	
-    	if (nameField != null) {
+    	    	    	String nameTestField = model.getString("statistic_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float valueField = model.getFloat("statistic_value");
+    	
     	    	
-    	if (valueField != null) {
+    	    	    	    	    	    	
+    	    	    	Float valueTestField = model.getFloat("statistic_value");
+    	if (valueTestField != null) {
+    		float valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String typeField = model.getString("statistic_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	
+    	    	    	String typeTestField = model.getString("statistic_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
     }
 
 
-	    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+	            
 		public String getName() {
 		return name;
 	}
@@ -148,24 +156,16 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
-		public Float getValue() {
+		            
+		public float getValue() {
 		return value;
 	}
 	
-	public Statistic setValue(Float value) {
+	public Statistic setValue(float value) {
 		this.value = value;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+		            
 		public String getType() {
 		return type;
 	}
@@ -253,25 +253,28 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
     public void writeTo(Output output, Statistic message) throws IOException
     {
     	    	
-    	    	if(message.name == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.name == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(1, message.name, false);
+        }
     	    	
     	            	
-    	    	if(message.value == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.value == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (Float)message.value != null) {
             output.writeFloat(2, message.value, false);
+        }
     	    	
     	            	
-    	    	if(message.type == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.type == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(3, message.type, false);
+        }
     	    	
     	            	
     }
@@ -279,15 +282,15 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
 	public void dumpObject()
     {
     	System.out.println("START Statistic");
-    	    	if(this.name != null) {
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.value != null) {
+    	//}
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
+    	//}
     	    	System.out.println("END Statistic");
     }
     

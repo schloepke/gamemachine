@@ -87,7 +87,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	    
         			public EntityList entityList;
 	    
-        			public Boolean published;
+        			public boolean published;
 	    
         			public String entityType;
 	    
@@ -95,11 +95,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	    
         			public PlayerLogout playerLogout;
 	    
-        			public Boolean sendToPlayer;
+        			public boolean sendToPlayer;
 	    
         			public Subscribers subscribers;
 	    
-        			public Boolean save;
+        			public boolean save;
 	    
         			public ObjectdbGetResponse objectdbGetResponse;
 	    
@@ -111,7 +111,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	    
         			public String destination;
 	    
-        			public Boolean json;
+        			public boolean json;
 	    
         			public String params;
 	    
@@ -135,7 +135,7 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
 	    
         			public Regions regions;
 	    
-        			public Boolean fastpath;
+        			public boolean fastpath;
 	    
         			public PoisonPill poisonPill;
 	    
@@ -427,11 +427,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
         return published == null ? false : true;
     }
         
-		public Boolean getPublished() {
+		public boolean getPublished() {
 		return published;
 	}
 	
-	public Entity setPublished(Boolean published) {
+	public Entity setPublished(boolean published) {
 		this.published = published;
 		return this;	}
 	
@@ -479,11 +479,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
         return sendToPlayer == null ? false : true;
     }
         
-		public Boolean getSendToPlayer() {
+		public boolean getSendToPlayer() {
 		return sendToPlayer;
 	}
 	
-	public Entity setSendToPlayer(Boolean sendToPlayer) {
+	public Entity setSendToPlayer(boolean sendToPlayer) {
 		this.sendToPlayer = sendToPlayer;
 		return this;	}
 	
@@ -505,11 +505,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
         return save == null ? false : true;
     }
         
-		public Boolean getSave() {
+		public boolean getSave() {
 		return save;
 	}
 	
-	public Entity setSave(Boolean save) {
+	public Entity setSave(boolean save) {
 		this.save = save;
 		return this;	}
 	
@@ -583,11 +583,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
         return json == null ? false : true;
     }
         
-		public Boolean getJson() {
+		public boolean getJson() {
 		return json;
 	}
 	
-	public Entity setJson(Boolean json) {
+	public Entity setJson(boolean json) {
 		this.json = json;
 		return this;	}
 	
@@ -739,11 +739,11 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
         return fastpath == null ? false : true;
     }
         
-		public Boolean getFastpath() {
+		public boolean getFastpath() {
 		return fastpath;
 	}
 	
-	public Entity setFastpath(Boolean fastpath) {
+	public Entity setFastpath(boolean fastpath) {
 		this.fastpath = fastpath;
 		return this;	}
 	

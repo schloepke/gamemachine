@@ -81,48 +81,90 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     static final WorldObject DEFAULT_INSTANCE = new WorldObject();
     static final String defaultScope = WorldObject.class.getSimpleName();
 
-    			public String playerItemId;
-	    
-        			public Integer action;
-	    
-        			public String id;
-	    
-        			public Integer recordId;
-	    
-        			public String ownerId;
-	    
-        			public Integer x;
-	    
-        			public Integer y;
-	    
-        			public Integer z;
-	    
-        			public Integer rx;
-	    
-        			public Integer ry;
-	    
-        			public Integer rz;
-	    
-        			public Integer rw;
-	    
-        			public Integer maxHealth;
-	    
-        			public Integer health;
-	    
-        			public String parentId;
-	    
-        			public Boolean destructable;
-	    
-        			public String prefab;
-	    
-        			public Integer type;
-	    
-        			public String grid;
-	    
-        			public String currentUser;
-	    
-        			public Integer state;
-	    
+    	
+	    	    public String playerItemId= null;
+	    		
+    
+        	
+	    	    public int action= 0;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String ownerId= null;
+	    		
+    
+        	
+	    	    public int x= 0;
+	    		
+    
+        	
+	    	    public int y= 0;
+	    		
+    
+        	
+	    	    public int z= 0;
+	    		
+    
+        	
+	    	    public int rx= 0;
+	    		
+    
+        	
+	    	    public int ry= 0;
+	    		
+    
+        	
+	    	    public int rz= 0;
+	    		
+    
+        	
+	    	    public int rw= 0;
+	    		
+    
+        	
+	    	    public int maxHealth= 0;
+	    		
+    
+        	
+	    	    public int health= 0;
+	    		
+    
+        	
+	    	    public String parentId= null;
+	    		
+    
+        	
+	    	    public boolean destructable= false;
+	    		
+    
+        	
+	    	    public String prefab= null;
+	    		
+    
+        	
+	    	    public int type= 0;
+	    		
+    
+        	
+	    	    public String grid= null;
+	    		
+    
+        	
+	    	    public String currentUser= null;
+	    		
+    
+        	
+	    	    public int state= 0;
+	    		
+    
         
 	public static WorldObjectCache cache() {
 		return WorldObjectCache.getInstance();
@@ -466,9 +508,9 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 	    	}
 	    	
 	    	io.gamemachine.orm.models.WorldObject model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.WorldObject.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.WorldObject();
@@ -610,257 +652,297 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerItemId != null) {
+    	    	    	//if (playerItemId != null) {
     	       	    	model.setString("world_object_player_item_id",playerItemId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setInteger("world_object_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("world_object_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (ownerId != null) {
+    	    	    	//if (ownerId != null) {
     	       	    	model.setString("world_object_owner_id",ownerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setInteger("world_object_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setInteger("world_object_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (z != null) {
+    	    	    	//if (z != null) {
     	       	    	model.setInteger("world_object_z",z);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rx != null) {
+    	    	    	//if (rx != null) {
     	       	    	model.setInteger("world_object_rx",rx);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ry != null) {
+    	    	    	//if (ry != null) {
     	       	    	model.setInteger("world_object_ry",ry);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rz != null) {
+    	    	    	//if (rz != null) {
     	       	    	model.setInteger("world_object_rz",rz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rw != null) {
+    	    	    	//if (rw != null) {
     	       	    	model.setInteger("world_object_rw",rw);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (maxHealth != null) {
+    	    	    	//if (maxHealth != null) {
     	       	    	model.setInteger("world_object_max_health",maxHealth);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (health != null) {
+    	    	    	//if (health != null) {
     	       	    	model.setInteger("world_object_health",health);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (parentId != null) {
+    	    	    	//if (parentId != null) {
     	       	    	model.setString("world_object_parent_id",parentId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (destructable != null) {
+    	    	    	//if (destructable != null) {
     	       	    	model.setBoolean("world_object_destructable",destructable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (prefab != null) {
+    	    	    	//if (prefab != null) {
     	       	    	model.setString("world_object_prefab",prefab);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setInteger("world_object_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (grid != null) {
+    	    	    	//if (grid != null) {
     	       	    	model.setString("world_object_grid",grid);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (currentUser != null) {
+    	    	    	//if (currentUser != null) {
     	       	    	model.setString("world_object_current_user",currentUser);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (state != null) {
+    	    	    	//if (state != null) {
     	       	    	model.setInteger("world_object_state",state);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static WorldObject fromModel(Model model) {
 		boolean hasFields = false;
     	WorldObject message = new WorldObject();
     	    	    	    	    	
-    	    	    	String playerItemIdField = model.getString("world_object_player_item_id");
-    	    	
-    	if (playerItemIdField != null) {
+    	    	    	String playerItemIdTestField = model.getString("world_object_player_item_id");
+    	if (playerItemIdTestField != null) {
+    		String playerItemIdField = playerItemIdTestField;
     		message.setPlayerItemId(playerItemIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer actionField = model.getInteger("world_object_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer actionTestField = model.getInteger("world_object_action");
+    	if (actionTestField != null) {
+    		int actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String idField = model.getString("world_object_id");
+    	
     	    	
-    	if (idField != null) {
+    	    	    	    	    	    	
+    	    	    	String idTestField = model.getString("world_object_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String ownerIdField = model.getString("world_object_owner_id");
-    	    	
-    	if (ownerIdField != null) {
+    	    	    	String ownerIdTestField = model.getString("world_object_owner_id");
+    	if (ownerIdTestField != null) {
+    		String ownerIdField = ownerIdTestField;
     		message.setOwnerId(ownerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer xField = model.getInteger("world_object_x");
+    	
     	    	
-    	if (xField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer xTestField = model.getInteger("world_object_x");
+    	if (xTestField != null) {
+    		int xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yField = model.getInteger("world_object_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yTestField = model.getInteger("world_object_y");
+    	if (yTestField != null) {
+    		int yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer zField = model.getInteger("world_object_z");
+    	
     	    	
-    	if (zField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer zTestField = model.getInteger("world_object_z");
+    	if (zTestField != null) {
+    		int zField = zTestField;
     		message.setZ(zField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rxField = model.getInteger("world_object_rx");
+    	
     	    	
-    	if (rxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rxTestField = model.getInteger("world_object_rx");
+    	if (rxTestField != null) {
+    		int rxField = rxTestField;
     		message.setRx(rxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ryField = model.getInteger("world_object_ry");
+    	
     	    	
-    	if (ryField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ryTestField = model.getInteger("world_object_ry");
+    	if (ryTestField != null) {
+    		int ryField = ryTestField;
     		message.setRy(ryField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rzField = model.getInteger("world_object_rz");
+    	
     	    	
-    	if (rzField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rzTestField = model.getInteger("world_object_rz");
+    	if (rzTestField != null) {
+    		int rzField = rzTestField;
     		message.setRz(rzField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rwField = model.getInteger("world_object_rw");
+    	
     	    	
-    	if (rwField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rwTestField = model.getInteger("world_object_rw");
+    	if (rwTestField != null) {
+    		int rwField = rwTestField;
     		message.setRw(rwField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer maxHealthField = model.getInteger("world_object_max_health");
+    	
     	    	
-    	if (maxHealthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer maxHealthTestField = model.getInteger("world_object_max_health");
+    	if (maxHealthTestField != null) {
+    		int maxHealthField = maxHealthTestField;
     		message.setMaxHealth(maxHealthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthField = model.getInteger("world_object_health");
+    	
     	    	
-    	if (healthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthTestField = model.getInteger("world_object_health");
+    	if (healthTestField != null) {
+    		int healthField = healthTestField;
     		message.setHealth(healthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String parentIdField = model.getString("world_object_parent_id");
+    	
     	    	
-    	if (parentIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String parentIdTestField = model.getString("world_object_parent_id");
+    	if (parentIdTestField != null) {
+    		String parentIdField = parentIdTestField;
     		message.setParentId(parentIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean destructableField = model.getBoolean("world_object_destructable");
+    	
     	    	
-    	if (destructableField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean destructableTestField = model.getBoolean("world_object_destructable");
+    	if (destructableTestField != null) {
+    		boolean destructableField = destructableTestField;
     		message.setDestructable(destructableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String prefabField = model.getString("world_object_prefab");
+    	
     	    	
-    	if (prefabField != null) {
+    	    	    	    	    	    	
+    	    	    	String prefabTestField = model.getString("world_object_prefab");
+    	if (prefabTestField != null) {
+    		String prefabField = prefabTestField;
     		message.setPrefab(prefabField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer typeField = model.getInteger("world_object_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer typeTestField = model.getInteger("world_object_type");
+    	if (typeTestField != null) {
+    		int typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gridField = model.getString("world_object_grid");
+    	
     	    	
-    	if (gridField != null) {
+    	    	    	    	    	    	
+    	    	    	String gridTestField = model.getString("world_object_grid");
+    	if (gridTestField != null) {
+    		String gridField = gridTestField;
     		message.setGrid(gridField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String currentUserField = model.getString("world_object_current_user");
+    	
     	    	
-    	if (currentUserField != null) {
+    	    	    	    	    	    	
+    	    	    	String currentUserTestField = model.getString("world_object_current_user");
+    	if (currentUserTestField != null) {
+    		String currentUserField = currentUserTestField;
     		message.setCurrentUser(currentUserField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer stateField = model.getInteger("world_object_state");
+    	
     	    	
-    	if (stateField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer stateTestField = model.getInteger("world_object_state");
+    	if (stateTestField != null) {
+    		int stateField = stateTestField;
     		message.setState(stateField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -869,11 +951,7 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     }
 
 
-	    
-    public Boolean hasPlayerItemId()  {
-        return playerItemId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerItemId() {
 		return playerItemId;
 	}
@@ -882,24 +960,16 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.playerItemId = playerItemId;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
-		public Integer getAction() {
+		            
+		public int getAction() {
 		return action;
 	}
 	
-	public WorldObject setAction(Integer action) {
+	public WorldObject setAction(int action) {
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -908,24 +978,16 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public WorldObject setRecordId(Integer recordId) {
+	public WorldObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasOwnerId()  {
-        return ownerId == null ? false : true;
-    }
-        
+		            
 		public String getOwnerId() {
 		return ownerId;
 	}
@@ -934,128 +996,88 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.ownerId = ownerId;
 		return this;	}
 	
-		    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Integer getX() {
+		            
+		public int getX() {
 		return x;
 	}
 	
-	public WorldObject setX(Integer x) {
+	public WorldObject setX(int x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Integer getY() {
+		            
+		public int getY() {
 		return y;
 	}
 	
-	public WorldObject setY(Integer y) {
+	public WorldObject setY(int y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
-        
-		public Integer getZ() {
+		            
+		public int getZ() {
 		return z;
 	}
 	
-	public WorldObject setZ(Integer z) {
+	public WorldObject setZ(int z) {
 		this.z = z;
 		return this;	}
 	
-		    
-    public Boolean hasRx()  {
-        return rx == null ? false : true;
-    }
-        
-		public Integer getRx() {
+		            
+		public int getRx() {
 		return rx;
 	}
 	
-	public WorldObject setRx(Integer rx) {
+	public WorldObject setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
-		    
-    public Boolean hasRy()  {
-        return ry == null ? false : true;
-    }
-        
-		public Integer getRy() {
+		            
+		public int getRy() {
 		return ry;
 	}
 	
-	public WorldObject setRy(Integer ry) {
+	public WorldObject setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
-		    
-    public Boolean hasRz()  {
-        return rz == null ? false : true;
-    }
-        
-		public Integer getRz() {
+		            
+		public int getRz() {
 		return rz;
 	}
 	
-	public WorldObject setRz(Integer rz) {
+	public WorldObject setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
-		    
-    public Boolean hasRw()  {
-        return rw == null ? false : true;
-    }
-        
-		public Integer getRw() {
+		            
+		public int getRw() {
 		return rw;
 	}
 	
-	public WorldObject setRw(Integer rw) {
+	public WorldObject setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
-		    
-    public Boolean hasMaxHealth()  {
-        return maxHealth == null ? false : true;
-    }
-        
-		public Integer getMaxHealth() {
+		            
+		public int getMaxHealth() {
 		return maxHealth;
 	}
 	
-	public WorldObject setMaxHealth(Integer maxHealth) {
+	public WorldObject setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 		return this;	}
 	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public Integer getHealth() {
+		            
+		public int getHealth() {
 		return health;
 	}
 	
-	public WorldObject setHealth(Integer health) {
+	public WorldObject setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
-		    
-    public Boolean hasParentId()  {
-        return parentId == null ? false : true;
-    }
-        
+		            
 		public String getParentId() {
 		return parentId;
 	}
@@ -1064,24 +1086,16 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.parentId = parentId;
 		return this;	}
 	
-		    
-    public Boolean hasDestructable()  {
-        return destructable == null ? false : true;
-    }
-        
-		public Boolean getDestructable() {
+		            
+		public boolean getDestructable() {
 		return destructable;
 	}
 	
-	public WorldObject setDestructable(Boolean destructable) {
+	public WorldObject setDestructable(boolean destructable) {
 		this.destructable = destructable;
 		return this;	}
 	
-		    
-    public Boolean hasPrefab()  {
-        return prefab == null ? false : true;
-    }
-        
+		            
 		public String getPrefab() {
 		return prefab;
 	}
@@ -1090,24 +1104,16 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.prefab = prefab;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
-		public Integer getType() {
+		            
+		public int getType() {
 		return type;
 	}
 	
-	public WorldObject setType(Integer type) {
+	public WorldObject setType(int type) {
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasGrid()  {
-        return grid == null ? false : true;
-    }
-        
+		            
 		public String getGrid() {
 		return grid;
 	}
@@ -1116,11 +1122,7 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.grid = grid;
 		return this;	}
 	
-		    
-    public Boolean hasCurrentUser()  {
-        return currentUser == null ? false : true;
-    }
-        
+		            
 		public String getCurrentUser() {
 		return currentUser;
 	}
@@ -1129,16 +1131,12 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		this.currentUser = currentUser;
 		return this;	}
 	
-		    
-    public Boolean hasState()  {
-        return state == null ? false : true;
-    }
-        
-		public Integer getState() {
+		            
+		public int getState() {
 		return state;
 	}
 	
-	public WorldObject setState(Integer state) {
+	public WorldObject setState(int state) {
 		this.state = state;
 		return this;	}
 	
@@ -1294,108 +1292,129 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     {
     	    	
     	    	
-    	    	    	if(message.playerItemId != null)
+    	    	    	if( (String)message.playerItemId != null) {
             output.writeString(1, message.playerItemId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (Integer)message.action != null) {
             output.writeInt32(2, message.action, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(3, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(4, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ownerId != null)
+    	    	    	if( (String)message.ownerId != null) {
             output.writeString(5, message.ownerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Integer)message.x != null) {
             output.writeInt32(6, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Integer)message.y != null) {
             output.writeInt32(7, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.z != null)
+    	    	    	if( (Integer)message.z != null) {
             output.writeInt32(8, message.z, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rx != null)
+    	    	    	if( (Integer)message.rx != null) {
             output.writeInt32(9, message.rx, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ry != null)
+    	    	    	if( (Integer)message.ry != null) {
             output.writeInt32(10, message.ry, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rz != null)
+    	    	    	if( (Integer)message.rz != null) {
             output.writeInt32(11, message.rz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rw != null)
+    	    	    	if( (Integer)message.rw != null) {
             output.writeInt32(12, message.rw, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.maxHealth != null)
+    	    	    	if( (Integer)message.maxHealth != null) {
             output.writeInt32(13, message.maxHealth, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.health != null)
+    	    	    	if( (Integer)message.health != null) {
             output.writeInt32(14, message.health, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.parentId != null)
+    	    	    	if( (String)message.parentId != null) {
             output.writeString(15, message.parentId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.destructable != null)
+    	    	    	if( (Boolean)message.destructable != null) {
             output.writeBool(16, message.destructable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.prefab != null)
+    	    	    	if( (String)message.prefab != null) {
             output.writeString(17, message.prefab, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (Integer)message.type != null) {
             output.writeInt32(18, message.type, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.grid != null)
+    	    	    	if( (String)message.grid != null) {
             output.writeString(19, message.grid, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.currentUser != null)
+    	    	    	if( (String)message.currentUser != null) {
             output.writeString(20, message.currentUser, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.state != null)
+    	    	    	if( (Integer)message.state != null) {
             output.writeInt32(21, message.state, false);
+        }
     	    	
     	            	
     }
@@ -1403,69 +1422,69 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 	public void dumpObject()
     {
     	System.out.println("START WorldObject");
-    	    	if(this.playerItemId != null) {
+    	    	//if(this.playerItemId != null) {
     		System.out.println("playerItemId="+this.playerItemId);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.ownerId != null) {
+    	//}
+    	    	//if(this.ownerId != null) {
     		System.out.println("ownerId="+this.ownerId);
-    	}
-    	    	if(this.x != null) {
+    	//}
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.z != null) {
+    	//}
+    	    	//if(this.z != null) {
     		System.out.println("z="+this.z);
-    	}
-    	    	if(this.rx != null) {
+    	//}
+    	    	//if(this.rx != null) {
     		System.out.println("rx="+this.rx);
-    	}
-    	    	if(this.ry != null) {
+    	//}
+    	    	//if(this.ry != null) {
     		System.out.println("ry="+this.ry);
-    	}
-    	    	if(this.rz != null) {
+    	//}
+    	    	//if(this.rz != null) {
     		System.out.println("rz="+this.rz);
-    	}
-    	    	if(this.rw != null) {
+    	//}
+    	    	//if(this.rw != null) {
     		System.out.println("rw="+this.rw);
-    	}
-    	    	if(this.maxHealth != null) {
+    	//}
+    	    	//if(this.maxHealth != null) {
     		System.out.println("maxHealth="+this.maxHealth);
-    	}
-    	    	if(this.health != null) {
+    	//}
+    	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
-    	}
-    	    	if(this.parentId != null) {
+    	//}
+    	    	//if(this.parentId != null) {
     		System.out.println("parentId="+this.parentId);
-    	}
-    	    	if(this.destructable != null) {
+    	//}
+    	    	//if(this.destructable != null) {
     		System.out.println("destructable="+this.destructable);
-    	}
-    	    	if(this.prefab != null) {
+    	//}
+    	    	//if(this.prefab != null) {
     		System.out.println("prefab="+this.prefab);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.grid != null) {
+    	//}
+    	    	//if(this.grid != null) {
     		System.out.println("grid="+this.grid);
-    	}
-    	    	if(this.currentUser != null) {
+    	//}
+    	    	//if(this.currentUser != null) {
     		System.out.println("currentUser="+this.currentUser);
-    	}
-    	    	if(this.state != null) {
+    	//}
+    	    	//if(this.state != null) {
     		System.out.println("state="+this.state);
-    	}
+    	//}
     	    	System.out.println("END WorldObject");
     }
     

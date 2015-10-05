@@ -8,14 +8,16 @@ import io.netty.handler.codec.MessageToMessageEncoder;
 
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 public class ClientMessageEncoder extends MessageToMessageEncoder<ClientMessage> {
 	@Override
 	protected void encode(ChannelHandlerContext ctx, ClientMessage msg, List<Object> out) throws Exception {
 		if (msg instanceof ClientMessage) {
 			String playerId;
 			// It has a game id if it's a normal client and not an agent
-			if (msg.hasGameId()) {
-				if (msg.hasPlayer()) {
+			if (Strings.isNullOrEmpty(msg.gameId)) {
+				if (msg.player != null) {
 					playerId = msg.player.id;
 				} else {
 					playerId = "nobody";

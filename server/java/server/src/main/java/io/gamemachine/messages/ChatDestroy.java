@@ -61,8 +61,10 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
     static final ChatDestroy DEFAULT_INSTANCE = new ChatDestroy();
     static final String defaultScope = ChatDestroy.class.getSimpleName();
 
-    			public String playerId;
-	    
+    	
+	    	    public String playerId= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("chat_destroy_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatDestroy fromModel(Model model) {
 		boolean hasFields = false;
     	ChatDestroy message = new ChatDestroy();
     	    	    	    	    	
-    	    	    	String playerIdField = model.getString("chat_destroy_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("chat_destroy_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
     }
 
 
-	    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -189,11 +189,12 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
     public void writeTo(Output output, ChatDestroy message) throws IOException
     {
     	    	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(1, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
 	public void dumpObject()
     {
     	System.out.println("START ChatDestroy");
-    	    	if(this.playerId != null) {
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END ChatDestroy");
     }
     

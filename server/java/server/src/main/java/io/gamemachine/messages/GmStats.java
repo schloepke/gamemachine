@@ -75,26 +75,46 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
     static final GmStats DEFAULT_INSTANCE = new GmStats();
     static final String defaultScope = GmStats.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String action;
-	    
-        			public Long messageCountIn;
-	    
-        			public Long messageCountOut;
-	    
-        			public Long messageCountInOut;
-	    
-        			public Long bytesOut;
-	    
-        			public Integer connectionCount;
-	    
-        			public Long playerBytesOut;
-	    
-        			public String playerId;
-	    
-        			public Long bytesPerMessageOut;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String action= null;
+	    		
+    
+        	
+	    	    public long messageCountIn= 0L;
+	    		
+    
+        	
+	    	    public long messageCountOut= 0L;
+	    		
+    
+        	
+	    	    public long messageCountInOut= 0L;
+	    		
+    
+        	
+	    	    public long bytesOut= 0L;
+	    		
+    
+        	
+	    	    public int connectionCount= 0;
+	    		
+    
+        	
+	    	    public long playerBytesOut= 0L;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public long bytesPerMessageOut= 0L;
+	    		
+    
         
 	public static GmStatsCache cache() {
 		return GmStatsCache.getInstance();
@@ -374,130 +394,150 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("gm_stats_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setString("gm_stats_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (messageCountIn != null) {
+    	    	    	//if (messageCountIn != null) {
     	       	    	model.setLong("gm_stats_message_count_in",messageCountIn);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (messageCountOut != null) {
+    	    	    	//if (messageCountOut != null) {
     	       	    	model.setLong("gm_stats_message_count_out",messageCountOut);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (messageCountInOut != null) {
+    	    	    	//if (messageCountInOut != null) {
     	       	    	model.setLong("gm_stats_message_count_in_out",messageCountInOut);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (bytesOut != null) {
+    	    	    	//if (bytesOut != null) {
     	       	    	model.setLong("gm_stats_bytes_out",bytesOut);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (connectionCount != null) {
+    	    	    	//if (connectionCount != null) {
     	       	    	model.setInteger("gm_stats_connection_count",connectionCount);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerBytesOut != null) {
+    	    	    	//if (playerBytesOut != null) {
     	       	    	model.setLong("gm_stats_player_bytes_out",playerBytesOut);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("gm_stats_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (bytesPerMessageOut != null) {
+    	    	    	//if (bytesPerMessageOut != null) {
     	       	    	model.setLong("gm_stats_bytes_per_message_out",bytesPerMessageOut);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GmStats fromModel(Model model) {
 		boolean hasFields = false;
     	GmStats message = new GmStats();
     	    	    	    	    	
-    	    	    	String idField = model.getString("gm_stats_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("gm_stats_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String actionField = model.getString("gm_stats_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	String actionTestField = model.getString("gm_stats_action");
+    	if (actionTestField != null) {
+    		String actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long messageCountInField = model.getLong("gm_stats_message_count_in");
+    	
     	    	
-    	if (messageCountInField != null) {
+    	    	    	    	    	    	
+    	    	    	Long messageCountInTestField = model.getLong("gm_stats_message_count_in");
+    	if (messageCountInTestField != null) {
+    		long messageCountInField = messageCountInTestField;
     		message.setMessageCountIn(messageCountInField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long messageCountOutField = model.getLong("gm_stats_message_count_out");
+    	
     	    	
-    	if (messageCountOutField != null) {
+    	    	    	    	    	    	
+    	    	    	Long messageCountOutTestField = model.getLong("gm_stats_message_count_out");
+    	if (messageCountOutTestField != null) {
+    		long messageCountOutField = messageCountOutTestField;
     		message.setMessageCountOut(messageCountOutField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long messageCountInOutField = model.getLong("gm_stats_message_count_in_out");
+    	
     	    	
-    	if (messageCountInOutField != null) {
+    	    	    	    	    	    	
+    	    	    	Long messageCountInOutTestField = model.getLong("gm_stats_message_count_in_out");
+    	if (messageCountInOutTestField != null) {
+    		long messageCountInOutField = messageCountInOutTestField;
     		message.setMessageCountInOut(messageCountInOutField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long bytesOutField = model.getLong("gm_stats_bytes_out");
+    	
     	    	
-    	if (bytesOutField != null) {
+    	    	    	    	    	    	
+    	    	    	Long bytesOutTestField = model.getLong("gm_stats_bytes_out");
+    	if (bytesOutTestField != null) {
+    		long bytesOutField = bytesOutTestField;
     		message.setBytesOut(bytesOutField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer connectionCountField = model.getInteger("gm_stats_connection_count");
+    	
     	    	
-    	if (connectionCountField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer connectionCountTestField = model.getInteger("gm_stats_connection_count");
+    	if (connectionCountTestField != null) {
+    		int connectionCountField = connectionCountTestField;
     		message.setConnectionCount(connectionCountField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long playerBytesOutField = model.getLong("gm_stats_player_bytes_out");
+    	
     	    	
-    	if (playerBytesOutField != null) {
+    	    	    	    	    	    	
+    	    	    	Long playerBytesOutTestField = model.getLong("gm_stats_player_bytes_out");
+    	if (playerBytesOutTestField != null) {
+    		long playerBytesOutField = playerBytesOutTestField;
     		message.setPlayerBytesOut(playerBytesOutField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("gm_stats_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("gm_stats_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long bytesPerMessageOutField = model.getLong("gm_stats_bytes_per_message_out");
+    	
     	    	
-    	if (bytesPerMessageOutField != null) {
+    	    	    	    	    	    	
+    	    	    	Long bytesPerMessageOutTestField = model.getLong("gm_stats_bytes_per_message_out");
+    	if (bytesPerMessageOutTestField != null) {
+    		long bytesPerMessageOutField = bytesPerMessageOutTestField;
     		message.setBytesPerMessageOut(bytesPerMessageOutField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -506,11 +546,7 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -519,11 +555,7 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+		            
 		public String getAction() {
 		return action;
 	}
@@ -532,89 +564,61 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasMessageCountIn()  {
-        return messageCountIn == null ? false : true;
-    }
-        
-		public Long getMessageCountIn() {
+		            
+		public long getMessageCountIn() {
 		return messageCountIn;
 	}
 	
-	public GmStats setMessageCountIn(Long messageCountIn) {
+	public GmStats setMessageCountIn(long messageCountIn) {
 		this.messageCountIn = messageCountIn;
 		return this;	}
 	
-		    
-    public Boolean hasMessageCountOut()  {
-        return messageCountOut == null ? false : true;
-    }
-        
-		public Long getMessageCountOut() {
+		            
+		public long getMessageCountOut() {
 		return messageCountOut;
 	}
 	
-	public GmStats setMessageCountOut(Long messageCountOut) {
+	public GmStats setMessageCountOut(long messageCountOut) {
 		this.messageCountOut = messageCountOut;
 		return this;	}
 	
-		    
-    public Boolean hasMessageCountInOut()  {
-        return messageCountInOut == null ? false : true;
-    }
-        
-		public Long getMessageCountInOut() {
+		            
+		public long getMessageCountInOut() {
 		return messageCountInOut;
 	}
 	
-	public GmStats setMessageCountInOut(Long messageCountInOut) {
+	public GmStats setMessageCountInOut(long messageCountInOut) {
 		this.messageCountInOut = messageCountInOut;
 		return this;	}
 	
-		    
-    public Boolean hasBytesOut()  {
-        return bytesOut == null ? false : true;
-    }
-        
-		public Long getBytesOut() {
+		            
+		public long getBytesOut() {
 		return bytesOut;
 	}
 	
-	public GmStats setBytesOut(Long bytesOut) {
+	public GmStats setBytesOut(long bytesOut) {
 		this.bytesOut = bytesOut;
 		return this;	}
 	
-		    
-    public Boolean hasConnectionCount()  {
-        return connectionCount == null ? false : true;
-    }
-        
-		public Integer getConnectionCount() {
+		            
+		public int getConnectionCount() {
 		return connectionCount;
 	}
 	
-	public GmStats setConnectionCount(Integer connectionCount) {
+	public GmStats setConnectionCount(int connectionCount) {
 		this.connectionCount = connectionCount;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerBytesOut()  {
-        return playerBytesOut == null ? false : true;
-    }
-        
-		public Long getPlayerBytesOut() {
+		            
+		public long getPlayerBytesOut() {
 		return playerBytesOut;
 	}
 	
-	public GmStats setPlayerBytesOut(Long playerBytesOut) {
+	public GmStats setPlayerBytesOut(long playerBytesOut) {
 		this.playerBytesOut = playerBytesOut;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -623,16 +627,12 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasBytesPerMessageOut()  {
-        return bytesPerMessageOut == null ? false : true;
-    }
-        
-		public Long getBytesPerMessageOut() {
+		            
+		public long getBytesPerMessageOut() {
 		return bytesPerMessageOut;
 	}
 	
-	public GmStats setBytesPerMessageOut(Long bytesPerMessageOut) {
+	public GmStats setBytesPerMessageOut(long bytesPerMessageOut) {
 		this.bytesPerMessageOut = bytesPerMessageOut;
 		return this;	}
 	
@@ -744,53 +744,63 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (String)message.action != null) {
             output.writeString(2, message.action, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.messageCountIn != null)
+    	    	    	if( (Long)message.messageCountIn != null) {
             output.writeInt64(3, message.messageCountIn, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.messageCountOut != null)
+    	    	    	if( (Long)message.messageCountOut != null) {
             output.writeInt64(4, message.messageCountOut, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.messageCountInOut != null)
+    	    	    	if( (Long)message.messageCountInOut != null) {
             output.writeInt64(5, message.messageCountInOut, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.bytesOut != null)
+    	    	    	if( (Long)message.bytesOut != null) {
             output.writeInt64(6, message.bytesOut, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.connectionCount != null)
+    	    	    	if( (Integer)message.connectionCount != null) {
             output.writeInt32(7, message.connectionCount, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerBytesOut != null)
+    	    	    	if( (Long)message.playerBytesOut != null) {
             output.writeInt64(8, message.playerBytesOut, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(9, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.bytesPerMessageOut != null)
+    	    	    	if( (Long)message.bytesPerMessageOut != null) {
             output.writeInt64(10, message.bytesPerMessageOut, false);
+        }
     	    	
     	            	
     }
@@ -798,36 +808,36 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 	public void dumpObject()
     {
     	System.out.println("START GmStats");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.messageCountIn != null) {
+    	//}
+    	    	//if(this.messageCountIn != null) {
     		System.out.println("messageCountIn="+this.messageCountIn);
-    	}
-    	    	if(this.messageCountOut != null) {
+    	//}
+    	    	//if(this.messageCountOut != null) {
     		System.out.println("messageCountOut="+this.messageCountOut);
-    	}
-    	    	if(this.messageCountInOut != null) {
+    	//}
+    	    	//if(this.messageCountInOut != null) {
     		System.out.println("messageCountInOut="+this.messageCountInOut);
-    	}
-    	    	if(this.bytesOut != null) {
+    	//}
+    	    	//if(this.bytesOut != null) {
     		System.out.println("bytesOut="+this.bytesOut);
-    	}
-    	    	if(this.connectionCount != null) {
+    	//}
+    	    	//if(this.connectionCount != null) {
     		System.out.println("connectionCount="+this.connectionCount);
-    	}
-    	    	if(this.playerBytesOut != null) {
+    	//}
+    	    	//if(this.playerBytesOut != null) {
     		System.out.println("playerBytesOut="+this.playerBytesOut);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.bytesPerMessageOut != null) {
+    	//}
+    	    	//if(this.bytesPerMessageOut != null) {
     		System.out.println("bytesPerMessageOut="+this.bytesPerMessageOut);
-    	}
+    	//}
     	    	System.out.println("END GmStats");
     }
     

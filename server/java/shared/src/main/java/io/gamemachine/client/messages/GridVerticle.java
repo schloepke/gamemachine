@@ -51,9 +51,9 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
 
     static final GridVerticle DEFAULT_INSTANCE = new GridVerticle();
 
-    			public Float x;
+    			public float x;
 	    
-        			public Float y;
+        			public float y;
 	    
             public List<GridNode> gridNodes;
 	  
@@ -70,11 +70,11 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
         return x == null ? false : true;
     }
         
-		public Float getX() {
+		public float getX() {
 		return x;
 	}
 	
-	public GridVerticle setX(Float x) {
+	public GridVerticle setX(float x) {
 		this.x = x;
 		return this;	}
 	
@@ -83,11 +83,11 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
         return y == null ? false : true;
     }
         
-		public Float getY() {
+		public float getY() {
 		return y;
 	}
 	
-	public GridVerticle setY(Float y) {
+	public GridVerticle setY(float y) {
 		this.y = y;
 		return this;	}
 	

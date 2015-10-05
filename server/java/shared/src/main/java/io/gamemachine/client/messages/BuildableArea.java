@@ -53,19 +53,19 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 
     			public String ownerId;
 	    
-        			public Float px;
+        			public float px;
 	    
-        			public Float py;
+        			public float py;
 	    
-        			public Float pz;
+        			public float pz;
 	    
-        			public Integer sx;
+        			public int sx;
 	    
-        			public Integer sy;
+        			public int sy;
 	    
-        			public Integer sz;
+        			public int sz;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
       
     public BuildableArea()
@@ -94,11 +94,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return px == null ? false : true;
     }
         
-		public Float getPx() {
+		public float getPx() {
 		return px;
 	}
 	
-	public BuildableArea setPx(Float px) {
+	public BuildableArea setPx(float px) {
 		this.px = px;
 		return this;	}
 	
@@ -107,11 +107,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return py == null ? false : true;
     }
         
-		public Float getPy() {
+		public float getPy() {
 		return py;
 	}
 	
-	public BuildableArea setPy(Float py) {
+	public BuildableArea setPy(float py) {
 		this.py = py;
 		return this;	}
 	
@@ -120,11 +120,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return pz == null ? false : true;
     }
         
-		public Float getPz() {
+		public float getPz() {
 		return pz;
 	}
 	
-	public BuildableArea setPz(Float pz) {
+	public BuildableArea setPz(float pz) {
 		this.pz = pz;
 		return this;	}
 	
@@ -133,11 +133,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return sx == null ? false : true;
     }
         
-		public Integer getSx() {
+		public int getSx() {
 		return sx;
 	}
 	
-	public BuildableArea setSx(Integer sx) {
+	public BuildableArea setSx(int sx) {
 		this.sx = sx;
 		return this;	}
 	
@@ -146,11 +146,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return sy == null ? false : true;
     }
         
-		public Integer getSy() {
+		public int getSy() {
 		return sy;
 	}
 	
-	public BuildableArea setSy(Integer sy) {
+	public BuildableArea setSy(int sy) {
 		this.sy = sy;
 		return this;	}
 	
@@ -159,11 +159,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return sz == null ? false : true;
     }
         
-		public Integer getSz() {
+		public int getSz() {
 		return sz;
 	}
 	
-	public BuildableArea setSz(Integer sz) {
+	public BuildableArea setSz(int sz) {
 		this.sz = sz;
 		return this;	}
 	
@@ -172,11 +172,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public BuildableArea setRecordId(Integer recordId) {
+	public BuildableArea setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	

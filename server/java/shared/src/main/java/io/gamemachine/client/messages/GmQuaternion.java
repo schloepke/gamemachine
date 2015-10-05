@@ -51,13 +51,13 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
 
     static final GmQuaternion DEFAULT_INSTANCE = new GmQuaternion();
 
-    			public Float x;
+    			public float x;
 	    
-        			public Float y;
+        			public float y;
 	    
-        			public Float z;
+        			public float z;
 	    
-        			public Float w;
+        			public float w;
 	    
       
     public GmQuaternion()
@@ -73,11 +73,11 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
         return x == null ? false : true;
     }
         
-		public Float getX() {
+		public float getX() {
 		return x;
 	}
 	
-	public GmQuaternion setX(Float x) {
+	public GmQuaternion setX(float x) {
 		this.x = x;
 		return this;	}
 	
@@ -86,11 +86,11 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
         return y == null ? false : true;
     }
         
-		public Float getY() {
+		public float getY() {
 		return y;
 	}
 	
-	public GmQuaternion setY(Float y) {
+	public GmQuaternion setY(float y) {
 		this.y = y;
 		return this;	}
 	
@@ -99,11 +99,11 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
         return z == null ? false : true;
     }
         
-		public Float getZ() {
+		public float getZ() {
 		return z;
 	}
 	
-	public GmQuaternion setZ(Float z) {
+	public GmQuaternion setZ(float z) {
 		this.z = z;
 		return this;	}
 	
@@ -112,11 +112,11 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
         return w == null ? false : true;
     }
         
-		public Float getW() {
+		public float getW() {
 		return w;
 	}
 	
-	public GmQuaternion setW(Float w) {
+	public GmQuaternion setW(float w) {
 		this.w = w;
 		return this;	}
 	

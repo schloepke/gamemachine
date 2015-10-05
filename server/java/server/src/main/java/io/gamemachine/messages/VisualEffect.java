@@ -75,18 +75,30 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     static final VisualEffect DEFAULT_INSTANCE = new VisualEffect();
     static final String defaultScope = VisualEffect.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String prefab;
-	    
-        			public GmVector3 startPosition;
-	    
-        			public GmVector3 endPosition;
-	    
-        			public String type;
-	    
-        			public Integer duration;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String prefab= null;
+	    		
+    
+        	
+	    	    public GmVector3 startPosition;
+	    		
+    
+        	
+	    	    public GmVector3 endPosition;
+	    		
+    
+        	
+	    	    public String type= null;
+	    		
+    
+        	
+	    	    public int duration= 0;
+	    		
+    
         
 	public static VisualEffectCache cache() {
 		return VisualEffectCache.getInstance();
@@ -360,58 +372,66 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("visual_effect_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (prefab != null) {
+    	    	    	//if (prefab != null) {
     	       	    	model.setString("visual_effect_prefab",prefab);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("visual_effect_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (duration != null) {
+    	    	    	//if (duration != null) {
     	       	    	model.setInteger("visual_effect_duration",duration);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static VisualEffect fromModel(Model model) {
 		boolean hasFields = false;
     	VisualEffect message = new VisualEffect();
     	    	    	    	    	
-    	    	    	String idField = model.getString("visual_effect_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("visual_effect_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String prefabField = model.getString("visual_effect_prefab");
+    	
     	    	
-    	if (prefabField != null) {
+    	    	    	    	    	    	
+    	    	    	String prefabTestField = model.getString("visual_effect_prefab");
+    	if (prefabTestField != null) {
+    		String prefabField = prefabTestField;
     		message.setPrefab(prefabField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	
-    	    	    	String typeField = model.getString("visual_effect_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	    	    	
+    	    	    	String typeTestField = model.getString("visual_effect_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer durationField = model.getInteger("visual_effect_duration");
+    	
     	    	
-    	if (durationField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer durationTestField = model.getInteger("visual_effect_duration");
+    	if (durationTestField != null) {
+    		int durationField = durationTestField;
     		message.setDuration(durationField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -420,11 +440,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -433,11 +449,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasPrefab()  {
-        return prefab == null ? false : true;
-    }
-        
+		            
 		public String getPrefab() {
 		return prefab;
 	}
@@ -446,11 +458,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		this.prefab = prefab;
 		return this;	}
 	
-		    
-    public Boolean hasStartPosition()  {
-        return startPosition == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getStartPosition() {
 		return startPosition;
 	}
@@ -459,11 +467,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		this.startPosition = startPosition;
 		return this;	}
 	
-		    
-    public Boolean hasEndPosition()  {
-        return endPosition == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getEndPosition() {
 		return endPosition;
 	}
@@ -472,11 +476,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		this.endPosition = endPosition;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+		            
 		public String getType() {
 		return type;
 	}
@@ -485,16 +485,12 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasDuration()  {
-        return duration == null ? false : true;
-    }
-        
-		public Integer getDuration() {
+		            
+		public int getDuration() {
 		return duration;
 	}
 	
-	public VisualEffect setDuration(Integer duration) {
+	public VisualEffect setDuration(int duration) {
 		this.duration = duration;
 		return this;	}
 	
@@ -590,13 +586,15 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.prefab != null)
+    	    	    	if( (String)message.prefab != null) {
             output.writeString(2, message.prefab, false);
+        }
     	    	
     	            	
     	    	
@@ -610,13 +608,15 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     	    	
     	            	
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(5, message.type, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.duration != null)
+    	    	    	if( (Integer)message.duration != null) {
             output.writeInt32(6, message.duration, false);
+        }
     	    	
     	            	
     }
@@ -624,24 +624,24 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 	public void dumpObject()
     {
     	System.out.println("START VisualEffect");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.prefab != null) {
+    	//}
+    	    	//if(this.prefab != null) {
     		System.out.println("prefab="+this.prefab);
-    	}
-    	    	if(this.startPosition != null) {
+    	//}
+    	    	//if(this.startPosition != null) {
     		System.out.println("startPosition="+this.startPosition);
-    	}
-    	    	if(this.endPosition != null) {
+    	//}
+    	    	//if(this.endPosition != null) {
     		System.out.println("endPosition="+this.endPosition);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.duration != null) {
+    	//}
+    	    	//if(this.duration != null) {
     		System.out.println("duration="+this.duration);
-    	}
+    	//}
     	    	System.out.println("END VisualEffect");
     }
     

@@ -128,7 +128,7 @@ public class CharacterHandler extends GameMessageActor {
 			return;
 		}
 		
-		if (!requestedCharacter.hasIncludeUmaData()) {
+		if (!requestedCharacter.includeUmaData) {
 			sendComplete(character.clone());
 			return;
 		}
@@ -229,7 +229,7 @@ public class CharacterHandler extends GameMessageActor {
 			Character cloned = base.clone();
 			cloned.setId(clonedId);
 			cloned.setPlayerId(clonedPlayerId);
-			cloned.setRecordId(null);
+			cloned.setRecordId(0);
 			saveCharacter(cloned);
 			return cloned;
 		} else {

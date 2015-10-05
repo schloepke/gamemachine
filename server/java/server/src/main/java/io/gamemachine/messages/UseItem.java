@@ -75,14 +75,22 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
     static final UseItem DEFAULT_INSTANCE = new UseItem();
     static final String defaultScope = UseItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String targetId;
-	    
-        			public String action;
-	    
-        			public String playerId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String targetId= null;
+	    		
+    
+        	
+	    	    public String action= null;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
         
 	public static UseItemCache cache() {
 		return UseItemCache.getInstance();
@@ -356,58 +364,66 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("use_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (targetId != null) {
+    	    	    	//if (targetId != null) {
     	       	    	model.setString("use_item_target_id",targetId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setString("use_item_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("use_item_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static UseItem fromModel(Model model) {
 		boolean hasFields = false;
     	UseItem message = new UseItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("use_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("use_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String targetIdField = model.getString("use_item_target_id");
+    	
     	    	
-    	if (targetIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String targetIdTestField = model.getString("use_item_target_id");
+    	if (targetIdTestField != null) {
+    		String targetIdField = targetIdTestField;
     		message.setTargetId(targetIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String actionField = model.getString("use_item_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	String actionTestField = model.getString("use_item_action");
+    	if (actionTestField != null) {
+    		String actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("use_item_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("use_item_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -416,11 +432,7 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -429,11 +441,7 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasTargetId()  {
-        return targetId == null ? false : true;
-    }
-        
+		            
 		public String getTargetId() {
 		return targetId;
 	}
@@ -442,11 +450,7 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
 		this.targetId = targetId;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+		            
 		public String getAction() {
 		return action;
 	}
@@ -455,11 +459,7 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -551,28 +551,32 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
     public void writeTo(Output output, UseItem message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.targetId != null)
+    	    	    	if( (String)message.targetId != null) {
             output.writeString(2, message.targetId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (String)message.action != null) {
             output.writeString(3, message.action, false);
+        }
     	    	
     	            	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(4, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -580,18 +584,18 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
 	public void dumpObject()
     {
     	System.out.println("START UseItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.targetId != null) {
+    	//}
+    	    	//if(this.targetId != null) {
     		System.out.println("targetId="+this.targetId);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END UseItem");
     }
     

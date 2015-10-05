@@ -55,21 +55,21 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 	    
         			public String action;
 	    
-        			public Long messageCountIn;
+        			public long messageCountIn;
 	    
-        			public Long messageCountOut;
+        			public long messageCountOut;
 	    
-        			public Long messageCountInOut;
+        			public long messageCountInOut;
 	    
-        			public Long bytesOut;
+        			public long bytesOut;
 	    
-        			public Integer connectionCount;
+        			public int connectionCount;
 	    
-        			public Long playerBytesOut;
+        			public long playerBytesOut;
 	    
         			public String playerId;
 	    
-        			public Long bytesPerMessageOut;
+        			public long bytesPerMessageOut;
 	    
       
     public GmStats()
@@ -111,11 +111,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return messageCountIn == null ? false : true;
     }
         
-		public Long getMessageCountIn() {
+		public long getMessageCountIn() {
 		return messageCountIn;
 	}
 	
-	public GmStats setMessageCountIn(Long messageCountIn) {
+	public GmStats setMessageCountIn(long messageCountIn) {
 		this.messageCountIn = messageCountIn;
 		return this;	}
 	
@@ -124,11 +124,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return messageCountOut == null ? false : true;
     }
         
-		public Long getMessageCountOut() {
+		public long getMessageCountOut() {
 		return messageCountOut;
 	}
 	
-	public GmStats setMessageCountOut(Long messageCountOut) {
+	public GmStats setMessageCountOut(long messageCountOut) {
 		this.messageCountOut = messageCountOut;
 		return this;	}
 	
@@ -137,11 +137,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return messageCountInOut == null ? false : true;
     }
         
-		public Long getMessageCountInOut() {
+		public long getMessageCountInOut() {
 		return messageCountInOut;
 	}
 	
-	public GmStats setMessageCountInOut(Long messageCountInOut) {
+	public GmStats setMessageCountInOut(long messageCountInOut) {
 		this.messageCountInOut = messageCountInOut;
 		return this;	}
 	
@@ -150,11 +150,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return bytesOut == null ? false : true;
     }
         
-		public Long getBytesOut() {
+		public long getBytesOut() {
 		return bytesOut;
 	}
 	
-	public GmStats setBytesOut(Long bytesOut) {
+	public GmStats setBytesOut(long bytesOut) {
 		this.bytesOut = bytesOut;
 		return this;	}
 	
@@ -163,11 +163,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return connectionCount == null ? false : true;
     }
         
-		public Integer getConnectionCount() {
+		public int getConnectionCount() {
 		return connectionCount;
 	}
 	
-	public GmStats setConnectionCount(Integer connectionCount) {
+	public GmStats setConnectionCount(int connectionCount) {
 		this.connectionCount = connectionCount;
 		return this;	}
 	
@@ -176,11 +176,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return playerBytesOut == null ? false : true;
     }
         
-		public Long getPlayerBytesOut() {
+		public long getPlayerBytesOut() {
 		return playerBytesOut;
 	}
 	
-	public GmStats setPlayerBytesOut(Long playerBytesOut) {
+	public GmStats setPlayerBytesOut(long playerBytesOut) {
 		this.playerBytesOut = playerBytesOut;
 		return this;	}
 	
@@ -202,11 +202,11 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
         return bytesPerMessageOut == null ? false : true;
     }
         
-		public Long getBytesPerMessageOut() {
+		public long getBytesPerMessageOut() {
 		return bytesPerMessageOut;
 	}
 	
-	public GmStats setBytesPerMessageOut(Long bytesPerMessageOut) {
+	public GmStats setBytesPerMessageOut(long bytesPerMessageOut) {
 		this.bytesPerMessageOut = bytesPerMessageOut;
 		return this;	}
 	

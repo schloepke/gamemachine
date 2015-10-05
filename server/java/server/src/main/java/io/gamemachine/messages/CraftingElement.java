@@ -75,14 +75,22 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
     static final CraftingElement DEFAULT_INSTANCE = new CraftingElement();
     static final String defaultScope = CraftingElement.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer quantity;
-	    
-        			public Integer level;
-	    
-        			public Integer order;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int quantity= 0;
+	    		
+    
+        	
+	    	    public int level= 0;
+	    		
+    
+        	
+	    	    public int order= 0;
+	    		
+    
         
 	public static CraftingElementCache cache() {
 		return CraftingElementCache.getInstance();
@@ -356,58 +364,66 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("crafting_element_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (quantity != null) {
+    	    	    	//if (quantity != null) {
     	       	    	model.setInteger("crafting_element_quantity",quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (level != null) {
+    	    	    	//if (level != null) {
     	       	    	model.setInteger("crafting_element_level",level);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (order != null) {
+    	    	    	//if (order != null) {
     	       	    	model.setInteger("crafting_element_order",order);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CraftingElement fromModel(Model model) {
 		boolean hasFields = false;
     	CraftingElement message = new CraftingElement();
     	    	    	    	    	
-    	    	    	String idField = model.getString("crafting_element_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("crafting_element_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer quantityField = model.getInteger("crafting_element_quantity");
+    	
     	    	
-    	if (quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer quantityTestField = model.getInteger("crafting_element_quantity");
+    	if (quantityTestField != null) {
+    		int quantityField = quantityTestField;
     		message.setQuantity(quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer levelField = model.getInteger("crafting_element_level");
+    	
     	    	
-    	if (levelField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer levelTestField = model.getInteger("crafting_element_level");
+    	if (levelTestField != null) {
+    		int levelField = levelTestField;
     		message.setLevel(levelField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer orderField = model.getInteger("crafting_element_order");
+    	
     	    	
-    	if (orderField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer orderTestField = model.getInteger("crafting_element_order");
+    	if (orderTestField != null) {
+    		int orderField = orderTestField;
     		message.setOrder(orderField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -416,11 +432,7 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -429,42 +441,30 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasQuantity()  {
-        return quantity == null ? false : true;
-    }
-        
-		public Integer getQuantity() {
+		            
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public CraftingElement setQuantity(Integer quantity) {
+	public CraftingElement setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
-		    
-    public Boolean hasLevel()  {
-        return level == null ? false : true;
-    }
-        
-		public Integer getLevel() {
+		            
+		public int getLevel() {
 		return level;
 	}
 	
-	public CraftingElement setLevel(Integer level) {
+	public CraftingElement setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
-		    
-    public Boolean hasOrder()  {
-        return order == null ? false : true;
-    }
-        
-		public Integer getOrder() {
+		            
+		public int getOrder() {
 		return order;
 	}
 	
-	public CraftingElement setOrder(Integer order) {
+	public CraftingElement setOrder(int order) {
 		this.order = order;
 		return this;	}
 	
@@ -551,32 +551,36 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
     public void writeTo(Output output, CraftingElement message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.quantity == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.quantity == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.quantity != null)
+    	    	    	if( (Integer)message.quantity != null) {
             output.writeInt32(2, message.quantity, false);
+        }
     	    	
     	            	
-    	    	if(message.level == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.level == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.level != null)
+    	    	    	if( (Integer)message.level != null) {
             output.writeInt32(3, message.level, false);
+        }
     	    	
     	            	
-    	    	if(message.order == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.order == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.order != null)
+    	    	    	if( (Integer)message.order != null) {
             output.writeInt32(4, message.order, false);
+        }
     	    	
     	            	
     }
@@ -584,18 +588,18 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
 	public void dumpObject()
     {
     	System.out.println("START CraftingElement");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.quantity != null) {
+    	//}
+    	    	//if(this.quantity != null) {
     		System.out.println("quantity="+this.quantity);
-    	}
-    	    	if(this.level != null) {
+    	//}
+    	    	//if(this.level != null) {
     		System.out.println("level="+this.level);
-    	}
-    	    	if(this.order != null) {
+    	//}
+    	    	//if(this.order != null) {
     		System.out.println("order="+this.order);
-    	}
+    	//}
     	    	System.out.println("END CraftingElement");
     }
     

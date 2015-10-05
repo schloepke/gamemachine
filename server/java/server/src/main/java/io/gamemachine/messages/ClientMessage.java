@@ -62,26 +62,46 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     static final String defaultScope = ClientMessage.class.getSimpleName();
 
         public List<Entity> entity;
-	    			public Player player;
-	    
-        			public ClientConnection clientConnection;
-	    
-        			public PlayerLogout playerLogout;
-	    
-        			public PlayerConnect playerConnect;
-	    
-        			public PlayerConnected playerConnected;
-	    
-        			public Integer connection_type;
-	    
-        			public Long sentAt;
-	    
-        			public TrackData trackData;
-	    
-        			public String gameId;
-	    
-        			public RpcMessage rpcMessage;
-	    
+	    	
+	    	    public Player player;
+	    		
+    
+        	
+	    	    public ClientConnection clientConnection;
+	    		
+    
+        	
+	    	    public PlayerLogout playerLogout;
+	    		
+    
+        	
+	    	    public PlayerConnect playerConnect;
+	    		
+    
+        	
+	    	    public PlayerConnected playerConnected;
+	    		
+    
+        	
+	    	    public int connection_type= 0;
+	    		
+    
+        	
+	    	    public long sentAt= 0L;
+	    		
+    
+        	
+	    	    public TrackData trackData;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
+        	
+	    	    public RpcMessage rpcMessage;
+	    		
+    
         
 
 
@@ -102,46 +122,52 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     
 	public void toModel(Model model) {
     	    	    	    	    	    	    	    	    	    	
-    	    	    	if (connection_type != null) {
+    	    	    	//if (connection_type != null) {
     	       	    	model.setInteger("client_message_connection_type",connection_type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (sentAt != null) {
+    	    	    	//if (sentAt != null) {
     	       	    	model.setLong("client_message_sent_at",sentAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("client_message_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static ClientMessage fromModel(Model model) {
 		boolean hasFields = false;
     	ClientMessage message = new ClientMessage();
     	    	    	    	    	    	    	    	    	    	    	
-    	    	    	Integer connection_typeField = model.getInteger("client_message_connection_type");
-    	    	
-    	if (connection_typeField != null) {
+    	    	    	Integer connection_typeTestField = model.getInteger("client_message_connection_type");
+    	if (connection_typeTestField != null) {
+    		int connection_typeField = connection_typeTestField;
     		message.setConnection_type(connection_typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long sentAtField = model.getLong("client_message_sent_at");
+    	
     	    	
-    	if (sentAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long sentAtTestField = model.getLong("client_message_sent_at");
+    	if (sentAtTestField != null) {
+    		long sentAtField = sentAtTestField;
     		message.setSentAt(sentAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("client_message_game_id");
+    	
     	    	
-    	if (gameIdField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String gameIdTestField = model.getString("client_message_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,11 +176,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     }
 
 
-	    
-    public Boolean hasEntity()  {
-        return entity == null ? false : true;
-    }
-        
+	            
 		public List<Entity> getEntityList() {
 		if(this.entity == null)
             this.entity = new ArrayList<Entity>();
@@ -205,7 +227,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.published.equals(obj.published)) {
+    	    		if (entity.published == obj.published) {
     	      			itr.remove();
     		}
 		}
@@ -237,7 +259,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.sendToPlayer.equals(obj.sendToPlayer)) {
+    	    		if (entity.sendToPlayer == obj.sendToPlayer) {
     	      			itr.remove();
     		}
 		}
@@ -253,7 +275,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.save.equals(obj.save)) {
+    	    		if (entity.save == obj.save) {
     	      			itr.remove();
     		}
 		}
@@ -285,7 +307,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.json.equals(obj.json)) {
+    	    		if (entity.json == obj.json) {
     	      			itr.remove();
     		}
 		}
@@ -317,7 +339,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
        	while (itr.hasNext()) {
     	Entity obj = itr.next();
     	
-    	    		if (entity.fastpath.equals(obj.fastpath)) {
+    	    		if (entity.fastpath == obj.fastpath) {
     	      			itr.remove();
     		}
 		}
@@ -344,11 +366,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     
     
     
-		    
-    public Boolean hasPlayer()  {
-        return player == null ? false : true;
-    }
-        
+		            
 		public Player getPlayer() {
 		return player;
 	}
@@ -357,11 +375,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.player = player;
 		return this;	}
 	
-		    
-    public Boolean hasClientConnection()  {
-        return clientConnection == null ? false : true;
-    }
-        
+		            
 		public ClientConnection getClientConnection() {
 		return clientConnection;
 	}
@@ -370,11 +384,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.clientConnection = clientConnection;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerLogout()  {
-        return playerLogout == null ? false : true;
-    }
-        
+		            
 		public PlayerLogout getPlayerLogout() {
 		return playerLogout;
 	}
@@ -383,11 +393,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.playerLogout = playerLogout;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerConnect()  {
-        return playerConnect == null ? false : true;
-    }
-        
+		            
 		public PlayerConnect getPlayerConnect() {
 		return playerConnect;
 	}
@@ -396,11 +402,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.playerConnect = playerConnect;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerConnected()  {
-        return playerConnected == null ? false : true;
-    }
-        
+		            
 		public PlayerConnected getPlayerConnected() {
 		return playerConnected;
 	}
@@ -409,37 +411,25 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.playerConnected = playerConnected;
 		return this;	}
 	
-		    
-    public Boolean hasConnection_type()  {
-        return connection_type == null ? false : true;
-    }
-        
-		public Integer getConnection_type() {
+		            
+		public int getConnection_type() {
 		return connection_type;
 	}
 	
-	public ClientMessage setConnection_type(Integer connection_type) {
+	public ClientMessage setConnection_type(int connection_type) {
 		this.connection_type = connection_type;
 		return this;	}
 	
-		    
-    public Boolean hasSentAt()  {
-        return sentAt == null ? false : true;
-    }
-        
-		public Long getSentAt() {
+		            
+		public long getSentAt() {
 		return sentAt;
 	}
 	
-	public ClientMessage setSentAt(Long sentAt) {
+	public ClientMessage setSentAt(long sentAt) {
 		this.sentAt = sentAt;
 		return this;	}
 	
-		    
-    public Boolean hasTrackData()  {
-        return trackData == null ? false : true;
-    }
-        
+		            
 		public TrackData getTrackData() {
 		return trackData;
 	}
@@ -448,11 +438,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.trackData = trackData;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -461,11 +447,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		this.gameId = gameId;
 		return this;	}
 	
-		    
-    public Boolean hasRpcMessage()  {
-        return rpcMessage == null ? false : true;
-    }
-        
+		            
 		public RpcMessage getRpcMessage() {
 		return rpcMessage;
 	}
@@ -591,7 +573,7 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
         {
             for(Entity entity : message.entity)
             {
-                if(entity != null) {
+                if( (Entity) entity != null) {
                    	    				output.writeObject(1, entity, Entity.getSchema(), true);
     				    			}
             }
@@ -623,13 +605,15 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     	    	
     	            	
     	    	
-    	    	    	if(message.connection_type != null)
+    	    	    	if( (Integer)message.connection_type != null) {
             output.writeInt32(9, message.connection_type, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.sentAt != null)
+    	    	    	if( (Long)message.sentAt != null) {
             output.writeUInt64(10, message.sentAt, false);
+        }
     	    	
     	            	
     	    	
@@ -638,8 +622,9 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
     	    	
     	            	
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(12, message.gameId, false);
+        }
     	    	
     	            	
     	    	
@@ -652,39 +637,39 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 	public void dumpObject()
     {
     	System.out.println("START ClientMessage");
-    	    	if(this.entity != null) {
+    	    	//if(this.entity != null) {
     		System.out.println("entity="+this.entity);
-    	}
-    	    	if(this.player != null) {
+    	//}
+    	    	//if(this.player != null) {
     		System.out.println("player="+this.player);
-    	}
-    	    	if(this.clientConnection != null) {
+    	//}
+    	    	//if(this.clientConnection != null) {
     		System.out.println("clientConnection="+this.clientConnection);
-    	}
-    	    	if(this.playerLogout != null) {
+    	//}
+    	    	//if(this.playerLogout != null) {
     		System.out.println("playerLogout="+this.playerLogout);
-    	}
-    	    	if(this.playerConnect != null) {
+    	//}
+    	    	//if(this.playerConnect != null) {
     		System.out.println("playerConnect="+this.playerConnect);
-    	}
-    	    	if(this.playerConnected != null) {
+    	//}
+    	    	//if(this.playerConnected != null) {
     		System.out.println("playerConnected="+this.playerConnected);
-    	}
-    	    	if(this.connection_type != null) {
+    	//}
+    	    	//if(this.connection_type != null) {
     		System.out.println("connection_type="+this.connection_type);
-    	}
-    	    	if(this.sentAt != null) {
+    	//}
+    	    	//if(this.sentAt != null) {
     		System.out.println("sentAt="+this.sentAt);
-    	}
-    	    	if(this.trackData != null) {
+    	//}
+    	    	//if(this.trackData != null) {
     		System.out.println("trackData="+this.trackData);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
-    	    	if(this.rpcMessage != null) {
+    	//}
+    	    	//if(this.rpcMessage != null) {
     		System.out.println("rpcMessage="+this.rpcMessage);
-    	}
+    	//}
     	    	System.out.println("END ClientMessage");
     }
     

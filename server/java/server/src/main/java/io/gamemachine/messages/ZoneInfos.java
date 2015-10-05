@@ -76,8 +76,10 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
     static final String defaultScope = ZoneInfos.class.getSimpleName();
 
         public List<ZoneInfo> zoneInfo;
-	    			public String id;
-	    
+	    	
+	    	    public String id= null;
+	    		
+    
         
 	public static ZoneInfosCache cache() {
 		return ZoneInfosCache.getInstance();
@@ -348,22 +350,24 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("zone_infos_id",id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ZoneInfos fromModel(Model model) {
 		boolean hasFields = false;
     	ZoneInfos message = new ZoneInfos();
     	    	    	    	    	    	
-    	    	    	String idField = model.getString("zone_infos_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("zone_infos_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -372,11 +376,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
     }
 
 
-	    
-    public Boolean hasZoneInfo()  {
-        return zoneInfo == null ? false : true;
-    }
-        
+	            
 		public List<ZoneInfo> getZoneInfoList() {
 		if(this.zoneInfo == null)
             this.zoneInfo = new ArrayList<ZoneInfo>();
@@ -427,7 +427,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
        	while (itr.hasNext()) {
     	ZoneInfo obj = itr.next();
     	
-    	    		if (zoneInfo.recordId.equals(obj.recordId)) {
+    	    		if (zoneInfo.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -475,7 +475,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
        	while (itr.hasNext()) {
     	ZoneInfo obj = itr.next();
     	
-    	    		if (zoneInfo.assigned.equals(obj.assigned)) {
+    	    		if (zoneInfo.assigned == obj.assigned) {
     	      			itr.remove();
     		}
 		}
@@ -491,7 +491,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
        	while (itr.hasNext()) {
     	ZoneInfo obj = itr.next();
     	
-    	    		if (zoneInfo.number.equals(obj.number)) {
+    	    		if (zoneInfo.number == obj.number) {
     	      			itr.remove();
     		}
 		}
@@ -523,7 +523,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
        	while (itr.hasNext()) {
     	ZoneInfo obj = itr.next();
     	
-    	    		if (zoneInfo.current.equals(obj.current)) {
+    	    		if (zoneInfo.current == obj.current) {
     	      			itr.remove();
     		}
 		}
@@ -534,11 +534,7 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
     
     
     
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -628,15 +624,16 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
         {
             for(ZoneInfo zoneInfo : message.zoneInfo)
             {
-                if(zoneInfo != null) {
+                if( (ZoneInfo) zoneInfo != null) {
                    	    				output.writeObject(1, zoneInfo, ZoneInfo.getSchema(), true);
     				    			}
             }
         }
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(2, message.id, false);
+        }
     	    	
     	            	
     }
@@ -644,12 +641,12 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
 	public void dumpObject()
     {
     	System.out.println("START ZoneInfos");
-    	    	if(this.zoneInfo != null) {
+    	    	//if(this.zoneInfo != null) {
     		System.out.println("zoneInfo="+this.zoneInfo);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
+    	//}
     	    	System.out.println("END ZoneInfos");
     }
     

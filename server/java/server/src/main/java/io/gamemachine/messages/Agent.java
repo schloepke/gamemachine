@@ -75,18 +75,30 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
     static final Agent DEFAULT_INSTANCE = new Agent();
     static final String defaultScope = Agent.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String code;
-	    
-        			public String classname;
-	    
-        			public Boolean remove;
-	    
-        			public String compileResult;
-	    
-        			public Integer concurrency;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String code= null;
+	    		
+    
+        	
+	    	    public String classname= null;
+	    		
+    
+        	
+	    	    public boolean remove= false;
+	    		
+    
+        	
+	    	    public String compileResult= null;
+	    		
+    
+        	
+	    	    public int concurrency= 0;
+	    		
+    
         
 	public static AgentCache cache() {
 		return AgentCache.getInstance();
@@ -362,82 +374,94 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("agent_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (code != null) {
+    	    	    	//if (code != null) {
     	       	    	model.setString("agent_code",code);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (classname != null) {
+    	    	    	//if (classname != null) {
     	       	    	model.setString("agent_classname",classname);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (remove != null) {
+    	    	    	//if (remove != null) {
     	       	    	model.setBoolean("agent_remove",remove);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (compileResult != null) {
+    	    	    	//if (compileResult != null) {
     	       	    	model.setString("agent_compile_result",compileResult);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (concurrency != null) {
+    	    	    	//if (concurrency != null) {
     	       	    	model.setInteger("agent_concurrency",concurrency);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Agent fromModel(Model model) {
 		boolean hasFields = false;
     	Agent message = new Agent();
     	    	    	    	    	
-    	    	    	String idField = model.getString("agent_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("agent_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String codeField = model.getString("agent_code");
+    	
     	    	
-    	if (codeField != null) {
+    	    	    	    	    	    	
+    	    	    	String codeTestField = model.getString("agent_code");
+    	if (codeTestField != null) {
+    		String codeField = codeTestField;
     		message.setCode(codeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String classnameField = model.getString("agent_classname");
+    	
     	    	
-    	if (classnameField != null) {
+    	    	    	    	    	    	
+    	    	    	String classnameTestField = model.getString("agent_classname");
+    	if (classnameTestField != null) {
+    		String classnameField = classnameTestField;
     		message.setClassname(classnameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean removeField = model.getBoolean("agent_remove");
+    	
     	    	
-    	if (removeField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean removeTestField = model.getBoolean("agent_remove");
+    	if (removeTestField != null) {
+    		boolean removeField = removeTestField;
     		message.setRemove(removeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String compileResultField = model.getString("agent_compile_result");
+    	
     	    	
-    	if (compileResultField != null) {
+    	    	    	    	    	    	
+    	    	    	String compileResultTestField = model.getString("agent_compile_result");
+    	if (compileResultTestField != null) {
+    		String compileResultField = compileResultTestField;
     		message.setCompileResult(compileResultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer concurrencyField = model.getInteger("agent_concurrency");
+    	
     	    	
-    	if (concurrencyField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer concurrencyTestField = model.getInteger("agent_concurrency");
+    	if (concurrencyTestField != null) {
+    		int concurrencyField = concurrencyTestField;
     		message.setConcurrency(concurrencyField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -446,11 +470,7 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -459,11 +479,7 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasCode()  {
-        return code == null ? false : true;
-    }
-        
+		            
 		public String getCode() {
 		return code;
 	}
@@ -472,11 +488,7 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 		this.code = code;
 		return this;	}
 	
-		    
-    public Boolean hasClassname()  {
-        return classname == null ? false : true;
-    }
-        
+		            
 		public String getClassname() {
 		return classname;
 	}
@@ -485,24 +497,16 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 		this.classname = classname;
 		return this;	}
 	
-		    
-    public Boolean hasRemove()  {
-        return remove == null ? false : true;
-    }
-        
-		public Boolean getRemove() {
+		            
+		public boolean getRemove() {
 		return remove;
 	}
 	
-	public Agent setRemove(Boolean remove) {
+	public Agent setRemove(boolean remove) {
 		this.remove = remove;
 		return this;	}
 	
-		    
-    public Boolean hasCompileResult()  {
-        return compileResult == null ? false : true;
-    }
-        
+		            
 		public String getCompileResult() {
 		return compileResult;
 	}
@@ -511,16 +515,12 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 		this.compileResult = compileResult;
 		return this;	}
 	
-		    
-    public Boolean hasConcurrency()  {
-        return concurrency == null ? false : true;
-    }
-        
-		public Integer getConcurrency() {
+		            
+		public int getConcurrency() {
 		return concurrency;
 	}
 	
-	public Agent setConcurrency(Integer concurrency) {
+	public Agent setConcurrency(int concurrency) {
 		this.concurrency = concurrency;
 		return this;	}
 	
@@ -615,44 +615,50 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
     public void writeTo(Output output, Agent message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.code == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.code == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.code != null)
+    	    	    	if( (String)message.code != null) {
             output.writeString(2, message.code, false);
+        }
     	    	
     	            	
-    	    	if(message.classname == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.classname == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.classname != null)
+    	    	    	if( (String)message.classname != null) {
             output.writeString(3, message.classname, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.remove != null)
+    	    	    	if( (Boolean)message.remove != null) {
             output.writeBool(5, message.remove, false);
+        }
     	    	
     	            	
-    	    	if(message.compileResult == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.compileResult == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.compileResult != null)
+    	    	    	if( (String)message.compileResult != null) {
             output.writeString(6, message.compileResult, false);
+        }
     	    	
     	            	
-    	    	if(message.concurrency == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.concurrency == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.concurrency != null)
+    	    	    	if( (Integer)message.concurrency != null) {
             output.writeInt32(7, message.concurrency, false);
+        }
     	    	
     	            	
     }
@@ -660,24 +666,24 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 	public void dumpObject()
     {
     	System.out.println("START Agent");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.code != null) {
+    	//}
+    	    	//if(this.code != null) {
     		System.out.println("code="+this.code);
-    	}
-    	    	if(this.classname != null) {
+    	//}
+    	    	//if(this.classname != null) {
     		System.out.println("classname="+this.classname);
-    	}
-    	    	if(this.remove != null) {
+    	//}
+    	    	//if(this.remove != null) {
     		System.out.println("remove="+this.remove);
-    	}
-    	    	if(this.compileResult != null) {
+    	//}
+    	    	//if(this.compileResult != null) {
     		System.out.println("compileResult="+this.compileResult);
-    	}
-    	    	if(this.concurrency != null) {
+    	//}
+    	    	//if(this.concurrency != null) {
     		System.out.println("concurrency="+this.concurrency);
-    	}
+    	//}
     	    	System.out.println("END Agent");
     }
     

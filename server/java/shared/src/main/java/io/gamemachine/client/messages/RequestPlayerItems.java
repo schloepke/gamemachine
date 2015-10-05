@@ -51,11 +51,11 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
 
     static final RequestPlayerItems DEFAULT_INSTANCE = new RequestPlayerItems();
 
-    			public Boolean catalog;
+    			public boolean catalog;
 	    
         			public String characterId;
 	    
-        			public Integer result;
+        			public int result;
 	    
         			public PlayerItems playerItems;
 	    
@@ -75,11 +75,11 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
         return catalog == null ? false : true;
     }
         
-		public Boolean getCatalog() {
+		public boolean getCatalog() {
 		return catalog;
 	}
 	
-	public RequestPlayerItems setCatalog(Boolean catalog) {
+	public RequestPlayerItems setCatalog(boolean catalog) {
 		this.catalog = catalog;
 		return this;	}
 	
@@ -101,11 +101,11 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public RequestPlayerItems setResult(Integer result) {
+	public RequestPlayerItems setResult(int result) {
 		this.result = result;
 		return this;	}
 	

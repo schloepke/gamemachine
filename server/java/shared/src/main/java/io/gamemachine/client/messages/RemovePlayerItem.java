@@ -53,9 +53,9 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
 
     			public String id;
 	    
-        			public Integer quantity;
+        			public int quantity;
 	    
-        			public Integer result;
+        			public int result;
 	    
         			public String characterId;
 	    
@@ -86,11 +86,11 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
         return quantity == null ? false : true;
     }
         
-		public Integer getQuantity() {
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public RemovePlayerItem setQuantity(Integer quantity) {
+	public RemovePlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
@@ -99,11 +99,11 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public RemovePlayerItem setResult(Integer result) {
+	public RemovePlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	

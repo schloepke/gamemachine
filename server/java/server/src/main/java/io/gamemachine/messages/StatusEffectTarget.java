@@ -115,27 +115,47 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     static final StatusEffectTarget DEFAULT_INSTANCE = new StatusEffectTarget();
     static final String defaultScope = StatusEffectTarget.class.getSimpleName();
 
-    			public String target;
-	    
-        			public String skill;
-	    
-        			public GmVector3 location;
-	    
-        			public Integer range;
-	    
+    	
+	    	    public String target= null;
+	    		
+    
+        	
+	    	    public String skill= null;
+	    		
+    
+        	
+	    	    public GmVector3 location;
+	    		
+    
+        	
+	    	    public int range= 0;
+	    		
+    
             public List<StatusEffect> statusEffect;
-	    			public String origin;
-	    
-        			public Integer ticks;
-	    
-        			public Long activeId;
-	    
-        			public Long lastTick;
-	    
-        			public Action action; // = None:0;
-	    
-        			public PassiveFlag passiveFlag; // = NA:0;
-	    
+	    	
+	    	    public String origin= null;
+	    		
+    
+        	
+	    	    public int ticks= 0;
+	    		
+    
+        	
+	    	    public long activeId= 0L;
+	    		
+    
+        	
+	    	    public long lastTick= 0L;
+	    		
+    
+        	
+	    	    public Action action;
+	    		
+    
+        	
+	    	    public PassiveFlag passiveFlag;
+	    		
+    
         
 
 
@@ -160,94 +180,108 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (target != null) {
+    	    	    	//if (target != null) {
     	       	    	model.setString("status_effect_target_target",target);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (skill != null) {
+    	    	    	//if (skill != null) {
     	       	    	model.setString("status_effect_target_skill",skill);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (range != null) {
+    	    	    	//if (range != null) {
     	       	    	model.setInteger("status_effect_target_range",range);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (origin != null) {
+    	    	    	//if (origin != null) {
     	       	    	model.setString("status_effect_target_origin",origin);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ticks != null) {
+    	    	    	//if (ticks != null) {
     	       	    	model.setInteger("status_effect_target_ticks",ticks);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (activeId != null) {
+    	    	    	//if (activeId != null) {
     	       	    	model.setLong("status_effect_target_active_id",activeId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (lastTick != null) {
+    	    	    	//if (lastTick != null) {
     	       	    	model.setLong("status_effect_target_last_tick",lastTick);
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static StatusEffectTarget fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffectTarget message = new StatusEffectTarget();
     	    	    	    	    	
-    	    	    	String targetField = model.getString("status_effect_target_target");
-    	    	
-    	if (targetField != null) {
+    	    	    	String targetTestField = model.getString("status_effect_target_target");
+    	if (targetTestField != null) {
+    		String targetField = targetTestField;
     		message.setTarget(targetField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String skillField = model.getString("status_effect_target_skill");
+    	
     	    	
-    	if (skillField != null) {
+    	    	    	    	    	    	
+    	    	    	String skillTestField = model.getString("status_effect_target_skill");
+    	if (skillTestField != null) {
+    		String skillField = skillTestField;
     		message.setSkill(skillField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	Integer rangeField = model.getInteger("status_effect_target_range");
+    	
     	    	
-    	if (rangeField != null) {
+    	    	    	    	    	    	    	
+    	    	    	Integer rangeTestField = model.getInteger("status_effect_target_range");
+    	if (rangeTestField != null) {
+    		int rangeField = rangeTestField;
     		message.setRange(rangeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String originField = model.getString("status_effect_target_origin");
+    	
     	    	
-    	if (originField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String originTestField = model.getString("status_effect_target_origin");
+    	if (originTestField != null) {
+    		String originField = originTestField;
     		message.setOrigin(originField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ticksField = model.getInteger("status_effect_target_ticks");
+    	
     	    	
-    	if (ticksField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ticksTestField = model.getInteger("status_effect_target_ticks");
+    	if (ticksTestField != null) {
+    		int ticksField = ticksTestField;
     		message.setTicks(ticksField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long activeIdField = model.getLong("status_effect_target_active_id");
+    	
     	    	
-    	if (activeIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Long activeIdTestField = model.getLong("status_effect_target_active_id");
+    	if (activeIdTestField != null) {
+    		long activeIdField = activeIdTestField;
     		message.setActiveId(activeIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long lastTickField = model.getLong("status_effect_target_last_tick");
+    	
     	    	
-    	if (lastTickField != null) {
+    	    	    	    	    	    	
+    	    	    	Long lastTickTestField = model.getLong("status_effect_target_last_tick");
+    	if (lastTickTestField != null) {
+    		long lastTickField = lastTickTestField;
     		message.setLastTick(lastTickField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -256,11 +290,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     }
 
 
-	    
-    public Boolean hasTarget()  {
-        return target == null ? false : true;
-    }
-        
+	            
 		public String getTarget() {
 		return target;
 	}
@@ -269,11 +299,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.target = target;
 		return this;	}
 	
-		    
-    public Boolean hasSkill()  {
-        return skill == null ? false : true;
-    }
-        
+		            
 		public String getSkill() {
 		return skill;
 	}
@@ -282,11 +308,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.skill = skill;
 		return this;	}
 	
-		    
-    public Boolean hasLocation()  {
-        return location == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getLocation() {
 		return location;
 	}
@@ -295,24 +317,16 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.location = location;
 		return this;	}
 	
-		    
-    public Boolean hasRange()  {
-        return range == null ? false : true;
-    }
-        
-		public Integer getRange() {
+		            
+		public int getRange() {
 		return range;
 	}
 	
-	public StatusEffectTarget setRange(Integer range) {
+	public StatusEffectTarget setRange(int range) {
 		this.range = range;
 		return this;	}
 	
-		    
-    public Boolean hasStatusEffect()  {
-        return statusEffect == null ? false : true;
-    }
-        
+		            
 		public List<StatusEffect> getStatusEffectList() {
 		if(this.statusEffect == null)
             this.statusEffect = new ArrayList<StatusEffect>();
@@ -363,7 +377,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.duration.equals(obj.duration)) {
+    	    		if (statusEffect.duration == obj.duration) {
     	      			itr.remove();
     		}
 		}
@@ -379,7 +393,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.ticks.equals(obj.ticks)) {
+    	    		if (statusEffect.ticks == obj.ticks) {
     	      			itr.remove();
     		}
 		}
@@ -411,7 +425,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.minValue.equals(obj.minValue)) {
+    	    		if (statusEffect.minValue == obj.minValue) {
     	      			itr.remove();
     		}
 		}
@@ -427,7 +441,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.maxValue.equals(obj.maxValue)) {
+    	    		if (statusEffect.maxValue == obj.maxValue) {
     	      			itr.remove();
     		}
 		}
@@ -486,11 +500,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     
     
     
-		    
-    public Boolean hasOrigin()  {
-        return origin == null ? false : true;
-    }
-        
+		            
 		public String getOrigin() {
 		return origin;
 	}
@@ -499,50 +509,34 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.origin = origin;
 		return this;	}
 	
-		    
-    public Boolean hasTicks()  {
-        return ticks == null ? false : true;
-    }
-        
-		public Integer getTicks() {
+		            
+		public int getTicks() {
 		return ticks;
 	}
 	
-	public StatusEffectTarget setTicks(Integer ticks) {
+	public StatusEffectTarget setTicks(int ticks) {
 		this.ticks = ticks;
 		return this;	}
 	
-		    
-    public Boolean hasActiveId()  {
-        return activeId == null ? false : true;
-    }
-        
-		public Long getActiveId() {
+		            
+		public long getActiveId() {
 		return activeId;
 	}
 	
-	public StatusEffectTarget setActiveId(Long activeId) {
+	public StatusEffectTarget setActiveId(long activeId) {
 		this.activeId = activeId;
 		return this;	}
 	
-		    
-    public Boolean hasLastTick()  {
-        return lastTick == null ? false : true;
-    }
-        
-		public Long getLastTick() {
+		            
+		public long getLastTick() {
 		return lastTick;
 	}
 	
-	public StatusEffectTarget setLastTick(Long lastTick) {
+	public StatusEffectTarget setLastTick(long lastTick) {
 		this.lastTick = lastTick;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+		            
 		public Action getAction() {
 		return action;
 	}
@@ -551,11 +545,7 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasPassiveFlag()  {
-        return passiveFlag == null ? false : true;
-    }
-        
+		            
 		public PassiveFlag getPassiveFlag() {
 		return passiveFlag;
 	}
@@ -676,18 +666,20 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     public void writeTo(Output output, StatusEffectTarget message) throws IOException
     {
     	    	
-    	    	if(message.target == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.target == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.target != null)
+    	    	    	if( (String)message.target != null) {
             output.writeString(1, message.target, false);
+        }
     	    	
     	            	
-    	    	if(message.skill == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.skill == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.skill != null)
+    	    	    	if( (String)message.skill != null) {
             output.writeString(2, message.skill, false);
+        }
     	    	
     	            	
     	    	
@@ -696,8 +688,9 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     	    	
     	            	
     	    	
-    	    	    	if(message.range != null)
+    	    	    	if( (Integer)message.range != null) {
             output.writeInt32(4, message.range, false);
+        }
     	    	
     	            	
     	    	
@@ -705,43 +698,47 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         {
             for(StatusEffect statusEffect : message.statusEffect)
             {
-                if(statusEffect != null) {
+                if( (StatusEffect) statusEffect != null) {
                    	    				output.writeObject(5, statusEffect, StatusEffect.getSchema(), true);
     				    			}
             }
         }
     	            	
-    	    	if(message.origin == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.origin == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.origin != null)
+    	    	    	if( (String)message.origin != null) {
             output.writeString(6, message.origin, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ticks != null)
+    	    	    	if( (Integer)message.ticks != null) {
             output.writeInt32(7, message.ticks, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.activeId != null)
+    	    	    	if( (Long)message.activeId != null) {
             output.writeInt64(8, message.activeId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.lastTick != null)
+    	    	    	if( (Long)message.lastTick != null) {
             output.writeInt64(9, message.lastTick, false);
+        }
     	    	
     	            	
-    	    	if(message.action == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.action == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.action != null)
     	 	output.writeEnum(10, message.action.number, false);
     	    	
     	            	
-    	    	if(message.passiveFlag == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.passiveFlag == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.passiveFlag != null)
     	 	output.writeEnum(11, message.passiveFlag.number, false);
@@ -752,39 +749,39 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 	public void dumpObject()
     {
     	System.out.println("START StatusEffectTarget");
-    	    	if(this.target != null) {
+    	    	//if(this.target != null) {
     		System.out.println("target="+this.target);
-    	}
-    	    	if(this.skill != null) {
+    	//}
+    	    	//if(this.skill != null) {
     		System.out.println("skill="+this.skill);
-    	}
-    	    	if(this.location != null) {
+    	//}
+    	    	//if(this.location != null) {
     		System.out.println("location="+this.location);
-    	}
-    	    	if(this.range != null) {
+    	//}
+    	    	//if(this.range != null) {
     		System.out.println("range="+this.range);
-    	}
-    	    	if(this.statusEffect != null) {
+    	//}
+    	    	//if(this.statusEffect != null) {
     		System.out.println("statusEffect="+this.statusEffect);
-    	}
-    	    	if(this.origin != null) {
+    	//}
+    	    	//if(this.origin != null) {
     		System.out.println("origin="+this.origin);
-    	}
-    	    	if(this.ticks != null) {
+    	//}
+    	    	//if(this.ticks != null) {
     		System.out.println("ticks="+this.ticks);
-    	}
-    	    	if(this.activeId != null) {
+    	//}
+    	    	//if(this.activeId != null) {
     		System.out.println("activeId="+this.activeId);
-    	}
-    	    	if(this.lastTick != null) {
+    	//}
+    	    	//if(this.lastTick != null) {
     		System.out.println("lastTick="+this.lastTick);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.passiveFlag != null) {
+    	//}
+    	    	//if(this.passiveFlag != null) {
     		System.out.println("passiveFlag="+this.passiveFlag);
-    	}
+    	//}
     	    	System.out.println("END StatusEffectTarget");
     }
     

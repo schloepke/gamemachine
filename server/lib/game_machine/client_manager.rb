@@ -67,18 +67,18 @@ module GameMachine
           end
 
         # client events come from other client managers
-        elsif message.has_client_event
+        elsif message.client_event != nil
           if message.client_event.sender_id.match(/#{@server}/)
             return
           end
           process_client_event(message.client_event)
         
         # Unregister requests come from clients only
-        elsif message.has_client_manager_unregister
+        elsif message.client_manager_unregister != nil
           unregister_sender(message)
 
         # Register requests come from actors and clients
-        elsif message.has_client_manager_register
+        elsif message.client_manager_register != nil
           register_sender(message)
         else
           unhandled(message)

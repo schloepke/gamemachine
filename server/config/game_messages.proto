@@ -570,6 +570,7 @@ local_persistent_message PlayerSkill {
 	SingleTarget = 1;
 	Pbaoe = 2;
 	SelfAoe = 3;
+	Self = 4;
   }
   
   enum SkillType {
@@ -618,6 +619,7 @@ local_persistent_message PlayerSkill {
   optional int32 isPassive = 17;
   optional string skillType = 18;
   optional string icon_uuid = 19;
+  optional string statusEffects = 20;
   
 }
 

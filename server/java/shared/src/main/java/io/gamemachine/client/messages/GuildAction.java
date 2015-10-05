@@ -61,7 +61,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 	    
         			public String guildId;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String inviteId;
 	    
@@ -146,11 +146,11 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public GuildAction setRecordId(Integer recordId) {
+	public GuildAction setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	

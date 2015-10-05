@@ -61,30 +61,54 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
     static final ModelInfo DEFAULT_INSTANCE = new ModelInfo();
     static final String defaultScope = ModelInfo.class.getSimpleName();
 
-    			public Float attachX;
-	    
-        			public Float attachY;
-	    
-        			public Float attachZ;
-	    
-        			public Float rotateX;
-	    
-        			public Float rotateY;
-	    
-        			public Float rotateZ;
-	    
-        			public Float scaleX;
-	    
-        			public Float scaleY;
-	    
-        			public Float scaleZ;
-	    
-        			public String resource;
-	    
-        			public String prefab;
-	    
-        			public String weapon_type;
-	    
+    	
+	    	    public float attachX= 0F;
+	    		
+    
+        	
+	    	    public float attachY= 0F;
+	    		
+    
+        	
+	    	    public float attachZ= 0F;
+	    		
+    
+        	
+	    	    public float rotateX= 0F;
+	    		
+    
+        	
+	    	    public float rotateY= 0F;
+	    		
+    
+        	
+	    	    public float rotateZ= 0F;
+	    		
+    
+        	
+	    	    public float scaleX= 0F;
+	    		
+    
+        	
+	    	    public float scaleY= 0F;
+	    		
+    
+        	
+	    	    public float scaleZ= 0F;
+	    		
+    
+        	
+	    	    public String resource= null;
+	    		
+    
+        	
+	    	    public String prefab= null;
+	    		
+    
+        	
+	    	    public String weapon_type= null;
+	    		
+    
         
 
 
@@ -114,154 +138,178 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (attachX != null) {
+    	    	    	//if (attachX != null) {
     	       	    	model.setFloat("model_info_attach_x",attachX);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (attachY != null) {
+    	    	    	//if (attachY != null) {
     	       	    	model.setFloat("model_info_attach_y",attachY);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (attachZ != null) {
+    	    	    	//if (attachZ != null) {
     	       	    	model.setFloat("model_info_attach_z",attachZ);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rotateX != null) {
+    	    	    	//if (rotateX != null) {
     	       	    	model.setFloat("model_info_rotate_x",rotateX);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rotateY != null) {
+    	    	    	//if (rotateY != null) {
     	       	    	model.setFloat("model_info_rotate_y",rotateY);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rotateZ != null) {
+    	    	    	//if (rotateZ != null) {
     	       	    	model.setFloat("model_info_rotate_z",rotateZ);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (scaleX != null) {
+    	    	    	//if (scaleX != null) {
     	       	    	model.setFloat("model_info_scale_x",scaleX);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (scaleY != null) {
+    	    	    	//if (scaleY != null) {
     	       	    	model.setFloat("model_info_scale_y",scaleY);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (scaleZ != null) {
+    	    	    	//if (scaleZ != null) {
     	       	    	model.setFloat("model_info_scale_z",scaleZ);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (resource != null) {
+    	    	    	//if (resource != null) {
     	       	    	model.setString("model_info_resource",resource);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (prefab != null) {
+    	    	    	//if (prefab != null) {
     	       	    	model.setString("model_info_prefab",prefab);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (weapon_type != null) {
+    	    	    	//if (weapon_type != null) {
     	       	    	model.setString("model_info_weapon_type",weapon_type);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ModelInfo fromModel(Model model) {
 		boolean hasFields = false;
     	ModelInfo message = new ModelInfo();
     	    	    	    	    	
-    	    	    	Float attachXField = model.getFloat("model_info_attach_x");
-    	    	
-    	if (attachXField != null) {
+    	    	    	Float attachXTestField = model.getFloat("model_info_attach_x");
+    	if (attachXTestField != null) {
+    		float attachXField = attachXTestField;
     		message.setAttachX(attachXField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float attachYField = model.getFloat("model_info_attach_y");
+    	
     	    	
-    	if (attachYField != null) {
+    	    	    	    	    	    	
+    	    	    	Float attachYTestField = model.getFloat("model_info_attach_y");
+    	if (attachYTestField != null) {
+    		float attachYField = attachYTestField;
     		message.setAttachY(attachYField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float attachZField = model.getFloat("model_info_attach_z");
+    	
     	    	
-    	if (attachZField != null) {
+    	    	    	    	    	    	
+    	    	    	Float attachZTestField = model.getFloat("model_info_attach_z");
+    	if (attachZTestField != null) {
+    		float attachZField = attachZTestField;
     		message.setAttachZ(attachZField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float rotateXField = model.getFloat("model_info_rotate_x");
+    	
     	    	
-    	if (rotateXField != null) {
+    	    	    	    	    	    	
+    	    	    	Float rotateXTestField = model.getFloat("model_info_rotate_x");
+    	if (rotateXTestField != null) {
+    		float rotateXField = rotateXTestField;
     		message.setRotateX(rotateXField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float rotateYField = model.getFloat("model_info_rotate_y");
+    	
     	    	
-    	if (rotateYField != null) {
+    	    	    	    	    	    	
+    	    	    	Float rotateYTestField = model.getFloat("model_info_rotate_y");
+    	if (rotateYTestField != null) {
+    		float rotateYField = rotateYTestField;
     		message.setRotateY(rotateYField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float rotateZField = model.getFloat("model_info_rotate_z");
+    	
     	    	
-    	if (rotateZField != null) {
+    	    	    	    	    	    	
+    	    	    	Float rotateZTestField = model.getFloat("model_info_rotate_z");
+    	if (rotateZTestField != null) {
+    		float rotateZField = rotateZTestField;
     		message.setRotateZ(rotateZField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float scaleXField = model.getFloat("model_info_scale_x");
+    	
     	    	
-    	if (scaleXField != null) {
+    	    	    	    	    	    	
+    	    	    	Float scaleXTestField = model.getFloat("model_info_scale_x");
+    	if (scaleXTestField != null) {
+    		float scaleXField = scaleXTestField;
     		message.setScaleX(scaleXField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float scaleYField = model.getFloat("model_info_scale_y");
+    	
     	    	
-    	if (scaleYField != null) {
+    	    	    	    	    	    	
+    	    	    	Float scaleYTestField = model.getFloat("model_info_scale_y");
+    	if (scaleYTestField != null) {
+    		float scaleYField = scaleYTestField;
     		message.setScaleY(scaleYField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float scaleZField = model.getFloat("model_info_scale_z");
+    	
     	    	
-    	if (scaleZField != null) {
+    	    	    	    	    	    	
+    	    	    	Float scaleZTestField = model.getFloat("model_info_scale_z");
+    	if (scaleZTestField != null) {
+    		float scaleZField = scaleZTestField;
     		message.setScaleZ(scaleZField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String resourceField = model.getString("model_info_resource");
+    	
     	    	
-    	if (resourceField != null) {
+    	    	    	    	    	    	
+    	    	    	String resourceTestField = model.getString("model_info_resource");
+    	if (resourceTestField != null) {
+    		String resourceField = resourceTestField;
     		message.setResource(resourceField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String prefabField = model.getString("model_info_prefab");
+    	
     	    	
-    	if (prefabField != null) {
+    	    	    	    	    	    	
+    	    	    	String prefabTestField = model.getString("model_info_prefab");
+    	if (prefabTestField != null) {
+    		String prefabField = prefabTestField;
     		message.setPrefab(prefabField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String weapon_typeField = model.getString("model_info_weapon_type");
+    	
     	    	
-    	if (weapon_typeField != null) {
+    	    	    	    	    	    	
+    	    	    	String weapon_typeTestField = model.getString("model_info_weapon_type");
+    	if (weapon_typeTestField != null) {
+    		String weapon_typeField = weapon_typeTestField;
     		message.setWeapon_type(weapon_typeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -270,128 +318,88 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
     }
 
 
-	    
-    public Boolean hasAttachX()  {
-        return attachX == null ? false : true;
-    }
-        
-		public Float getAttachX() {
+	            
+		public float getAttachX() {
 		return attachX;
 	}
 	
-	public ModelInfo setAttachX(Float attachX) {
+	public ModelInfo setAttachX(float attachX) {
 		this.attachX = attachX;
 		return this;	}
 	
-		    
-    public Boolean hasAttachY()  {
-        return attachY == null ? false : true;
-    }
-        
-		public Float getAttachY() {
+		            
+		public float getAttachY() {
 		return attachY;
 	}
 	
-	public ModelInfo setAttachY(Float attachY) {
+	public ModelInfo setAttachY(float attachY) {
 		this.attachY = attachY;
 		return this;	}
 	
-		    
-    public Boolean hasAttachZ()  {
-        return attachZ == null ? false : true;
-    }
-        
-		public Float getAttachZ() {
+		            
+		public float getAttachZ() {
 		return attachZ;
 	}
 	
-	public ModelInfo setAttachZ(Float attachZ) {
+	public ModelInfo setAttachZ(float attachZ) {
 		this.attachZ = attachZ;
 		return this;	}
 	
-		    
-    public Boolean hasRotateX()  {
-        return rotateX == null ? false : true;
-    }
-        
-		public Float getRotateX() {
+		            
+		public float getRotateX() {
 		return rotateX;
 	}
 	
-	public ModelInfo setRotateX(Float rotateX) {
+	public ModelInfo setRotateX(float rotateX) {
 		this.rotateX = rotateX;
 		return this;	}
 	
-		    
-    public Boolean hasRotateY()  {
-        return rotateY == null ? false : true;
-    }
-        
-		public Float getRotateY() {
+		            
+		public float getRotateY() {
 		return rotateY;
 	}
 	
-	public ModelInfo setRotateY(Float rotateY) {
+	public ModelInfo setRotateY(float rotateY) {
 		this.rotateY = rotateY;
 		return this;	}
 	
-		    
-    public Boolean hasRotateZ()  {
-        return rotateZ == null ? false : true;
-    }
-        
-		public Float getRotateZ() {
+		            
+		public float getRotateZ() {
 		return rotateZ;
 	}
 	
-	public ModelInfo setRotateZ(Float rotateZ) {
+	public ModelInfo setRotateZ(float rotateZ) {
 		this.rotateZ = rotateZ;
 		return this;	}
 	
-		    
-    public Boolean hasScaleX()  {
-        return scaleX == null ? false : true;
-    }
-        
-		public Float getScaleX() {
+		            
+		public float getScaleX() {
 		return scaleX;
 	}
 	
-	public ModelInfo setScaleX(Float scaleX) {
+	public ModelInfo setScaleX(float scaleX) {
 		this.scaleX = scaleX;
 		return this;	}
 	
-		    
-    public Boolean hasScaleY()  {
-        return scaleY == null ? false : true;
-    }
-        
-		public Float getScaleY() {
+		            
+		public float getScaleY() {
 		return scaleY;
 	}
 	
-	public ModelInfo setScaleY(Float scaleY) {
+	public ModelInfo setScaleY(float scaleY) {
 		this.scaleY = scaleY;
 		return this;	}
 	
-		    
-    public Boolean hasScaleZ()  {
-        return scaleZ == null ? false : true;
-    }
-        
-		public Float getScaleZ() {
+		            
+		public float getScaleZ() {
 		return scaleZ;
 	}
 	
-	public ModelInfo setScaleZ(Float scaleZ) {
+	public ModelInfo setScaleZ(float scaleZ) {
 		this.scaleZ = scaleZ;
 		return this;	}
 	
-		    
-    public Boolean hasResource()  {
-        return resource == null ? false : true;
-    }
-        
+		            
 		public String getResource() {
 		return resource;
 	}
@@ -400,11 +408,7 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
 		this.resource = resource;
 		return this;	}
 	
-		    
-    public Boolean hasPrefab()  {
-        return prefab == null ? false : true;
-    }
-        
+		            
 		public String getPrefab() {
 		return prefab;
 	}
@@ -413,11 +417,7 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
 		this.prefab = prefab;
 		return this;	}
 	
-		    
-    public Boolean hasWeapon_type()  {
-        return weapon_type == null ? false : true;
-    }
-        
+		            
 		public String getWeapon_type() {
 		return weapon_type;
 	}
@@ -542,63 +542,75 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
     {
     	    	
     	    	
-    	    	    	if(message.attachX != null)
+    	    	    	if( (Float)message.attachX != null) {
             output.writeFloat(1, message.attachX, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.attachY != null)
+    	    	    	if( (Float)message.attachY != null) {
             output.writeFloat(2, message.attachY, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.attachZ != null)
+    	    	    	if( (Float)message.attachZ != null) {
             output.writeFloat(3, message.attachZ, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rotateX != null)
+    	    	    	if( (Float)message.rotateX != null) {
             output.writeFloat(4, message.rotateX, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rotateY != null)
+    	    	    	if( (Float)message.rotateY != null) {
             output.writeFloat(5, message.rotateY, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rotateZ != null)
+    	    	    	if( (Float)message.rotateZ != null) {
             output.writeFloat(6, message.rotateZ, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.scaleX != null)
+    	    	    	if( (Float)message.scaleX != null) {
             output.writeFloat(7, message.scaleX, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.scaleY != null)
+    	    	    	if( (Float)message.scaleY != null) {
             output.writeFloat(8, message.scaleY, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.scaleZ != null)
+    	    	    	if( (Float)message.scaleZ != null) {
             output.writeFloat(9, message.scaleZ, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.resource != null)
+    	    	    	if( (String)message.resource != null) {
             output.writeString(10, message.resource, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.prefab != null)
+    	    	    	if( (String)message.prefab != null) {
             output.writeString(11, message.prefab, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.weapon_type != null)
+    	    	    	if( (String)message.weapon_type != null) {
             output.writeString(12, message.weapon_type, false);
+        }
     	    	
     	            	
     }
@@ -606,42 +618,42 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
 	public void dumpObject()
     {
     	System.out.println("START ModelInfo");
-    	    	if(this.attachX != null) {
+    	    	//if(this.attachX != null) {
     		System.out.println("attachX="+this.attachX);
-    	}
-    	    	if(this.attachY != null) {
+    	//}
+    	    	//if(this.attachY != null) {
     		System.out.println("attachY="+this.attachY);
-    	}
-    	    	if(this.attachZ != null) {
+    	//}
+    	    	//if(this.attachZ != null) {
     		System.out.println("attachZ="+this.attachZ);
-    	}
-    	    	if(this.rotateX != null) {
+    	//}
+    	    	//if(this.rotateX != null) {
     		System.out.println("rotateX="+this.rotateX);
-    	}
-    	    	if(this.rotateY != null) {
+    	//}
+    	    	//if(this.rotateY != null) {
     		System.out.println("rotateY="+this.rotateY);
-    	}
-    	    	if(this.rotateZ != null) {
+    	//}
+    	    	//if(this.rotateZ != null) {
     		System.out.println("rotateZ="+this.rotateZ);
-    	}
-    	    	if(this.scaleX != null) {
+    	//}
+    	    	//if(this.scaleX != null) {
     		System.out.println("scaleX="+this.scaleX);
-    	}
-    	    	if(this.scaleY != null) {
+    	//}
+    	    	//if(this.scaleY != null) {
     		System.out.println("scaleY="+this.scaleY);
-    	}
-    	    	if(this.scaleZ != null) {
+    	//}
+    	    	//if(this.scaleZ != null) {
     		System.out.println("scaleZ="+this.scaleZ);
-    	}
-    	    	if(this.resource != null) {
+    	//}
+    	    	//if(this.resource != null) {
     		System.out.println("resource="+this.resource);
-    	}
-    	    	if(this.prefab != null) {
+    	//}
+    	    	//if(this.prefab != null) {
     		System.out.println("prefab="+this.prefab);
-    	}
-    	    	if(this.weapon_type != null) {
+    	//}
+    	    	//if(this.weapon_type != null) {
     		System.out.println("weapon_type="+this.weapon_type);
-    	}
+    	//}
     	    	System.out.println("END ModelInfo");
     }
     

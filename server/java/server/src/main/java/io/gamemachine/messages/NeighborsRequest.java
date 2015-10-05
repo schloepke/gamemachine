@@ -61,10 +61,14 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
     static final NeighborsRequest DEFAULT_INSTANCE = new NeighborsRequest();
     static final String defaultScope = NeighborsRequest.class.getSimpleName();
 
-    			public String neighborEntityType;
-	    
-        			public String gridName;
-	    
+    	
+	    	    public String neighborEntityType= null;
+	    		
+    
+        	
+	    	    public String gridName= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (neighborEntityType != null) {
+    	    	    	//if (neighborEntityType != null) {
     	       	    	model.setString("neighbors_request_neighbor_entity_type",neighborEntityType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gridName != null) {
+    	    	    	//if (gridName != null) {
     	       	    	model.setString("neighbors_request_grid_name",gridName);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static NeighborsRequest fromModel(Model model) {
 		boolean hasFields = false;
     	NeighborsRequest message = new NeighborsRequest();
     	    	    	    	    	
-    	    	    	String neighborEntityTypeField = model.getString("neighbors_request_neighbor_entity_type");
-    	    	
-    	if (neighborEntityTypeField != null) {
+    	    	    	String neighborEntityTypeTestField = model.getString("neighbors_request_neighbor_entity_type");
+    	if (neighborEntityTypeTestField != null) {
+    		String neighborEntityTypeField = neighborEntityTypeTestField;
     		message.setNeighborEntityType(neighborEntityTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gridNameField = model.getString("neighbors_request_grid_name");
+    	
     	    	
-    	if (gridNameField != null) {
+    	    	    	    	    	    	
+    	    	    	String gridNameTestField = model.getString("neighbors_request_grid_name");
+    	if (gridNameTestField != null) {
+    		String gridNameField = gridNameTestField;
     		message.setGridName(gridNameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
     }
 
 
-	    
-    public Boolean hasNeighborEntityType()  {
-        return neighborEntityType == null ? false : true;
-    }
-        
+	            
 		public String getNeighborEntityType() {
 		return neighborEntityType;
 	}
@@ -133,11 +137,7 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
 		this.neighborEntityType = neighborEntityType;
 		return this;	}
 	
-		    
-    public Boolean hasGridName()  {
-        return gridName == null ? false : true;
-    }
-        
+		            
 		public String getGridName() {
 		return gridName;
 	}
@@ -221,16 +221,18 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
     public void writeTo(Output output, NeighborsRequest message) throws IOException
     {
     	    	
-    	    	if(message.neighborEntityType == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.neighborEntityType == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.neighborEntityType != null)
+    	    	    	if( (String)message.neighborEntityType != null) {
             output.writeString(1, message.neighborEntityType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.gridName != null)
+    	    	    	if( (String)message.gridName != null) {
             output.writeString(2, message.gridName, false);
+        }
     	    	
     	            	
     }
@@ -238,12 +240,12 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
 	public void dumpObject()
     {
     	System.out.println("START NeighborsRequest");
-    	    	if(this.neighborEntityType != null) {
+    	    	//if(this.neighborEntityType != null) {
     		System.out.println("neighborEntityType="+this.neighborEntityType);
-    	}
-    	    	if(this.gridName != null) {
+    	//}
+    	    	//if(this.gridName != null) {
     		System.out.println("gridName="+this.gridName);
-    	}
+    	//}
     	    	System.out.println("END NeighborsRequest");
     }
     

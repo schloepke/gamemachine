@@ -61,8 +61,10 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
     static final MeshNode DEFAULT_INSTANCE = new MeshNode();
     static final String defaultScope = MeshNode.class.getSimpleName();
 
-    			public GmVector3 position;
-	    
+    	
+	    	    public GmVector3 position;
+	    		
+    
             public List<GmVector3> connections;
 	    
 
@@ -93,11 +95,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
     }
 
 
-	    
-    public Boolean hasPosition()  {
-        return position == null ? false : true;
-    }
-        
+	            
 		public GmVector3 getPosition() {
 		return position;
 	}
@@ -106,11 +104,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
 		this.position = position;
 		return this;	}
 	
-		    
-    public Boolean hasConnections()  {
-        return connections == null ? false : true;
-    }
-        
+		            
 		public List<GmVector3> getConnectionsList() {
 		if(this.connections == null)
             this.connections = new ArrayList<GmVector3>();
@@ -145,7 +139,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.x.equals(obj.x)) {
+    	    		if (connections.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -161,7 +155,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.y.equals(obj.y)) {
+    	    		if (connections.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -177,7 +171,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.z.equals(obj.z)) {
+    	    		if (connections.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -193,7 +187,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.xi.equals(obj.xi)) {
+    	    		if (connections.xi == obj.xi) {
     	      			itr.remove();
     		}
 		}
@@ -209,7 +203,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.yi.equals(obj.yi)) {
+    	    		if (connections.yi == obj.yi) {
     	      			itr.remove();
     		}
 		}
@@ -225,7 +219,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.zi.equals(obj.zi)) {
+    	    		if (connections.zi == obj.zi) {
     	      			itr.remove();
     		}
 		}
@@ -241,7 +235,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (connections.vertice.equals(obj.vertice)) {
+    	    		if (connections.vertice == obj.vertice) {
     	      			itr.remove();
     		}
 		}
@@ -328,8 +322,8 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
     public void writeTo(Output output, MeshNode message) throws IOException
     {
     	    	
-    	    	if(message.position == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.position == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.position != null)
     		output.writeObject(1, message.position, GmVector3.getSchema(), false);
@@ -340,7 +334,7 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
         {
             for(GmVector3 connections : message.connections)
             {
-                if(connections != null) {
+                if( (GmVector3) connections != null) {
                    	    				output.writeObject(2, connections, GmVector3.getSchema(), true);
     				    			}
             }
@@ -351,12 +345,12 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
 	public void dumpObject()
     {
     	System.out.println("START MeshNode");
-    	    	if(this.position != null) {
+    	    	//if(this.position != null) {
     		System.out.println("position="+this.position);
-    	}
-    	    	if(this.connections != null) {
+    	//}
+    	    	//if(this.connections != null) {
     		System.out.println("connections="+this.connections);
-    	}
+    	//}
     	    	System.out.println("END MeshNode");
     }
     

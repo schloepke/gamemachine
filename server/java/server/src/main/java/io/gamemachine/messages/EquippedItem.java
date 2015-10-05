@@ -75,10 +75,14 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
     static final EquippedItem DEFAULT_INSTANCE = new EquippedItem();
     static final String defaultScope = EquippedItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String playerId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String playerId= null;
+	    		
+    
         
 	public static EquippedItemCache cache() {
 		return EquippedItemCache.getInstance();
@@ -350,34 +354,38 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("equipped_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("equipped_item_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static EquippedItem fromModel(Model model) {
 		boolean hasFields = false;
     	EquippedItem message = new EquippedItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("equipped_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("equipped_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String playerIdField = model.getString("equipped_item_player_id");
+    	
     	    	
-    	if (playerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String playerIdTestField = model.getString("equipped_item_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -386,11 +394,7 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -399,11 +403,7 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+		            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -488,13 +488,15 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
     {
     	    	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(2, message.playerId, false);
+        }
     	    	
     	            	
     }
@@ -502,12 +504,12 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
 	public void dumpObject()
     {
     	System.out.println("START EquippedItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.playerId != null) {
+    	//}
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
+    	//}
     	    	System.out.println("END EquippedItem");
     }
     

@@ -61,10 +61,14 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
     static final ClientManagerUnregister DEFAULT_INSTANCE = new ClientManagerUnregister();
     static final String defaultScope = ClientManagerUnregister.class.getSimpleName();
 
-    			public String registerType;
-	    
-        			public String name;
-	    
+    	
+	    	    public String registerType= null;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (registerType != null) {
+    	    	    	//if (registerType != null) {
     	       	    	model.setString("client_manager_unregister_register_type",registerType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("client_manager_unregister_name",name);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ClientManagerUnregister fromModel(Model model) {
 		boolean hasFields = false;
     	ClientManagerUnregister message = new ClientManagerUnregister();
     	    	    	    	    	
-    	    	    	String registerTypeField = model.getString("client_manager_unregister_register_type");
-    	    	
-    	if (registerTypeField != null) {
+    	    	    	String registerTypeTestField = model.getString("client_manager_unregister_register_type");
+    	if (registerTypeTestField != null) {
+    		String registerTypeField = registerTypeTestField;
     		message.setRegisterType(registerTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("client_manager_unregister_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("client_manager_unregister_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
     }
 
 
-	    
-    public Boolean hasRegisterType()  {
-        return registerType == null ? false : true;
-    }
-        
+	            
 		public String getRegisterType() {
 		return registerType;
 	}
@@ -133,11 +137,7 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
 		this.registerType = registerType;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -222,13 +222,15 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
     {
     	    	
     	    	
-    	    	    	if(message.registerType != null)
+    	    	    	if( (String)message.registerType != null) {
             output.writeString(1, message.registerType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(2, message.name, false);
+        }
     	    	
     	            	
     }
@@ -236,12 +238,12 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
 	public void dumpObject()
     {
     	System.out.println("START ClientManagerUnregister");
-    	    	if(this.registerType != null) {
+    	    	//if(this.registerType != null) {
     		System.out.println("registerType="+this.registerType);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
+    	//}
     	    	System.out.println("END ClientManagerUnregister");
     }
     

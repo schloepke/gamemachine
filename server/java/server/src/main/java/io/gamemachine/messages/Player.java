@@ -81,28 +81,50 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     static final Player DEFAULT_INSTANCE = new Player();
     static final String defaultScope = Player.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Boolean authenticated;
-	    
-        			public Integer authtoken;
-	    
-        			public String passwordHash;
-	    
-        			public String gameId;
-	    
-        			public Integer recordId;
-	    
-        			public String role;
-	    
-        			public Boolean locked;
-	    
-        			public Integer ip;
-	    
-        			public Long ipChangedAt;
-	    
-        			public String characterId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public boolean authenticated= false;
+	    		
+    
+        	
+	    	    public int authtoken= 0;
+	    		
+    
+        	
+	    	    public String passwordHash= null;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String role= null;
+	    		
+    
+        	
+	    	    public boolean locked= false;
+	    		
+    
+        	
+	    	    public int ip= 0;
+	    		
+    
+        	
+	    	    public long ipChangedAt= 0L;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
             public List<Character> characters;
 	    
 	public static PlayerCache cache() {
@@ -447,9 +469,9 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 	    	}
 	    	
 	    	io.gamemachine.orm.models.Player model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.Player.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.Player();
@@ -581,137 +603,157 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("player_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (authenticated != null) {
+    	    	    	//if (authenticated != null) {
     	       	    	model.setBoolean("player_authenticated",authenticated);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (authtoken != null) {
+    	    	    	//if (authtoken != null) {
     	       	    	model.setInteger("player_authtoken",authtoken);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (passwordHash != null) {
+    	    	    	//if (passwordHash != null) {
     	       	    	model.setString("player_password_hash",passwordHash);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("player_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (role != null) {
+    	    	    	//if (role != null) {
     	       	    	model.setString("player_role",role);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (locked != null) {
+    	    	    	//if (locked != null) {
     	       	    	model.setBoolean("player_locked",locked);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ip != null) {
+    	    	    	//if (ip != null) {
     	       	    	model.setInteger("player_ip",ip);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ipChangedAt != null) {
+    	    	    	//if (ipChangedAt != null) {
     	       	    	model.setLong("player_ip_changed_at",ipChangedAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("player_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static Player fromModel(Model model) {
 		boolean hasFields = false;
     	Player message = new Player();
     	    	    	    	    	
-    	    	    	String idField = model.getString("player_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("player_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean authenticatedField = model.getBoolean("player_authenticated");
+    	
     	    	
-    	if (authenticatedField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean authenticatedTestField = model.getBoolean("player_authenticated");
+    	if (authenticatedTestField != null) {
+    		boolean authenticatedField = authenticatedTestField;
     		message.setAuthenticated(authenticatedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer authtokenField = model.getInteger("player_authtoken");
+    	
     	    	
-    	if (authtokenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer authtokenTestField = model.getInteger("player_authtoken");
+    	if (authtokenTestField != null) {
+    		int authtokenField = authtokenTestField;
     		message.setAuthtoken(authtokenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String passwordHashField = model.getString("player_password_hash");
+    	
     	    	
-    	if (passwordHashField != null) {
+    	    	    	    	    	    	
+    	    	    	String passwordHashTestField = model.getString("player_password_hash");
+    	if (passwordHashTestField != null) {
+    		String passwordHashField = passwordHashTestField;
     		message.setPasswordHash(passwordHashField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("player_game_id");
+    	
     	    	
-    	if (gameIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String gameIdTestField = model.getString("player_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String roleField = model.getString("player_role");
-    	    	
-    	if (roleField != null) {
+    	    	    	String roleTestField = model.getString("player_role");
+    	if (roleTestField != null) {
+    		String roleField = roleTestField;
     		message.setRole(roleField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean lockedField = model.getBoolean("player_locked");
+    	
     	    	
-    	if (lockedField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean lockedTestField = model.getBoolean("player_locked");
+    	if (lockedTestField != null) {
+    		boolean lockedField = lockedTestField;
     		message.setLocked(lockedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ipField = model.getInteger("player_ip");
+    	
     	    	
-    	if (ipField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ipTestField = model.getInteger("player_ip");
+    	if (ipTestField != null) {
+    		int ipField = ipTestField;
     		message.setIp(ipField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long ipChangedAtField = model.getLong("player_ip_changed_at");
+    	
     	    	
-    	if (ipChangedAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long ipChangedAtTestField = model.getLong("player_ip_changed_at");
+    	if (ipChangedAtTestField != null) {
+    		long ipChangedAtField = ipChangedAtTestField;
     		message.setIpChangedAt(ipChangedAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("player_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("player_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -720,11 +762,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -733,37 +771,25 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasAuthenticated()  {
-        return authenticated == null ? false : true;
-    }
-        
-		public Boolean getAuthenticated() {
+		            
+		public boolean getAuthenticated() {
 		return authenticated;
 	}
 	
-	public Player setAuthenticated(Boolean authenticated) {
+	public Player setAuthenticated(boolean authenticated) {
 		this.authenticated = authenticated;
 		return this;	}
 	
-		    
-    public Boolean hasAuthtoken()  {
-        return authtoken == null ? false : true;
-    }
-        
-		public Integer getAuthtoken() {
+		            
+		public int getAuthtoken() {
 		return authtoken;
 	}
 	
-	public Player setAuthtoken(Integer authtoken) {
+	public Player setAuthtoken(int authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	
-		    
-    public Boolean hasPasswordHash()  {
-        return passwordHash == null ? false : true;
-    }
-        
+		            
 		public String getPasswordHash() {
 		return passwordHash;
 	}
@@ -772,11 +798,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		this.passwordHash = passwordHash;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -785,24 +807,16 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		this.gameId = gameId;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Player setRecordId(Integer recordId) {
+	public Player setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasRole()  {
-        return role == null ? false : true;
-    }
-        
+		            
 		public String getRole() {
 		return role;
 	}
@@ -811,50 +825,34 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		this.role = role;
 		return this;	}
 	
-		    
-    public Boolean hasLocked()  {
-        return locked == null ? false : true;
-    }
-        
-		public Boolean getLocked() {
+		            
+		public boolean getLocked() {
 		return locked;
 	}
 	
-	public Player setLocked(Boolean locked) {
+	public Player setLocked(boolean locked) {
 		this.locked = locked;
 		return this;	}
 	
-		    
-    public Boolean hasIp()  {
-        return ip == null ? false : true;
-    }
-        
-		public Integer getIp() {
+		            
+		public int getIp() {
 		return ip;
 	}
 	
-	public Player setIp(Integer ip) {
+	public Player setIp(int ip) {
 		this.ip = ip;
 		return this;	}
 	
-		    
-    public Boolean hasIpChangedAt()  {
-        return ipChangedAt == null ? false : true;
-    }
-        
-		public Long getIpChangedAt() {
+		            
+		public long getIpChangedAt() {
 		return ipChangedAt;
 	}
 	
-	public Player setIpChangedAt(Long ipChangedAt) {
+	public Player setIpChangedAt(long ipChangedAt) {
 		this.ipChangedAt = ipChangedAt;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -863,11 +861,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasCharacters()  {
-        return characters == null ? false : true;
-    }
-        
+		            
 		public List<Character> getCharactersList() {
 		if(this.characters == null)
             this.characters = new ArrayList<Character>();
@@ -934,7 +928,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.health.equals(obj.health)) {
+    	    		if (characters.health == obj.health) {
     	      			itr.remove();
     		}
 		}
@@ -950,7 +944,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.recordId.equals(obj.recordId)) {
+    	    		if (characters.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -982,7 +976,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.part.equals(obj.part)) {
+    	    		if (characters.part == obj.part) {
     	      			itr.remove();
     		}
 		}
@@ -998,7 +992,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.parts.equals(obj.parts)) {
+    	    		if (characters.parts == obj.parts) {
     	      			itr.remove();
     		}
 		}
@@ -1014,7 +1008,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldx.equals(obj.worldx)) {
+    	    		if (characters.worldx == obj.worldx) {
     	      			itr.remove();
     		}
 		}
@@ -1030,7 +1024,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldy.equals(obj.worldy)) {
+    	    		if (characters.worldy == obj.worldy) {
     	      			itr.remove();
     		}
 		}
@@ -1046,7 +1040,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.worldz.equals(obj.worldz)) {
+    	    		if (characters.worldz == obj.worldz) {
     	      			itr.remove();
     		}
 		}
@@ -1062,7 +1056,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.zone.equals(obj.zone)) {
+    	    		if (characters.zone == obj.zone) {
     	      			itr.remove();
     		}
 		}
@@ -1078,7 +1072,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.stamina.equals(obj.stamina)) {
+    	    		if (characters.stamina == obj.stamina) {
     	      			itr.remove();
     		}
 		}
@@ -1094,7 +1088,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.magic.equals(obj.magic)) {
+    	    		if (characters.magic == obj.magic) {
     	      			itr.remove();
     		}
 		}
@@ -1110,7 +1104,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
        	while (itr.hasNext()) {
     	Character obj = itr.next();
     	
-    	    		if (characters.includeUmaData.equals(obj.includeUmaData)) {
+    	    		if (characters.includeUmaData == obj.includeUmaData) {
     	      			itr.remove();
     		}
 		}
@@ -1237,61 +1231,72 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     public void writeTo(Output output, Player message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.authenticated != null)
+    	    	    	if( (Boolean)message.authenticated != null) {
             output.writeBool(2, message.authenticated, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.authtoken != null)
+    	    	    	if( (Integer)message.authtoken != null) {
             output.writeInt32(3, message.authtoken, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.passwordHash != null)
+    	    	    	if( (String)message.passwordHash != null) {
             output.writeString(4, message.passwordHash, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(5, message.gameId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(6, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.role != null)
+    	    	    	if( (String)message.role != null) {
             output.writeString(7, message.role, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.locked != null)
+    	    	    	if( (Boolean)message.locked != null) {
             output.writeBool(8, message.locked, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ip != null)
+    	    	    	if( (Integer)message.ip != null) {
             output.writeInt32(9, message.ip, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ipChangedAt != null)
+    	    	    	if( (Long)message.ipChangedAt != null) {
             output.writeInt64(10, message.ipChangedAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(11, message.characterId, false);
+        }
     	    	
     	            	
     	    	
@@ -1299,7 +1304,7 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
         {
             for(Character characters : message.characters)
             {
-                if(characters != null) {
+                if( (Character) characters != null) {
                    	    				output.writeObject(12, characters, Character.getSchema(), true);
     				    			}
             }
@@ -1310,42 +1315,42 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 	public void dumpObject()
     {
     	System.out.println("START Player");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.authenticated != null) {
+    	//}
+    	    	//if(this.authenticated != null) {
     		System.out.println("authenticated="+this.authenticated);
-    	}
-    	    	if(this.authtoken != null) {
+    	//}
+    	    	//if(this.authtoken != null) {
     		System.out.println("authtoken="+this.authtoken);
-    	}
-    	    	if(this.passwordHash != null) {
+    	//}
+    	    	//if(this.passwordHash != null) {
     		System.out.println("passwordHash="+this.passwordHash);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.role != null) {
+    	//}
+    	    	//if(this.role != null) {
     		System.out.println("role="+this.role);
-    	}
-    	    	if(this.locked != null) {
+    	//}
+    	    	//if(this.locked != null) {
     		System.out.println("locked="+this.locked);
-    	}
-    	    	if(this.ip != null) {
+    	//}
+    	    	//if(this.ip != null) {
     		System.out.println("ip="+this.ip);
-    	}
-    	    	if(this.ipChangedAt != null) {
+    	//}
+    	    	//if(this.ipChangedAt != null) {
     		System.out.println("ipChangedAt="+this.ipChangedAt);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.characters != null) {
+    	//}
+    	    	//if(this.characters != null) {
     		System.out.println("characters="+this.characters);
-    	}
+    	//}
     	    	System.out.println("END Player");
     }
     

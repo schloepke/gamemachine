@@ -61,8 +61,10 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
     static final EchoTest DEFAULT_INSTANCE = new EchoTest();
     static final String defaultScope = EchoTest.class.getSimpleName();
 
-    			public String message;
-	    
+    	
+	    	    public String message= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (message != null) {
+    	    	    	//if (message != null) {
     	       	    	model.setString("echo_test_message",message);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static EchoTest fromModel(Model model) {
 		boolean hasFields = false;
     	EchoTest message = new EchoTest();
     	    	    	    	    	
-    	    	    	String messageField = model.getString("echo_test_message");
-    	    	
-    	if (messageField != null) {
+    	    	    	String messageTestField = model.getString("echo_test_message");
+    	if (messageTestField != null) {
+    		String messageField = messageTestField;
     		message.setMessage(messageField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
     }
 
 
-	    
-    public Boolean hasMessage()  {
-        return message == null ? false : true;
-    }
-        
+	            
 		public String getMessage() {
 		return message;
 	}
@@ -189,11 +189,12 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
     public void writeTo(Output output, EchoTest message) throws IOException
     {
     	    	
-    	    	if(message.message == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.message == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.message != null)
+    	    	    	if( (String)message.message != null) {
             output.writeString(1, message.message, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
 	public void dumpObject()
     {
     	System.out.println("START EchoTest");
-    	    	if(this.message != null) {
+    	    	//if(this.message != null) {
     		System.out.println("message="+this.message);
-    	}
+    	//}
     	    	System.out.println("END EchoTest");
     }
     

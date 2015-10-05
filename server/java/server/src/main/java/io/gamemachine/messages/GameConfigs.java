@@ -91,11 +91,7 @@ public final class GameConfigs implements Externalizable, Message<GameConfigs>, 
     }
 
 
-	    
-    public Boolean hasGameConfig()  {
-        return gameConfig == null ? false : true;
-    }
-        
+	            
 		public List<GameConfig> getGameConfigList() {
 		if(this.gameConfig == null)
             this.gameConfig = new ArrayList<GameConfig>();
@@ -146,7 +142,7 @@ public final class GameConfigs implements Externalizable, Message<GameConfigs>, 
        	while (itr.hasNext()) {
     	GameConfig obj = itr.next();
     	
-    	    		if (gameConfig.version.equals(obj.version)) {
+    	    		if (gameConfig.version == obj.version) {
     	      			itr.remove();
     		}
 		}
@@ -250,7 +246,7 @@ public final class GameConfigs implements Externalizable, Message<GameConfigs>, 
         {
             for(GameConfig gameConfig : message.gameConfig)
             {
-                if(gameConfig != null) {
+                if( (GameConfig) gameConfig != null) {
                    	    				output.writeObject(1, gameConfig, GameConfig.getSchema(), true);
     				    			}
             }
@@ -261,9 +257,9 @@ public final class GameConfigs implements Externalizable, Message<GameConfigs>, 
 	public void dumpObject()
     {
     	System.out.println("START GameConfigs");
-    	    	if(this.gameConfig != null) {
+    	    	//if(this.gameConfig != null) {
     		System.out.println("gameConfig="+this.gameConfig);
-    	}
+    	//}
     	    	System.out.println("END GameConfigs");
     }
     

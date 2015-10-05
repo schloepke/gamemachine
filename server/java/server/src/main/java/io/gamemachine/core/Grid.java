@@ -92,10 +92,10 @@ public class Grid {
 
 		private TrackData cloneTrackData(TrackData trackData) {
 			TrackData clone = trackData.clone();
-			clone.x = null;
-			clone.y = null;
-			clone.z = null;
-			clone.getNeighbors = null;
+			clone.x = 0;
+			clone.y = 0;
+			clone.z = 0;
+			clone.getNeighbors = 0;
 			clone.characterId = null;
 			clone.dynamicMessage = trackData.dynamicMessage;
 			clone.userDefinedData = trackData.userDefinedData;
@@ -378,7 +378,7 @@ public class Grid {
 		trackData.y += deltaTrackData.iy;
 		trackData.z += deltaTrackData.iz;
 
-		if (deltaTrackData.hasDynamicMessage()) {
+		if (deltaTrackData.dynamicMessage != null) {
 			trackData.dynamicMessage = deltaTrackData.dynamicMessage;
 		}
 
@@ -396,7 +396,7 @@ public class Grid {
 		updateStatus.put(newTrackData.id, System.currentTimeMillis());
 		
 		TrackData trackData = null;
-		if (newTrackData.hasIx()) {
+		if (newTrackData.ix > 0) {
 			trackData = updateFromDelta(newTrackData);
 			if (trackData == null) {
 				logger.debug("Delta update with no original " + newTrackData.id);

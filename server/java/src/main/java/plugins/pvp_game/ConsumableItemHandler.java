@@ -6,13 +6,14 @@ import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.core.PlayerVitalsHandler;
 import io.gamemachine.messages.GmBounds;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.WorldObject;
 import io.gamemachine.messages.WorldObjects;
+import plugins.combat.Common;
+import plugins.combat.PlayerVitalsHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +52,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 			defaultGrid = GameGrid.getGameGrid(Common.gameId, "default",playerId);
 		}
 				
-		if (gameMessage.hasUseItem()) {
+		if (gameMessage.useItem != null) {
 			
 			// Make PlayerItemManager into game message actor and move this there
 			//logger.warning(playerId+ " useItem "+gameMessage.useItem.id+" action "+gameMessage.useItem.action);
@@ -62,7 +63,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 			return;
 		}
 		
-		if (gameMessage.hasEquippedItem()) {
+		if (gameMessage.equippedItem != null) {
 			String itemId = PlayerItemManager.getEquippedItem(gameMessage.equippedItem.playerId);
 			if (itemId != null) {
 				logger.warning(playerId+" requested equipped for "+ gameMessage.equippedItem.playerId+ " equipped with "+itemId);
@@ -75,11 +76,11 @@ public class ConsumableItemHandler extends GameMessageActor {
 			return;
 		}
 
-		if (gameMessage.hasWorldObjects()) {
+		if (gameMessage.worldObjects != null) {
 
 			for (WorldObject worldObject : gameMessage.worldObjects.worldObject) {
 				if (worldObject.action == 1) {
-					if (gameMessage.hasBounds()) {
+					if (gameMessage.bounds != null) {
 						deployInBounds(worldObject, gameMessage.bounds);
 					} else {
 						deploy(worldObject);
@@ -151,8 +152,8 @@ public class ConsumableItemHandler extends GameMessageActor {
 				for (String target : targets) {
 					if (wobjects.containsKey(target)) {
 						WorldObject worldObject = wobjects.get(target);
-						if (worldObject.hasHealth() && worldObject.health <= 0) {
-							if (worldObject.hasPlayerItemId()) {
+						if (worldObject.health <= 0) {
+							if (!Strings.isNullOrEmpty(worldObject.playerItemId)) {
 								//remove(worldObject.id);
 								//continue;
 							}
@@ -242,7 +243,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 	}
 
 	private void create(WorldObject worldObject) {
-		if (worldObject.hasId()) {
+		if (!Strings.isNullOrEmpty(worldObject.id)) {
 			WorldObject existing = find(worldObject.id);
 			if (existing != null) {
 				return;
@@ -251,7 +252,7 @@ public class ConsumableItemHandler extends GameMessageActor {
 			worldObject.id = genId(worldObject);
 		}
 
-		if (worldObject.hasPlayerItemId()) {
+		if (!Strings.isNullOrEmpty(worldObject.playerItemId)) {
 			PlayerItem global = PlayerItemManager.playerItemGlobal(worldObject.playerItemId);
 			if (global != null) {
 				worldObject.maxHealth = global.maxHealth;

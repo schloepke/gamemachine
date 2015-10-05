@@ -61,8 +61,10 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
     static final PlayerItems DEFAULT_INSTANCE = new PlayerItems();
     static final String defaultScope = PlayerItems.class.getSimpleName();
 
-    			public Boolean catalog;
-	    
+    	
+	    	    public boolean catalog= false;
+	    		
+    
             public List<PlayerItem> playerItem;
 	    
 
@@ -82,22 +84,24 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (catalog != null) {
+    	    	    	//if (catalog != null) {
     	       	    	model.setBoolean("player_items_catalog",catalog);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static PlayerItems fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerItems message = new PlayerItems();
     	    	    	    	    	
-    	    	    	Boolean catalogField = model.getBoolean("player_items_catalog");
-    	    	
-    	if (catalogField != null) {
+    	    	    	Boolean catalogTestField = model.getBoolean("player_items_catalog");
+    	if (catalogTestField != null) {
+    		boolean catalogField = catalogTestField;
     		message.setCatalog(catalogField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -106,24 +110,16 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
     }
 
 
-	    
-    public Boolean hasCatalog()  {
-        return catalog == null ? false : true;
-    }
-        
-		public Boolean getCatalog() {
+	            
+		public boolean getCatalog() {
 		return catalog;
 	}
 	
-	public PlayerItems setCatalog(Boolean catalog) {
+	public PlayerItems setCatalog(boolean catalog) {
 		this.catalog = catalog;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItem()  {
-        return playerItem == null ? false : true;
-    }
-        
+		            
 		public List<PlayerItem> getPlayerItemList() {
 		if(this.playerItem == null)
             this.playerItem = new ArrayList<PlayerItem>();
@@ -190,7 +186,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.quantity.equals(obj.quantity)) {
+    	    		if (playerItem.quantity == obj.quantity) {
     	      			itr.remove();
     		}
 		}
@@ -222,7 +218,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.weapon.equals(obj.weapon)) {
+    	    		if (playerItem.weapon == obj.weapon) {
     	      			itr.remove();
     		}
 		}
@@ -254,7 +250,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.recordId.equals(obj.recordId)) {
+    	    		if (playerItem.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -286,7 +282,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.harvestable.equals(obj.harvestable)) {
+    	    		if (playerItem.harvestable == obj.harvestable) {
     	      			itr.remove();
     		}
 		}
@@ -302,7 +298,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.craftingResource.equals(obj.craftingResource)) {
+    	    		if (playerItem.craftingResource == obj.craftingResource) {
     	      			itr.remove();
     		}
 		}
@@ -318,7 +314,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.craftable.equals(obj.craftable)) {
+    	    		if (playerItem.craftable == obj.craftable) {
     	      			itr.remove();
     		}
 		}
@@ -334,7 +330,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.isConsumable.equals(obj.isConsumable)) {
+    	    		if (playerItem.isConsumable == obj.isConsumable) {
     	      			itr.remove();
     		}
 		}
@@ -350,7 +346,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.type.equals(obj.type)) {
+    	    		if (playerItem.type == obj.type) {
     	      			itr.remove();
     		}
 		}
@@ -366,7 +362,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.maxHealth.equals(obj.maxHealth)) {
+    	    		if (playerItem.maxHealth == obj.maxHealth) {
     	      			itr.remove();
     		}
 		}
@@ -382,7 +378,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.health.equals(obj.health)) {
+    	    		if (playerItem.health == obj.health) {
     	      			itr.remove();
     		}
 		}
@@ -398,7 +394,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.level.equals(obj.level)) {
+    	    		if (playerItem.level == obj.level) {
     	      			itr.remove();
     		}
 		}
@@ -446,7 +442,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.updatedAt.equals(obj.updatedAt)) {
+    	    		if (playerItem.updatedAt == obj.updatedAt) {
     	      			itr.remove();
     		}
 		}
@@ -494,7 +490,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.slotCount.equals(obj.slotCount)) {
+    	    		if (playerItem.slotCount == obj.slotCount) {
     	      			itr.remove();
     		}
 		}
@@ -510,7 +506,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.stackable.equals(obj.stackable)) {
+    	    		if (playerItem.stackable == obj.stackable) {
     	      			itr.remove();
     		}
 		}
@@ -542,7 +538,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.stackMax.equals(obj.stackMax)) {
+    	    		if (playerItem.stackMax == obj.stackMax) {
     	      			itr.remove();
     		}
 		}
@@ -558,7 +554,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.containerSlot.equals(obj.containerSlot)) {
+    	    		if (playerItem.containerSlot == obj.containerSlot) {
     	      			itr.remove();
     		}
 		}
@@ -622,7 +618,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.hidden.equals(obj.hidden)) {
+    	    		if (playerItem.hidden == obj.hidden) {
     	      			itr.remove();
     		}
 		}
@@ -638,7 +634,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.maxQuantity.equals(obj.maxQuantity)) {
+    	    		if (playerItem.maxQuantity == obj.maxQuantity) {
     	      			itr.remove();
     		}
 		}
@@ -654,7 +650,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.active.equals(obj.active)) {
+    	    		if (playerItem.active == obj.active) {
     	      			itr.remove();
     		}
 		}
@@ -670,7 +666,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.weight.equals(obj.weight)) {
+    	    		if (playerItem.weight == obj.weight) {
     	      			itr.remove();
     		}
 		}
@@ -686,7 +682,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
        	while (itr.hasNext()) {
     	PlayerItem obj = itr.next();
     	
-    	    		if (playerItem.templateBlockId.equals(obj.templateBlockId)) {
+    	    		if (playerItem.templateBlockId == obj.templateBlockId) {
     	      			itr.remove();
     		}
 		}
@@ -774,8 +770,9 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
     {
     	    	
     	    	
-    	    	    	if(message.catalog != null)
+    	    	    	if( (Boolean)message.catalog != null) {
             output.writeBool(1, message.catalog, false);
+        }
     	    	
     	            	
     	    	
@@ -783,7 +780,7 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
         {
             for(PlayerItem playerItem : message.playerItem)
             {
-                if(playerItem != null) {
+                if( (PlayerItem) playerItem != null) {
                    	    				output.writeObject(2, playerItem, PlayerItem.getSchema(), true);
     				    			}
             }
@@ -794,12 +791,12 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
 	public void dumpObject()
     {
     	System.out.println("START PlayerItems");
-    	    	if(this.catalog != null) {
+    	    	//if(this.catalog != null) {
     		System.out.println("catalog="+this.catalog);
-    	}
-    	    	if(this.playerItem != null) {
+    	//}
+    	    	//if(this.playerItem != null) {
     		System.out.println("playerItem="+this.playerItem);
-    	}
+    	//}
     	    	System.out.println("END PlayerItems");
     }
     

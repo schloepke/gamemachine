@@ -61,10 +61,14 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
     static final MonoMessage DEFAULT_INSTANCE = new MonoMessage();
     static final String defaultScope = MonoMessage.class.getSimpleName();
 
-    			public Entity entity;
-	    
-        			public String klass;
-	    
+    	
+	    	    public Entity entity;
+	    		
+    
+        	
+	    	    public String klass= null;
+	    		
+    
         
 
 
@@ -83,22 +87,24 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (klass != null) {
+    	    	    	//if (klass != null) {
     	       	    	model.setString("mono_message_klass",klass);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static MonoMessage fromModel(Model model) {
 		boolean hasFields = false;
     	MonoMessage message = new MonoMessage();
     	    	    	    	    	    	
-    	    	    	String klassField = model.getString("mono_message_klass");
-    	    	
-    	if (klassField != null) {
+    	    	    	String klassTestField = model.getString("mono_message_klass");
+    	if (klassTestField != null) {
+    		String klassField = klassTestField;
     		message.setKlass(klassField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -107,11 +113,7 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
     }
 
 
-	    
-    public Boolean hasEntity()  {
-        return entity == null ? false : true;
-    }
-        
+	            
 		public Entity getEntity() {
 		return entity;
 	}
@@ -120,11 +122,7 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
 		this.entity = entity;
 		return this;	}
 	
-		    
-    public Boolean hasKlass()  {
-        return klass == null ? false : true;
-    }
-        
+		            
 		public String getKlass() {
 		return klass;
 	}
@@ -214,8 +212,9 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
     	    	
     	            	
     	    	
-    	    	    	if(message.klass != null)
+    	    	    	if( (String)message.klass != null) {
             output.writeString(2, message.klass, false);
+        }
     	    	
     	            	
     }
@@ -223,12 +222,12 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
 	public void dumpObject()
     {
     	System.out.println("START MonoMessage");
-    	    	if(this.entity != null) {
+    	    	//if(this.entity != null) {
     		System.out.println("entity="+this.entity);
-    	}
-    	    	if(this.klass != null) {
+    	//}
+    	    	//if(this.klass != null) {
     		System.out.println("klass="+this.klass);
-    	}
+    	//}
     	    	System.out.println("END MonoMessage");
     }
     

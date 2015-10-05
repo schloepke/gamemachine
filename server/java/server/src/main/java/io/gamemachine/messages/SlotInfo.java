@@ -61,10 +61,14 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
     static final SlotInfo DEFAULT_INSTANCE = new SlotInfo();
     static final String defaultScope = SlotInfo.class.getSimpleName();
 
-    			public String placedBlockId;
-	    
-        			public String slotId;
-	    
+    	
+	    	    public String placedBlockId= null;
+	    		
+    
+        	
+	    	    public String slotId= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (placedBlockId != null) {
+    	    	    	//if (placedBlockId != null) {
     	       	    	model.setString("slot_info_placed_block_id",placedBlockId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (slotId != null) {
+    	    	    	//if (slotId != null) {
     	       	    	model.setString("slot_info_slot_id",slotId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static SlotInfo fromModel(Model model) {
 		boolean hasFields = false;
     	SlotInfo message = new SlotInfo();
     	    	    	    	    	
-    	    	    	String placedBlockIdField = model.getString("slot_info_placed_block_id");
-    	    	
-    	if (placedBlockIdField != null) {
+    	    	    	String placedBlockIdTestField = model.getString("slot_info_placed_block_id");
+    	if (placedBlockIdTestField != null) {
+    		String placedBlockIdField = placedBlockIdTestField;
     		message.setPlacedBlockId(placedBlockIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String slotIdField = model.getString("slot_info_slot_id");
+    	
     	    	
-    	if (slotIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String slotIdTestField = model.getString("slot_info_slot_id");
+    	if (slotIdTestField != null) {
+    		String slotIdField = slotIdTestField;
     		message.setSlotId(slotIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
     }
 
 
-	    
-    public Boolean hasPlacedBlockId()  {
-        return placedBlockId == null ? false : true;
-    }
-        
+	            
 		public String getPlacedBlockId() {
 		return placedBlockId;
 	}
@@ -133,11 +137,7 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
 		this.placedBlockId = placedBlockId;
 		return this;	}
 	
-		    
-    public Boolean hasSlotId()  {
-        return slotId == null ? false : true;
-    }
-        
+		            
 		public String getSlotId() {
 		return slotId;
 	}
@@ -221,18 +221,20 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
     public void writeTo(Output output, SlotInfo message) throws IOException
     {
     	    	
-    	    	if(message.placedBlockId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.placedBlockId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.placedBlockId != null)
+    	    	    	if( (String)message.placedBlockId != null) {
             output.writeString(1, message.placedBlockId, false);
+        }
     	    	
     	            	
-    	    	if(message.slotId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.slotId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.slotId != null)
+    	    	    	if( (String)message.slotId != null) {
             output.writeString(2, message.slotId, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
 	public void dumpObject()
     {
     	System.out.println("START SlotInfo");
-    	    	if(this.placedBlockId != null) {
+    	    	//if(this.placedBlockId != null) {
     		System.out.println("placedBlockId="+this.placedBlockId);
-    	}
-    	    	if(this.slotId != null) {
+    	//}
+    	    	//if(this.slotId != null) {
     		System.out.println("slotId="+this.slotId);
-    	}
+    	//}
     	    	System.out.println("END SlotInfo");
     }
     

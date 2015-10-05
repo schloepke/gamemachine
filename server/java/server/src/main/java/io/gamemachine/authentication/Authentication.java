@@ -77,7 +77,7 @@ public class Authentication {
 		// 0 signifies logged out in the db, it's reserved and clients should never send this
 		if (player.authtoken == 0) {
 			return false;
-		} else 	if (isPublic() || player.authtoken.equals(authtokenForPlayer(player))) {
+		} else 	if (isPublic() || player.authtoken == authtokenForPlayer(player)) {
 			return true;
 		} else {
 			return false;

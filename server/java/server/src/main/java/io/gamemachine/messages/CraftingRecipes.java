@@ -62,8 +62,10 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
     static final String defaultScope = CraftingRecipes.class.getSimpleName();
 
         public List<CraftingRecipe> craftingRecipes;
-	    			public String itemCatalog;
-	    
+	    	
+	    	    public String itemCatalog= null;
+	    		
+    
         
 
 
@@ -82,22 +84,24 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (itemCatalog != null) {
+    	    	    	//if (itemCatalog != null) {
     	       	    	model.setString("crafting_recipes_item_catalog",itemCatalog);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CraftingRecipes fromModel(Model model) {
 		boolean hasFields = false;
     	CraftingRecipes message = new CraftingRecipes();
     	    	    	    	    	    	
-    	    	    	String itemCatalogField = model.getString("crafting_recipes_item_catalog");
-    	    	
-    	if (itemCatalogField != null) {
+    	    	    	String itemCatalogTestField = model.getString("crafting_recipes_item_catalog");
+    	if (itemCatalogTestField != null) {
+    		String itemCatalogField = itemCatalogTestField;
     		message.setItemCatalog(itemCatalogField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -106,11 +110,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
     }
 
 
-	    
-    public Boolean hasCraftingRecipes()  {
-        return craftingRecipes == null ? false : true;
-    }
-        
+	            
 		public List<CraftingRecipe> getCraftingRecipesList() {
 		if(this.craftingRecipes == null)
             this.craftingRecipes = new ArrayList<CraftingRecipe>();
@@ -161,7 +161,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
        	while (itr.hasNext()) {
     	CraftingRecipe obj = itr.next();
     	
-    	    		if (craftingRecipes.orderMatters.equals(obj.orderMatters)) {
+    	    		if (craftingRecipes.orderMatters == obj.orderMatters) {
     	      			itr.remove();
     		}
 		}
@@ -177,7 +177,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
        	while (itr.hasNext()) {
     	CraftingRecipe obj = itr.next();
     	
-    	    		if (craftingRecipes.timeToComplete.equals(obj.timeToComplete)) {
+    	    		if (craftingRecipes.timeToComplete == obj.timeToComplete) {
     	      			itr.remove();
     		}
 		}
@@ -193,7 +193,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
        	while (itr.hasNext()) {
     	CraftingRecipe obj = itr.next();
     	
-    	    		if (craftingRecipes.maxUses.equals(obj.maxUses)) {
+    	    		if (craftingRecipes.maxUses == obj.maxUses) {
     	      			itr.remove();
     		}
 		}
@@ -209,7 +209,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
        	while (itr.hasNext()) {
     	CraftingRecipe obj = itr.next();
     	
-    	    		if (craftingRecipes.active.equals(obj.active)) {
+    	    		if (craftingRecipes.active == obj.active) {
     	      			itr.remove();
     		}
 		}
@@ -220,11 +220,7 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
     
     
     
-		    
-    public Boolean hasItemCatalog()  {
-        return itemCatalog == null ? false : true;
-    }
-        
+		            
 		public String getItemCatalog() {
 		return itemCatalog;
 	}
@@ -314,17 +310,18 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
         {
             for(CraftingRecipe craftingRecipes : message.craftingRecipes)
             {
-                if(craftingRecipes != null) {
+                if( (CraftingRecipe) craftingRecipes != null) {
                    	    				output.writeObject(1, craftingRecipes, CraftingRecipe.getSchema(), true);
     				    			}
             }
         }
     	            	
-    	    	if(message.itemCatalog == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.itemCatalog == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.itemCatalog != null)
+    	    	    	if( (String)message.itemCatalog != null) {
             output.writeString(2, message.itemCatalog, false);
+        }
     	    	
     	            	
     }
@@ -332,12 +329,12 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
 	public void dumpObject()
     {
     	System.out.println("START CraftingRecipes");
-    	    	if(this.craftingRecipes != null) {
+    	    	//if(this.craftingRecipes != null) {
     		System.out.println("craftingRecipes="+this.craftingRecipes);
-    	}
-    	    	if(this.itemCatalog != null) {
+    	//}
+    	    	//if(this.itemCatalog != null) {
     		System.out.println("itemCatalog="+this.itemCatalog);
-    	}
+    	//}
     	    	System.out.println("END CraftingRecipes");
     }
     

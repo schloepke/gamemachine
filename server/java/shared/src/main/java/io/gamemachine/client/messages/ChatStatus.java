@@ -51,7 +51,7 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
 
     static final ChatStatus DEFAULT_INSTANCE = new ChatStatus();
 
-    			public Integer notused;
+    			public int notused;
 	    
       
     public ChatStatus()
@@ -67,11 +67,11 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
         return notused == null ? false : true;
     }
         
-		public Integer getNotused() {
+		public int getNotused() {
 		return notused;
 	}
 	
-	public ChatStatus setNotused(Integer notused) {
+	public ChatStatus setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	

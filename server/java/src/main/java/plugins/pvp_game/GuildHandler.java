@@ -142,7 +142,7 @@ public class GuildHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		
-		if (gameMessage.hasGuildAction()) {
+		if (gameMessage.guildAction != null) {
 			GuildAction guildAction = gameMessage.guildAction;
 			Guild guild = null;
 			if (guildAction.action.equals("guilds")) {

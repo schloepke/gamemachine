@@ -91,11 +91,7 @@ public final class Guilds implements Externalizable, Message<Guilds>, Schema<Gui
     }
 
 
-	    
-    public Boolean hasGuild()  {
-        return guild == null ? false : true;
-    }
-        
+	            
 		public List<Guild> getGuildList() {
 		if(this.guild == null)
             this.guild = new ArrayList<Guild>();
@@ -162,7 +158,7 @@ public final class Guilds implements Externalizable, Message<Guilds>, Schema<Gui
        	while (itr.hasNext()) {
     	Guild obj = itr.next();
     	
-    	    		if (guild.recordId.equals(obj.recordId)) {
+    	    		if (guild.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -266,7 +262,7 @@ public final class Guilds implements Externalizable, Message<Guilds>, Schema<Gui
         {
             for(Guild guild : message.guild)
             {
-                if(guild != null) {
+                if( (Guild) guild != null) {
                    	    				output.writeObject(1, guild, Guild.getSchema(), true);
     				    			}
             }
@@ -277,9 +273,9 @@ public final class Guilds implements Externalizable, Message<Guilds>, Schema<Gui
 	public void dumpObject()
     {
     	System.out.println("START Guilds");
-    	    	if(this.guild != null) {
+    	    	//if(this.guild != null) {
     		System.out.println("guild="+this.guild);
-    	}
+    	//}
     	    	System.out.println("END Guilds");
     }
     

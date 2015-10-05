@@ -61,10 +61,14 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
     static final JsonEntity DEFAULT_INSTANCE = new JsonEntity();
     static final String defaultScope = JsonEntity.class.getSimpleName();
 
-    			public String json;
-	    
-        			public String klass;
-	    
+    	
+	    	    public String json= null;
+	    		
+    
+        	
+	    	    public String klass= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (json != null) {
+    	    	    	//if (json != null) {
     	       	    	model.setString("json_entity_json",json);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (klass != null) {
+    	    	    	//if (klass != null) {
     	       	    	model.setString("json_entity_klass",klass);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static JsonEntity fromModel(Model model) {
 		boolean hasFields = false;
     	JsonEntity message = new JsonEntity();
     	    	    	    	    	
-    	    	    	String jsonField = model.getString("json_entity_json");
-    	    	
-    	if (jsonField != null) {
+    	    	    	String jsonTestField = model.getString("json_entity_json");
+    	if (jsonTestField != null) {
+    		String jsonField = jsonTestField;
     		message.setJson(jsonField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String klassField = model.getString("json_entity_klass");
+    	
     	    	
-    	if (klassField != null) {
+    	    	    	    	    	    	
+    	    	    	String klassTestField = model.getString("json_entity_klass");
+    	if (klassTestField != null) {
+    		String klassField = klassTestField;
     		message.setKlass(klassField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
     }
 
 
-	    
-    public Boolean hasJson()  {
-        return json == null ? false : true;
-    }
-        
+	            
 		public String getJson() {
 		return json;
 	}
@@ -133,11 +137,7 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
 		this.json = json;
 		return this;	}
 	
-		    
-    public Boolean hasKlass()  {
-        return klass == null ? false : true;
-    }
-        
+		            
 		public String getKlass() {
 		return klass;
 	}
@@ -221,16 +221,18 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
     public void writeTo(Output output, JsonEntity message) throws IOException
     {
     	    	
-    	    	if(message.json == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.json == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.json != null)
+    	    	    	if( (String)message.json != null) {
             output.writeString(1, message.json, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.klass != null)
+    	    	    	if( (String)message.klass != null) {
             output.writeString(2, message.klass, false);
+        }
     	    	
     	            	
     }
@@ -238,12 +240,12 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
 	public void dumpObject()
     {
     	System.out.println("START JsonEntity");
-    	    	if(this.json != null) {
+    	    	//if(this.json != null) {
     		System.out.println("json="+this.json);
-    	}
-    	    	if(this.klass != null) {
+    	//}
+    	    	//if(this.klass != null) {
     		System.out.println("klass="+this.klass);
-    	}
+    	//}
     	    	System.out.println("END JsonEntity");
     }
     

@@ -99,13 +99,13 @@ module GameMachine
         end
 
         def model_filter(message)
-          if message.is_a?(MessageLib::Entity) && message.has_json_entity
+          if message.is_a?(MessageLib::Entity) && !message.json_entity.nil?
             # Don't convert outgoing messages
             if message.send_to_player
               message
             else
               model = Model.from_entity(message)
-              if message.has_player
+              if message.player != nil
                 model.player_id = message.player.id
               end
               return model

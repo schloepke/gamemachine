@@ -61,18 +61,30 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
     static final ChatMessage DEFAULT_INSTANCE = new ChatMessage();
     static final String defaultScope = ChatMessage.class.getSimpleName();
 
-    			public ChatChannel chatChannel;
-	    
-        			public String message;
-	    
-        			public String type;
-	    
-        			public String senderId;
-	    
-        			public Entity entity;
-	    
-        			public DynamicMessage dynamicMessage;
-	    
+    	
+	    	    public ChatChannel chatChannel;
+	    		
+    
+        	
+	    	    public String message= null;
+	    		
+    
+        	
+	    	    public String type= null;
+	    		
+    
+        	
+	    	    public String senderId= null;
+	    		
+    
+        	
+	    	    public Entity entity;
+	    		
+    
+        	
+	    	    public DynamicMessage dynamicMessage;
+	    		
+    
         
 
 
@@ -93,46 +105,52 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (message != null) {
+    	    	    	//if (message != null) {
     	       	    	model.setString("chat_message_message",message);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("chat_message_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (senderId != null) {
+    	    	    	//if (senderId != null) {
     	       	    	model.setString("chat_message_sender_id",senderId);
     	        		
-    	}
+    	//}
     	    	    	    	    }
     
 	public static ChatMessage fromModel(Model model) {
 		boolean hasFields = false;
     	ChatMessage message = new ChatMessage();
     	    	    	    	    	    	
-    	    	    	String messageField = model.getString("chat_message_message");
-    	    	
-    	if (messageField != null) {
+    	    	    	String messageTestField = model.getString("chat_message_message");
+    	if (messageTestField != null) {
+    		String messageField = messageTestField;
     		message.setMessage(messageField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String typeField = model.getString("chat_message_type");
+    	
     	    	
-    	if (typeField != null) {
+    	    	    	    	    	    	
+    	    	    	String typeTestField = model.getString("chat_message_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String senderIdField = model.getString("chat_message_sender_id");
+    	
     	    	
-    	if (senderIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String senderIdTestField = model.getString("chat_message_sender_id");
+    	if (senderIdTestField != null) {
+    		String senderIdField = senderIdTestField;
     		message.setSenderId(senderIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -141,11 +159,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
     }
 
 
-	    
-    public Boolean hasChatChannel()  {
-        return chatChannel == null ? false : true;
-    }
-        
+	            
 		public ChatChannel getChatChannel() {
 		return chatChannel;
 	}
@@ -154,11 +168,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		this.chatChannel = chatChannel;
 		return this;	}
 	
-		    
-    public Boolean hasMessage()  {
-        return message == null ? false : true;
-    }
-        
+		            
 		public String getMessage() {
 		return message;
 	}
@@ -167,11 +177,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		this.message = message;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+		            
 		public String getType() {
 		return type;
 	}
@@ -180,11 +186,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasSenderId()  {
-        return senderId == null ? false : true;
-    }
-        
+		            
 		public String getSenderId() {
 		return senderId;
 	}
@@ -193,11 +195,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		this.senderId = senderId;
 		return this;	}
 	
-		    
-    public Boolean hasEntity()  {
-        return entity == null ? false : true;
-    }
-        
+		            
 		public Entity getEntity() {
 		return entity;
 	}
@@ -206,11 +204,7 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		this.entity = entity;
 		return this;	}
 	
-		    
-    public Boolean hasDynamicMessage()  {
-        return dynamicMessage == null ? false : true;
-    }
-        
+		            
 		public DynamicMessage getDynamicMessage() {
 		return dynamicMessage;
 	}
@@ -310,30 +304,33 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
     public void writeTo(Output output, ChatMessage message) throws IOException
     {
     	    	
-    	    	if(message.chatChannel == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.chatChannel == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.chatChannel != null)
     		output.writeObject(1, message.chatChannel, ChatChannel.getSchema(), false);
     	    	
     	            	
-    	    	if(message.message == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.message == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.message != null)
+    	    	    	if( (String)message.message != null) {
             output.writeString(2, message.message, false);
+        }
     	    	
     	            	
-    	    	if(message.type == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.type == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(3, message.type, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.senderId != null)
+    	    	    	if( (String)message.senderId != null) {
             output.writeString(4, message.senderId, false);
+        }
     	    	
     	            	
     	    	
@@ -351,24 +348,24 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 	public void dumpObject()
     {
     	System.out.println("START ChatMessage");
-    	    	if(this.chatChannel != null) {
+    	    	//if(this.chatChannel != null) {
     		System.out.println("chatChannel="+this.chatChannel);
-    	}
-    	    	if(this.message != null) {
+    	//}
+    	    	//if(this.message != null) {
     		System.out.println("message="+this.message);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.senderId != null) {
+    	//}
+    	    	//if(this.senderId != null) {
     		System.out.println("senderId="+this.senderId);
-    	}
-    	    	if(this.entity != null) {
+    	//}
+    	    	//if(this.entity != null) {
     		System.out.println("entity="+this.entity);
-    	}
-    	    	if(this.dynamicMessage != null) {
+    	//}
+    	    	//if(this.dynamicMessage != null) {
     		System.out.println("dynamicMessage="+this.dynamicMessage);
-    	}
+    	//}
     	    	System.out.println("END ChatMessage");
     }
     

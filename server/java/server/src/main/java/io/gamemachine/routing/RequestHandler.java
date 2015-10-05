@@ -32,7 +32,7 @@ public class RequestHandler extends UntypedActor {
 	public void onReceive(Object message) {
 		if (message instanceof ClientMessage) {
 			ClientMessage clientMessage = (ClientMessage) message;
-			if (clientMessage.hasTrackData()) {
+			if (clientMessage.trackData != null) {
 				entityRouter.routeTrackData(clientMessage.getTrackData());
 			}
 			

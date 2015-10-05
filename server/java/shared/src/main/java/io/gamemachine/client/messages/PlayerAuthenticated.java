@@ -53,7 +53,7 @@ public final class PlayerAuthenticated implements Externalizable, Message<Player
 
     			public String playerId;
 	    
-        			public Integer authtoken;
+        			public int authtoken;
 	    
       
     public PlayerAuthenticated()
@@ -82,11 +82,11 @@ public final class PlayerAuthenticated implements Externalizable, Message<Player
         return authtoken == null ? false : true;
     }
         
-		public Integer getAuthtoken() {
+		public int getAuthtoken() {
 		return authtoken;
 	}
 	
-	public PlayerAuthenticated setAuthtoken(Integer authtoken) {
+	public PlayerAuthenticated setAuthtoken(int authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	

@@ -213,11 +213,51 @@ module GameMachine
         end
       end
 
-      def get_type(field)
+      def default_value(field)
+        if field.getJavaType.to_s == 'int'
+          return 0
+        elsif field.getJavaType.to_s == 'boolean'
+            return 'false'
+        elsif field.getJavaType.to_s == 'double'
+          return '0D'
+        elsif field.getJavaType.to_s == 'long'
+          return '0L'
+        elsif field.getJavaType.to_s == 'float'
+          return '0F'
+        elsif field.getJavaType.to_s == 'String'
+          return 'null'
+        else
+          return nil
+        end
+      end
+           
+      def nullable(field)
         if field.getJavaType.to_s == 'int'
           return 'Integer'
-        elsif ['boolean','double','float','long'].include?(field.getJavaType.to_s)
+        elsif ['boolean','double','long','float'].include?(field.getJavaType.to_s)
           return field.getJavaType.to_s.clone.capitalize
+        else
+          return field.getJavaType
+        end
+      end
+      
+      def setter(field)
+        if field.getJavaType.to_s == 'int'
+          return 'Integer'
+        elsif ['boolean','double','long','float'].include?(field.getJavaType.to_s)
+          return field.getJavaType.to_s.clone.capitalize
+        else
+          return field.getJavaType
+        end
+      end
+      
+      def get_type(field)
+        if field.getJavaType.to_s == 'int'
+          return 'int'
+        elsif field.getJavaType.to_s == 'float'
+          return 'float'
+        elsif ['boolean','double','long'].include?(field.getJavaType.to_s)
+          return field.getJavaType.to_s.clone
         else
           return field.getJavaType
         end

@@ -61,8 +61,10 @@ public final class ObjectdbPut implements Externalizable, Message<ObjectdbPut>, 
     static final ObjectdbPut DEFAULT_INSTANCE = new ObjectdbPut();
     static final String defaultScope = ObjectdbPut.class.getSimpleName();
 
-    			public Entity entity;
-	    
+    	
+	    	    public Entity entity;
+	    		
+    
         
 
 
@@ -92,11 +94,7 @@ public final class ObjectdbPut implements Externalizable, Message<ObjectdbPut>, 
     }
 
 
-	    
-    public Boolean hasEntity()  {
-        return entity == null ? false : true;
-    }
-        
+	            
 		public Entity getEntity() {
 		return entity;
 	}
@@ -176,8 +174,8 @@ public final class ObjectdbPut implements Externalizable, Message<ObjectdbPut>, 
     public void writeTo(Output output, ObjectdbPut message) throws IOException
     {
     	    	
-    	    	if(message.entity == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entity == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.entity != null)
     		output.writeObject(1, message.entity, Entity.getSchema(), false);
@@ -188,9 +186,9 @@ public final class ObjectdbPut implements Externalizable, Message<ObjectdbPut>, 
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbPut");
-    	    	if(this.entity != null) {
+    	    	//if(this.entity != null) {
     		System.out.println("entity="+this.entity);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbPut");
     }
     

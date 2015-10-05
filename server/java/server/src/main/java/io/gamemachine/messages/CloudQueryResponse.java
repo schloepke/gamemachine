@@ -61,8 +61,10 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     static final CloudQueryResponse DEFAULT_INSTANCE = new CloudQueryResponse();
     static final String defaultScope = CloudQueryResponse.class.getSimpleName();
 
-    			public String format;
-	    
+    	
+	    	    public String format= null;
+	    		
+    
             public List<String> messageId;
 	        public List<ByteString> byteMessage;
 	        public List<String> jsonMessage;
@@ -84,22 +86,24 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (format != null) {
+    	    	    	//if (format != null) {
     	       	    	model.setString("cloud_query_response_format",format);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	    	    }
     
 	public static CloudQueryResponse fromModel(Model model) {
 		boolean hasFields = false;
     	CloudQueryResponse message = new CloudQueryResponse();
     	    	    	    	    	
-    	    	    	String formatField = model.getString("cloud_query_response_format");
-    	    	
-    	if (formatField != null) {
+    	    	    	String formatTestField = model.getString("cloud_query_response_format");
+    	if (formatTestField != null) {
+    		String formatField = formatTestField;
     		message.setFormat(formatField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -108,11 +112,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     }
 
 
-	    
-    public Boolean hasFormat()  {
-        return format == null ? false : true;
-    }
-        
+	            
 		public String getFormat() {
 		return format;
 	}
@@ -121,11 +121,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
 		this.format = format;
 		return this;	}
 	
-		    
-    public Boolean hasMessageId()  {
-        return messageId == null ? false : true;
-    }
-        
+		            
 		public List<String> getMessageIdList() {
 		if(this.messageId == null)
             this.messageId = new ArrayList<String>();
@@ -155,11 +151,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     
     
     
-		    
-    public Boolean hasByteMessage()  {
-        return byteMessage == null ? false : true;
-    }
-        
+		            
 		public List<ByteString> getByteMessageList() {
 		if(this.byteMessage == null)
             this.byteMessage = new ArrayList<ByteString>();
@@ -189,11 +181,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     
     
     
-		    
-    public Boolean hasJsonMessage()  {
-        return jsonMessage == null ? false : true;
-    }
-        
+		            
 		public List<String> getJsonMessageList() {
 		if(this.jsonMessage == null)
             this.jsonMessage = new ArrayList<String>();
@@ -309,11 +297,12 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     public void writeTo(Output output, CloudQueryResponse message) throws IOException
     {
     	    	
-    	    	if(message.format == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.format == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.format != null)
+    	    	    	if( (String)message.format != null) {
             output.writeString(1, message.format, false);
+        }
     	    	
     	            	
     	    	
@@ -321,7 +310,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
         {
             for(String messageId : message.messageId)
             {
-                if(messageId != null) {
+                if( (String) messageId != null) {
                    	            		output.writeString(2, messageId, true);
     				    			}
             }
@@ -332,7 +321,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
         {
             for(ByteString byteMessage : message.byteMessage)
             {
-                if(byteMessage != null) {
+                if( (ByteString) byteMessage != null) {
                    	            		output.writeBytes(3, byteMessage, true);
     				    			}
             }
@@ -343,7 +332,7 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
         {
             for(String jsonMessage : message.jsonMessage)
             {
-                if(jsonMessage != null) {
+                if( (String) jsonMessage != null) {
                    	            		output.writeString(4, jsonMessage, true);
     				    			}
             }
@@ -354,18 +343,18 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
 	public void dumpObject()
     {
     	System.out.println("START CloudQueryResponse");
-    	    	if(this.format != null) {
+    	    	//if(this.format != null) {
     		System.out.println("format="+this.format);
-    	}
-    	    	if(this.messageId != null) {
+    	//}
+    	    	//if(this.messageId != null) {
     		System.out.println("messageId="+this.messageId);
-    	}
-    	    	if(this.byteMessage != null) {
+    	//}
+    	    	//if(this.byteMessage != null) {
     		System.out.println("byteMessage="+this.byteMessage);
-    	}
-    	    	if(this.jsonMessage != null) {
+    	//}
+    	    	//if(this.jsonMessage != null) {
     		System.out.println("jsonMessage="+this.jsonMessage);
-    	}
+    	//}
     	    	System.out.println("END CloudQueryResponse");
     }
     

@@ -91,11 +91,7 @@ public final class Subscribers implements Externalizable, Message<Subscribers>, 
     }
 
 
-	    
-    public Boolean hasSubscriberId()  {
-        return subscriberId == null ? false : true;
-    }
-        
+	            
 		public List<String> getSubscriberIdList() {
 		if(this.subscriberId == null)
             this.subscriberId = new ArrayList<String>();
@@ -202,7 +198,7 @@ public final class Subscribers implements Externalizable, Message<Subscribers>, 
         {
             for(String subscriberId : message.subscriberId)
             {
-                if(subscriberId != null) {
+                if( (String) subscriberId != null) {
                    	            		output.writeString(1, subscriberId, true);
     				    			}
             }
@@ -213,9 +209,9 @@ public final class Subscribers implements Externalizable, Message<Subscribers>, 
 	public void dumpObject()
     {
     	System.out.println("START Subscribers");
-    	    	if(this.subscriberId != null) {
+    	    	//if(this.subscriberId != null) {
     		System.out.println("subscriberId="+this.subscriberId);
-    	}
+    	//}
     	    	System.out.println("END Subscribers");
     }
     

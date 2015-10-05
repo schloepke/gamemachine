@@ -91,11 +91,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
     }
 
 
-	    
-    public Boolean hasStatusEffect()  {
-        return statusEffect == null ? false : true;
-    }
-        
+	            
 		public List<StatusEffect> getStatusEffectList() {
 		if(this.statusEffect == null)
             this.statusEffect = new ArrayList<StatusEffect>();
@@ -146,7 +142,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.duration.equals(obj.duration)) {
+    	    		if (statusEffect.duration == obj.duration) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.ticks.equals(obj.ticks)) {
+    	    		if (statusEffect.ticks == obj.ticks) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.minValue.equals(obj.minValue)) {
+    	    		if (statusEffect.minValue == obj.minValue) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
        	while (itr.hasNext()) {
     	StatusEffect obj = itr.next();
     	
-    	    		if (statusEffect.maxValue.equals(obj.maxValue)) {
+    	    		if (statusEffect.maxValue == obj.maxValue) {
     	      			itr.remove();
     		}
 		}
@@ -346,7 +342,7 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
         {
             for(StatusEffect statusEffect : message.statusEffect)
             {
-                if(statusEffect != null) {
+                if( (StatusEffect) statusEffect != null) {
                    	    				output.writeObject(1, statusEffect, StatusEffect.getSchema(), true);
     				    			}
             }
@@ -357,9 +353,9 @@ public final class StatusEffects implements Externalizable, Message<StatusEffect
 	public void dumpObject()
     {
     	System.out.println("START StatusEffects");
-    	    	if(this.statusEffect != null) {
+    	    	//if(this.statusEffect != null) {
     		System.out.println("statusEffect="+this.statusEffect);
-    	}
+    	//}
     	    	System.out.println("END StatusEffects");
     }
     

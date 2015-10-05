@@ -61,8 +61,10 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
     static final ObjectdbDel DEFAULT_INSTANCE = new ObjectdbDel();
     static final String defaultScope = ObjectdbDel.class.getSimpleName();
 
-    			public String entityId;
-	    
+    	
+	    	    public String entityId= null;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (entityId != null) {
+    	    	    	//if (entityId != null) {
     	       	    	model.setString("objectdb_del_entity_id",entityId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ObjectdbDel fromModel(Model model) {
 		boolean hasFields = false;
     	ObjectdbDel message = new ObjectdbDel();
     	    	    	    	    	
-    	    	    	String entityIdField = model.getString("objectdb_del_entity_id");
-    	    	
-    	if (entityIdField != null) {
+    	    	    	String entityIdTestField = model.getString("objectdb_del_entity_id");
+    	if (entityIdTestField != null) {
+    		String entityIdField = entityIdTestField;
     		message.setEntityId(entityIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,11 +109,7 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
     }
 
 
-	    
-    public Boolean hasEntityId()  {
-        return entityId == null ? false : true;
-    }
-        
+	            
 		public String getEntityId() {
 		return entityId;
 	}
@@ -189,11 +189,12 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
     public void writeTo(Output output, ObjectdbDel message) throws IOException
     {
     	    	
-    	    	if(message.entityId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entityId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.entityId != null)
+    	    	    	if( (String)message.entityId != null) {
             output.writeString(1, message.entityId, false);
+        }
     	    	
     	            	
     }
@@ -201,9 +202,9 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
 	public void dumpObject()
     {
     	System.out.println("START ObjectdbDel");
-    	    	if(this.entityId != null) {
+    	    	//if(this.entityId != null) {
     		System.out.println("entityId="+this.entityId);
-    	}
+    	//}
     	    	System.out.println("END ObjectdbDel");
     }
     

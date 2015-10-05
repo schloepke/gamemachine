@@ -61,20 +61,34 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
     static final GmVector3 DEFAULT_INSTANCE = new GmVector3();
     static final String defaultScope = GmVector3.class.getSimpleName();
 
-    			public Float x;
-	    
-        			public Float y;
-	    
-        			public Float z;
-	    
-        			public Integer xi;
-	    
-        			public Integer yi;
-	    
-        			public Integer zi;
-	    
-        			public Integer vertice;
-	    
+    	
+	    	    public float x= 0F;
+	    		
+    
+        	
+	    	    public float y= 0F;
+	    		
+    
+        	
+	    	    public float z= 0F;
+	    		
+    
+        	
+	    	    public int xi= 0;
+	    		
+    
+        	
+	    	    public int yi= 0;
+	    		
+    
+        	
+	    	    public int zi= 0;
+	    		
+    
+        	
+	    	    public int vertice= 0;
+	    		
+    
         
 
 
@@ -99,94 +113,108 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setFloat("gm_vector3_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setFloat("gm_vector3_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (z != null) {
+    	    	    	//if (z != null) {
     	       	    	model.setFloat("gm_vector3_z",z);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (xi != null) {
+    	    	    	//if (xi != null) {
     	       	    	model.setInteger("gm_vector3_xi",xi);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (yi != null) {
+    	    	    	//if (yi != null) {
     	       	    	model.setInteger("gm_vector3_yi",yi);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (zi != null) {
+    	    	    	//if (zi != null) {
     	       	    	model.setInteger("gm_vector3_zi",zi);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (vertice != null) {
+    	    	    	//if (vertice != null) {
     	       	    	model.setInteger("gm_vector3_vertice",vertice);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GmVector3 fromModel(Model model) {
 		boolean hasFields = false;
     	GmVector3 message = new GmVector3();
     	    	    	    	    	
-    	    	    	Float xField = model.getFloat("gm_vector3_x");
-    	    	
-    	if (xField != null) {
+    	    	    	Float xTestField = model.getFloat("gm_vector3_x");
+    	if (xTestField != null) {
+    		float xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float yField = model.getFloat("gm_vector3_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Float yTestField = model.getFloat("gm_vector3_y");
+    	if (yTestField != null) {
+    		float yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float zField = model.getFloat("gm_vector3_z");
+    	
     	    	
-    	if (zField != null) {
+    	    	    	    	    	    	
+    	    	    	Float zTestField = model.getFloat("gm_vector3_z");
+    	if (zTestField != null) {
+    		float zField = zTestField;
     		message.setZ(zField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer xiField = model.getInteger("gm_vector3_xi");
+    	
     	    	
-    	if (xiField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer xiTestField = model.getInteger("gm_vector3_xi");
+    	if (xiTestField != null) {
+    		int xiField = xiTestField;
     		message.setXi(xiField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yiField = model.getInteger("gm_vector3_yi");
+    	
     	    	
-    	if (yiField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yiTestField = model.getInteger("gm_vector3_yi");
+    	if (yiTestField != null) {
+    		int yiField = yiTestField;
     		message.setYi(yiField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ziField = model.getInteger("gm_vector3_zi");
+    	
     	    	
-    	if (ziField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ziTestField = model.getInteger("gm_vector3_zi");
+    	if (ziTestField != null) {
+    		int ziField = ziTestField;
     		message.setZi(ziField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer verticeField = model.getInteger("gm_vector3_vertice");
+    	
     	    	
-    	if (verticeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer verticeTestField = model.getInteger("gm_vector3_vertice");
+    	if (verticeTestField != null) {
+    		int verticeField = verticeTestField;
     		message.setVertice(verticeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -195,94 +223,66 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
     }
 
 
-	    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Float getX() {
+	            
+		public float getX() {
 		return x;
 	}
 	
-	public GmVector3 setX(Float x) {
+	public GmVector3 setX(float x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Float getY() {
+		            
+		public float getY() {
 		return y;
 	}
 	
-	public GmVector3 setY(Float y) {
+	public GmVector3 setY(float y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
-        
-		public Float getZ() {
+		            
+		public float getZ() {
 		return z;
 	}
 	
-	public GmVector3 setZ(Float z) {
+	public GmVector3 setZ(float z) {
 		this.z = z;
 		return this;	}
 	
-		    
-    public Boolean hasXi()  {
-        return xi == null ? false : true;
-    }
-        
-		public Integer getXi() {
+		            
+		public int getXi() {
 		return xi;
 	}
 	
-	public GmVector3 setXi(Integer xi) {
+	public GmVector3 setXi(int xi) {
 		this.xi = xi;
 		return this;	}
 	
-		    
-    public Boolean hasYi()  {
-        return yi == null ? false : true;
-    }
-        
-		public Integer getYi() {
+		            
+		public int getYi() {
 		return yi;
 	}
 	
-	public GmVector3 setYi(Integer yi) {
+	public GmVector3 setYi(int yi) {
 		this.yi = yi;
 		return this;	}
 	
-		    
-    public Boolean hasZi()  {
-        return zi == null ? false : true;
-    }
-        
-		public Integer getZi() {
+		            
+		public int getZi() {
 		return zi;
 	}
 	
-	public GmVector3 setZi(Integer zi) {
+	public GmVector3 setZi(int zi) {
 		this.zi = zi;
 		return this;	}
 	
-		    
-    public Boolean hasVertice()  {
-        return vertice == null ? false : true;
-    }
-        
-		public Integer getVertice() {
+		            
+		public int getVertice() {
 		return vertice;
 	}
 	
-	public GmVector3 setVertice(Integer vertice) {
+	public GmVector3 setVertice(int vertice) {
 		this.vertice = vertice;
 		return this;	}
 	
@@ -382,38 +382,45 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
     {
     	    	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Float)message.x != null) {
             output.writeFloat(1, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Float)message.y != null) {
             output.writeFloat(2, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.z != null)
+    	    	    	if( (Float)message.z != null) {
             output.writeFloat(3, message.z, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.xi != null)
+    	    	    	if( (Integer)message.xi != null) {
             output.writeInt32(4, message.xi, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.yi != null)
+    	    	    	if( (Integer)message.yi != null) {
             output.writeInt32(5, message.yi, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.zi != null)
+    	    	    	if( (Integer)message.zi != null) {
             output.writeInt32(6, message.zi, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.vertice != null)
+    	    	    	if( (Integer)message.vertice != null) {
             output.writeInt32(7, message.vertice, false);
+        }
     	    	
     	            	
     }
@@ -421,27 +428,27 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
 	public void dumpObject()
     {
     	System.out.println("START GmVector3");
-    	    	if(this.x != null) {
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.z != null) {
+    	//}
+    	    	//if(this.z != null) {
     		System.out.println("z="+this.z);
-    	}
-    	    	if(this.xi != null) {
+    	//}
+    	    	//if(this.xi != null) {
     		System.out.println("xi="+this.xi);
-    	}
-    	    	if(this.yi != null) {
+    	//}
+    	    	//if(this.yi != null) {
     		System.out.println("yi="+this.yi);
-    	}
-    	    	if(this.zi != null) {
+    	//}
+    	    	//if(this.zi != null) {
     		System.out.println("zi="+this.zi);
-    	}
-    	    	if(this.vertice != null) {
+    	//}
+    	    	//if(this.vertice != null) {
     		System.out.println("vertice="+this.vertice);
-    	}
+    	//}
     	    	System.out.println("END GmVector3");
     }
     

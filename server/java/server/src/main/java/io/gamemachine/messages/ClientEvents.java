@@ -91,11 +91,7 @@ public final class ClientEvents implements Externalizable, Message<ClientEvents>
     }
 
 
-	    
-    public Boolean hasClientEvent()  {
-        return clientEvent == null ? false : true;
-    }
-        
+	            
 		public List<ClientEvent> getClientEventList() {
 		if(this.clientEvent == null)
             this.clientEvent = new ArrayList<ClientEvent>();
@@ -266,7 +262,7 @@ public final class ClientEvents implements Externalizable, Message<ClientEvents>
         {
             for(ClientEvent clientEvent : message.clientEvent)
             {
-                if(clientEvent != null) {
+                if( (ClientEvent) clientEvent != null) {
                    	    				output.writeObject(1, clientEvent, ClientEvent.getSchema(), true);
     				    			}
             }
@@ -277,9 +273,9 @@ public final class ClientEvents implements Externalizable, Message<ClientEvents>
 	public void dumpObject()
     {
     	System.out.println("START ClientEvents");
-    	    	if(this.clientEvent != null) {
+    	    	//if(this.clientEvent != null) {
     		System.out.println("clientEvent="+this.clientEvent);
-    	}
+    	//}
     	    	System.out.println("END ClientEvents");
     }
     

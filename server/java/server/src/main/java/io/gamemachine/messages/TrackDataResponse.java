@@ -102,10 +102,14 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     static final TrackDataResponse DEFAULT_INSTANCE = new TrackDataResponse();
     static final String defaultScope = TrackDataResponse.class.getSimpleName();
 
-    			public String id;
-	    
-        			public REASON reason; // = RESEND:0;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public REASON reason;
+	    		
+    
         
 	public static TrackDataResponseCache cache() {
 		return TrackDataResponseCache.getInstance();
@@ -376,22 +380,24 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("track_data_response_id",id);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static TrackDataResponse fromModel(Model model) {
 		boolean hasFields = false;
     	TrackDataResponse message = new TrackDataResponse();
     	    	    	    	    	
-    	    	    	String idField = model.getString("track_data_response_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("track_data_response_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -400,11 +406,7 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -413,11 +415,7 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasReason()  {
-        return reason == null ? false : true;
-    }
-        
+		            
 		public REASON getReason() {
 		return reason;
 	}
@@ -501,11 +499,12 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     public void writeTo(Output output, TrackDataResponse message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
@@ -518,12 +517,12 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
 	public void dumpObject()
     {
     	System.out.println("START TrackDataResponse");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.reason != null) {
+    	//}
+    	    	//if(this.reason != null) {
     		System.out.println("reason="+this.reason);
-    	}
+    	//}
     	    	System.out.println("END TrackDataResponse");
     }
     

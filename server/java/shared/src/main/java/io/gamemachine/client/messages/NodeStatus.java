@@ -51,21 +51,21 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
 
     static final NodeStatus DEFAULT_INSTANCE = new NodeStatus();
 
-    			public Integer containerId;
+    			public int containerId;
 	    
         			public String clusterName;
 	    
-        			public Integer lastUpdated;
+        			public int lastUpdated;
 	    
         			public String hostname;
 	    
-        			public Integer port;
+        			public int port;
 	    
-        			public Integer clientCount;
+        			public int clientCount;
 	    
-        			public Double loadAverage;
+        			public double loadAverage;
 	    
-        			public Integer heapUsed;
+        			public int heapUsed;
 	    
         			public Statistics statistics;
 	    
@@ -83,11 +83,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return containerId == null ? false : true;
     }
         
-		public Integer getContainerId() {
+		public int getContainerId() {
 		return containerId;
 	}
 	
-	public NodeStatus setContainerId(Integer containerId) {
+	public NodeStatus setContainerId(int containerId) {
 		this.containerId = containerId;
 		return this;	}
 	
@@ -109,11 +109,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return lastUpdated == null ? false : true;
     }
         
-		public Integer getLastUpdated() {
+		public int getLastUpdated() {
 		return lastUpdated;
 	}
 	
-	public NodeStatus setLastUpdated(Integer lastUpdated) {
+	public NodeStatus setLastUpdated(int lastUpdated) {
 		this.lastUpdated = lastUpdated;
 		return this;	}
 	
@@ -135,11 +135,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return port == null ? false : true;
     }
         
-		public Integer getPort() {
+		public int getPort() {
 		return port;
 	}
 	
-	public NodeStatus setPort(Integer port) {
+	public NodeStatus setPort(int port) {
 		this.port = port;
 		return this;	}
 	
@@ -148,11 +148,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return clientCount == null ? false : true;
     }
         
-		public Integer getClientCount() {
+		public int getClientCount() {
 		return clientCount;
 	}
 	
-	public NodeStatus setClientCount(Integer clientCount) {
+	public NodeStatus setClientCount(int clientCount) {
 		this.clientCount = clientCount;
 		return this;	}
 	
@@ -161,11 +161,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return loadAverage == null ? false : true;
     }
         
-		public Double getLoadAverage() {
+		public double getLoadAverage() {
 		return loadAverage;
 	}
 	
-	public NodeStatus setLoadAverage(Double loadAverage) {
+	public NodeStatus setLoadAverage(double loadAverage) {
 		this.loadAverage = loadAverage;
 		return this;	}
 	
@@ -174,11 +174,11 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
         return heapUsed == null ? false : true;
     }
         
-		public Integer getHeapUsed() {
+		public int getHeapUsed() {
 		return heapUsed;
 	}
 	
-	public NodeStatus setHeapUsed(Integer heapUsed) {
+	public NodeStatus setHeapUsed(int heapUsed) {
 		this.heapUsed = heapUsed;
 		return this;	}
 	

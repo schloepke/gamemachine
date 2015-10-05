@@ -61,14 +61,22 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
     static final ChatInvite DEFAULT_INSTANCE = new ChatInvite();
     static final String defaultScope = ChatInvite.class.getSimpleName();
 
-    			public String invitee;
-	    
-        			public String inviter;
-	    
-        			public String channelName;
-	    
-        			public String invite_id;
-	    
+    	
+	    	    public String invitee= null;
+	    		
+    
+        	
+	    	    public String inviter= null;
+	    		
+    
+        	
+	    	    public String channelName= null;
+	    		
+    
+        	
+	    	    public String invite_id= null;
+	    		
+    
         
 
 
@@ -90,58 +98,66 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (invitee != null) {
+    	    	    	//if (invitee != null) {
     	       	    	model.setString("chat_invite_invitee",invitee);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (inviter != null) {
+    	    	    	//if (inviter != null) {
     	       	    	model.setString("chat_invite_inviter",inviter);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (channelName != null) {
+    	    	    	//if (channelName != null) {
     	       	    	model.setString("chat_invite_channel_name",channelName);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (invite_id != null) {
+    	    	    	//if (invite_id != null) {
     	       	    	model.setString("chat_invite_invite_id",invite_id);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatInvite fromModel(Model model) {
 		boolean hasFields = false;
     	ChatInvite message = new ChatInvite();
     	    	    	    	    	
-    	    	    	String inviteeField = model.getString("chat_invite_invitee");
-    	    	
-    	if (inviteeField != null) {
+    	    	    	String inviteeTestField = model.getString("chat_invite_invitee");
+    	if (inviteeTestField != null) {
+    		String inviteeField = inviteeTestField;
     		message.setInvitee(inviteeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String inviterField = model.getString("chat_invite_inviter");
+    	
     	    	
-    	if (inviterField != null) {
+    	    	    	    	    	    	
+    	    	    	String inviterTestField = model.getString("chat_invite_inviter");
+    	if (inviterTestField != null) {
+    		String inviterField = inviterTestField;
     		message.setInviter(inviterField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String channelNameField = model.getString("chat_invite_channel_name");
+    	
     	    	
-    	if (channelNameField != null) {
+    	    	    	    	    	    	
+    	    	    	String channelNameTestField = model.getString("chat_invite_channel_name");
+    	if (channelNameTestField != null) {
+    		String channelNameField = channelNameTestField;
     		message.setChannelName(channelNameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String invite_idField = model.getString("chat_invite_invite_id");
+    	
     	    	
-    	if (invite_idField != null) {
+    	    	    	    	    	    	
+    	    	    	String invite_idTestField = model.getString("chat_invite_invite_id");
+    	if (invite_idTestField != null) {
+    		String invite_idField = invite_idTestField;
     		message.setInvite_id(invite_idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,11 +166,7 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
     }
 
 
-	    
-    public Boolean hasInvitee()  {
-        return invitee == null ? false : true;
-    }
-        
+	            
 		public String getInvitee() {
 		return invitee;
 	}
@@ -163,11 +175,7 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
 		this.invitee = invitee;
 		return this;	}
 	
-		    
-    public Boolean hasInviter()  {
-        return inviter == null ? false : true;
-    }
-        
+		            
 		public String getInviter() {
 		return inviter;
 	}
@@ -176,11 +184,7 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
 		this.inviter = inviter;
 		return this;	}
 	
-		    
-    public Boolean hasChannelName()  {
-        return channelName == null ? false : true;
-    }
-        
+		            
 		public String getChannelName() {
 		return channelName;
 	}
@@ -189,11 +193,7 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
 		this.channelName = channelName;
 		return this;	}
 	
-		    
-    public Boolean hasInvite_id()  {
-        return invite_id == null ? false : true;
-    }
-        
+		            
 		public String getInvite_id() {
 		return invite_id;
 	}
@@ -285,32 +285,36 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
     public void writeTo(Output output, ChatInvite message) throws IOException
     {
     	    	
-    	    	if(message.invitee == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.invitee == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.invitee != null)
+    	    	    	if( (String)message.invitee != null) {
             output.writeString(1, message.invitee, false);
+        }
     	    	
     	            	
-    	    	if(message.inviter == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.inviter == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.inviter != null)
+    	    	    	if( (String)message.inviter != null) {
             output.writeString(2, message.inviter, false);
+        }
     	    	
     	            	
-    	    	if(message.channelName == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.channelName == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.channelName != null)
+    	    	    	if( (String)message.channelName != null) {
             output.writeString(4, message.channelName, false);
+        }
     	    	
     	            	
-    	    	if(message.invite_id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.invite_id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.invite_id != null)
+    	    	    	if( (String)message.invite_id != null) {
             output.writeString(5, message.invite_id, false);
+        }
     	    	
     	            	
     }
@@ -318,18 +322,18 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
 	public void dumpObject()
     {
     	System.out.println("START ChatInvite");
-    	    	if(this.invitee != null) {
+    	    	//if(this.invitee != null) {
     		System.out.println("invitee="+this.invitee);
-    	}
-    	    	if(this.inviter != null) {
+    	//}
+    	    	//if(this.inviter != null) {
     		System.out.println("inviter="+this.inviter);
-    	}
-    	    	if(this.channelName != null) {
+    	//}
+    	    	//if(this.channelName != null) {
     		System.out.println("channelName="+this.channelName);
-    	}
-    	    	if(this.invite_id != null) {
+    	//}
+    	    	//if(this.invite_id != null) {
     		System.out.println("invite_id="+this.invite_id);
-    	}
+    	//}
     	    	System.out.println("END ChatInvite");
     }
     

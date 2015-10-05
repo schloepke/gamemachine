@@ -53,9 +53,9 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
 
     			public String id;
 	    
-        			public Integer quantity;
+        			public int quantity;
 	    
-        			public Integer result;
+        			public int result;
 	    
         			public String characterId;
 	    
@@ -90,11 +90,11 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
         return quantity == null ? false : true;
     }
         
-		public Integer getQuantity() {
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public AddPlayerItem setQuantity(Integer quantity) {
+	public AddPlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
@@ -103,11 +103,11 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
         return result == null ? false : true;
     }
         
-		public Integer getResult() {
+		public int getResult() {
 		return result;
 	}
 	
-	public AddPlayerItem setResult(Integer result) {
+	public AddPlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	

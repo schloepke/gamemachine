@@ -81,7 +81,7 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
 	    
         			public GameMessage gameMessage;
 	    
-        			public Long messageId;
+        			public long messageId;
 	    
         			public String playerId;
 	    
@@ -125,11 +125,11 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
         return messageId == null ? false : true;
     }
         
-		public Long getMessageId() {
+		public long getMessageId() {
 		return messageId;
 	}
 	
-	public RpcMessage setMessageId(Long messageId) {
+	public RpcMessage setMessageId(long messageId) {
 		this.messageId = messageId;
 		return this;	}
 	

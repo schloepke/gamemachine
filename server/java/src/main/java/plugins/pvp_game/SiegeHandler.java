@@ -25,13 +25,13 @@ public class SiegeHandler extends GameMessageActor {
 
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
-		if (gameMessage.hasSiegeCommand()) {
-			if (gameMessage.siegeCommand.hasHitId()) {
+		if (gameMessage.siegeCommand != null) {
+			if (!Strings.isNullOrEmpty(gameMessage.siegeCommand.hitId)) {
 				doHit(gameMessage.siegeCommand.hitId, gameMessage.siegeCommand.skillId);
 			} else {
-				if (gameMessage.siegeCommand.hasStartUse()) {
+				if (gameMessage.siegeCommand.startUse == 1) {
 					setUser(gameMessage.siegeCommand.id, true);
-				} else if (gameMessage.siegeCommand.hasEndUse()) {
+				} else if (gameMessage.siegeCommand.endUse == 1) {
 					setUser(gameMessage.siegeCommand.id, false);
 				}
 				Grid grid = GameGrid.getGameGrid("mygame", "default", playerId);
@@ -78,7 +78,7 @@ public class SiegeHandler extends GameMessageActor {
 		WorldObject worldObject = ConsumableItemHandler.find(id);
 		logger.warning("Siege dohit " + id + " " + skillId);
 		if (worldObject != null) {
-			if (!worldObject.hasHealth()) {
+			if (worldObject.health <= 0) {
 				worldObject.maxHealth = 10000;
 				worldObject.health = 10000;
 			}

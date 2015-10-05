@@ -61,14 +61,22 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
     static final Attack DEFAULT_INSTANCE = new Attack();
     static final String defaultScope = Attack.class.getSimpleName();
 
-    			public String attacker;
-	    
-        			public String target;
-	    
-        			public String skill;
-	    
-        			public GmVector3 targetLocation;
-	    
+    	
+	    	    public String attacker= null;
+	    		
+    
+        	
+	    	    public String target= null;
+	    		
+    
+        	
+	    	    public String skill= null;
+	    		
+    
+        	
+	    	    public GmVector3 targetLocation;
+	    		
+    
         
 
 
@@ -89,46 +97,52 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (attacker != null) {
+    	    	    	//if (attacker != null) {
     	       	    	model.setString("attack_attacker",attacker);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (target != null) {
+    	    	    	//if (target != null) {
     	       	    	model.setString("attack_target",target);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (skill != null) {
+    	    	    	//if (skill != null) {
     	       	    	model.setString("attack_skill",skill);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static Attack fromModel(Model model) {
 		boolean hasFields = false;
     	Attack message = new Attack();
     	    	    	    	    	
-    	    	    	String attackerField = model.getString("attack_attacker");
-    	    	
-    	if (attackerField != null) {
+    	    	    	String attackerTestField = model.getString("attack_attacker");
+    	if (attackerTestField != null) {
+    		String attackerField = attackerTestField;
     		message.setAttacker(attackerField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String targetField = model.getString("attack_target");
+    	
     	    	
-    	if (targetField != null) {
+    	    	    	    	    	    	
+    	    	    	String targetTestField = model.getString("attack_target");
+    	if (targetTestField != null) {
+    		String targetField = targetTestField;
     		message.setTarget(targetField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String skillField = model.getString("attack_skill");
+    	
     	    	
-    	if (skillField != null) {
+    	    	    	    	    	    	
+    	    	    	String skillTestField = model.getString("attack_skill");
+    	if (skillTestField != null) {
+    		String skillField = skillTestField;
     		message.setSkill(skillField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -137,11 +151,7 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
     }
 
 
-	    
-    public Boolean hasAttacker()  {
-        return attacker == null ? false : true;
-    }
-        
+	            
 		public String getAttacker() {
 		return attacker;
 	}
@@ -150,11 +160,7 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 		this.attacker = attacker;
 		return this;	}
 	
-		    
-    public Boolean hasTarget()  {
-        return target == null ? false : true;
-    }
-        
+		            
 		public String getTarget() {
 		return target;
 	}
@@ -163,11 +169,7 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 		this.target = target;
 		return this;	}
 	
-		    
-    public Boolean hasSkill()  {
-        return skill == null ? false : true;
-    }
-        
+		            
 		public String getSkill() {
 		return skill;
 	}
@@ -176,11 +178,7 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 		this.skill = skill;
 		return this;	}
 	
-		    
-    public Boolean hasTargetLocation()  {
-        return targetLocation == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getTargetLocation() {
 		return targetLocation;
 	}
@@ -272,25 +270,28 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
     public void writeTo(Output output, Attack message) throws IOException
     {
     	    	
-    	    	if(message.attacker == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.attacker == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.attacker != null)
+    	    	    	if( (String)message.attacker != null) {
             output.writeString(1, message.attacker, false);
+        }
     	    	
     	            	
-    	    	if(message.target == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.target == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.target != null)
+    	    	    	if( (String)message.target != null) {
             output.writeString(2, message.target, false);
+        }
     	    	
     	            	
-    	    	if(message.skill == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.skill == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.skill != null)
+    	    	    	if( (String)message.skill != null) {
             output.writeString(3, message.skill, false);
+        }
     	    	
     	            	
     	    	
@@ -303,18 +304,18 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 	public void dumpObject()
     {
     	System.out.println("START Attack");
-    	    	if(this.attacker != null) {
+    	    	//if(this.attacker != null) {
     		System.out.println("attacker="+this.attacker);
-    	}
-    	    	if(this.target != null) {
+    	//}
+    	    	//if(this.target != null) {
     		System.out.println("target="+this.target);
-    	}
-    	    	if(this.skill != null) {
+    	//}
+    	    	//if(this.skill != null) {
     		System.out.println("skill="+this.skill);
-    	}
-    	    	if(this.targetLocation != null) {
+    	//}
+    	    	//if(this.targetLocation != null) {
     		System.out.println("targetLocation="+this.targetLocation);
-    	}
+    	//}
     	    	System.out.println("END Attack");
     }
     

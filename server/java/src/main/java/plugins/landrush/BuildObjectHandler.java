@@ -50,7 +50,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		BuildObjects buildObjects = gameMessage.buildObjects;
 		
 		if (exactlyOnce(gameMessage)) {
-			if (buildObjects.hasAction()) {
+			if (buildObjects.action > 0) {
 				if (buildObjects.action == 1) {
 					buildObjects.currentUpdate = getUpdateCount();
 					setReply(gameMessage);

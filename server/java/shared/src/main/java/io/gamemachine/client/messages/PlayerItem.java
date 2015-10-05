@@ -55,55 +55,55 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    
         			public String name;
 	    
-        			public Integer quantity;
+        			public int quantity;
 	    
         			public String color;
 	    
-        			public Boolean weapon;
+        			public boolean weapon;
 	    
         			public Cost cost;
 	    
         			public String playerId;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String icon;
 	    
-        			public Integer harvestable;
+        			public int harvestable;
 	    
-        			public Integer craftingResource;
+        			public int craftingResource;
 	    
-        			public Integer craftable;
+        			public int craftable;
 	    
-        			public Boolean isConsumable;
+        			public boolean isConsumable;
 	    
-        			public Integer type;
+        			public int type;
 	    
-        			public Integer maxHealth;
+        			public int maxHealth;
 	    
-        			public Integer health;
+        			public int health;
 	    
-        			public Integer level;
+        			public int level;
 	    
         			public String characterId;
 	    
         			public String containerId;
 	    
-        			public Integer updatedAt;
+        			public int updatedAt;
 	    
         			public String category;
 	    
         			public String locationId;
 	    
-        			public Integer slotCount;
+        			public int slotCount;
 	    
-        			public Boolean stackable;
+        			public boolean stackable;
 	    
         			public String locationType;
 	    
-        			public Integer stackMax;
+        			public int stackMax;
 	    
-        			public Integer containerSlot;
+        			public int containerSlot;
 	    
         			public String icon_uuid;
 	    
@@ -111,15 +111,15 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    
         			public String referenceId;
 	    
-        			public Boolean hidden;
+        			public boolean hidden;
 	    
-        			public Integer maxQuantity;
+        			public int maxQuantity;
 	    
-        			public Boolean active;
+        			public boolean active;
 	    
-        			public Float weight;
+        			public float weight;
 	    
-        			public Integer templateBlockId;
+        			public int templateBlockId;
 	    
       
     public PlayerItem()
@@ -161,11 +161,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return quantity == null ? false : true;
     }
         
-		public Integer getQuantity() {
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public PlayerItem setQuantity(Integer quantity) {
+	public PlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
@@ -187,11 +187,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return weapon == null ? false : true;
     }
         
-		public Boolean getWeapon() {
+		public boolean getWeapon() {
 		return weapon;
 	}
 	
-	public PlayerItem setWeapon(Boolean weapon) {
+	public PlayerItem setWeapon(boolean weapon) {
 		this.weapon = weapon;
 		return this;	}
 	
@@ -226,11 +226,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public PlayerItem setRecordId(Integer recordId) {
+	public PlayerItem setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -252,11 +252,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return harvestable == null ? false : true;
     }
         
-		public Integer getHarvestable() {
+		public int getHarvestable() {
 		return harvestable;
 	}
 	
-	public PlayerItem setHarvestable(Integer harvestable) {
+	public PlayerItem setHarvestable(int harvestable) {
 		this.harvestable = harvestable;
 		return this;	}
 	
@@ -265,11 +265,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return craftingResource == null ? false : true;
     }
         
-		public Integer getCraftingResource() {
+		public int getCraftingResource() {
 		return craftingResource;
 	}
 	
-	public PlayerItem setCraftingResource(Integer craftingResource) {
+	public PlayerItem setCraftingResource(int craftingResource) {
 		this.craftingResource = craftingResource;
 		return this;	}
 	
@@ -278,11 +278,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return craftable == null ? false : true;
     }
         
-		public Integer getCraftable() {
+		public int getCraftable() {
 		return craftable;
 	}
 	
-	public PlayerItem setCraftable(Integer craftable) {
+	public PlayerItem setCraftable(int craftable) {
 		this.craftable = craftable;
 		return this;	}
 	
@@ -291,11 +291,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return isConsumable == null ? false : true;
     }
         
-		public Boolean getIsConsumable() {
+		public boolean getIsConsumable() {
 		return isConsumable;
 	}
 	
-	public PlayerItem setIsConsumable(Boolean isConsumable) {
+	public PlayerItem setIsConsumable(boolean isConsumable) {
 		this.isConsumable = isConsumable;
 		return this;	}
 	
@@ -304,11 +304,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return type == null ? false : true;
     }
         
-		public Integer getType() {
+		public int getType() {
 		return type;
 	}
 	
-	public PlayerItem setType(Integer type) {
+	public PlayerItem setType(int type) {
 		this.type = type;
 		return this;	}
 	
@@ -317,11 +317,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return maxHealth == null ? false : true;
     }
         
-		public Integer getMaxHealth() {
+		public int getMaxHealth() {
 		return maxHealth;
 	}
 	
-	public PlayerItem setMaxHealth(Integer maxHealth) {
+	public PlayerItem setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
 		return this;	}
 	
@@ -330,11 +330,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return health == null ? false : true;
     }
         
-		public Integer getHealth() {
+		public int getHealth() {
 		return health;
 	}
 	
-	public PlayerItem setHealth(Integer health) {
+	public PlayerItem setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
@@ -343,11 +343,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return level == null ? false : true;
     }
         
-		public Integer getLevel() {
+		public int getLevel() {
 		return level;
 	}
 	
-	public PlayerItem setLevel(Integer level) {
+	public PlayerItem setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
@@ -382,11 +382,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return updatedAt == null ? false : true;
     }
         
-		public Integer getUpdatedAt() {
+		public int getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public PlayerItem setUpdatedAt(Integer updatedAt) {
+	public PlayerItem setUpdatedAt(int updatedAt) {
 		this.updatedAt = updatedAt;
 		return this;	}
 	
@@ -421,11 +421,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return slotCount == null ? false : true;
     }
         
-		public Integer getSlotCount() {
+		public int getSlotCount() {
 		return slotCount;
 	}
 	
-	public PlayerItem setSlotCount(Integer slotCount) {
+	public PlayerItem setSlotCount(int slotCount) {
 		this.slotCount = slotCount;
 		return this;	}
 	
@@ -434,11 +434,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return stackable == null ? false : true;
     }
         
-		public Boolean getStackable() {
+		public boolean getStackable() {
 		return stackable;
 	}
 	
-	public PlayerItem setStackable(Boolean stackable) {
+	public PlayerItem setStackable(boolean stackable) {
 		this.stackable = stackable;
 		return this;	}
 	
@@ -460,11 +460,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return stackMax == null ? false : true;
     }
         
-		public Integer getStackMax() {
+		public int getStackMax() {
 		return stackMax;
 	}
 	
-	public PlayerItem setStackMax(Integer stackMax) {
+	public PlayerItem setStackMax(int stackMax) {
 		this.stackMax = stackMax;
 		return this;	}
 	
@@ -473,11 +473,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return containerSlot == null ? false : true;
     }
         
-		public Integer getContainerSlot() {
+		public int getContainerSlot() {
 		return containerSlot;
 	}
 	
-	public PlayerItem setContainerSlot(Integer containerSlot) {
+	public PlayerItem setContainerSlot(int containerSlot) {
 		this.containerSlot = containerSlot;
 		return this;	}
 	
@@ -525,11 +525,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return hidden == null ? false : true;
     }
         
-		public Boolean getHidden() {
+		public boolean getHidden() {
 		return hidden;
 	}
 	
-	public PlayerItem setHidden(Boolean hidden) {
+	public PlayerItem setHidden(boolean hidden) {
 		this.hidden = hidden;
 		return this;	}
 	
@@ -538,11 +538,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return maxQuantity == null ? false : true;
     }
         
-		public Integer getMaxQuantity() {
+		public int getMaxQuantity() {
 		return maxQuantity;
 	}
 	
-	public PlayerItem setMaxQuantity(Integer maxQuantity) {
+	public PlayerItem setMaxQuantity(int maxQuantity) {
 		this.maxQuantity = maxQuantity;
 		return this;	}
 	
@@ -551,11 +551,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return active == null ? false : true;
     }
         
-		public Boolean getActive() {
+		public boolean getActive() {
 		return active;
 	}
 	
-	public PlayerItem setActive(Boolean active) {
+	public PlayerItem setActive(boolean active) {
 		this.active = active;
 		return this;	}
 	
@@ -564,11 +564,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return weight == null ? false : true;
     }
         
-		public Float getWeight() {
+		public float getWeight() {
 		return weight;
 	}
 	
-	public PlayerItem setWeight(Float weight) {
+	public PlayerItem setWeight(float weight) {
 		this.weight = weight;
 		return this;	}
 	
@@ -577,11 +577,11 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
         return templateBlockId == null ? false : true;
     }
         
-		public Integer getTemplateBlockId() {
+		public int getTemplateBlockId() {
 		return templateBlockId;
 	}
 	
-	public PlayerItem setTemplateBlockId(Integer templateBlockId) {
+	public PlayerItem setTemplateBlockId(int templateBlockId) {
 		this.templateBlockId = templateBlockId;
 		return this;	}
 	

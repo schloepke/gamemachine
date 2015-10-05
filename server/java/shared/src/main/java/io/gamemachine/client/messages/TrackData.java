@@ -81,61 +81,61 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 
     static final TrackData DEFAULT_INSTANCE = new TrackData();
 
-    			public Integer ix;
+    			public int ix;
 	    
-        			public Integer iy;
+        			public int iy;
 	    
-        			public Integer iz;
+        			public int iz;
 	    
         			public String id;
 	    
-        			public Integer x;
+        			public int x;
 	    
-        			public Integer y;
+        			public int y;
 	    
-        			public Integer z;
+        			public int z;
 	    
         			public DynamicMessage dynamicMessage;
 	    
         			public String gridName;
 	    
-        			public Integer getNeighbors;
+        			public int getNeighbors;
 	    
         			public EntityType neighborEntityType; // = NONE:0;
 	    
         			public EntityType entityType; // = NONE:0;
 	    
-        			public Integer shortId;
+        			public int shortId;
 	    
         			public UserDefinedData userDefinedData;
 	    
-        			public Integer broadcast;
+        			public int broadcast;
 	    
         			public String characterId;
 	    
-        			public Integer rx;
+        			public int rx;
 	    
-        			public Integer ry;
+        			public int ry;
 	    
-        			public Integer rz;
+        			public int rz;
 	    
-        			public Integer rw;
+        			public int rw;
 	    
-        			public Integer vaxis;
+        			public int vaxis;
 	    
-        			public Integer haxis;
+        			public int haxis;
 	    
-        			public Integer speed;
+        			public int speed;
 	    
-        			public Float velX;
+        			public float velX;
 	    
-        			public Float velZ;
+        			public float velZ;
 	    
-        			public Integer zone;
+        			public int zone;
 	    
-        			public Integer hidden;
+        			public int hidden;
 	    
-        			public Integer yaxis;
+        			public int yaxis;
 	    
       
     public TrackData()
@@ -151,11 +151,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return ix == null ? false : true;
     }
         
-		public Integer getIx() {
+		public int getIx() {
 		return ix;
 	}
 	
-	public TrackData setIx(Integer ix) {
+	public TrackData setIx(int ix) {
 		this.ix = ix;
 		return this;	}
 	
@@ -164,11 +164,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return iy == null ? false : true;
     }
         
-		public Integer getIy() {
+		public int getIy() {
 		return iy;
 	}
 	
-	public TrackData setIy(Integer iy) {
+	public TrackData setIy(int iy) {
 		this.iy = iy;
 		return this;	}
 	
@@ -177,11 +177,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return iz == null ? false : true;
     }
         
-		public Integer getIz() {
+		public int getIz() {
 		return iz;
 	}
 	
-	public TrackData setIz(Integer iz) {
+	public TrackData setIz(int iz) {
 		this.iz = iz;
 		return this;	}
 	
@@ -203,11 +203,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return x == null ? false : true;
     }
         
-		public Integer getX() {
+		public int getX() {
 		return x;
 	}
 	
-	public TrackData setX(Integer x) {
+	public TrackData setX(int x) {
 		this.x = x;
 		return this;	}
 	
@@ -216,11 +216,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return y == null ? false : true;
     }
         
-		public Integer getY() {
+		public int getY() {
 		return y;
 	}
 	
-	public TrackData setY(Integer y) {
+	public TrackData setY(int y) {
 		this.y = y;
 		return this;	}
 	
@@ -229,11 +229,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return z == null ? false : true;
     }
         
-		public Integer getZ() {
+		public int getZ() {
 		return z;
 	}
 	
-	public TrackData setZ(Integer z) {
+	public TrackData setZ(int z) {
 		this.z = z;
 		return this;	}
 	
@@ -268,11 +268,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return getNeighbors == null ? false : true;
     }
         
-		public Integer getGetNeighbors() {
+		public int getGetNeighbors() {
 		return getNeighbors;
 	}
 	
-	public TrackData setGetNeighbors(Integer getNeighbors) {
+	public TrackData setGetNeighbors(int getNeighbors) {
 		this.getNeighbors = getNeighbors;
 		return this;	}
 	
@@ -307,11 +307,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return shortId == null ? false : true;
     }
         
-		public Integer getShortId() {
+		public int getShortId() {
 		return shortId;
 	}
 	
-	public TrackData setShortId(Integer shortId) {
+	public TrackData setShortId(int shortId) {
 		this.shortId = shortId;
 		return this;	}
 	
@@ -333,11 +333,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return broadcast == null ? false : true;
     }
         
-		public Integer getBroadcast() {
+		public int getBroadcast() {
 		return broadcast;
 	}
 	
-	public TrackData setBroadcast(Integer broadcast) {
+	public TrackData setBroadcast(int broadcast) {
 		this.broadcast = broadcast;
 		return this;	}
 	
@@ -359,11 +359,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return rx == null ? false : true;
     }
         
-		public Integer getRx() {
+		public int getRx() {
 		return rx;
 	}
 	
-	public TrackData setRx(Integer rx) {
+	public TrackData setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
@@ -372,11 +372,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return ry == null ? false : true;
     }
         
-		public Integer getRy() {
+		public int getRy() {
 		return ry;
 	}
 	
-	public TrackData setRy(Integer ry) {
+	public TrackData setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
@@ -385,11 +385,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return rz == null ? false : true;
     }
         
-		public Integer getRz() {
+		public int getRz() {
 		return rz;
 	}
 	
-	public TrackData setRz(Integer rz) {
+	public TrackData setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
@@ -398,11 +398,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return rw == null ? false : true;
     }
         
-		public Integer getRw() {
+		public int getRw() {
 		return rw;
 	}
 	
-	public TrackData setRw(Integer rw) {
+	public TrackData setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
@@ -411,11 +411,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return vaxis == null ? false : true;
     }
         
-		public Integer getVaxis() {
+		public int getVaxis() {
 		return vaxis;
 	}
 	
-	public TrackData setVaxis(Integer vaxis) {
+	public TrackData setVaxis(int vaxis) {
 		this.vaxis = vaxis;
 		return this;	}
 	
@@ -424,11 +424,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return haxis == null ? false : true;
     }
         
-		public Integer getHaxis() {
+		public int getHaxis() {
 		return haxis;
 	}
 	
-	public TrackData setHaxis(Integer haxis) {
+	public TrackData setHaxis(int haxis) {
 		this.haxis = haxis;
 		return this;	}
 	
@@ -437,11 +437,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return speed == null ? false : true;
     }
         
-		public Integer getSpeed() {
+		public int getSpeed() {
 		return speed;
 	}
 	
-	public TrackData setSpeed(Integer speed) {
+	public TrackData setSpeed(int speed) {
 		this.speed = speed;
 		return this;	}
 	
@@ -450,11 +450,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return velX == null ? false : true;
     }
         
-		public Float getVelX() {
+		public float getVelX() {
 		return velX;
 	}
 	
-	public TrackData setVelX(Float velX) {
+	public TrackData setVelX(float velX) {
 		this.velX = velX;
 		return this;	}
 	
@@ -463,11 +463,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return velZ == null ? false : true;
     }
         
-		public Float getVelZ() {
+		public float getVelZ() {
 		return velZ;
 	}
 	
-	public TrackData setVelZ(Float velZ) {
+	public TrackData setVelZ(float velZ) {
 		this.velZ = velZ;
 		return this;	}
 	
@@ -476,11 +476,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return zone == null ? false : true;
     }
         
-		public Integer getZone() {
+		public int getZone() {
 		return zone;
 	}
 	
-	public TrackData setZone(Integer zone) {
+	public TrackData setZone(int zone) {
 		this.zone = zone;
 		return this;	}
 	
@@ -489,11 +489,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return hidden == null ? false : true;
     }
         
-		public Integer getHidden() {
+		public int getHidden() {
 		return hidden;
 	}
 	
-	public TrackData setHidden(Integer hidden) {
+	public TrackData setHidden(int hidden) {
 		this.hidden = hidden;
 		return this;	}
 	
@@ -502,11 +502,11 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
         return yaxis == null ? false : true;
     }
         
-		public Integer getYaxis() {
+		public int getYaxis() {
 		return yaxis;
 	}
 	
-	public TrackData setYaxis(Integer yaxis) {
+	public TrackData setYaxis(int yaxis) {
 		this.yaxis = yaxis;
 		return this;	}
 	

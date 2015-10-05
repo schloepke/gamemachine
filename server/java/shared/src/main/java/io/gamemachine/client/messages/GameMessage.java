@@ -55,7 +55,7 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 	    
         			public String messageId;
 	    
-        			public Integer destinationId;
+        			public int destinationId;
 	    
         			public String destination;
 	    
@@ -77,9 +77,9 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 	    
         			public Harvest harvest;
 	    
-        			public Long authtoken;
+        			public long authtoken;
 	    
-        			public Long unityMessageId;
+        			public long unityMessageId;
 	    
         			public CraftItem craftItem;
 	    
@@ -179,11 +179,11 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
         return destinationId == null ? false : true;
     }
         
-		public Integer getDestinationId() {
+		public int getDestinationId() {
 		return destinationId;
 	}
 	
-	public GameMessage setDestinationId(Integer destinationId) {
+	public GameMessage setDestinationId(int destinationId) {
 		this.destinationId = destinationId;
 		return this;	}
 	
@@ -322,11 +322,11 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
         return authtoken == null ? false : true;
     }
         
-		public Long getAuthtoken() {
+		public long getAuthtoken() {
 		return authtoken;
 	}
 	
-	public GameMessage setAuthtoken(Long authtoken) {
+	public GameMessage setAuthtoken(long authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	
@@ -335,11 +335,11 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
         return unityMessageId == null ? false : true;
     }
         
-		public Long getUnityMessageId() {
+		public long getUnityMessageId() {
 		return unityMessageId;
 	}
 	
-	public GameMessage setUnityMessageId(Long unityMessageId) {
+	public GameMessage setUnityMessageId(long unityMessageId) {
 		this.unityMessageId = unityMessageId;
 		return this;	}
 	

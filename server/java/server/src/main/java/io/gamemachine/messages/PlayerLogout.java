@@ -61,10 +61,14 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
     static final PlayerLogout DEFAULT_INSTANCE = new PlayerLogout();
     static final String defaultScope = PlayerLogout.class.getSimpleName();
 
-    			public String playerId;
-	    
-        			public Integer authtoken;
-	    
+    	
+	    	    public String playerId= null;
+	    		
+    
+        	
+	    	    public int authtoken= 0;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerId != null) {
+    	    	    	//if (playerId != null) {
     	       	    	model.setString("player_logout_player_id",playerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (authtoken != null) {
+    	    	    	//if (authtoken != null) {
     	       	    	model.setInteger("player_logout_authtoken",authtoken);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PlayerLogout fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerLogout message = new PlayerLogout();
     	    	    	    	    	
-    	    	    	String playerIdField = model.getString("player_logout_player_id");
-    	    	
-    	if (playerIdField != null) {
+    	    	    	String playerIdTestField = model.getString("player_logout_player_id");
+    	if (playerIdTestField != null) {
+    		String playerIdField = playerIdTestField;
     		message.setPlayerId(playerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer authtokenField = model.getInteger("player_logout_authtoken");
+    	
     	    	
-    	if (authtokenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer authtokenTestField = model.getInteger("player_logout_authtoken");
+    	if (authtokenTestField != null) {
+    		int authtokenField = authtokenTestField;
     		message.setAuthtoken(authtokenField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
     }
 
 
-	    
-    public Boolean hasPlayerId()  {
-        return playerId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerId() {
 		return playerId;
 	}
@@ -133,16 +137,12 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
 		this.playerId = playerId;
 		return this;	}
 	
-		    
-    public Boolean hasAuthtoken()  {
-        return authtoken == null ? false : true;
-    }
-        
-		public Integer getAuthtoken() {
+		            
+		public int getAuthtoken() {
 		return authtoken;
 	}
 	
-	public PlayerLogout setAuthtoken(Integer authtoken) {
+	public PlayerLogout setAuthtoken(int authtoken) {
 		this.authtoken = authtoken;
 		return this;	}
 	
@@ -221,16 +221,18 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
     public void writeTo(Output output, PlayerLogout message) throws IOException
     {
     	    	
-    	    	if(message.playerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.playerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.playerId != null)
+    	    	    	if( (String)message.playerId != null) {
             output.writeString(1, message.playerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.authtoken != null)
+    	    	    	if( (Integer)message.authtoken != null) {
             output.writeInt32(2, message.authtoken, false);
+        }
     	    	
     	            	
     }
@@ -238,12 +240,12 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
 	public void dumpObject()
     {
     	System.out.println("START PlayerLogout");
-    	    	if(this.playerId != null) {
+    	    	//if(this.playerId != null) {
     		System.out.println("playerId="+this.playerId);
-    	}
-    	    	if(this.authtoken != null) {
+    	//}
+    	    	//if(this.authtoken != null) {
     		System.out.println("authtoken="+this.authtoken);
-    	}
+    	//}
     	    	System.out.println("END PlayerLogout");
     }
     

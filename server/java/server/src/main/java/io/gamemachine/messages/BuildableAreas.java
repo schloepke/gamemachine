@@ -91,11 +91,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
     }
 
 
-	    
-    public Boolean hasBuildableArea()  {
-        return buildableArea == null ? false : true;
-    }
-        
+	            
 		public List<BuildableArea> getBuildableAreaList() {
 		if(this.buildableArea == null)
             this.buildableArea = new ArrayList<BuildableArea>();
@@ -146,7 +142,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.px.equals(obj.px)) {
+    	    		if (buildableArea.px == obj.px) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.py.equals(obj.py)) {
+    	    		if (buildableArea.py == obj.py) {
     	      			itr.remove();
     		}
 		}
@@ -178,7 +174,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.pz.equals(obj.pz)) {
+    	    		if (buildableArea.pz == obj.pz) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.sx.equals(obj.sx)) {
+    	    		if (buildableArea.sx == obj.sx) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.sy.equals(obj.sy)) {
+    	    		if (buildableArea.sy == obj.sy) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.sz.equals(obj.sz)) {
+    	    		if (buildableArea.sz == obj.sz) {
     	      			itr.remove();
     		}
 		}
@@ -242,7 +238,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
        	while (itr.hasNext()) {
     	BuildableArea obj = itr.next();
     	
-    	    		if (buildableArea.recordId.equals(obj.recordId)) {
+    	    		if (buildableArea.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -330,7 +326,7 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
         {
             for(BuildableArea buildableArea : message.buildableArea)
             {
-                if(buildableArea != null) {
+                if( (BuildableArea) buildableArea != null) {
                    	    				output.writeObject(1, buildableArea, BuildableArea.getSchema(), true);
     				    			}
             }
@@ -341,9 +337,9 @@ public final class BuildableAreas implements Externalizable, Message<BuildableAr
 	public void dumpObject()
     {
     	System.out.println("START BuildableAreas");
-    	    	if(this.buildableArea != null) {
+    	    	//if(this.buildableArea != null) {
     		System.out.println("buildableArea="+this.buildableArea);
-    	}
+    	//}
     	    	System.out.println("END BuildableAreas");
     }
     

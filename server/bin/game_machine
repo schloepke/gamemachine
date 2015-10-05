@@ -4,6 +4,11 @@ ENV['APP_ROOT'] ||= File.expand_path(Dir.pwd)
 ENV['JAVA_ROOT'] = File.join(ENV['APP_ROOT'],'java','server')
 ENV['GAME_ENV'] = 'default' unless ENV['GAME_ENV']
 
+env_datfile = File.join(ENV['APP_ROOT'],'env.dat')
+if File.exist?(env_datfile)
+  ENV['GAME_ENV'] = File.read(env_datfile);
+end
+
 ARGV << '--help' if ARGV.empty?
 
 aliases = {
@@ -11,6 +16,7 @@ aliases = {
   "s"  => "server",
   "p" => "plugin"
 }
+
 
 command = ARGV.shift
 command = aliases[command] || command
@@ -42,7 +48,8 @@ if command == 'build' || command == 'bundle'
   else
     GameMachine::Console::Build.new(ARGV).run!
   end
-  
+  print "Hit return to exit"
+  gets
 
 elsif command == 'server'
   #puts 'classpath is ' + java.lang.System.getProperty("java.class.path")

@@ -51,9 +51,9 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
 
     static final Weapon DEFAULT_INSTANCE = new Weapon();
 
-    			public Integer attack;
+    			public int attack;
 	    
-        			public Integer delay;
+        			public int delay;
 	    
       
     public Weapon()
@@ -69,11 +69,11 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
         return attack == null ? false : true;
     }
         
-		public Integer getAttack() {
+		public int getAttack() {
 		return attack;
 	}
 	
-	public Weapon setAttack(Integer attack) {
+	public Weapon setAttack(int attack) {
 		this.attack = attack;
 		return this;	}
 	
@@ -82,11 +82,11 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
         return delay == null ? false : true;
     }
         
-		public Integer getDelay() {
+		public int getDelay() {
 		return delay;
 	}
 	
-	public Weapon setDelay(Integer delay) {
+	public Weapon setDelay(int delay) {
 		this.delay = delay;
 		return this;	}
 	

@@ -52,11 +52,11 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
     static final BuildObjects DEFAULT_INSTANCE = new BuildObjects();
 
         public List<BuildObject> buildObject;
-	    			public Integer action;
+	    			public int action;
 	    
-        			public Integer requestedUpdateId;
+        			public int requestedUpdateId;
 	    
-        			public Integer currentUpdate;
+        			public int currentUpdate;
 	    
       
     public BuildObjects()
@@ -618,11 +618,11 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
         return action == null ? false : true;
     }
         
-		public Integer getAction() {
+		public int getAction() {
 		return action;
 	}
 	
-	public BuildObjects setAction(Integer action) {
+	public BuildObjects setAction(int action) {
 		this.action = action;
 		return this;	}
 	
@@ -631,11 +631,11 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
         return requestedUpdateId == null ? false : true;
     }
         
-		public Integer getRequestedUpdateId() {
+		public int getRequestedUpdateId() {
 		return requestedUpdateId;
 	}
 	
-	public BuildObjects setRequestedUpdateId(Integer requestedUpdateId) {
+	public BuildObjects setRequestedUpdateId(int requestedUpdateId) {
 		this.requestedUpdateId = requestedUpdateId;
 		return this;	}
 	
@@ -644,11 +644,11 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
         return currentUpdate == null ? false : true;
     }
         
-		public Integer getCurrentUpdate() {
+		public int getCurrentUpdate() {
 		return currentUpdate;
 	}
 	
-	public BuildObjects setCurrentUpdate(Integer currentUpdate) {
+	public BuildObjects setCurrentUpdate(int currentUpdate) {
 		this.currentUpdate = currentUpdate;
 		return this;	}
 	

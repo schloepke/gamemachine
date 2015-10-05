@@ -61,8 +61,10 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
     static final PoisonPill DEFAULT_INSTANCE = new PoisonPill();
     static final String defaultScope = PoisonPill.class.getSimpleName();
 
-    			public Integer notused;
-	    
+    	
+	    	    public int notused= 0;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (notused != null) {
+    	    	    	//if (notused != null) {
     	       	    	model.setInteger("poison_pill_notused",notused);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PoisonPill fromModel(Model model) {
 		boolean hasFields = false;
     	PoisonPill message = new PoisonPill();
     	    	    	    	    	
-    	    	    	Integer notusedField = model.getInteger("poison_pill_notused");
-    	    	
-    	if (notusedField != null) {
+    	    	    	Integer notusedTestField = model.getInteger("poison_pill_notused");
+    	if (notusedTestField != null) {
+    		int notusedField = notusedTestField;
     		message.setNotused(notusedField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,16 +109,12 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
     }
 
 
-	    
-    public Boolean hasNotused()  {
-        return notused == null ? false : true;
-    }
-        
-		public Integer getNotused() {
+	            
+		public int getNotused() {
 		return notused;
 	}
 	
-	public PoisonPill setNotused(Integer notused) {
+	public PoisonPill setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	
@@ -190,8 +190,9 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
     {
     	    	
     	    	
-    	    	    	if(message.notused != null)
+    	    	    	if( (Integer)message.notused != null) {
             output.writeInt32(1, message.notused, false);
+        }
     	    	
     	            	
     }
@@ -199,9 +200,9 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
 	public void dumpObject()
     {
     	System.out.println("START PoisonPill");
-    	    	if(this.notused != null) {
+    	    	//if(this.notused != null) {
     		System.out.println("notused="+this.notused);
-    	}
+    	//}
     	    	System.out.println("END PoisonPill");
     }
     

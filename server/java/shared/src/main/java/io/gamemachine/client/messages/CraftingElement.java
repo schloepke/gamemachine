@@ -53,11 +53,11 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
 
     			public String id;
 	    
-        			public Integer quantity;
+        			public int quantity;
 	    
-        			public Integer level;
+        			public int level;
 	    
-        			public Integer order;
+        			public int order;
 	    
       
     public CraftingElement()
@@ -86,11 +86,11 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
         return quantity == null ? false : true;
     }
         
-		public Integer getQuantity() {
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public CraftingElement setQuantity(Integer quantity) {
+	public CraftingElement setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
@@ -99,11 +99,11 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
         return level == null ? false : true;
     }
         
-		public Integer getLevel() {
+		public int getLevel() {
 		return level;
 	}
 	
-	public CraftingElement setLevel(Integer level) {
+	public CraftingElement setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
@@ -112,11 +112,11 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
         return order == null ? false : true;
     }
         
-		public Integer getOrder() {
+		public int getOrder() {
 		return order;
 	}
 	
-	public CraftingElement setOrder(Integer order) {
+	public CraftingElement setOrder(int order) {
 		this.order = order;
 		return this;	}
 	

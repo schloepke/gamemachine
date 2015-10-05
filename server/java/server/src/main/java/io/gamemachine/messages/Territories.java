@@ -91,11 +91,7 @@ public final class Territories implements Externalizable, Message<Territories>, 
     }
 
 
-	    
-    public Boolean hasTerritories()  {
-        return territories == null ? false : true;
-    }
-        
+	            
 		public List<Territory> getTerritoriesList() {
 		if(this.territories == null)
             this.territories = new ArrayList<Territory>();
@@ -162,7 +158,7 @@ public final class Territories implements Externalizable, Message<Territories>, 
        	while (itr.hasNext()) {
     	Territory obj = itr.next();
     	
-    	    		if (territories.recordId.equals(obj.recordId)) {
+    	    		if (territories.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -266,7 +262,7 @@ public final class Territories implements Externalizable, Message<Territories>, 
         {
             for(Territory territories : message.territories)
             {
-                if(territories != null) {
+                if( (Territory) territories != null) {
                    	    				output.writeObject(1, territories, Territory.getSchema(), true);
     				    			}
             }
@@ -277,9 +273,9 @@ public final class Territories implements Externalizable, Message<Territories>, 
 	public void dumpObject()
     {
     	System.out.println("START Territories");
-    	    	if(this.territories != null) {
+    	    	//if(this.territories != null) {
     		System.out.println("territories="+this.territories);
-    	}
+    	//}
     	    	System.out.println("END Territories");
     }
     

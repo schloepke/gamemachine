@@ -75,10 +75,14 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
     static final CraftingTool DEFAULT_INSTANCE = new CraftingTool();
     static final String defaultScope = CraftingTool.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer level;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int level= 0;
+	    		
+    
         
 	public static CraftingToolCache cache() {
 		return CraftingToolCache.getInstance();
@@ -350,34 +354,38 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("crafting_tool_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (level != null) {
+    	    	    	//if (level != null) {
     	       	    	model.setInteger("crafting_tool_level",level);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CraftingTool fromModel(Model model) {
 		boolean hasFields = false;
     	CraftingTool message = new CraftingTool();
     	    	    	    	    	
-    	    	    	String idField = model.getString("crafting_tool_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("crafting_tool_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer levelField = model.getInteger("crafting_tool_level");
+    	
     	    	
-    	if (levelField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer levelTestField = model.getInteger("crafting_tool_level");
+    	if (levelTestField != null) {
+    		int levelField = levelTestField;
     		message.setLevel(levelField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -386,11 +394,7 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -399,16 +403,12 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasLevel()  {
-        return level == null ? false : true;
-    }
-        
-		public Integer getLevel() {
+		            
+		public int getLevel() {
 		return level;
 	}
 	
-	public CraftingTool setLevel(Integer level) {
+	public CraftingTool setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
@@ -487,18 +487,20 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
     public void writeTo(Output output, CraftingTool message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.level == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.level == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.level != null)
+    	    	    	if( (Integer)message.level != null) {
             output.writeInt32(2, message.level, false);
+        }
     	    	
     	            	
     }
@@ -506,12 +508,12 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
 	public void dumpObject()
     {
     	System.out.println("START CraftingTool");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.level != null) {
+    	//}
+    	    	//if(this.level != null) {
     		System.out.println("level="+this.level);
-    	}
+    	//}
     	    	System.out.println("END CraftingTool");
     }
     

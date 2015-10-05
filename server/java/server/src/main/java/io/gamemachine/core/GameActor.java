@@ -6,6 +6,8 @@ import io.gamemachine.messages.GameMessages;
 
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.google.common.base.Strings;
+
 import akka.actor.UntypedActor;
 
 public class GameActor extends UntypedActor {
@@ -61,7 +63,7 @@ public class GameActor extends UntypedActor {
 	}
 
 	public boolean exactlyOnce(GameMessage gameMessage) {
-		if (gameMessage.hasMessageId()) {
+		if (!Strings.isNullOrEmpty(gameMessage.messageId)) {
 			if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
 				int status = reliableMessageStatus.get(gameMessage.messageId);
 				if (status == 1) {

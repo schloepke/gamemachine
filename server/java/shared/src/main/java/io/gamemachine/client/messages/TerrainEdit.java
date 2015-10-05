@@ -80,25 +80,25 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
 
     static final TerrainEdit DEFAULT_INSTANCE = new TerrainEdit();
 
-    			public Integer x;
+    			public int x;
 	    
-        			public Integer y;
+        			public int y;
 	    
-        			public Integer detailLayer;
+        			public int detailLayer;
 	    
-        			public Integer value;
+        			public int value;
 	    
         			public Type type; // = NONE:0;
 	    
         			public String id;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
-        			public Integer texture;
+        			public int texture;
 	    
-        			public Float height;
+        			public float height;
 	    
-        			public Long createdAt;
+        			public long createdAt;
 	    
         			public String terrain;
 	    
@@ -116,11 +116,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return x == null ? false : true;
     }
         
-		public Integer getX() {
+		public int getX() {
 		return x;
 	}
 	
-	public TerrainEdit setX(Integer x) {
+	public TerrainEdit setX(int x) {
 		this.x = x;
 		return this;	}
 	
@@ -129,11 +129,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return y == null ? false : true;
     }
         
-		public Integer getY() {
+		public int getY() {
 		return y;
 	}
 	
-	public TerrainEdit setY(Integer y) {
+	public TerrainEdit setY(int y) {
 		this.y = y;
 		return this;	}
 	
@@ -142,11 +142,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return detailLayer == null ? false : true;
     }
         
-		public Integer getDetailLayer() {
+		public int getDetailLayer() {
 		return detailLayer;
 	}
 	
-	public TerrainEdit setDetailLayer(Integer detailLayer) {
+	public TerrainEdit setDetailLayer(int detailLayer) {
 		this.detailLayer = detailLayer;
 		return this;	}
 	
@@ -155,11 +155,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return value == null ? false : true;
     }
         
-		public Integer getValue() {
+		public int getValue() {
 		return value;
 	}
 	
-	public TerrainEdit setValue(Integer value) {
+	public TerrainEdit setValue(int value) {
 		this.value = value;
 		return this;	}
 	
@@ -194,11 +194,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public TerrainEdit setRecordId(Integer recordId) {
+	public TerrainEdit setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -207,11 +207,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return texture == null ? false : true;
     }
         
-		public Integer getTexture() {
+		public int getTexture() {
 		return texture;
 	}
 	
-	public TerrainEdit setTexture(Integer texture) {
+	public TerrainEdit setTexture(int texture) {
 		this.texture = texture;
 		return this;	}
 	
@@ -220,11 +220,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return height == null ? false : true;
     }
         
-		public Float getHeight() {
+		public float getHeight() {
 		return height;
 	}
 	
-	public TerrainEdit setHeight(Float height) {
+	public TerrainEdit setHeight(float height) {
 		this.height = height;
 		return this;	}
 	
@@ -233,11 +233,11 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
         return createdAt == null ? false : true;
     }
         
-		public Long getCreatedAt() {
+		public long getCreatedAt() {
 		return createdAt;
 	}
 	
-	public TerrainEdit setCreatedAt(Long createdAt) {
+	public TerrainEdit setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 		return this;	}
 	

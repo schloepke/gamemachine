@@ -51,11 +51,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 
     static final SiegeCommand DEFAULT_INSTANCE = new SiegeCommand();
 
-    			public Integer startLoad;
+    			public int startLoad;
 	    
-        			public Integer fire;
+        			public int fire;
 	    
-        			public Float force;
+        			public float force;
 	    
         			public String id;
 	    
@@ -65,9 +65,9 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 	    
         			public String skillId;
 	    
-        			public Integer startUse;
+        			public int startUse;
 	    
-        			public Integer endUse;
+        			public int endUse;
 	    
         			public String playerId;
 	    
@@ -89,11 +89,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
         return startLoad == null ? false : true;
     }
         
-		public Integer getStartLoad() {
+		public int getStartLoad() {
 		return startLoad;
 	}
 	
-	public SiegeCommand setStartLoad(Integer startLoad) {
+	public SiegeCommand setStartLoad(int startLoad) {
 		this.startLoad = startLoad;
 		return this;	}
 	
@@ -102,11 +102,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
         return fire == null ? false : true;
     }
         
-		public Integer getFire() {
+		public int getFire() {
 		return fire;
 	}
 	
-	public SiegeCommand setFire(Integer fire) {
+	public SiegeCommand setFire(int fire) {
 		this.fire = fire;
 		return this;	}
 	
@@ -115,11 +115,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
         return force == null ? false : true;
     }
         
-		public Float getForce() {
+		public float getForce() {
 		return force;
 	}
 	
-	public SiegeCommand setForce(Float force) {
+	public SiegeCommand setForce(float force) {
 		this.force = force;
 		return this;	}
 	
@@ -180,11 +180,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
         return startUse == null ? false : true;
     }
         
-		public Integer getStartUse() {
+		public int getStartUse() {
 		return startUse;
 	}
 	
-	public SiegeCommand setStartUse(Integer startUse) {
+	public SiegeCommand setStartUse(int startUse) {
 		this.startUse = startUse;
 		return this;	}
 	
@@ -193,11 +193,11 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
         return endUse == null ? false : true;
     }
         
-		public Integer getEndUse() {
+		public int getEndUse() {
 		return endUse;
 	}
 	
-	public SiegeCommand setEndUse(Integer endUse) {
+	public SiegeCommand setEndUse(int endUse) {
 		this.endUse = endUse;
 		return this;	}
 	

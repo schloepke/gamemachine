@@ -104,28 +104,50 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     static final TerrainEdit DEFAULT_INSTANCE = new TerrainEdit();
     static final String defaultScope = TerrainEdit.class.getSimpleName();
 
-    			public Integer x;
-	    
-        			public Integer y;
-	    
-        			public Integer detailLayer;
-	    
-        			public Integer value;
-	    
-        			public Type type; // = NONE:0;
-	    
-        			public String id;
-	    
-        			public Integer recordId;
-	    
-        			public Integer texture;
-	    
-        			public Float height;
-	    
-        			public Long createdAt;
-	    
-        			public String terrain;
-	    
+    	
+	    	    public int x= 0;
+	    		
+    
+        	
+	    	    public int y= 0;
+	    		
+    
+        	
+	    	    public int detailLayer= 0;
+	    		
+    
+        	
+	    	    public int value= 0;
+	    		
+    
+        	
+	    	    public Type type;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public int texture= 0;
+	    		
+    
+        	
+	    	    public float height= 0F;
+	    		
+    
+        	
+	    	    public long createdAt= 0L;
+	    		
+    
+        	
+	    	    public String terrain= null;
+	    		
+    
         
 	public static TerrainEditCache cache() {
 		return TerrainEditCache.getInstance();
@@ -404,125 +426,143 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setInteger("terrain_edit_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setInteger("terrain_edit_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (detailLayer != null) {
+    	    	    	//if (detailLayer != null) {
     	       	    	model.setInteger("terrain_edit_detail_layer",detailLayer);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setInteger("terrain_edit_value",value);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("terrain_edit_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (texture != null) {
+    	    	    	//if (texture != null) {
     	       	    	model.setInteger("terrain_edit_texture",texture);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (height != null) {
+    	    	    	//if (height != null) {
     	       	    	model.setFloat("terrain_edit_height",height);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (createdAt != null) {
+    	    	    	//if (createdAt != null) {
     	       	    	model.setLong("terrain_edit_created_at",createdAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (terrain != null) {
+    	    	    	//if (terrain != null) {
     	       	    	model.setString("terrain_edit_terrain",terrain);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static TerrainEdit fromModel(Model model) {
 		boolean hasFields = false;
     	TerrainEdit message = new TerrainEdit();
     	    	    	    	    	
-    	    	    	Integer xField = model.getInteger("terrain_edit_x");
-    	    	
-    	if (xField != null) {
+    	    	    	Integer xTestField = model.getInteger("terrain_edit_x");
+    	if (xTestField != null) {
+    		int xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yField = model.getInteger("terrain_edit_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yTestField = model.getInteger("terrain_edit_y");
+    	if (yTestField != null) {
+    		int yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer detailLayerField = model.getInteger("terrain_edit_detail_layer");
+    	
     	    	
-    	if (detailLayerField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer detailLayerTestField = model.getInteger("terrain_edit_detail_layer");
+    	if (detailLayerTestField != null) {
+    		int detailLayerField = detailLayerTestField;
     		message.setDetailLayer(detailLayerField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer valueField = model.getInteger("terrain_edit_value");
+    	
     	    	
-    	if (valueField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer valueTestField = model.getInteger("terrain_edit_value");
+    	if (valueTestField != null) {
+    		int valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String idField = model.getString("terrain_edit_id");
+    	
     	    	
-    	if (idField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String idTestField = model.getString("terrain_edit_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	Integer textureField = model.getInteger("terrain_edit_texture");
-    	    	
-    	if (textureField != null) {
+    	    	    	Integer textureTestField = model.getInteger("terrain_edit_texture");
+    	if (textureTestField != null) {
+    		int textureField = textureTestField;
     		message.setTexture(textureField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float heightField = model.getFloat("terrain_edit_height");
+    	
     	    	
-    	if (heightField != null) {
+    	    	    	    	    	    	
+    	    	    	Float heightTestField = model.getFloat("terrain_edit_height");
+    	if (heightTestField != null) {
+    		float heightField = heightTestField;
     		message.setHeight(heightField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long createdAtField = model.getLong("terrain_edit_created_at");
+    	
     	    	
-    	if (createdAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long createdAtTestField = model.getLong("terrain_edit_created_at");
+    	if (createdAtTestField != null) {
+    		long createdAtField = createdAtTestField;
     		message.setCreatedAt(createdAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String terrainField = model.getString("terrain_edit_terrain");
+    	
     	    	
-    	if (terrainField != null) {
+    	    	    	    	    	    	
+    	    	    	String terrainTestField = model.getString("terrain_edit_terrain");
+    	if (terrainTestField != null) {
+    		String terrainField = terrainTestField;
     		message.setTerrain(terrainField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -531,63 +571,43 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     }
 
 
-	    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Integer getX() {
+	            
+		public int getX() {
 		return x;
 	}
 	
-	public TerrainEdit setX(Integer x) {
+	public TerrainEdit setX(int x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Integer getY() {
+		            
+		public int getY() {
 		return y;
 	}
 	
-	public TerrainEdit setY(Integer y) {
+	public TerrainEdit setY(int y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasDetailLayer()  {
-        return detailLayer == null ? false : true;
-    }
-        
-		public Integer getDetailLayer() {
+		            
+		public int getDetailLayer() {
 		return detailLayer;
 	}
 	
-	public TerrainEdit setDetailLayer(Integer detailLayer) {
+	public TerrainEdit setDetailLayer(int detailLayer) {
 		this.detailLayer = detailLayer;
 		return this;	}
 	
-		    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
-		public Integer getValue() {
+		            
+		public int getValue() {
 		return value;
 	}
 	
-	public TerrainEdit setValue(Integer value) {
+	public TerrainEdit setValue(int value) {
 		this.value = value;
 		return this;	}
 	
-		    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+		            
 		public Type getType() {
 		return type;
 	}
@@ -596,11 +616,7 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -609,63 +625,43 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public TerrainEdit setRecordId(Integer recordId) {
+	public TerrainEdit setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasTexture()  {
-        return texture == null ? false : true;
-    }
-        
-		public Integer getTexture() {
+		            
+		public int getTexture() {
 		return texture;
 	}
 	
-	public TerrainEdit setTexture(Integer texture) {
+	public TerrainEdit setTexture(int texture) {
 		this.texture = texture;
 		return this;	}
 	
-		    
-    public Boolean hasHeight()  {
-        return height == null ? false : true;
-    }
-        
-		public Float getHeight() {
+		            
+		public float getHeight() {
 		return height;
 	}
 	
-	public TerrainEdit setHeight(Float height) {
+	public TerrainEdit setHeight(float height) {
 		this.height = height;
 		return this;	}
 	
-		    
-    public Boolean hasCreatedAt()  {
-        return createdAt == null ? false : true;
-    }
-        
-		public Long getCreatedAt() {
+		            
+		public long getCreatedAt() {
 		return createdAt;
 	}
 	
-	public TerrainEdit setCreatedAt(Long createdAt) {
+	public TerrainEdit setCreatedAt(long createdAt) {
 		this.createdAt = createdAt;
 		return this;	}
 	
-		    
-    public Boolean hasTerrain()  {
-        return terrain == null ? false : true;
-    }
-        
+		            
 		public String getTerrain() {
 		return terrain;
 	}
@@ -786,23 +782,27 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     {
     	    	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Integer)message.x != null) {
             output.writeInt32(1, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Integer)message.y != null) {
             output.writeInt32(2, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.detailLayer != null)
+    	    	    	if( (Integer)message.detailLayer != null) {
             output.writeInt32(3, message.detailLayer, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (Integer)message.value != null) {
             output.writeInt32(4, message.value, false);
+        }
     	    	
     	            	
     	    	
@@ -811,33 +811,39 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(6, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(7, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.texture != null)
+    	    	    	if( (Integer)message.texture != null) {
             output.writeInt32(8, message.texture, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.height != null)
+    	    	    	if( (Float)message.height != null) {
             output.writeFloat(9, message.height, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.createdAt != null)
+    	    	    	if( (Long)message.createdAt != null) {
             output.writeInt64(10, message.createdAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.terrain != null)
+    	    	    	if( (String)message.terrain != null) {
             output.writeString(11, message.terrain, false);
+        }
     	    	
     	            	
     }
@@ -845,39 +851,39 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
 	public void dumpObject()
     {
     	System.out.println("START TerrainEdit");
-    	    	if(this.x != null) {
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.detailLayer != null) {
+    	//}
+    	    	//if(this.detailLayer != null) {
     		System.out.println("detailLayer="+this.detailLayer);
-    	}
-    	    	if(this.value != null) {
+    	//}
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
-    	    	if(this.type != null) {
+    	//}
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.texture != null) {
+    	//}
+    	    	//if(this.texture != null) {
     		System.out.println("texture="+this.texture);
-    	}
-    	    	if(this.height != null) {
+    	//}
+    	    	//if(this.height != null) {
     		System.out.println("height="+this.height);
-    	}
-    	    	if(this.createdAt != null) {
+    	//}
+    	    	//if(this.createdAt != null) {
     		System.out.println("createdAt="+this.createdAt);
-    	}
-    	    	if(this.terrain != null) {
+    	//}
+    	    	//if(this.terrain != null) {
     		System.out.println("terrain="+this.terrain);
-    	}
+    	//}
     	    	System.out.println("END TerrainEdit");
     }
     

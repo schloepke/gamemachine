@@ -61,10 +61,14 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
     static final TimeCycle DEFAULT_INSTANCE = new TimeCycle();
     static final String defaultScope = TimeCycle.class.getSimpleName();
 
-    			public Float currentTime;
-	    
-        			public Float dayCycleLength;
-	    
+    	
+	    	    public float currentTime= 0F;
+	    		
+    
+        	
+	    	    public float dayCycleLength= 0F;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (currentTime != null) {
+    	    	    	//if (currentTime != null) {
     	       	    	model.setFloat("time_cycle_current_time",currentTime);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (dayCycleLength != null) {
+    	    	    	//if (dayCycleLength != null) {
     	       	    	model.setFloat("time_cycle_day_cycle_length",dayCycleLength);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static TimeCycle fromModel(Model model) {
 		boolean hasFields = false;
     	TimeCycle message = new TimeCycle();
     	    	    	    	    	
-    	    	    	Float currentTimeField = model.getFloat("time_cycle_current_time");
-    	    	
-    	if (currentTimeField != null) {
+    	    	    	Float currentTimeTestField = model.getFloat("time_cycle_current_time");
+    	if (currentTimeTestField != null) {
+    		float currentTimeField = currentTimeTestField;
     		message.setCurrentTime(currentTimeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float dayCycleLengthField = model.getFloat("time_cycle_day_cycle_length");
+    	
     	    	
-    	if (dayCycleLengthField != null) {
+    	    	    	    	    	    	
+    	    	    	Float dayCycleLengthTestField = model.getFloat("time_cycle_day_cycle_length");
+    	if (dayCycleLengthTestField != null) {
+    		float dayCycleLengthField = dayCycleLengthTestField;
     		message.setDayCycleLength(dayCycleLengthField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,29 +128,21 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
     }
 
 
-	    
-    public Boolean hasCurrentTime()  {
-        return currentTime == null ? false : true;
-    }
-        
-		public Float getCurrentTime() {
+	            
+		public float getCurrentTime() {
 		return currentTime;
 	}
 	
-	public TimeCycle setCurrentTime(Float currentTime) {
+	public TimeCycle setCurrentTime(float currentTime) {
 		this.currentTime = currentTime;
 		return this;	}
 	
-		    
-    public Boolean hasDayCycleLength()  {
-        return dayCycleLength == null ? false : true;
-    }
-        
-		public Float getDayCycleLength() {
+		            
+		public float getDayCycleLength() {
 		return dayCycleLength;
 	}
 	
-	public TimeCycle setDayCycleLength(Float dayCycleLength) {
+	public TimeCycle setDayCycleLength(float dayCycleLength) {
 		this.dayCycleLength = dayCycleLength;
 		return this;	}
 	
@@ -222,13 +222,15 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
     {
     	    	
     	    	
-    	    	    	if(message.currentTime != null)
+    	    	    	if( (Float)message.currentTime != null) {
             output.writeFloat(1, message.currentTime, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.dayCycleLength != null)
+    	    	    	if( (Float)message.dayCycleLength != null) {
             output.writeFloat(2, message.dayCycleLength, false);
+        }
     	    	
     	            	
     }
@@ -236,12 +238,12 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
 	public void dumpObject()
     {
     	System.out.println("START TimeCycle");
-    	    	if(this.currentTime != null) {
+    	    	//if(this.currentTime != null) {
     		System.out.println("currentTime="+this.currentTime);
-    	}
-    	    	if(this.dayCycleLength != null) {
+    	//}
+    	    	//if(this.dayCycleLength != null) {
     		System.out.println("dayCycleLength="+this.dayCycleLength);
-    	}
+    	//}
     	    	System.out.println("END TimeCycle");
     }
     

@@ -61,16 +61,26 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
     static final BuildObjectSlot DEFAULT_INSTANCE = new BuildObjectSlot();
     static final String defaultScope = BuildObjectSlot.class.getSimpleName();
 
-    			public String slotId;
-	    
-        			public String buildObjectId;
-	    
-        			public Long placedAt;
-	    
-        			public Boolean buildOverTime;
-	    
-        			public Integer buildTime;
-	    
+    	
+	    	    public String slotId= null;
+	    		
+    
+        	
+	    	    public String buildObjectId= null;
+	    		
+    
+        	
+	    	    public long placedAt= 0L;
+	    		
+    
+        	
+	    	    public boolean buildOverTime= false;
+	    		
+    
+        	
+	    	    public int buildTime= 0;
+	    		
+    
         
 
 
@@ -93,70 +103,80 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (slotId != null) {
+    	    	    	//if (slotId != null) {
     	       	    	model.setString("build_object_slot_slot_id",slotId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (buildObjectId != null) {
+    	    	    	//if (buildObjectId != null) {
     	       	    	model.setString("build_object_slot_build_object_id",buildObjectId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (placedAt != null) {
+    	    	    	//if (placedAt != null) {
     	       	    	model.setLong("build_object_slot_placed_at",placedAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (buildOverTime != null) {
+    	    	    	//if (buildOverTime != null) {
     	       	    	model.setBoolean("build_object_slot_build_over_time",buildOverTime);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (buildTime != null) {
+    	    	    	//if (buildTime != null) {
     	       	    	model.setInteger("build_object_slot_build_time",buildTime);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static BuildObjectSlot fromModel(Model model) {
 		boolean hasFields = false;
     	BuildObjectSlot message = new BuildObjectSlot();
     	    	    	    	    	
-    	    	    	String slotIdField = model.getString("build_object_slot_slot_id");
-    	    	
-    	if (slotIdField != null) {
+    	    	    	String slotIdTestField = model.getString("build_object_slot_slot_id");
+    	if (slotIdTestField != null) {
+    		String slotIdField = slotIdTestField;
     		message.setSlotId(slotIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String buildObjectIdField = model.getString("build_object_slot_build_object_id");
+    	
     	    	
-    	if (buildObjectIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String buildObjectIdTestField = model.getString("build_object_slot_build_object_id");
+    	if (buildObjectIdTestField != null) {
+    		String buildObjectIdField = buildObjectIdTestField;
     		message.setBuildObjectId(buildObjectIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long placedAtField = model.getLong("build_object_slot_placed_at");
+    	
     	    	
-    	if (placedAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long placedAtTestField = model.getLong("build_object_slot_placed_at");
+    	if (placedAtTestField != null) {
+    		long placedAtField = placedAtTestField;
     		message.setPlacedAt(placedAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean buildOverTimeField = model.getBoolean("build_object_slot_build_over_time");
+    	
     	    	
-    	if (buildOverTimeField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean buildOverTimeTestField = model.getBoolean("build_object_slot_build_over_time");
+    	if (buildOverTimeTestField != null) {
+    		boolean buildOverTimeField = buildOverTimeTestField;
     		message.setBuildOverTime(buildOverTimeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer buildTimeField = model.getInteger("build_object_slot_build_time");
+    	
     	    	
-    	if (buildTimeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer buildTimeTestField = model.getInteger("build_object_slot_build_time");
+    	if (buildTimeTestField != null) {
+    		int buildTimeField = buildTimeTestField;
     		message.setBuildTime(buildTimeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -165,11 +185,7 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
     }
 
 
-	    
-    public Boolean hasSlotId()  {
-        return slotId == null ? false : true;
-    }
-        
+	            
 		public String getSlotId() {
 		return slotId;
 	}
@@ -178,11 +194,7 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
 		this.slotId = slotId;
 		return this;	}
 	
-		    
-    public Boolean hasBuildObjectId()  {
-        return buildObjectId == null ? false : true;
-    }
-        
+		            
 		public String getBuildObjectId() {
 		return buildObjectId;
 	}
@@ -191,42 +203,30 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
 		this.buildObjectId = buildObjectId;
 		return this;	}
 	
-		    
-    public Boolean hasPlacedAt()  {
-        return placedAt == null ? false : true;
-    }
-        
-		public Long getPlacedAt() {
+		            
+		public long getPlacedAt() {
 		return placedAt;
 	}
 	
-	public BuildObjectSlot setPlacedAt(Long placedAt) {
+	public BuildObjectSlot setPlacedAt(long placedAt) {
 		this.placedAt = placedAt;
 		return this;	}
 	
-		    
-    public Boolean hasBuildOverTime()  {
-        return buildOverTime == null ? false : true;
-    }
-        
-		public Boolean getBuildOverTime() {
+		            
+		public boolean getBuildOverTime() {
 		return buildOverTime;
 	}
 	
-	public BuildObjectSlot setBuildOverTime(Boolean buildOverTime) {
+	public BuildObjectSlot setBuildOverTime(boolean buildOverTime) {
 		this.buildOverTime = buildOverTime;
 		return this;	}
 	
-		    
-    public Boolean hasBuildTime()  {
-        return buildTime == null ? false : true;
-    }
-        
-		public Integer getBuildTime() {
+		            
+		public int getBuildTime() {
 		return buildTime;
 	}
 	
-	public BuildObjectSlot setBuildTime(Integer buildTime) {
+	public BuildObjectSlot setBuildTime(int buildTime) {
 		this.buildTime = buildTime;
 		return this;	}
 	
@@ -317,33 +317,38 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
     public void writeTo(Output output, BuildObjectSlot message) throws IOException
     {
     	    	
-    	    	if(message.slotId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.slotId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.slotId != null)
+    	    	    	if( (String)message.slotId != null) {
             output.writeString(1, message.slotId, false);
+        }
     	    	
     	            	
-    	    	if(message.buildObjectId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.buildObjectId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.buildObjectId != null)
+    	    	    	if( (String)message.buildObjectId != null) {
             output.writeString(2, message.buildObjectId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.placedAt != null)
+    	    	    	if( (Long)message.placedAt != null) {
             output.writeInt64(3, message.placedAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.buildOverTime != null)
+    	    	    	if( (Boolean)message.buildOverTime != null) {
             output.writeBool(4, message.buildOverTime, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.buildTime != null)
+    	    	    	if( (Integer)message.buildTime != null) {
             output.writeInt32(5, message.buildTime, false);
+        }
     	    	
     	            	
     }
@@ -351,21 +356,21 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
 	public void dumpObject()
     {
     	System.out.println("START BuildObjectSlot");
-    	    	if(this.slotId != null) {
+    	    	//if(this.slotId != null) {
     		System.out.println("slotId="+this.slotId);
-    	}
-    	    	if(this.buildObjectId != null) {
+    	//}
+    	    	//if(this.buildObjectId != null) {
     		System.out.println("buildObjectId="+this.buildObjectId);
-    	}
-    	    	if(this.placedAt != null) {
+    	//}
+    	    	//if(this.placedAt != null) {
     		System.out.println("placedAt="+this.placedAt);
-    	}
-    	    	if(this.buildOverTime != null) {
+    	//}
+    	    	//if(this.buildOverTime != null) {
     		System.out.println("buildOverTime="+this.buildOverTime);
-    	}
-    	    	if(this.buildTime != null) {
+    	//}
+    	    	//if(this.buildTime != null) {
     		System.out.println("buildTime="+this.buildTime);
-    	}
+    	//}
     	    	System.out.println("END BuildObjectSlot");
     }
     

@@ -61,16 +61,26 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
     static final CraftItem DEFAULT_INSTANCE = new CraftItem();
     static final String defaultScope = CraftItem.class.getSimpleName();
 
-    			public CraftableItem craftableItem;
-	    
-        			public Integer result;
-	    
-        			public String characterId;
-	    
-        			public Integer craftedQuantity;
-	    
-        			public String craftedId;
-	    
+    	
+	    	    public CraftableItem craftableItem;
+	    		
+    
+        	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public int craftedQuantity= 0;
+	    		
+    
+        	
+	    	    public String craftedId= null;
+	    		
+    
         
 
 
@@ -92,58 +102,66 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("craft_item_result",result);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("craft_item_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (craftedQuantity != null) {
+    	    	    	//if (craftedQuantity != null) {
     	       	    	model.setInteger("craft_item_crafted_quantity",craftedQuantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (craftedId != null) {
+    	    	    	//if (craftedId != null) {
     	       	    	model.setString("craft_item_crafted_id",craftedId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static CraftItem fromModel(Model model) {
 		boolean hasFields = false;
     	CraftItem message = new CraftItem();
     	    	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("craft_item_result");
-    	    	
-    	if (resultField != null) {
+    	    	    	Integer resultTestField = model.getInteger("craft_item_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("craft_item_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("craft_item_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer craftedQuantityField = model.getInteger("craft_item_crafted_quantity");
+    	
     	    	
-    	if (craftedQuantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer craftedQuantityTestField = model.getInteger("craft_item_crafted_quantity");
+    	if (craftedQuantityTestField != null) {
+    		int craftedQuantityField = craftedQuantityTestField;
     		message.setCraftedQuantity(craftedQuantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String craftedIdField = model.getString("craft_item_crafted_id");
+    	
     	    	
-    	if (craftedIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String craftedIdTestField = model.getString("craft_item_crafted_id");
+    	if (craftedIdTestField != null) {
+    		String craftedIdField = craftedIdTestField;
     		message.setCraftedId(craftedIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -152,11 +170,7 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
     }
 
 
-	    
-    public Boolean hasCraftableItem()  {
-        return craftableItem == null ? false : true;
-    }
-        
+	            
 		public CraftableItem getCraftableItem() {
 		return craftableItem;
 	}
@@ -165,24 +179,16 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
 		this.craftableItem = craftableItem;
 		return this;	}
 	
-		    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+		            
+		public int getResult() {
 		return result;
 	}
 	
-	public CraftItem setResult(Integer result) {
+	public CraftItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -191,24 +197,16 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasCraftedQuantity()  {
-        return craftedQuantity == null ? false : true;
-    }
-        
-		public Integer getCraftedQuantity() {
+		            
+		public int getCraftedQuantity() {
 		return craftedQuantity;
 	}
 	
-	public CraftItem setCraftedQuantity(Integer craftedQuantity) {
+	public CraftItem setCraftedQuantity(int craftedQuantity) {
 		this.craftedQuantity = craftedQuantity;
 		return this;	}
 	
-		    
-    public Boolean hasCraftedId()  {
-        return craftedId == null ? false : true;
-    }
-        
+		            
 		public String getCraftedId() {
 		return craftedId;
 	}
@@ -310,23 +308,27 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
     	    	
     	            	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(2, message.result, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(3, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.craftedQuantity != null)
+    	    	    	if( (Integer)message.craftedQuantity != null) {
             output.writeInt32(4, message.craftedQuantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.craftedId != null)
+    	    	    	if( (String)message.craftedId != null) {
             output.writeString(5, message.craftedId, false);
+        }
     	    	
     	            	
     }
@@ -334,21 +336,21 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
 	public void dumpObject()
     {
     	System.out.println("START CraftItem");
-    	    	if(this.craftableItem != null) {
+    	    	//if(this.craftableItem != null) {
     		System.out.println("craftableItem="+this.craftableItem);
-    	}
-    	    	if(this.result != null) {
+    	//}
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.craftedQuantity != null) {
+    	//}
+    	    	//if(this.craftedQuantity != null) {
     		System.out.println("craftedQuantity="+this.craftedQuantity);
-    	}
-    	    	if(this.craftedId != null) {
+    	//}
+    	    	//if(this.craftedId != null) {
     		System.out.println("craftedId="+this.craftedId);
-    	}
+    	//}
     	    	System.out.println("END CraftItem");
     }
     

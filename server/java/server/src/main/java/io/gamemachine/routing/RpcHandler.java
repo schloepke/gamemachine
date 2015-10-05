@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.google.common.base.Strings;
+
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -53,7 +55,7 @@ public class RpcHandler extends UntypedActor {
 	public void onReceive(Object message) throws Exception {
 		RpcMessage rpcMessage = (RpcMessage)message;
 		
-		if (rpcMessage.hasMessageId()) {
+		if (rpcMessage.messageId > 0) {
 			ActorRef ref = pending.get(rpcMessage.messageId);
 			ref.tell(rpcMessage,getSelf());
 			pending.remove(rpcMessage.messageId);

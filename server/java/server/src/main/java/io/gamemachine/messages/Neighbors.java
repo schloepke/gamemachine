@@ -91,11 +91,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
     }
 
 
-	    
-    public Boolean hasTrackData()  {
-        return trackData == null ? false : true;
-    }
-        
+	            
 		public List<TrackData> getTrackDataList() {
 		if(this.trackData == null)
             this.trackData = new ArrayList<TrackData>();
@@ -130,7 +126,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.ix.equals(obj.ix)) {
+    	    		if (trackData.ix == obj.ix) {
     	      			itr.remove();
     		}
 		}
@@ -146,7 +142,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.iy.equals(obj.iy)) {
+    	    		if (trackData.iy == obj.iy) {
     	      			itr.remove();
     		}
 		}
@@ -162,7 +158,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.iz.equals(obj.iz)) {
+    	    		if (trackData.iz == obj.iz) {
     	      			itr.remove();
     		}
 		}
@@ -194,7 +190,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.x.equals(obj.x)) {
+    	    		if (trackData.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.y.equals(obj.y)) {
+    	    		if (trackData.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.z.equals(obj.z)) {
+    	    		if (trackData.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.getNeighbors.equals(obj.getNeighbors)) {
+    	    		if (trackData.getNeighbors == obj.getNeighbors) {
     	      			itr.remove();
     		}
 		}
@@ -274,7 +270,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.shortId.equals(obj.shortId)) {
+    	    		if (trackData.shortId == obj.shortId) {
     	      			itr.remove();
     		}
 		}
@@ -290,7 +286,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.broadcast.equals(obj.broadcast)) {
+    	    		if (trackData.broadcast == obj.broadcast) {
     	      			itr.remove();
     		}
 		}
@@ -322,7 +318,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.rx.equals(obj.rx)) {
+    	    		if (trackData.rx == obj.rx) {
     	      			itr.remove();
     		}
 		}
@@ -338,7 +334,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.ry.equals(obj.ry)) {
+    	    		if (trackData.ry == obj.ry) {
     	      			itr.remove();
     		}
 		}
@@ -354,7 +350,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.rz.equals(obj.rz)) {
+    	    		if (trackData.rz == obj.rz) {
     	      			itr.remove();
     		}
 		}
@@ -370,7 +366,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.rw.equals(obj.rw)) {
+    	    		if (trackData.rw == obj.rw) {
     	      			itr.remove();
     		}
 		}
@@ -386,7 +382,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.vaxis.equals(obj.vaxis)) {
+    	    		if (trackData.vaxis == obj.vaxis) {
     	      			itr.remove();
     		}
 		}
@@ -402,7 +398,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.haxis.equals(obj.haxis)) {
+    	    		if (trackData.haxis == obj.haxis) {
     	      			itr.remove();
     		}
 		}
@@ -418,7 +414,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.speed.equals(obj.speed)) {
+    	    		if (trackData.speed == obj.speed) {
     	      			itr.remove();
     		}
 		}
@@ -434,7 +430,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.velX.equals(obj.velX)) {
+    	    		if (trackData.velX == obj.velX) {
     	      			itr.remove();
     		}
 		}
@@ -450,7 +446,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.velZ.equals(obj.velZ)) {
+    	    		if (trackData.velZ == obj.velZ) {
     	      			itr.remove();
     		}
 		}
@@ -466,7 +462,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.zone.equals(obj.zone)) {
+    	    		if (trackData.zone == obj.zone) {
     	      			itr.remove();
     		}
 		}
@@ -482,7 +478,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.hidden.equals(obj.hidden)) {
+    	    		if (trackData.hidden == obj.hidden) {
     	      			itr.remove();
     		}
 		}
@@ -498,7 +494,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
        	while (itr.hasNext()) {
     	TrackData obj = itr.next();
     	
-    	    		if (trackData.yaxis.equals(obj.yaxis)) {
+    	    		if (trackData.yaxis == obj.yaxis) {
     	      			itr.remove();
     		}
 		}
@@ -586,7 +582,7 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
         {
             for(TrackData trackData : message.trackData)
             {
-                if(trackData != null) {
+                if( (TrackData) trackData != null) {
                    	    				output.writeObject(1, trackData, TrackData.getSchema(), true);
     				    			}
             }
@@ -597,9 +593,9 @@ public final class Neighbors implements Externalizable, Message<Neighbors>, Sche
 	public void dumpObject()
     {
     	System.out.println("START Neighbors");
-    	    	if(this.trackData != null) {
+    	    	//if(this.trackData != null) {
     		System.out.println("trackData="+this.trackData);
-    	}
+    	//}
     	    	System.out.println("END Neighbors");
     }
     

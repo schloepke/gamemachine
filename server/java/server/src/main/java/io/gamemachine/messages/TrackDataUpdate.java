@@ -75,10 +75,14 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
     static final TrackDataUpdate DEFAULT_INSTANCE = new TrackDataUpdate();
     static final String defaultScope = TrackDataUpdate.class.getSimpleName();
 
-    			public String id;
-	    
-        			public DynamicMessage dynamicMessage;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public DynamicMessage dynamicMessage;
+	    		
+    
         
 	public static TrackDataUpdateCache cache() {
 		return TrackDataUpdateCache.getInstance();
@@ -349,22 +353,24 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("track_data_update_id",id);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static TrackDataUpdate fromModel(Model model) {
 		boolean hasFields = false;
     	TrackDataUpdate message = new TrackDataUpdate();
     	    	    	    	    	
-    	    	    	String idField = model.getString("track_data_update_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("track_data_update_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -373,11 +379,7 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -386,11 +388,7 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasDynamicMessage()  {
-        return dynamicMessage == null ? false : true;
-    }
-        
+		            
 		public DynamicMessage getDynamicMessage() {
 		return dynamicMessage;
 	}
@@ -474,15 +472,16 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
     public void writeTo(Output output, TrackDataUpdate message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.dynamicMessage == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.dynamicMessage == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.dynamicMessage != null)
     		output.writeObject(2, message.dynamicMessage, DynamicMessage.getSchema(), false);
@@ -493,12 +492,12 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
 	public void dumpObject()
     {
     	System.out.println("START TrackDataUpdate");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.dynamicMessage != null) {
+    	//}
+    	    	//if(this.dynamicMessage != null) {
     		System.out.println("dynamicMessage="+this.dynamicMessage);
-    	}
+    	//}
     	    	System.out.println("END TrackDataUpdate");
     }
     

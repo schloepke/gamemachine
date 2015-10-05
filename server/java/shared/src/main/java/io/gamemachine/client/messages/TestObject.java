@@ -55,19 +55,19 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 	    
         			public String requiredString;
 	    
-            public List<Integer> numbers;
+            public List<int> numbers;
 	    			public ByteString bstring;
 	    
-        			public Boolean bvalue;
+        			public boolean bvalue;
 	    
-        			public Double dvalue;
+        			public double dvalue;
 	    
-        			public Float fvalue;
+        			public float fvalue;
 	    
-        			public Long numbers64;
+        			public long numbers64;
 	    
             public List<Player> player;
-	    			public Integer recordId;
+	    			public int recordId;
 	    
         			public String id;
 	    
@@ -111,18 +111,18 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return numbers == null ? false : true;
     }
         
-		public List<Integer> getNumbersList() {
+		public List<int> getNumbersList() {
 		if(this.numbers == null)
-            this.numbers = new ArrayList<Integer>();
+            this.numbers = new ArrayList<int>();
 		return numbers;
 	}
 
-	public TestObject setNumbersList(List<Integer> numbers) {
+	public TestObject setNumbersList(List<int> numbers) {
 		this.numbers = numbers;
 		return this;
 	}
 
-	public Integer getNumbers(int index)  {
+	public int getNumbers(int index)  {
         return numbers == null ? null : numbers.get(index);
     }
 
@@ -130,9 +130,9 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return numbers == null ? 0 : numbers.size();
     }
 
-    public TestObject addNumbers(Integer numbers)  {
+    public TestObject addNumbers(int numbers)  {
         if(this.numbers == null)
-            this.numbers = new ArrayList<Integer>();
+            this.numbers = new ArrayList<int>();
         this.numbers.add(numbers);
         return this;
     }
@@ -158,11 +158,11 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return bvalue == null ? false : true;
     }
         
-		public Boolean getBvalue() {
+		public boolean getBvalue() {
 		return bvalue;
 	}
 	
-	public TestObject setBvalue(Boolean bvalue) {
+	public TestObject setBvalue(boolean bvalue) {
 		this.bvalue = bvalue;
 		return this;	}
 	
@@ -171,11 +171,11 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return dvalue == null ? false : true;
     }
         
-		public Double getDvalue() {
+		public double getDvalue() {
 		return dvalue;
 	}
 	
-	public TestObject setDvalue(Double dvalue) {
+	public TestObject setDvalue(double dvalue) {
 		this.dvalue = dvalue;
 		return this;	}
 	
@@ -184,11 +184,11 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return fvalue == null ? false : true;
     }
         
-		public Float getFvalue() {
+		public float getFvalue() {
 		return fvalue;
 	}
 	
-	public TestObject setFvalue(Float fvalue) {
+	public TestObject setFvalue(float fvalue) {
 		this.fvalue = fvalue;
 		return this;	}
 	
@@ -197,11 +197,11 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return numbers64 == null ? false : true;
     }
         
-		public Long getNumbers64() {
+		public long getNumbers64() {
 		return numbers64;
 	}
 	
-	public TestObject setNumbers64(Long numbers64) {
+	public TestObject setNumbers64(long numbers64) {
 		this.numbers64 = numbers64;
 		return this;	}
 	
@@ -420,11 +420,11 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public TestObject setRecordId(Integer recordId) {
+	public TestObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -507,7 +507,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
                 	                	
                             	            	case 3:
             	            		if(message.numbers == null)
-                        message.numbers = new ArrayList<Integer>();
+                        message.numbers = new ArrayList<int>();
                                     	message.numbers.add(input.readInt32());
                 	                    break;
                             	            	case 4:
@@ -569,7 +569,7 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     	    	
     	    	if(message.numbers != null)
         {
-            for(Integer numbers : message.numbers)
+            for(int numbers : message.numbers)
             {
                 if(numbers != null) {
                    	            		output.writeInt32(3, numbers, true);

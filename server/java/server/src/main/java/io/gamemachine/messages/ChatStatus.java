@@ -61,8 +61,10 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
     static final ChatStatus DEFAULT_INSTANCE = new ChatStatus();
     static final String defaultScope = ChatStatus.class.getSimpleName();
 
-    			public Integer notused;
-	    
+    	
+	    	    public int notused= 0;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (notused != null) {
+    	    	    	//if (notused != null) {
     	       	    	model.setInteger("chat_status_notused",notused);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatStatus fromModel(Model model) {
 		boolean hasFields = false;
     	ChatStatus message = new ChatStatus();
     	    	    	    	    	
-    	    	    	Integer notusedField = model.getInteger("chat_status_notused");
-    	    	
-    	if (notusedField != null) {
+    	    	    	Integer notusedTestField = model.getInteger("chat_status_notused");
+    	if (notusedTestField != null) {
+    		int notusedField = notusedTestField;
     		message.setNotused(notusedField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,16 +109,12 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
     }
 
 
-	    
-    public Boolean hasNotused()  {
-        return notused == null ? false : true;
-    }
-        
-		public Integer getNotused() {
+	            
+		public int getNotused() {
 		return notused;
 	}
 	
-	public ChatStatus setNotused(Integer notused) {
+	public ChatStatus setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	
@@ -190,8 +190,9 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
     {
     	    	
     	    	
-    	    	    	if(message.notused != null)
+    	    	    	if( (Integer)message.notused != null) {
             output.writeInt32(1, message.notused, false);
+        }
     	    	
     	            	
     }
@@ -199,9 +200,9 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
 	public void dumpObject()
     {
     	System.out.println("START ChatStatus");
-    	    	if(this.notused != null) {
+    	    	//if(this.notused != null) {
     		System.out.println("notused="+this.notused);
-    	}
+    	//}
     	    	System.out.println("END ChatStatus");
     }
     

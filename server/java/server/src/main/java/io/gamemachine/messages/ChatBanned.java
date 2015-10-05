@@ -61,12 +61,18 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
     static final ChatBanned DEFAULT_INSTANCE = new ChatBanned();
     static final String defaultScope = ChatBanned.class.getSimpleName();
 
-    			public String banned_id;
-	    
-        			public String channelNname;
-	    
-        			public String reason;
-	    
+    	
+	    	    public String banned_id= null;
+	    		
+    
+        	
+	    	    public String channelNname= null;
+	    		
+    
+        	
+	    	    public String reason= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (banned_id != null) {
+    	    	    	//if (banned_id != null) {
     	       	    	model.setString("chat_banned_banned_id",banned_id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (channelNname != null) {
+    	    	    	//if (channelNname != null) {
     	       	    	model.setString("chat_banned_channel_nname",channelNname);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (reason != null) {
+    	    	    	//if (reason != null) {
     	       	    	model.setString("chat_banned_reason",reason);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ChatBanned fromModel(Model model) {
 		boolean hasFields = false;
     	ChatBanned message = new ChatBanned();
     	    	    	    	    	
-    	    	    	String banned_idField = model.getString("chat_banned_banned_id");
-    	    	
-    	if (banned_idField != null) {
+    	    	    	String banned_idTestField = model.getString("chat_banned_banned_id");
+    	if (banned_idTestField != null) {
+    		String banned_idField = banned_idTestField;
     		message.setBanned_id(banned_idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String channelNnameField = model.getString("chat_banned_channel_nname");
+    	
     	    	
-    	if (channelNnameField != null) {
+    	    	    	    	    	    	
+    	    	    	String channelNnameTestField = model.getString("chat_banned_channel_nname");
+    	if (channelNnameTestField != null) {
+    		String channelNnameField = channelNnameTestField;
     		message.setChannelNname(channelNnameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String reasonField = model.getString("chat_banned_reason");
+    	
     	    	
-    	if (reasonField != null) {
+    	    	    	    	    	    	
+    	    	    	String reasonTestField = model.getString("chat_banned_reason");
+    	if (reasonTestField != null) {
+    		String reasonField = reasonTestField;
     		message.setReason(reasonField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
     }
 
 
-	    
-    public Boolean hasBanned_id()  {
-        return banned_id == null ? false : true;
-    }
-        
+	            
 		public String getBanned_id() {
 		return banned_id;
 	}
@@ -148,11 +156,7 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
 		this.banned_id = banned_id;
 		return this;	}
 	
-		    
-    public Boolean hasChannelNname()  {
-        return channelNname == null ? false : true;
-    }
-        
+		            
 		public String getChannelNname() {
 		return channelNname;
 	}
@@ -161,11 +165,7 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
 		this.channelNname = channelNname;
 		return this;	}
 	
-		    
-    public Boolean hasReason()  {
-        return reason == null ? false : true;
-    }
-        
+		            
 		public String getReason() {
 		return reason;
 	}
@@ -253,23 +253,26 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
     public void writeTo(Output output, ChatBanned message) throws IOException
     {
     	    	
-    	    	if(message.banned_id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.banned_id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.banned_id != null)
+    	    	    	if( (String)message.banned_id != null) {
             output.writeString(1, message.banned_id, false);
+        }
     	    	
     	            	
-    	    	if(message.channelNname == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.channelNname == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.channelNname != null)
+    	    	    	if( (String)message.channelNname != null) {
             output.writeString(2, message.channelNname, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.reason != null)
+    	    	    	if( (String)message.reason != null) {
             output.writeString(3, message.reason, false);
+        }
     	    	
     	            	
     }
@@ -277,15 +280,15 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
 	public void dumpObject()
     {
     	System.out.println("START ChatBanned");
-    	    	if(this.banned_id != null) {
+    	    	//if(this.banned_id != null) {
     		System.out.println("banned_id="+this.banned_id);
-    	}
-    	    	if(this.channelNname != null) {
+    	//}
+    	    	//if(this.channelNname != null) {
     		System.out.println("channelNname="+this.channelNname);
-    	}
-    	    	if(this.reason != null) {
+    	//}
+    	    	//if(this.reason != null) {
     		System.out.println("reason="+this.reason);
-    	}
+    	//}
     	    	System.out.println("END ChatBanned");
     }
     

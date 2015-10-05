@@ -55,29 +55,29 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	    
         			public String umaData;
 	    
-        			public Integer health;
+        			public int health;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String playerId;
 	    
-        			public Integer part;
+        			public int part;
 	    
-        			public Integer parts;
+        			public int parts;
 	    
-        			public Integer worldx;
+        			public int worldx;
 	    
-        			public Integer worldy;
+        			public int worldy;
 	    
-        			public Integer worldz;
+        			public int worldz;
 	    
-        			public Integer zone;
+        			public int zone;
 	    
-        			public Integer stamina;
+        			public int stamina;
 	    
-        			public Integer magic;
+        			public int magic;
 	    
-        			public Boolean includeUmaData;
+        			public boolean includeUmaData;
 	    
       
     public Character()
@@ -119,11 +119,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return health == null ? false : true;
     }
         
-		public Integer getHealth() {
+		public int getHealth() {
 		return health;
 	}
 	
-	public Character setHealth(Integer health) {
+	public Character setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
@@ -132,11 +132,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Character setRecordId(Integer recordId) {
+	public Character setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -158,11 +158,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return part == null ? false : true;
     }
         
-		public Integer getPart() {
+		public int getPart() {
 		return part;
 	}
 	
-	public Character setPart(Integer part) {
+	public Character setPart(int part) {
 		this.part = part;
 		return this;	}
 	
@@ -171,11 +171,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return parts == null ? false : true;
     }
         
-		public Integer getParts() {
+		public int getParts() {
 		return parts;
 	}
 	
-	public Character setParts(Integer parts) {
+	public Character setParts(int parts) {
 		this.parts = parts;
 		return this;	}
 	
@@ -184,11 +184,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return worldx == null ? false : true;
     }
         
-		public Integer getWorldx() {
+		public int getWorldx() {
 		return worldx;
 	}
 	
-	public Character setWorldx(Integer worldx) {
+	public Character setWorldx(int worldx) {
 		this.worldx = worldx;
 		return this;	}
 	
@@ -197,11 +197,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return worldy == null ? false : true;
     }
         
-		public Integer getWorldy() {
+		public int getWorldy() {
 		return worldy;
 	}
 	
-	public Character setWorldy(Integer worldy) {
+	public Character setWorldy(int worldy) {
 		this.worldy = worldy;
 		return this;	}
 	
@@ -210,11 +210,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return worldz == null ? false : true;
     }
         
-		public Integer getWorldz() {
+		public int getWorldz() {
 		return worldz;
 	}
 	
-	public Character setWorldz(Integer worldz) {
+	public Character setWorldz(int worldz) {
 		this.worldz = worldz;
 		return this;	}
 	
@@ -223,11 +223,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return zone == null ? false : true;
     }
         
-		public Integer getZone() {
+		public int getZone() {
 		return zone;
 	}
 	
-	public Character setZone(Integer zone) {
+	public Character setZone(int zone) {
 		this.zone = zone;
 		return this;	}
 	
@@ -236,11 +236,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return stamina == null ? false : true;
     }
         
-		public Integer getStamina() {
+		public int getStamina() {
 		return stamina;
 	}
 	
-	public Character setStamina(Integer stamina) {
+	public Character setStamina(int stamina) {
 		this.stamina = stamina;
 		return this;	}
 	
@@ -249,11 +249,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return magic == null ? false : true;
     }
         
-		public Integer getMagic() {
+		public int getMagic() {
 		return magic;
 	}
 	
-	public Character setMagic(Integer magic) {
+	public Character setMagic(int magic) {
 		this.magic = magic;
 		return this;	}
 	
@@ -262,11 +262,11 @@ public final class Character implements Externalizable, Message<Character>, Sche
         return includeUmaData == null ? false : true;
     }
         
-		public Boolean getIncludeUmaData() {
+		public boolean getIncludeUmaData() {
 		return includeUmaData;
 	}
 	
-	public Character setIncludeUmaData(Boolean includeUmaData) {
+	public Character setIncludeUmaData(boolean includeUmaData) {
 		this.includeUmaData = includeUmaData;
 		return this;	}
 	

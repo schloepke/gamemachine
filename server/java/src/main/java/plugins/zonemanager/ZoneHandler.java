@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.Strings;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
@@ -45,9 +47,9 @@ public class ZoneHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (exactlyOnce(gameMessage)) {
-			if (gameMessage.hasZone()) {
+			if (gameMessage.zone != null) {
 				for (Zone zone : zones.values()) {
-					if (zone.hasUnityClient() && zone.unityClient.equals(playerId)) {
+					if (zone.unityClient.equals(playerId)) {
 						gameMessage.zone = zone;
 						setReply(gameMessage);
 						return;
@@ -55,7 +57,7 @@ public class ZoneHandler extends GameMessageActor {
 				}
 				
 				for (Zone zone : zones.values()) {
-					if (!zone.hasUnityClient()) {
+					if (!Strings.isNullOrEmpty(zone.unityClient)) {
 						zone.unityClient = playerId;
 						gameMessage.zone = zone;
 						logger.warning("Zone "+zone.name+" assigned to unityClient "+zone.unityClient);

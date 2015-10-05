@@ -91,11 +91,7 @@ public final class GmMesh implements Externalizable, Message<GmMesh>, Schema<GmM
     }
 
 
-	    
-    public Boolean hasNodes()  {
-        return nodes == null ? false : true;
-    }
-        
+	            
 		public List<MeshNode> getNodesList() {
 		if(this.nodes == null)
             this.nodes = new ArrayList<MeshNode>();
@@ -202,7 +198,7 @@ public final class GmMesh implements Externalizable, Message<GmMesh>, Schema<GmM
         {
             for(MeshNode nodes : message.nodes)
             {
-                if(nodes != null) {
+                if( (MeshNode) nodes != null) {
                    	    				output.writeObject(1, nodes, MeshNode.getSchema(), true);
     				    			}
             }
@@ -213,9 +209,9 @@ public final class GmMesh implements Externalizable, Message<GmMesh>, Schema<GmM
 	public void dumpObject()
     {
     	System.out.println("START GmMesh");
-    	    	if(this.nodes != null) {
+    	    	//if(this.nodes != null) {
     		System.out.println("nodes="+this.nodes);
-    	}
+    	//}
     	    	System.out.println("END GmMesh");
     }
     

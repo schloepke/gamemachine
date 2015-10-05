@@ -61,10 +61,14 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
     static final Consumable DEFAULT_INSTANCE = new Consumable();
     static final String defaultScope = Consumable.class.getSimpleName();
 
-    			public String type;
-	    
-        			public String size;
-	    
+    	
+	    	    public String type= null;
+	    		
+    
+        	
+	    	    public String size= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (type != null) {
+    	    	    	//if (type != null) {
     	       	    	model.setString("consumable_type",type);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (size != null) {
+    	    	    	//if (size != null) {
     	       	    	model.setString("consumable_size",size);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Consumable fromModel(Model model) {
 		boolean hasFields = false;
     	Consumable message = new Consumable();
     	    	    	    	    	
-    	    	    	String typeField = model.getString("consumable_type");
-    	    	
-    	if (typeField != null) {
+    	    	    	String typeTestField = model.getString("consumable_type");
+    	if (typeTestField != null) {
+    		String typeField = typeTestField;
     		message.setType(typeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String sizeField = model.getString("consumable_size");
+    	
     	    	
-    	if (sizeField != null) {
+    	    	    	    	    	    	
+    	    	    	String sizeTestField = model.getString("consumable_size");
+    	if (sizeTestField != null) {
+    		String sizeField = sizeTestField;
     		message.setSize(sizeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
     }
 
 
-	    
-    public Boolean hasType()  {
-        return type == null ? false : true;
-    }
-        
+	            
 		public String getType() {
 		return type;
 	}
@@ -133,11 +137,7 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
 		this.type = type;
 		return this;	}
 	
-		    
-    public Boolean hasSize()  {
-        return size == null ? false : true;
-    }
-        
+		            
 		public String getSize() {
 		return size;
 	}
@@ -221,18 +221,20 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
     public void writeTo(Output output, Consumable message) throws IOException
     {
     	    	
-    	    	if(message.type == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.type == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.type != null)
+    	    	    	if( (String)message.type != null) {
             output.writeString(1, message.type, false);
+        }
     	    	
     	            	
-    	    	if(message.size == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.size == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.size != null)
+    	    	    	if( (String)message.size != null) {
             output.writeString(2, message.size, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
 	public void dumpObject()
     {
     	System.out.println("START Consumable");
-    	    	if(this.type != null) {
+    	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
-    	}
-    	    	if(this.size != null) {
+    	//}
+    	    	//if(this.size != null) {
     		System.out.println("size="+this.size);
-    	}
+    	//}
     	    	System.out.println("END Consumable");
     }
     

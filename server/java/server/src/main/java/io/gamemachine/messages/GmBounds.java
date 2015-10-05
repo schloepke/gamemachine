@@ -61,10 +61,14 @@ public final class GmBounds implements Externalizable, Message<GmBounds>, Schema
     static final GmBounds DEFAULT_INSTANCE = new GmBounds();
     static final String defaultScope = GmBounds.class.getSimpleName();
 
-    			public GmVector3 min;
-	    
-        			public GmVector3 max;
-	    
+    	
+	    	    public GmVector3 min;
+	    		
+    
+        	
+	    	    public GmVector3 max;
+	    		
+    
         
 
 
@@ -94,11 +98,7 @@ public final class GmBounds implements Externalizable, Message<GmBounds>, Schema
     }
 
 
-	    
-    public Boolean hasMin()  {
-        return min == null ? false : true;
-    }
-        
+	            
 		public GmVector3 getMin() {
 		return min;
 	}
@@ -107,11 +107,7 @@ public final class GmBounds implements Externalizable, Message<GmBounds>, Schema
 		this.min = min;
 		return this;	}
 	
-		    
-    public Boolean hasMax()  {
-        return max == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getMax() {
 		return max;
 	}
@@ -210,12 +206,12 @@ public final class GmBounds implements Externalizable, Message<GmBounds>, Schema
 	public void dumpObject()
     {
     	System.out.println("START GmBounds");
-    	    	if(this.min != null) {
+    	    	//if(this.min != null) {
     		System.out.println("min="+this.min);
-    	}
-    	    	if(this.max != null) {
+    	//}
+    	    	//if(this.max != null) {
     		System.out.println("max="+this.max);
-    	}
+    	//}
     	    	System.out.println("END GmBounds");
     }
     

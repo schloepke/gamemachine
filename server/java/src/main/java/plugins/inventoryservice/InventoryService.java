@@ -39,6 +39,14 @@ public class InventoryService {
 		return find(id, "global");
 	}
 
+	public Boolean hasItem(String id, String characterId) {
+		if (find(id,characterId) == null) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
 	public PlayerItem find(String id, String characterId) {
 		return PlayerItem.db().findFirst("player_item_character_id = ? AND player_item_id = ?", characterId, id);
 	}

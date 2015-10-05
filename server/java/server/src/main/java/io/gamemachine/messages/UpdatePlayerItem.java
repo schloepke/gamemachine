@@ -61,10 +61,14 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
     static final UpdatePlayerItem DEFAULT_INSTANCE = new UpdatePlayerItem();
     static final String defaultScope = UpdatePlayerItem.class.getSimpleName();
 
-    			public Integer result;
-	    
-        			public PlayerItem playerItem;
-	    
+    	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public PlayerItem playerItem;
+	    		
+    
         
 
 
@@ -83,22 +87,24 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("update_player_item_result",result);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static UpdatePlayerItem fromModel(Model model) {
 		boolean hasFields = false;
     	UpdatePlayerItem message = new UpdatePlayerItem();
     	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("update_player_item_result");
-    	    	
-    	if (resultField != null) {
+    	    	    	Integer resultTestField = model.getInteger("update_player_item_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -107,24 +113,16 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
     }
 
 
-	    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+	            
+		public int getResult() {
 		return result;
 	}
 	
-	public UpdatePlayerItem setResult(Integer result) {
+	public UpdatePlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItem()  {
-        return playerItem == null ? false : true;
-    }
-        
+		            
 		public PlayerItem getPlayerItem() {
 		return playerItem;
 	}
@@ -209,8 +207,9 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
     {
     	    	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(1, message.result, false);
+        }
     	    	
     	            	
     	    	
@@ -223,12 +222,12 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
 	public void dumpObject()
     {
     	System.out.println("START UpdatePlayerItem");
-    	    	if(this.result != null) {
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.playerItem != null) {
+    	//}
+    	    	//if(this.playerItem != null) {
     		System.out.println("playerItem="+this.playerItem);
-    	}
+    	//}
     	    	System.out.println("END UpdatePlayerItem");
     }
     

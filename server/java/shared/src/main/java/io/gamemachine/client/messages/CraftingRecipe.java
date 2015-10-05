@@ -56,14 +56,14 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
             public List<CraftingElement> elements;
 	    			public CraftingTool tool;
 	    
-        			public Boolean orderMatters;
+        			public boolean orderMatters;
 	    
-        			public Float timeToComplete;
+        			public float timeToComplete;
 	    
             public List<CraftingReward> rewards;
-	    			public Integer maxUses;
+	    			public int maxUses;
 	    
-        			public Boolean active;
+        			public boolean active;
 	    
       
     public CraftingRecipe()
@@ -203,11 +203,11 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         return orderMatters == null ? false : true;
     }
         
-		public Boolean getOrderMatters() {
+		public boolean getOrderMatters() {
 		return orderMatters;
 	}
 	
-	public CraftingRecipe setOrderMatters(Boolean orderMatters) {
+	public CraftingRecipe setOrderMatters(boolean orderMatters) {
 		this.orderMatters = orderMatters;
 		return this;	}
 	
@@ -216,11 +216,11 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         return timeToComplete == null ? false : true;
     }
         
-		public Float getTimeToComplete() {
+		public float getTimeToComplete() {
 		return timeToComplete;
 	}
 	
-	public CraftingRecipe setTimeToComplete(Float timeToComplete) {
+	public CraftingRecipe setTimeToComplete(float timeToComplete) {
 		this.timeToComplete = timeToComplete;
 		return this;	}
 	
@@ -311,11 +311,11 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         return maxUses == null ? false : true;
     }
         
-		public Integer getMaxUses() {
+		public int getMaxUses() {
 		return maxUses;
 	}
 	
-	public CraftingRecipe setMaxUses(Integer maxUses) {
+	public CraftingRecipe setMaxUses(int maxUses) {
 		this.maxUses = maxUses;
 		return this;	}
 	
@@ -324,11 +324,11 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
         return active == null ? false : true;
     }
         
-		public Boolean getActive() {
+		public boolean getActive() {
 		return active;
 	}
 	
-	public CraftingRecipe setActive(Boolean active) {
+	public CraftingRecipe setActive(boolean active) {
 		this.active = active;
 		return this;	}
 	

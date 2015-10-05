@@ -91,11 +91,7 @@ public final class Statistics implements Externalizable, Message<Statistics>, Sc
     }
 
 
-	    
-    public Boolean hasStatistic()  {
-        return statistic == null ? false : true;
-    }
-        
+	            
 		public List<Statistic> getStatisticList() {
 		if(this.statistic == null)
             this.statistic = new ArrayList<Statistic>();
@@ -146,7 +142,7 @@ public final class Statistics implements Externalizable, Message<Statistics>, Sc
        	while (itr.hasNext()) {
     	Statistic obj = itr.next();
     	
-    	    		if (statistic.value.equals(obj.value)) {
+    	    		if (statistic.value == obj.value) {
     	      			itr.remove();
     		}
 		}
@@ -250,7 +246,7 @@ public final class Statistics implements Externalizable, Message<Statistics>, Sc
         {
             for(Statistic statistic : message.statistic)
             {
-                if(statistic != null) {
+                if( (Statistic) statistic != null) {
                    	    				output.writeObject(1, statistic, Statistic.getSchema(), true);
     				    			}
             }
@@ -261,9 +257,9 @@ public final class Statistics implements Externalizable, Message<Statistics>, Sc
 	public void dumpObject()
     {
     	System.out.println("START Statistics");
-    	    	if(this.statistic != null) {
+    	    	//if(this.statistic != null) {
     		System.out.println("statistic="+this.statistic);
-    	}
+    	//}
     	    	System.out.println("END Statistics");
     }
     

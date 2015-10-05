@@ -55,7 +55,7 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
 	    
         			public String ownerId;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String name;
 	    
@@ -99,11 +99,11 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Guild setRecordId(Integer recordId) {
+	public Guild setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	

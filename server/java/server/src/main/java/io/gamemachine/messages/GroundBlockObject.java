@@ -104,30 +104,54 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     static final String defaultScope = GroundBlockObject.class.getSimpleName();
 
         public List<GmVector3> vertices;
-	    			public GmVector3 position;
-	    
-        			public GmQuaternion rotation;
-	    
-        			public String id;
-	    
-        			public Integer verticeCount;
-	    
-        			public String tag;
-	    
-        			public String layer;
-	    
-        			public Integer gbLayer;
-	    
-        			public Boolean molded;
-	    
-        			public Status status; // = NONE:0;
-	    
-        			public Boolean canRemove;
-	    
-        			public Boolean isTop;
-	    
-        			public Integer gbType;
-	    
+	    	
+	    	    public GmVector3 position;
+	    		
+    
+        	
+	    	    public GmQuaternion rotation;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int verticeCount= 0;
+	    		
+    
+        	
+	    	    public String tag= null;
+	    		
+    
+        	
+	    	    public String layer= null;
+	    		
+    
+        	
+	    	    public int gbLayer= 0;
+	    		
+    
+        	
+	    	    public boolean molded= false;
+	    		
+    
+        	
+	    	    public Status status;
+	    		
+    
+        	
+	    	    public boolean canRemove= false;
+	    		
+    
+        	
+	    	    public boolean isTop= false;
+	    		
+    
+        	
+	    	    public int gbType= 0;
+	    		
+    
         
 	public static GroundBlockObjectCache cache() {
 		return GroundBlockObjectCache.getInstance();
@@ -406,118 +430,136 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     
 	public void toModel(Model model) {
     	    	    	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("ground_block_object_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (verticeCount != null) {
+    	    	    	//if (verticeCount != null) {
     	       	    	model.setInteger("ground_block_object_vertice_count",verticeCount);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (tag != null) {
+    	    	    	//if (tag != null) {
     	       	    	model.setString("ground_block_object_tag",tag);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (layer != null) {
+    	    	    	//if (layer != null) {
     	       	    	model.setString("ground_block_object_layer",layer);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gbLayer != null) {
+    	    	    	//if (gbLayer != null) {
     	       	    	model.setInteger("ground_block_object_gb_layer",gbLayer);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (molded != null) {
+    	    	    	//if (molded != null) {
     	       	    	model.setBoolean("ground_block_object_molded",molded);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (canRemove != null) {
+    	    	    	//if (canRemove != null) {
     	       	    	model.setBoolean("ground_block_object_can_remove",canRemove);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isTop != null) {
+    	    	    	//if (isTop != null) {
     	       	    	model.setBoolean("ground_block_object_is_top",isTop);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gbType != null) {
+    	    	    	//if (gbType != null) {
     	       	    	model.setInteger("ground_block_object_gb_type",gbType);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GroundBlockObject fromModel(Model model) {
 		boolean hasFields = false;
     	GroundBlockObject message = new GroundBlockObject();
     	    	    	    	    	    	    	    	
-    	    	    	String idField = model.getString("ground_block_object_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("ground_block_object_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer verticeCountField = model.getInteger("ground_block_object_vertice_count");
+    	
     	    	
-    	if (verticeCountField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer verticeCountTestField = model.getInteger("ground_block_object_vertice_count");
+    	if (verticeCountTestField != null) {
+    		int verticeCountField = verticeCountTestField;
     		message.setVerticeCount(verticeCountField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String tagField = model.getString("ground_block_object_tag");
+    	
     	    	
-    	if (tagField != null) {
+    	    	    	    	    	    	
+    	    	    	String tagTestField = model.getString("ground_block_object_tag");
+    	if (tagTestField != null) {
+    		String tagField = tagTestField;
     		message.setTag(tagField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String layerField = model.getString("ground_block_object_layer");
+    	
     	    	
-    	if (layerField != null) {
+    	    	    	    	    	    	
+    	    	    	String layerTestField = model.getString("ground_block_object_layer");
+    	if (layerTestField != null) {
+    		String layerField = layerTestField;
     		message.setLayer(layerField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer gbLayerField = model.getInteger("ground_block_object_gb_layer");
+    	
     	    	
-    	if (gbLayerField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer gbLayerTestField = model.getInteger("ground_block_object_gb_layer");
+    	if (gbLayerTestField != null) {
+    		int gbLayerField = gbLayerTestField;
     		message.setGbLayer(gbLayerField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean moldedField = model.getBoolean("ground_block_object_molded");
+    	
     	    	
-    	if (moldedField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean moldedTestField = model.getBoolean("ground_block_object_molded");
+    	if (moldedTestField != null) {
+    		boolean moldedField = moldedTestField;
     		message.setMolded(moldedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	Boolean canRemoveField = model.getBoolean("ground_block_object_can_remove");
+    	
     	    	
-    	if (canRemoveField != null) {
+    	    	    	    	    	    	    	
+    	    	    	Boolean canRemoveTestField = model.getBoolean("ground_block_object_can_remove");
+    	if (canRemoveTestField != null) {
+    		boolean canRemoveField = canRemoveTestField;
     		message.setCanRemove(canRemoveField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean isTopField = model.getBoolean("ground_block_object_is_top");
+    	
     	    	
-    	if (isTopField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean isTopTestField = model.getBoolean("ground_block_object_is_top");
+    	if (isTopTestField != null) {
+    		boolean isTopField = isTopTestField;
     		message.setIsTop(isTopField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer gbTypeField = model.getInteger("ground_block_object_gb_type");
+    	
     	    	
-    	if (gbTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer gbTypeTestField = model.getInteger("ground_block_object_gb_type");
+    	if (gbTypeTestField != null) {
+    		int gbTypeField = gbTypeTestField;
     		message.setGbType(gbTypeField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -526,11 +568,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     }
 
 
-	    
-    public Boolean hasVertices()  {
-        return vertices == null ? false : true;
-    }
-        
+	            
 		public List<GmVector3> getVerticesList() {
 		if(this.vertices == null)
             this.vertices = new ArrayList<GmVector3>();
@@ -565,7 +603,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.x.equals(obj.x)) {
+    	    		if (vertices.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -581,7 +619,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.y.equals(obj.y)) {
+    	    		if (vertices.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -597,7 +635,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.z.equals(obj.z)) {
+    	    		if (vertices.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -613,7 +651,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.xi.equals(obj.xi)) {
+    	    		if (vertices.xi == obj.xi) {
     	      			itr.remove();
     		}
 		}
@@ -629,7 +667,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.yi.equals(obj.yi)) {
+    	    		if (vertices.yi == obj.yi) {
     	      			itr.remove();
     		}
 		}
@@ -645,7 +683,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.zi.equals(obj.zi)) {
+    	    		if (vertices.zi == obj.zi) {
     	      			itr.remove();
     		}
 		}
@@ -661,7 +699,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.vertice.equals(obj.vertice)) {
+    	    		if (vertices.vertice == obj.vertice) {
     	      			itr.remove();
     		}
 		}
@@ -672,11 +710,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     
     
     
-		    
-    public Boolean hasPosition()  {
-        return position == null ? false : true;
-    }
-        
+		            
 		public GmVector3 getPosition() {
 		return position;
 	}
@@ -685,11 +719,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.position = position;
 		return this;	}
 	
-		    
-    public Boolean hasRotation()  {
-        return rotation == null ? false : true;
-    }
-        
+		            
 		public GmQuaternion getRotation() {
 		return rotation;
 	}
@@ -698,11 +728,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.rotation = rotation;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -711,24 +737,16 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasVerticeCount()  {
-        return verticeCount == null ? false : true;
-    }
-        
-		public Integer getVerticeCount() {
+		            
+		public int getVerticeCount() {
 		return verticeCount;
 	}
 	
-	public GroundBlockObject setVerticeCount(Integer verticeCount) {
+	public GroundBlockObject setVerticeCount(int verticeCount) {
 		this.verticeCount = verticeCount;
 		return this;	}
 	
-		    
-    public Boolean hasTag()  {
-        return tag == null ? false : true;
-    }
-        
+		            
 		public String getTag() {
 		return tag;
 	}
@@ -737,11 +755,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.tag = tag;
 		return this;	}
 	
-		    
-    public Boolean hasLayer()  {
-        return layer == null ? false : true;
-    }
-        
+		            
 		public String getLayer() {
 		return layer;
 	}
@@ -750,37 +764,25 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.layer = layer;
 		return this;	}
 	
-		    
-    public Boolean hasGbLayer()  {
-        return gbLayer == null ? false : true;
-    }
-        
-		public Integer getGbLayer() {
+		            
+		public int getGbLayer() {
 		return gbLayer;
 	}
 	
-	public GroundBlockObject setGbLayer(Integer gbLayer) {
+	public GroundBlockObject setGbLayer(int gbLayer) {
 		this.gbLayer = gbLayer;
 		return this;	}
 	
-		    
-    public Boolean hasMolded()  {
-        return molded == null ? false : true;
-    }
-        
-		public Boolean getMolded() {
+		            
+		public boolean getMolded() {
 		return molded;
 	}
 	
-	public GroundBlockObject setMolded(Boolean molded) {
+	public GroundBlockObject setMolded(boolean molded) {
 		this.molded = molded;
 		return this;	}
 	
-		    
-    public Boolean hasStatus()  {
-        return status == null ? false : true;
-    }
-        
+		            
 		public Status getStatus() {
 		return status;
 	}
@@ -789,42 +791,30 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		this.status = status;
 		return this;	}
 	
-		    
-    public Boolean hasCanRemove()  {
-        return canRemove == null ? false : true;
-    }
-        
-		public Boolean getCanRemove() {
+		            
+		public boolean getCanRemove() {
 		return canRemove;
 	}
 	
-	public GroundBlockObject setCanRemove(Boolean canRemove) {
+	public GroundBlockObject setCanRemove(boolean canRemove) {
 		this.canRemove = canRemove;
 		return this;	}
 	
-		    
-    public Boolean hasIsTop()  {
-        return isTop == null ? false : true;
-    }
-        
-		public Boolean getIsTop() {
+		            
+		public boolean getIsTop() {
 		return isTop;
 	}
 	
-	public GroundBlockObject setIsTop(Boolean isTop) {
+	public GroundBlockObject setIsTop(boolean isTop) {
 		this.isTop = isTop;
 		return this;	}
 	
-		    
-    public Boolean hasGbType()  {
-        return gbType == null ? false : true;
-    }
-        
-		public Integer getGbType() {
+		            
+		public int getGbType() {
 		return gbType;
 	}
 	
-	public GroundBlockObject setGbType(Integer gbType) {
+	public GroundBlockObject setGbType(int gbType) {
 		this.gbType = gbType;
 		return this;	}
 	
@@ -953,7 +943,7 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
         {
             for(GmVector3 vertices : message.vertices)
             {
-                if(vertices != null) {
+                if( (GmVector3) vertices != null) {
                    	    				output.writeObject(1, vertices, GmVector3.getSchema(), true);
     				    			}
             }
@@ -970,33 +960,39 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(4, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.verticeCount != null)
+    	    	    	if( (Integer)message.verticeCount != null) {
             output.writeInt32(5, message.verticeCount, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.tag != null)
+    	    	    	if( (String)message.tag != null) {
             output.writeString(6, message.tag, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.layer != null)
+    	    	    	if( (String)message.layer != null) {
             output.writeString(7, message.layer, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.gbLayer != null)
+    	    	    	if( (Integer)message.gbLayer != null) {
             output.writeInt32(8, message.gbLayer, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.molded != null)
+    	    	    	if( (Boolean)message.molded != null) {
             output.writeBool(9, message.molded, false);
+        }
     	    	
     	            	
     	    	
@@ -1005,18 +1001,21 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     	    	
     	            	
     	    	
-    	    	    	if(message.canRemove != null)
+    	    	    	if( (Boolean)message.canRemove != null) {
             output.writeBool(11, message.canRemove, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isTop != null)
+    	    	    	if( (Boolean)message.isTop != null) {
             output.writeBool(12, message.isTop, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.gbType != null)
+    	    	    	if( (Integer)message.gbType != null) {
             output.writeInt32(13, message.gbType, false);
+        }
     	    	
     	            	
     }
@@ -1024,45 +1023,45 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 	public void dumpObject()
     {
     	System.out.println("START GroundBlockObject");
-    	    	if(this.vertices != null) {
+    	    	//if(this.vertices != null) {
     		System.out.println("vertices="+this.vertices);
-    	}
-    	    	if(this.position != null) {
+    	//}
+    	    	//if(this.position != null) {
     		System.out.println("position="+this.position);
-    	}
-    	    	if(this.rotation != null) {
+    	//}
+    	    	//if(this.rotation != null) {
     		System.out.println("rotation="+this.rotation);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.verticeCount != null) {
+    	//}
+    	    	//if(this.verticeCount != null) {
     		System.out.println("verticeCount="+this.verticeCount);
-    	}
-    	    	if(this.tag != null) {
+    	//}
+    	    	//if(this.tag != null) {
     		System.out.println("tag="+this.tag);
-    	}
-    	    	if(this.layer != null) {
+    	//}
+    	    	//if(this.layer != null) {
     		System.out.println("layer="+this.layer);
-    	}
-    	    	if(this.gbLayer != null) {
+    	//}
+    	    	//if(this.gbLayer != null) {
     		System.out.println("gbLayer="+this.gbLayer);
-    	}
-    	    	if(this.molded != null) {
+    	//}
+    	    	//if(this.molded != null) {
     		System.out.println("molded="+this.molded);
-    	}
-    	    	if(this.status != null) {
+    	//}
+    	    	//if(this.status != null) {
     		System.out.println("status="+this.status);
-    	}
-    	    	if(this.canRemove != null) {
+    	//}
+    	    	//if(this.canRemove != null) {
     		System.out.println("canRemove="+this.canRemove);
-    	}
-    	    	if(this.isTop != null) {
+    	//}
+    	    	//if(this.isTop != null) {
     		System.out.println("isTop="+this.isTop);
-    	}
-    	    	if(this.gbType != null) {
+    	//}
+    	    	//if(this.gbType != null) {
     		System.out.println("gbType="+this.gbType);
-    	}
+    	//}
     	    	System.out.println("END GroundBlockObject");
     }
     

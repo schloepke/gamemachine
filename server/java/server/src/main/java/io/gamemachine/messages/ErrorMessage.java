@@ -61,10 +61,14 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
     static final ErrorMessage DEFAULT_INSTANCE = new ErrorMessage();
     static final String defaultScope = ErrorMessage.class.getSimpleName();
 
-    			public String code;
-	    
-        			public String message;
-	    
+    	
+	    	    public String code= null;
+	    		
+    
+        	
+	    	    public String message= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (code != null) {
+    	    	    	//if (code != null) {
     	       	    	model.setString("error_message_code",code);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (message != null) {
+    	    	    	//if (message != null) {
     	       	    	model.setString("error_message_message",message);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ErrorMessage fromModel(Model model) {
 		boolean hasFields = false;
     	ErrorMessage message = new ErrorMessage();
     	    	    	    	    	
-    	    	    	String codeField = model.getString("error_message_code");
-    	    	
-    	if (codeField != null) {
+    	    	    	String codeTestField = model.getString("error_message_code");
+    	if (codeTestField != null) {
+    		String codeField = codeTestField;
     		message.setCode(codeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String messageField = model.getString("error_message_message");
+    	
     	    	
-    	if (messageField != null) {
+    	    	    	    	    	    	
+    	    	    	String messageTestField = model.getString("error_message_message");
+    	if (messageTestField != null) {
+    		String messageField = messageTestField;
     		message.setMessage(messageField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
     }
 
 
-	    
-    public Boolean hasCode()  {
-        return code == null ? false : true;
-    }
-        
+	            
 		public String getCode() {
 		return code;
 	}
@@ -133,11 +137,7 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
 		this.code = code;
 		return this;	}
 	
-		    
-    public Boolean hasMessage()  {
-        return message == null ? false : true;
-    }
-        
+		            
 		public String getMessage() {
 		return message;
 	}
@@ -221,18 +221,20 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
     public void writeTo(Output output, ErrorMessage message) throws IOException
     {
     	    	
-    	    	if(message.code == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.code == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.code != null)
+    	    	    	if( (String)message.code != null) {
             output.writeString(1, message.code, false);
+        }
     	    	
     	            	
-    	    	if(message.message == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.message == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.message != null)
+    	    	    	if( (String)message.message != null) {
             output.writeString(2, message.message, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
 	public void dumpObject()
     {
     	System.out.println("START ErrorMessage");
-    	    	if(this.code != null) {
+    	    	//if(this.code != null) {
     		System.out.println("code="+this.code);
-    	}
-    	    	if(this.message != null) {
+    	//}
+    	    	//if(this.message != null) {
     		System.out.println("message="+this.message);
-    	}
+    	//}
     	    	System.out.println("END ErrorMessage");
     }
     

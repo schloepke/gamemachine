@@ -81,14 +81,22 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
     static final Guild DEFAULT_INSTANCE = new Guild();
     static final String defaultScope = Guild.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String ownerId;
-	    
-        			public Integer recordId;
-	    
-        			public String name;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String ownerId= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
         
 	public static GuildCache cache() {
 		return GuildCache.getInstance();
@@ -432,9 +440,9 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
 	    	}
 	    	
 	    	io.gamemachine.orm.models.Guild model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.Guild.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.Guild();
@@ -559,53 +567,59 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("guild_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ownerId != null) {
+    	    	    	//if (ownerId != null) {
     	       	    	model.setString("guild_owner_id",ownerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("guild_name",name);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Guild fromModel(Model model) {
 		boolean hasFields = false;
     	Guild message = new Guild();
     	    	    	    	    	
-    	    	    	String idField = model.getString("guild_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("guild_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String ownerIdField = model.getString("guild_owner_id");
+    	
     	    	
-    	if (ownerIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String ownerIdTestField = model.getString("guild_owner_id");
+    	if (ownerIdTestField != null) {
+    		String ownerIdField = ownerIdTestField;
     		message.setOwnerId(ownerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String nameField = model.getString("guild_name");
-    	    	
-    	if (nameField != null) {
+    	    	    	String nameTestField = model.getString("guild_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -614,11 +628,7 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -627,11 +637,7 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasOwnerId()  {
-        return ownerId == null ? false : true;
-    }
-        
+		            
 		public String getOwnerId() {
 		return ownerId;
 	}
@@ -640,24 +646,16 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
 		this.ownerId = ownerId;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Guild setRecordId(Integer recordId) {
+	public Guild setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -749,28 +747,32 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
     public void writeTo(Output output, Guild message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
-    	    	if(message.ownerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.ownerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.ownerId != null)
+    	    	    	if( (String)message.ownerId != null) {
             output.writeString(4, message.ownerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(5, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(6, message.name, false);
+        }
     	    	
     	            	
     }
@@ -778,18 +780,18 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
 	public void dumpObject()
     {
     	System.out.println("START Guild");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.ownerId != null) {
+    	//}
+    	    	//if(this.ownerId != null) {
     		System.out.println("ownerId="+this.ownerId);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
+    	//}
     	    	System.out.println("END Guild");
     }
     

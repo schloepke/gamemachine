@@ -69,7 +69,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
     	
-    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3);    	        
+    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3),    	    	Self(4);    	        
         public final int number;
         
         private DamageType (int number)
@@ -90,6 +90,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     			    			case 1: return (SingleTarget);
     			    			case 2: return (Pbaoe);
     			    			case 3: return (SelfAoe);
+    			    			case 4: return (Self);
     			                default: return null;
             }
         }
@@ -220,44 +221,86 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     static final PlayerSkill DEFAULT_INSTANCE = new PlayerSkill();
     static final String defaultScope = PlayerSkill.class.getSimpleName();
 
-    			public String id;
-	    
-        			public String name;
-	    
-        			public Integer recordId;
-	    
-        			public String category;
-	    
-        			public String damageType;
-	    
-        			public String icon_path;
-	    
-        			public String description;
-	    
-        			public String resource;
-	    
-        			public Integer resourceCost;
-	    
-        			public String characterId;
-	    
-        			public String weaponType;
-	    
-        			public Integer range;
-	    
-        			public String statusEffectId;
-	    
-        			public Integer level;
-	    
-        			public Integer resourceCostPerTick;
-	    
-        			public Integer isComboPart;
-	    
-        			public Integer isPassive;
-	    
-        			public String skillType;
-	    
-        			public String icon_uuid;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String category= null;
+	    		
+    
+        	
+	    	    public String damageType= null;
+	    		
+    
+        	
+	    	    public String icon_path= null;
+	    		
+    
+        	
+	    	    public String description= null;
+	    		
+    
+        	
+	    	    public String resource= null;
+	    		
+    
+        	
+	    	    public int resourceCost= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public String weaponType= null;
+	    		
+    
+        	
+	    	    public int range= 0;
+	    		
+    
+        	
+	    	    public String statusEffectId= null;
+	    		
+    
+        	
+	    	    public int level= 0;
+	    		
+    
+        	
+	    	    public int resourceCostPerTick= 0;
+	    		
+    
+        	
+	    	    public int isComboPart= 0;
+	    		
+    
+        	
+	    	    public int isPassive= 0;
+	    		
+    
+        	
+	    	    public String skillType= null;
+	    		
+    
+        	
+	    	    public String icon_uuid= null;
+	    		
+    
+        	
+	    	    public String statusEffects= null;
+	    		
+    
         
 	public static PlayerSkillCache cache() {
 		return PlayerSkillCache.getInstance();
@@ -601,9 +644,9 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	    	}
 	    	
 	    	io.gamemachine.orm.models.PlayerSkill model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.PlayerSkill.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.PlayerSkill();
@@ -739,237 +782,288 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	    	    	    	    	model.set("player_skill_is_passive",null);
     	    	    	    	    	    	model.set("player_skill_skill_type",null);
     	    	    	    	    	    	model.set("player_skill_icon_uuid",null);
+    	    	    	    	    	    	model.set("player_skill_status_effects",null);
     	    }
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("player_skill_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("player_skill_name",name);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (category != null) {
+    	    	    	//if (category != null) {
     	       	    	model.setString("player_skill_category",category);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (damageType != null) {
+    	    	    	//if (damageType != null) {
     	       	    	model.setString("player_skill_damage_type",damageType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (icon_path != null) {
+    	    	    	//if (icon_path != null) {
     	       	    	model.setString("player_skill_icon_path",icon_path);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (description != null) {
+    	    	    	//if (description != null) {
     	       	    	model.setString("player_skill_description",description);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (resource != null) {
+    	    	    	//if (resource != null) {
     	       	    	model.setString("player_skill_resource",resource);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (resourceCost != null) {
+    	    	    	//if (resourceCost != null) {
     	       	    	model.setInteger("player_skill_resource_cost",resourceCost);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("player_skill_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (weaponType != null) {
+    	    	    	//if (weaponType != null) {
     	       	    	model.setString("player_skill_weapon_type",weaponType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (range != null) {
+    	    	    	//if (range != null) {
     	       	    	model.setInteger("player_skill_range",range);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (statusEffectId != null) {
+    	    	    	//if (statusEffectId != null) {
     	       	    	model.setString("player_skill_status_effect_id",statusEffectId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (level != null) {
+    	    	    	//if (level != null) {
     	       	    	model.setInteger("player_skill_level",level);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (resourceCostPerTick != null) {
+    	    	    	//if (resourceCostPerTick != null) {
     	       	    	model.setInteger("player_skill_resource_cost_per_tick",resourceCostPerTick);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isComboPart != null) {
+    	    	    	//if (isComboPart != null) {
     	       	    	model.setInteger("player_skill_is_combo_part",isComboPart);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isPassive != null) {
+    	    	    	//if (isPassive != null) {
     	       	    	model.setInteger("player_skill_is_passive",isPassive);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (skillType != null) {
+    	    	    	//if (skillType != null) {
     	       	    	model.setString("player_skill_skill_type",skillType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (icon_uuid != null) {
+    	    	    	//if (icon_uuid != null) {
     	       	    	model.setString("player_skill_icon_uuid",icon_uuid);
     	        		
-    	}
+    	//}
+    	    	    	    	    	
+    	    	    	//if (statusEffects != null) {
+    	       	    	model.setString("player_skill_status_effects",statusEffects);
+    	        		
+    	//}
     	    	    }
     
 	public static PlayerSkill fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerSkill message = new PlayerSkill();
     	    	    	    	    	
-    	    	    	String idField = model.getString("player_skill_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("player_skill_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("player_skill_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("player_skill_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String categoryField = model.getString("player_skill_category");
-    	    	
-    	if (categoryField != null) {
+    	    	    	String categoryTestField = model.getString("player_skill_category");
+    	if (categoryTestField != null) {
+    		String categoryField = categoryTestField;
     		message.setCategory(categoryField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String damageTypeField = model.getString("player_skill_damage_type");
+    	
     	    	
-    	if (damageTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String damageTypeTestField = model.getString("player_skill_damage_type");
+    	if (damageTypeTestField != null) {
+    		String damageTypeField = damageTypeTestField;
     		message.setDamageType(damageTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String icon_pathField = model.getString("player_skill_icon_path");
+    	
     	    	
-    	if (icon_pathField != null) {
+    	    	    	    	    	    	
+    	    	    	String icon_pathTestField = model.getString("player_skill_icon_path");
+    	if (icon_pathTestField != null) {
+    		String icon_pathField = icon_pathTestField;
     		message.setIcon_path(icon_pathField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String descriptionField = model.getString("player_skill_description");
+    	
     	    	
-    	if (descriptionField != null) {
+    	    	    	    	    	    	
+    	    	    	String descriptionTestField = model.getString("player_skill_description");
+    	if (descriptionTestField != null) {
+    		String descriptionField = descriptionTestField;
     		message.setDescription(descriptionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String resourceField = model.getString("player_skill_resource");
+    	
     	    	
-    	if (resourceField != null) {
+    	    	    	    	    	    	
+    	    	    	String resourceTestField = model.getString("player_skill_resource");
+    	if (resourceTestField != null) {
+    		String resourceField = resourceTestField;
     		message.setResource(resourceField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resourceCostField = model.getInteger("player_skill_resource_cost");
+    	
     	    	
-    	if (resourceCostField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resourceCostTestField = model.getInteger("player_skill_resource_cost");
+    	if (resourceCostTestField != null) {
+    		int resourceCostField = resourceCostTestField;
     		message.setResourceCost(resourceCostField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("player_skill_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("player_skill_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String weaponTypeField = model.getString("player_skill_weapon_type");
+    	
     	    	
-    	if (weaponTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String weaponTypeTestField = model.getString("player_skill_weapon_type");
+    	if (weaponTypeTestField != null) {
+    		String weaponTypeField = weaponTypeTestField;
     		message.setWeaponType(weaponTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rangeField = model.getInteger("player_skill_range");
+    	
     	    	
-    	if (rangeField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rangeTestField = model.getInteger("player_skill_range");
+    	if (rangeTestField != null) {
+    		int rangeField = rangeTestField;
     		message.setRange(rangeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String statusEffectIdField = model.getString("player_skill_status_effect_id");
+    	
     	    	
-    	if (statusEffectIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String statusEffectIdTestField = model.getString("player_skill_status_effect_id");
+    	if (statusEffectIdTestField != null) {
+    		String statusEffectIdField = statusEffectIdTestField;
     		message.setStatusEffectId(statusEffectIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer levelField = model.getInteger("player_skill_level");
+    	
     	    	
-    	if (levelField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer levelTestField = model.getInteger("player_skill_level");
+    	if (levelTestField != null) {
+    		int levelField = levelTestField;
     		message.setLevel(levelField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resourceCostPerTickField = model.getInteger("player_skill_resource_cost_per_tick");
+    	
     	    	
-    	if (resourceCostPerTickField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resourceCostPerTickTestField = model.getInteger("player_skill_resource_cost_per_tick");
+    	if (resourceCostPerTickTestField != null) {
+    		int resourceCostPerTickField = resourceCostPerTickTestField;
     		message.setResourceCostPerTick(resourceCostPerTickField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer isComboPartField = model.getInteger("player_skill_is_combo_part");
+    	
     	    	
-    	if (isComboPartField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer isComboPartTestField = model.getInteger("player_skill_is_combo_part");
+    	if (isComboPartTestField != null) {
+    		int isComboPartField = isComboPartTestField;
     		message.setIsComboPart(isComboPartField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer isPassiveField = model.getInteger("player_skill_is_passive");
+    	
     	    	
-    	if (isPassiveField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer isPassiveTestField = model.getInteger("player_skill_is_passive");
+    	if (isPassiveTestField != null) {
+    		int isPassiveField = isPassiveTestField;
     		message.setIsPassive(isPassiveField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String skillTypeField = model.getString("player_skill_skill_type");
+    	
     	    	
-    	if (skillTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String skillTypeTestField = model.getString("player_skill_skill_type");
+    	if (skillTypeTestField != null) {
+    		String skillTypeField = skillTypeTestField;
     		message.setSkillType(skillTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String icon_uuidField = model.getString("player_skill_icon_uuid");
+    	
     	    	
-    	if (icon_uuidField != null) {
+    	    	    	    	    	    	
+    	    	    	String icon_uuidTestField = model.getString("player_skill_icon_uuid");
+    	if (icon_uuidTestField != null) {
+    		String icon_uuidField = icon_uuidTestField;
     		message.setIcon_uuid(icon_uuidField);
     		hasFields = true;
     	}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    	    	String statusEffectsTestField = model.getString("player_skill_status_effects");
+    	if (statusEffectsTestField != null) {
+    		String statusEffectsField = statusEffectsTestField;
+    		message.setStatusEffects(statusEffectsField);
+    		hasFields = true;
+    	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -978,11 +1072,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -991,11 +1081,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -1004,24 +1090,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.name = name;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public PlayerSkill setRecordId(Integer recordId) {
+	public PlayerSkill setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasCategory()  {
-        return category == null ? false : true;
-    }
-        
+		            
 		public String getCategory() {
 		return category;
 	}
@@ -1030,11 +1108,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.category = category;
 		return this;	}
 	
-		    
-    public Boolean hasDamageType()  {
-        return damageType == null ? false : true;
-    }
-        
+		            
 		public String getDamageType() {
 		return damageType;
 	}
@@ -1043,11 +1117,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.damageType = damageType;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_path()  {
-        return icon_path == null ? false : true;
-    }
-        
+		            
 		public String getIcon_path() {
 		return icon_path;
 	}
@@ -1056,11 +1126,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.icon_path = icon_path;
 		return this;	}
 	
-		    
-    public Boolean hasDescription()  {
-        return description == null ? false : true;
-    }
-        
+		            
 		public String getDescription() {
 		return description;
 	}
@@ -1069,11 +1135,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.description = description;
 		return this;	}
 	
-		    
-    public Boolean hasResource()  {
-        return resource == null ? false : true;
-    }
-        
+		            
 		public String getResource() {
 		return resource;
 	}
@@ -1082,24 +1144,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.resource = resource;
 		return this;	}
 	
-		    
-    public Boolean hasResourceCost()  {
-        return resourceCost == null ? false : true;
-    }
-        
-		public Integer getResourceCost() {
+		            
+		public int getResourceCost() {
 		return resourceCost;
 	}
 	
-	public PlayerSkill setResourceCost(Integer resourceCost) {
+	public PlayerSkill setResourceCost(int resourceCost) {
 		this.resourceCost = resourceCost;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -1108,11 +1162,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasWeaponType()  {
-        return weaponType == null ? false : true;
-    }
-        
+		            
 		public String getWeaponType() {
 		return weaponType;
 	}
@@ -1121,24 +1171,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.weaponType = weaponType;
 		return this;	}
 	
-		    
-    public Boolean hasRange()  {
-        return range == null ? false : true;
-    }
-        
-		public Integer getRange() {
+		            
+		public int getRange() {
 		return range;
 	}
 	
-	public PlayerSkill setRange(Integer range) {
+	public PlayerSkill setRange(int range) {
 		this.range = range;
 		return this;	}
 	
-		    
-    public Boolean hasStatusEffectId()  {
-        return statusEffectId == null ? false : true;
-    }
-        
+		            
 		public String getStatusEffectId() {
 		return statusEffectId;
 	}
@@ -1147,63 +1189,43 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.statusEffectId = statusEffectId;
 		return this;	}
 	
-		    
-    public Boolean hasLevel()  {
-        return level == null ? false : true;
-    }
-        
-		public Integer getLevel() {
+		            
+		public int getLevel() {
 		return level;
 	}
 	
-	public PlayerSkill setLevel(Integer level) {
+	public PlayerSkill setLevel(int level) {
 		this.level = level;
 		return this;	}
 	
-		    
-    public Boolean hasResourceCostPerTick()  {
-        return resourceCostPerTick == null ? false : true;
-    }
-        
-		public Integer getResourceCostPerTick() {
+		            
+		public int getResourceCostPerTick() {
 		return resourceCostPerTick;
 	}
 	
-	public PlayerSkill setResourceCostPerTick(Integer resourceCostPerTick) {
+	public PlayerSkill setResourceCostPerTick(int resourceCostPerTick) {
 		this.resourceCostPerTick = resourceCostPerTick;
 		return this;	}
 	
-		    
-    public Boolean hasIsComboPart()  {
-        return isComboPart == null ? false : true;
-    }
-        
-		public Integer getIsComboPart() {
+		            
+		public int getIsComboPart() {
 		return isComboPart;
 	}
 	
-	public PlayerSkill setIsComboPart(Integer isComboPart) {
+	public PlayerSkill setIsComboPart(int isComboPart) {
 		this.isComboPart = isComboPart;
 		return this;	}
 	
-		    
-    public Boolean hasIsPassive()  {
-        return isPassive == null ? false : true;
-    }
-        
-		public Integer getIsPassive() {
+		            
+		public int getIsPassive() {
 		return isPassive;
 	}
 	
-	public PlayerSkill setIsPassive(Integer isPassive) {
+	public PlayerSkill setIsPassive(int isPassive) {
 		this.isPassive = isPassive;
 		return this;	}
 	
-		    
-    public Boolean hasSkillType()  {
-        return skillType == null ? false : true;
-    }
-        
+		            
 		public String getSkillType() {
 		return skillType;
 	}
@@ -1212,17 +1234,22 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		this.skillType = skillType;
 		return this;	}
 	
-		    
-    public Boolean hasIcon_uuid()  {
-        return icon_uuid == null ? false : true;
-    }
-        
+		            
 		public String getIcon_uuid() {
 		return icon_uuid;
 	}
 	
 	public PlayerSkill setIcon_uuid(String icon_uuid) {
 		this.icon_uuid = icon_uuid;
+		return this;	}
+	
+		            
+		public String getStatusEffects() {
+		return statusEffects;
+	}
+	
+	public PlayerSkill setStatusEffects(String statusEffects) {
+		this.statusEffects = statusEffects;
 		return this;	}
 	
 	
@@ -1357,6 +1384,10 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
             	                	                	message.icon_uuid = input.readString();
                 	break;
                 	                	
+                            	            	case 20:
+            	                	                	message.statusEffects = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1368,103 +1399,128 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     public void writeTo(Output output, PlayerSkill message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(2, message.name, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(3, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.category != null)
+    	    	    	if( (String)message.category != null) {
             output.writeString(4, message.category, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.damageType != null)
+    	    	    	if( (String)message.damageType != null) {
             output.writeString(5, message.damageType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_path != null)
+    	    	    	if( (String)message.icon_path != null) {
             output.writeString(6, message.icon_path, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.description != null)
+    	    	    	if( (String)message.description != null) {
             output.writeString(7, message.description, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.resource != null)
+    	    	    	if( (String)message.resource != null) {
             output.writeString(8, message.resource, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.resourceCost != null)
+    	    	    	if( (Integer)message.resourceCost != null) {
             output.writeInt32(9, message.resourceCost, false);
+        }
     	    	
     	            	
-    	    	if(message.characterId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.characterId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(10, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.weaponType != null)
+    	    	    	if( (String)message.weaponType != null) {
             output.writeString(11, message.weaponType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.range != null)
+    	    	    	if( (Integer)message.range != null) {
             output.writeInt32(12, message.range, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.statusEffectId != null)
+    	    	    	if( (String)message.statusEffectId != null) {
             output.writeString(13, message.statusEffectId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.level != null)
+    	    	    	if( (Integer)message.level != null) {
             output.writeInt32(14, message.level, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.resourceCostPerTick != null)
+    	    	    	if( (Integer)message.resourceCostPerTick != null) {
             output.writeInt32(15, message.resourceCostPerTick, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isComboPart != null)
+    	    	    	if( (Integer)message.isComboPart != null) {
             output.writeInt32(16, message.isComboPart, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isPassive != null)
+    	    	    	if( (Integer)message.isPassive != null) {
             output.writeInt32(17, message.isPassive, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.skillType != null)
+    	    	    	if( (String)message.skillType != null) {
             output.writeString(18, message.skillType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.icon_uuid != null)
+    	    	    	if( (String)message.icon_uuid != null) {
             output.writeString(19, message.icon_uuid, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (String)message.statusEffects != null) {
+            output.writeString(20, message.statusEffects, false);
+        }
     	    	
     	            	
     }
@@ -1472,63 +1528,66 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public void dumpObject()
     {
     	System.out.println("START PlayerSkill");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.category != null) {
+    	//}
+    	    	//if(this.category != null) {
     		System.out.println("category="+this.category);
-    	}
-    	    	if(this.damageType != null) {
+    	//}
+    	    	//if(this.damageType != null) {
     		System.out.println("damageType="+this.damageType);
-    	}
-    	    	if(this.icon_path != null) {
+    	//}
+    	    	//if(this.icon_path != null) {
     		System.out.println("icon_path="+this.icon_path);
-    	}
-    	    	if(this.description != null) {
+    	//}
+    	    	//if(this.description != null) {
     		System.out.println("description="+this.description);
-    	}
-    	    	if(this.resource != null) {
+    	//}
+    	    	//if(this.resource != null) {
     		System.out.println("resource="+this.resource);
-    	}
-    	    	if(this.resourceCost != null) {
+    	//}
+    	    	//if(this.resourceCost != null) {
     		System.out.println("resourceCost="+this.resourceCost);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.weaponType != null) {
+    	//}
+    	    	//if(this.weaponType != null) {
     		System.out.println("weaponType="+this.weaponType);
-    	}
-    	    	if(this.range != null) {
+    	//}
+    	    	//if(this.range != null) {
     		System.out.println("range="+this.range);
-    	}
-    	    	if(this.statusEffectId != null) {
+    	//}
+    	    	//if(this.statusEffectId != null) {
     		System.out.println("statusEffectId="+this.statusEffectId);
-    	}
-    	    	if(this.level != null) {
+    	//}
+    	    	//if(this.level != null) {
     		System.out.println("level="+this.level);
-    	}
-    	    	if(this.resourceCostPerTick != null) {
+    	//}
+    	    	//if(this.resourceCostPerTick != null) {
     		System.out.println("resourceCostPerTick="+this.resourceCostPerTick);
-    	}
-    	    	if(this.isComboPart != null) {
+    	//}
+    	    	//if(this.isComboPart != null) {
     		System.out.println("isComboPart="+this.isComboPart);
-    	}
-    	    	if(this.isPassive != null) {
+    	//}
+    	    	//if(this.isPassive != null) {
     		System.out.println("isPassive="+this.isPassive);
-    	}
-    	    	if(this.skillType != null) {
+    	//}
+    	    	//if(this.skillType != null) {
     		System.out.println("skillType="+this.skillType);
-    	}
-    	    	if(this.icon_uuid != null) {
+    	//}
+    	    	//if(this.icon_uuid != null) {
     		System.out.println("icon_uuid="+this.icon_uuid);
-    	}
+    	//}
+    	    	//if(this.statusEffects != null) {
+    		System.out.println("statusEffects="+this.statusEffects);
+    	//}
     	    	System.out.println("END PlayerSkill");
     }
     
@@ -1555,6 +1614,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         	        	case 17: return "isPassive";
         	        	case 18: return "skillType";
         	        	case 19: return "icon_uuid";
+        	        	case 20: return "statusEffects";
         	            default: return null;
         }
     }
@@ -1587,6 +1647,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	    	__fieldMap.put("isPassive", 17);
     	    	__fieldMap.put("skillType", 18);
     	    	__fieldMap.put("icon_uuid", 19);
+    	    	__fieldMap.put("statusEffects", 20);
     	    }
    
    public static List<String> getFields() {

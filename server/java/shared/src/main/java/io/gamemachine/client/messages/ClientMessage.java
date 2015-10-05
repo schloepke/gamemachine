@@ -62,9 +62,9 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 	    
         			public PlayerConnected playerConnected;
 	    
-        			public Integer connection_type;
+        			public int connection_type;
 	    
-        			public Long sentAt;
+        			public long sentAt;
 	    
         			public TrackData trackData;
 	    
@@ -345,11 +345,11 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
         return connection_type == null ? false : true;
     }
         
-		public Integer getConnection_type() {
+		public int getConnection_type() {
 		return connection_type;
 	}
 	
-	public ClientMessage setConnection_type(Integer connection_type) {
+	public ClientMessage setConnection_type(int connection_type) {
 		this.connection_type = connection_type;
 		return this;	}
 	
@@ -358,11 +358,11 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
         return sentAt == null ? false : true;
     }
         
-		public Long getSentAt() {
+		public long getSentAt() {
 		return sentAt;
 	}
 	
-	public ClientMessage setSentAt(Long sentAt) {
+	public ClientMessage setSentAt(long sentAt) {
 		this.sentAt = sentAt;
 		return this;	}
 	

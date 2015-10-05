@@ -5,6 +5,7 @@ import io.gamemachine.core.ChatSubscriptions;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.combat.CombatHandler;
+import plugins.combat.PlayerSkillHandler;
 import plugins.combat.StatusEffectHandler;
 import plugins.pvp_game.CharacterHandler;
 import plugins.pvp_game.ConsumableItemHandler;
@@ -13,7 +14,6 @@ import plugins.pvp_game.GridExpiration;
 import plugins.pvp_game.GuildHandler;
 import plugins.pvp_game.HarvestHandler;
 import plugins.pvp_game.PlayerItemManager;
-import plugins.pvp_game.PlayerSkillHandler;
 import plugins.pvp_game.SiegeHandler;
 import plugins.pvp_game.TerritoryHandler;
 import plugins.pvp_game.TimeHandler;
@@ -27,7 +27,7 @@ public class PvpGamePlugin extends Plugin {
 		GameMessageRoute.add(HarvestHandler.name,HarvestHandler.name,false);
 		GameMessageRoute.add(CraftingHandler.name,CraftingHandler.name,false);
 		
-		GameMessageRoute.add(PlayerSkillHandler.name,PlayerSkillHandler.name,false);
+		
 		GameMessageRoute.add(ConsumableItemHandler.name,ConsumableItemHandler.name,false);
 		GameMessageRoute.add(SiegeHandler.name,SiegeHandler.name,false);
 		GameMessageRoute.add(GuildHandler.name,GuildHandler.name,false);
@@ -37,7 +37,7 @@ public class PvpGamePlugin extends Plugin {
 		ActorUtil.createActor(HarvestHandler.class, HarvestHandler.name);
 		ActorUtil.createActor(CraftingHandler.class, CraftingHandler.name);
 		
-		ActorUtil.createActor(PlayerSkillHandler.class, PlayerSkillHandler.name);
+		
 		
 		ActorUtil.createActor(ConsumableItemHandler.class, ConsumableItemHandler.name);
 		ActorUtil.createActor(SiegeHandler.class, SiegeHandler.name);

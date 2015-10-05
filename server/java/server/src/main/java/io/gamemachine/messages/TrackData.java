@@ -105,62 +105,118 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     static final TrackData DEFAULT_INSTANCE = new TrackData();
     static final String defaultScope = TrackData.class.getSimpleName();
 
-    			public Integer ix;
-	    
-        			public Integer iy;
-	    
-        			public Integer iz;
-	    
-        			public String id;
-	    
-        			public Integer x;
-	    
-        			public Integer y;
-	    
-        			public Integer z;
-	    
-        			public DynamicMessage dynamicMessage;
-	    
-        			public String gridName;
-	    
-        			public Integer getNeighbors;
-	    
-        			public EntityType neighborEntityType; // = NONE:0;
-	    
-        			public EntityType entityType; // = NONE:0;
-	    
-        			public Integer shortId;
-	    
-        			public UserDefinedData userDefinedData;
-	    
-        			public Integer broadcast;
-	    
-        			public String characterId;
-	    
-        			public Integer rx;
-	    
-        			public Integer ry;
-	    
-        			public Integer rz;
-	    
-        			public Integer rw;
-	    
-        			public Integer vaxis;
-	    
-        			public Integer haxis;
-	    
-        			public Integer speed;
-	    
-        			public Float velX;
-	    
-        			public Float velZ;
-	    
-        			public Integer zone;
-	    
-        			public Integer hidden;
-	    
-        			public Integer yaxis;
-	    
+    	
+	    	    public int ix= 0;
+	    		
+    
+        	
+	    	    public int iy= 0;
+	    		
+    
+        	
+	    	    public int iz= 0;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int x= 0;
+	    		
+    
+        	
+	    	    public int y= 0;
+	    		
+    
+        	
+	    	    public int z= 0;
+	    		
+    
+        	
+	    	    public DynamicMessage dynamicMessage;
+	    		
+    
+        	
+	    	    public String gridName= null;
+	    		
+    
+        	
+	    	    public int getNeighbors= 0;
+	    		
+    
+        	
+	    	    public EntityType neighborEntityType;
+	    		
+    
+        	
+	    	    public EntityType entityType;
+	    		
+    
+        	
+	    	    public int shortId= 0;
+	    		
+    
+        	
+	    	    public UserDefinedData userDefinedData;
+	    		
+    
+        	
+	    	    public int broadcast= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public int rx= 0;
+	    		
+    
+        	
+	    	    public int ry= 0;
+	    		
+    
+        	
+	    	    public int rz= 0;
+	    		
+    
+        	
+	    	    public int rw= 0;
+	    		
+    
+        	
+	    	    public int vaxis= 0;
+	    		
+    
+        	
+	    	    public int haxis= 0;
+	    		
+    
+        	
+	    	    public int speed= 0;
+	    		
+    
+        	
+	    	    public float velX= 0F;
+	    		
+    
+        	
+	    	    public float velZ= 0F;
+	    		
+    
+        	
+	    	    public int zone= 0;
+	    		
+    
+        	
+	    	    public int hidden= 0;
+	    		
+    
+        	
+	    	    public int yaxis= 0;
+	    		
+    
         
 	public static TrackDataCache cache() {
 		return TrackDataCache.getInstance();
@@ -454,298 +510,346 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (ix != null) {
+    	    	    	//if (ix != null) {
     	       	    	model.setInteger("track_data_ix",ix);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (iy != null) {
+    	    	    	//if (iy != null) {
     	       	    	model.setInteger("track_data_iy",iy);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (iz != null) {
+    	    	    	//if (iz != null) {
     	       	    	model.setInteger("track_data_iz",iz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("track_data_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setInteger("track_data_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setInteger("track_data_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (z != null) {
+    	    	    	//if (z != null) {
     	       	    	model.setInteger("track_data_z",z);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (gridName != null) {
+    	    	    	//if (gridName != null) {
     	       	    	model.setString("track_data_grid_name",gridName);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (getNeighbors != null) {
+    	    	    	//if (getNeighbors != null) {
     	       	    	model.setInteger("track_data_get_neighbors",getNeighbors);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	    	
-    	    	    	if (shortId != null) {
+    	    	    	//if (shortId != null) {
     	       	    	model.setInteger("track_data_short_id",shortId);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (broadcast != null) {
+    	    	    	//if (broadcast != null) {
     	       	    	model.setInteger("track_data_broadcast",broadcast);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("track_data_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rx != null) {
+    	    	    	//if (rx != null) {
     	       	    	model.setInteger("track_data_rx",rx);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ry != null) {
+    	    	    	//if (ry != null) {
     	       	    	model.setInteger("track_data_ry",ry);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rz != null) {
+    	    	    	//if (rz != null) {
     	       	    	model.setInteger("track_data_rz",rz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rw != null) {
+    	    	    	//if (rw != null) {
     	       	    	model.setInteger("track_data_rw",rw);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (vaxis != null) {
+    	    	    	//if (vaxis != null) {
     	       	    	model.setInteger("track_data_vaxis",vaxis);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (haxis != null) {
+    	    	    	//if (haxis != null) {
     	       	    	model.setInteger("track_data_haxis",haxis);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (speed != null) {
+    	    	    	//if (speed != null) {
     	       	    	model.setInteger("track_data_speed",speed);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (velX != null) {
+    	    	    	//if (velX != null) {
     	       	    	model.setFloat("track_data_vel_x",velX);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (velZ != null) {
+    	    	    	//if (velZ != null) {
     	       	    	model.setFloat("track_data_vel_z",velZ);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (zone != null) {
+    	    	    	//if (zone != null) {
     	       	    	model.setInteger("track_data_zone",zone);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hidden != null) {
+    	    	    	//if (hidden != null) {
     	       	    	model.setInteger("track_data_hidden",hidden);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (yaxis != null) {
+    	    	    	//if (yaxis != null) {
     	       	    	model.setInteger("track_data_yaxis",yaxis);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static TrackData fromModel(Model model) {
 		boolean hasFields = false;
     	TrackData message = new TrackData();
     	    	    	    	    	
-    	    	    	Integer ixField = model.getInteger("track_data_ix");
-    	    	
-    	if (ixField != null) {
+    	    	    	Integer ixTestField = model.getInteger("track_data_ix");
+    	if (ixTestField != null) {
+    		int ixField = ixTestField;
     		message.setIx(ixField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer iyField = model.getInteger("track_data_iy");
+    	
     	    	
-    	if (iyField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer iyTestField = model.getInteger("track_data_iy");
+    	if (iyTestField != null) {
+    		int iyField = iyTestField;
     		message.setIy(iyField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer izField = model.getInteger("track_data_iz");
+    	
     	    	
-    	if (izField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer izTestField = model.getInteger("track_data_iz");
+    	if (izTestField != null) {
+    		int izField = izTestField;
     		message.setIz(izField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String idField = model.getString("track_data_id");
+    	
     	    	
-    	if (idField != null) {
+    	    	    	    	    	    	
+    	    	    	String idTestField = model.getString("track_data_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer xField = model.getInteger("track_data_x");
+    	
     	    	
-    	if (xField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer xTestField = model.getInteger("track_data_x");
+    	if (xTestField != null) {
+    		int xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yField = model.getInteger("track_data_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yTestField = model.getInteger("track_data_y");
+    	if (yTestField != null) {
+    		int yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer zField = model.getInteger("track_data_z");
+    	
     	    	
-    	if (zField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer zTestField = model.getInteger("track_data_z");
+    	if (zTestField != null) {
+    		int zField = zTestField;
     		message.setZ(zField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String gridNameField = model.getString("track_data_grid_name");
+    	
     	    	
-    	if (gridNameField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String gridNameTestField = model.getString("track_data_grid_name");
+    	if (gridNameTestField != null) {
+    		String gridNameField = gridNameTestField;
     		message.setGridName(gridNameField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer getNeighborsField = model.getInteger("track_data_get_neighbors");
+    	
     	    	
-    	if (getNeighborsField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer getNeighborsTestField = model.getInteger("track_data_get_neighbors");
+    	if (getNeighborsTestField != null) {
+    		int getNeighborsField = getNeighborsTestField;
     		message.setGetNeighbors(getNeighborsField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	    	
-    	    	    	Integer shortIdField = model.getInteger("track_data_short_id");
+    	
     	    	
-    	if (shortIdField != null) {
+    	    	    	    	    	    	    	    	
+    	    	    	Integer shortIdTestField = model.getInteger("track_data_short_id");
+    	if (shortIdTestField != null) {
+    		int shortIdField = shortIdTestField;
     		message.setShortId(shortIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	Integer broadcastField = model.getInteger("track_data_broadcast");
+    	
     	    	
-    	if (broadcastField != null) {
+    	    	    	    	    	    	    	
+    	    	    	Integer broadcastTestField = model.getInteger("track_data_broadcast");
+    	if (broadcastTestField != null) {
+    		int broadcastField = broadcastTestField;
     		message.setBroadcast(broadcastField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("track_data_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("track_data_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rxField = model.getInteger("track_data_rx");
+    	
     	    	
-    	if (rxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rxTestField = model.getInteger("track_data_rx");
+    	if (rxTestField != null) {
+    		int rxField = rxTestField;
     		message.setRx(rxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ryField = model.getInteger("track_data_ry");
+    	
     	    	
-    	if (ryField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ryTestField = model.getInteger("track_data_ry");
+    	if (ryTestField != null) {
+    		int ryField = ryTestField;
     		message.setRy(ryField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rzField = model.getInteger("track_data_rz");
+    	
     	    	
-    	if (rzField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rzTestField = model.getInteger("track_data_rz");
+    	if (rzTestField != null) {
+    		int rzField = rzTestField;
     		message.setRz(rzField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rwField = model.getInteger("track_data_rw");
+    	
     	    	
-    	if (rwField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rwTestField = model.getInteger("track_data_rw");
+    	if (rwTestField != null) {
+    		int rwField = rwTestField;
     		message.setRw(rwField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer vaxisField = model.getInteger("track_data_vaxis");
+    	
     	    	
-    	if (vaxisField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer vaxisTestField = model.getInteger("track_data_vaxis");
+    	if (vaxisTestField != null) {
+    		int vaxisField = vaxisTestField;
     		message.setVaxis(vaxisField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer haxisField = model.getInteger("track_data_haxis");
+    	
     	    	
-    	if (haxisField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer haxisTestField = model.getInteger("track_data_haxis");
+    	if (haxisTestField != null) {
+    		int haxisField = haxisTestField;
     		message.setHaxis(haxisField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer speedField = model.getInteger("track_data_speed");
+    	
     	    	
-    	if (speedField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer speedTestField = model.getInteger("track_data_speed");
+    	if (speedTestField != null) {
+    		int speedField = speedTestField;
     		message.setSpeed(speedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float velXField = model.getFloat("track_data_vel_x");
+    	
     	    	
-    	if (velXField != null) {
+    	    	    	    	    	    	
+    	    	    	Float velXTestField = model.getFloat("track_data_vel_x");
+    	if (velXTestField != null) {
+    		float velXField = velXTestField;
     		message.setVelX(velXField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float velZField = model.getFloat("track_data_vel_z");
+    	
     	    	
-    	if (velZField != null) {
+    	    	    	    	    	    	
+    	    	    	Float velZTestField = model.getFloat("track_data_vel_z");
+    	if (velZTestField != null) {
+    		float velZField = velZTestField;
     		message.setVelZ(velZField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer zoneField = model.getInteger("track_data_zone");
+    	
     	    	
-    	if (zoneField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer zoneTestField = model.getInteger("track_data_zone");
+    	if (zoneTestField != null) {
+    		int zoneField = zoneTestField;
     		message.setZone(zoneField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer hiddenField = model.getInteger("track_data_hidden");
+    	
     	    	
-    	if (hiddenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer hiddenTestField = model.getInteger("track_data_hidden");
+    	if (hiddenTestField != null) {
+    		int hiddenField = hiddenTestField;
     		message.setHidden(hiddenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yaxisField = model.getInteger("track_data_yaxis");
+    	
     	    	
-    	if (yaxisField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yaxisTestField = model.getInteger("track_data_yaxis");
+    	if (yaxisTestField != null) {
+    		int yaxisField = yaxisTestField;
     		message.setYaxis(yaxisField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -754,50 +858,34 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     }
 
 
-	    
-    public Boolean hasIx()  {
-        return ix == null ? false : true;
-    }
-        
-		public Integer getIx() {
+	            
+		public int getIx() {
 		return ix;
 	}
 	
-	public TrackData setIx(Integer ix) {
+	public TrackData setIx(int ix) {
 		this.ix = ix;
 		return this;	}
 	
-		    
-    public Boolean hasIy()  {
-        return iy == null ? false : true;
-    }
-        
-		public Integer getIy() {
+		            
+		public int getIy() {
 		return iy;
 	}
 	
-	public TrackData setIy(Integer iy) {
+	public TrackData setIy(int iy) {
 		this.iy = iy;
 		return this;	}
 	
-		    
-    public Boolean hasIz()  {
-        return iz == null ? false : true;
-    }
-        
-		public Integer getIz() {
+		            
+		public int getIz() {
 		return iz;
 	}
 	
-	public TrackData setIz(Integer iz) {
+	public TrackData setIz(int iz) {
 		this.iz = iz;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -806,50 +894,34 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Integer getX() {
+		            
+		public int getX() {
 		return x;
 	}
 	
-	public TrackData setX(Integer x) {
+	public TrackData setX(int x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Integer getY() {
+		            
+		public int getY() {
 		return y;
 	}
 	
-	public TrackData setY(Integer y) {
+	public TrackData setY(int y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
-        
-		public Integer getZ() {
+		            
+		public int getZ() {
 		return z;
 	}
 	
-	public TrackData setZ(Integer z) {
+	public TrackData setZ(int z) {
 		this.z = z;
 		return this;	}
 	
-		    
-    public Boolean hasDynamicMessage()  {
-        return dynamicMessage == null ? false : true;
-    }
-        
+		            
 		public DynamicMessage getDynamicMessage() {
 		return dynamicMessage;
 	}
@@ -858,11 +930,7 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.dynamicMessage = dynamicMessage;
 		return this;	}
 	
-		    
-    public Boolean hasGridName()  {
-        return gridName == null ? false : true;
-    }
-        
+		            
 		public String getGridName() {
 		return gridName;
 	}
@@ -871,24 +939,16 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.gridName = gridName;
 		return this;	}
 	
-		    
-    public Boolean hasGetNeighbors()  {
-        return getNeighbors == null ? false : true;
-    }
-        
-		public Integer getGetNeighbors() {
+		            
+		public int getGetNeighbors() {
 		return getNeighbors;
 	}
 	
-	public TrackData setGetNeighbors(Integer getNeighbors) {
+	public TrackData setGetNeighbors(int getNeighbors) {
 		this.getNeighbors = getNeighbors;
 		return this;	}
 	
-		    
-    public Boolean hasNeighborEntityType()  {
-        return neighborEntityType == null ? false : true;
-    }
-        
+		            
 		public EntityType getNeighborEntityType() {
 		return neighborEntityType;
 	}
@@ -897,11 +957,7 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.neighborEntityType = neighborEntityType;
 		return this;	}
 	
-		    
-    public Boolean hasEntityType()  {
-        return entityType == null ? false : true;
-    }
-        
+		            
 		public EntityType getEntityType() {
 		return entityType;
 	}
@@ -910,24 +966,16 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.entityType = entityType;
 		return this;	}
 	
-		    
-    public Boolean hasShortId()  {
-        return shortId == null ? false : true;
-    }
-        
-		public Integer getShortId() {
+		            
+		public int getShortId() {
 		return shortId;
 	}
 	
-	public TrackData setShortId(Integer shortId) {
+	public TrackData setShortId(int shortId) {
 		this.shortId = shortId;
 		return this;	}
 	
-		    
-    public Boolean hasUserDefinedData()  {
-        return userDefinedData == null ? false : true;
-    }
-        
+		            
 		public UserDefinedData getUserDefinedData() {
 		return userDefinedData;
 	}
@@ -936,24 +984,16 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.userDefinedData = userDefinedData;
 		return this;	}
 	
-		    
-    public Boolean hasBroadcast()  {
-        return broadcast == null ? false : true;
-    }
-        
-		public Integer getBroadcast() {
+		            
+		public int getBroadcast() {
 		return broadcast;
 	}
 	
-	public TrackData setBroadcast(Integer broadcast) {
+	public TrackData setBroadcast(int broadcast) {
 		this.broadcast = broadcast;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -962,159 +1002,111 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasRx()  {
-        return rx == null ? false : true;
-    }
-        
-		public Integer getRx() {
+		            
+		public int getRx() {
 		return rx;
 	}
 	
-	public TrackData setRx(Integer rx) {
+	public TrackData setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
-		    
-    public Boolean hasRy()  {
-        return ry == null ? false : true;
-    }
-        
-		public Integer getRy() {
+		            
+		public int getRy() {
 		return ry;
 	}
 	
-	public TrackData setRy(Integer ry) {
+	public TrackData setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
-		    
-    public Boolean hasRz()  {
-        return rz == null ? false : true;
-    }
-        
-		public Integer getRz() {
+		            
+		public int getRz() {
 		return rz;
 	}
 	
-	public TrackData setRz(Integer rz) {
+	public TrackData setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
-		    
-    public Boolean hasRw()  {
-        return rw == null ? false : true;
-    }
-        
-		public Integer getRw() {
+		            
+		public int getRw() {
 		return rw;
 	}
 	
-	public TrackData setRw(Integer rw) {
+	public TrackData setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
-		    
-    public Boolean hasVaxis()  {
-        return vaxis == null ? false : true;
-    }
-        
-		public Integer getVaxis() {
+		            
+		public int getVaxis() {
 		return vaxis;
 	}
 	
-	public TrackData setVaxis(Integer vaxis) {
+	public TrackData setVaxis(int vaxis) {
 		this.vaxis = vaxis;
 		return this;	}
 	
-		    
-    public Boolean hasHaxis()  {
-        return haxis == null ? false : true;
-    }
-        
-		public Integer getHaxis() {
+		            
+		public int getHaxis() {
 		return haxis;
 	}
 	
-	public TrackData setHaxis(Integer haxis) {
+	public TrackData setHaxis(int haxis) {
 		this.haxis = haxis;
 		return this;	}
 	
-		    
-    public Boolean hasSpeed()  {
-        return speed == null ? false : true;
-    }
-        
-		public Integer getSpeed() {
+		            
+		public int getSpeed() {
 		return speed;
 	}
 	
-	public TrackData setSpeed(Integer speed) {
+	public TrackData setSpeed(int speed) {
 		this.speed = speed;
 		return this;	}
 	
-		    
-    public Boolean hasVelX()  {
-        return velX == null ? false : true;
-    }
-        
-		public Float getVelX() {
+		            
+		public float getVelX() {
 		return velX;
 	}
 	
-	public TrackData setVelX(Float velX) {
+	public TrackData setVelX(float velX) {
 		this.velX = velX;
 		return this;	}
 	
-		    
-    public Boolean hasVelZ()  {
-        return velZ == null ? false : true;
-    }
-        
-		public Float getVelZ() {
+		            
+		public float getVelZ() {
 		return velZ;
 	}
 	
-	public TrackData setVelZ(Float velZ) {
+	public TrackData setVelZ(float velZ) {
 		this.velZ = velZ;
 		return this;	}
 	
-		    
-    public Boolean hasZone()  {
-        return zone == null ? false : true;
-    }
-        
-		public Integer getZone() {
+		            
+		public int getZone() {
 		return zone;
 	}
 	
-	public TrackData setZone(Integer zone) {
+	public TrackData setZone(int zone) {
 		this.zone = zone;
 		return this;	}
 	
-		    
-    public Boolean hasHidden()  {
-        return hidden == null ? false : true;
-    }
-        
-		public Integer getHidden() {
+		            
+		public int getHidden() {
 		return hidden;
 	}
 	
-	public TrackData setHidden(Integer hidden) {
+	public TrackData setHidden(int hidden) {
 		this.hidden = hidden;
 		return this;	}
 	
-		    
-    public Boolean hasYaxis()  {
-        return yaxis == null ? false : true;
-    }
-        
-		public Integer getYaxis() {
+		            
+		public int getYaxis() {
 		return yaxis;
 	}
 	
-	public TrackData setYaxis(Integer yaxis) {
+	public TrackData setYaxis(int yaxis) {
 		this.yaxis = yaxis;
 		return this;	}
 	
@@ -1298,38 +1290,45 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     {
     	    	
     	    	
-    	    	    	if(message.ix != null)
+    	    	    	if( (Integer)message.ix != null) {
             output.writeSInt32(1, message.ix, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.iy != null)
+    	    	    	if( (Integer)message.iy != null) {
             output.writeSInt32(2, message.iy, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.iz != null)
+    	    	    	if( (Integer)message.iz != null) {
             output.writeSInt32(3, message.iz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(4, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Integer)message.x != null) {
             output.writeInt32(5, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Integer)message.y != null) {
             output.writeInt32(6, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.z != null)
+    	    	    	if( (Integer)message.z != null) {
             output.writeInt32(7, message.z, false);
+        }
     	    	
     	            	
     	    	
@@ -1338,13 +1337,15 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     	    	
     	            	
     	    	
-    	    	    	if(message.gridName != null)
+    	    	    	if( (String)message.gridName != null) {
             output.writeString(9, message.gridName, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.getNeighbors != null)
+    	    	    	if( (Integer)message.getNeighbors != null) {
             output.writeInt32(10, message.getNeighbors, false);
+        }
     	    	
     	            	
     	    	
@@ -1352,16 +1353,17 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     	 	output.writeEnum(11, message.neighborEntityType.number, false);
     	    	
     	            	
-    	    	if(message.entityType == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.entityType == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.entityType != null)
     	 	output.writeEnum(12, message.entityType.number, false);
     	    	
     	            	
     	    	
-    	    	    	if(message.shortId != null)
+    	    	    	if( (Integer)message.shortId != null) {
             output.writeInt32(13, message.shortId, false);
+        }
     	    	
     	            	
     	    	
@@ -1370,73 +1372,87 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     	    	
     	            	
     	    	
-    	    	    	if(message.broadcast != null)
+    	    	    	if( (Integer)message.broadcast != null) {
             output.writeInt32(15, message.broadcast, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(16, message.characterId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rx != null)
+    	    	    	if( (Integer)message.rx != null) {
             output.writeInt32(17, message.rx, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ry != null)
+    	    	    	if( (Integer)message.ry != null) {
             output.writeInt32(18, message.ry, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rz != null)
+    	    	    	if( (Integer)message.rz != null) {
             output.writeInt32(19, message.rz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rw != null)
+    	    	    	if( (Integer)message.rw != null) {
             output.writeInt32(20, message.rw, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.vaxis != null)
+    	    	    	if( (Integer)message.vaxis != null) {
             output.writeInt32(21, message.vaxis, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.haxis != null)
+    	    	    	if( (Integer)message.haxis != null) {
             output.writeInt32(22, message.haxis, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.speed != null)
+    	    	    	if( (Integer)message.speed != null) {
             output.writeInt32(23, message.speed, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.velX != null)
+    	    	    	if( (Float)message.velX != null) {
             output.writeFloat(24, message.velX, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.velZ != null)
+    	    	    	if( (Float)message.velZ != null) {
             output.writeFloat(25, message.velZ, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.zone != null)
+    	    	    	if( (Integer)message.zone != null) {
             output.writeInt32(26, message.zone, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.hidden != null)
+    	    	    	if( (Integer)message.hidden != null) {
             output.writeInt32(27, message.hidden, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.yaxis != null)
+    	    	    	if( (Integer)message.yaxis != null) {
             output.writeInt32(28, message.yaxis, false);
+        }
     	    	
     	            	
     }
@@ -1444,90 +1460,90 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 	public void dumpObject()
     {
     	System.out.println("START TrackData");
-    	    	if(this.ix != null) {
+    	    	//if(this.ix != null) {
     		System.out.println("ix="+this.ix);
-    	}
-    	    	if(this.iy != null) {
+    	//}
+    	    	//if(this.iy != null) {
     		System.out.println("iy="+this.iy);
-    	}
-    	    	if(this.iz != null) {
+    	//}
+    	    	//if(this.iz != null) {
     		System.out.println("iz="+this.iz);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.x != null) {
+    	//}
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.z != null) {
+    	//}
+    	    	//if(this.z != null) {
     		System.out.println("z="+this.z);
-    	}
-    	    	if(this.dynamicMessage != null) {
+    	//}
+    	    	//if(this.dynamicMessage != null) {
     		System.out.println("dynamicMessage="+this.dynamicMessage);
-    	}
-    	    	if(this.gridName != null) {
+    	//}
+    	    	//if(this.gridName != null) {
     		System.out.println("gridName="+this.gridName);
-    	}
-    	    	if(this.getNeighbors != null) {
+    	//}
+    	    	//if(this.getNeighbors != null) {
     		System.out.println("getNeighbors="+this.getNeighbors);
-    	}
-    	    	if(this.neighborEntityType != null) {
+    	//}
+    	    	//if(this.neighborEntityType != null) {
     		System.out.println("neighborEntityType="+this.neighborEntityType);
-    	}
-    	    	if(this.entityType != null) {
+    	//}
+    	    	//if(this.entityType != null) {
     		System.out.println("entityType="+this.entityType);
-    	}
-    	    	if(this.shortId != null) {
+    	//}
+    	    	//if(this.shortId != null) {
     		System.out.println("shortId="+this.shortId);
-    	}
-    	    	if(this.userDefinedData != null) {
+    	//}
+    	    	//if(this.userDefinedData != null) {
     		System.out.println("userDefinedData="+this.userDefinedData);
-    	}
-    	    	if(this.broadcast != null) {
+    	//}
+    	    	//if(this.broadcast != null) {
     		System.out.println("broadcast="+this.broadcast);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.rx != null) {
+    	//}
+    	    	//if(this.rx != null) {
     		System.out.println("rx="+this.rx);
-    	}
-    	    	if(this.ry != null) {
+    	//}
+    	    	//if(this.ry != null) {
     		System.out.println("ry="+this.ry);
-    	}
-    	    	if(this.rz != null) {
+    	//}
+    	    	//if(this.rz != null) {
     		System.out.println("rz="+this.rz);
-    	}
-    	    	if(this.rw != null) {
+    	//}
+    	    	//if(this.rw != null) {
     		System.out.println("rw="+this.rw);
-    	}
-    	    	if(this.vaxis != null) {
+    	//}
+    	    	//if(this.vaxis != null) {
     		System.out.println("vaxis="+this.vaxis);
-    	}
-    	    	if(this.haxis != null) {
+    	//}
+    	    	//if(this.haxis != null) {
     		System.out.println("haxis="+this.haxis);
-    	}
-    	    	if(this.speed != null) {
+    	//}
+    	    	//if(this.speed != null) {
     		System.out.println("speed="+this.speed);
-    	}
-    	    	if(this.velX != null) {
+    	//}
+    	    	//if(this.velX != null) {
     		System.out.println("velX="+this.velX);
-    	}
-    	    	if(this.velZ != null) {
+    	//}
+    	    	//if(this.velZ != null) {
     		System.out.println("velZ="+this.velZ);
-    	}
-    	    	if(this.zone != null) {
+    	//}
+    	    	//if(this.zone != null) {
     		System.out.println("zone="+this.zone);
-    	}
-    	    	if(this.hidden != null) {
+    	//}
+    	    	//if(this.hidden != null) {
     		System.out.println("hidden="+this.hidden);
-    	}
-    	    	if(this.yaxis != null) {
+    	//}
+    	    	//if(this.yaxis != null) {
     		System.out.println("yaxis="+this.yaxis);
-    	}
+    	//}
     	    	System.out.println("END TrackData");
     }
     

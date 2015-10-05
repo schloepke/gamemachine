@@ -91,11 +91,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
     }
 
 
-	    
-    public Boolean hasWorldObject()  {
-        return worldObject == null ? false : true;
-    }
-        
+	            
 		public List<WorldObject> getWorldObjectList() {
 		if(this.worldObject == null)
             this.worldObject = new ArrayList<WorldObject>();
@@ -146,7 +142,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.action.equals(obj.action)) {
+    	    		if (worldObject.action == obj.action) {
     	      			itr.remove();
     		}
 		}
@@ -178,7 +174,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.recordId.equals(obj.recordId)) {
+    	    		if (worldObject.recordId == obj.recordId) {
     	      			itr.remove();
     		}
 		}
@@ -210,7 +206,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.x.equals(obj.x)) {
+    	    		if (worldObject.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -226,7 +222,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.y.equals(obj.y)) {
+    	    		if (worldObject.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -242,7 +238,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.z.equals(obj.z)) {
+    	    		if (worldObject.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -258,7 +254,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.rx.equals(obj.rx)) {
+    	    		if (worldObject.rx == obj.rx) {
     	      			itr.remove();
     		}
 		}
@@ -274,7 +270,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.ry.equals(obj.ry)) {
+    	    		if (worldObject.ry == obj.ry) {
     	      			itr.remove();
     		}
 		}
@@ -290,7 +286,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.rz.equals(obj.rz)) {
+    	    		if (worldObject.rz == obj.rz) {
     	      			itr.remove();
     		}
 		}
@@ -306,7 +302,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.rw.equals(obj.rw)) {
+    	    		if (worldObject.rw == obj.rw) {
     	      			itr.remove();
     		}
 		}
@@ -322,7 +318,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.maxHealth.equals(obj.maxHealth)) {
+    	    		if (worldObject.maxHealth == obj.maxHealth) {
     	      			itr.remove();
     		}
 		}
@@ -338,7 +334,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.health.equals(obj.health)) {
+    	    		if (worldObject.health == obj.health) {
     	      			itr.remove();
     		}
 		}
@@ -370,7 +366,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.destructable.equals(obj.destructable)) {
+    	    		if (worldObject.destructable == obj.destructable) {
     	      			itr.remove();
     		}
 		}
@@ -402,7 +398,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.type.equals(obj.type)) {
+    	    		if (worldObject.type == obj.type) {
     	      			itr.remove();
     		}
 		}
@@ -450,7 +446,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
        	while (itr.hasNext()) {
     	WorldObject obj = itr.next();
     	
-    	    		if (worldObject.state.equals(obj.state)) {
+    	    		if (worldObject.state == obj.state) {
     	      			itr.remove();
     		}
 		}
@@ -538,7 +534,7 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
         {
             for(WorldObject worldObject : message.worldObject)
             {
-                if(worldObject != null) {
+                if( (WorldObject) worldObject != null) {
                    	    				output.writeObject(1, worldObject, WorldObject.getSchema(), true);
     				    			}
             }
@@ -549,9 +545,9 @@ public final class WorldObjects implements Externalizable, Message<WorldObjects>
 	public void dumpObject()
     {
     	System.out.println("START WorldObjects");
-    	    	if(this.worldObject != null) {
+    	    	//if(this.worldObject != null) {
     		System.out.println("worldObject="+this.worldObject);
-    	}
+    	//}
     	    	System.out.println("END WorldObjects");
     }
     

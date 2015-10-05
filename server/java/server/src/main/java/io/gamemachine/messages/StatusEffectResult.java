@@ -61,14 +61,22 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
     static final StatusEffectResult DEFAULT_INSTANCE = new StatusEffectResult();
     static final String defaultScope = StatusEffectResult.class.getSimpleName();
 
-    			public String target;
-	    
-        			public String origin;
-	    
-        			public Integer value;
-	    
-        			public String statusEffectId;
-	    
+    	
+	    	    public String target= null;
+	    		
+    
+        	
+	    	    public String origin= null;
+	    		
+    
+        	
+	    	    public int value= 0;
+	    		
+    
+        	
+	    	    public String statusEffectId= null;
+	    		
+    
         
 
 
@@ -90,58 +98,66 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (target != null) {
+    	    	    	//if (target != null) {
     	       	    	model.setString("status_effect_result_target",target);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (origin != null) {
+    	    	    	//if (origin != null) {
     	       	    	model.setString("status_effect_result_origin",origin);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (value != null) {
+    	    	    	//if (value != null) {
     	       	    	model.setInteger("status_effect_result_value",value);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (statusEffectId != null) {
+    	    	    	//if (statusEffectId != null) {
     	       	    	model.setString("status_effect_result_status_effect_id",statusEffectId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static StatusEffectResult fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffectResult message = new StatusEffectResult();
     	    	    	    	    	
-    	    	    	String targetField = model.getString("status_effect_result_target");
-    	    	
-    	if (targetField != null) {
+    	    	    	String targetTestField = model.getString("status_effect_result_target");
+    	if (targetTestField != null) {
+    		String targetField = targetTestField;
     		message.setTarget(targetField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String originField = model.getString("status_effect_result_origin");
+    	
     	    	
-    	if (originField != null) {
+    	    	    	    	    	    	
+    	    	    	String originTestField = model.getString("status_effect_result_origin");
+    	if (originTestField != null) {
+    		String originField = originTestField;
     		message.setOrigin(originField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer valueField = model.getInteger("status_effect_result_value");
+    	
     	    	
-    	if (valueField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer valueTestField = model.getInteger("status_effect_result_value");
+    	if (valueTestField != null) {
+    		int valueField = valueTestField;
     		message.setValue(valueField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String statusEffectIdField = model.getString("status_effect_result_status_effect_id");
+    	
     	    	
-    	if (statusEffectIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String statusEffectIdTestField = model.getString("status_effect_result_status_effect_id");
+    	if (statusEffectIdTestField != null) {
+    		String statusEffectIdField = statusEffectIdTestField;
     		message.setStatusEffectId(statusEffectIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -150,11 +166,7 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
     }
 
 
-	    
-    public Boolean hasTarget()  {
-        return target == null ? false : true;
-    }
-        
+	            
 		public String getTarget() {
 		return target;
 	}
@@ -163,11 +175,7 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
 		this.target = target;
 		return this;	}
 	
-		    
-    public Boolean hasOrigin()  {
-        return origin == null ? false : true;
-    }
-        
+		            
 		public String getOrigin() {
 		return origin;
 	}
@@ -176,24 +184,16 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
 		this.origin = origin;
 		return this;	}
 	
-		    
-    public Boolean hasValue()  {
-        return value == null ? false : true;
-    }
-        
-		public Integer getValue() {
+		            
+		public int getValue() {
 		return value;
 	}
 	
-	public StatusEffectResult setValue(Integer value) {
+	public StatusEffectResult setValue(int value) {
 		this.value = value;
 		return this;	}
 	
-		    
-    public Boolean hasStatusEffectId()  {
-        return statusEffectId == null ? false : true;
-    }
-        
+		            
 		public String getStatusEffectId() {
 		return statusEffectId;
 	}
@@ -285,32 +285,36 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
     public void writeTo(Output output, StatusEffectResult message) throws IOException
     {
     	    	
-    	    	if(message.target == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.target == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.target != null)
+    	    	    	if( (String)message.target != null) {
             output.writeString(1, message.target, false);
+        }
     	    	
     	            	
-    	    	if(message.origin == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.origin == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.origin != null)
+    	    	    	if( (String)message.origin != null) {
             output.writeString(2, message.origin, false);
+        }
     	    	
     	            	
-    	    	if(message.value == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.value == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.value != null)
+    	    	    	if( (Integer)message.value != null) {
             output.writeInt32(3, message.value, false);
+        }
     	    	
     	            	
-    	    	if(message.statusEffectId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.statusEffectId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.statusEffectId != null)
+    	    	    	if( (String)message.statusEffectId != null) {
             output.writeString(4, message.statusEffectId, false);
+        }
     	    	
     	            	
     }
@@ -318,18 +322,18 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
 	public void dumpObject()
     {
     	System.out.println("START StatusEffectResult");
-    	    	if(this.target != null) {
+    	    	//if(this.target != null) {
     		System.out.println("target="+this.target);
-    	}
-    	    	if(this.origin != null) {
+    	//}
+    	    	//if(this.origin != null) {
     		System.out.println("origin="+this.origin);
-    	}
-    	    	if(this.value != null) {
+    	//}
+    	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
-    	}
-    	    	if(this.statusEffectId != null) {
+    	//}
+    	    	//if(this.statusEffectId != null) {
     		System.out.println("statusEffectId="+this.statusEffectId);
-    	}
+    	//}
     	    	System.out.println("END StatusEffectResult");
     }
     

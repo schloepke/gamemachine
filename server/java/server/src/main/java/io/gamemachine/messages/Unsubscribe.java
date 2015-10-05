@@ -61,10 +61,14 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
     static final Unsubscribe DEFAULT_INSTANCE = new Unsubscribe();
     static final String defaultScope = Unsubscribe.class.getSimpleName();
 
-    			public String topic;
-	    
-        			public String gameId;
-	    
+    	
+	    	    public String topic= null;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (topic != null) {
+    	    	    	//if (topic != null) {
     	       	    	model.setString("unsubscribe_topic",topic);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("unsubscribe_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Unsubscribe fromModel(Model model) {
 		boolean hasFields = false;
     	Unsubscribe message = new Unsubscribe();
     	    	    	    	    	
-    	    	    	String topicField = model.getString("unsubscribe_topic");
-    	    	
-    	if (topicField != null) {
+    	    	    	String topicTestField = model.getString("unsubscribe_topic");
+    	if (topicTestField != null) {
+    		String topicField = topicTestField;
     		message.setTopic(topicField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("unsubscribe_game_id");
+    	
     	    	
-    	if (gameIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String gameIdTestField = model.getString("unsubscribe_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,11 +128,7 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
     }
 
 
-	    
-    public Boolean hasTopic()  {
-        return topic == null ? false : true;
-    }
-        
+	            
 		public String getTopic() {
 		return topic;
 	}
@@ -133,11 +137,7 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
 		this.topic = topic;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -221,18 +221,20 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
     public void writeTo(Output output, Unsubscribe message) throws IOException
     {
     	    	
-    	    	if(message.topic == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.topic == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.topic != null)
+    	    	    	if( (String)message.topic != null) {
             output.writeString(1, message.topic, false);
+        }
     	    	
     	            	
-    	    	if(message.gameId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.gameId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(2, message.gameId, false);
+        }
     	    	
     	            	
     }
@@ -240,12 +242,12 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
 	public void dumpObject()
     {
     	System.out.println("START Unsubscribe");
-    	    	if(this.topic != null) {
+    	    	//if(this.topic != null) {
     		System.out.println("topic="+this.topic);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
+    	//}
     	    	System.out.println("END Unsubscribe");
     }
     

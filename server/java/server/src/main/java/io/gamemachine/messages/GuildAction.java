@@ -68,22 +68,38 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     static final GuildAction DEFAULT_INSTANCE = new GuildAction();
     static final String defaultScope = GuildAction.class.getSimpleName();
 
-    			public String action;
-	    
-        			public String to;
-	    
-        			public String from;
-	    
-        			public String response;
-	    
-        			public String guildId;
-	    
-        			public Integer recordId;
-	    
-        			public String inviteId;
-	    
-        			public String guildName;
-	    
+    	
+	    	    public String action= null;
+	    		
+    
+        	
+	    	    public String to= null;
+	    		
+    
+        	
+	    	    public String from= null;
+	    		
+    
+        	
+	    	    public String response= null;
+	    		
+    
+        	
+	    	    public String guildId= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String inviteId= null;
+	    		
+    
+        	
+	    	    public String guildName= null;
+	    		
+    
         
 
 
@@ -175,9 +191,9 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 	    	}
 	    	
 	    	io.gamemachine.orm.models.GuildAction model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.GuildAction.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.GuildAction();
@@ -306,101 +322,115 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setString("guild_action_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (to != null) {
+    	    	    	//if (to != null) {
     	       	    	model.setString("guild_action_to",to);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (from != null) {
+    	    	    	//if (from != null) {
     	       	    	model.setString("guild_action_from",from);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (response != null) {
+    	    	    	//if (response != null) {
     	       	    	model.setString("guild_action_response",response);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (guildId != null) {
+    	    	    	//if (guildId != null) {
     	       	    	model.setString("guild_action_guild_id",guildId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (inviteId != null) {
+    	    	    	//if (inviteId != null) {
     	       	    	model.setString("guild_action_invite_id",inviteId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (guildName != null) {
+    	    	    	//if (guildName != null) {
     	       	    	model.setString("guild_action_guild_name",guildName);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static GuildAction fromModel(Model model) {
 		boolean hasFields = false;
     	GuildAction message = new GuildAction();
     	    	    	    	    	
-    	    	    	String actionField = model.getString("guild_action_action");
-    	    	
-    	if (actionField != null) {
+    	    	    	String actionTestField = model.getString("guild_action_action");
+    	if (actionTestField != null) {
+    		String actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String toField = model.getString("guild_action_to");
+    	
     	    	
-    	if (toField != null) {
+    	    	    	    	    	    	
+    	    	    	String toTestField = model.getString("guild_action_to");
+    	if (toTestField != null) {
+    		String toField = toTestField;
     		message.setTo(toField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String fromField = model.getString("guild_action_from");
+    	
     	    	
-    	if (fromField != null) {
+    	    	    	    	    	    	
+    	    	    	String fromTestField = model.getString("guild_action_from");
+    	if (fromTestField != null) {
+    		String fromField = fromTestField;
     		message.setFrom(fromField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String responseField = model.getString("guild_action_response");
+    	
     	    	
-    	if (responseField != null) {
+    	    	    	    	    	    	
+    	    	    	String responseTestField = model.getString("guild_action_response");
+    	if (responseTestField != null) {
+    		String responseField = responseTestField;
     		message.setResponse(responseField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String guildIdField = model.getString("guild_action_guild_id");
+    	
     	    	
-    	if (guildIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String guildIdTestField = model.getString("guild_action_guild_id");
+    	if (guildIdTestField != null) {
+    		String guildIdField = guildIdTestField;
     		message.setGuildId(guildIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String inviteIdField = model.getString("guild_action_invite_id");
-    	    	
-    	if (inviteIdField != null) {
+    	    	    	String inviteIdTestField = model.getString("guild_action_invite_id");
+    	if (inviteIdTestField != null) {
+    		String inviteIdField = inviteIdTestField;
     		message.setInviteId(inviteIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String guildNameField = model.getString("guild_action_guild_name");
+    	
     	    	
-    	if (guildNameField != null) {
+    	    	    	    	    	    	
+    	    	    	String guildNameTestField = model.getString("guild_action_guild_name");
+    	if (guildNameTestField != null) {
+    		String guildNameField = guildNameTestField;
     		message.setGuildName(guildNameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -409,11 +439,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     }
 
 
-	    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
+	            
 		public String getAction() {
 		return action;
 	}
@@ -422,11 +448,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasTo()  {
-        return to == null ? false : true;
-    }
-        
+		            
 		public String getTo() {
 		return to;
 	}
@@ -435,11 +457,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.to = to;
 		return this;	}
 	
-		    
-    public Boolean hasFrom()  {
-        return from == null ? false : true;
-    }
-        
+		            
 		public String getFrom() {
 		return from;
 	}
@@ -448,11 +466,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.from = from;
 		return this;	}
 	
-		    
-    public Boolean hasResponse()  {
-        return response == null ? false : true;
-    }
-        
+		            
 		public String getResponse() {
 		return response;
 	}
@@ -461,11 +475,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.response = response;
 		return this;	}
 	
-		    
-    public Boolean hasGuildId()  {
-        return guildId == null ? false : true;
-    }
-        
+		            
 		public String getGuildId() {
 		return guildId;
 	}
@@ -474,24 +484,16 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.guildId = guildId;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public GuildAction setRecordId(Integer recordId) {
+	public GuildAction setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasInviteId()  {
-        return inviteId == null ? false : true;
-    }
-        
+		            
 		public String getInviteId() {
 		return inviteId;
 	}
@@ -500,11 +502,7 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		this.inviteId = inviteId;
 		return this;	}
 	
-		    
-    public Boolean hasGuildName()  {
-        return guildName == null ? false : true;
-    }
-        
+		            
 		public String getGuildName() {
 		return guildName;
 	}
@@ -612,46 +610,54 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     public void writeTo(Output output, GuildAction message) throws IOException
     {
     	    	
-    	    	if(message.action == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.action == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (String)message.action != null) {
             output.writeString(1, message.action, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.to != null)
+    	    	    	if( (String)message.to != null) {
             output.writeString(2, message.to, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.from != null)
+    	    	    	if( (String)message.from != null) {
             output.writeString(3, message.from, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.response != null)
+    	    	    	if( (String)message.response != null) {
             output.writeString(4, message.response, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.guildId != null)
+    	    	    	if( (String)message.guildId != null) {
             output.writeString(5, message.guildId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(6, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.inviteId != null)
+    	    	    	if( (String)message.inviteId != null) {
             output.writeString(7, message.inviteId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.guildName != null)
+    	    	    	if( (String)message.guildName != null) {
             output.writeString(8, message.guildName, false);
+        }
     	    	
     	            	
     }
@@ -659,30 +665,30 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 	public void dumpObject()
     {
     	System.out.println("START GuildAction");
-    	    	if(this.action != null) {
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.to != null) {
+    	//}
+    	    	//if(this.to != null) {
     		System.out.println("to="+this.to);
-    	}
-    	    	if(this.from != null) {
+    	//}
+    	    	//if(this.from != null) {
     		System.out.println("from="+this.from);
-    	}
-    	    	if(this.response != null) {
+    	//}
+    	    	//if(this.response != null) {
     		System.out.println("response="+this.response);
-    	}
-    	    	if(this.guildId != null) {
+    	//}
+    	    	//if(this.guildId != null) {
     		System.out.println("guildId="+this.guildId);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.inviteId != null) {
+    	//}
+    	    	//if(this.inviteId != null) {
     		System.out.println("inviteId="+this.inviteId);
-    	}
-    	    	if(this.guildName != null) {
+    	//}
+    	    	//if(this.guildName != null) {
     		System.out.println("guildName="+this.guildName);
-    	}
+    	//}
     	    	System.out.println("END GuildAction");
     }
     

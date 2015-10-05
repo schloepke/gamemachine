@@ -62,10 +62,14 @@ public final class AgentController implements Externalizable, Message<AgentContr
     static final String defaultScope = AgentController.class.getSimpleName();
 
         public List<Agent> agent;
-	    			public Player player;
-	    
-        			public String gameId;
-	    
+	    	
+	    	    public Player player;
+	    		
+    
+        	
+	    	    public String gameId= null;
+	    		
+    
         
 
 
@@ -84,22 +88,24 @@ public final class AgentController implements Externalizable, Message<AgentContr
     
 	public void toModel(Model model) {
     	    	    	    	    	    	
-    	    	    	if (gameId != null) {
+    	    	    	//if (gameId != null) {
     	       	    	model.setString("agent_controller_game_id",gameId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static AgentController fromModel(Model model) {
 		boolean hasFields = false;
     	AgentController message = new AgentController();
     	    	    	    	    	    	    	
-    	    	    	String gameIdField = model.getString("agent_controller_game_id");
-    	    	
-    	if (gameIdField != null) {
+    	    	    	String gameIdTestField = model.getString("agent_controller_game_id");
+    	if (gameIdTestField != null) {
+    		String gameIdField = gameIdTestField;
     		message.setGameId(gameIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -108,11 +114,7 @@ public final class AgentController implements Externalizable, Message<AgentContr
     }
 
 
-	    
-    public Boolean hasAgent()  {
-        return agent == null ? false : true;
-    }
-        
+	            
 		public List<Agent> getAgentList() {
 		if(this.agent == null)
             this.agent = new ArrayList<Agent>();
@@ -195,7 +197,7 @@ public final class AgentController implements Externalizable, Message<AgentContr
        	while (itr.hasNext()) {
     	Agent obj = itr.next();
     	
-    	    		if (agent.remove.equals(obj.remove)) {
+    	    		if (agent.remove == obj.remove) {
     	      			itr.remove();
     		}
 		}
@@ -227,7 +229,7 @@ public final class AgentController implements Externalizable, Message<AgentContr
        	while (itr.hasNext()) {
     	Agent obj = itr.next();
     	
-    	    		if (agent.concurrency.equals(obj.concurrency)) {
+    	    		if (agent.concurrency == obj.concurrency) {
     	      			itr.remove();
     		}
 		}
@@ -238,11 +240,7 @@ public final class AgentController implements Externalizable, Message<AgentContr
     
     
     
-		    
-    public Boolean hasPlayer()  {
-        return player == null ? false : true;
-    }
-        
+		            
 		public Player getPlayer() {
 		return player;
 	}
@@ -251,11 +249,7 @@ public final class AgentController implements Externalizable, Message<AgentContr
 		this.player = player;
 		return this;	}
 	
-		    
-    public Boolean hasGameId()  {
-        return gameId == null ? false : true;
-    }
-        
+		            
 		public String getGameId() {
 		return gameId;
 	}
@@ -349,24 +343,25 @@ public final class AgentController implements Externalizable, Message<AgentContr
         {
             for(Agent agent : message.agent)
             {
-                if(agent != null) {
+                if( (Agent) agent != null) {
                    	    				output.writeObject(1, agent, Agent.getSchema(), true);
     				    			}
             }
         }
     	            	
-    	    	if(message.player == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.player == null)
+        //    throw new UninitializedMessageException(message);
     	    	
     	    	    	if(message.player != null)
     		output.writeObject(2, message.player, Player.getSchema(), false);
     	    	
     	            	
-    	    	if(message.gameId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.gameId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.gameId != null)
+    	    	    	if( (String)message.gameId != null) {
             output.writeString(3, message.gameId, false);
+        }
     	    	
     	            	
     }
@@ -374,15 +369,15 @@ public final class AgentController implements Externalizable, Message<AgentContr
 	public void dumpObject()
     {
     	System.out.println("START AgentController");
-    	    	if(this.agent != null) {
+    	    	//if(this.agent != null) {
     		System.out.println("agent="+this.agent);
-    	}
-    	    	if(this.player != null) {
+    	//}
+    	    	//if(this.player != null) {
     		System.out.println("player="+this.player);
-    	}
-    	    	if(this.gameId != null) {
+    	//}
+    	    	//if(this.gameId != null) {
     		System.out.println("gameId="+this.gameId);
-    	}
+    	//}
     	    	System.out.println("END AgentController");
     }
     

@@ -61,10 +61,14 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
     static final Cost DEFAULT_INSTANCE = new Cost();
     static final String defaultScope = Cost.class.getSimpleName();
 
-    			public Float amount;
-	    
-        			public String currency;
-	    
+    	
+	    	    public float amount= 0F;
+	    		
+    
+        	
+	    	    public String currency= null;
+	    		
+    
         
 
 
@@ -84,34 +88,38 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (amount != null) {
+    	    	    	//if (amount != null) {
     	       	    	model.setFloat("cost_amount",amount);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (currency != null) {
+    	    	    	//if (currency != null) {
     	       	    	model.setString("cost_currency",currency);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Cost fromModel(Model model) {
 		boolean hasFields = false;
     	Cost message = new Cost();
     	    	    	    	    	
-    	    	    	Float amountField = model.getFloat("cost_amount");
-    	    	
-    	if (amountField != null) {
+    	    	    	Float amountTestField = model.getFloat("cost_amount");
+    	if (amountTestField != null) {
+    		float amountField = amountTestField;
     		message.setAmount(amountField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String currencyField = model.getString("cost_currency");
+    	
     	    	
-    	if (currencyField != null) {
+    	    	    	    	    	    	
+    	    	    	String currencyTestField = model.getString("cost_currency");
+    	if (currencyTestField != null) {
+    		String currencyField = currencyTestField;
     		message.setCurrency(currencyField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -120,24 +128,16 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
     }
 
 
-	    
-    public Boolean hasAmount()  {
-        return amount == null ? false : true;
-    }
-        
-		public Float getAmount() {
+	            
+		public float getAmount() {
 		return amount;
 	}
 	
-	public Cost setAmount(Float amount) {
+	public Cost setAmount(float amount) {
 		this.amount = amount;
 		return this;	}
 	
-		    
-    public Boolean hasCurrency()  {
-        return currency == null ? false : true;
-    }
-        
+		            
 		public String getCurrency() {
 		return currency;
 	}
@@ -221,16 +221,18 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
     public void writeTo(Output output, Cost message) throws IOException
     {
     	    	
-    	    	if(message.amount == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.amount == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.amount != null)
+    	    	    	if( (Float)message.amount != null) {
             output.writeFloat(1, message.amount, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.currency != null)
+    	    	    	if( (String)message.currency != null) {
             output.writeString(2, message.currency, false);
+        }
     	    	
     	            	
     }
@@ -238,12 +240,12 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
 	public void dumpObject()
     {
     	System.out.println("START Cost");
-    	    	if(this.amount != null) {
+    	    	//if(this.amount != null) {
     		System.out.println("amount="+this.amount);
-    	}
-    	    	if(this.currency != null) {
+    	//}
+    	    	//if(this.currency != null) {
     		System.out.println("currency="+this.currency);
-    	}
+    	//}
     	    	System.out.println("END Cost");
     }
     

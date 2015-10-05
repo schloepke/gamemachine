@@ -53,35 +53,35 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 
     			public String id;
 	    
-        			public Integer health;
+        			public int health;
 	    
-        			public Integer stamina;
+        			public int stamina;
 	    
-        			public Integer magic;
+        			public int magic;
 	    
-        			public Long lastCombat;
+        			public long lastCombat;
 	    
-        			public Integer dead;
+        			public int dead;
 	    
-        			public Integer armor;
+        			public int armor;
 	    
-        			public Integer spellResist;
+        			public int spellResist;
 	    
-        			public Integer elementalResist;
+        			public int elementalResist;
 	    
-        			public Integer spellPenetration;
+        			public int spellPenetration;
 	    
-        			public Integer magicRegen;
+        			public int magicRegen;
 	    
-        			public Integer healthRegen;
+        			public int healthRegen;
 	    
-        			public Integer staminaRegen;
+        			public int staminaRegen;
 	    
-        			public Integer changed;
+        			public int changed;
 	    
         			public String grid;
 	    
-        			public Integer staminaDrain;
+        			public int staminaDrain;
 	    
       
     public Vitals()
@@ -110,11 +110,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return health == null ? false : true;
     }
         
-		public Integer getHealth() {
+		public int getHealth() {
 		return health;
 	}
 	
-	public Vitals setHealth(Integer health) {
+	public Vitals setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
@@ -123,11 +123,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return stamina == null ? false : true;
     }
         
-		public Integer getStamina() {
+		public int getStamina() {
 		return stamina;
 	}
 	
-	public Vitals setStamina(Integer stamina) {
+	public Vitals setStamina(int stamina) {
 		this.stamina = stamina;
 		return this;	}
 	
@@ -136,11 +136,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return magic == null ? false : true;
     }
         
-		public Integer getMagic() {
+		public int getMagic() {
 		return magic;
 	}
 	
-	public Vitals setMagic(Integer magic) {
+	public Vitals setMagic(int magic) {
 		this.magic = magic;
 		return this;	}
 	
@@ -149,11 +149,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return lastCombat == null ? false : true;
     }
         
-		public Long getLastCombat() {
+		public long getLastCombat() {
 		return lastCombat;
 	}
 	
-	public Vitals setLastCombat(Long lastCombat) {
+	public Vitals setLastCombat(long lastCombat) {
 		this.lastCombat = lastCombat;
 		return this;	}
 	
@@ -162,11 +162,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return dead == null ? false : true;
     }
         
-		public Integer getDead() {
+		public int getDead() {
 		return dead;
 	}
 	
-	public Vitals setDead(Integer dead) {
+	public Vitals setDead(int dead) {
 		this.dead = dead;
 		return this;	}
 	
@@ -175,11 +175,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return armor == null ? false : true;
     }
         
-		public Integer getArmor() {
+		public int getArmor() {
 		return armor;
 	}
 	
-	public Vitals setArmor(Integer armor) {
+	public Vitals setArmor(int armor) {
 		this.armor = armor;
 		return this;	}
 	
@@ -188,11 +188,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return spellResist == null ? false : true;
     }
         
-		public Integer getSpellResist() {
+		public int getSpellResist() {
 		return spellResist;
 	}
 	
-	public Vitals setSpellResist(Integer spellResist) {
+	public Vitals setSpellResist(int spellResist) {
 		this.spellResist = spellResist;
 		return this;	}
 	
@@ -201,11 +201,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return elementalResist == null ? false : true;
     }
         
-		public Integer getElementalResist() {
+		public int getElementalResist() {
 		return elementalResist;
 	}
 	
-	public Vitals setElementalResist(Integer elementalResist) {
+	public Vitals setElementalResist(int elementalResist) {
 		this.elementalResist = elementalResist;
 		return this;	}
 	
@@ -214,11 +214,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return spellPenetration == null ? false : true;
     }
         
-		public Integer getSpellPenetration() {
+		public int getSpellPenetration() {
 		return spellPenetration;
 	}
 	
-	public Vitals setSpellPenetration(Integer spellPenetration) {
+	public Vitals setSpellPenetration(int spellPenetration) {
 		this.spellPenetration = spellPenetration;
 		return this;	}
 	
@@ -227,11 +227,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return magicRegen == null ? false : true;
     }
         
-		public Integer getMagicRegen() {
+		public int getMagicRegen() {
 		return magicRegen;
 	}
 	
-	public Vitals setMagicRegen(Integer magicRegen) {
+	public Vitals setMagicRegen(int magicRegen) {
 		this.magicRegen = magicRegen;
 		return this;	}
 	
@@ -240,11 +240,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return healthRegen == null ? false : true;
     }
         
-		public Integer getHealthRegen() {
+		public int getHealthRegen() {
 		return healthRegen;
 	}
 	
-	public Vitals setHealthRegen(Integer healthRegen) {
+	public Vitals setHealthRegen(int healthRegen) {
 		this.healthRegen = healthRegen;
 		return this;	}
 	
@@ -253,11 +253,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return staminaRegen == null ? false : true;
     }
         
-		public Integer getStaminaRegen() {
+		public int getStaminaRegen() {
 		return staminaRegen;
 	}
 	
-	public Vitals setStaminaRegen(Integer staminaRegen) {
+	public Vitals setStaminaRegen(int staminaRegen) {
 		this.staminaRegen = staminaRegen;
 		return this;	}
 	
@@ -266,11 +266,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return changed == null ? false : true;
     }
         
-		public Integer getChanged() {
+		public int getChanged() {
 		return changed;
 	}
 	
-	public Vitals setChanged(Integer changed) {
+	public Vitals setChanged(int changed) {
 		this.changed = changed;
 		return this;	}
 	
@@ -292,11 +292,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return staminaDrain == null ? false : true;
     }
         
-		public Integer getStaminaDrain() {
+		public int getStaminaDrain() {
 		return staminaDrain;
 	}
 	
-	public Vitals setStaminaDrain(Integer staminaDrain) {
+	public Vitals setStaminaDrain(int staminaDrain) {
 		this.staminaDrain = staminaDrain;
 		return this;	}
 	

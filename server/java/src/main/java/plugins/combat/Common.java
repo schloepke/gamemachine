@@ -1,4 +1,4 @@
-package plugins.pvp_game;
+package plugins.combat;
 
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;

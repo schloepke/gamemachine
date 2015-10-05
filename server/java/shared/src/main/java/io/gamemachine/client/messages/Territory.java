@@ -55,7 +55,7 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 	    
         			public String owner;
 	    
-        			public Integer recordId;
+        			public int recordId;
 	    
         			public String keep;
 	    
@@ -99,11 +99,11 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
         return recordId == null ? false : true;
     }
         
-		public Integer getRecordId() {
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public Territory setRecordId(Integer recordId) {
+	public Territory setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	

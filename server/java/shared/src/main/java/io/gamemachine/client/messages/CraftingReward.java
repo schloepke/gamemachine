@@ -53,9 +53,9 @@ public final class CraftingReward implements Externalizable, Message<CraftingRew
 
     			public String id;
 	    
-        			public Integer quantity;
+        			public int quantity;
 	    
-        			public Integer level;
+        			public int level;
 	    
       
     public CraftingReward()
@@ -84,11 +84,11 @@ public final class CraftingReward implements Externalizable, Message<CraftingRew
         return quantity == null ? false : true;
     }
         
-		public Integer getQuantity() {
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public CraftingReward setQuantity(Integer quantity) {
+	public CraftingReward setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
@@ -97,11 +97,11 @@ public final class CraftingReward implements Externalizable, Message<CraftingRew
         return level == null ? false : true;
     }
         
-		public Integer getLevel() {
+		public int getLevel() {
 		return level;
 	}
 	
-	public CraftingReward setLevel(Integer level) {
+	public CraftingReward setLevel(int level) {
 		this.level = level;
 		return this;	}
 	

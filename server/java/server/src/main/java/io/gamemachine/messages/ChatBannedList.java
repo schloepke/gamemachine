@@ -91,11 +91,7 @@ public final class ChatBannedList implements Externalizable, Message<ChatBannedL
     }
 
 
-	    
-    public Boolean hasChatBanned()  {
-        return chatBanned == null ? false : true;
-    }
-        
+	            
 		public List<ChatBanned> getChatBannedList() {
 		if(this.chatBanned == null)
             this.chatBanned = new ArrayList<ChatBanned>();
@@ -250,7 +246,7 @@ public final class ChatBannedList implements Externalizable, Message<ChatBannedL
         {
             for(ChatBanned chatBanned : message.chatBanned)
             {
-                if(chatBanned != null) {
+                if( (ChatBanned) chatBanned != null) {
                    	    				output.writeObject(1, chatBanned, ChatBanned.getSchema(), true);
     				    			}
             }
@@ -261,9 +257,9 @@ public final class ChatBannedList implements Externalizable, Message<ChatBannedL
 	public void dumpObject()
     {
     	System.out.println("START ChatBannedList");
-    	    	if(this.chatBanned != null) {
+    	    	//if(this.chatBanned != null) {
     		System.out.println("chatBanned="+this.chatBanned);
-    	}
+    	//}
     	    	System.out.println("END ChatBannedList");
     }
     

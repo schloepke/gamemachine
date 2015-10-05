@@ -91,11 +91,7 @@ public final class ChatChannels implements Externalizable, Message<ChatChannels>
     }
 
 
-	    
-    public Boolean hasChatChannel()  {
-        return chatChannel == null ? false : true;
-    }
-        
+	            
 		public List<ChatChannel> getChatChannelList() {
 		if(this.chatChannel == null)
             this.chatChannel = new ArrayList<ChatChannel>();
@@ -250,7 +246,7 @@ public final class ChatChannels implements Externalizable, Message<ChatChannels>
         {
             for(ChatChannel chatChannel : message.chatChannel)
             {
-                if(chatChannel != null) {
+                if( (ChatChannel) chatChannel != null) {
                    	    				output.writeObject(1, chatChannel, ChatChannel.getSchema(), true);
     				    			}
             }
@@ -261,9 +257,9 @@ public final class ChatChannels implements Externalizable, Message<ChatChannels>
 	public void dumpObject()
     {
     	System.out.println("START ChatChannels");
-    	    	if(this.chatChannel != null) {
+    	    	//if(this.chatChannel != null) {
     		System.out.println("chatChannel="+this.chatChannel);
-    	}
+    	//}
     	    	System.out.println("END ChatChannels");
     }
     

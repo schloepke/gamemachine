@@ -61,12 +61,18 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
     static final ClientManagerRegister DEFAULT_INSTANCE = new ClientManagerRegister();
     static final String defaultScope = ClientManagerRegister.class.getSimpleName();
 
-    			public String events;
-	    
-        			public String registerType;
-	    
-        			public String name;
-	    
+    	
+	    	    public String events= null;
+	    		
+    
+        	
+	    	    public String registerType= null;
+	    		
+    
+        	
+	    	    public String name= null;
+	    		
+    
         
 
 
@@ -87,46 +93,52 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (events != null) {
+    	    	    	//if (events != null) {
     	       	    	model.setString("client_manager_register_events",events);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (registerType != null) {
+    	    	    	//if (registerType != null) {
     	       	    	model.setString("client_manager_register_register_type",registerType);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (name != null) {
+    	    	    	//if (name != null) {
     	       	    	model.setString("client_manager_register_name",name);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static ClientManagerRegister fromModel(Model model) {
 		boolean hasFields = false;
     	ClientManagerRegister message = new ClientManagerRegister();
     	    	    	    	    	
-    	    	    	String eventsField = model.getString("client_manager_register_events");
-    	    	
-    	if (eventsField != null) {
+    	    	    	String eventsTestField = model.getString("client_manager_register_events");
+    	if (eventsTestField != null) {
+    		String eventsField = eventsTestField;
     		message.setEvents(eventsField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String registerTypeField = model.getString("client_manager_register_register_type");
+    	
     	    	
-    	if (registerTypeField != null) {
+    	    	    	    	    	    	
+    	    	    	String registerTypeTestField = model.getString("client_manager_register_register_type");
+    	if (registerTypeTestField != null) {
+    		String registerTypeField = registerTypeTestField;
     		message.setRegisterType(registerTypeField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String nameField = model.getString("client_manager_register_name");
+    	
     	    	
-    	if (nameField != null) {
+    	    	    	    	    	    	
+    	    	    	String nameTestField = model.getString("client_manager_register_name");
+    	if (nameTestField != null) {
+    		String nameField = nameTestField;
     		message.setName(nameField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -135,11 +147,7 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
     }
 
 
-	    
-    public Boolean hasEvents()  {
-        return events == null ? false : true;
-    }
-        
+	            
 		public String getEvents() {
 		return events;
 	}
@@ -148,11 +156,7 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
 		this.events = events;
 		return this;	}
 	
-		    
-    public Boolean hasRegisterType()  {
-        return registerType == null ? false : true;
-    }
-        
+		            
 		public String getRegisterType() {
 		return registerType;
 	}
@@ -161,11 +165,7 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
 		this.registerType = registerType;
 		return this;	}
 	
-		    
-    public Boolean hasName()  {
-        return name == null ? false : true;
-    }
-        
+		            
 		public String getName() {
 		return name;
 	}
@@ -254,18 +254,21 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
     {
     	    	
     	    	
-    	    	    	if(message.events != null)
+    	    	    	if( (String)message.events != null) {
             output.writeString(1, message.events, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.registerType != null)
+    	    	    	if( (String)message.registerType != null) {
             output.writeString(2, message.registerType, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.name != null)
+    	    	    	if( (String)message.name != null) {
             output.writeString(3, message.name, false);
+        }
     	    	
     	            	
     }
@@ -273,15 +276,15 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
 	public void dumpObject()
     {
     	System.out.println("START ClientManagerRegister");
-    	    	if(this.events != null) {
+    	    	//if(this.events != null) {
     		System.out.println("events="+this.events);
-    	}
-    	    	if(this.registerType != null) {
+    	//}
+    	    	//if(this.registerType != null) {
     		System.out.println("registerType="+this.registerType);
-    	}
-    	    	if(this.name != null) {
+    	//}
+    	    	//if(this.name != null) {
     		System.out.println("name="+this.name);
-    	}
+    	//}
     	    	System.out.println("END ClientManagerRegister");
     }
     

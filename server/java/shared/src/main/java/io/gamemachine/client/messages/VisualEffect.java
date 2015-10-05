@@ -61,7 +61,7 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 	    
         			public String type;
 	    
-        			public Integer duration;
+        			public int duration;
 	    
       
     public VisualEffect()
@@ -142,11 +142,11 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
         return duration == null ? false : true;
     }
         
-		public Integer getDuration() {
+		public int getDuration() {
 		return duration;
 	}
 	
-	public VisualEffect setDuration(Integer duration) {
+	public VisualEffect setDuration(int duration) {
 		this.duration = duration;
 		return this;	}
 	

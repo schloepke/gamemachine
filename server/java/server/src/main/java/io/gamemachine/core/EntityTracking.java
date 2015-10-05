@@ -100,12 +100,12 @@ public class EntityTracking extends UntypedActor {
 			}
 			role = player.role;
 			
-			if (entity.hasAgentTrackData()) {
+			if (entity.agentTrackData != null) {
 				handleAgentTrackData(entity.agentTrackData, player);
 				return;
 			}
 
-			if (entity.hasTrackDataUpdate()) {
+			if (entity.trackDataUpdate != null) {
 				updateTrackData(entity.getTrackDataUpdate(), player);
 				return;
 			}
@@ -143,7 +143,7 @@ public class EntityTracking extends UntypedActor {
 			return;
 		}
 
-		if (trackData.hasBroadcast() && trackData.broadcast == 1) {
+		if (trackData.broadcast == 1) {
 			List<TrackData> trackDatas = grid.neighbors(player.id, trackData.x, trackData.y,
 					trackData.neighborEntityType, 2);
 
@@ -176,7 +176,7 @@ public class EntityTracking extends UntypedActor {
 
 		setEntityLocation(player.id, grid, trackData);
 
-		if (trackData.hasGetNeighbors() && trackData.getNeighbors >= 1) {
+		if (trackData.getNeighbors >= 1) {
 			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType, trackData.getNeighbors);
 		}
 	}
@@ -277,7 +277,7 @@ public class EntityTracking extends UntypedActor {
 			trackData.setDynamicMessage(dynamicMessage);
 		}
 
-		if (trackData.hasZone()) {
+		if (trackData.zone > 0) {
 			GameGrid.setPlayerZone(trackData.id, trackData.zone);
 		}
 

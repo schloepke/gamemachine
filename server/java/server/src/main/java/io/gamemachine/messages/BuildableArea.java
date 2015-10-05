@@ -68,22 +68,38 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     static final BuildableArea DEFAULT_INSTANCE = new BuildableArea();
     static final String defaultScope = BuildableArea.class.getSimpleName();
 
-    			public String ownerId;
-	    
-        			public Float px;
-	    
-        			public Float py;
-	    
-        			public Float pz;
-	    
-        			public Integer sx;
-	    
-        			public Integer sy;
-	    
-        			public Integer sz;
-	    
-        			public Integer recordId;
-	    
+    	
+	    	    public String ownerId= null;
+	    		
+    
+        	
+	    	    public float px= 0F;
+	    		
+    
+        	
+	    	    public float py= 0F;
+	    		
+    
+        	
+	    	    public float pz= 0F;
+	    		
+    
+        	
+	    	    public int sx= 0;
+	    		
+    
+        	
+	    	    public int sy= 0;
+	    		
+    
+        	
+	    	    public int sz= 0;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
         
 
 
@@ -175,9 +191,9 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 	    	}
 	    	
 	    	io.gamemachine.orm.models.BuildableArea model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.BuildableArea.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.BuildableArea();
@@ -306,40 +322,40 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (ownerId != null) {
+    	    	    	//if (ownerId != null) {
     	       	    	model.setString("buildable_area_owner_id",ownerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (px != null) {
+    	    	    	//if (px != null) {
     	       	    	model.setFloat("buildable_area_px",px);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (py != null) {
+    	    	    	//if (py != null) {
     	       	    	model.setFloat("buildable_area_py",py);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (pz != null) {
+    	    	    	//if (pz != null) {
     	       	    	model.setFloat("buildable_area_pz",pz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (sx != null) {
+    	    	    	//if (sx != null) {
     	       	    	model.setInteger("buildable_area_sx",sx);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (sy != null) {
+    	    	    	//if (sy != null) {
     	       	    	model.setInteger("buildable_area_sy",sy);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (sz != null) {
+    	    	    	//if (sz != null) {
     	       	    	model.setInteger("buildable_area_sz",sz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    }
@@ -348,59 +364,73 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 		boolean hasFields = false;
     	BuildableArea message = new BuildableArea();
     	    	    	    	    	
-    	    	    	String ownerIdField = model.getString("buildable_area_owner_id");
-    	    	
-    	if (ownerIdField != null) {
+    	    	    	String ownerIdTestField = model.getString("buildable_area_owner_id");
+    	if (ownerIdTestField != null) {
+    		String ownerIdField = ownerIdTestField;
     		message.setOwnerId(ownerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float pxField = model.getFloat("buildable_area_px");
+    	
     	    	
-    	if (pxField != null) {
+    	    	    	    	    	    	
+    	    	    	Float pxTestField = model.getFloat("buildable_area_px");
+    	if (pxTestField != null) {
+    		float pxField = pxTestField;
     		message.setPx(pxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float pyField = model.getFloat("buildable_area_py");
+    	
     	    	
-    	if (pyField != null) {
+    	    	    	    	    	    	
+    	    	    	Float pyTestField = model.getFloat("buildable_area_py");
+    	if (pyTestField != null) {
+    		float pyField = pyTestField;
     		message.setPy(pyField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Float pzField = model.getFloat("buildable_area_pz");
+    	
     	    	
-    	if (pzField != null) {
+    	    	    	    	    	    	
+    	    	    	Float pzTestField = model.getFloat("buildable_area_pz");
+    	if (pzTestField != null) {
+    		float pzField = pzTestField;
     		message.setPz(pzField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer sxField = model.getInteger("buildable_area_sx");
+    	
     	    	
-    	if (sxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer sxTestField = model.getInteger("buildable_area_sx");
+    	if (sxTestField != null) {
+    		int sxField = sxTestField;
     		message.setSx(sxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer syField = model.getInteger("buildable_area_sy");
+    	
     	    	
-    	if (syField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer syTestField = model.getInteger("buildable_area_sy");
+    	if (syTestField != null) {
+    		int syField = syTestField;
     		message.setSy(syField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer szField = model.getInteger("buildable_area_sz");
+    	
     	    	
-    	if (szField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer szTestField = model.getInteger("buildable_area_sz");
+    	if (szTestField != null) {
+    		int szField = szTestField;
     		message.setSz(szField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -409,11 +439,7 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     }
 
 
-	    
-    public Boolean hasOwnerId()  {
-        return ownerId == null ? false : true;
-    }
-        
+	            
 		public String getOwnerId() {
 		return ownerId;
 	}
@@ -422,94 +448,66 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 		this.ownerId = ownerId;
 		return this;	}
 	
-		    
-    public Boolean hasPx()  {
-        return px == null ? false : true;
-    }
-        
-		public Float getPx() {
+		            
+		public float getPx() {
 		return px;
 	}
 	
-	public BuildableArea setPx(Float px) {
+	public BuildableArea setPx(float px) {
 		this.px = px;
 		return this;	}
 	
-		    
-    public Boolean hasPy()  {
-        return py == null ? false : true;
-    }
-        
-		public Float getPy() {
+		            
+		public float getPy() {
 		return py;
 	}
 	
-	public BuildableArea setPy(Float py) {
+	public BuildableArea setPy(float py) {
 		this.py = py;
 		return this;	}
 	
-		    
-    public Boolean hasPz()  {
-        return pz == null ? false : true;
-    }
-        
-		public Float getPz() {
+		            
+		public float getPz() {
 		return pz;
 	}
 	
-	public BuildableArea setPz(Float pz) {
+	public BuildableArea setPz(float pz) {
 		this.pz = pz;
 		return this;	}
 	
-		    
-    public Boolean hasSx()  {
-        return sx == null ? false : true;
-    }
-        
-		public Integer getSx() {
+		            
+		public int getSx() {
 		return sx;
 	}
 	
-	public BuildableArea setSx(Integer sx) {
+	public BuildableArea setSx(int sx) {
 		this.sx = sx;
 		return this;	}
 	
-		    
-    public Boolean hasSy()  {
-        return sy == null ? false : true;
-    }
-        
-		public Integer getSy() {
+		            
+		public int getSy() {
 		return sy;
 	}
 	
-	public BuildableArea setSy(Integer sy) {
+	public BuildableArea setSy(int sy) {
 		this.sy = sy;
 		return this;	}
 	
-		    
-    public Boolean hasSz()  {
-        return sz == null ? false : true;
-    }
-        
-		public Integer getSz() {
+		            
+		public int getSz() {
 		return sz;
 	}
 	
-	public BuildableArea setSz(Integer sz) {
+	public BuildableArea setSz(int sz) {
 		this.sz = sz;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public BuildableArea setRecordId(Integer recordId) {
+	public BuildableArea setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
@@ -612,58 +610,66 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     public void writeTo(Output output, BuildableArea message) throws IOException
     {
     	    	
-    	    	if(message.ownerId == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.ownerId == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.ownerId != null)
+    	    	    	if( (String)message.ownerId != null) {
             output.writeString(1, message.ownerId, false);
+        }
     	    	
     	            	
-    	    	if(message.px == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.px == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.px != null)
+    	    	    	if( (Float)message.px != null) {
             output.writeFloat(2, message.px, false);
+        }
     	    	
     	            	
-    	    	if(message.py == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.py == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.py != null)
+    	    	    	if( (Float)message.py != null) {
             output.writeFloat(3, message.py, false);
+        }
     	    	
     	            	
-    	    	if(message.pz == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.pz == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.pz != null)
+    	    	    	if( (Float)message.pz != null) {
             output.writeFloat(4, message.pz, false);
+        }
     	    	
     	            	
-    	    	if(message.sx == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.sx == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.sx != null)
+    	    	    	if( (Integer)message.sx != null) {
             output.writeInt32(5, message.sx, false);
+        }
     	    	
     	            	
-    	    	if(message.sy == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.sy == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.sy != null)
+    	    	    	if( (Integer)message.sy != null) {
             output.writeInt32(6, message.sy, false);
+        }
     	    	
     	            	
-    	    	if(message.sz == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.sz == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.sz != null)
+    	    	    	if( (Integer)message.sz != null) {
             output.writeInt32(7, message.sz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(8, message.recordId, false);
+        }
     	    	
     	            	
     }
@@ -671,30 +677,30 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 	public void dumpObject()
     {
     	System.out.println("START BuildableArea");
-    	    	if(this.ownerId != null) {
+    	    	//if(this.ownerId != null) {
     		System.out.println("ownerId="+this.ownerId);
-    	}
-    	    	if(this.px != null) {
+    	//}
+    	    	//if(this.px != null) {
     		System.out.println("px="+this.px);
-    	}
-    	    	if(this.py != null) {
+    	//}
+    	    	//if(this.py != null) {
     		System.out.println("py="+this.py);
-    	}
-    	    	if(this.pz != null) {
+    	//}
+    	    	//if(this.pz != null) {
     		System.out.println("pz="+this.pz);
-    	}
-    	    	if(this.sx != null) {
+    	//}
+    	    	//if(this.sx != null) {
     		System.out.println("sx="+this.sx);
-    	}
-    	    	if(this.sy != null) {
+    	//}
+    	    	//if(this.sy != null) {
     		System.out.println("sy="+this.sy);
-    	}
-    	    	if(this.sz != null) {
+    	//}
+    	    	//if(this.sz != null) {
     		System.out.println("sz="+this.sz);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
+    	//}
     	    	System.out.println("END BuildableArea");
     }
     

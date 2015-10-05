@@ -128,15 +128,15 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	    
         			public String id;
 	    
-        			public Integer duration;
+        			public int duration;
 	    
-        			public Integer ticks;
+        			public int ticks;
 	    
         			public String attribute;
 	    
-        			public Integer minValue;
+        			public int minValue;
 	    
-        			public Integer maxValue;
+        			public int maxValue;
 	    
         			public String particleEffect;
 	    
@@ -186,11 +186,11 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         return duration == null ? false : true;
     }
         
-		public Integer getDuration() {
+		public int getDuration() {
 		return duration;
 	}
 	
-	public StatusEffect setDuration(Integer duration) {
+	public StatusEffect setDuration(int duration) {
 		this.duration = duration;
 		return this;	}
 	
@@ -199,11 +199,11 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         return ticks == null ? false : true;
     }
         
-		public Integer getTicks() {
+		public int getTicks() {
 		return ticks;
 	}
 	
-	public StatusEffect setTicks(Integer ticks) {
+	public StatusEffect setTicks(int ticks) {
 		this.ticks = ticks;
 		return this;	}
 	
@@ -225,11 +225,11 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         return minValue == null ? false : true;
     }
         
-		public Integer getMinValue() {
+		public int getMinValue() {
 		return minValue;
 	}
 	
-	public StatusEffect setMinValue(Integer minValue) {
+	public StatusEffect setMinValue(int minValue) {
 		this.minValue = minValue;
 		return this;	}
 	
@@ -238,11 +238,11 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         return maxValue == null ? false : true;
     }
         
-		public Integer getMaxValue() {
+		public int getMaxValue() {
 		return maxValue;
 	}
 	
-	public StatusEffect setMaxValue(Integer maxValue) {
+	public StatusEffect setMaxValue(int maxValue) {
 		this.maxValue = maxValue;
 		return this;	}
 	

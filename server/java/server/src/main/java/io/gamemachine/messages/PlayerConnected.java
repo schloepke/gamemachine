@@ -61,8 +61,10 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
     static final PlayerConnected DEFAULT_INSTANCE = new PlayerConnected();
     static final String defaultScope = PlayerConnected.class.getSimpleName();
 
-    			public Integer notused;
-	    
+    	
+	    	    public int notused= 0;
+	    		
+    
         
 
 
@@ -81,22 +83,24 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (notused != null) {
+    	    	    	//if (notused != null) {
     	       	    	model.setInteger("player_connected_notused",notused);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static PlayerConnected fromModel(Model model) {
 		boolean hasFields = false;
     	PlayerConnected message = new PlayerConnected();
     	    	    	    	    	
-    	    	    	Integer notusedField = model.getInteger("player_connected_notused");
-    	    	
-    	if (notusedField != null) {
+    	    	    	Integer notusedTestField = model.getInteger("player_connected_notused");
+    	if (notusedTestField != null) {
+    		int notusedField = notusedTestField;
     		message.setNotused(notusedField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -105,16 +109,12 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
     }
 
 
-	    
-    public Boolean hasNotused()  {
-        return notused == null ? false : true;
-    }
-        
-		public Integer getNotused() {
+	            
+		public int getNotused() {
 		return notused;
 	}
 	
-	public PlayerConnected setNotused(Integer notused) {
+	public PlayerConnected setNotused(int notused) {
 		this.notused = notused;
 		return this;	}
 	
@@ -190,8 +190,9 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
     {
     	    	
     	    	
-    	    	    	if(message.notused != null)
+    	    	    	if( (Integer)message.notused != null) {
             output.writeInt32(1, message.notused, false);
+        }
     	    	
     	            	
     }
@@ -199,9 +200,9 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
 	public void dumpObject()
     {
     	System.out.println("START PlayerConnected");
-    	    	if(this.notused != null) {
+    	    	//if(this.notused != null) {
     		System.out.println("notused="+this.notused);
-    	}
+    	//}
     	    	System.out.println("END PlayerConnected");
     }
     

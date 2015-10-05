@@ -111,16 +111,16 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 	    
         			public GmVector3 location;
 	    
-        			public Integer range;
+        			public int range;
 	    
             public List<StatusEffect> statusEffect;
 	    			public String origin;
 	    
-        			public Integer ticks;
+        			public int ticks;
 	    
-        			public Long activeId;
+        			public long activeId;
 	    
-        			public Long lastTick;
+        			public long lastTick;
 	    
         			public Action action; // = None:0;
 	    
@@ -179,11 +179,11 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         return range == null ? false : true;
     }
         
-		public Integer getRange() {
+		public int getRange() {
 		return range;
 	}
 	
-	public StatusEffectTarget setRange(Integer range) {
+	public StatusEffectTarget setRange(int range) {
 		this.range = range;
 		return this;	}
 	
@@ -383,11 +383,11 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         return ticks == null ? false : true;
     }
         
-		public Integer getTicks() {
+		public int getTicks() {
 		return ticks;
 	}
 	
-	public StatusEffectTarget setTicks(Integer ticks) {
+	public StatusEffectTarget setTicks(int ticks) {
 		this.ticks = ticks;
 		return this;	}
 	
@@ -396,11 +396,11 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         return activeId == null ? false : true;
     }
         
-		public Long getActiveId() {
+		public long getActiveId() {
 		return activeId;
 	}
 	
-	public StatusEffectTarget setActiveId(Long activeId) {
+	public StatusEffectTarget setActiveId(long activeId) {
 		this.activeId = activeId;
 		return this;	}
 	
@@ -409,11 +409,11 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         return lastTick == null ? false : true;
     }
         
-		public Long getLastTick() {
+		public long getLastTick() {
 		return lastTick;
 	}
 	
-	public StatusEffectTarget setLastTick(Long lastTick) {
+	public StatusEffectTarget setLastTick(long lastTick) {
 		this.lastTick = lastTick;
 		return this;	}
 	

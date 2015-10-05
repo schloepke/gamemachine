@@ -75,38 +75,70 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     static final Vitals DEFAULT_INSTANCE = new Vitals();
     static final String defaultScope = Vitals.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer health;
-	    
-        			public Integer stamina;
-	    
-        			public Integer magic;
-	    
-        			public Long lastCombat;
-	    
-        			public Integer dead;
-	    
-        			public Integer armor;
-	    
-        			public Integer spellResist;
-	    
-        			public Integer elementalResist;
-	    
-        			public Integer spellPenetration;
-	    
-        			public Integer magicRegen;
-	    
-        			public Integer healthRegen;
-	    
-        			public Integer staminaRegen;
-	    
-        			public Integer changed;
-	    
-        			public String grid;
-	    
-        			public Integer staminaDrain;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int health= 0;
+	    		
+    
+        	
+	    	    public int stamina= 0;
+	    		
+    
+        	
+	    	    public int magic= 0;
+	    		
+    
+        	
+	    	    public long lastCombat= 0L;
+	    		
+    
+        	
+	    	    public int dead= 0;
+	    		
+    
+        	
+	    	    public int armor= 0;
+	    		
+    
+        	
+	    	    public int spellResist= 0;
+	    		
+    
+        	
+	    	    public int elementalResist= 0;
+	    		
+    
+        	
+	    	    public int spellPenetration= 0;
+	    		
+    
+        	
+	    	    public int magicRegen= 0;
+	    		
+    
+        	
+	    	    public int healthRegen= 0;
+	    		
+    
+        	
+	    	    public int staminaRegen= 0;
+	    		
+    
+        	
+	    	    public int changed= 0;
+	    		
+    
+        	
+	    	    public String grid= null;
+	    		
+    
+        	
+	    	    public int staminaDrain= 0;
+	    		
+    
         
 	public static VitalsCache cache() {
 		return VitalsCache.getInstance();
@@ -392,202 +424,234 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("vitals_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (health != null) {
+    	    	    	//if (health != null) {
     	       	    	model.setInteger("vitals_health",health);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (stamina != null) {
+    	    	    	//if (stamina != null) {
     	       	    	model.setInteger("vitals_stamina",stamina);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (magic != null) {
+    	    	    	//if (magic != null) {
     	       	    	model.setInteger("vitals_magic",magic);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (lastCombat != null) {
+    	    	    	//if (lastCombat != null) {
     	       	    	model.setLong("vitals_last_combat",lastCombat);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (dead != null) {
+    	    	    	//if (dead != null) {
     	       	    	model.setInteger("vitals_dead",dead);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (armor != null) {
+    	    	    	//if (armor != null) {
     	       	    	model.setInteger("vitals_armor",armor);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (spellResist != null) {
+    	    	    	//if (spellResist != null) {
     	       	    	model.setInteger("vitals_spell_resist",spellResist);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (elementalResist != null) {
+    	    	    	//if (elementalResist != null) {
     	       	    	model.setInteger("vitals_elemental_resist",elementalResist);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (spellPenetration != null) {
+    	    	    	//if (spellPenetration != null) {
     	       	    	model.setInteger("vitals_spell_penetration",spellPenetration);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (magicRegen != null) {
+    	    	    	//if (magicRegen != null) {
     	       	    	model.setInteger("vitals_magic_regen",magicRegen);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (healthRegen != null) {
+    	    	    	//if (healthRegen != null) {
     	       	    	model.setInteger("vitals_health_regen",healthRegen);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (staminaRegen != null) {
+    	    	    	//if (staminaRegen != null) {
     	       	    	model.setInteger("vitals_stamina_regen",staminaRegen);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (changed != null) {
+    	    	    	//if (changed != null) {
     	       	    	model.setInteger("vitals_changed",changed);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (grid != null) {
+    	    	    	//if (grid != null) {
     	       	    	model.setString("vitals_grid",grid);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (staminaDrain != null) {
+    	    	    	//if (staminaDrain != null) {
     	       	    	model.setInteger("vitals_stamina_drain",staminaDrain);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static Vitals fromModel(Model model) {
 		boolean hasFields = false;
     	Vitals message = new Vitals();
     	    	    	    	    	
-    	    	    	String idField = model.getString("vitals_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("vitals_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthField = model.getInteger("vitals_health");
+    	
     	    	
-    	if (healthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthTestField = model.getInteger("vitals_health");
+    	if (healthTestField != null) {
+    		int healthField = healthTestField;
     		message.setHealth(healthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer staminaField = model.getInteger("vitals_stamina");
+    	
     	    	
-    	if (staminaField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer staminaTestField = model.getInteger("vitals_stamina");
+    	if (staminaTestField != null) {
+    		int staminaField = staminaTestField;
     		message.setStamina(staminaField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer magicField = model.getInteger("vitals_magic");
+    	
     	    	
-    	if (magicField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer magicTestField = model.getInteger("vitals_magic");
+    	if (magicTestField != null) {
+    		int magicField = magicTestField;
     		message.setMagic(magicField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long lastCombatField = model.getLong("vitals_last_combat");
+    	
     	    	
-    	if (lastCombatField != null) {
+    	    	    	    	    	    	
+    	    	    	Long lastCombatTestField = model.getLong("vitals_last_combat");
+    	if (lastCombatTestField != null) {
+    		long lastCombatField = lastCombatTestField;
     		message.setLastCombat(lastCombatField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer deadField = model.getInteger("vitals_dead");
+    	
     	    	
-    	if (deadField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer deadTestField = model.getInteger("vitals_dead");
+    	if (deadTestField != null) {
+    		int deadField = deadTestField;
     		message.setDead(deadField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer armorField = model.getInteger("vitals_armor");
+    	
     	    	
-    	if (armorField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer armorTestField = model.getInteger("vitals_armor");
+    	if (armorTestField != null) {
+    		int armorField = armorTestField;
     		message.setArmor(armorField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer spellResistField = model.getInteger("vitals_spell_resist");
+    	
     	    	
-    	if (spellResistField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer spellResistTestField = model.getInteger("vitals_spell_resist");
+    	if (spellResistTestField != null) {
+    		int spellResistField = spellResistTestField;
     		message.setSpellResist(spellResistField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer elementalResistField = model.getInteger("vitals_elemental_resist");
+    	
     	    	
-    	if (elementalResistField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer elementalResistTestField = model.getInteger("vitals_elemental_resist");
+    	if (elementalResistTestField != null) {
+    		int elementalResistField = elementalResistTestField;
     		message.setElementalResist(elementalResistField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer spellPenetrationField = model.getInteger("vitals_spell_penetration");
+    	
     	    	
-    	if (spellPenetrationField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer spellPenetrationTestField = model.getInteger("vitals_spell_penetration");
+    	if (spellPenetrationTestField != null) {
+    		int spellPenetrationField = spellPenetrationTestField;
     		message.setSpellPenetration(spellPenetrationField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer magicRegenField = model.getInteger("vitals_magic_regen");
+    	
     	    	
-    	if (magicRegenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer magicRegenTestField = model.getInteger("vitals_magic_regen");
+    	if (magicRegenTestField != null) {
+    		int magicRegenField = magicRegenTestField;
     		message.setMagicRegen(magicRegenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthRegenField = model.getInteger("vitals_health_regen");
+    	
     	    	
-    	if (healthRegenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthRegenTestField = model.getInteger("vitals_health_regen");
+    	if (healthRegenTestField != null) {
+    		int healthRegenField = healthRegenTestField;
     		message.setHealthRegen(healthRegenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer staminaRegenField = model.getInteger("vitals_stamina_regen");
+    	
     	    	
-    	if (staminaRegenField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer staminaRegenTestField = model.getInteger("vitals_stamina_regen");
+    	if (staminaRegenTestField != null) {
+    		int staminaRegenField = staminaRegenTestField;
     		message.setStaminaRegen(staminaRegenField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer changedField = model.getInteger("vitals_changed");
+    	
     	    	
-    	if (changedField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer changedTestField = model.getInteger("vitals_changed");
+    	if (changedTestField != null) {
+    		int changedField = changedTestField;
     		message.setChanged(changedField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gridField = model.getString("vitals_grid");
+    	
     	    	
-    	if (gridField != null) {
+    	    	    	    	    	    	
+    	    	    	String gridTestField = model.getString("vitals_grid");
+    	if (gridTestField != null) {
+    		String gridField = gridTestField;
     		message.setGrid(gridField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer staminaDrainField = model.getInteger("vitals_stamina_drain");
+    	
     	    	
-    	if (staminaDrainField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer staminaDrainTestField = model.getInteger("vitals_stamina_drain");
+    	if (staminaDrainTestField != null) {
+    		int staminaDrainField = staminaDrainTestField;
     		message.setStaminaDrain(staminaDrainField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -596,11 +660,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -609,180 +669,124 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public Integer getHealth() {
+		            
+		public int getHealth() {
 		return health;
 	}
 	
-	public Vitals setHealth(Integer health) {
+	public Vitals setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
-		    
-    public Boolean hasStamina()  {
-        return stamina == null ? false : true;
-    }
-        
-		public Integer getStamina() {
+		            
+		public int getStamina() {
 		return stamina;
 	}
 	
-	public Vitals setStamina(Integer stamina) {
+	public Vitals setStamina(int stamina) {
 		this.stamina = stamina;
 		return this;	}
 	
-		    
-    public Boolean hasMagic()  {
-        return magic == null ? false : true;
-    }
-        
-		public Integer getMagic() {
+		            
+		public int getMagic() {
 		return magic;
 	}
 	
-	public Vitals setMagic(Integer magic) {
+	public Vitals setMagic(int magic) {
 		this.magic = magic;
 		return this;	}
 	
-		    
-    public Boolean hasLastCombat()  {
-        return lastCombat == null ? false : true;
-    }
-        
-		public Long getLastCombat() {
+		            
+		public long getLastCombat() {
 		return lastCombat;
 	}
 	
-	public Vitals setLastCombat(Long lastCombat) {
+	public Vitals setLastCombat(long lastCombat) {
 		this.lastCombat = lastCombat;
 		return this;	}
 	
-		    
-    public Boolean hasDead()  {
-        return dead == null ? false : true;
-    }
-        
-		public Integer getDead() {
+		            
+		public int getDead() {
 		return dead;
 	}
 	
-	public Vitals setDead(Integer dead) {
+	public Vitals setDead(int dead) {
 		this.dead = dead;
 		return this;	}
 	
-		    
-    public Boolean hasArmor()  {
-        return armor == null ? false : true;
-    }
-        
-		public Integer getArmor() {
+		            
+		public int getArmor() {
 		return armor;
 	}
 	
-	public Vitals setArmor(Integer armor) {
+	public Vitals setArmor(int armor) {
 		this.armor = armor;
 		return this;	}
 	
-		    
-    public Boolean hasSpellResist()  {
-        return spellResist == null ? false : true;
-    }
-        
-		public Integer getSpellResist() {
+		            
+		public int getSpellResist() {
 		return spellResist;
 	}
 	
-	public Vitals setSpellResist(Integer spellResist) {
+	public Vitals setSpellResist(int spellResist) {
 		this.spellResist = spellResist;
 		return this;	}
 	
-		    
-    public Boolean hasElementalResist()  {
-        return elementalResist == null ? false : true;
-    }
-        
-		public Integer getElementalResist() {
+		            
+		public int getElementalResist() {
 		return elementalResist;
 	}
 	
-	public Vitals setElementalResist(Integer elementalResist) {
+	public Vitals setElementalResist(int elementalResist) {
 		this.elementalResist = elementalResist;
 		return this;	}
 	
-		    
-    public Boolean hasSpellPenetration()  {
-        return spellPenetration == null ? false : true;
-    }
-        
-		public Integer getSpellPenetration() {
+		            
+		public int getSpellPenetration() {
 		return spellPenetration;
 	}
 	
-	public Vitals setSpellPenetration(Integer spellPenetration) {
+	public Vitals setSpellPenetration(int spellPenetration) {
 		this.spellPenetration = spellPenetration;
 		return this;	}
 	
-		    
-    public Boolean hasMagicRegen()  {
-        return magicRegen == null ? false : true;
-    }
-        
-		public Integer getMagicRegen() {
+		            
+		public int getMagicRegen() {
 		return magicRegen;
 	}
 	
-	public Vitals setMagicRegen(Integer magicRegen) {
+	public Vitals setMagicRegen(int magicRegen) {
 		this.magicRegen = magicRegen;
 		return this;	}
 	
-		    
-    public Boolean hasHealthRegen()  {
-        return healthRegen == null ? false : true;
-    }
-        
-		public Integer getHealthRegen() {
+		            
+		public int getHealthRegen() {
 		return healthRegen;
 	}
 	
-	public Vitals setHealthRegen(Integer healthRegen) {
+	public Vitals setHealthRegen(int healthRegen) {
 		this.healthRegen = healthRegen;
 		return this;	}
 	
-		    
-    public Boolean hasStaminaRegen()  {
-        return staminaRegen == null ? false : true;
-    }
-        
-		public Integer getStaminaRegen() {
+		            
+		public int getStaminaRegen() {
 		return staminaRegen;
 	}
 	
-	public Vitals setStaminaRegen(Integer staminaRegen) {
+	public Vitals setStaminaRegen(int staminaRegen) {
 		this.staminaRegen = staminaRegen;
 		return this;	}
 	
-		    
-    public Boolean hasChanged()  {
-        return changed == null ? false : true;
-    }
-        
-		public Integer getChanged() {
+		            
+		public int getChanged() {
 		return changed;
 	}
 	
-	public Vitals setChanged(Integer changed) {
+	public Vitals setChanged(int changed) {
 		this.changed = changed;
 		return this;	}
 	
-		    
-    public Boolean hasGrid()  {
-        return grid == null ? false : true;
-    }
-        
+		            
 		public String getGrid() {
 		return grid;
 	}
@@ -791,16 +795,12 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 		this.grid = grid;
 		return this;	}
 	
-		    
-    public Boolean hasStaminaDrain()  {
-        return staminaDrain == null ? false : true;
-    }
-        
-		public Integer getStaminaDrain() {
+		            
+		public int getStaminaDrain() {
 		return staminaDrain;
 	}
 	
-	public Vitals setStaminaDrain(Integer staminaDrain) {
+	public Vitals setStaminaDrain(int staminaDrain) {
 		this.staminaDrain = staminaDrain;
 		return this;	}
 	
@@ -935,86 +935,102 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     public void writeTo(Output output, Vitals message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.health != null)
+    	    	    	if( (Integer)message.health != null) {
             output.writeInt32(2, message.health, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.stamina != null)
+    	    	    	if( (Integer)message.stamina != null) {
             output.writeInt32(3, message.stamina, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.magic != null)
+    	    	    	if( (Integer)message.magic != null) {
             output.writeInt32(4, message.magic, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.lastCombat != null)
+    	    	    	if( (Long)message.lastCombat != null) {
             output.writeInt64(5, message.lastCombat, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.dead != null)
+    	    	    	if( (Integer)message.dead != null) {
             output.writeInt32(6, message.dead, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.armor != null)
+    	    	    	if( (Integer)message.armor != null) {
             output.writeInt32(7, message.armor, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.spellResist != null)
+    	    	    	if( (Integer)message.spellResist != null) {
             output.writeInt32(8, message.spellResist, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.elementalResist != null)
+    	    	    	if( (Integer)message.elementalResist != null) {
             output.writeInt32(9, message.elementalResist, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.spellPenetration != null)
+    	    	    	if( (Integer)message.spellPenetration != null) {
             output.writeInt32(10, message.spellPenetration, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.magicRegen != null)
+    	    	    	if( (Integer)message.magicRegen != null) {
             output.writeInt32(11, message.magicRegen, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.healthRegen != null)
+    	    	    	if( (Integer)message.healthRegen != null) {
             output.writeInt32(12, message.healthRegen, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.staminaRegen != null)
+    	    	    	if( (Integer)message.staminaRegen != null) {
             output.writeInt32(13, message.staminaRegen, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.changed != null)
+    	    	    	if( (Integer)message.changed != null) {
             output.writeInt32(14, message.changed, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.grid != null)
+    	    	    	if( (String)message.grid != null) {
             output.writeString(15, message.grid, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.staminaDrain != null)
+    	    	    	if( (Integer)message.staminaDrain != null) {
             output.writeInt32(16, message.staminaDrain, false);
+        }
     	    	
     	            	
     }
@@ -1022,54 +1038,54 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 	public void dumpObject()
     {
     	System.out.println("START Vitals");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.health != null) {
+    	//}
+    	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
-    	}
-    	    	if(this.stamina != null) {
+    	//}
+    	    	//if(this.stamina != null) {
     		System.out.println("stamina="+this.stamina);
-    	}
-    	    	if(this.magic != null) {
+    	//}
+    	    	//if(this.magic != null) {
     		System.out.println("magic="+this.magic);
-    	}
-    	    	if(this.lastCombat != null) {
+    	//}
+    	    	//if(this.lastCombat != null) {
     		System.out.println("lastCombat="+this.lastCombat);
-    	}
-    	    	if(this.dead != null) {
+    	//}
+    	    	//if(this.dead != null) {
     		System.out.println("dead="+this.dead);
-    	}
-    	    	if(this.armor != null) {
+    	//}
+    	    	//if(this.armor != null) {
     		System.out.println("armor="+this.armor);
-    	}
-    	    	if(this.spellResist != null) {
+    	//}
+    	    	//if(this.spellResist != null) {
     		System.out.println("spellResist="+this.spellResist);
-    	}
-    	    	if(this.elementalResist != null) {
+    	//}
+    	    	//if(this.elementalResist != null) {
     		System.out.println("elementalResist="+this.elementalResist);
-    	}
-    	    	if(this.spellPenetration != null) {
+    	//}
+    	    	//if(this.spellPenetration != null) {
     		System.out.println("spellPenetration="+this.spellPenetration);
-    	}
-    	    	if(this.magicRegen != null) {
+    	//}
+    	    	//if(this.magicRegen != null) {
     		System.out.println("magicRegen="+this.magicRegen);
-    	}
-    	    	if(this.healthRegen != null) {
+    	//}
+    	    	//if(this.healthRegen != null) {
     		System.out.println("healthRegen="+this.healthRegen);
-    	}
-    	    	if(this.staminaRegen != null) {
+    	//}
+    	    	//if(this.staminaRegen != null) {
     		System.out.println("staminaRegen="+this.staminaRegen);
-    	}
-    	    	if(this.changed != null) {
+    	//}
+    	    	//if(this.changed != null) {
     		System.out.println("changed="+this.changed);
-    	}
-    	    	if(this.grid != null) {
+    	//}
+    	    	//if(this.grid != null) {
     		System.out.println("grid="+this.grid);
-    	}
-    	    	if(this.staminaDrain != null) {
+    	//}
+    	    	//if(this.staminaDrain != null) {
     		System.out.println("staminaDrain="+this.staminaDrain);
-    	}
+    	//}
     	    	System.out.println("END Vitals");
     }
     

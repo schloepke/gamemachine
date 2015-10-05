@@ -48,9 +48,9 @@ public class Incoming extends UntypedActor {
 		long clientId = netMessage.clientId;
 		ClientMessage clientMessage = netMessage.clientMessage;
 
-		if (clientMessage.hasPlayerLogout()) {
+		if (clientMessage.playerLogout != null) {
 			handleLogout(clientMessage, clientId);
-		} else if (clientMessage.hasPlayerConnect()) {
+		} else if (clientMessage.playerConnect != null) {
 			handleConnect(netMessage, clientMessage, clientId);
 		} else {
 			if (!Connection.hasConnection(clientMessage.player.id)) {
@@ -59,7 +59,7 @@ public class Incoming extends UntypedActor {
 			}
 		}
 
-		if (clientMessage.hasPlayer()) {
+		if (clientMessage.player != null) {
 			String gameId = playerService.getGameId(clientMessage.player.id);
 			GameLimits.incrementMessageCountIn(gameId);
 			
@@ -166,7 +166,7 @@ public class Incoming extends UntypedActor {
 	}
 
 	private String clientConnectionType(ClientMessage clientMessage) {
-		if (clientMessage.hasConnection_type()) {
+		if (clientMessage.connection_type > 0) {
 			if (clientMessage.getConnection_type() == 1) {
 				return "region";
 			} else if (clientMessage.getConnection_type() == 2) {

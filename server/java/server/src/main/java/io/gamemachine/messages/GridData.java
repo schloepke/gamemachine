@@ -62,10 +62,14 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
     static final String defaultScope = GridData.class.getSimpleName();
 
         public List<GridNode> nodes;
-	    			public Integer w;
-	    
-        			public Integer h;
-	    
+	    	
+	    	    public int w= 0;
+	    		
+    
+        	
+	    	    public int h= 0;
+	    		
+    
             public List<GridVerticle> gridVerticles;
 	    
 
@@ -86,34 +90,38 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
     
 	public void toModel(Model model) {
     	    	    	    	    	
-    	    	    	if (w != null) {
+    	    	    	//if (w != null) {
     	       	    	model.setInteger("grid_data_w",w);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (h != null) {
+    	    	    	//if (h != null) {
     	       	    	model.setInteger("grid_data_h",h);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static GridData fromModel(Model model) {
 		boolean hasFields = false;
     	GridData message = new GridData();
     	    	    	    	    	    	
-    	    	    	Integer wField = model.getInteger("grid_data_w");
-    	    	
-    	if (wField != null) {
+    	    	    	Integer wTestField = model.getInteger("grid_data_w");
+    	if (wTestField != null) {
+    		int wField = wTestField;
     		message.setW(wField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer hField = model.getInteger("grid_data_h");
+    	
     	    	
-    	if (hField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer hTestField = model.getInteger("grid_data_h");
+    	if (hTestField != null) {
+    		int hField = hTestField;
     		message.setH(hField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -122,11 +130,7 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
     }
 
 
-	    
-    public Boolean hasNodes()  {
-        return nodes == null ? false : true;
-    }
-        
+	            
 		public List<GridNode> getNodesList() {
 		if(this.nodes == null)
             this.nodes = new ArrayList<GridNode>();
@@ -161,7 +165,7 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
        	while (itr.hasNext()) {
     	GridNode obj = itr.next();
     	
-    	    		if (nodes.slope.equals(obj.slope)) {
+    	    		if (nodes.slope == obj.slope) {
     	      			itr.remove();
     		}
 		}
@@ -172,37 +176,25 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
     
     
     
-		    
-    public Boolean hasW()  {
-        return w == null ? false : true;
-    }
-        
-		public Integer getW() {
+		            
+		public int getW() {
 		return w;
 	}
 	
-	public GridData setW(Integer w) {
+	public GridData setW(int w) {
 		this.w = w;
 		return this;	}
 	
-		    
-    public Boolean hasH()  {
-        return h == null ? false : true;
-    }
-        
-		public Integer getH() {
+		            
+		public int getH() {
 		return h;
 	}
 	
-	public GridData setH(Integer h) {
+	public GridData setH(int h) {
 		this.h = h;
 		return this;	}
 	
-		    
-    public Boolean hasGridVerticles()  {
-        return gridVerticles == null ? false : true;
-    }
-        
+		            
 		public List<GridVerticle> getGridVerticlesList() {
 		if(this.gridVerticles == null)
             this.gridVerticles = new ArrayList<GridVerticle>();
@@ -237,7 +229,7 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
        	while (itr.hasNext()) {
     	GridVerticle obj = itr.next();
     	
-    	    		if (gridVerticles.x.equals(obj.x)) {
+    	    		if (gridVerticles.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -253,7 +245,7 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
        	while (itr.hasNext()) {
     	GridVerticle obj = itr.next();
     	
-    	    		if (gridVerticles.y.equals(obj.y)) {
+    	    		if (gridVerticles.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -354,24 +346,26 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
         {
             for(GridNode nodes : message.nodes)
             {
-                if(nodes != null) {
+                if( (GridNode) nodes != null) {
                    	    				output.writeObject(1, nodes, GridNode.getSchema(), true);
     				    			}
             }
         }
     	            	
-    	    	if(message.w == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.w == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.w != null)
+    	    	    	if( (Integer)message.w != null) {
             output.writeInt32(2, message.w, false);
+        }
     	    	
     	            	
-    	    	if(message.h == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.h == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.h != null)
+    	    	    	if( (Integer)message.h != null) {
             output.writeInt32(3, message.h, false);
+        }
     	    	
     	            	
     	    	
@@ -379,7 +373,7 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
         {
             for(GridVerticle gridVerticles : message.gridVerticles)
             {
-                if(gridVerticles != null) {
+                if( (GridVerticle) gridVerticles != null) {
                    	    				output.writeObject(4, gridVerticles, GridVerticle.getSchema(), true);
     				    			}
             }
@@ -390,18 +384,18 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
 	public void dumpObject()
     {
     	System.out.println("START GridData");
-    	    	if(this.nodes != null) {
+    	    	//if(this.nodes != null) {
     		System.out.println("nodes="+this.nodes);
-    	}
-    	    	if(this.w != null) {
+    	//}
+    	    	//if(this.w != null) {
     		System.out.println("w="+this.w);
-    	}
-    	    	if(this.h != null) {
+    	//}
+    	    	//if(this.h != null) {
     		System.out.println("h="+this.h);
-    	}
-    	    	if(this.gridVerticles != null) {
+    	//}
+    	    	//if(this.gridVerticles != null) {
     		System.out.println("gridVerticles="+this.gridVerticles);
-    	}
+    	//}
     	    	System.out.println("END GridData");
     }
     

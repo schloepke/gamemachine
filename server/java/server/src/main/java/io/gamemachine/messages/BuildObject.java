@@ -81,72 +81,138 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     static final BuildObject DEFAULT_INSTANCE = new BuildObject();
     static final String defaultScope = BuildObject.class.getSimpleName();
 
-    			public String playerItemId;
-	    
-        			public Integer action;
-	    
-        			public String id;
-	    
-        			public Integer recordId;
-	    
-        			public String ownerId;
-	    
-        			public Integer x;
-	    
-        			public Integer y;
-	    
-        			public Integer z;
-	    
-        			public Integer rx;
-	    
-        			public Integer ry;
-	    
-        			public Integer rz;
-	    
-        			public Integer rw;
-	    
-        			public Integer health;
-	    
-        			public Integer templateId;
-	    
-        			public String grid;
-	    
-        			public Long updatedAt;
-	    
-        			public Integer state;
-	    
-        			public Integer updateId;
-	    
-        			public Boolean isFloor;
-	    
-        			public Boolean isDestructable;
-	    
-        			public Boolean hasDoor;
-	    
-        			public Integer doorStatus;
-	    
-        			public ByteString groundBlockObject;
-	    
-        			public Boolean isGroundBlock;
-	    
-        			public Integer chunk;
-	    
-        			public ByteString terrainEdit;
-	    
-        			public Boolean isTerrainEdit;
-	    
-        			public ByteString customBytes;
-	    
-        			public String customString;
-	    
-        			public String textureId;
-	    
-        			public ByteString slots;
-	    
-        			public Long placedAt;
-	    
-        			public SlotInfo slotInfo;
-	    
+    	
+	    	    public String playerItemId= null;
+	    		
+    
+        	
+	    	    public int action= 0;
+	    		
+    
+        	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int recordId= 0;
+	    		
+    
+        	
+	    	    public String ownerId= null;
+	    		
+    
+        	
+	    	    public int x= 0;
+	    		
+    
+        	
+	    	    public int y= 0;
+	    		
+    
+        	
+	    	    public int z= 0;
+	    		
+    
+        	
+	    	    public int rx= 0;
+	    		
+    
+        	
+	    	    public int ry= 0;
+	    		
+    
+        	
+	    	    public int rz= 0;
+	    		
+    
+        	
+	    	    public int rw= 0;
+	    		
+    
+        	
+	    	    public int health= 0;
+	    		
+    
+        	
+	    	    public int templateId= 0;
+	    		
+    
+        	
+	    	    public String grid= null;
+	    		
+    
+        	
+	    	    public long updatedAt= 0L;
+	    		
+    
+        	
+	    	    public int state= 0;
+	    		
+    
+        	
+	    	    public int updateId= 0;
+	    		
+    
+        	
+	    	    public boolean isFloor= false;
+	    		
+    
+        	
+	    	    public boolean isDestructable= false;
+	    		
+    
+        	
+	    	    public boolean hasDoor= false;
+	    		
+    
+        	
+	    	    public int doorStatus= 0;
+	    		
+    
+        	
+	    	    public ByteString groundBlockObject;
+	    		
+    
+        	
+	    	    public boolean isGroundBlock= false;
+	    		
+    
+        	
+	    	    public int chunk= 0;
+	    		
+    
+        	
+	    	    public ByteString terrainEdit;
+	    		
+    
+        	
+	    	    public boolean isTerrainEdit= false;
+	    		
+    
+        	
+	    	    public ByteString customBytes;
+	    		
+    
+        	
+	    	    public String customString= null;
+	    		
+    
+        	
+	    	    public String textureId= null;
+	    		
+    
+        	
+	    	    public ByteString slots;
+	    		
+    
+        	
+	    	    public long placedAt= 0L;
+	    		
+    
+        	
+	    	    public SlotInfo slotInfo;
+	    		
+    
         
 	public static BuildObjectCache cache() {
 		return BuildObjectCache.getInstance();
@@ -490,9 +556,9 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 	    	}
 	    	
 	    	io.gamemachine.orm.models.BuildObject model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.BuildObject.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.BuildObject();
@@ -500,7 +566,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 	    	} else {
 	    		message.toModel(model);
 	    	}
-	    		    	if (message.hasSlotInfo()) {
+	    		    	if (message.slotInfo != null) {
 	    		message.slotInfo.toModel(model);
 	    	} else {
 	    		SlotInfo.clearModel(model);
@@ -654,319 +720,361 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (playerItemId != null) {
+    	    	    	//if (playerItemId != null) {
     	       	    	model.setString("build_object_player_item_id",playerItemId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (action != null) {
+    	    	    	//if (action != null) {
     	       	    	model.setInteger("build_object_action",action);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("build_object_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
     	    	    	model.setInteger("id",recordId);
     	    	    	    	    	
-    	    	    	if (ownerId != null) {
+    	    	    	//if (ownerId != null) {
     	       	    	model.setString("build_object_owner_id",ownerId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (x != null) {
+    	    	    	//if (x != null) {
     	       	    	model.setInteger("build_object_x",x);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (y != null) {
+    	    	    	//if (y != null) {
     	       	    	model.setInteger("build_object_y",y);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (z != null) {
+    	    	    	//if (z != null) {
     	       	    	model.setInteger("build_object_z",z);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rx != null) {
+    	    	    	//if (rx != null) {
     	       	    	model.setInteger("build_object_rx",rx);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (ry != null) {
+    	    	    	//if (ry != null) {
     	       	    	model.setInteger("build_object_ry",ry);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rz != null) {
+    	    	    	//if (rz != null) {
     	       	    	model.setInteger("build_object_rz",rz);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (rw != null) {
+    	    	    	//if (rw != null) {
     	       	    	model.setInteger("build_object_rw",rw);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (health != null) {
+    	    	    	//if (health != null) {
     	       	    	model.setInteger("build_object_health",health);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (templateId != null) {
+    	    	    	//if (templateId != null) {
     	       	    	model.setInteger("build_object_template_id",templateId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (grid != null) {
+    	    	    	//if (grid != null) {
     	       	    	model.setString("build_object_grid",grid);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (updatedAt != null) {
+    	    	    	//if (updatedAt != null) {
     	       	    	model.setLong("build_object_updated_at",updatedAt);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (state != null) {
+    	    	    	//if (state != null) {
     	       	    	model.setInteger("build_object_state",state);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (updateId != null) {
+    	    	    	//if (updateId != null) {
     	       	    	model.setInteger("build_object_update_id",updateId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isFloor != null) {
+    	    	    	//if (isFloor != null) {
     	       	    	model.setBoolean("build_object_is_floor",isFloor);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isDestructable != null) {
+    	    	    	//if (isDestructable != null) {
     	       	    	model.setBoolean("build_object_is_destructable",isDestructable);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (hasDoor != null) {
+    	    	    	//if (hasDoor != null) {
     	       	    	model.setBoolean("build_object_has_door",hasDoor);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (doorStatus != null) {
+    	    	    	//if (doorStatus != null) {
     	       	    	model.setInteger("build_object_door_status",doorStatus);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (groundBlockObject != null) {
+    	    	    	//if (groundBlockObject != null) {
     	       	    	model.set("build_object_ground_block_object",groundBlockObject.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isGroundBlock != null) {
+    	    	    	//if (isGroundBlock != null) {
     	       	    	model.setBoolean("build_object_is_ground_block",isGroundBlock);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (chunk != null) {
+    	    	    	//if (chunk != null) {
     	       	    	model.setInteger("build_object_chunk",chunk);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (terrainEdit != null) {
+    	    	    	//if (terrainEdit != null) {
     	       	    	model.set("build_object_terrain_edit",terrainEdit.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (isTerrainEdit != null) {
+    	    	    	//if (isTerrainEdit != null) {
     	       	    	model.setBoolean("build_object_is_terrain_edit",isTerrainEdit);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (customBytes != null) {
+    	    	    	//if (customBytes != null) {
     	       	    	model.set("build_object_custom_bytes",customBytes.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (customString != null) {
+    	    	    	//if (customString != null) {
     	       	    	model.setString("build_object_custom_string",customString);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (textureId != null) {
+    	    	    	//if (textureId != null) {
     	       	    	model.setString("build_object_texture_id",textureId);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (slots != null) {
+    	    	    	//if (slots != null) {
     	       	    	model.set("build_object_slots",slots.toByteArray());
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (placedAt != null) {
+    	    	    	//if (placedAt != null) {
     	       	    	model.setLong("build_object_placed_at",placedAt);
     	        		
-    	}
+    	//}
     	    	    	    }
     
 	public static BuildObject fromModel(Model model) {
 		boolean hasFields = false;
     	BuildObject message = new BuildObject();
     	    	    	    	    	
-    	    	    	String playerItemIdField = model.getString("build_object_player_item_id");
-    	    	
-    	if (playerItemIdField != null) {
+    	    	    	String playerItemIdTestField = model.getString("build_object_player_item_id");
+    	if (playerItemIdTestField != null) {
+    		String playerItemIdField = playerItemIdTestField;
     		message.setPlayerItemId(playerItemIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer actionField = model.getInteger("build_object_action");
+    	
     	    	
-    	if (actionField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer actionTestField = model.getInteger("build_object_action");
+    	if (actionTestField != null) {
+    		int actionField = actionTestField;
     		message.setAction(actionField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String idField = model.getString("build_object_id");
+    	
     	    	
-    	if (idField != null) {
+    	    	    	    	    	    	
+    	    	    	String idTestField = model.getString("build_object_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
-    	    	if (model.getInteger("id") != null) {
+    	    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	String ownerIdField = model.getString("build_object_owner_id");
-    	    	
-    	if (ownerIdField != null) {
+    	    	    	String ownerIdTestField = model.getString("build_object_owner_id");
+    	if (ownerIdTestField != null) {
+    		String ownerIdField = ownerIdTestField;
     		message.setOwnerId(ownerIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer xField = model.getInteger("build_object_x");
+    	
     	    	
-    	if (xField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer xTestField = model.getInteger("build_object_x");
+    	if (xTestField != null) {
+    		int xField = xTestField;
     		message.setX(xField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer yField = model.getInteger("build_object_y");
+    	
     	    	
-    	if (yField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer yTestField = model.getInteger("build_object_y");
+    	if (yTestField != null) {
+    		int yField = yTestField;
     		message.setY(yField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer zField = model.getInteger("build_object_z");
+    	
     	    	
-    	if (zField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer zTestField = model.getInteger("build_object_z");
+    	if (zTestField != null) {
+    		int zField = zTestField;
     		message.setZ(zField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rxField = model.getInteger("build_object_rx");
+    	
     	    	
-    	if (rxField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rxTestField = model.getInteger("build_object_rx");
+    	if (rxTestField != null) {
+    		int rxField = rxTestField;
     		message.setRx(rxField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer ryField = model.getInteger("build_object_ry");
+    	
     	    	
-    	if (ryField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer ryTestField = model.getInteger("build_object_ry");
+    	if (ryTestField != null) {
+    		int ryField = ryTestField;
     		message.setRy(ryField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rzField = model.getInteger("build_object_rz");
+    	
     	    	
-    	if (rzField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rzTestField = model.getInteger("build_object_rz");
+    	if (rzTestField != null) {
+    		int rzField = rzTestField;
     		message.setRz(rzField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer rwField = model.getInteger("build_object_rw");
+    	
     	    	
-    	if (rwField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer rwTestField = model.getInteger("build_object_rw");
+    	if (rwTestField != null) {
+    		int rwField = rwTestField;
     		message.setRw(rwField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer healthField = model.getInteger("build_object_health");
+    	
     	    	
-    	if (healthField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer healthTestField = model.getInteger("build_object_health");
+    	if (healthTestField != null) {
+    		int healthField = healthTestField;
     		message.setHealth(healthField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer templateIdField = model.getInteger("build_object_template_id");
+    	
     	    	
-    	if (templateIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer templateIdTestField = model.getInteger("build_object_template_id");
+    	if (templateIdTestField != null) {
+    		int templateIdField = templateIdTestField;
     		message.setTemplateId(templateIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String gridField = model.getString("build_object_grid");
+    	
     	    	
-    	if (gridField != null) {
+    	    	    	    	    	    	
+    	    	    	String gridTestField = model.getString("build_object_grid");
+    	if (gridTestField != null) {
+    		String gridField = gridTestField;
     		message.setGrid(gridField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Long updatedAtField = model.getLong("build_object_updated_at");
+    	
     	    	
-    	if (updatedAtField != null) {
+    	    	    	    	    	    	
+    	    	    	Long updatedAtTestField = model.getLong("build_object_updated_at");
+    	if (updatedAtTestField != null) {
+    		long updatedAtField = updatedAtTestField;
     		message.setUpdatedAt(updatedAtField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer stateField = model.getInteger("build_object_state");
+    	
     	    	
-    	if (stateField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer stateTestField = model.getInteger("build_object_state");
+    	if (stateTestField != null) {
+    		int stateField = stateTestField;
     		message.setState(stateField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer updateIdField = model.getInteger("build_object_update_id");
+    	
     	    	
-    	if (updateIdField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer updateIdTestField = model.getInteger("build_object_update_id");
+    	if (updateIdTestField != null) {
+    		int updateIdField = updateIdTestField;
     		message.setUpdateId(updateIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean isFloorField = model.getBoolean("build_object_is_floor");
+    	
     	    	
-    	if (isFloorField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean isFloorTestField = model.getBoolean("build_object_is_floor");
+    	if (isFloorTestField != null) {
+    		boolean isFloorField = isFloorTestField;
     		message.setIsFloor(isFloorField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean isDestructableField = model.getBoolean("build_object_is_destructable");
+    	
     	    	
-    	if (isDestructableField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean isDestructableTestField = model.getBoolean("build_object_is_destructable");
+    	if (isDestructableTestField != null) {
+    		boolean isDestructableField = isDestructableTestField;
     		message.setIsDestructable(isDestructableField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Boolean hasDoorField = model.getBoolean("build_object_has_door");
+    	
     	    	
-    	if (hasDoorField != null) {
+    	    	    	    	    	    	
+    	    	    	Boolean hasDoorTestField = model.getBoolean("build_object_has_door");
+    	if (hasDoorTestField != null) {
+    		boolean hasDoorField = hasDoorTestField;
     		message.setHasDoor(hasDoorField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer doorStatusField = model.getInteger("build_object_door_status");
+    	
     	    	
-    	if (doorStatusField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer doorStatusTestField = model.getInteger("build_object_door_status");
+    	if (doorStatusTestField != null) {
+    		int doorStatusField = doorStatusTestField;
     		message.setDoorStatus(doorStatusField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
     	    	    	ByteString groundBlockObjectField = null;
     	Object groundBlockObjectValue = model.get("build_object_ground_block_object");
@@ -976,24 +1084,24 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     	}
     	    	
     	    	
-    	if (groundBlockObjectField != null) {
-    		message.setGroundBlockObject(groundBlockObjectField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	Boolean isGroundBlockField = model.getBoolean("build_object_is_ground_block");
-    	    	
-    	if (isGroundBlockField != null) {
+    	    	    	Boolean isGroundBlockTestField = model.getBoolean("build_object_is_ground_block");
+    	if (isGroundBlockTestField != null) {
+    		boolean isGroundBlockField = isGroundBlockTestField;
     		message.setIsGroundBlock(isGroundBlockField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer chunkField = model.getInteger("build_object_chunk");
+    	
     	    	
-    	if (chunkField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer chunkTestField = model.getInteger("build_object_chunk");
+    	if (chunkTestField != null) {
+    		int chunkField = chunkTestField;
     		message.setChunk(chunkField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
     	    	    	ByteString terrainEditField = null;
     	Object terrainEditValue = model.get("build_object_terrain_edit");
@@ -1003,17 +1111,15 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     	}
     	    	
     	    	
-    	if (terrainEditField != null) {
-    		message.setTerrainEdit(terrainEditField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	Boolean isTerrainEditField = model.getBoolean("build_object_is_terrain_edit");
-    	    	
-    	if (isTerrainEditField != null) {
+    	    	    	Boolean isTerrainEditTestField = model.getBoolean("build_object_is_terrain_edit");
+    	if (isTerrainEditTestField != null) {
+    		boolean isTerrainEditField = isTerrainEditTestField;
     		message.setIsTerrainEdit(isTerrainEditField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
     	    	    	ByteString customBytesField = null;
     	Object customBytesValue = model.get("build_object_custom_bytes");
@@ -1023,24 +1129,24 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     	}
     	    	
     	    	
-    	if (customBytesField != null) {
-    		message.setCustomBytes(customBytesField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	String customStringField = model.getString("build_object_custom_string");
-    	    	
-    	if (customStringField != null) {
+    	    	    	String customStringTestField = model.getString("build_object_custom_string");
+    	if (customStringTestField != null) {
+    		String customStringField = customStringTestField;
     		message.setCustomString(customStringField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String textureIdField = model.getString("build_object_texture_id");
+    	
     	    	
-    	if (textureIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String textureIdTestField = model.getString("build_object_texture_id");
+    	if (textureIdTestField != null) {
+    		String textureIdField = textureIdTestField;
     		message.setTextureId(textureIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	    	    	
     	    	    	ByteString slotsField = null;
     	Object slotsValue = model.get("build_object_slots");
@@ -1050,17 +1156,15 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     	}
     	    	
     	    	
-    	if (slotsField != null) {
-    		message.setSlots(slotsField);
-    		hasFields = true;
-    	}
     	    	    	    	    	    	
-    	    	    	Long placedAtField = model.getLong("build_object_placed_at");
-    	    	
-    	if (placedAtField != null) {
+    	    	    	Long placedAtTestField = model.getLong("build_object_placed_at");
+    	if (placedAtTestField != null) {
+    		long placedAtField = placedAtTestField;
     		message.setPlacedAt(placedAtField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -1069,11 +1173,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     }
 
 
-	    
-    public Boolean hasPlayerItemId()  {
-        return playerItemId == null ? false : true;
-    }
-        
+	            
 		public String getPlayerItemId() {
 		return playerItemId;
 	}
@@ -1082,24 +1182,16 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.playerItemId = playerItemId;
 		return this;	}
 	
-		    
-    public Boolean hasAction()  {
-        return action == null ? false : true;
-    }
-        
-		public Integer getAction() {
+		            
+		public int getAction() {
 		return action;
 	}
 	
-	public BuildObject setAction(Integer action) {
+	public BuildObject setAction(int action) {
 		this.action = action;
 		return this;	}
 	
-		    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+		            
 		public String getId() {
 		return id;
 	}
@@ -1108,24 +1200,16 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasRecordId()  {
-        return recordId == null ? false : true;
-    }
-        
-		public Integer getRecordId() {
+		            
+		public int getRecordId() {
 		return recordId;
 	}
 	
-	public BuildObject setRecordId(Integer recordId) {
+	public BuildObject setRecordId(int recordId) {
 		this.recordId = recordId;
 		return this;	}
 	
-		    
-    public Boolean hasOwnerId()  {
-        return ownerId == null ? false : true;
-    }
-        
+		            
 		public String getOwnerId() {
 		return ownerId;
 	}
@@ -1134,128 +1218,88 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.ownerId = ownerId;
 		return this;	}
 	
-		    
-    public Boolean hasX()  {
-        return x == null ? false : true;
-    }
-        
-		public Integer getX() {
+		            
+		public int getX() {
 		return x;
 	}
 	
-	public BuildObject setX(Integer x) {
+	public BuildObject setX(int x) {
 		this.x = x;
 		return this;	}
 	
-		    
-    public Boolean hasY()  {
-        return y == null ? false : true;
-    }
-        
-		public Integer getY() {
+		            
+		public int getY() {
 		return y;
 	}
 	
-	public BuildObject setY(Integer y) {
+	public BuildObject setY(int y) {
 		this.y = y;
 		return this;	}
 	
-		    
-    public Boolean hasZ()  {
-        return z == null ? false : true;
-    }
-        
-		public Integer getZ() {
+		            
+		public int getZ() {
 		return z;
 	}
 	
-	public BuildObject setZ(Integer z) {
+	public BuildObject setZ(int z) {
 		this.z = z;
 		return this;	}
 	
-		    
-    public Boolean hasRx()  {
-        return rx == null ? false : true;
-    }
-        
-		public Integer getRx() {
+		            
+		public int getRx() {
 		return rx;
 	}
 	
-	public BuildObject setRx(Integer rx) {
+	public BuildObject setRx(int rx) {
 		this.rx = rx;
 		return this;	}
 	
-		    
-    public Boolean hasRy()  {
-        return ry == null ? false : true;
-    }
-        
-		public Integer getRy() {
+		            
+		public int getRy() {
 		return ry;
 	}
 	
-	public BuildObject setRy(Integer ry) {
+	public BuildObject setRy(int ry) {
 		this.ry = ry;
 		return this;	}
 	
-		    
-    public Boolean hasRz()  {
-        return rz == null ? false : true;
-    }
-        
-		public Integer getRz() {
+		            
+		public int getRz() {
 		return rz;
 	}
 	
-	public BuildObject setRz(Integer rz) {
+	public BuildObject setRz(int rz) {
 		this.rz = rz;
 		return this;	}
 	
-		    
-    public Boolean hasRw()  {
-        return rw == null ? false : true;
-    }
-        
-		public Integer getRw() {
+		            
+		public int getRw() {
 		return rw;
 	}
 	
-	public BuildObject setRw(Integer rw) {
+	public BuildObject setRw(int rw) {
 		this.rw = rw;
 		return this;	}
 	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public Integer getHealth() {
+		            
+		public int getHealth() {
 		return health;
 	}
 	
-	public BuildObject setHealth(Integer health) {
+	public BuildObject setHealth(int health) {
 		this.health = health;
 		return this;	}
 	
-		    
-    public Boolean hasTemplateId()  {
-        return templateId == null ? false : true;
-    }
-        
-		public Integer getTemplateId() {
+		            
+		public int getTemplateId() {
 		return templateId;
 	}
 	
-	public BuildObject setTemplateId(Integer templateId) {
+	public BuildObject setTemplateId(int templateId) {
 		this.templateId = templateId;
 		return this;	}
 	
-		    
-    public Boolean hasGrid()  {
-        return grid == null ? false : true;
-    }
-        
+		            
 		public String getGrid() {
 		return grid;
 	}
@@ -1264,102 +1308,70 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.grid = grid;
 		return this;	}
 	
-		    
-    public Boolean hasUpdatedAt()  {
-        return updatedAt == null ? false : true;
-    }
-        
-		public Long getUpdatedAt() {
+		            
+		public long getUpdatedAt() {
 		return updatedAt;
 	}
 	
-	public BuildObject setUpdatedAt(Long updatedAt) {
+	public BuildObject setUpdatedAt(long updatedAt) {
 		this.updatedAt = updatedAt;
 		return this;	}
 	
-		    
-    public Boolean hasState()  {
-        return state == null ? false : true;
-    }
-        
-		public Integer getState() {
+		            
+		public int getState() {
 		return state;
 	}
 	
-	public BuildObject setState(Integer state) {
+	public BuildObject setState(int state) {
 		this.state = state;
 		return this;	}
 	
-		    
-    public Boolean hasUpdateId()  {
-        return updateId == null ? false : true;
-    }
-        
-		public Integer getUpdateId() {
+		            
+		public int getUpdateId() {
 		return updateId;
 	}
 	
-	public BuildObject setUpdateId(Integer updateId) {
+	public BuildObject setUpdateId(int updateId) {
 		this.updateId = updateId;
 		return this;	}
 	
-		    
-    public Boolean hasIsFloor()  {
-        return isFloor == null ? false : true;
-    }
-        
-		public Boolean getIsFloor() {
+		            
+		public boolean getIsFloor() {
 		return isFloor;
 	}
 	
-	public BuildObject setIsFloor(Boolean isFloor) {
+	public BuildObject setIsFloor(boolean isFloor) {
 		this.isFloor = isFloor;
 		return this;	}
 	
-		    
-    public Boolean hasIsDestructable()  {
-        return isDestructable == null ? false : true;
-    }
-        
-		public Boolean getIsDestructable() {
+		            
+		public boolean getIsDestructable() {
 		return isDestructable;
 	}
 	
-	public BuildObject setIsDestructable(Boolean isDestructable) {
+	public BuildObject setIsDestructable(boolean isDestructable) {
 		this.isDestructable = isDestructable;
 		return this;	}
 	
-		    
-    public Boolean hasHasDoor()  {
-        return hasDoor == null ? false : true;
-    }
-        
-		public Boolean getHasDoor() {
+		            
+		public boolean getHasDoor() {
 		return hasDoor;
 	}
 	
-	public BuildObject setHasDoor(Boolean hasDoor) {
+	public BuildObject setHasDoor(boolean hasDoor) {
 		this.hasDoor = hasDoor;
 		return this;	}
 	
-		    
-    public Boolean hasDoorStatus()  {
-        return doorStatus == null ? false : true;
-    }
-        
-		public Integer getDoorStatus() {
+		            
+		public int getDoorStatus() {
 		return doorStatus;
 	}
 	
-	public BuildObject setDoorStatus(Integer doorStatus) {
+	public BuildObject setDoorStatus(int doorStatus) {
 		this.doorStatus = doorStatus;
 		return this;	}
 	
-		    
-    public Boolean hasGroundBlockObject()  {
-        return groundBlockObject == null ? false : true;
-    }
-        
+		            
 		public ByteString getGroundBlockObject() {
 		return groundBlockObject;
 	}
@@ -1368,37 +1380,25 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.groundBlockObject = groundBlockObject;
 		return this;	}
 	
-		    
-    public Boolean hasIsGroundBlock()  {
-        return isGroundBlock == null ? false : true;
-    }
-        
-		public Boolean getIsGroundBlock() {
+		            
+		public boolean getIsGroundBlock() {
 		return isGroundBlock;
 	}
 	
-	public BuildObject setIsGroundBlock(Boolean isGroundBlock) {
+	public BuildObject setIsGroundBlock(boolean isGroundBlock) {
 		this.isGroundBlock = isGroundBlock;
 		return this;	}
 	
-		    
-    public Boolean hasChunk()  {
-        return chunk == null ? false : true;
-    }
-        
-		public Integer getChunk() {
+		            
+		public int getChunk() {
 		return chunk;
 	}
 	
-	public BuildObject setChunk(Integer chunk) {
+	public BuildObject setChunk(int chunk) {
 		this.chunk = chunk;
 		return this;	}
 	
-		    
-    public Boolean hasTerrainEdit()  {
-        return terrainEdit == null ? false : true;
-    }
-        
+		            
 		public ByteString getTerrainEdit() {
 		return terrainEdit;
 	}
@@ -1407,24 +1407,16 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.terrainEdit = terrainEdit;
 		return this;	}
 	
-		    
-    public Boolean hasIsTerrainEdit()  {
-        return isTerrainEdit == null ? false : true;
-    }
-        
-		public Boolean getIsTerrainEdit() {
+		            
+		public boolean getIsTerrainEdit() {
 		return isTerrainEdit;
 	}
 	
-	public BuildObject setIsTerrainEdit(Boolean isTerrainEdit) {
+	public BuildObject setIsTerrainEdit(boolean isTerrainEdit) {
 		this.isTerrainEdit = isTerrainEdit;
 		return this;	}
 	
-		    
-    public Boolean hasCustomBytes()  {
-        return customBytes == null ? false : true;
-    }
-        
+		            
 		public ByteString getCustomBytes() {
 		return customBytes;
 	}
@@ -1433,11 +1425,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.customBytes = customBytes;
 		return this;	}
 	
-		    
-    public Boolean hasCustomString()  {
-        return customString == null ? false : true;
-    }
-        
+		            
 		public String getCustomString() {
 		return customString;
 	}
@@ -1446,11 +1434,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.customString = customString;
 		return this;	}
 	
-		    
-    public Boolean hasTextureId()  {
-        return textureId == null ? false : true;
-    }
-        
+		            
 		public String getTextureId() {
 		return textureId;
 	}
@@ -1459,11 +1443,7 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.textureId = textureId;
 		return this;	}
 	
-		    
-    public Boolean hasSlots()  {
-        return slots == null ? false : true;
-    }
-        
+		            
 		public ByteString getSlots() {
 		return slots;
 	}
@@ -1472,24 +1452,16 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		this.slots = slots;
 		return this;	}
 	
-		    
-    public Boolean hasPlacedAt()  {
-        return placedAt == null ? false : true;
-    }
-        
-		public Long getPlacedAt() {
+		            
+		public long getPlacedAt() {
 		return placedAt;
 	}
 	
-	public BuildObject setPlacedAt(Long placedAt) {
+	public BuildObject setPlacedAt(long placedAt) {
 		this.placedAt = placedAt;
 		return this;	}
 	
-		    
-    public Boolean hasSlotInfo()  {
-        return slotInfo == null ? false : true;
-    }
-        
+		            
 		public SlotInfo getSlotInfo() {
 		return slotInfo;
 	}
@@ -1698,163 +1670,195 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     {
     	    	
     	    	
-    	    	    	if(message.playerItemId != null)
+    	    	    	if( (String)message.playerItemId != null) {
             output.writeString(1, message.playerItemId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.action != null)
+    	    	    	if( (Integer)message.action != null) {
             output.writeInt32(2, message.action, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(3, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.recordId != null)
+    	    	    	if( (Integer)message.recordId != null) {
             output.writeInt32(4, message.recordId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ownerId != null)
+    	    	    	if( (String)message.ownerId != null) {
             output.writeString(5, message.ownerId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.x != null)
+    	    	    	if( (Integer)message.x != null) {
             output.writeInt32(6, message.x, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.y != null)
+    	    	    	if( (Integer)message.y != null) {
             output.writeInt32(7, message.y, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.z != null)
+    	    	    	if( (Integer)message.z != null) {
             output.writeInt32(8, message.z, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rx != null)
+    	    	    	if( (Integer)message.rx != null) {
             output.writeInt32(9, message.rx, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.ry != null)
+    	    	    	if( (Integer)message.ry != null) {
             output.writeInt32(10, message.ry, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rz != null)
+    	    	    	if( (Integer)message.rz != null) {
             output.writeInt32(11, message.rz, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.rw != null)
+    	    	    	if( (Integer)message.rw != null) {
             output.writeInt32(12, message.rw, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.health != null)
+    	    	    	if( (Integer)message.health != null) {
             output.writeInt32(14, message.health, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.templateId != null)
+    	    	    	if( (Integer)message.templateId != null) {
             output.writeInt32(18, message.templateId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.grid != null)
+    	    	    	if( (String)message.grid != null) {
             output.writeString(19, message.grid, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.updatedAt != null)
+    	    	    	if( (Long)message.updatedAt != null) {
             output.writeInt64(22, message.updatedAt, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.state != null)
+    	    	    	if( (Integer)message.state != null) {
             output.writeInt32(23, message.state, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.updateId != null)
+    	    	    	if( (Integer)message.updateId != null) {
             output.writeInt32(24, message.updateId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isFloor != null)
+    	    	    	if( (Boolean)message.isFloor != null) {
             output.writeBool(25, message.isFloor, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isDestructable != null)
+    	    	    	if( (Boolean)message.isDestructable != null) {
             output.writeBool(26, message.isDestructable, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.hasDoor != null)
+    	    	    	if( (Boolean)message.hasDoor != null) {
             output.writeBool(27, message.hasDoor, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.doorStatus != null)
+    	    	    	if( (Integer)message.doorStatus != null) {
             output.writeInt32(28, message.doorStatus, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.groundBlockObject != null)
+    	    	    	if( (ByteString)message.groundBlockObject != null) {
             output.writeBytes(29, message.groundBlockObject, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isGroundBlock != null)
+    	    	    	if( (Boolean)message.isGroundBlock != null) {
             output.writeBool(30, message.isGroundBlock, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.chunk != null)
+    	    	    	if( (Integer)message.chunk != null) {
             output.writeInt32(31, message.chunk, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.terrainEdit != null)
+    	    	    	if( (ByteString)message.terrainEdit != null) {
             output.writeBytes(32, message.terrainEdit, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.isTerrainEdit != null)
+    	    	    	if( (Boolean)message.isTerrainEdit != null) {
             output.writeBool(33, message.isTerrainEdit, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.customBytes != null)
+    	    	    	if( (ByteString)message.customBytes != null) {
             output.writeBytes(34, message.customBytes, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.customString != null)
+    	    	    	if( (String)message.customString != null) {
             output.writeString(35, message.customString, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.textureId != null)
+    	    	    	if( (String)message.textureId != null) {
             output.writeString(36, message.textureId, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.slots != null)
+    	    	    	if( (ByteString)message.slots != null) {
             output.writeBytes(37, message.slots, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.placedAt != null)
+    	    	    	if( (Long)message.placedAt != null) {
             output.writeInt64(38, message.placedAt, false);
+        }
     	    	
     	            	
     	    	
@@ -1867,105 +1871,105 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 	public void dumpObject()
     {
     	System.out.println("START BuildObject");
-    	    	if(this.playerItemId != null) {
+    	    	//if(this.playerItemId != null) {
     		System.out.println("playerItemId="+this.playerItemId);
-    	}
-    	    	if(this.action != null) {
+    	//}
+    	    	//if(this.action != null) {
     		System.out.println("action="+this.action);
-    	}
-    	    	if(this.id != null) {
+    	//}
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.recordId != null) {
+    	//}
+    	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
-    	}
-    	    	if(this.ownerId != null) {
+    	//}
+    	    	//if(this.ownerId != null) {
     		System.out.println("ownerId="+this.ownerId);
-    	}
-    	    	if(this.x != null) {
+    	//}
+    	    	//if(this.x != null) {
     		System.out.println("x="+this.x);
-    	}
-    	    	if(this.y != null) {
+    	//}
+    	    	//if(this.y != null) {
     		System.out.println("y="+this.y);
-    	}
-    	    	if(this.z != null) {
+    	//}
+    	    	//if(this.z != null) {
     		System.out.println("z="+this.z);
-    	}
-    	    	if(this.rx != null) {
+    	//}
+    	    	//if(this.rx != null) {
     		System.out.println("rx="+this.rx);
-    	}
-    	    	if(this.ry != null) {
+    	//}
+    	    	//if(this.ry != null) {
     		System.out.println("ry="+this.ry);
-    	}
-    	    	if(this.rz != null) {
+    	//}
+    	    	//if(this.rz != null) {
     		System.out.println("rz="+this.rz);
-    	}
-    	    	if(this.rw != null) {
+    	//}
+    	    	//if(this.rw != null) {
     		System.out.println("rw="+this.rw);
-    	}
-    	    	if(this.health != null) {
+    	//}
+    	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
-    	}
-    	    	if(this.templateId != null) {
+    	//}
+    	    	//if(this.templateId != null) {
     		System.out.println("templateId="+this.templateId);
-    	}
-    	    	if(this.grid != null) {
+    	//}
+    	    	//if(this.grid != null) {
     		System.out.println("grid="+this.grid);
-    	}
-    	    	if(this.updatedAt != null) {
+    	//}
+    	    	//if(this.updatedAt != null) {
     		System.out.println("updatedAt="+this.updatedAt);
-    	}
-    	    	if(this.state != null) {
+    	//}
+    	    	//if(this.state != null) {
     		System.out.println("state="+this.state);
-    	}
-    	    	if(this.updateId != null) {
+    	//}
+    	    	//if(this.updateId != null) {
     		System.out.println("updateId="+this.updateId);
-    	}
-    	    	if(this.isFloor != null) {
+    	//}
+    	    	//if(this.isFloor != null) {
     		System.out.println("isFloor="+this.isFloor);
-    	}
-    	    	if(this.isDestructable != null) {
+    	//}
+    	    	//if(this.isDestructable != null) {
     		System.out.println("isDestructable="+this.isDestructable);
-    	}
-    	    	if(this.hasDoor != null) {
+    	//}
+    	    	//if(this.hasDoor != null) {
     		System.out.println("hasDoor="+this.hasDoor);
-    	}
-    	    	if(this.doorStatus != null) {
+    	//}
+    	    	//if(this.doorStatus != null) {
     		System.out.println("doorStatus="+this.doorStatus);
-    	}
-    	    	if(this.groundBlockObject != null) {
+    	//}
+    	    	//if(this.groundBlockObject != null) {
     		System.out.println("groundBlockObject="+this.groundBlockObject);
-    	}
-    	    	if(this.isGroundBlock != null) {
+    	//}
+    	    	//if(this.isGroundBlock != null) {
     		System.out.println("isGroundBlock="+this.isGroundBlock);
-    	}
-    	    	if(this.chunk != null) {
+    	//}
+    	    	//if(this.chunk != null) {
     		System.out.println("chunk="+this.chunk);
-    	}
-    	    	if(this.terrainEdit != null) {
+    	//}
+    	    	//if(this.terrainEdit != null) {
     		System.out.println("terrainEdit="+this.terrainEdit);
-    	}
-    	    	if(this.isTerrainEdit != null) {
+    	//}
+    	    	//if(this.isTerrainEdit != null) {
     		System.out.println("isTerrainEdit="+this.isTerrainEdit);
-    	}
-    	    	if(this.customBytes != null) {
+    	//}
+    	    	//if(this.customBytes != null) {
     		System.out.println("customBytes="+this.customBytes);
-    	}
-    	    	if(this.customString != null) {
+    	//}
+    	    	//if(this.customString != null) {
     		System.out.println("customString="+this.customString);
-    	}
-    	    	if(this.textureId != null) {
+    	//}
+    	    	//if(this.textureId != null) {
     		System.out.println("textureId="+this.textureId);
-    	}
-    	    	if(this.slots != null) {
+    	//}
+    	    	//if(this.slots != null) {
     		System.out.println("slots="+this.slots);
-    	}
-    	    	if(this.placedAt != null) {
+    	//}
+    	    	//if(this.placedAt != null) {
     		System.out.println("placedAt="+this.placedAt);
-    	}
-    	    	if(this.slotInfo != null) {
+    	//}
+    	    	//if(this.slotInfo != null) {
     		System.out.println("slotInfo="+this.slotInfo);
-    	}
+    	//}
     	    	System.out.println("END BuildObject");
     }
     

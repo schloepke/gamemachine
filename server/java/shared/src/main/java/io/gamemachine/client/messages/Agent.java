@@ -57,11 +57,11 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 	    
         			public String classname;
 	    
-        			public Boolean remove;
+        			public boolean remove;
 	    
         			public String compileResult;
 	    
-        			public Integer concurrency;
+        			public int concurrency;
 	    
       
     public Agent()
@@ -116,11 +116,11 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
         return remove == null ? false : true;
     }
         
-		public Boolean getRemove() {
+		public boolean getRemove() {
 		return remove;
 	}
 	
-	public Agent setRemove(Boolean remove) {
+	public Agent setRemove(boolean remove) {
 		this.remove = remove;
 		return this;	}
 	
@@ -142,11 +142,11 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
         return concurrency == null ? false : true;
     }
         
-		public Integer getConcurrency() {
+		public int getConcurrency() {
 		return concurrency;
 	}
 	
-	public Agent setConcurrency(Integer concurrency) {
+	public Agent setConcurrency(int concurrency) {
 		this.concurrency = concurrency;
 		return this;	}
 	

@@ -279,6 +279,8 @@ CREATE TABLE `player_skills` (
 
   `player_skill_icon_uuid` varchar(128) DEFAULT NULL,
 
+  `player_skill_status_effects` varchar(128) DEFAULT NULL,
+
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `craftable_items` (

@@ -75,18 +75,30 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     static final AddPlayerItem DEFAULT_INSTANCE = new AddPlayerItem();
     static final String defaultScope = AddPlayerItem.class.getSimpleName();
 
-    			public String id;
-	    
-        			public Integer quantity;
-	    
-        			public Integer result;
-	    
-        			public String characterId;
-	    
-        			public PlayerItem playerItem;
-	    
-        			public String containerId;
-	    
+    	
+	    	    public String id= null;
+	    		
+    
+        	
+	    	    public int quantity= 0;
+	    		
+    
+        	
+	    	    public int result= 0;
+	    		
+    
+        	
+	    	    public String characterId= null;
+	    		
+    
+        	
+	    	    public PlayerItem playerItem;
+	    		
+    
+        	
+	    	    public String containerId= null;
+	    		
+    
         
 	public static AddPlayerItemCache cache() {
 		return AddPlayerItemCache.getInstance();
@@ -361,70 +373,80 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	if (id != null) {
+    	    	    	//if (id != null) {
     	       	    	model.setString("add_player_item_id",id);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (quantity != null) {
+    	    	    	//if (quantity != null) {
     	       	    	model.setInteger("add_player_item_quantity",quantity);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (result != null) {
+    	    	    	//if (result != null) {
     	       	    	model.setInteger("add_player_item_result",result);
     	        		
-    	}
+    	//}
     	    	    	    	    	
-    	    	    	if (characterId != null) {
+    	    	    	//if (characterId != null) {
     	       	    	model.setString("add_player_item_character_id",characterId);
     	        		
-    	}
+    	//}
     	    	    	    	    	    	
-    	    	    	if (containerId != null) {
+    	    	    	//if (containerId != null) {
     	       	    	model.setString("add_player_item_container_id",containerId);
     	        		
-    	}
+    	//}
     	    	    }
     
 	public static AddPlayerItem fromModel(Model model) {
 		boolean hasFields = false;
     	AddPlayerItem message = new AddPlayerItem();
     	    	    	    	    	
-    	    	    	String idField = model.getString("add_player_item_id");
-    	    	
-    	if (idField != null) {
+    	    	    	String idTestField = model.getString("add_player_item_id");
+    	if (idTestField != null) {
+    		String idField = idTestField;
     		message.setId(idField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer quantityField = model.getInteger("add_player_item_quantity");
+    	
     	    	
-    	if (quantityField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer quantityTestField = model.getInteger("add_player_item_quantity");
+    	if (quantityTestField != null) {
+    		int quantityField = quantityTestField;
     		message.setQuantity(quantityField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	Integer resultField = model.getInteger("add_player_item_result");
+    	
     	    	
-    	if (resultField != null) {
+    	    	    	    	    	    	
+    	    	    	Integer resultTestField = model.getInteger("add_player_item_result");
+    	if (resultTestField != null) {
+    		int resultField = resultTestField;
     		message.setResult(resultField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	
-    	    	    	String characterIdField = model.getString("add_player_item_character_id");
+    	
     	    	
-    	if (characterIdField != null) {
+    	    	    	    	    	    	
+    	    	    	String characterIdTestField = model.getString("add_player_item_character_id");
+    	if (characterIdTestField != null) {
+    		String characterIdField = characterIdTestField;
     		message.setCharacterId(characterIdField);
     		hasFields = true;
     	}
-    	    	    	    	    	    	    	
-    	    	    	String containerIdField = model.getString("add_player_item_container_id");
+    	
     	    	
-    	if (containerIdField != null) {
+    	    	    	    	    	    	    	
+    	    	    	String containerIdTestField = model.getString("add_player_item_container_id");
+    	if (containerIdTestField != null) {
+    		String containerIdField = containerIdTestField;
     		message.setContainerId(containerIdField);
     		hasFields = true;
     	}
+    	
+    	    	
     	    	    	if (hasFields) {
     		return message;
     	} else {
@@ -433,11 +455,7 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     }
 
 
-	    
-    public Boolean hasId()  {
-        return id == null ? false : true;
-    }
-        
+	            
 		public String getId() {
 		return id;
 	}
@@ -446,37 +464,25 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
 		this.id = id;
 		return this;	}
 	
-		    
-    public Boolean hasQuantity()  {
-        return quantity == null ? false : true;
-    }
-        
-		public Integer getQuantity() {
+		            
+		public int getQuantity() {
 		return quantity;
 	}
 	
-	public AddPlayerItem setQuantity(Integer quantity) {
+	public AddPlayerItem setQuantity(int quantity) {
 		this.quantity = quantity;
 		return this;	}
 	
-		    
-    public Boolean hasResult()  {
-        return result == null ? false : true;
-    }
-        
-		public Integer getResult() {
+		            
+		public int getResult() {
 		return result;
 	}
 	
-	public AddPlayerItem setResult(Integer result) {
+	public AddPlayerItem setResult(int result) {
 		this.result = result;
 		return this;	}
 	
-		    
-    public Boolean hasCharacterId()  {
-        return characterId == null ? false : true;
-    }
-        
+		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -485,11 +491,7 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
 		this.characterId = characterId;
 		return this;	}
 	
-		    
-    public Boolean hasPlayerItem()  {
-        return playerItem == null ? false : true;
-    }
-        
+		            
 		public PlayerItem getPlayerItem() {
 		return playerItem;
 	}
@@ -498,11 +500,7 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
 		this.playerItem = playerItem;
 		return this;	}
 	
-		    
-    public Boolean hasContainerId()  {
-        return containerId == null ? false : true;
-    }
-        
+		            
 		public String getContainerId() {
 		return containerId;
 	}
@@ -602,26 +600,30 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     public void writeTo(Output output, AddPlayerItem message) throws IOException
     {
     	    	
-    	    	if(message.id == null)
-            throw new UninitializedMessageException(message);
+    	    	//if(message.id == null)
+        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if(message.id != null)
+    	    	    	if( (String)message.id != null) {
             output.writeString(1, message.id, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.quantity != null)
+    	    	    	if( (Integer)message.quantity != null) {
             output.writeInt32(2, message.quantity, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.result != null)
+    	    	    	if( (Integer)message.result != null) {
             output.writeInt32(3, message.result, false);
+        }
     	    	
     	            	
     	    	
-    	    	    	if(message.characterId != null)
+    	    	    	if( (String)message.characterId != null) {
             output.writeString(4, message.characterId, false);
+        }
     	    	
     	            	
     	    	
@@ -630,8 +632,9 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     	    	
     	            	
     	    	
-    	    	    	if(message.containerId != null)
+    	    	    	if( (String)message.containerId != null) {
             output.writeString(6, message.containerId, false);
+        }
     	    	
     	            	
     }
@@ -639,24 +642,24 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
 	public void dumpObject()
     {
     	System.out.println("START AddPlayerItem");
-    	    	if(this.id != null) {
+    	    	//if(this.id != null) {
     		System.out.println("id="+this.id);
-    	}
-    	    	if(this.quantity != null) {
+    	//}
+    	    	//if(this.quantity != null) {
     		System.out.println("quantity="+this.quantity);
-    	}
-    	    	if(this.result != null) {
+    	//}
+    	    	//if(this.result != null) {
     		System.out.println("result="+this.result);
-    	}
-    	    	if(this.characterId != null) {
+    	//}
+    	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
-    	}
-    	    	if(this.playerItem != null) {
+    	//}
+    	    	//if(this.playerItem != null) {
     		System.out.println("playerItem="+this.playerItem);
-    	}
-    	    	if(this.containerId != null) {
+    	//}
+    	    	//if(this.containerId != null) {
     		System.out.println("containerId="+this.containerId);
-    	}
+    	//}
     	    	System.out.println("END AddPlayerItem");
     }
     

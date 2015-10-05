@@ -130,13 +130,15 @@ import io.gamemachine.core.CacheUpdate;
 
 <% message.getFields.each do |field| %>
     <% if field.isRepeated %>
-    public List<<%=get_type(field)%>> <%=field.name %>;
+    public List<<%=nullable(field)%>> <%=field.name %>;
 	<% else %>
-	<% if field.default_value.nil? %>
-		public <%=get_type(field)%> <%=field.name %>;
-	<% else %>
-		public <%=get_type(field)%> <%=field.name %>; // = <%= field.default_value %>;
-	<% end %>
+	
+	    <% if default_value(field).nil? %>
+	    public <%=get_type(field)%> <%=field.name %>;
+	    <% else %>
+	    public <%=get_type(field)%> <%=field.name %>= <%= default_value(field) %>;
+	    <% end %>
+		
     
     <% end %>
 <% end %>
@@ -488,9 +490,9 @@ import io.gamemachine.core.CacheUpdate;
 	    	}
 	    	
 	    	io.gamemachine.orm.models.<%=klass%> model = null;
-	    	if (message.hasRecordId()) {
+	    	//if (message.hasRecordId()) {
 	    		model = io.gamemachine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
-	    	}
+	    	//}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.<%=klass%>();
@@ -499,7 +501,7 @@ import io.gamemachine.core.CacheUpdate;
 	    		message.toModel(model);
 	    	}
 	    	<% message_fields.each do |message_field| %>
-	    	if (message.has<%= message_field %>()) {
+	    	if (message.<%= varname(message_field) %> != null) {
 	    		message.<%= varname(message_field) %>.toModel(model);
 	    	} else {
 	    		<%= message_field %>.clearModel(model);
@@ -647,14 +649,14 @@ import io.gamemachine.core.CacheUpdate;
     	<% if field.name == 'recordId' %>
     	model.setInteger("id",recordId);
     	<% else %>
-    	if (<%= field.name %> != null) {
+    	//if (<%= field.name %> != null) {
     	   <% if get_type(field) == 'ByteString' %>
     	    	model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
     	    <% else %>
-    	    	model.set<%=get_type(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
+    	    	model.set<%=setter(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
     	    <% end %>
     		
-    	}
+    	//}
     	<% end %>
     	<% end %>
     }
@@ -668,10 +670,10 @@ import io.gamemachine.core.CacheUpdate;
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     	
     	<% if field.name == 'recordId' %>
-    	if (model.getInteger("id") != null) {
+    	//if (model.getInteger("id") != null) {
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
-    	}
+    	//}
     	<% else %>
     	<% if get_type(field) == 'ByteString' %>
     	<%=get_type(field) %> <%= field.name %>Field = null;
@@ -682,13 +684,15 @@ import io.gamemachine.core.CacheUpdate;
     	}
     	    	
     	<% else %>
-    	<%=get_type(field) %> <%= field.name %>Field = model.get<%=get_type(field) %>("<%=sql_column_name(klass,field)%>");
-    	<% end %>
-    	
-    	if (<%= field.name %>Field != null) {
+    	<%=nullable(field) %> <%= field.name %>TestField = model.get<%=setter(field) %>("<%=sql_column_name(klass,field)%>");
+    	if (<%= field.name %>TestField != null) {
+    		<%=get_type(field) %> <%= field.name %>Field = <%= field.name %>TestField;
     		message.set<%= field_name %>(<%= field.name %>Field);
     		hasFields = true;
     	}
+    	
+    	<% end %>
+    	
     	<% end %>
     	<% end %>
     	if (hasFields) {
@@ -704,7 +708,7 @@ import io.gamemachine.core.CacheUpdate;
 		ArrayList<String> names = new ArrayList<String>();
 	<% messages.each do |m| %>
 	  <% if message.getFields.collect {|f| f.name}.include?(varname(m.getName)) %>
-		if (this.has<%=m.getName%>()) {
+		if (this.<%=varname(m.getName)%> != null) {
 			names.add(this.<%=varname(m.getName)%>.getClass().getSimpleName());
 		}
 	  <% end %>
@@ -715,19 +719,15 @@ import io.gamemachine.core.CacheUpdate;
 
 <% message.getFields.each do |field| %>
 	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
-    
-    public Boolean has<%=field_name %>()  {
-        return <%=field.name%> == null ? false : true;
-    }
-        
+            
 	<% if field.isRepeated %>
-	public List<<%=get_type(field)%>> get<%=field_name %>List() {
+	public List<<%=nullable(field)%>> get<%=field_name %>List() {
 		if(this.<%=field.name%> == null)
-            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
+            this.<%=field.name%> = new ArrayList<<%=nullable(field) %>>();
 		return <%= field.name %>;
 	}
 
-	public <%=klass%> set<%=field_name %>List(List<<%=get_type(field)%>> <%=field.name%>) {
+	public <%=klass%> set<%=field_name %>List(List<<%=nullable(field)%>> <%=field.name%>) {
 		this.<%=field.name%> = <%=field.name%>;
 		return this;
 	}
@@ -742,7 +742,7 @@ import io.gamemachine.core.CacheUpdate;
 
     public <%=klass%> add<%=field_name %>(<%=get_type(field) %> <%=field.name%>)  {
         if(this.<%=field.name%> == null)
-            this.<%=field.name%> = new ArrayList<<%=get_type(field) %>>();
+            this.<%=field.name%> = new ArrayList<<%=nullable(field) %>>();
         this.<%=field.name%>.add(<%=field.name%>);
         return this;
     }
@@ -763,7 +763,7 @@ import io.gamemachine.core.CacheUpdate;
     	<% if simple_field.getJavaType.to_s == 'String' %>
     		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
     	<% else %>
-    		if (<%=field.name%>.<%=simple_field.name%>.equals(obj.<%=simple_field.name%>)) {
+    		if (<%=field.name%>.<%=simple_field.name%> == obj.<%=simple_field.name%>) {
     	<% end %>
       			itr.remove();
     		}
@@ -849,7 +849,7 @@ import io.gamemachine.core.CacheUpdate;
             	case <%=field.number%>:
             	<% if field.isRepeated %>
             		if(message.<%=field.name%> == null)
-                        message.<%=field.name%> = new ArrayList<<%=get_type(field)%>>();
+                        message.<%=field.name%> = new ArrayList<<%=nullable(field)%>>();
                     <% if field.isMessageField %>
                     message.<%=field.name%>.add(input.mergeObject(null, <%=get_type(field)%>.getSchema()));
                     <% elsif field.enumField %>
@@ -885,8 +885,8 @@ import io.gamemachine.core.CacheUpdate;
     	<% message.getFields.each do |field| %>
     	
     	<% if field.isRequired %>
-    	if(message.<%=field.name%> == null)
-            throw new UninitializedMessageException(message);
+    	//if(message.<%=field.name%> == null)
+        //    throw new UninitializedMessageException(message);
     	<% end %>
     	
     	<% if field.isRepeated %>
@@ -894,7 +894,7 @@ import io.gamemachine.core.CacheUpdate;
         {
             for(<%=get_type(field)%> <%=field.name%> : message.<%=field.name%>)
             {
-                if(<%=field.name%> != null) {
+                if( (<%=nullable(field)%>) <%=field.name%> != null) {
                    	<% if field.isMessageField %>
     				output.writeObject(<%=field.number%>, <%=field.name%>, <%=get_type(field)%>.getSchema(), true);
     				<% elsif field.enumField %>
@@ -913,8 +913,9 @@ import io.gamemachine.core.CacheUpdate;
     	if(message.<%=field.name%> != null)
     	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
     	<% else %>
-    	if(message.<%=field.name%> != null)
+    	if( (<%=nullable(field)%>)message.<%=field.name%> != null) {
             output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+        }
     	<% end %>
     	
     	<% end %>
@@ -926,9 +927,9 @@ import io.gamemachine.core.CacheUpdate;
     {
     	System.out.println("START <%=klass%>");
     	<% message.getFields.each do |field| %>
-    	if(this.<%=field.name%> != null) {
+    	//if(this.<%=field.name%> != null) {
     		System.out.println("<%=field.name%>="+this.<%=field.name%>);
-    	}
+    	//}
     	<% end %>
     	System.out.println("END <%=klass%>");
     }

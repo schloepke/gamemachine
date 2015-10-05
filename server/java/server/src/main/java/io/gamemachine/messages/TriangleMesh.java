@@ -92,11 +92,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
     }
 
 
-	    
-    public Boolean hasVertices()  {
-        return vertices == null ? false : true;
-    }
-        
+	            
 		public List<GmVector3> getVerticesList() {
 		if(this.vertices == null)
             this.vertices = new ArrayList<GmVector3>();
@@ -131,7 +127,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.x.equals(obj.x)) {
+    	    		if (vertices.x == obj.x) {
     	      			itr.remove();
     		}
 		}
@@ -147,7 +143,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.y.equals(obj.y)) {
+    	    		if (vertices.y == obj.y) {
     	      			itr.remove();
     		}
 		}
@@ -163,7 +159,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.z.equals(obj.z)) {
+    	    		if (vertices.z == obj.z) {
     	      			itr.remove();
     		}
 		}
@@ -179,7 +175,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.xi.equals(obj.xi)) {
+    	    		if (vertices.xi == obj.xi) {
     	      			itr.remove();
     		}
 		}
@@ -195,7 +191,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.yi.equals(obj.yi)) {
+    	    		if (vertices.yi == obj.yi) {
     	      			itr.remove();
     		}
 		}
@@ -211,7 +207,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.zi.equals(obj.zi)) {
+    	    		if (vertices.zi == obj.zi) {
     	      			itr.remove();
     		}
 		}
@@ -227,7 +223,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
        	while (itr.hasNext()) {
     	GmVector3 obj = itr.next();
     	
-    	    		if (vertices.vertice.equals(obj.vertice)) {
+    	    		if (vertices.vertice == obj.vertice) {
     	      			itr.remove();
     		}
 		}
@@ -238,11 +234,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
     
     
     
-		    
-    public Boolean hasIndices()  {
-        return indices == null ? false : true;
-    }
-        
+		            
 		public List<Integer> getIndicesList() {
 		if(this.indices == null)
             this.indices = new ArrayList<Integer>();
@@ -254,7 +246,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
 		return this;
 	}
 
-	public Integer getIndices(int index)  {
+	public int getIndices(int index)  {
         return indices == null ? null : indices.get(index);
     }
 
@@ -262,7 +254,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
         return indices == null ? 0 : indices.size();
     }
 
-    public TriangleMesh addIndices(Integer indices)  {
+    public TriangleMesh addIndices(int indices)  {
         if(this.indices == null)
             this.indices = new ArrayList<Integer>();
         this.indices.add(indices);
@@ -354,7 +346,7 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
         {
             for(GmVector3 vertices : message.vertices)
             {
-                if(vertices != null) {
+                if( (GmVector3) vertices != null) {
                    	    				output.writeObject(1, vertices, GmVector3.getSchema(), true);
     				    			}
             }
@@ -363,9 +355,9 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
     	    	
     	    	if(message.indices != null)
         {
-            for(Integer indices : message.indices)
+            for(int indices : message.indices)
             {
-                if(indices != null) {
+                if( (Integer) indices != null) {
                    	            		output.writeInt32(2, indices, true);
     				    			}
             }
@@ -376,12 +368,12 @@ public final class TriangleMesh implements Externalizable, Message<TriangleMesh>
 	public void dumpObject()
     {
     	System.out.println("START TriangleMesh");
-    	    	if(this.vertices != null) {
+    	    	//if(this.vertices != null) {
     		System.out.println("vertices="+this.vertices);
-    	}
-    	    	if(this.indices != null) {
+    	//}
+    	    	//if(this.indices != null) {
     		System.out.println("indices="+this.indices);
-    	}
+    	//}
     	    	System.out.println("END TriangleMesh");
     }
     
