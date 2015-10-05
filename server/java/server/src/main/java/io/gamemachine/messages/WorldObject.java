@@ -82,88 +82,109 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     static final String defaultScope = WorldObject.class.getSimpleName();
 
     	
-	    	    public String playerItemId= null;
-	    		
+							    public String playerItemId= null;
+		    			    
+		
     
         	
-	    	    public int action= 0;
-	    		
+							    public int action= 0;
+		    			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String ownerId= null;
-	    		
+							    public String ownerId= null;
+		    			    
+		
     
         	
-	    	    public int x= 0;
-	    		
+							    public int x= 0;
+		    			    
+		
     
         	
-	    	    public int y= 0;
-	    		
+							    public int y= 0;
+		    			    
+		
     
         	
-	    	    public int z= 0;
-	    		
+							    public int z= 0;
+		    			    
+		
     
         	
-	    	    public int rx= 0;
-	    		
+							    public int rx= 0;
+		    			    
+		
     
         	
-	    	    public int ry= 0;
-	    		
+							    public int ry= 0;
+		    			    
+		
     
         	
-	    	    public int rz= 0;
-	    		
+							    public int rz= 0;
+		    			    
+		
     
         	
-	    	    public int rw= 0;
-	    		
+							    public int rw= 0;
+		    			    
+		
     
         	
-	    	    public int maxHealth= 0;
-	    		
+							    public int maxHealth= 0;
+		    			    
+		
     
         	
-	    	    public int health= 0;
-	    		
+							    public int health= 0;
+		    			    
+		
     
         	
-	    	    public String parentId= null;
-	    		
+							    public String parentId= null;
+		    			    
+		
     
         	
-	    	    public boolean destructable= false;
-	    		
+							    public boolean destructable= false;
+		    			    
+		
     
         	
-	    	    public String prefab= null;
-	    		
+							    public String prefab= null;
+		    			    
+		
     
         	
-	    	    public int type= 0;
-	    		
+							    public int type= 0;
+		    			    
+		
     
         	
-	    	    public String grid= null;
-	    		
+							    public String grid= null;
+		    			    
+		
     
         	
-	    	    public String currentUser= null;
-	    		
+							    public String currentUser= null;
+		    			    
+		
     
         	
-	    	    public int state= 0;
-	    		
+							    public int state= 0;
+		    			    
+		
     
         
 	public static WorldObjectCache cache() {

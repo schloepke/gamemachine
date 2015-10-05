@@ -76,6 +76,10 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
             return number;
         }
         
+        public static EntityType defaultValue() {
+        	return (NONE);
+        }
+        
         public static EntityType valueOf(int number)
         {
             switch(number) 
@@ -106,116 +110,144 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     static final String defaultScope = TrackData.class.getSimpleName();
 
     	
-	    	    public int ix= 0;
-	    		
+							    public int ix= 0;
+		    			    
+		
     
         	
-	    	    public int iy= 0;
-	    		
+							    public int iy= 0;
+		    			    
+		
     
         	
-	    	    public int iz= 0;
-	    		
+							    public int iz= 0;
+		    			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int x= 0;
-	    		
+							    public int x= 0;
+		    			    
+		
     
         	
-	    	    public int y= 0;
-	    		
+							    public int y= 0;
+		    			    
+		
     
         	
-	    	    public int z= 0;
-	    		
+							    public int z= 0;
+		    			    
+		
     
         	
-	    	    public DynamicMessage dynamicMessage;
-	    		
+					public DynamicMessage dynamicMessage = null;
+			    
+		
     
         	
-	    	    public String gridName= null;
-	    		
+							    public String gridName= null;
+		    			    
+		
     
         	
-	    	    public int getNeighbors= 0;
-	    		
+							    public int getNeighbors= 0;
+		    			    
+		
     
         	
-	    	    public EntityType neighborEntityType;
-	    		
+					public EntityType neighborEntityType = EntityType.defaultValue();
+			    
+		
     
         	
-	    	    public EntityType entityType;
-	    		
+					public EntityType entityType = EntityType.defaultValue();
+			    
+		
     
         	
-	    	    public int shortId= 0;
-	    		
+							    public int shortId= 0;
+		    			    
+		
     
         	
-	    	    public UserDefinedData userDefinedData;
-	    		
+					public UserDefinedData userDefinedData = null;
+			    
+		
     
         	
-	    	    public int broadcast= 0;
-	    		
+							    public int broadcast= 0;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public int rx= 0;
-	    		
+							    public int rx= 0;
+		    			    
+		
     
         	
-	    	    public int ry= 0;
-	    		
+							    public int ry= 0;
+		    			    
+		
     
         	
-	    	    public int rz= 0;
-	    		
+							    public int rz= 0;
+		    			    
+		
     
         	
-	    	    public int rw= 0;
-	    		
+							    public int rw= 0;
+		    			    
+		
     
         	
-	    	    public int vaxis= 0;
-	    		
+							    public int vaxis= 0;
+		    			    
+		
     
         	
-	    	    public int haxis= 0;
-	    		
+							    public int haxis= 0;
+		    			    
+		
     
         	
-	    	    public int speed= 0;
-	    		
+							    public int speed= 0;
+		    			    
+		
     
         	
-	    	    public float velX= 0F;
-	    		
+							    public float velX= 0F;
+		    			    
+		
     
         	
-	    	    public float velZ= 0F;
-	    		
+							    public float velZ= 0F;
+		    			    
+		
     
         	
-	    	    public int zone= 0;
-	    		
+							    public int zone= 0;
+		    			    
+		
     
         	
-	    	    public int hidden= 0;
-	    		
+							    public int hidden= 0;
+		    			    
+		
     
         	
-	    	    public int yaxis= 0;
-	    		
+							    public int yaxis= 0;
+		    			    
+		
     
         
 	public static TrackDataCache cache() {

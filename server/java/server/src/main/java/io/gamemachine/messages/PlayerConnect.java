@@ -62,12 +62,14 @@ public final class PlayerConnect implements Externalizable, Message<PlayerConnec
     static final String defaultScope = PlayerConnect.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String password= null;
-	    		
+							    public String password= null;
+		    			    
+		
     
         
 

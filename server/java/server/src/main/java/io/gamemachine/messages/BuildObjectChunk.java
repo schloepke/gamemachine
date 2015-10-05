@@ -62,12 +62,14 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
     static final String defaultScope = BuildObjectChunk.class.getSimpleName();
 
     	
-	    	    public ByteString data;
-	    		
+							    public ByteString data;
+		    			    
+		
     
         	
-	    	    public int chunk= 0;
-	    		
+							    public int chunk= 0;
+		    			    
+		
     
         
 

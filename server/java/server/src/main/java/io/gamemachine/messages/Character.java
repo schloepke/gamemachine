@@ -82,60 +82,74 @@ public final class Character implements Externalizable, Message<Character>, Sche
     static final String defaultScope = Character.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String umaData= null;
-	    		
+							    public String umaData= null;
+		    			    
+		
     
         	
-	    	    public int health= 0;
-	    		
+							    public int health= 0;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public int part= 0;
-	    		
+							    public int part= 0;
+		    			    
+		
     
         	
-	    	    public int parts= 0;
-	    		
+							    public int parts= 0;
+		    			    
+		
     
         	
-	    	    public int worldx= 0;
-	    		
+							    public int worldx= 0;
+		    			    
+		
     
         	
-	    	    public int worldy= 0;
-	    		
+							    public int worldy= 0;
+		    			    
+		
     
         	
-	    	    public int worldz= 0;
-	    		
+							    public int worldz= 0;
+		    			    
+		
     
         	
-	    	    public int zone= 0;
-	    		
+							    public int zone= 0;
+		    			    
+		
     
         	
-	    	    public int stamina= 0;
-	    		
+							    public int stamina= 0;
+		    			    
+		
     
         	
-	    	    public int magic= 0;
-	    		
+							    public int magic= 0;
+		    			    
+		
     
         	
-	    	    public boolean includeUmaData= false;
-	    		
+							    public boolean includeUmaData= false;
+		    			    
+		
     
         
 	public static CharacterCache cache() {

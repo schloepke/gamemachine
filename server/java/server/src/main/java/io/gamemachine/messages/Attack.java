@@ -62,20 +62,24 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
     static final String defaultScope = Attack.class.getSimpleName();
 
     	
-	    	    public String attacker= null;
-	    		
+							    public String attacker= null;
+		    			    
+		
     
         	
-	    	    public String target= null;
-	    		
+							    public String target= null;
+		    			    
+		
     
         	
-	    	    public String skill= null;
-	    		
+							    public String skill= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 targetLocation;
-	    		
+					public GmVector3 targetLocation = null;
+			    
+		
     
         
 

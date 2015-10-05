@@ -62,12 +62,14 @@ public final class ObjectdbStatus implements Externalizable, Message<ObjectdbSta
     static final String defaultScope = ObjectdbStatus.class.getSimpleName();
 
     	
-	    	    public String entityId= null;
-	    		
+							    public String entityId= null;
+		    			    
+		
     
         	
-	    	    public String status= null;
-	    		
+							    public String status= null;
+		    			    
+		
     
         
 

@@ -62,8 +62,9 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
     static final String defaultScope = CloudQueryResponse.class.getSimpleName();
 
     	
-	    	    public String format= null;
-	    		
+							    public String format= null;
+		    			    
+		
     
             public List<String> messageId;
 	        public List<ByteString> byteMessage;

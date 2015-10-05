@@ -62,8 +62,9 @@ public final class ObjectdbGetResponse implements Externalizable, Message<Object
     static final String defaultScope = ObjectdbGetResponse.class.getSimpleName();
 
     	
-	    	    public boolean entityFound= false;
-	    		
+							    public boolean entityFound= false;
+		    			    
+		
     
         
 

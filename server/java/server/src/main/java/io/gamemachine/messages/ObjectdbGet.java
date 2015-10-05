@@ -62,16 +62,19 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
     static final String defaultScope = ObjectdbGet.class.getSimpleName();
 
     	
-	    	    public String entityId= null;
-	    		
+							    public String entityId= null;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String klass= null;
-	    		
+							    public String klass= null;
+		    			    
+		
     
         
 

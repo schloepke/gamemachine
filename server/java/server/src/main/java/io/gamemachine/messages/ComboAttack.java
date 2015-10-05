@@ -76,8 +76,9 @@ public final class ComboAttack implements Externalizable, Message<ComboAttack>, 
     static final String defaultScope = ComboAttack.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
             public List<Attack> attack;
 	    

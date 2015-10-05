@@ -62,24 +62,29 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
     static final String defaultScope = BuildObjectSlot.class.getSimpleName();
 
     	
-	    	    public String slotId= null;
-	    		
+							    public String slotId= null;
+		    			    
+		
     
         	
-	    	    public String buildObjectId= null;
-	    		
+							    public String buildObjectId= null;
+		    			    
+		
     
         	
-	    	    public long placedAt= 0L;
-	    		
+							    public long placedAt= 0L;
+		    			    
+		
     
         	
-	    	    public boolean buildOverTime= false;
-	    		
+							    public boolean buildOverTime= false;
+		    			    
+		
     
         	
-	    	    public int buildTime= 0;
-	    		
+							    public int buildTime= 0;
+		    			    
+		
     
         
 

@@ -69,16 +69,19 @@ public final class GuildMembers implements Externalizable, Message<GuildMembers>
     static final String defaultScope = GuildMembers.class.getSimpleName();
 
     	
-	    	    public String guildId= null;
-	    		
+							    public String guildId= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 

@@ -76,28 +76,34 @@ public final class AddPlayerItem implements Externalizable, Message<AddPlayerIte
     static final String defaultScope = AddPlayerItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int quantity= 0;
-	    		
+							    public int quantity= 0;
+		    			    
+		
     
         	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public PlayerItem playerItem;
-	    		
+					public PlayerItem playerItem = null;
+			    
+		
     
         	
-	    	    public String containerId= null;
-	    		
+							    public String containerId= null;
+		    			    
+		
     
         
 	public static AddPlayerItemCache cache() {

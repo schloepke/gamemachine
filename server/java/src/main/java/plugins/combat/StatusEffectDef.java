@@ -9,12 +9,16 @@ import plugins.clientDbLoader.ClientDbLoader;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.common.base.Strings;
 
 import java.util.List;
 
 public class StatusEffectDef {
 
+	private static final Logger logger = LoggerFactory.getLogger(StatusEffectDef.class);
 	
 	public static void createStatusEffects() {
 		StatusEffectHandler.statusEffects = new ConcurrentHashMap<String, StatusEffect>();
@@ -24,10 +28,12 @@ public class StatusEffectDef {
 		
 		PlayerSkills playerSkills = ClientDbLoader.getPlayerSkills();
 		for (PlayerSkill playerSkill : playerSkills.playerSkill) {
+			//playerSkill.dumpObject();
 			if (!Strings.isNullOrEmpty(playerSkill.statusEffects)) {
 				for (String effectId : playerSkill.statusEffects.split(",")) {
 					for (StatusEffect effect : effects.statusEffect) {
 						if (effect.id.equals(effectId)) {
+							effect.dumpObject();
 							addSkill(playerSkill.id,effect);
 						}
 					}

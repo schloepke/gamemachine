@@ -76,6 +76,10 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
             return number;
         }
         
+        public static Type defaultValue() {
+        	return (NONE);
+        }
+        
         public static Type valueOf(int number)
         {
             switch(number) 
@@ -105,48 +109,59 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     static final String defaultScope = TerrainEdit.class.getSimpleName();
 
     	
-	    	    public int x= 0;
-	    		
+							    public int x= 0;
+		    			    
+		
     
         	
-	    	    public int y= 0;
-	    		
+							    public int y= 0;
+		    			    
+		
     
         	
-	    	    public int detailLayer= 0;
-	    		
+							    public int detailLayer= 0;
+		    			    
+		
     
         	
-	    	    public int value= 0;
-	    		
+							    public int value= 0;
+		    			    
+		
     
         	
-	    	    public Type type;
-	    		
+					public Type type = Type.defaultValue();
+			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public int texture= 0;
-	    		
+							    public int texture= 0;
+		    			    
+		
     
         	
-	    	    public float height= 0F;
-	    		
+							    public float height= 0F;
+		    			    
+		
     
         	
-	    	    public long createdAt= 0L;
-	    		
+							    public long createdAt= 0L;
+		    			    
+		
     
         	
-	    	    public String terrain= null;
-	    		
+							    public String terrain= null;
+		    			    
+		
     
         
 	public static TerrainEditCache cache() {

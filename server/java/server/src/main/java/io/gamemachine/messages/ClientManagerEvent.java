@@ -62,16 +62,19 @@ public final class ClientManagerEvent implements Externalizable, Message<ClientM
     static final String defaultScope = ClientManagerEvent.class.getSimpleName();
 
     	
-	    	    public String client_id= null;
-	    		
+							    public String client_id= null;
+		    			    
+		
     
         	
-	    	    public String player_id= null;
-	    		
+							    public String player_id= null;
+		    			    
+		
     
         	
-	    	    public String event= null;
-	    		
+							    public String event= null;
+		    			    
+		
     
         
 

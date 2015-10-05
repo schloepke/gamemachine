@@ -62,16 +62,19 @@ public final class PvpGameMessage implements Externalizable, Message<PvpGameMess
     static final String defaultScope = PvpGameMessage.class.getSimpleName();
 
     	
-	    	    public Character character;
-	    		
+					public Character character = null;
+			    
+		
     
         	
-	    	    public Characters characters;
-	    		
+					public Characters characters = null;
+			    
+		
     
         	
-	    	    public int command= 0;
-	    		
+							    public int command= 0;
+		    			    
+		
     
         
 

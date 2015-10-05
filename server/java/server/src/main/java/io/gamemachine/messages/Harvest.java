@@ -76,24 +76,29 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
     static final String defaultScope = Harvest.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public long harvestedAt= 0L;
-	    		
+							    public long harvestedAt= 0L;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public String itemId= null;
-	    		
+							    public String itemId= null;
+		    			    
+		
     
         
 	public static HarvestCache cache() {

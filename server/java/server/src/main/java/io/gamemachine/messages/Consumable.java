@@ -62,12 +62,14 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
     static final String defaultScope = Consumable.class.getSimpleName();
 
     	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         	
-	    	    public String size= null;
-	    		
+							    public String size= null;
+		    			    
+		
     
         
 

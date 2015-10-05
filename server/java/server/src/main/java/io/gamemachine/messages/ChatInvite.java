@@ -62,20 +62,24 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
     static final String defaultScope = ChatInvite.class.getSimpleName();
 
     	
-	    	    public String invitee= null;
-	    		
+							    public String invitee= null;
+		    			    
+		
     
         	
-	    	    public String inviter= null;
-	    		
+							    public String inviter= null;
+		    			    
+		
     
         	
-	    	    public String channelName= null;
-	    		
+							    public String channelName= null;
+		    			    
+		
     
         	
-	    	    public String invite_id= null;
-	    		
+							    public String invite_id= null;
+		    			    
+		
     
         
 

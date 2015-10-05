@@ -63,12 +63,14 @@ public final class AgentController implements Externalizable, Message<AgentContr
 
         public List<Agent> agent;
 	    	
-	    	    public Player player;
-	    		
+					public Player player = null;
+			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         
 

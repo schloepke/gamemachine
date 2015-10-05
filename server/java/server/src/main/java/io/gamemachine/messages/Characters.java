@@ -77,8 +77,9 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
 
         public List<Character> characters;
 	    	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static CharactersCache cache() {

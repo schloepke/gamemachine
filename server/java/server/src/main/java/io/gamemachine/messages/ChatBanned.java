@@ -62,16 +62,19 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
     static final String defaultScope = ChatBanned.class.getSimpleName();
 
     	
-	    	    public String banned_id= null;
-	    		
+							    public String banned_id= null;
+		    			    
+		
     
         	
-	    	    public String channelNname= null;
-	    		
+							    public String channelNname= null;
+		    			    
+		
     
         	
-	    	    public String reason= null;
-	    		
+							    public String reason= null;
+		    			    
+		
     
         
 

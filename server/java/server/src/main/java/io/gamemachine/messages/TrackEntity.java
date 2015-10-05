@@ -62,16 +62,19 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
     static final String defaultScope = TrackEntity.class.getSimpleName();
 
     	
-	    	    public boolean value= false;
-	    		
+							    public boolean value= false;
+		    			    
+		
     
         	
-	    	    public boolean internal= false;
-	    		
+							    public boolean internal= false;
+		    			    
+		
     
         	
-	    	    public TrackData trackData;
-	    		
+					public TrackData trackData = null;
+			    
+		
     
         
 

@@ -69,36 +69,44 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     static final String defaultScope = BuildableArea.class.getSimpleName();
 
     	
-	    	    public String ownerId= null;
-	    		
+							    public String ownerId= null;
+		    			    
+		
     
         	
-	    	    public float px= 0F;
-	    		
+							    public float px= 0F;
+		    			    
+		
     
         	
-	    	    public float py= 0F;
-	    		
+							    public float py= 0F;
+		    			    
+		
     
         	
-	    	    public float pz= 0F;
-	    		
+							    public float pz= 0F;
+		    			    
+		
     
         	
-	    	    public int sx= 0;
-	    		
+							    public int sx= 0;
+		    			    
+		
     
         	
-	    	    public int sy= 0;
-	    		
+							    public int sy= 0;
+		    			    
+		
     
         	
-	    	    public int sz= 0;
-	    		
+							    public int sz= 0;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         
 

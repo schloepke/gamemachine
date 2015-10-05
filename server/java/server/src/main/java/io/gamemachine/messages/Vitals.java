@@ -76,68 +76,84 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     static final String defaultScope = Vitals.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int health= 0;
-	    		
+							    public int health= 0;
+		    			    
+		
     
         	
-	    	    public int stamina= 0;
-	    		
+							    public int stamina= 0;
+		    			    
+		
     
         	
-	    	    public int magic= 0;
-	    		
+							    public int magic= 0;
+		    			    
+		
     
         	
-	    	    public long lastCombat= 0L;
-	    		
+							    public long lastCombat= 0L;
+		    			    
+		
     
         	
-	    	    public int dead= 0;
-	    		
+							    public int dead= 0;
+		    			    
+		
     
         	
-	    	    public int armor= 0;
-	    		
+							    public int armor= 0;
+		    			    
+		
     
         	
-	    	    public int spellResist= 0;
-	    		
+							    public int spellResist= 0;
+		    			    
+		
     
         	
-	    	    public int elementalResist= 0;
-	    		
+							    public int elementalResist= 0;
+		    			    
+		
     
         	
-	    	    public int spellPenetration= 0;
-	    		
+							    public int spellPenetration= 0;
+		    			    
+		
     
         	
-	    	    public int magicRegen= 0;
-	    		
+							    public int magicRegen= 0;
+		    			    
+		
     
         	
-	    	    public int healthRegen= 0;
-	    		
+							    public int healthRegen= 0;
+		    			    
+		
     
         	
-	    	    public int staminaRegen= 0;
-	    		
+							    public int staminaRegen= 0;
+		    			    
+		
     
         	
-	    	    public int changed= 0;
-	    		
+							    public int changed= 0;
+		    			    
+		
     
         	
-	    	    public String grid= null;
-	    		
+							    public String grid= null;
+		    			    
+		
     
         	
-	    	    public int staminaDrain= 0;
-	    		
+							    public int staminaDrain= 0;
+		    			    
+		
     
         
 	public static VitalsCache cache() {

@@ -76,52 +76,64 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
     static final String defaultScope = SiegeCommand.class.getSimpleName();
 
     	
-	    	    public int startLoad= 0;
-	    		
+							    public int startLoad= 0;
+		    			    
+		
     
         	
-	    	    public int fire= 0;
-	    		
+							    public int fire= 0;
+		    			    
+		
     
         	
-	    	    public float force= 0F;
-	    		
+							    public float force= 0F;
+		    			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String hitId= null;
-	    		
+							    public String hitId= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 hit;
-	    		
+					public GmVector3 hit = null;
+			    
+		
     
         	
-	    	    public String skillId= null;
-	    		
+							    public String skillId= null;
+		    			    
+		
     
         	
-	    	    public int startUse= 0;
-	    		
+							    public int startUse= 0;
+		    			    
+		
     
         	
-	    	    public int endUse= 0;
-	    		
+							    public int endUse= 0;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String targetType= null;
-	    		
+							    public String targetType= null;
+		    			    
+		
     
         	
-	    	    public String targetId= null;
-	    		
+							    public String targetId= null;
+		    			    
+		
     
         
 	public static SiegeCommandCache cache() {

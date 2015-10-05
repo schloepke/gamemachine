@@ -62,16 +62,19 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
     static final String defaultScope = GameConfig.class.getSimpleName();
 
     	
-	    	    public String config= null;
-	    		
+							    public String config= null;
+		    			    
+		
     
         	
-	    	    public int version= 0;
-	    		
+							    public int version= 0;
+		    			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         
 

@@ -62,100 +62,124 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
     static final String defaultScope = UserDefinedData.class.getSimpleName();
 
     	
-	    	    public int command= 0;
-	    		
+							    public int command= 0;
+		    			    
+		
     
         	
-	    	    public int value= 0;
-	    		
+							    public int value= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt2= 0;
-	    		
+							    public int userdefInt2= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt3= 0;
-	    		
+							    public int userdefInt3= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt4= 0;
-	    		
+							    public int userdefInt4= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt5= 0;
-	    		
+							    public int userdefInt5= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt6= 0;
-	    		
+							    public int userdefInt6= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt7= 0;
-	    		
+							    public int userdefInt7= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt8= 0;
-	    		
+							    public int userdefInt8= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt9= 0;
-	    		
+							    public int userdefInt9= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt1= 0;
-	    		
+							    public int userdefInt1= 0;
+		    			    
+		
     
         	
-	    	    public int rx= 0;
-	    		
+							    public int rx= 0;
+		    			    
+		
     
         	
-	    	    public int ry= 0;
-	    		
+							    public int ry= 0;
+		    			    
+		
     
         	
-	    	    public int rz= 0;
-	    		
+							    public int rz= 0;
+		    			    
+		
     
         	
-	    	    public int rw= 0;
-	    		
+							    public int rw= 0;
+		    			    
+		
     
         	
-	    	    public int x= 0;
-	    		
+							    public int x= 0;
+		    			    
+		
     
         	
-	    	    public int y= 0;
-	    		
+							    public int y= 0;
+		    			    
+		
     
         	
-	    	    public int z= 0;
-	    		
+							    public int z= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt10= 0;
-	    		
+							    public int userdefInt10= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt11= 0;
-	    		
+							    public int userdefInt11= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt12= 0;
-	    		
+							    public int userdefInt12= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt13= 0;
-	    		
+							    public int userdefInt13= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt14= 0;
-	    		
+							    public int userdefInt14= 0;
+		    			    
+		
     
         	
-	    	    public int userdefInt15= 0;
-	    		
+							    public int userdefInt15= 0;
+		    			    
+		
     
         
 

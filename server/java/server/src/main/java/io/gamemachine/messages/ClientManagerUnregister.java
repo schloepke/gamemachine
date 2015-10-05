@@ -62,12 +62,14 @@ public final class ClientManagerUnregister implements Externalizable, Message<Cl
     static final String defaultScope = ClientManagerUnregister.class.getSimpleName();
 
     	
-	    	    public String registerType= null;
-	    		
+							    public String registerType= null;
+		    			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         
 

@@ -82,20 +82,24 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     static final String defaultScope = Territory.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String owner= null;
-	    		
+							    public String owner= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String keep= null;
-	    		
+							    public String keep= null;
+		    			    
+		
     
         
 	public static TerritoryCache cache() {

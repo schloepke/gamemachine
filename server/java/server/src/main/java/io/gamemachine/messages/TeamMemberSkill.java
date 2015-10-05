@@ -62,16 +62,19 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
     static final String defaultScope = TeamMemberSkill.class.getSimpleName();
 
     	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         	
-	    	    public int value= 0;
-	    		
+							    public int value= 0;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 

@@ -62,8 +62,9 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
     static final String defaultScope = PoisonPill.class.getSimpleName();
 
     	
-	    	    public int notused= 0;
-	    		
+							    public int notused= 0;
+		    			    
+		
     
         
 

@@ -40,7 +40,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
     	
-    	    	Aoe(0),    	    	SingleTarget(1),    	    	Pbaoe(2),    	    	SelfAoe(3),    	    	Self(4);    	        
+    	    	DamageTypeNone(0),    	    	Aoe(1),    	    	SingleTarget(2),    	    	Pbaoe(3),    	    	SelfAoe(4),    	    	Self(5);    	        
         public final int number;
         
         private DamageType (int number)
@@ -57,11 +57,12 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         {
             switch(number) 
             {
-            	    			case 0: return (Aoe);
-    			    			case 1: return (SingleTarget);
-    			    			case 2: return (Pbaoe);
-    			    			case 3: return (SelfAoe);
-    			    			case 4: return (Self);
+            	    			case 0: return (DamageTypeNone);
+    			    			case 1: return (Aoe);
+    			    			case 2: return (SingleTarget);
+    			    			case 3: return (Pbaoe);
+    			    			case 4: return (SelfAoe);
+    			    			case 5: return (Self);
     			                default: return null;
             }
         }
@@ -69,7 +70,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum SkillType implements io.protostuff.EnumLite<SkillType>
     {
     	
-    	    	Active(0),    	    	Passive(1);    	        
+    	    	SkillTypeNone(0),    	    	Active(1),    	    	Passive(2);    	        
         public final int number;
         
         private SkillType (int number)
@@ -86,8 +87,9 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         {
             switch(number) 
             {
-            	    			case 0: return (Active);
-    			    			case 1: return (Passive);
+            	    			case 0: return (SkillTypeNone);
+    			    			case 1: return (Active);
+    			    			case 2: return (Passive);
     			                default: return null;
             }
         }
@@ -95,7 +97,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum Resource implements io.protostuff.EnumLite<Resource>
     {
     	
-    	    	NoResource(0),    	    	Magic(1),    	    	Stamina(2);    	        
+    	    	ResourceNone(0),    	    	Magic(1),    	    	Stamina(2);    	        
         public final int number;
         
         private Resource (int number)
@@ -112,7 +114,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         {
             switch(number) 
             {
-            	    			case 0: return (NoResource);
+            	    			case 0: return (ResourceNone);
     			    			case 1: return (Magic);
     			    			case 2: return (Stamina);
     			                default: return null;
@@ -122,7 +124,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum Category implements io.protostuff.EnumLite<Category>
     {
     	
-    	    	Weapon(0),    	    	Crafting(1),    	    	CategoryOther(2);    	        
+    	    	CategoryNone(0),    	    	Weapon(1),    	    	Crafting(2),    	    	CategoryOther(3);    	        
         public final int number;
         
         private Category (int number)
@@ -139,9 +141,10 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         {
             switch(number) 
             {
-            	    			case 0: return (Weapon);
-    			    			case 1: return (Crafting);
-    			    			case 2: return (CategoryOther);
+            	    			case 0: return (CategoryNone);
+    			    			case 1: return (Weapon);
+    			    			case 2: return (Crafting);
+    			    			case 3: return (CategoryOther);
     			                default: return null;
             }
         }
@@ -149,7 +152,7 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	public enum WeaponType implements io.protostuff.EnumLite<WeaponType>
     {
     	
-    	    	Bow(0),    	    	Sword2h(1),    	    	Sword1h(2),    	    	Staff(3),    	    	Gun(4),    	    	Siege(5),    	    	WeaponTypeOther(6);    	        
+    	    	WeaponTypeNone(0),    	    	Bow(1),    	    	Sword2h(2),    	    	Sword1h(3),    	    	Staff(4),    	    	Gun(5),    	    	Siege(6),    	    	WeaponTypeOther(7);    	        
         public final int number;
         
         private WeaponType (int number)
@@ -166,13 +169,14 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
         {
             switch(number) 
             {
-            	    			case 0: return (Bow);
-    			    			case 1: return (Sword2h);
-    			    			case 2: return (Sword1h);
-    			    			case 3: return (Staff);
-    			    			case 4: return (Gun);
-    			    			case 5: return (Siege);
-    			    			case 6: return (WeaponTypeOther);
+            	    			case 0: return (WeaponTypeNone);
+    			    			case 1: return (Bow);
+    			    			case 2: return (Sword2h);
+    			    			case 3: return (Sword1h);
+    			    			case 4: return (Staff);
+    			    			case 5: return (Gun);
+    			    			case 6: return (Siege);
+    			    			case 7: return (WeaponTypeOther);
     			                default: return null;
             }
         }

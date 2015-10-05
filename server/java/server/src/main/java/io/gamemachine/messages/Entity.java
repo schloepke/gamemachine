@@ -76,260 +76,324 @@ public final class Entity implements Externalizable, Message<Entity>, Schema<Ent
     static final String defaultScope = Entity.class.getSimpleName();
 
     	
-	    	    public Neighbors neighbors;
-	    		
+					public Neighbors neighbors = null;
+			    
+		
     
         	
-	    	    public ChatMessage chatMessage;
-	    		
+					public ChatMessage chatMessage = null;
+			    
+		
     
         	
-	    	    public ClientConnection clientConnection;
-	    		
+					public ClientConnection clientConnection = null;
+			    
+		
     
         	
-	    	    public EchoTest echoTest;
-	    		
+					public EchoTest echoTest = null;
+			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public Subscribe subscribe;
-	    		
+					public Subscribe subscribe = null;
+			    
+		
     
         	
-	    	    public Publish publish;
-	    		
+					public Publish publish = null;
+			    
+		
     
         	
-	    	    public ChatChannel chatChannel;
-	    		
+					public ChatChannel chatChannel = null;
+			    
+		
     
         	
-	    	    public JoinChat joinChat;
-	    		
+					public JoinChat joinChat = null;
+			    
+		
     
         	
-	    	    public LeaveChat leaveChat;
-	    		
+					public LeaveChat leaveChat = null;
+			    
+		
     
         	
-	    	    public Unsubscribe unsubscribe;
-	    		
+					public Unsubscribe unsubscribe = null;
+			    
+		
     
         	
-	    	    public ChatRegister chatRegister;
-	    		
+					public ChatRegister chatRegister = null;
+			    
+		
     
         	
-	    	    public ChatChannels chatChannels;
-	    		
+					public ChatChannels chatChannels = null;
+			    
+		
     
         	
-	    	    public ErrorMessage errorMessage;
-	    		
+					public ErrorMessage errorMessage = null;
+			    
+		
     
         	
-	    	    public NeighborsRequest neighborsRequest;
-	    		
+					public NeighborsRequest neighborsRequest = null;
+			    
+		
     
         	
-	    	    public TrackEntity trackEntity;
-	    		
+					public TrackEntity trackEntity = null;
+			    
+		
     
         	
-	    	    public GmVector3 vector3;
-	    		
+					public GmVector3 vector3 = null;
+			    
+		
     
         	
-	    	    public EntityList entityList;
-	    		
+					public EntityList entityList = null;
+			    
+		
     
         	
-	    	    public boolean published= false;
-	    		
+							    public boolean published= false;
+		    			    
+		
     
         	
-	    	    public String entityType= null;
-	    		
+							    public String entityType= null;
+		    			    
+		
     
         	
-	    	    public PlayerAuthenticated playerAuthenticated;
-	    		
+					public PlayerAuthenticated playerAuthenticated = null;
+			    
+		
     
         	
-	    	    public PlayerLogout playerLogout;
-	    		
+					public PlayerLogout playerLogout = null;
+			    
+		
     
         	
-	    	    public boolean sendToPlayer= false;
-	    		
+							    public boolean sendToPlayer= false;
+		    			    
+		
     
         	
-	    	    public Subscribers subscribers;
-	    		
+					public Subscribers subscribers = null;
+			    
+		
     
         	
-	    	    public boolean save= false;
-	    		
+							    public boolean save= false;
+		    			    
+		
     
         	
-	    	    public ObjectdbGetResponse objectdbGetResponse;
-	    		
+					public ObjectdbGetResponse objectdbGetResponse = null;
+			    
+		
     
         	
-	    	    public NativeBytes nativeBytes;
-	    		
+					public NativeBytes nativeBytes = null;
+			    
+		
     
         	
-	    	    public ObjectdbGet objectdbGet;
-	    		
+					public ObjectdbGet objectdbGet = null;
+			    
+		
     
         	
-	    	    public JsonEntity jsonEntity;
-	    		
+					public JsonEntity jsonEntity = null;
+			    
+		
     
         	
-	    	    public String destination= null;
-	    		
+							    public String destination= null;
+		    			    
+		
     
         	
-	    	    public boolean json= false;
-	    		
+							    public boolean json= false;
+		    			    
+		
     
         	
-	    	    public String params= null;
-	    		
+							    public String params= null;
+		    			    
+		
     
         	
-	    	    public ChatStatus chatStatus;
-	    		
+					public ChatStatus chatStatus = null;
+			    
+		
     
         	
-	    	    public ChatBannedList chatBannedList;
-	    		
+					public ChatBannedList chatBannedList = null;
+			    
+		
     
         	
-	    	    public ChatInvite chatInvite;
-	    		
+					public ChatInvite chatInvite = null;
+			    
+		
     
         	
-	    	    public ClientManagerRegister clientManagerRegister;
-	    		
+					public ClientManagerRegister clientManagerRegister = null;
+			    
+		
     
         	
-	    	    public ClientManagerUnregister clientManagerUnregister;
-	    		
+					public ClientManagerUnregister clientManagerUnregister = null;
+			    
+		
     
         	
-	    	    public ClientEvent clientEvent;
-	    		
+					public ClientEvent clientEvent = null;
+			    
+		
     
         	
-	    	    public ClientEvents clientEvents;
-	    		
+					public ClientEvents clientEvents = null;
+			    
+		
     
         	
-	    	    public JsonStorage jsonStorage;
-	    		
+					public JsonStorage jsonStorage = null;
+			    
+		
     
         	
-	    	    public ClientManagerEvent clientManagerEvent;
-	    		
+					public ClientManagerEvent clientManagerEvent = null;
+			    
+		
     
         	
-	    	    public Regions regions;
-	    		
+					public Regions regions = null;
+			    
+		
     
         	
-	    	    public boolean fastpath= false;
-	    		
+							    public boolean fastpath= false;
+		    			    
+		
     
         	
-	    	    public PoisonPill poisonPill;
-	    		
+					public PoisonPill poisonPill = null;
+			    
+		
     
         	
-	    	    public String senderId= null;
-	    		
+							    public String senderId= null;
+		    			    
+		
     
         	
-	    	    public AgentTrackData agentTrackData;
-	    		
+					public AgentTrackData agentTrackData = null;
+			    
+		
     
         	
-	    	    public TeamMemberSkill teamMemberSkill;
-	    		
+					public TeamMemberSkill teamMemberSkill = null;
+			    
+		
     
         	
-	    	    public TrackDataUpdate trackDataUpdate;
-	    		
+					public TrackDataUpdate trackDataUpdate = null;
+			    
+		
     
         	
-	    	    public TrackDataResponse trackDataResponse;
-	    		
+					public TrackDataResponse trackDataResponse = null;
+			    
+		
     
         	
-	    	    public GmMesh mesh;
-	    		
+					public GmMesh mesh = null;
+			    
+		
     
         	
-	    	    public PathData pathData;
-	    		
+					public PathData pathData = null;
+			    
+		
     
         	
-	    	    public ObjectdbStatus objectdbStatus;
-	    		
+					public ObjectdbStatus objectdbStatus = null;
+			    
+		
     
         	
-	    	    public GuildAction guildAction;
-	    		
+					public GuildAction guildAction = null;
+			    
+		
     
         	
-	    	    public PvpGameMessage pvpGameMessage;
-	    		
+					public PvpGameMessage pvpGameMessage = null;
+			    
+		
     
         	
-	    	    public Player player;
-	    		
+					public Player player = null;
+			    
+		
     
         	
-	    	    public TrackData trackData;
-	    		
+					public TrackData trackData = null;
+			    
+		
     
         	
-	    	    public DynamicMessage dynamicMessage;
-	    		
+					public DynamicMessage dynamicMessage = null;
+			    
+		
     
         	
-	    	    public PlayerSkills playerSkills;
-	    		
+					public PlayerSkills playerSkills = null;
+			    
+		
     
         	
-	    	    public PlayerItems playerItems;
-	    		
+					public PlayerItems playerItems = null;
+			    
+		
     
         	
-	    	    public Players players;
-	    		
+					public Players players = null;
+			    
+		
     
         	
-	    	    public TestObject testObject;
-	    		
+					public TestObject testObject = null;
+			    
+		
     
         	
-	    	    public RpcMessage rpcMessage;
-	    		
+					public RpcMessage rpcMessage = null;
+			    
+		
     
         	
-	    	    public GameMessage gameMessage;
-	    		
+					public GameMessage gameMessage = null;
+			    
+		
     
         	
-	    	    public GameMessages gameMessages;
-	    		
+					public GameMessages gameMessages = null;
+			    
+		
     
         
 	public static EntityCache cache() {

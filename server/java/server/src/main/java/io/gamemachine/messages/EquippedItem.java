@@ -76,12 +76,14 @@ public final class EquippedItem implements Externalizable, Message<EquippedItem>
     static final String defaultScope = EquippedItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 	public static EquippedItemCache cache() {

@@ -62,20 +62,24 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
     static final String defaultScope = GmQuaternion.class.getSimpleName();
 
     	
-	    	    public float x= 0F;
-	    		
+							    public float x= 0F;
+		    			    
+		
     
         	
-	    	    public float y= 0F;
-	    		
+							    public float y= 0F;
+		    			    
+		
     
         	
-	    	    public float z= 0F;
-	    		
+							    public float z= 0F;
+		    			    
+		
     
         	
-	    	    public float w= 0F;
-	    		
+							    public float w= 0F;
+		    			    
+		
     
         
 

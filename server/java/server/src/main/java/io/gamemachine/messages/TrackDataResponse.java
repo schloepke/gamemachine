@@ -76,6 +76,10 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
             return number;
         }
         
+        public static REASON defaultValue() {
+        	return (RESEND);
+        }
+        
         public static REASON valueOf(int number)
         {
             switch(number) 
@@ -103,12 +107,14 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     static final String defaultScope = TrackDataResponse.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public REASON reason;
-	    		
+					public REASON reason = REASON.defaultValue();
+			    
+		
     
         
 	public static TrackDataResponseCache cache() {

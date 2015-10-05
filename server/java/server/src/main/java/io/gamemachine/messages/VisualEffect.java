@@ -76,28 +76,34 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
     static final String defaultScope = VisualEffect.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String prefab= null;
-	    		
+							    public String prefab= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 startPosition;
-	    		
+					public GmVector3 startPosition = null;
+			    
+		
     
         	
-	    	    public GmVector3 endPosition;
-	    		
+					public GmVector3 endPosition = null;
+			    
+		
     
         	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         	
-	    	    public int duration= 0;
-	    		
+							    public int duration= 0;
+		    			    
+		
     
         
 	public static VisualEffectCache cache() {

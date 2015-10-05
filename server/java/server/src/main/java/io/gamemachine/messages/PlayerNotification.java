@@ -62,12 +62,14 @@ public final class PlayerNotification implements Externalizable, Message<PlayerN
     static final String defaultScope = PlayerNotification.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String action= null;
-	    		
+							    public String action= null;
+		    			    
+		
     
         
 

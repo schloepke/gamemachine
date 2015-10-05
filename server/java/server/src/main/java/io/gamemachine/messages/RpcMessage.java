@@ -62,6 +62,10 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
             return number;
         }
         
+        public static MessageType defaultValue() {
+        	return (NONE);
+        }
+        
         public static MessageType valueOf(int number)
         {
             switch(number) 
@@ -88,20 +92,24 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     static final String defaultScope = RpcMessage.class.getSimpleName();
 
     	
-	    	    public MessageType messageType;
-	    		
+					public MessageType messageType = MessageType.defaultValue();
+			    
+		
     
         	
-	    	    public GameMessage gameMessage;
-	    		
+					public GameMessage gameMessage = null;
+			    
+		
     
         	
-	    	    public long messageId= 0L;
-	    		
+							    public long messageId= 0L;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 

@@ -76,12 +76,14 @@ public final class TrackDataUpdate implements Externalizable, Message<TrackDataU
     static final String defaultScope = TrackDataUpdate.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public DynamicMessage dynamicMessage;
-	    		
+					public DynamicMessage dynamicMessage = null;
+			    
+		
     
         
 	public static TrackDataUpdateCache cache() {

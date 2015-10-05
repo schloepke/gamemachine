@@ -62,12 +62,14 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
     static final String defaultScope = NeighborsRequest.class.getSimpleName();
 
     	
-	    	    public String neighborEntityType= null;
-	    		
+							    public String neighborEntityType= null;
+		    			    
+		
     
         	
-	    	    public String gridName= null;
-	    		
+							    public String gridName= null;
+		    			    
+		
     
         
 

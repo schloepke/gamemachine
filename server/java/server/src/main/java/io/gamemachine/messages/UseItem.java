@@ -76,20 +76,24 @@ public final class UseItem implements Externalizable, Message<UseItem>, Schema<U
     static final String defaultScope = UseItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String targetId= null;
-	    		
+							    public String targetId= null;
+		    			    
+		
     
         	
-	    	    public String action= null;
-	    		
+							    public String action= null;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 	public static UseItemCache cache() {

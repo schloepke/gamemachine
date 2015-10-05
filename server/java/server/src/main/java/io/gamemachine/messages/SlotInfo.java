@@ -62,12 +62,14 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
     static final String defaultScope = SlotInfo.class.getSimpleName();
 
     	
-	    	    public String placedBlockId= null;
-	    		
+							    public String placedBlockId= null;
+		    			    
+		
     
         	
-	    	    public String slotId= null;
-	    		
+							    public String slotId= null;
+		    			    
+		
     
         
 

@@ -62,12 +62,14 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
     static final String defaultScope = DynamicMessage.class.getSimpleName();
 
     	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         	
-	    	    public ByteString message;
-	    		
+							    public ByteString message;
+		    			    
+		
     
         
 

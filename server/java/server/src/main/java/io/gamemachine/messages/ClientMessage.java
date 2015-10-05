@@ -63,44 +63,54 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 
         public List<Entity> entity;
 	    	
-	    	    public Player player;
-	    		
+					public Player player = null;
+			    
+		
     
         	
-	    	    public ClientConnection clientConnection;
-	    		
+					public ClientConnection clientConnection = null;
+			    
+		
     
         	
-	    	    public PlayerLogout playerLogout;
-	    		
+					public PlayerLogout playerLogout = null;
+			    
+		
     
         	
-	    	    public PlayerConnect playerConnect;
-	    		
+					public PlayerConnect playerConnect = null;
+			    
+		
     
         	
-	    	    public PlayerConnected playerConnected;
-	    		
+					public PlayerConnected playerConnected = null;
+			    
+		
     
         	
-	    	    public int connection_type= 0;
-	    		
+							    public int connection_type= 0;
+		    			    
+		
     
         	
-	    	    public long sentAt= 0L;
-	    		
+							    public long sentAt= 0L;
+		    			    
+		
     
         	
-	    	    public TrackData trackData;
-	    		
+					public TrackData trackData = null;
+			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         	
-	    	    public RpcMessage rpcMessage;
-	    		
+					public RpcMessage rpcMessage = null;
+			    
+		
     
         
 

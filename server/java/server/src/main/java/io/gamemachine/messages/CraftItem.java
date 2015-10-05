@@ -62,24 +62,29 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
     static final String defaultScope = CraftItem.class.getSimpleName();
 
     	
-	    	    public CraftableItem craftableItem;
-	    		
+					public CraftableItem craftableItem = null;
+			    
+		
     
         	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public int craftedQuantity= 0;
-	    		
+							    public int craftedQuantity= 0;
+		    			    
+		
     
         	
-	    	    public String craftedId= null;
-	    		
+							    public String craftedId= null;
+		    			    
+		
     
         
 

@@ -62,16 +62,19 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
     static final String defaultScope = Statistic.class.getSimpleName();
 
     	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         	
-	    	    public float value= 0F;
-	    		
+							    public float value= 0F;
+		    			    
+		
     
         	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         
 

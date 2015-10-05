@@ -82,20 +82,24 @@ public final class Guild implements Externalizable, Message<Guild>, Schema<Guild
     static final String defaultScope = Guild.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String ownerId= null;
-	    		
+							    public String ownerId= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         
 	public static GuildCache cache() {

@@ -76,20 +76,24 @@ public final class UseSkill implements Externalizable, Message<UseSkill>, Schema
     static final String defaultScope = UseSkill.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String targetId= null;
-	    		
+							    public String targetId= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 location;
-	    		
+					public GmVector3 location = null;
+			    
+		
     
         	
-	    	    public GmVector3 direction;
-	    		
+					public GmVector3 direction = null;
+			    
+		
     
         
 	public static UseSkillCache cache() {

@@ -62,20 +62,24 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
     static final String defaultScope = ObjectdbUpdate.class.getSimpleName();
 
     	
-	    	    public String currentEntityId= null;
-	    		
+							    public String currentEntityId= null;
+		    			    
+		
     
         	
-	    	    public String updateClass= null;
-	    		
+							    public String updateClass= null;
+		    			    
+		
     
         	
-	    	    public String updateMethod= null;
-	    		
+							    public String updateMethod= null;
+		    			    
+		
     
         	
-	    	    public Entity updateEntity;
-	    		
+					public Entity updateEntity = null;
+			    
+		
     
         
 

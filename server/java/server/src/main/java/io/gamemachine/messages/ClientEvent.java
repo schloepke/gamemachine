@@ -62,20 +62,24 @@ public final class ClientEvent implements Externalizable, Message<ClientEvent>, 
     static final String defaultScope = ClientEvent.class.getSimpleName();
 
     	
-	    	    public String event= null;
-	    		
+							    public String event= null;
+		    			    
+		
     
         	
-	    	    public String clientId= null;
-	    		
+							    public String clientId= null;
+		    			    
+		
     
         	
-	    	    public String senderId= null;
-	    		
+							    public String senderId= null;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 

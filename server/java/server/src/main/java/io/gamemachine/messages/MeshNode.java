@@ -62,8 +62,9 @@ public final class MeshNode implements Externalizable, Message<MeshNode>, Schema
     static final String defaultScope = MeshNode.class.getSimpleName();
 
     	
-	    	    public GmVector3 position;
-	    		
+					public GmVector3 position = null;
+			    
+		
     
             public List<GmVector3> connections;
 	    

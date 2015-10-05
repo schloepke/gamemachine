@@ -62,8 +62,9 @@ public final class ChatStatus implements Externalizable, Message<ChatStatus>, Sc
     static final String defaultScope = ChatStatus.class.getSimpleName();
 
     	
-	    	    public int notused= 0;
-	    		
+							    public int notused= 0;
+		    			    
+		
     
         
 

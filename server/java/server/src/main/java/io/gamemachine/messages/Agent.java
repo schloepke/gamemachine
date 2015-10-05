@@ -76,28 +76,34 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
     static final String defaultScope = Agent.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String code= null;
-	    		
+							    public String code= null;
+		    			    
+		
     
         	
-	    	    public String classname= null;
-	    		
+							    public String classname= null;
+		    			    
+		
     
         	
-	    	    public boolean remove= false;
-	    		
+							    public boolean remove= false;
+		    			    
+		
     
         	
-	    	    public String compileResult= null;
-	    		
+							    public String compileResult= null;
+		    			    
+		
     
         	
-	    	    public int concurrency= 0;
-	    		
+							    public int concurrency= 0;
+		    			    
+		
     
         
 	public static AgentCache cache() {

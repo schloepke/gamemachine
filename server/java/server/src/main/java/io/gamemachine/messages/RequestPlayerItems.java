@@ -62,24 +62,29 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
     static final String defaultScope = RequestPlayerItems.class.getSimpleName();
 
     	
-	    	    public boolean catalog= false;
-	    		
+							    public boolean catalog= false;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public PlayerItems playerItems;
-	    		
+					public PlayerItems playerItems = null;
+			    
+		
     
         	
-	    	    public String query= null;
-	    		
+							    public String query= null;
+		    			    
+		
     
         
 

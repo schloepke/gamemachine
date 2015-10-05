@@ -77,8 +77,9 @@ public final class ZoneInfos implements Externalizable, Message<ZoneInfos>, Sche
 
         public List<ZoneInfo> zoneInfo;
 	    	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static ZoneInfosCache cache() {

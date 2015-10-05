@@ -76,17 +76,20 @@ public final class PathData implements Externalizable, Message<PathData>, Schema
     static final String defaultScope = PathData.class.getSimpleName();
 
     	
-	    	    public GmVector3 startPoint;
-	    		
+					public GmVector3 startPoint = null;
+			    
+		
     
         	
-	    	    public GmVector3 endPoint;
-	    		
+					public GmVector3 endPoint = null;
+			    
+		
     
             public List<GmVector3> nodes;
 	    	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static PathDataCache cache() {

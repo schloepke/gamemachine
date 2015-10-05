@@ -62,20 +62,24 @@ public final class Publish implements Externalizable, Message<Publish>, Schema<P
     static final String defaultScope = Publish.class.getSimpleName();
 
     	
-	    	    public String topic= null;
-	    		
+							    public String topic= null;
+		    			    
+		
     
         	
-	    	    public Entity message;
-	    		
+					public Entity message = null;
+			    
+		
     
         	
-	    	    public String path= null;
-	    		
+							    public String path= null;
+		    			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         
 

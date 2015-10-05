@@ -62,12 +62,14 @@ public final class Subscribe implements Externalizable, Message<Subscribe>, Sche
     static final String defaultScope = Subscribe.class.getSimpleName();
 
     	
-	    	    public String topic= null;
-	    		
+							    public String topic= null;
+		    			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         
 

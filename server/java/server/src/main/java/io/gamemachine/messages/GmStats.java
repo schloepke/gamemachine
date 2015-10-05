@@ -76,44 +76,54 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
     static final String defaultScope = GmStats.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String action= null;
-	    		
+							    public String action= null;
+		    			    
+		
     
         	
-	    	    public long messageCountIn= 0L;
-	    		
+							    public long messageCountIn= 0L;
+		    			    
+		
     
         	
-	    	    public long messageCountOut= 0L;
-	    		
+							    public long messageCountOut= 0L;
+		    			    
+		
     
         	
-	    	    public long messageCountInOut= 0L;
-	    		
+							    public long messageCountInOut= 0L;
+		    			    
+		
     
         	
-	    	    public long bytesOut= 0L;
-	    		
+							    public long bytesOut= 0L;
+		    			    
+		
     
         	
-	    	    public int connectionCount= 0;
-	    		
+							    public int connectionCount= 0;
+		    			    
+		
     
         	
-	    	    public long playerBytesOut= 0L;
-	    		
+							    public long playerBytesOut= 0L;
+		    			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public long bytesPerMessageOut= 0L;
-	    		
+							    public long bytesPerMessageOut= 0L;
+		    			    
+		
     
         
 	public static GmStatsCache cache() {

@@ -62,12 +62,14 @@ public final class PlayerLogout implements Externalizable, Message<PlayerLogout>
     static final String defaultScope = PlayerLogout.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public int authtoken= 0;
-	    		
+							    public int authtoken= 0;
+		    			    
+		
     
         
 

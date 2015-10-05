@@ -62,12 +62,14 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
     static final String defaultScope = ChatRegister.class.getSimpleName();
 
     	
-	    	    public String chatId= null;
-	    		
+							    public String chatId= null;
+		    			    
+		
     
         	
-	    	    public String registerAs= null;
-	    		
+							    public String registerAs= null;
+		    			    
+		
     
         
 

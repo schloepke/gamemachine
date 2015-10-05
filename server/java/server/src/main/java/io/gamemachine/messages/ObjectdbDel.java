@@ -62,8 +62,9 @@ public final class ObjectdbDel implements Externalizable, Message<ObjectdbDel>, 
     static final String defaultScope = ObjectdbDel.class.getSimpleName();
 
     	
-	    	    public String entityId= null;
-	    		
+							    public String entityId= null;
+		    			    
+		
     
         
 

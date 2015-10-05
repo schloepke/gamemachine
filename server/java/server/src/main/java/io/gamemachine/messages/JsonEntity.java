@@ -62,12 +62,14 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
     static final String defaultScope = JsonEntity.class.getSimpleName();
 
     	
-	    	    public String json= null;
-	    		
+							    public String json= null;
+		    			    
+		
     
         	
-	    	    public String klass= null;
-	    		
+							    public String klass= null;
+		    			    
+		
     
         
 

@@ -62,20 +62,24 @@ public final class ChatChannel implements Externalizable, Message<ChatChannel>, 
     static final String defaultScope = ChatChannel.class.getSimpleName();
 
     	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         	
-	    	    public Subscribers subscribers;
-	    		
+					public Subscribers subscribers = null;
+			    
+		
     
         	
-	    	    public String flags= null;
-	    		
+							    public String flags= null;
+		    			    
+		
     
         	
-	    	    public String invite_id= null;
-	    		
+							    public String invite_id= null;
+		    			    
+		
     
         
 

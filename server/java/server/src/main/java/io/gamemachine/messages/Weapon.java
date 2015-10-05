@@ -62,12 +62,14 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
     static final String defaultScope = Weapon.class.getSimpleName();
 
     	
-	    	    public int attack= 0;
-	    		
+							    public int attack= 0;
+		    			    
+		
     
         	
-	    	    public int delay= 0;
-	    		
+							    public int delay= 0;
+		    			    
+		
     
         
 

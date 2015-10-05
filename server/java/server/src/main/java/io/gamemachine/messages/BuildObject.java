@@ -82,136 +82,169 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     static final String defaultScope = BuildObject.class.getSimpleName();
 
     	
-	    	    public String playerItemId= null;
-	    		
+							    public String playerItemId= null;
+		    			    
+		
     
         	
-	    	    public int action= 0;
-	    		
+							    public int action= 0;
+		    			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String ownerId= null;
-	    		
+							    public String ownerId= null;
+		    			    
+		
     
         	
-	    	    public int x= 0;
-	    		
+							    public int x= 0;
+		    			    
+		
     
         	
-	    	    public int y= 0;
-	    		
+							    public int y= 0;
+		    			    
+		
     
         	
-	    	    public int z= 0;
-	    		
+							    public int z= 0;
+		    			    
+		
     
         	
-	    	    public int rx= 0;
-	    		
+							    public int rx= 0;
+		    			    
+		
     
         	
-	    	    public int ry= 0;
-	    		
+							    public int ry= 0;
+		    			    
+		
     
         	
-	    	    public int rz= 0;
-	    		
+							    public int rz= 0;
+		    			    
+		
     
         	
-	    	    public int rw= 0;
-	    		
+							    public int rw= 0;
+		    			    
+		
     
         	
-	    	    public int health= 0;
-	    		
+							    public int health= 0;
+		    			    
+		
     
         	
-	    	    public int templateId= 0;
-	    		
+							    public int templateId= 0;
+		    			    
+		
     
         	
-	    	    public String grid= null;
-	    		
+							    public String grid= null;
+		    			    
+		
     
         	
-	    	    public long updatedAt= 0L;
-	    		
+							    public long updatedAt= 0L;
+		    			    
+		
     
         	
-	    	    public int state= 0;
-	    		
+							    public int state= 0;
+		    			    
+		
     
         	
-	    	    public int updateId= 0;
-	    		
+							    public int updateId= 0;
+		    			    
+		
     
         	
-	    	    public boolean isFloor= false;
-	    		
+							    public boolean isFloor= false;
+		    			    
+		
     
         	
-	    	    public boolean isDestructable= false;
-	    		
+							    public boolean isDestructable= false;
+		    			    
+		
     
         	
-	    	    public boolean hasDoor= false;
-	    		
+							    public boolean hasDoor= false;
+		    			    
+		
     
         	
-	    	    public int doorStatus= 0;
-	    		
+							    public int doorStatus= 0;
+		    			    
+		
     
         	
-	    	    public ByteString groundBlockObject;
-	    		
+							    public ByteString groundBlockObject;
+		    			    
+		
     
         	
-	    	    public boolean isGroundBlock= false;
-	    		
+							    public boolean isGroundBlock= false;
+		    			    
+		
     
         	
-	    	    public int chunk= 0;
-	    		
+							    public int chunk= 0;
+		    			    
+		
     
         	
-	    	    public ByteString terrainEdit;
-	    		
+							    public ByteString terrainEdit;
+		    			    
+		
     
         	
-	    	    public boolean isTerrainEdit= false;
-	    		
+							    public boolean isTerrainEdit= false;
+		    			    
+		
     
         	
-	    	    public ByteString customBytes;
-	    		
+							    public ByteString customBytes;
+		    			    
+		
     
         	
-	    	    public String customString= null;
-	    		
+							    public String customString= null;
+		    			    
+		
     
         	
-	    	    public String textureId= null;
-	    		
+							    public String textureId= null;
+		    			    
+		
     
         	
-	    	    public ByteString slots;
-	    		
+							    public ByteString slots;
+		    			    
+		
     
         	
-	    	    public long placedAt= 0L;
-	    		
+							    public long placedAt= 0L;
+		    			    
+		
     
         	
-	    	    public SlotInfo slotInfo;
-	    		
+					public SlotInfo slotInfo = null;
+			    
+		
     
         
 	public static BuildObjectCache cache() {

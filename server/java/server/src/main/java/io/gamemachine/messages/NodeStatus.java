@@ -62,40 +62,49 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
     static final String defaultScope = NodeStatus.class.getSimpleName();
 
     	
-	    	    public int containerId= 0;
-	    		
+							    public int containerId= 0;
+		    			    
+		
     
         	
-	    	    public String clusterName= null;
-	    		
+							    public String clusterName= null;
+		    			    
+		
     
         	
-	    	    public int lastUpdated= 0;
-	    		
+							    public int lastUpdated= 0;
+		    			    
+		
     
         	
-	    	    public String hostname= null;
-	    		
+							    public String hostname= null;
+		    			    
+		
     
         	
-	    	    public int port= 0;
-	    		
+							    public int port= 0;
+		    			    
+		
     
         	
-	    	    public int clientCount= 0;
-	    		
+							    public int clientCount= 0;
+		    			    
+		
     
         	
-	    	    public double loadAverage= 0D;
-	    		
+							    public double loadAverage= 0D;
+		    			    
+		
     
         	
-	    	    public int heapUsed= 0;
-	    		
+							    public int heapUsed= 0;
+		    			    
+		
     
         	
-	    	    public Statistics statistics;
-	    		
+					public Statistics statistics = null;
+			    
+		
     
         
 

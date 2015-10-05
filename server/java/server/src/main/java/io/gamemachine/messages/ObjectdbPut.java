@@ -62,8 +62,9 @@ public final class ObjectdbPut implements Externalizable, Message<ObjectdbPut>, 
     static final String defaultScope = ObjectdbPut.class.getSimpleName();
 
     	
-	    	    public Entity entity;
-	    		
+					public Entity entity = null;
+			    
+		
     
         
 

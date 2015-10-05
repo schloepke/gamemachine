@@ -62,12 +62,14 @@ public final class GmBounds implements Externalizable, Message<GmBounds>, Schema
     static final String defaultScope = GmBounds.class.getSimpleName();
 
     	
-	    	    public GmVector3 min;
-	    		
+					public GmVector3 min = null;
+			    
+		
     
         	
-	    	    public GmVector3 max;
-	    		
+					public GmVector3 max = null;
+			    
+		
     
         
 

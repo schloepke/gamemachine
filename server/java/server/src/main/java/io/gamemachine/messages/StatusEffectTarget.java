@@ -62,6 +62,10 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
             return number;
         }
         
+        public static Action defaultValue() {
+        	return (None);
+        }
+        
         public static Action valueOf(int number)
         {
             switch(number) 
@@ -87,6 +91,10 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
         public int getNumber()
         {
             return number;
+        }
+        
+        public static PassiveFlag defaultValue() {
+        	return (NA);
         }
         
         public static PassiveFlag valueOf(int number)
@@ -116,45 +124,55 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     static final String defaultScope = StatusEffectTarget.class.getSimpleName();
 
     	
-	    	    public String target= null;
-	    		
+							    public String target= null;
+		    			    
+		
     
         	
-	    	    public String skill= null;
-	    		
+							    public String skill= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 location;
-	    		
+					public GmVector3 location = null;
+			    
+		
     
         	
-	    	    public int range= 0;
-	    		
+							    public int range= 0;
+		    			    
+		
     
             public List<StatusEffect> statusEffect;
 	    	
-	    	    public String origin= null;
-	    		
+							    public String origin= null;
+		    			    
+		
     
         	
-	    	    public int ticks= 0;
-	    		
+							    public int ticks= 0;
+		    			    
+		
     
         	
-	    	    public long activeId= 0L;
-	    		
+							    public long activeId= 0L;
+		    			    
+		
     
         	
-	    	    public long lastTick= 0L;
-	    		
+							    public long lastTick= 0L;
+		    			    
+		
     
         	
-	    	    public Action action;
-	    		
+					public Action action = Action.defaultValue();
+			    
+		
     
         	
-	    	    public PassiveFlag passiveFlag;
-	    		
+					public PassiveFlag passiveFlag = PassiveFlag.defaultValue();
+			    
+		
     
         
 

@@ -62,180 +62,224 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
     static final String defaultScope = GameMessage.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String messageId= null;
-	    		
+							    public String messageId= null;
+		    			    
+		
     
         	
-	    	    public int destinationId= 0;
-	    		
+							    public int destinationId= 0;
+		    			    
+		
     
         	
-	    	    public String destination= null;
-	    		
+							    public String destination= null;
+		    			    
+		
     
         	
-	    	    public String agentId= null;
-	    		
+							    public String agentId= null;
+		    			    
+		
     
         	
-	    	    public DynamicMessage dynamicMessage;
-	    		
+					public DynamicMessage dynamicMessage = null;
+			    
+		
     
         	
-	    	    public PathData pathData;
-	    		
+					public PathData pathData = null;
+			    
+		
     
         	
-	    	    public PlayerItems playerItems;
-	    		
+					public PlayerItems playerItems = null;
+			    
+		
     
         	
-	    	    public AddPlayerItem addPlayerItem;
-	    		
+					public AddPlayerItem addPlayerItem = null;
+			    
+		
     
         	
-	    	    public RemovePlayerItem removePlayerItem;
-	    		
+					public RemovePlayerItem removePlayerItem = null;
+			    
+		
     
         	
-	    	    public RequestPlayerItems requestPlayerItems;
-	    		
+					public RequestPlayerItems requestPlayerItems = null;
+			    
+		
     
         	
-	    	    public PvpGameMessage pvpGameMessage;
-	    		
+					public PvpGameMessage pvpGameMessage = null;
+			    
+		
     
         	
-	    	    public Harvest harvest;
-	    		
+					public Harvest harvest = null;
+			    
+		
     
         	
-	    	    public long authtoken= 0L;
-	    		
+							    public long authtoken= 0L;
+		    			    
+		
     
         	
-	    	    public long unityMessageId= 0L;
-	    		
+							    public long unityMessageId= 0L;
+		    			    
+		
     
         	
-	    	    public CraftItem craftItem;
-	    		
+					public CraftItem craftItem = null;
+			    
+		
     
         	
-	    	    public UseSkill useSkill;
-	    		
+					public UseSkill useSkill = null;
+			    
+		
     
         	
-	    	    public PlayerSkills playerSkills;
-	    		
+					public PlayerSkills playerSkills = null;
+			    
+		
     
         	
-	    	    public Vitals vitals;
-	    		
+					public Vitals vitals = null;
+			    
+		
     
         	
-	    	    public Attack attack;
-	    		
+					public Attack attack = null;
+			    
+		
     
         	
-	    	    public StatusEffect statusEffect;
-	    		
+					public StatusEffect statusEffect = null;
+			    
+		
     
         	
-	    	    public StatusEffectResult statusEffectResult;
-	    		
+					public StatusEffectResult statusEffectResult = null;
+			    
+		
     
         	
-	    	    public DataRequest dataRequest;
-	    		
+					public DataRequest dataRequest = null;
+			    
+		
     
         	
-	    	    public VisualEffect visualEffect;
-	    		
+					public VisualEffect visualEffect = null;
+			    
+		
     
         	
-	    	    public WorldObjects worldObjects;
-	    		
+					public WorldObjects worldObjects = null;
+			    
+		
     
         	
-	    	    public SiegeCommand siegeCommand;
-	    		
+					public SiegeCommand siegeCommand = null;
+			    
+		
     
         	
-	    	    public GmBounds bounds;
-	    		
+					public GmBounds bounds = null;
+			    
+		
     
         	
-	    	    public UseItem useItem;
-	    		
+					public UseItem useItem = null;
+			    
+		
     
         	
-	    	    public TimeCycle timeCycle;
-	    		
+					public TimeCycle timeCycle = null;
+			    
+		
     
         	
-	    	    public Guilds guilds;
-	    		
+					public Guilds guilds = null;
+			    
+		
     
         	
-	    	    public GuildAction guildAction;
-	    		
+					public GuildAction guildAction = null;
+			    
+		
     
         	
-	    	    public GuildMemberList guildMemberList;
-	    		
+					public GuildMemberList guildMemberList = null;
+			    
+		
     
         	
-	    	    public Territory territory;
-	    		
+					public Territory territory = null;
+			    
+		
     
         	
-	    	    public Territories territories;
-	    		
+					public Territories territories = null;
+			    
+		
     
         	
-	    	    public EquippedItem equippedItem;
-	    		
+					public EquippedItem equippedItem = null;
+			    
+		
     
         	
-	    	    public ComboAttack comboAttack;
-	    		
+					public ComboAttack comboAttack = null;
+			    
+		
     
         	
-	    	    public NpcData npcData;
-	    		
+					public NpcData npcData = null;
+			    
+		
     
         	
-	    	    public BuildObjects buildObjects;
-	    		
+					public BuildObjects buildObjects = null;
+			    
+		
     
         	
-	    	    public BuildableAreas buildableAreas;
-	    		
+					public BuildableAreas buildableAreas = null;
+			    
+		
     
         	
-	    	    public GmStats gmStats;
-	    		
+					public GmStats gmStats = null;
+			    
+		
     
         	
-	    	    public Zone zone;
-	    		
+					public Zone zone = null;
+			    
+		
     
         	
-	    	    public BuildObjectChunks buildObjectChunks;
-	    		
+					public BuildObjectChunks buildObjectChunks = null;
+			    
+		
     
         	
-	    	    public TerrainEdits terrainEdits;
-	    		
+					public TerrainEdits terrainEdits = null;
+			    
+		
     
         	
-	    	    public UpdatePlayerItem updatePlayerItem;
-	    		
+					public UpdatePlayerItem updatePlayerItem = null;
+			    
+		
     
         
 

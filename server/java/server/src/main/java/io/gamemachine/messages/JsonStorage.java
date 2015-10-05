@@ -62,8 +62,9 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
     static final String defaultScope = JsonStorage.class.getSimpleName();
 
     	
-	    	    public String json= null;
-	    		
+							    public String json= null;
+		    			    
+		
     
         
 

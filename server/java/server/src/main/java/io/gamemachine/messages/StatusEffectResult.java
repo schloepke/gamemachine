@@ -62,20 +62,24 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
     static final String defaultScope = StatusEffectResult.class.getSimpleName();
 
     	
-	    	    public String target= null;
-	    		
+							    public String target= null;
+		    			    
+		
     
         	
-	    	    public String origin= null;
-	    		
+							    public String origin= null;
+		    			    
+		
     
         	
-	    	    public int value= 0;
-	    		
+							    public int value= 0;
+		    			    
+		
     
         	
-	    	    public String statusEffectId= null;
-	    		
+							    public String statusEffectId= null;
+		    			    
+		
     
         
 

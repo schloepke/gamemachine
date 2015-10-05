@@ -62,12 +62,14 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
     static final String defaultScope = TimeCycle.class.getSimpleName();
 
     	
-	    	    public float currentTime= 0F;
-	    		
+							    public float currentTime= 0F;
+		    			    
+		
     
         	
-	    	    public float dayCycleLength= 0F;
-	    		
+							    public float dayCycleLength= 0F;
+		    			    
+		
     
         
 

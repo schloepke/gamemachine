@@ -76,8 +76,9 @@ public final class Ping implements Externalizable, Message<Ping>, Schema<Ping>, 
     static final String defaultScope = Ping.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static PingCache cache() {

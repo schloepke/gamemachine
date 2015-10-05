@@ -62,12 +62,14 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
     static final String defaultScope = MonoMessage.class.getSimpleName();
 
     	
-	    	    public Entity entity;
-	    		
+					public Entity entity = null;
+			    
+		
     
         	
-	    	    public String klass= null;
-	    		
+							    public String klass= null;
+		    			    
+		
     
         
 

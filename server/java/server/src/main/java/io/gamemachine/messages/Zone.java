@@ -76,6 +76,10 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
             return number;
         }
         
+        public static Status defaultValue() {
+        	return (NONE);
+        }
+        
         public static Status valueOf(int number)
         {
             switch(number) 
@@ -105,20 +109,24 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     static final String defaultScope = Zone.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public Status status;
-	    		
+					public Status status = Status.defaultValue();
+			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         	
-	    	    public String unityClient= null;
-	    		
+							    public String unityClient= null;
+		    			    
+		
     
         
 	public static ZoneCache cache() {

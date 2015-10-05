@@ -76,16 +76,19 @@ public final class CraftingReward implements Externalizable, Message<CraftingRew
     static final String defaultScope = CraftingReward.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int quantity= 0;
-	    		
+							    public int quantity= 0;
+		    			    
+		
     
         	
-	    	    public int level= 0;
-	    		
+							    public int level= 0;
+		    			    
+		
     
         
 	public static CraftingRewardCache cache() {

@@ -76,12 +76,14 @@ public final class CraftingTool implements Externalizable, Message<CraftingTool>
     static final String defaultScope = CraftingTool.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int level= 0;
-	    		
+							    public int level= 0;
+		    			    
+		
     
         
 	public static CraftingToolCache cache() {

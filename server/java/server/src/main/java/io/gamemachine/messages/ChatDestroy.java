@@ -62,8 +62,9 @@ public final class ChatDestroy implements Externalizable, Message<ChatDestroy>, 
     static final String defaultScope = ChatDestroy.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         
 

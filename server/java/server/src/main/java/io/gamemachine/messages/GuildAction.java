@@ -69,36 +69,44 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     static final String defaultScope = GuildAction.class.getSimpleName();
 
     	
-	    	    public String action= null;
-	    		
+							    public String action= null;
+		    			    
+		
     
         	
-	    	    public String to= null;
-	    		
+							    public String to= null;
+		    			    
+		
     
         	
-	    	    public String from= null;
-	    		
+							    public String from= null;
+		    			    
+		
     
         	
-	    	    public String response= null;
-	    		
+							    public String response= null;
+		    			    
+		
     
         	
-	    	    public String guildId= null;
-	    		
+							    public String guildId= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String inviteId= null;
-	    		
+							    public String inviteId= null;
+		    			    
+		
     
         	
-	    	    public String guildName= null;
-	    		
+							    public String guildName= null;
+		    			    
+		
     
         
 

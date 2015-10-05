@@ -82,42 +82,51 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     static final String defaultScope = TestObject.class.getSimpleName();
 
     	
-	    	    public String optionalString= null;
-	    		
+							    public String optionalString= null;
+		    			    
+		
     
         	
-	    	    public String requiredString= null;
-	    		
+							    public String requiredString= null;
+		    			    
+		
     
             public List<Integer> numbers;
 	    	
-	    	    public ByteString bstring;
-	    		
+							    public ByteString bstring;
+		    			    
+		
     
         	
-	    	    public boolean bvalue= false;
-	    		
+							    public boolean bvalue= false;
+		    			    
+		
     
         	
-	    	    public double dvalue= 0D;
-	    		
+							    public double dvalue= 0D;
+		    			    
+		
     
         	
-	    	    public float fvalue= 0F;
-	    		
+							    public float fvalue= 0F;
+		    			    
+		
     
         	
-	    	    public long numbers64= 0L;
-	    		
+							    public long numbers64= 0L;
+		    			    
+		
     
             public List<Player> player;
 	    	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static TestObjectCache cache() {

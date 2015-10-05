@@ -62,32 +62,39 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
     static final String defaultScope = GmVector3.class.getSimpleName();
 
     	
-	    	    public float x= 0F;
-	    		
+							    public float x= 0F;
+		    			    
+		
     
         	
-	    	    public float y= 0F;
-	    		
+							    public float y= 0F;
+		    			    
+		
     
         	
-	    	    public float z= 0F;
-	    		
+							    public float z= 0F;
+		    			    
+		
     
         	
-	    	    public int xi= 0;
-	    		
+							    public int xi= 0;
+		    			    
+		
     
         	
-	    	    public int yi= 0;
-	    		
+							    public int yi= 0;
+		    			    
+		
     
         	
-	    	    public int zi= 0;
-	    		
+							    public int zi= 0;
+		    			    
+		
     
         	
-	    	    public int vertice= 0;
-	    		
+							    public int vertice= 0;
+		    			    
+		
     
         
 

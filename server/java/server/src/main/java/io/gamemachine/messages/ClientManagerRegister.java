@@ -62,16 +62,19 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
     static final String defaultScope = ClientManagerRegister.class.getSimpleName();
 
     	
-	    	    public String events= null;
-	    		
+							    public String events= null;
+		    			    
+		
     
         	
-	    	    public String registerType= null;
-	    		
+							    public String registerType= null;
+		    			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         
 

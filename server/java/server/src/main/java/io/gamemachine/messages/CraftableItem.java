@@ -82,44 +82,54 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     static final String defaultScope = CraftableItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String item1= null;
-	    		
+							    public String item1= null;
+		    			    
+		
     
         	
-	    	    public int item1_quantity= 0;
-	    		
+							    public int item1_quantity= 0;
+		    			    
+		
     
         	
-	    	    public String item2= null;
-	    		
+							    public String item2= null;
+		    			    
+		
     
         	
-	    	    public int item2_quantity= 0;
-	    		
+							    public int item2_quantity= 0;
+		    			    
+		
     
         	
-	    	    public String item3= null;
-	    		
+							    public String item3= null;
+		    			    
+		
     
         	
-	    	    public int item3_quantity= 0;
-	    		
+							    public int item3_quantity= 0;
+		    			    
+		
     
         	
-	    	    public String item4= null;
-	    		
+							    public String item4= null;
+		    			    
+		
     
         	
-	    	    public int item4_quantity= 0;
-	    		
+							    public int item4_quantity= 0;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         
 	public static CraftableItemCache cache() {

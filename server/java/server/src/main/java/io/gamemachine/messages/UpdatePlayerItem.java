@@ -62,12 +62,14 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
     static final String defaultScope = UpdatePlayerItem.class.getSimpleName();
 
     	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public PlayerItem playerItem;
-	    		
+					public PlayerItem playerItem = null;
+			    
+		
     
         
 

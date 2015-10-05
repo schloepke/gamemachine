@@ -62,8 +62,9 @@ public final class Regions implements Externalizable, Message<Regions>, Schema<R
     static final String defaultScope = Regions.class.getSimpleName();
 
     	
-	    	    public String regions= null;
-	    		
+							    public String regions= null;
+		    			    
+		
     
         
 

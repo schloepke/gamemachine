@@ -62,8 +62,9 @@ public final class PlayerConnected implements Externalizable, Message<PlayerConn
     static final String defaultScope = PlayerConnected.class.getSimpleName();
 
     	
-	    	    public int notused= 0;
-	    		
+							    public int notused= 0;
+		    			    
+		
     
         
 

@@ -101,6 +101,10 @@ import io.gamemachine.core.CacheUpdate;
             return number;
         }
         
+        public static <%=group.name %> defaultValue() {
+        	return (<%= group.values.first.getName %>);
+        }
+        
         public static <%=group.name %> valueOf(int number)
         {
             switch(number) 
@@ -133,11 +137,18 @@ import io.gamemachine.core.CacheUpdate;
     public List<<%=nullable(field)%>> <%=field.name %>;
 	<% else %>
 	
-	    <% if default_value(field).nil? %>
-	    public <%=get_type(field)%> <%=field.name %>;
-	    <% else %>
-	    public <%=get_type(field)%> <%=field.name %>= <%= default_value(field) %>;
-	    <% end %>
+		<% if field.enumField %>
+			public <%=get_type(field)%> <%=field.name %> = <%=get_type(field)%>.defaultValue();
+		<% elsif field.messageField %>
+			public <%=get_type(field)%> <%=field.name %> = null;
+		<% else %>
+			<% if default_value(field).nil? %>
+		    public <%=get_type(field)%> <%=field.name %>;
+		    <% else %>
+		    public <%=get_type(field)%> <%=field.name %>= <%= default_value(field) %>;
+		    <% end %>
+		<% end %>
+	    
 		
     
     <% end %>

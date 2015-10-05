@@ -82,144 +82,179 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     static final String defaultScope = PlayerItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         	
-	    	    public int quantity= 0;
-	    		
+							    public int quantity= 0;
+		    			    
+		
     
         	
-	    	    public String color= null;
-	    		
+							    public String color= null;
+		    			    
+		
     
         	
-	    	    public boolean weapon= false;
-	    		
+							    public boolean weapon= false;
+		    			    
+		
     
         	
-	    	    public Cost cost;
-	    		
+					public Cost cost = null;
+			    
+		
     
         	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String icon= null;
-	    		
+							    public String icon= null;
+		    			    
+		
     
         	
-	    	    public int harvestable= 0;
-	    		
+							    public int harvestable= 0;
+		    			    
+		
     
         	
-	    	    public int craftingResource= 0;
-	    		
+							    public int craftingResource= 0;
+		    			    
+		
     
         	
-	    	    public int craftable= 0;
-	    		
+							    public int craftable= 0;
+		    			    
+		
     
         	
-	    	    public boolean isConsumable= false;
-	    		
+							    public boolean isConsumable= false;
+		    			    
+		
     
         	
-	    	    public int type= 0;
-	    		
+							    public int type= 0;
+		    			    
+		
     
         	
-	    	    public int maxHealth= 0;
-	    		
+							    public int maxHealth= 0;
+		    			    
+		
     
         	
-	    	    public int health= 0;
-	    		
+							    public int health= 0;
+		    			    
+		
     
         	
-	    	    public int level= 0;
-	    		
+							    public int level= 0;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         	
-	    	    public String containerId= null;
-	    		
+							    public String containerId= null;
+		    			    
+		
     
         	
-	    	    public int updatedAt= 0;
-	    		
+							    public int updatedAt= 0;
+		    			    
+		
     
         	
-	    	    public String category= null;
-	    		
+							    public String category= null;
+		    			    
+		
     
         	
-	    	    public String locationId= null;
-	    		
+							    public String locationId= null;
+		    			    
+		
     
         	
-	    	    public int slotCount= 0;
-	    		
+							    public int slotCount= 0;
+		    			    
+		
     
         	
-	    	    public boolean stackable= false;
-	    		
+							    public boolean stackable= false;
+		    			    
+		
     
         	
-	    	    public String locationType= null;
-	    		
+							    public String locationType= null;
+		    			    
+		
     
         	
-	    	    public int stackMax= 0;
-	    		
+							    public int stackMax= 0;
+		    			    
+		
     
         	
-	    	    public int containerSlot= 0;
-	    		
+							    public int containerSlot= 0;
+		    			    
+		
     
         	
-	    	    public String icon_uuid= null;
-	    		
+							    public String icon_uuid= null;
+		    			    
+		
     
         	
-	    	    public String icon_path= null;
-	    		
+							    public String icon_path= null;
+		    			    
+		
     
         	
-	    	    public String referenceId= null;
-	    		
+							    public String referenceId= null;
+		    			    
+		
     
         	
-	    	    public boolean hidden= false;
-	    		
+							    public boolean hidden= false;
+		    			    
+		
     
         	
-	    	    public int maxQuantity= 0;
-	    		
+							    public int maxQuantity= 0;
+		    			    
+		
     
         	
-	    	    public boolean active= false;
-	    		
+							    public boolean active= false;
+		    			    
+		
     
         	
-	    	    public float weight= 0F;
-	    		
+							    public float weight= 0F;
+		    			    
+		
     
         	
-	    	    public int templateBlockId= 0;
-	    		
+							    public int templateBlockId= 0;
+		    			    
+		
     
         
 	public static PlayerItemCache cache() {

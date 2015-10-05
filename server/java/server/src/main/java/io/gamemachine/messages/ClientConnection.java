@@ -76,20 +76,24 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
     static final String defaultScope = ClientConnection.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public String gateway= null;
-	    		
+							    public String gateway= null;
+		    			    
+		
     
         	
-	    	    public String server= null;
-	    		
+							    public String server= null;
+		    			    
+		
     
         	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         
 	public static ClientConnectionCache cache() {

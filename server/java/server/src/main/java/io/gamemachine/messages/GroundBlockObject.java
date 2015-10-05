@@ -76,6 +76,10 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
             return number;
         }
         
+        public static Status defaultValue() {
+        	return (NONE);
+        }
+        
         public static Status valueOf(int number)
         {
             switch(number) 
@@ -105,52 +109,64 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 
         public List<GmVector3> vertices;
 	    	
-	    	    public GmVector3 position;
-	    		
+					public GmVector3 position = null;
+			    
+		
     
         	
-	    	    public GmQuaternion rotation;
-	    		
+					public GmQuaternion rotation = null;
+			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int verticeCount= 0;
-	    		
+							    public int verticeCount= 0;
+		    			    
+		
     
         	
-	    	    public String tag= null;
-	    		
+							    public String tag= null;
+		    			    
+		
     
         	
-	    	    public String layer= null;
-	    		
+							    public String layer= null;
+		    			    
+		
     
         	
-	    	    public int gbLayer= 0;
-	    		
+							    public int gbLayer= 0;
+		    			    
+		
     
         	
-	    	    public boolean molded= false;
-	    		
+							    public boolean molded= false;
+		    			    
+		
     
         	
-	    	    public Status status;
-	    		
+					public Status status = Status.defaultValue();
+			    
+		
     
         	
-	    	    public boolean canRemove= false;
-	    		
+							    public boolean canRemove= false;
+		    			    
+		
     
         	
-	    	    public boolean isTop= false;
-	    		
+							    public boolean isTop= false;
+		    			    
+		
     
         	
-	    	    public int gbType= 0;
-	    		
+							    public int gbType= 0;
+		    			    
+		
     
         
 	public static GroundBlockObjectCache cache() {

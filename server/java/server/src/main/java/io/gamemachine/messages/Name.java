@@ -62,8 +62,9 @@ public final class Name implements Externalizable, Message<Name>, Schema<Name>{
     static final String defaultScope = Name.class.getSimpleName();
 
     	
-	    	    public String value= null;
-	    		
+							    public String value= null;
+		    			    
+		
     
         
 

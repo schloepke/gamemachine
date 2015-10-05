@@ -62,12 +62,14 @@ public final class ErrorMessage implements Externalizable, Message<ErrorMessage>
     static final String defaultScope = ErrorMessage.class.getSimpleName();
 
     	
-	    	    public String code= null;
-	    		
+							    public String code= null;
+		    			    
+		
     
         	
-	    	    public String message= null;
-	    		
+							    public String message= null;
+		    			    
+		
     
         
 

@@ -62,28 +62,34 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
     static final String defaultScope = ChatMessage.class.getSimpleName();
 
     	
-	    	    public ChatChannel chatChannel;
-	    		
+					public ChatChannel chatChannel = null;
+			    
+		
     
         	
-	    	    public String message= null;
-	    		
+							    public String message= null;
+		    			    
+		
     
         	
-	    	    public String type= null;
-	    		
+							    public String type= null;
+		    			    
+		
     
         	
-	    	    public String senderId= null;
-	    		
+							    public String senderId= null;
+		    			    
+		
     
         	
-	    	    public Entity entity;
-	    		
+					public Entity entity = null;
+			    
+		
     
         	
-	    	    public DynamicMessage dynamicMessage;
-	    		
+					public DynamicMessage dynamicMessage = null;
+			    
+		
     
         
 

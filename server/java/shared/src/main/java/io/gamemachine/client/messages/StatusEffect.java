@@ -40,7 +40,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	public enum Type implements io.protostuff.EnumLite<Type>
     {
     	
-    	    	AttributeDecrease(0),    	    	AttributeIncrease(1),    	    	Heal(2),    	    	Slow(3),    	    	Stun(4),    	    	Root(5),    	    	Death(6),    	    	ArmorIncrease(7),    	    	SpellResistIncrease(8),    	    	ElementalResistIncrease(9),    	    	SpellPenetrationIncrease(10),    	    	MagicRegenIncrease(11),    	    	HealthRegenIncrease(12),    	    	StaminaRegenIncrease(13),    	    	ArmorDecrease(14),    	    	SpellResistDecrease(15),    	    	ElementalResistDecrease(16),    	    	MagicRegenDecrease(17),    	    	HealthRegenDecrease(18),    	    	StaminaRegenDecrease(19),    	    	Speed(20);    	        
+    	    	StatusEffectNone(0),    	    	AttributeDecrease(1),    	    	AttributeIncrease(2),    	    	Heal(3),    	    	Slow(4),    	    	Stun(5),    	    	Root(6),    	    	Death(7),    	    	ArmorIncrease(8),    	    	SpellResistIncrease(9),    	    	ElementalResistIncrease(10),    	    	SpellPenetrationIncrease(11),    	    	MagicRegenIncrease(12),    	    	HealthRegenIncrease(13),    	    	StaminaRegenIncrease(14),    	    	ArmorDecrease(15),    	    	SpellResistDecrease(16),    	    	ElementalResistDecrease(17),    	    	MagicRegenDecrease(18),    	    	HealthRegenDecrease(19),    	    	StaminaRegenDecrease(20),    	    	Speed(21);    	        
         public final int number;
         
         private Type (int number)
@@ -57,27 +57,28 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         {
             switch(number) 
             {
-            	    			case 0: return (AttributeDecrease);
-    			    			case 1: return (AttributeIncrease);
-    			    			case 2: return (Heal);
-    			    			case 3: return (Slow);
-    			    			case 4: return (Stun);
-    			    			case 5: return (Root);
-    			    			case 6: return (Death);
-    			    			case 7: return (ArmorIncrease);
-    			    			case 8: return (SpellResistIncrease);
-    			    			case 9: return (ElementalResistIncrease);
-    			    			case 10: return (SpellPenetrationIncrease);
-    			    			case 11: return (MagicRegenIncrease);
-    			    			case 12: return (HealthRegenIncrease);
-    			    			case 13: return (StaminaRegenIncrease);
-    			    			case 14: return (ArmorDecrease);
-    			    			case 15: return (SpellResistDecrease);
-    			    			case 16: return (ElementalResistDecrease);
-    			    			case 17: return (MagicRegenDecrease);
-    			    			case 18: return (HealthRegenDecrease);
-    			    			case 19: return (StaminaRegenDecrease);
-    			    			case 20: return (Speed);
+            	    			case 0: return (StatusEffectNone);
+    			    			case 1: return (AttributeDecrease);
+    			    			case 2: return (AttributeIncrease);
+    			    			case 3: return (Heal);
+    			    			case 4: return (Slow);
+    			    			case 5: return (Stun);
+    			    			case 6: return (Root);
+    			    			case 7: return (Death);
+    			    			case 8: return (ArmorIncrease);
+    			    			case 9: return (SpellResistIncrease);
+    			    			case 10: return (ElementalResistIncrease);
+    			    			case 11: return (SpellPenetrationIncrease);
+    			    			case 12: return (MagicRegenIncrease);
+    			    			case 13: return (HealthRegenIncrease);
+    			    			case 14: return (StaminaRegenIncrease);
+    			    			case 15: return (ArmorDecrease);
+    			    			case 16: return (SpellResistDecrease);
+    			    			case 17: return (ElementalResistDecrease);
+    			    			case 18: return (MagicRegenDecrease);
+    			    			case 19: return (HealthRegenDecrease);
+    			    			case 20: return (StaminaRegenDecrease);
+    			    			case 21: return (Speed);
     			                default: return null;
             }
         }
@@ -85,7 +86,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
     	
-    	    	None(0),    	    	Physical(1),    	    	Magic(2),    	    	Elemental(3);    	        
+    	    	DamageTypeNone(0),    	    	Physical(1),    	    	Magic(2),    	    	Elemental(3);    	        
         public final int number;
         
         private DamageType (int number)
@@ -102,7 +103,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
         {
             switch(number) 
             {
-            	    			case 0: return (None);
+            	    			case 0: return (DamageTypeNone);
     			    			case 1: return (Physical);
     			    			case 2: return (Magic);
     			    			case 3: return (Elemental);
@@ -124,7 +125,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 
     static final StatusEffect DEFAULT_INSTANCE = new StatusEffect();
 
-    			public Type type; // = AttributeDecrease:0;
+    			public Type type; // = StatusEffectNone:0;
 	    
         			public String id;
 	    
@@ -140,7 +141,7 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	    
         			public String particleEffect;
 	    
-        			public DamageType damageType; // = None:0;
+        			public DamageType damageType; // = DamageTypeNone:0;
 	    
         			public String icon_path;
 	    

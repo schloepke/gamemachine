@@ -325,31 +325,32 @@ local_message EquippedItem {
 
 local_message StatusEffect {
   enum Type {
-    AttributeDecrease = 0;
-    AttributeIncrease = 1;
-    Heal = 2;
-    Slow = 3;
-    Stun = 4;
-    Root = 5;
-    Death = 6;
-    ArmorIncrease = 7;
-    SpellResistIncrease = 8;
-    ElementalResistIncrease = 9;
-    SpellPenetrationIncrease = 10;
-    MagicRegenIncrease = 11;
-    HealthRegenIncrease = 12;
-    StaminaRegenIncrease = 13;
-    ArmorDecrease = 14;
-    SpellResistDecrease = 15;
-    ElementalResistDecrease = 16;
-    MagicRegenDecrease = 17;
-    HealthRegenDecrease = 18;
-    StaminaRegenDecrease = 19;
-    Speed = 20;
+  	StatusEffectNone = 0;
+    AttributeDecrease = 1;
+    AttributeIncrease = 2;
+    Heal = 3;
+    Slow = 4;
+    Stun = 5;
+    Root = 6;
+    Death = 7;
+    ArmorIncrease = 8;
+    SpellResistIncrease = 9;
+    ElementalResistIncrease = 10;
+    SpellPenetrationIncrease = 11;
+    MagicRegenIncrease = 12;
+    HealthRegenIncrease = 13;
+    StaminaRegenIncrease = 14;
+    ArmorDecrease = 15;
+    SpellResistDecrease = 16;
+    ElementalResistDecrease = 17;
+    MagicRegenDecrease = 18;
+    HealthRegenDecrease = 19;
+    StaminaRegenDecrease = 20;
+    Speed = 21;
 }
 
   enum DamageType {
-    None = 0;
+    DamageTypeNone = 0;
     Physical = 1;
     Magic = 2;
     Elemental = 3;
@@ -566,38 +567,42 @@ message DynamicMessage {
 
 local_persistent_message PlayerSkill {
   enum DamageType {
-	Aoe = 0;
-	SingleTarget = 1;
-	Pbaoe = 2;
-	SelfAoe = 3;
-	Self = 4;
+    DamageTypeNone = 0;
+	Aoe = 1;
+	SingleTarget = 2;
+	Pbaoe = 3;
+	SelfAoe = 4;
+	Self = 5;
   }
   
   enum SkillType {
-    Active = 0;
-    Passive = 1;
+    SkillTypeNone = 0;
+    Active = 1;
+    Passive = 2;
   }
   
   enum Resource {
-    NoResource = 0;
+    ResourceNone = 0;
     Magic = 1;
     Stamina = 2;
   }
   
   enum Category {
-    Weapon = 0;
-    Crafting = 1;
-    CategoryOther = 2;
+    CategoryNone = 0;
+    Weapon = 1;
+    Crafting = 2;
+    CategoryOther = 3;
   }
   
   enum WeaponType {
-    Bow = 0;
-    Sword2h = 1;
-    Sword1h = 2;
-    Staff = 3;
-    Gun = 4;
-    Siege = 5;
-    WeaponTypeOther = 6;
+    WeaponTypeNone = 0;
+    Bow = 1;
+    Sword2h = 2;
+    Sword1h = 3;
+    Staff = 4;
+    Gun = 5;
+    Siege = 6;
+    WeaponTypeOther = 7;
   }
   
   required string id = 1;

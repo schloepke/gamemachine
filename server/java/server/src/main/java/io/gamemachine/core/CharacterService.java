@@ -4,10 +4,13 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerNotification;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +26,7 @@ public class CharacterService {
 	public static int timeout = 2000;
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
+	public Map<String, Character> characters = new ConcurrentHashMap<String, Character>();
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
 	private CharacterService() {
@@ -191,17 +195,34 @@ public class CharacterService {
 		if (authType == OBJECT_DB) {
 			return ObjectStoreHelper.getCharacter(characterId);
 		} else if (authType == SQL_DB) {
-			return Character.db().findFirst("character_id = ?", characterId);
+			if (characters.containsKey(characterId)) {
+				return characters.get(characterId);
+			} else {
+				Character character = Character.db().findFirst("character_id = ?", characterId);
+				if (character != null) {
+					characters.put(characterId, character);
+				}
+				return character;
+			}
 		} else {
 			return null;
 		}
 	}
 	
-	public Character find(String playerId, String id) {
+	public Character find(String playerId, String characterId) {
 		if (authType == OBJECT_DB) {
-			return ObjectStoreHelper.find(playerId, id);
+			return ObjectStoreHelper.find(playerId, characterId);
 		} else if (authType == SQL_DB) {
-			return Character.db().findFirst("character_id = ?", id);
+			if (characters.containsKey(characterId)) {
+				return characters.get(characterId);
+			} else {
+				Character character = Character.db().findFirst("character_id = ?", characterId);
+				if (character != null) {
+					characters.put(characterId, character);
+				}
+				return character;
+			}
+			
 		} else {
 			return null;
 		}

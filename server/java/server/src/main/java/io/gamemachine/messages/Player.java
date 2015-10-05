@@ -82,48 +82,59 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     static final String defaultScope = Player.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public boolean authenticated= false;
-	    		
+							    public boolean authenticated= false;
+		    			    
+		
     
         	
-	    	    public int authtoken= 0;
-	    		
+							    public int authtoken= 0;
+		    			    
+		
     
         	
-	    	    public String passwordHash= null;
-	    		
+							    public String passwordHash= null;
+		    			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String role= null;
-	    		
+							    public String role= null;
+		    			    
+		
     
         	
-	    	    public boolean locked= false;
-	    		
+							    public boolean locked= false;
+		    			    
+		
     
         	
-	    	    public int ip= 0;
-	    		
+							    public int ip= 0;
+		    			    
+		
     
         	
-	    	    public long ipChangedAt= 0L;
-	    		
+							    public long ipChangedAt= 0L;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
             public List<Character> characters;
 	    

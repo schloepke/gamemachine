@@ -62,12 +62,14 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
     static final String defaultScope = Cost.class.getSimpleName();
 
     	
-	    	    public float amount= 0F;
-	    		
+							    public float amount= 0F;
+		    			    
+		
     
         	
-	    	    public String currency= null;
-	    		
+							    public String currency= null;
+		    			    
+		
     
         
 

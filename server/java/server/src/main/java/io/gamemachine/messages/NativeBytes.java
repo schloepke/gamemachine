@@ -62,8 +62,9 @@ public final class NativeBytes implements Externalizable, Message<NativeBytes>, 
     static final String defaultScope = NativeBytes.class.getSimpleName();
 
     	
-	    	    public ByteString bytes;
-	    		
+							    public ByteString bytes;
+		    			    
+		
     
             public List<ByteString> byteArray;
 	    

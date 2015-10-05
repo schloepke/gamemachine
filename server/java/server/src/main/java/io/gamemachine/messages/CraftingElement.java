@@ -76,20 +76,24 @@ public final class CraftingElement implements Externalizable, Message<CraftingEl
     static final String defaultScope = CraftingElement.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int quantity= 0;
-	    		
+							    public int quantity= 0;
+		    			    
+		
     
         	
-	    	    public int level= 0;
-	    		
+							    public int level= 0;
+		    			    
+		
     
         	
-	    	    public int order= 0;
-	    		
+							    public int order= 0;
+		    			    
+		
     
         
 	public static CraftingElementCache cache() {

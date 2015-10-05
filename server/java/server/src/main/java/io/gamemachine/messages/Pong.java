@@ -76,8 +76,9 @@ public final class Pong implements Externalizable, Message<Pong>, Schema<Pong>, 
     static final String defaultScope = Pong.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static PongCache cache() {

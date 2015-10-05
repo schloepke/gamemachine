@@ -62,12 +62,14 @@ public final class GridNode implements Externalizable, Message<GridNode>, Schema
     static final String defaultScope = GridNode.class.getSimpleName();
 
     	
-	    	    public GmVector3 point;
-	    		
+					public GmVector3 point = null;
+			    
+		
     
         	
-	    	    public float slope= 0F;
-	    		
+							    public float slope= 0F;
+		    			    
+		
     
         
 

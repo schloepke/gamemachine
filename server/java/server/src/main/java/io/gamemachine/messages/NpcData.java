@@ -76,6 +76,10 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
             return number;
         }
         
+        public static NpcType defaultValue() {
+        	return (None);
+        }
+        
         public static NpcType valueOf(int number)
         {
             switch(number) 
@@ -105,29 +109,35 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     static final String defaultScope = NpcData.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public GmVector3 spawnpoint;
-	    		
+					public GmVector3 spawnpoint = null;
+			    
+		
     
         	
-	    	    public String leader= null;
-	    		
+							    public String leader= null;
+		    			    
+		
     
             public List<String> followers;
 	    	
-	    	    public String patrolRoute= null;
-	    		
+							    public String patrolRoute= null;
+		    			    
+		
     
         	
-	    	    public Waypoint waypoint;
-	    		
+					public Waypoint waypoint = null;
+			    
+		
     
         	
-	    	    public NpcType npcType;
-	    		
+					public NpcType npcType = NpcType.defaultValue();
+			    
+		
     
         
 	public static NpcDataCache cache() {

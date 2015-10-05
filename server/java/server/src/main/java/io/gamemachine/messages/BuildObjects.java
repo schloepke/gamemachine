@@ -63,16 +63,19 @@ public final class BuildObjects implements Externalizable, Message<BuildObjects>
 
         public List<BuildObject> buildObject;
 	    	
-	    	    public int action= 0;
-	    		
+							    public int action= 0;
+		    			    
+		
     
         	
-	    	    public int requestedUpdateId= 0;
-	    		
+							    public int requestedUpdateId= 0;
+		    			    
+		
     
         	
-	    	    public int currentUpdate= 0;
-	    		
+							    public int currentUpdate= 0;
+		    			    
+		
     
         
 

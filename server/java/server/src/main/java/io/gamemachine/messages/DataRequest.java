@@ -62,12 +62,14 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
     static final String defaultScope = DataRequest.class.getSimpleName();
 
     	
-	    	    public String requester= null;
-	    		
+							    public String requester= null;
+		    			    
+		
     
         	
-	    	    public String name= null;
-	    		
+							    public String name= null;
+		    			    
+		
     
         
 

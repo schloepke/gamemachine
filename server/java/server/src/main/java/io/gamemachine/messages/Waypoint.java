@@ -76,8 +76,9 @@ public final class Waypoint implements Externalizable, Message<Waypoint>, Schema
     static final String defaultScope = Waypoint.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
             public List<GmVector3> position;
 	    

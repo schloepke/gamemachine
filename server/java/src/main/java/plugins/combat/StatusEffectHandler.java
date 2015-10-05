@@ -18,10 +18,12 @@ import io.gamemachine.core.ChatSubscriptions;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.DataRequest;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
@@ -333,11 +335,18 @@ public class StatusEffectHandler extends UntypedActor {
 						sendVisualEffect(effect, statusEffectTarget.location,defaultGrid);
 					}
 					for (String target : Common.getTargetsInRange(statusEffectTarget.range,	location, defaultGrid)) {
-						applyStatusEffect(statusEffectTarget, target, effect);
+						Player player = PlayerService.getInstance().find(target);
+						if (player != null) {
+							String characterId = player.characterId;
+							applyStatusEffect(statusEffectTarget, characterId, effect);
+						} else {
+							logger.warning("Player not found "+target);
+						}
+						
 					}
-					for (String target : Common.getTargetsInRange(statusEffectTarget.range, location, worldObjectGrid)) {
-						applyStatusEffect(statusEffectTarget, target, effect);
-					}
+					//for (String target : Common.getTargetsInRange(statusEffectTarget.range, location, worldObjectGrid)) {
+					//	applyStatusEffect(statusEffectTarget, target, effect);
+					//}
 				} else {
 					applyStatusEffect(statusEffectTarget, statusEffectTarget.target, effect);
 				}

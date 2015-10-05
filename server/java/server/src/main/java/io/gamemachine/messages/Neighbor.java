@@ -76,16 +76,19 @@ public final class Neighbor implements Externalizable, Message<Neighbor>, Schema
     static final String defaultScope = Neighbor.class.getSimpleName();
 
     	
-	    	    public TrackData trackData;
-	    		
+					public TrackData trackData = null;
+			    
+		
     
         	
-	    	    public GmVector3 location;
-	    		
+					public GmVector3 location = null;
+			    
+		
     
         	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         
 	public static NeighborCache cache() {

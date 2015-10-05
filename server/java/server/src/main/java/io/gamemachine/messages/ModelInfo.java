@@ -62,52 +62,64 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
     static final String defaultScope = ModelInfo.class.getSimpleName();
 
     	
-	    	    public float attachX= 0F;
-	    		
+							    public float attachX= 0F;
+		    			    
+		
     
         	
-	    	    public float attachY= 0F;
-	    		
+							    public float attachY= 0F;
+		    			    
+		
     
         	
-	    	    public float attachZ= 0F;
-	    		
+							    public float attachZ= 0F;
+		    			    
+		
     
         	
-	    	    public float rotateX= 0F;
-	    		
+							    public float rotateX= 0F;
+		    			    
+		
     
         	
-	    	    public float rotateY= 0F;
-	    		
+							    public float rotateY= 0F;
+		    			    
+		
     
         	
-	    	    public float rotateZ= 0F;
-	    		
+							    public float rotateZ= 0F;
+		    			    
+		
     
         	
-	    	    public float scaleX= 0F;
-	    		
+							    public float scaleX= 0F;
+		    			    
+		
     
         	
-	    	    public float scaleY= 0F;
-	    		
+							    public float scaleY= 0F;
+		    			    
+		
     
         	
-	    	    public float scaleZ= 0F;
-	    		
+							    public float scaleZ= 0F;
+		    			    
+		
     
         	
-	    	    public String resource= null;
-	    		
+							    public String resource= null;
+		    			    
+		
     
         	
-	    	    public String prefab= null;
-	    		
+							    public String prefab= null;
+		    			    
+		
     
         	
-	    	    public String weapon_type= null;
-	    		
+							    public String weapon_type= null;
+		    			    
+		
     
         
 

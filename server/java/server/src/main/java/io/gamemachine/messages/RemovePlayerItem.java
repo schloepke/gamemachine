@@ -76,20 +76,24 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
     static final String defaultScope = RemovePlayerItem.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int quantity= 0;
-	    		
+							    public int quantity= 0;
+		    			    
+		
     
         	
-	    	    public int result= 0;
-	    		
+							    public int result= 0;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         
 	public static RemovePlayerItemCache cache() {

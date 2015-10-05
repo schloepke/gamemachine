@@ -62,12 +62,14 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
     static final String defaultScope = GridVerticle.class.getSimpleName();
 
     	
-	    	    public float x= 0F;
-	    		
+							    public float x= 0F;
+		    			    
+		
     
         	
-	    	    public float y= 0F;
-	    		
+							    public float y= 0F;
+		    			    
+		
     
             public List<GridNode> gridNodes;
 	    

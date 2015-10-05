@@ -62,8 +62,9 @@ public final class PlayerItems implements Externalizable, Message<PlayerItems>, 
     static final String defaultScope = PlayerItems.class.getSimpleName();
 
     	
-	    	    public boolean catalog= false;
-	    		
+							    public boolean catalog= false;
+		    			    
+		
     
             public List<PlayerItem> playerItem;
 	    

@@ -63,12 +63,14 @@ public final class GridData implements Externalizable, Message<GridData>, Schema
 
         public List<GridNode> nodes;
 	    	
-	    	    public int w= 0;
-	    		
+							    public int w= 0;
+		    			    
+		
     
         	
-	    	    public int h= 0;
-	    		
+							    public int h= 0;
+		    			    
+		
     
             public List<GridVerticle> gridVerticles;
 	    

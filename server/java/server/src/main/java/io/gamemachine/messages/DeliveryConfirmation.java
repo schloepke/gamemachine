@@ -62,8 +62,9 @@ public final class DeliveryConfirmation implements Externalizable, Message<Deliv
     static final String defaultScope = DeliveryConfirmation.class.getSimpleName();
 
     	
-	    	    public String messageId= null;
-	    		
+							    public String messageId= null;
+		    			    
+		
     
         
 

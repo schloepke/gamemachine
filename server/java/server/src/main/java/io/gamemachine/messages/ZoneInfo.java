@@ -82,36 +82,44 @@ public final class ZoneInfo implements Externalizable, Message<ZoneInfo>, Schema
     static final String defaultScope = ZoneInfo.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
         	
-	    	    public int recordId= 0;
-	    		
+							    public int recordId= 0;
+		    			    
+		
     
         	
-	    	    public String node= null;
-	    		
+							    public String node= null;
+		    			    
+		
     
         	
-	    	    public String actorName= null;
-	    		
+							    public String actorName= null;
+		    			    
+		
     
         	
-	    	    public boolean assigned= false;
-	    		
+							    public boolean assigned= false;
+		    			    
+		
     
         	
-	    	    public int number= 0;
-	    		
+							    public int number= 0;
+		    			    
+		
     
         	
-	    	    public String hostname= null;
-	    		
+							    public String hostname= null;
+		    			    
+		
     
         	
-	    	    public boolean current= false;
-	    		
+							    public boolean current= false;
+		    			    
+		
     
         
 	public static ZoneInfoCache cache() {

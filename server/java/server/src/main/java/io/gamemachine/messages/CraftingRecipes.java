@@ -63,8 +63,9 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
 
         public List<CraftingRecipe> craftingRecipes;
 	    	
-	    	    public String itemCatalog= null;
-	    		
+							    public String itemCatalog= null;
+		    			    
+		
     
         
 

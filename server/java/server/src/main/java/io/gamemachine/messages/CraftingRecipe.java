@@ -76,30 +76,36 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
     static final String defaultScope = CraftingRecipe.class.getSimpleName();
 
     	
-	    	    public String id= null;
-	    		
+							    public String id= null;
+		    			    
+		
     
             public List<CraftingElement> elements;
 	    	
-	    	    public CraftingTool tool;
-	    		
+					public CraftingTool tool = null;
+			    
+		
     
         	
-	    	    public boolean orderMatters= false;
-	    		
+							    public boolean orderMatters= false;
+		    			    
+		
     
         	
-	    	    public float timeToComplete= 0F;
-	    		
+							    public float timeToComplete= 0F;
+		    			    
+		
     
             public List<CraftingReward> rewards;
 	    	
-	    	    public int maxUses= 0;
-	    		
+							    public int maxUses= 0;
+		    			    
+		
     
         	
-	    	    public boolean active= false;
-	    		
+							    public boolean active= false;
+		    			    
+		
     
         
 	public static CraftingRecipeCache cache() {

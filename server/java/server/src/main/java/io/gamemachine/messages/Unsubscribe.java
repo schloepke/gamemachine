@@ -62,12 +62,14 @@ public final class Unsubscribe implements Externalizable, Message<Unsubscribe>, 
     static final String defaultScope = Unsubscribe.class.getSimpleName();
 
     	
-	    	    public String topic= null;
-	    		
+							    public String topic= null;
+		    			    
+		
     
         	
-	    	    public String gameId= null;
-	    		
+							    public String gameId= null;
+		    			    
+		
     
         
 

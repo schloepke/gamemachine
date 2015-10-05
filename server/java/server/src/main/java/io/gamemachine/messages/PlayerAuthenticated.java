@@ -62,12 +62,14 @@ public final class PlayerAuthenticated implements Externalizable, Message<Player
     static final String defaultScope = PlayerAuthenticated.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public int authtoken= 0;
-	    		
+							    public int authtoken= 0;
+		    			    
+		
     
         
 

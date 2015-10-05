@@ -62,8 +62,9 @@ public final class EchoTest implements Externalizable, Message<EchoTest>, Schema
     static final String defaultScope = EchoTest.class.getSimpleName();
 
     	
-	    	    public String message= null;
-	    		
+							    public String message= null;
+		    			    
+		
     
         
 

@@ -62,16 +62,19 @@ public final class CharacterNotification implements Externalizable, Message<Char
     static final String defaultScope = CharacterNotification.class.getSimpleName();
 
     	
-	    	    public String playerId= null;
-	    		
+							    public String playerId= null;
+		    			    
+		
     
         	
-	    	    public String action= null;
-	    		
+							    public String action= null;
+		    			    
+		
     
         	
-	    	    public String characterId= null;
-	    		
+							    public String characterId= null;
+		    			    
+		
     
         
 
