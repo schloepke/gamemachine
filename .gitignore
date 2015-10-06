@@ -30,3 +30,4 @@ server/pathfinding/build
 /rdoc/
 /server/java/project/.nb-gradle/private/
 /server/java/server/src/main/java/io/gamemachine/orm/models
+/server/java/server/src/main/java/io/gamemachine/messages
