@@ -64,7 +64,7 @@ public class GameConfig extends UntypedActor {
 		try {
 			return new GridConfig(gridName, config.getString("grids." + gridName));
 		} catch (ConfigException.Missing e) {
-			e.printStackTrace();
+			logger.info("Undefined grid "+gridName);
 			return null;
 		}
 	}

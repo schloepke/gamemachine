@@ -25,14 +25,6 @@ public class GameGrid {
 	private static ConcurrentHashMap<String, Integer> playerZone = new ConcurrentHashMap<String, Integer>();
 	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>> zoneToGridName = new ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>>();
 	
-	public static Grid getPlayerGrid(String gameId, String gridName, String playerId) {
-		return getGameGrid(gameId, gridName,playerId);
-	}
-
-	public static Grid getPlayerGrid(String gridName, String playerId) {
-		String gameId = AppConfig.getDefaultGameId();
-		return getGameGrid(gameId, gridName,playerId);
-	}
 	
 	public static int getPlayerZone(String playerId) {
 		if (playerZone.containsKey(playerId)) {
@@ -190,6 +182,12 @@ public class GameGrid {
 	}
 	
 	public static Grid getGameGrid(String gameId, String gridName, String playerId) {
+		int zone = getPlayerZone(playerId);
+		return getGameGrid(gameId,gridName,zone);
+	}
+	
+	public static Grid getGameGrid(String gridName, String playerId) {
+		String gameId = PlayerService.getInstance().getGameId(playerId);
 		int zone = getPlayerZone(playerId);
 		return getGameGrid(gameId,gridName,zone);
 	}

@@ -22,11 +22,9 @@ public class CombatHandler extends GameMessageActor {
 	public static String name = CombatHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
-	private ActorSelection effectHandler;
 
 	@Override
 	public void awake() {
-		effectHandler = ActorUtil.getSelectionByName(StatusEffectHandler.name);
 	}
 
 	@Override
@@ -34,7 +32,7 @@ public class CombatHandler extends GameMessageActor {
 		if (gameMessage.attack != null) {
 			doAttack(gameMessage.attack);
 		} else if (gameMessage.dataRequest != null) {
-			effectHandler.tell(gameMessage.dataRequest, getSelf());
+			//effectHandler.tell(gameMessage.dataRequest, getSelf());
 		}
 	}
 
@@ -50,21 +48,11 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 
-	private void doComboAttack(ComboAttack combo) {
-		for (Attack attack : combo.attack) {
-			PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
-			if (skill.isPassive == 1) {
-				StatusEffectHandler.setPassiveSkill(attack.skill, attack.attacker, attack.target,
-						StatusEffectTarget.Action.Apply, StatusEffectTarget.PassiveFlag.AutoRemove);
-			} else {
-				doAttack(attack);
-			}
-		}
-	}
-
-	
-	
+		
 	private void doAttack(Attack attack) {
+		int zone = GameGrid.getPlayerZone(playerId);
+		PlayerVitalsHandler vitalsHandler = PlayerVitalsHandler.getHandler("default", zone);
+		
 		logger.warning("Attack " + attack.attacker + " " + attack.target + " skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
 		StatusEffectTarget target = new StatusEffectTarget();
@@ -94,7 +82,8 @@ public class CombatHandler extends GameMessageActor {
 		}
 		
 
-		Vitals vitals = PlayerVitalsHandler.getOrCreate("default", target.origin);
+		
+		Vitals vitals = vitalsHandler.findOrCreate(target.origin);
 		if (skill.resource.equals(PlayerSkill.Resource.Stamina.toString())) {
 			if (vitals.stamina < skill.resourceCost) {
 				logger.warning("Insufficient stamina needed " + skill.resourceCost);
@@ -109,7 +98,10 @@ public class CombatHandler extends GameMessageActor {
 			vitals.magic -= skill.resourceCost;
 		}
 
-		effectHandler.tell(target, getSelf());
+		
+		StatusEffectHandler.tell("default",zone, target, getSelf());
+		StatusEffectHandler.tell("build_objects",zone, target, getSelf());
+		
 		sendAttack(attack);
 	}
 

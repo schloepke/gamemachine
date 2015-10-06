@@ -78,6 +78,7 @@ public class GameMachineLoader {
 
 	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
+		
 		actorSystem = newActorSystem;
 				
 		actorSystem.actorOf(Props.create(RpcHandler.class), RpcHandler.class.getSimpleName());

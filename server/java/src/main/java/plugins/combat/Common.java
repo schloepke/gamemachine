@@ -1,5 +1,6 @@
 package plugins.combat;
 
+import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerService;
@@ -18,14 +19,12 @@ public class Common {
 	public static int worldOffset = 1000;
 	public static String gameId = "mygame";
 	
-	public static Grid gameGrid(String playerId) {
-		String name = "default";
-		String gameId = PlayerService.getInstance().getGameId(playerId);
-		if (gameId == null) {
-			return null;
-		} else {
-			return GameGrid.getGameGrid(gameId, name, playerId);
-		}
+	public static Grid playerGrid(String playerId) {
+		return GameGrid.getGameGrid("default", playerId);
+	}
+	
+	public static Grid objectGrid(String playerId) {
+		return GameGrid.getGameGrid("build_objects", playerId);
 	}
 	
 	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {

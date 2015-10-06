@@ -101,10 +101,10 @@ module GameMachine
           src_file = File.join(server_src,"#{message.getName}.java")
           File.open(src_file,'w') {|f| f.write out}
 
-          out = ERB.new(File.read(client_template),0,'>').result(binding)
-          out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
-          src_file = File.join(shared_src,"#{message.getName}.java")
-          File.open(src_file,'w') {|f| f.write out}
+          #out = ERB.new(File.read(client_template),0,'>').result(binding)
+          #out = out.gsub(/^(\s*\r\n){2,}/,"\r\n")
+          #src_file = File.join(shared_src,"#{message.getName}.java")
+          #File.open(src_file,'w') {|f| f.write out}
 
           if persistent
             out = ERB.new(File.read(model_template),0,'<>').result(binding)

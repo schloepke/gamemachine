@@ -72,13 +72,14 @@ public class CharacterService {
 	}
 	
 	public Vitals getVitalsTemplate(Character character) {
-		Vitals vitals = templates.get(character.vitalsType);
+		Vitals vitals = templates.get(character.vitalsType).clone();
 		if (vitals == null) {
 			vitals = new Vitals();
 			vitals.health = 1000;
 			vitals.stamina = 1000;
 			vitals.magic = 1000;
 		}
+		vitals.id = character.id;
 		return vitals;
 	}
 	
