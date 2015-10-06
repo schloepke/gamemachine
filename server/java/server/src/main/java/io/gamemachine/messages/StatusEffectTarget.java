@@ -245,12 +245,12 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	//}
     	    	    	    	    	
     	    	    	//if (action != null) {
-    	       	    	model.setInteger("status_effect_target_action",action.ordinal());
+    	       	    	model.setInteger("status_effect_target_action",action.number);
     	        		
     	//}
     	    	    	    	    	
     	    	    	//if (passiveFlag != null) {
-    	       	    	model.setInteger("status_effect_target_passive_flag",passiveFlag.ordinal());
+    	       	    	model.setInteger("status_effect_target_passive_flag",passiveFlag.number);
     	        		
     	//}
     	    	    	    	    	

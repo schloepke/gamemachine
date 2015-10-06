@@ -136,7 +136,7 @@ private static final Logger logger = LoggerFactory.getLogger(RpcMessage.class);
 	public void toModel(Model model) {
     	    	    	    	
     	    	    	//if (messageType != null) {
-    	       	    	model.setInteger("rpc_message_message_type",messageType.ordinal());
+    	       	    	model.setInteger("rpc_message_message_type",messageType.number);
     	        		
     	//}
     	    	    	    	    	    	

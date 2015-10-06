@@ -482,7 +482,7 @@ private static final Logger logger = LoggerFactory.getLogger(GroundBlockObject.c
     	//}
     	    	    	    	    	
     	    	    	//if (status != null) {
-    	       	    	model.setInteger("ground_block_object_status",status.ordinal());
+    	       	    	model.setInteger("ground_block_object_status",status.number);
     	        		
     	//}
     	    	    	    	    	

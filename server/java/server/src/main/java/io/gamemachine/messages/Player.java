@@ -946,22 +946,6 @@ private static final Logger logger = LoggerFactory.getLogger(Player.class);
     }
     
         	    	    	    	
-    public Player removeCharactersByHealth(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.health == obj.health) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Player removeCharactersByRecordId(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -1090,38 +1074,6 @@ private static final Logger logger = LoggerFactory.getLogger(Player.class);
     }
     
         	    	    	    	
-    public Player removeCharactersByStamina(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.stamina == obj.stamina) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public Player removeCharactersByMagic(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.magic == obj.magic) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Player removeCharactersByIncludeUmaData(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -1131,6 +1083,22 @@ private static final Logger logger = LoggerFactory.getLogger(Player.class);
     	Character obj = itr.next();
     	
     	    		if (characters.includeUmaData == obj.includeUmaData) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public Player removeCharactersByVitalsType(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.vitalsType == obj.vitalsType) {
     	      			itr.remove();
     		}
 		}

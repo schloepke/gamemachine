@@ -47,7 +47,6 @@ import io.netty.handler.codec.http.multipart.InterfaceHttpData.HttpDataType;
 import io.netty.util.CharsetUtil;
 import plugins.HttpHandler;
 import plugins.landrush.BuildObjectHandler;
-import plugins.pvp_game.CharacterHandler;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -329,17 +328,6 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					}
 
 				}
-			}
-
-			if (req.getUri().startsWith("/characters/create")) {
-				CharacterHandler.createCharacter(params.get("playerId"), params.get("id"), params.get("umaData"));
-				byte[] resp = CharacterHandler.getPvpCharacters(params.get("playerId"));
-				Ok(ctx, resp);
-			}
-
-			if (req.getUri().startsWith("/characters/get")) {
-				byte[] resp = CharacterHandler.getPvpCharacters(params.get("playerId"));
-				Ok(ctx, resp);
 			}
 
 		}

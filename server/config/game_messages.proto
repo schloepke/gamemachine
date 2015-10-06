@@ -278,7 +278,6 @@ local_message SiegeCommand {
 local_persistent_message Character {
   required string id = 1;
   optional string umaData = 2;
-  optional int32 health = 3;
   optional int32 recordId = 4;
   required string playerId = 5;
   optional int32 part = 6;
@@ -287,9 +286,8 @@ local_persistent_message Character {
   optional int32 worldy = 9;
   optional int32 worldz = 10;
   optional int32 zone = 11;
-  optional int32 stamina = 12;
-  optional int32 magic = 13;
   optional bool includeUmaData = 14;
+  optional int32 vitalsType = 15;
   
 }
 
@@ -373,8 +371,12 @@ local_message StatusEffects {
   repeated StatusEffect statusEffect = 1;
 }
 
+local_message VitalsContainer {
+  repeated Vitals vitals = 1;
+}
+
 local_message Vitals {
-  enum Type {
+  enum VitalsType {
     None = 0;
     Guard = 1;
     AggressiveNpc = 2;
@@ -404,7 +406,7 @@ local_message Vitals {
   optional string playerId = 15;
   optional int32 staminaDrain = 16;
   optional string grid = 17;
-  optional Type type = 18;
+  optional VitalsType type = 18;
 }
 
 local_message VisualEffect {

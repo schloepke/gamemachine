@@ -126,22 +126,6 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     }
     
         	    	    	    	
-    public Characters removeCharactersByHealth(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.health.equals(obj.health)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Characters removeCharactersByRecordId(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -270,38 +254,6 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     }
     
         	    	    	    	
-    public Characters removeCharactersByStamina(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.stamina.equals(obj.stamina)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public Characters removeCharactersByMagic(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.magic.equals(obj.magic)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Characters removeCharactersByIncludeUmaData(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -311,6 +263,22 @@ public final class Characters implements Externalizable, Message<Characters>, Sc
     	Character obj = itr.next();
     	
     	    		if (characters.includeUmaData.equals(obj.includeUmaData)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public Characters removeCharactersByVitalsType(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.vitalsType.equals(obj.vitalsType)) {
     	      			itr.remove();
     		}
 		}

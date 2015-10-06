@@ -594,12 +594,12 @@ private static final Logger logger = LoggerFactory.getLogger(TrackData.class);
     	//}
     	    	    	    	    	
     	    	    	//if (neighborEntityType != null) {
-    	       	    	model.setInteger("track_data_neighbor_entity_type",neighborEntityType.ordinal());
+    	       	    	model.setInteger("track_data_neighbor_entity_type",neighborEntityType.number);
     	        		
     	//}
     	    	    	    	    	
     	    	    	//if (entityType != null) {
-    	       	    	model.setInteger("track_data_entity_type",entityType.ordinal());
+    	       	    	model.setInteger("track_data_entity_type",entityType.number);
     	        		
     	//}
     	    	    	    	    	

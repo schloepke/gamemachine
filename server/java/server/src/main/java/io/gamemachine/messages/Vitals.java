@@ -65,13 +65,13 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 
 private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 
-	public enum Type implements io.protostuff.EnumLite<Type>
+	public enum VitalsType implements io.protostuff.EnumLite<VitalsType>
     {
     	
     	    	None(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
         public final int number;
         
-        private Type (int number)
+        private VitalsType (int number)
         {
             this.number = number;
         }
@@ -81,11 +81,11 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             return number;
         }
         
-        public static Type defaultValue() {
+        public static VitalsType defaultValue() {
         	return (None);
         }
         
-        public static Type valueOf(int number)
+        public static VitalsType valueOf(int number)
         {
             switch(number) 
             {
@@ -205,7 +205,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		
     
         	
-					public Type type = Type.defaultValue();
+					public VitalsType type = VitalsType.defaultValue();
 			    
 		
     
@@ -581,7 +581,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	//}
     	    	    	    	    	
     	    	    	//if (type != null) {
-    	       	    	model.setInteger("vitals_type",type.ordinal());
+    	       	    	model.setInteger("vitals_type",type.number);
     	        		
     	//}
     	    	    }
@@ -743,7 +743,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	
     	    	
     	    	    	    	    	    	
-    				message.setType(Type.valueOf(model.getInteger("vitals_type")));
+    				message.setType(VitalsType.valueOf(model.getInteger("vitals_type")));
     	    			if (hasFields) {
 			return message;
 		} else {
@@ -906,11 +906,11 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		return this;	}
 	
 		            
-		public Type getType() {
+		public VitalsType getType() {
 		return type;
 	}
 	
-	public Vitals setType(Type type) {
+	public Vitals setType(VitalsType type) {
 		this.type = type;
 		return this;	}
 	
@@ -1039,7 +1039,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
                 	break;
                 	                	
                             	            	case 18:
-            	                	                    message.type = Type.valueOf(input.readEnum());
+            	                	                    message.type = VitalsType.valueOf(input.readEnum());
                     break;
                 	                	
                             	            

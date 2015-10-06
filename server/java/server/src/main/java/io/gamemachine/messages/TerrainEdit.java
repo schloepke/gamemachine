@@ -467,7 +467,7 @@ private static final Logger logger = LoggerFactory.getLogger(TerrainEdit.class);
     	//}
     	    	    	    	    	
     	    	    	//if (type != null) {
-    	       	    	model.setInteger("terrain_edit_type",type.ordinal());
+    	       	    	model.setInteger("terrain_edit_type",type.number);
     	        		
     	//}
     	    	    	    	    	

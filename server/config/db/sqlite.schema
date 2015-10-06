@@ -183,8 +183,6 @@ CREATE TABLE characters (
 
   character_uma_data varchar(128) DEFAULT NULL,
 
-  character_health integer DEFAULT NULL,
-
   character_player_id varchar(128) NOT NULL,
 
   character_part integer DEFAULT NULL,
@@ -199,11 +197,9 @@ CREATE TABLE characters (
 
   character_zone integer DEFAULT NULL,
 
-  character_stamina integer DEFAULT NULL,
-
-  character_magic integer DEFAULT NULL,
-
   character_include_uma_data boolean DEFAULT NULL,
+
+  character_vitals_type integer DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );

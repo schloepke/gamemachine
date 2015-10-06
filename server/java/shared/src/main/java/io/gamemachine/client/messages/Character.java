@@ -55,8 +55,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	    
         			public String umaData;
 	    
-        			public int health;
-	    
         			public int recordId;
 	    
         			public String playerId;
@@ -73,11 +71,9 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	    
         			public int zone;
 	    
-        			public int stamina;
-	    
-        			public int magic;
-	    
         			public boolean includeUmaData;
+	    
+        			public int vitalsType;
 	    
       
     public Character()
@@ -112,19 +108,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	
 	public Character setUmaData(String umaData) {
 		this.umaData = umaData;
-		return this;	}
-	
-		    
-    public Boolean hasHealth()  {
-        return health == null ? false : true;
-    }
-        
-		public int getHealth() {
-		return health;
-	}
-	
-	public Character setHealth(int health) {
-		this.health = health;
 		return this;	}
 	
 		    
@@ -232,32 +215,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
 		return this;	}
 	
 		    
-    public Boolean hasStamina()  {
-        return stamina == null ? false : true;
-    }
-        
-		public int getStamina() {
-		return stamina;
-	}
-	
-	public Character setStamina(int stamina) {
-		this.stamina = stamina;
-		return this;	}
-	
-		    
-    public Boolean hasMagic()  {
-        return magic == null ? false : true;
-    }
-        
-		public int getMagic() {
-		return magic;
-	}
-	
-	public Character setMagic(int magic) {
-		this.magic = magic;
-		return this;	}
-	
-		    
     public Boolean hasIncludeUmaData()  {
         return includeUmaData == null ? false : true;
     }
@@ -268,6 +225,19 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	
 	public Character setIncludeUmaData(boolean includeUmaData) {
 		this.includeUmaData = includeUmaData;
+		return this;	}
+	
+		    
+    public Boolean hasVitalsType()  {
+        return vitalsType == null ? false : true;
+    }
+        
+		public int getVitalsType() {
+		return vitalsType;
+	}
+	
+	public Character setVitalsType(int vitalsType) {
+		this.vitalsType = vitalsType;
 		return this;	}
 	
 	
@@ -334,10 +304,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
             	                	                	message.umaData = input.readString();
                 	break;
                 	                	
-                            	            	case 3:
-            	                	                	message.health = input.readInt32();
-                	break;
-                	                	
                             	            	case 4:
             	                	                	message.recordId = input.readInt32();
                 	break;
@@ -370,16 +336,12 @@ public final class Character implements Externalizable, Message<Character>, Sche
             	                	                	message.zone = input.readInt32();
                 	break;
                 	                	
-                            	            	case 12:
-            	                	                	message.stamina = input.readInt32();
-                	break;
-                	                	
-                            	            	case 13:
-            	                	                	message.magic = input.readInt32();
-                	break;
-                	                	
                             	            	case 14:
             	                	                	message.includeUmaData = input.readBool();
+                	break;
+                	                	
+                            	            	case 15:
+            	                	                	message.vitalsType = input.readInt32();
                 	break;
                 	                	
                             	            
@@ -403,11 +365,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
     	    	
     	    	    	if(message.umaData != null)
             output.writeString(2, message.umaData, false);
-    	    	
-    	            	
-    	    	
-    	    	    	if(message.health != null)
-            output.writeInt32(3, message.health, false);
     	    	
     	            	
     	    	
@@ -453,18 +410,13 @@ public final class Character implements Externalizable, Message<Character>, Sche
     	    	
     	            	
     	    	
-    	    	    	if(message.stamina != null)
-            output.writeInt32(12, message.stamina, false);
-    	    	
-    	            	
-    	    	
-    	    	    	if(message.magic != null)
-            output.writeInt32(13, message.magic, false);
-    	    	
-    	            	
-    	    	
     	    	    	if(message.includeUmaData != null)
             output.writeBool(14, message.includeUmaData, false);
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.vitalsType != null)
+            output.writeInt32(15, message.vitalsType, false);
     	    	
     	            	
     }
@@ -475,7 +427,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
         {
         	        	case 1: return "id";
         	        	case 2: return "umaData";
-        	        	case 3: return "health";
         	        	case 4: return "recordId";
         	        	case 5: return "playerId";
         	        	case 6: return "part";
@@ -484,9 +435,8 @@ public final class Character implements Externalizable, Message<Character>, Sche
         	        	case 9: return "worldy";
         	        	case 10: return "worldz";
         	        	case 11: return "zone";
-        	        	case 12: return "stamina";
-        	        	case 13: return "magic";
         	        	case 14: return "includeUmaData";
+        	        	case 15: return "vitalsType";
         	            default: return null;
         }
     }
@@ -502,7 +452,6 @@ public final class Character implements Externalizable, Message<Character>, Sche
     {
     	    	__fieldMap.put("id", 1);
     	    	__fieldMap.put("umaData", 2);
-    	    	__fieldMap.put("health", 3);
     	    	__fieldMap.put("recordId", 4);
     	    	__fieldMap.put("playerId", 5);
     	    	__fieldMap.put("part", 6);
@@ -511,9 +460,8 @@ public final class Character implements Externalizable, Message<Character>, Sche
     	    	__fieldMap.put("worldy", 9);
     	    	__fieldMap.put("worldz", 10);
     	    	__fieldMap.put("zone", 11);
-    	    	__fieldMap.put("stamina", 12);
-    	    	__fieldMap.put("magic", 13);
     	    	__fieldMap.put("includeUmaData", 14);
+    	    	__fieldMap.put("vitalsType", 15);
     	    }
    
    public static List<String> getFields() {

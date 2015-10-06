@@ -496,7 +496,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 	public void toModel(Model model) {
     	    	    	    	
     	    	    	//if (type != null) {
-    	       	    	model.setInteger("status_effect_type",type.ordinal());
+    	       	    	model.setInteger("status_effect_type",type.number);
     	        		
     	//}
     	    	    	    	    	
@@ -536,7 +536,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	//}
     	    	    	    	    	
     	    	    	//if (damageType != null) {
-    	       	    	model.setInteger("status_effect_damage_type",damageType.ordinal());
+    	       	    	model.setInteger("status_effect_damage_type",damageType.number);
     	        		
     	//}
     	    	    	    	    	

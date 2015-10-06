@@ -289,22 +289,6 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     }
     
         	    	    	    	
-    public Player removeCharactersByHealth(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.health.equals(obj.health)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Player removeCharactersByRecordId(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -433,38 +417,6 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     }
     
         	    	    	    	
-    public Player removeCharactersByStamina(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.stamina.equals(obj.stamina)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public Player removeCharactersByMagic(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.magic.equals(obj.magic)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Player removeCharactersByIncludeUmaData(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -474,6 +426,22 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     	Character obj = itr.next();
     	
     	    		if (characters.includeUmaData.equals(obj.includeUmaData)) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public Player removeCharactersByVitalsType(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.vitalsType.equals(obj.vitalsType)) {
     	      			itr.remove();
     		}
 		}

@@ -1,23 +1,26 @@
 package plugins.combat;
 
-import io.gamemachine.core.CharacterService;
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.PlayerService;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.Player;
-import io.gamemachine.messages.Vitals;
-import io.gamemachine.net.http.HttpServerHandler;
-
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.Character;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.VitalsContainer;
+import plugins.clientDbLoader.ClientDbLoader;
+
 public class PlayerVitalsHandler {
 
 	private static final Logger logger = LoggerFactory.getLogger(PlayerVitalsHandler.class);
 	public static ConcurrentHashMap<String, Vitals> playerVitals = new ConcurrentHashMap<String, Vitals>();
+	public static Map<Integer,Vitals> templates = new HashMap<Integer,Vitals>();
 	
 	public static Vitals get(String id) {
 		return playerVitals.get(id);
@@ -33,30 +36,37 @@ public class PlayerVitalsHandler {
 		return playerVitals.values();
 	}
 	
+	private static void LoadTemplates() {
+		VitalsContainer container = ClientDbLoader.getVitalsContainer();
+		if (container != null) {
+			for (Vitals vitals : ClientDbLoader.getVitalsContainer().vitals) {
+				templates.put(vitals.type.number,vitals);
+			}
+		}
+	}
+	
 	public static Vitals getOrCreate(String gridName, String characterId) {
+		if (templates.size() == 0) {
+			LoadTemplates();
+		}
+		
+		if (characterId == null) {
+			throw new RuntimeException("Character id is null!!");
+		}
+		
 		if (!playerVitals.containsKey(characterId)) {
-			Vitals vitals = new Vitals();
+			
 			Character character = CharacterService.getInstance().find(characterId);
 			Player player = PlayerService.getInstance().findByCharacterId(characterId);
 			if (character == null) {
-				logger.error("No character found with id "+characterId);
-				return null;
+				throw new RuntimeException("No character found with id "+characterId);
 			}
 			
-			vitals.changed = 1;
-			vitals.id = characterId;
-			vitals.dead = 0;
-			vitals.health = character.health;
-			vitals.stamina = character.stamina;
-			vitals.magic = character.magic;
-			vitals.armor = 0;
-			vitals.elementalResist = 0;
-			vitals.spellResist = 0;
-			vitals.spellPenetration = 0;
-			vitals.magicRegen = 0;
-			vitals.healthRegen = 0;
-			vitals.staminaRegen = 0;
-			vitals.lastCombat = 0l;
+			Vitals vitals = templates.get(character.vitalsType);
+			if (vitals == null) {
+				vitals = new Vitals();
+			}
+			
 			vitals.playerId = player.id;
 			vitals.grid = Common.gameGrid(player.id).name;
 			

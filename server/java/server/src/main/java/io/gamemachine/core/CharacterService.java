@@ -6,8 +6,12 @@ import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerNotification;
+import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.VitalsContainer;
+import plugins.clientDbLoader.ClientDbLoader;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,6 +31,7 @@ public class CharacterService {
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
 	public Map<String, Character> characters = new ConcurrentHashMap<String, Character>();
+	private Map<Integer,Vitals> templates = new HashMap<Integer,Vitals>();
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
 	private CharacterService() {
@@ -36,6 +41,8 @@ public class CharacterService {
 		} else {
 			this.authType = 0;
 		}
+		
+		loadTemplates();
 		logger.info("CharacterService starting authType=" + authType);
 	}
 
@@ -47,6 +54,34 @@ public class CharacterService {
 		return LazyHolder.INSTANCE;
 	}
 
+	private void loadTemplates() {
+		VitalsContainer container = ClientDbLoader.getVitalsContainer();
+		if (container != null) {
+			for (Vitals vitals : ClientDbLoader.getVitalsContainer().vitals) {
+				templates.put(vitals.type.number,vitals);
+			}
+		}
+	}
+	
+	public Vitals getVitalsTemplate(String characterId) {
+		Character character = find(characterId);
+		if (character == null) {
+			throw new RuntimeException("Unable to find character "+characterId);
+		}
+		return getVitalsTemplate(character);
+	}
+	
+	public Vitals getVitalsTemplate(Character character) {
+		Vitals vitals = templates.get(character.vitalsType);
+		if (vitals == null) {
+			vitals = new Vitals();
+			vitals.health = 1000;
+			vitals.stamina = 1000;
+			vitals.magic = 1000;
+		}
+		return vitals;
+	}
+	
 	public static class ObjectStoreHelper {
 		public static boolean update(Character character) {
 			Characters characters = getCharacters(character.playerId);
@@ -155,11 +190,9 @@ public class CharacterService {
 		Character character = new Character();
 		character.setId(id);
 		character.setPlayerId(playerId);
-		character.setHealth(1000);
-		character.setStamina(1000);
-		character.setMagic(1000);
 		character.setUmaData(umaData);
-
+		character.setVitalsType(Vitals.VitalsType.Player.number);
+		
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.update(character);
 			global = character.clone();

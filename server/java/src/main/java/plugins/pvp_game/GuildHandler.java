@@ -1,5 +1,6 @@
 package plugins.pvp_game;
 
+import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.messages.GameMessage;
@@ -115,7 +116,7 @@ public class GuildHandler extends GameMessageActor {
 	}
 	
 	private void destroy(Guild guild) {
-		TerritoryHandler.removeOwner(guild.id);
+		//TerritoryHandler.removeOwner(guild.id);
 		Guild.db().deleteWhere("guild_id = ?", guild.id);
 		guilds.remove(guild.id);
 		GuildMembers.db().deleteWhere("guild_members_guild_id = ?", guild.id);
@@ -223,7 +224,8 @@ public class GuildHandler extends GameMessageActor {
 						String inviteId = guild.id+"|"+String.valueOf(rand.nextInt(10000) + 10);
 						gameMessage.guildAction.inviteId = inviteId;
 						
-						String to = CharacterHandler.PlayerIdFromCharacterId(guildAction.to);
+						// fixme, player id will be null here most likely
+						String to = CharacterService.getInstance().find(guildAction.to).playerId;
 						invites.put(to, inviteId);
 						if (!Strings.isNullOrEmpty(to)) {
 							PlayerCommands.sendGameMessage(gameMessage, to);

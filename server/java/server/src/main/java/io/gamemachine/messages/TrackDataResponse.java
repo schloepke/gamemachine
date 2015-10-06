@@ -397,7 +397,7 @@ private static final Logger logger = LoggerFactory.getLogger(TrackDataResponse.c
     	//}
     	    	    	    	    	
     	    	    	//if (reason != null) {
-    	       	    	model.setInteger("track_data_response_reason",reason.ordinal());
+    	       	    	model.setInteger("track_data_response_reason",reason.number);
     	        		
     	//}
     	    	    }

@@ -37,13 +37,13 @@ import io.protostuff.UninitializedMessageException;
 @SuppressWarnings("unused")
 public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vitals>{
 
-	public enum Type implements io.protostuff.EnumLite<Type>
+	public enum VitalsType implements io.protostuff.EnumLite<VitalsType>
     {
     	
     	    	None(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
         public final int number;
         
-        private Type (int number)
+        private VitalsType (int number)
         {
             this.number = number;
         }
@@ -53,7 +53,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
             return number;
         }
         
-        public static Type valueOf(int number)
+        public static VitalsType valueOf(int number)
         {
             switch(number) 
             {
@@ -120,7 +120,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 	    
         			public String grid;
 	    
-        			public Type type; // = None:0;
+        			public VitalsType type; // = None:0;
 	    
       
     public Vitals()
@@ -357,11 +357,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         return type == null ? false : true;
     }
         
-		public Type getType() {
+		public VitalsType getType() {
 		return type;
 	}
 	
-	public Vitals setType(Type type) {
+	public Vitals setType(VitalsType type) {
 		this.type = type;
 		return this;	}
 	
@@ -490,7 +490,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
                 	break;
                 	                	
                             	            	case 18:
-            	                	                    message.type = Type.valueOf(input.readEnum());
+            	                	                    message.type = VitalsType.valueOf(input.readEnum());
                     break;
                 	                	
                             	            

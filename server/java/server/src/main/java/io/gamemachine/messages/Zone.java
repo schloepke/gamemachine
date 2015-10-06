@@ -411,7 +411,7 @@ private static final Logger logger = LoggerFactory.getLogger(Zone.class);
     	//}
     	    	    	    	    	
     	    	    	//if (status != null) {
-    	       	    	model.setInteger("zone_status",status.ordinal());
+    	       	    	model.setInteger("zone_status",status.number);
     	        		
     	//}
     	    	    	    	    	

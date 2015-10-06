@@ -441,22 +441,6 @@ private static final Logger logger = LoggerFactory.getLogger(Characters.class);
     }
     
         	    	    	    	
-    public Characters removeCharactersByHealth(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.health == obj.health) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Characters removeCharactersByRecordId(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -585,38 +569,6 @@ private static final Logger logger = LoggerFactory.getLogger(Characters.class);
     }
     
         	    	    	    	
-    public Characters removeCharactersByStamina(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.stamina == obj.stamina) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public Characters removeCharactersByMagic(Character characters)  {
-    	if(this.characters == null)
-           return this;
-            
-       	Iterator<Character> itr = this.characters.iterator();
-       	while (itr.hasNext()) {
-    	Character obj = itr.next();
-    	
-    	    		if (characters.magic == obj.magic) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public Characters removeCharactersByIncludeUmaData(Character characters)  {
     	if(this.characters == null)
            return this;
@@ -626,6 +578,22 @@ private static final Logger logger = LoggerFactory.getLogger(Characters.class);
     	Character obj = itr.next();
     	
     	    		if (characters.includeUmaData == obj.includeUmaData) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public Characters removeCharactersByVitalsType(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.vitalsType == obj.vitalsType) {
     	      			itr.remove();
     		}
 		}

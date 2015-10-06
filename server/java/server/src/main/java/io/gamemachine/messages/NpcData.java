@@ -432,7 +432,7 @@ private static final Logger logger = LoggerFactory.getLogger(NpcData.class);
     	//}
     	    	    	    	    	    	
     	    	    	//if (npcType != null) {
-    	       	    	model.setInteger("npc_data_npc_type",npcType.ordinal());
+    	       	    	model.setInteger("npc_data_npc_type",npcType.number);
     	        		
     	//}
     	    	    }

@@ -16,6 +16,7 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerItems;
 import io.gamemachine.messages.PlayerSkills;
 import io.gamemachine.messages.StatusEffects;
+import io.gamemachine.messages.VitalsContainer;
 
 public class ClientDbLoader extends GameMessageActor {
 
@@ -34,6 +35,15 @@ public class ClientDbLoader extends GameMessageActor {
 	
 	private static String dbPath(String name) {
 		return AppConfig.getEnvRoot() + "/db/"+name;
+	}
+	
+	public static VitalsContainer getVitalsContainer() {
+		String name = "VitalsCatalog.proto";
+		if (new File(dbPath(name)).exists()) {
+			return VitalsContainer.parseFrom(LoadProtoFile(name));
+		} else {
+			return null;
+		}
 	}
 	
 	public static StatusEffects getStatusEffects() {

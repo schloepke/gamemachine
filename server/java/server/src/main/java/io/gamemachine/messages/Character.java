@@ -97,11 +97,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		
     
         	
-							    public int health= 0;
-		    			    
-		
-    
-        	
 							    public int recordId= 0;
 		    			    
 		
@@ -142,17 +137,12 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		
     
         	
-							    public int stamina= 0;
-		    			    
-		
-    
-        	
-							    public int magic= 0;
-		    			    
-		
-    
-        	
 							    public boolean includeUmaData= false;
+		    			    
+		
+    
+        	
+							    public int vitalsType= 0;
 		    			    
 		
     
@@ -630,7 +620,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 	public static void clearModel(Model model) {
     	    	    	    	    	    	model.set("character_id",null);
     	    	    	    	    	    	model.set("character_uma_data",null);
-    	    	    	    	    	    	model.set("character_health",null);
     	    	    	    	    	    	    	    	    	model.set("character_player_id",null);
     	    	    	    	    	    	model.set("character_part",null);
     	    	    	    	    	    	model.set("character_parts",null);
@@ -638,9 +627,8 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	    	model.set("character_worldy",null);
     	    	    	    	    	    	model.set("character_worldz",null);
     	    	    	    	    	    	model.set("character_zone",null);
-    	    	    	    	    	    	model.set("character_stamina",null);
-    	    	    	    	    	    	model.set("character_magic",null);
     	    	    	    	    	    	model.set("character_include_uma_data",null);
+    	    	    	    	    	    	model.set("character_vitals_type",null);
     	    }
     
 	public void toModel(Model model) {
@@ -652,11 +640,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	
     	    	    	//if (umaData != null) {
     	       	    	model.setString("character_uma_data",umaData);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (health != null) {
-    	       	    	model.setInteger("character_health",health);
     	        		
     	//}
     	    	    	    	    	
@@ -698,18 +681,13 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (stamina != null) {
-    	       	    	model.setInteger("character_stamina",stamina);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (magic != null) {
-    	       	    	model.setInteger("character_magic",magic);
-    	        		
-    	//}
-    	    	    	    	    	
     	    	    	//if (includeUmaData != null) {
     	       	    	model.setBoolean("character_include_uma_data",includeUmaData);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (vitalsType != null) {
+    	       	    	model.setInteger("character_vitals_type",vitalsType);
     	        		
     	//}
     	    	    }
@@ -731,15 +709,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		if (umaDataTestField != null) {
 			String umaDataField = umaDataTestField;
 			message.setUmaData(umaDataField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer healthTestField = model.getInteger("character_health");
-		if (healthTestField != null) {
-			int healthField = healthTestField;
-			message.setHealth(healthField);
 			hasFields = true;
 		}
     	
@@ -813,28 +782,19 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			Integer staminaTestField = model.getInteger("character_stamina");
-		if (staminaTestField != null) {
-			int staminaField = staminaTestField;
-			message.setStamina(staminaField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer magicTestField = model.getInteger("character_magic");
-		if (magicTestField != null) {
-			int magicField = magicTestField;
-			message.setMagic(magicField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
     	    			Boolean includeUmaDataTestField = model.getBoolean("character_include_uma_data");
 		if (includeUmaDataTestField != null) {
 			boolean includeUmaDataField = includeUmaDataTestField;
 			message.setIncludeUmaData(includeUmaDataField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			Integer vitalsTypeTestField = model.getInteger("character_vitals_type");
+		if (vitalsTypeTestField != null) {
+			int vitalsTypeField = vitalsTypeTestField;
+			message.setVitalsType(vitalsTypeField);
 			hasFields = true;
 		}
     	
@@ -863,15 +823,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 	
 	public Character setUmaData(String umaData) {
 		this.umaData = umaData;
-		return this;	}
-	
-		            
-		public int getHealth() {
-		return health;
-	}
-	
-	public Character setHealth(int health) {
-		this.health = health;
 		return this;	}
 	
 		            
@@ -947,30 +898,21 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		return this;	}
 	
 		            
-		public int getStamina() {
-		return stamina;
-	}
-	
-	public Character setStamina(int stamina) {
-		this.stamina = stamina;
-		return this;	}
-	
-		            
-		public int getMagic() {
-		return magic;
-	}
-	
-	public Character setMagic(int magic) {
-		this.magic = magic;
-		return this;	}
-	
-		            
 		public boolean getIncludeUmaData() {
 		return includeUmaData;
 	}
 	
 	public Character setIncludeUmaData(boolean includeUmaData) {
 		this.includeUmaData = includeUmaData;
+		return this;	}
+	
+		            
+		public int getVitalsType() {
+		return vitalsType;
+	}
+	
+	public Character setVitalsType(int vitalsType) {
+		this.vitalsType = vitalsType;
 		return this;	}
 	
 	
@@ -1037,10 +979,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
             	                	                	message.umaData = input.readString();
                 	break;
                 	                	
-                            	            	case 3:
-            	                	                	message.health = input.readInt32();
-                	break;
-                	                	
                             	            	case 4:
             	                	                	message.recordId = input.readInt32();
                 	break;
@@ -1073,16 +1011,12 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
             	                	                	message.zone = input.readInt32();
                 	break;
                 	                	
-                            	            	case 12:
-            	                	                	message.stamina = input.readInt32();
-                	break;
-                	                	
-                            	            	case 13:
-            	                	                	message.magic = input.readInt32();
-                	break;
-                	                	
                             	            	case 14:
             	                	                	message.includeUmaData = input.readBool();
+                	break;
+                	                	
+                            	            	case 15:
+            	                	                	message.vitalsType = input.readInt32();
                 	break;
                 	                	
                             	            
@@ -1107,12 +1041,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	
     	    	    	if( (String)message.umaData != null) {
             output.writeString(2, message.umaData, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.health != null) {
-            output.writeInt32(3, message.health, false);
         }
     	    	
     	            	
@@ -1167,20 +1095,14 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	
     	            	
     	    	
-    	    	    	if( (Integer)message.stamina != null) {
-            output.writeInt32(12, message.stamina, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.magic != null) {
-            output.writeInt32(13, message.magic, false);
-        }
-    	    	
-    	            	
-    	    	
     	    	    	if( (Boolean)message.includeUmaData != null) {
             output.writeBool(14, message.includeUmaData, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.vitalsType != null) {
+            output.writeInt32(15, message.vitalsType, false);
         }
     	    	
     	            	
@@ -1194,9 +1116,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	//}
     	    	//if(this.umaData != null) {
     		System.out.println("umaData="+this.umaData);
-    	//}
-    	    	//if(this.health != null) {
-    		System.out.println("health="+this.health);
     	//}
     	    	//if(this.recordId != null) {
     		System.out.println("recordId="+this.recordId);
@@ -1222,14 +1141,11 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	//if(this.zone != null) {
     		System.out.println("zone="+this.zone);
     	//}
-    	    	//if(this.stamina != null) {
-    		System.out.println("stamina="+this.stamina);
-    	//}
-    	    	//if(this.magic != null) {
-    		System.out.println("magic="+this.magic);
-    	//}
     	    	//if(this.includeUmaData != null) {
     		System.out.println("includeUmaData="+this.includeUmaData);
+    	//}
+    	    	//if(this.vitalsType != null) {
+    		System.out.println("vitalsType="+this.vitalsType);
     	//}
     	    	System.out.println("END Character");
     }
@@ -1240,7 +1156,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         {
         	        	case 1: return "id";
         	        	case 2: return "umaData";
-        	        	case 3: return "health";
         	        	case 4: return "recordId";
         	        	case 5: return "playerId";
         	        	case 6: return "part";
@@ -1249,9 +1164,8 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         	        	case 9: return "worldy";
         	        	case 10: return "worldz";
         	        	case 11: return "zone";
-        	        	case 12: return "stamina";
-        	        	case 13: return "magic";
         	        	case 14: return "includeUmaData";
+        	        	case 15: return "vitalsType";
         	            default: return null;
         }
     }
@@ -1267,7 +1181,6 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     {
     	    	__fieldMap.put("id", 1);
     	    	__fieldMap.put("umaData", 2);
-    	    	__fieldMap.put("health", 3);
     	    	__fieldMap.put("recordId", 4);
     	    	__fieldMap.put("playerId", 5);
     	    	__fieldMap.put("part", 6);
@@ -1276,9 +1189,8 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	__fieldMap.put("worldy", 9);
     	    	__fieldMap.put("worldz", 10);
     	    	__fieldMap.put("zone", 11);
-    	    	__fieldMap.put("stamina", 12);
-    	    	__fieldMap.put("magic", 13);
     	    	__fieldMap.put("includeUmaData", 14);
+    	    	__fieldMap.put("vitalsType", 15);
     	    }
    
    public static List<String> getFields() {

@@ -672,7 +672,7 @@ private static final Logger logger = LoggerFactory.getLogger(Entity.class);
 	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.pvpGameMessage != null) {
 			names.add(this.pvpGameMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.player != null) {
+	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.player != null) {
 			names.add(this.player.getClass().getSimpleName());
 		}
 	  		  		if (this.trackData != null) {

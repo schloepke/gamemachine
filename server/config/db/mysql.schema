@@ -191,8 +191,6 @@ CREATE TABLE `characters` (
 
   `character_uma_data` varchar(128) DEFAULT NULL,
 
-  `character_health` int(11) DEFAULT NULL,
-
   `character_player_id` varchar(128) NOT NULL,
 
   `character_part` int(11) DEFAULT NULL,
@@ -207,11 +205,9 @@ CREATE TABLE `characters` (
 
   `character_zone` int(11) DEFAULT NULL,
 
-  `character_stamina` int(11) DEFAULT NULL,
-
-  `character_magic` int(11) DEFAULT NULL,
-
   `character_include_uma_data` tinyint(4) DEFAULT NULL,
+
+  `character_vitals_type` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

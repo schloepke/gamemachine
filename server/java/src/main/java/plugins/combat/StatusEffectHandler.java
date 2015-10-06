@@ -393,7 +393,9 @@ public class StatusEffectHandler extends UntypedActor {
 		vitals.lastCombat = System.currentTimeMillis();
 
 
-		int targetBaseHealth = CharacterService.getInstance().find(vitals.id).health;
+		Vitals targetTemplate = CharacterService.getInstance().getVitalsTemplate(vitals.id);
+		
+		int targetBaseHealth = targetTemplate.health;
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
 		
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
@@ -513,10 +515,11 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private void revive(Vitals vitals, Character character) {
+		Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
 		vitals.dead = 0;
-		vitals.health = character.health;
-		vitals.stamina = character.stamina;
-		vitals.magic = character.magic;
+		vitals.health = template.health;
+		vitals.stamina = template.stamina;
+		vitals.magic = template.magic;
 		vitals.changed = 1;
 	}
 
@@ -535,10 +538,10 @@ public class StatusEffectHandler extends UntypedActor {
 			}
 
 			Character character = CharacterService.getInstance().find(vitals.id);
-
-			int stamina = character.stamina;
-			int magic = character.magic;
-			int health = character.health;
+			Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
+			int stamina = template.stamina;
+			int magic = template.magic;
+			int health = template.health;
 
 			if (vitals.dead == 1) {
 				if (deathTimer.containsKey(vitals.id)) {
@@ -655,11 +658,9 @@ public class StatusEffectHandler extends UntypedActor {
 		Map<String, List<GameMessage>> gridMap = new HashMap<String, List<GameMessage>>();
 
 		for (Vitals vitals : PlayerVitalsHandler.getVitals()) {
-			int health = CharacterService.getInstance().find(vitals.id).health;
-			int stamina = CharacterService.getInstance().find(vitals.id).stamina;
-			int magic = CharacterService.getInstance().find(vitals.id).magic;
+			Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
 			Boolean send = false;
-			if (vitals.changed == 1 || vitals.health < health || vitals.magic < magic || vitals.stamina < stamina) {
+			if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic || vitals.stamina < template.stamina) {
 				resetVitalTick(vitals.id);
 				send = true;
 				vitals.changed = 0;
