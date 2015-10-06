@@ -81,7 +81,9 @@ module GameMachine
             config.jdbc.database,
             config.jdbc.ds,
             config.jdbc.username,
-            config.jdbc.password || ''
+            config.jdbc.password || '',
+            config.jdbc.driver,
+            config.jdbc.url
           )
             GameMachine.logger.error "Unable to establish database connection, exiting"
             System.exit 1

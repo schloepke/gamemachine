@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
+
+private static final Logger logger = LoggerFactory.getLogger(Cost.class);
 
 
 
@@ -105,28 +110,28 @@ public final class Cost implements Externalizable, Message<Cost>, Schema<Cost>{
 		boolean hasFields = false;
     	Cost message = new Cost();
     	    	    	    	    	
-    	    	    	Float amountTestField = model.getFloat("cost_amount");
-    	if (amountTestField != null) {
-    		float amountField = amountTestField;
-    		message.setAmount(amountField);
-    		hasFields = true;
-    	}
+    	    			Float amountTestField = model.getFloat("cost_amount");
+		if (amountTestField != null) {
+			float amountField = amountTestField;
+			message.setAmount(amountField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String currencyTestField = model.getString("cost_currency");
-    	if (currencyTestField != null) {
-    		String currencyField = currencyTestField;
-    		message.setCurrency(currencyField);
-    		hasFields = true;
-    	}
+    	    			String currencyTestField = model.getString("cost_currency");
+		if (currencyTestField != null) {
+			String currencyField = currencyTestField;
+			message.setCurrency(currencyField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

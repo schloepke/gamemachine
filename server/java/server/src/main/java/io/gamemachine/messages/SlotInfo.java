@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema<SlotInfo>{
+
+private static final Logger logger = LoggerFactory.getLogger(SlotInfo.class);
 
 
 
@@ -105,28 +110,28 @@ public final class SlotInfo implements Externalizable, Message<SlotInfo>, Schema
 		boolean hasFields = false;
     	SlotInfo message = new SlotInfo();
     	    	    	    	    	
-    	    	    	String placedBlockIdTestField = model.getString("slot_info_placed_block_id");
-    	if (placedBlockIdTestField != null) {
-    		String placedBlockIdField = placedBlockIdTestField;
-    		message.setPlacedBlockId(placedBlockIdField);
-    		hasFields = true;
-    	}
+    	    			String placedBlockIdTestField = model.getString("slot_info_placed_block_id");
+		if (placedBlockIdTestField != null) {
+			String placedBlockIdField = placedBlockIdTestField;
+			message.setPlacedBlockId(placedBlockIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String slotIdTestField = model.getString("slot_info_slot_id");
-    	if (slotIdTestField != null) {
-    		String slotIdField = slotIdTestField;
-    		message.setSlotId(slotIdField);
-    		hasFields = true;
-    	}
+    	    			String slotIdTestField = model.getString("slot_info_slot_id");
+		if (slotIdTestField != null) {
+			String slotIdField = slotIdTestField;
+			message.setSlotId(slotIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

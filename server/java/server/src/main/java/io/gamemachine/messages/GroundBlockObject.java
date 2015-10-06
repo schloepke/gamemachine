@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class GroundBlockObject implements Externalizable, Message<GroundBlockObject>, Schema<GroundBlockObject>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(GroundBlockObject.class);
 
 	public enum Status implements io.protostuff.EnumLite<Status>
     {
@@ -475,7 +480,12 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
     	       	    	model.setBoolean("ground_block_object_molded",molded);
     	        		
     	//}
-    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (status != null) {
+    	       	    	model.setInteger("ground_block_object_status",status.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (canRemove != null) {
     	       	    	model.setBoolean("ground_block_object_can_remove",canRemove);
     	        		
@@ -496,91 +506,93 @@ public final class GroundBlockObject implements Externalizable, Message<GroundBl
 		boolean hasFields = false;
     	GroundBlockObject message = new GroundBlockObject();
     	    	    	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("ground_block_object_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("ground_block_object_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer verticeCountTestField = model.getInteger("ground_block_object_vertice_count");
-    	if (verticeCountTestField != null) {
-    		int verticeCountField = verticeCountTestField;
-    		message.setVerticeCount(verticeCountField);
-    		hasFields = true;
-    	}
+    	    			Integer verticeCountTestField = model.getInteger("ground_block_object_vertice_count");
+		if (verticeCountTestField != null) {
+			int verticeCountField = verticeCountTestField;
+			message.setVerticeCount(verticeCountField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String tagTestField = model.getString("ground_block_object_tag");
-    	if (tagTestField != null) {
-    		String tagField = tagTestField;
-    		message.setTag(tagField);
-    		hasFields = true;
-    	}
+    	    			String tagTestField = model.getString("ground_block_object_tag");
+		if (tagTestField != null) {
+			String tagField = tagTestField;
+			message.setTag(tagField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String layerTestField = model.getString("ground_block_object_layer");
-    	if (layerTestField != null) {
-    		String layerField = layerTestField;
-    		message.setLayer(layerField);
-    		hasFields = true;
-    	}
+    	    			String layerTestField = model.getString("ground_block_object_layer");
+		if (layerTestField != null) {
+			String layerField = layerTestField;
+			message.setLayer(layerField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer gbLayerTestField = model.getInteger("ground_block_object_gb_layer");
-    	if (gbLayerTestField != null) {
-    		int gbLayerField = gbLayerTestField;
-    		message.setGbLayer(gbLayerField);
-    		hasFields = true;
-    	}
+    	    			Integer gbLayerTestField = model.getInteger("ground_block_object_gb_layer");
+		if (gbLayerTestField != null) {
+			int gbLayerField = gbLayerTestField;
+			message.setGbLayer(gbLayerField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean moldedTestField = model.getBoolean("ground_block_object_molded");
-    	if (moldedTestField != null) {
-    		boolean moldedField = moldedTestField;
-    		message.setMolded(moldedField);
-    		hasFields = true;
-    	}
-    	
-    	    	
-    	    	    	    	    	    	    	
-    	    	    	Boolean canRemoveTestField = model.getBoolean("ground_block_object_can_remove");
-    	if (canRemoveTestField != null) {
-    		boolean canRemoveField = canRemoveTestField;
-    		message.setCanRemove(canRemoveField);
-    		hasFields = true;
-    	}
+    	    			Boolean moldedTestField = model.getBoolean("ground_block_object_molded");
+		if (moldedTestField != null) {
+			boolean moldedField = moldedTestField;
+			message.setMolded(moldedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isTopTestField = model.getBoolean("ground_block_object_is_top");
-    	if (isTopTestField != null) {
-    		boolean isTopField = isTopTestField;
-    		message.setIsTop(isTopField);
-    		hasFields = true;
-    	}
+    				message.setStatus(Status.valueOf(model.getInteger("ground_block_object_status")));
+    	    	    	    	    	    	
+    	    			Boolean canRemoveTestField = model.getBoolean("ground_block_object_can_remove");
+		if (canRemoveTestField != null) {
+			boolean canRemoveField = canRemoveTestField;
+			message.setCanRemove(canRemoveField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer gbTypeTestField = model.getInteger("ground_block_object_gb_type");
-    	if (gbTypeTestField != null) {
-    		int gbTypeField = gbTypeTestField;
-    		message.setGbType(gbTypeField);
-    		hasFields = true;
-    	}
+    	    			Boolean isTopTestField = model.getBoolean("ground_block_object_is_top");
+		if (isTopTestField != null) {
+			boolean isTopField = isTopTestField;
+			message.setIsTop(isTopField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	
+    	    			Integer gbTypeTestField = model.getInteger("ground_block_object_gb_type");
+		if (gbTypeTestField != null) {
+			int gbTypeField = gbTypeTestField;
+			message.setGbType(gbTypeField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

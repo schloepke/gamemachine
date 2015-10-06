@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Statistic implements Externalizable, Message<Statistic>, Schema<Statistic>{
+
+private static final Logger logger = LoggerFactory.getLogger(Statistic.class);
 
 
 
@@ -116,37 +121,37 @@ public final class Statistic implements Externalizable, Message<Statistic>, Sche
 		boolean hasFields = false;
     	Statistic message = new Statistic();
     	    	    	    	    	
-    	    	    	String nameTestField = model.getString("statistic_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("statistic_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float valueTestField = model.getFloat("statistic_value");
-    	if (valueTestField != null) {
-    		float valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Float valueTestField = model.getFloat("statistic_value");
+		if (valueTestField != null) {
+			float valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String typeTestField = model.getString("statistic_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("statistic_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

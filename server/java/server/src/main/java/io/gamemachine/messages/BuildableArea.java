@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -44,6 +45,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -52,6 +55,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class BuildableArea implements Externalizable, Message<BuildableArea>, Schema<BuildableArea>{
+
+private static final Logger logger = LoggerFactory.getLogger(BuildableArea.class);
 
 
 
@@ -214,7 +219,16 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.BuildableArea.close();
@@ -365,73 +379,74 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    }
     
 	public static BuildableArea fromModel(Model model) {
 		boolean hasFields = false;
     	BuildableArea message = new BuildableArea();
     	    	    	    	    	
-    	    	    	String ownerIdTestField = model.getString("buildable_area_owner_id");
-    	if (ownerIdTestField != null) {
-    		String ownerIdField = ownerIdTestField;
-    		message.setOwnerId(ownerIdField);
-    		hasFields = true;
-    	}
+    	    			String ownerIdTestField = model.getString("buildable_area_owner_id");
+		if (ownerIdTestField != null) {
+			String ownerIdField = ownerIdTestField;
+			message.setOwnerId(ownerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float pxTestField = model.getFloat("buildable_area_px");
-    	if (pxTestField != null) {
-    		float pxField = pxTestField;
-    		message.setPx(pxField);
-    		hasFields = true;
-    	}
+    	    			Float pxTestField = model.getFloat("buildable_area_px");
+		if (pxTestField != null) {
+			float pxField = pxTestField;
+			message.setPx(pxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float pyTestField = model.getFloat("buildable_area_py");
-    	if (pyTestField != null) {
-    		float pyField = pyTestField;
-    		message.setPy(pyField);
-    		hasFields = true;
-    	}
+    	    			Float pyTestField = model.getFloat("buildable_area_py");
+		if (pyTestField != null) {
+			float pyField = pyTestField;
+			message.setPy(pyField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float pzTestField = model.getFloat("buildable_area_pz");
-    	if (pzTestField != null) {
-    		float pzField = pzTestField;
-    		message.setPz(pzField);
-    		hasFields = true;
-    	}
+    	    			Float pzTestField = model.getFloat("buildable_area_pz");
+		if (pzTestField != null) {
+			float pzField = pzTestField;
+			message.setPz(pzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer sxTestField = model.getInteger("buildable_area_sx");
-    	if (sxTestField != null) {
-    		int sxField = sxTestField;
-    		message.setSx(sxField);
-    		hasFields = true;
-    	}
+    	    			Integer sxTestField = model.getInteger("buildable_area_sx");
+		if (sxTestField != null) {
+			int sxField = sxTestField;
+			message.setSx(sxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer syTestField = model.getInteger("buildable_area_sy");
-    	if (syTestField != null) {
-    		int syField = syTestField;
-    		message.setSy(syField);
-    		hasFields = true;
-    	}
+    	    			Integer syTestField = model.getInteger("buildable_area_sy");
+		if (syTestField != null) {
+			int syField = syTestField;
+			message.setSy(syField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer szTestField = model.getInteger("buildable_area_sz");
-    	if (szTestField != null) {
-    		int szField = szTestField;
-    		message.setSz(szField);
-    		hasFields = true;
-    	}
+    	    			Integer szTestField = model.getInteger("buildable_area_sz");
+		if (szTestField != null) {
+			int szField = szTestField;
+			message.setSz(szField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -439,11 +454,11 @@ public final class BuildableArea implements Externalizable, Message<BuildableAre
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
     	//}
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class MonoMessage implements Externalizable, Message<MonoMessage>, Schema<MonoMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(MonoMessage.class);
 
 
 
@@ -99,19 +104,19 @@ public final class MonoMessage implements Externalizable, Message<MonoMessage>, 
 		boolean hasFields = false;
     	MonoMessage message = new MonoMessage();
     	    	    	    	    	    	
-    	    	    	String klassTestField = model.getString("mono_message_klass");
-    	if (klassTestField != null) {
-    		String klassField = klassTestField;
-    		message.setKlass(klassField);
-    		hasFields = true;
-    	}
+    	    			String klassTestField = model.getString("mono_message_klass");
+		if (klassTestField != null) {
+			String klassField = klassTestField;
+			message.setKlass(klassField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

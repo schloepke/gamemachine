@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Harvest implements Externalizable, Message<Harvest>, Schema<Harvest>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Harvest.class);
 
 
 
@@ -404,55 +409,55 @@ public final class Harvest implements Externalizable, Message<Harvest>, Schema<H
 		boolean hasFields = false;
     	Harvest message = new Harvest();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("harvest_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("harvest_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer resultTestField = model.getInteger("harvest_result");
-    	if (resultTestField != null) {
-    		int resultField = resultTestField;
-    		message.setResult(resultField);
-    		hasFields = true;
-    	}
+    	    			Integer resultTestField = model.getInteger("harvest_result");
+		if (resultTestField != null) {
+			int resultField = resultTestField;
+			message.setResult(resultField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long harvestedAtTestField = model.getLong("harvest_harvested_at");
-    	if (harvestedAtTestField != null) {
-    		long harvestedAtField = harvestedAtTestField;
-    		message.setHarvestedAt(harvestedAtField);
-    		hasFields = true;
-    	}
+    	    			Long harvestedAtTestField = model.getLong("harvest_harvested_at");
+		if (harvestedAtTestField != null) {
+			long harvestedAtField = harvestedAtTestField;
+			message.setHarvestedAt(harvestedAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("harvest_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("harvest_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String itemIdTestField = model.getString("harvest_item_id");
-    	if (itemIdTestField != null) {
-    		String itemIdField = itemIdTestField;
-    		message.setItemId(itemIdField);
-    		hasFields = true;
-    	}
+    	    			String itemIdTestField = model.getString("harvest_item_id");
+		if (itemIdTestField != null) {
+			String itemIdField = itemIdTestField;
+			message.setItemId(itemIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

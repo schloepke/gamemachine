@@ -26,19 +26,22 @@ public class DbConnectionPool {
 		return LazyHolder.INSTANCE;
 	}
 
-	private HikariConfig getConfig(String hostname, int port, String dbname, String ds, String username,
-			String password) {
+	private HikariConfig getConfig(String driver, String url, String username, String password) {
 		
 		HikariConfig config = new HikariConfig();
-		config.setDataSourceClassName(ds);
-		config.addDataSourceProperty("serverName", hostname);
-		config.addDataSourceProperty("portNumber", port);
-		config.addDataSourceProperty("databaseName", dbname);
-		config.addDataSourceProperty("user", username);
-		config.addDataSourceProperty("password", password);
-		config.setMaximumPoolSize(5);
-		config.setIdleTimeout(30000);
-		config.setLeakDetectionThreshold(10000);
+		//config.setDataSourceClassName(ds);
+		config.setDriverClassName(driver);
+		config.setJdbcUrl(url);
+		config.setUsername(username);
+		config.setPassword(password);
+		//config.addDataSourceProperty("serverName", hostname);
+		//config.addDataSourceProperty("portNumber", port);
+		//config.addDataSourceProperty("databaseName", dbname);
+		//config.addDataSourceProperty("user", username);
+		//config.addDataSourceProperty("password", password);
+		//config.setMaximumPoolSize(5);
+		//config.setIdleTimeout(30000);
+		//config.setLeakDetectionThreshold(10000);
 		return config;
 	}
 	
@@ -56,7 +59,7 @@ public class DbConnectionPool {
 	}
 	
 	public Boolean connect(String id, String hostname, int port, String dbname, String ds, String username,
-			String password) throws SQLException {
+			String password, String driver, String url) throws SQLException {
 		if (datasources.containsKey(id)) {
 			return true;
 		}
@@ -73,7 +76,7 @@ public class DbConnectionPool {
 		if (ds.equals("org.sqlite.JDBC")) {
 			config = getSqliteConfig(dbname);
 		} else {
-			config = getConfig(hostname, port, dbname, ds, username, password);
+			config = getConfig(driver, url, username, password);
 		}
 		
 		// config.setAutoCommit(false);

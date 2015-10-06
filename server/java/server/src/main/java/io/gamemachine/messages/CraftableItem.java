@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class CraftableItem implements Externalizable, Message<CraftableItem>, Schema<CraftableItem>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(CraftableItem.class);
 
 
 
@@ -489,7 +494,16 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.CraftableItem.close();
@@ -652,91 +666,92 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    }
     
 	public static CraftableItem fromModel(Model model) {
 		boolean hasFields = false;
     	CraftableItem message = new CraftableItem();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("craftable_item_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("craftable_item_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String item1TestField = model.getString("craftable_item_item1");
-    	if (item1TestField != null) {
-    		String item1Field = item1TestField;
-    		message.setItem1(item1Field);
-    		hasFields = true;
-    	}
+    	    			String item1TestField = model.getString("craftable_item_item1");
+		if (item1TestField != null) {
+			String item1Field = item1TestField;
+			message.setItem1(item1Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer item1_quantityTestField = model.getInteger("craftable_item_item1_quantity");
-    	if (item1_quantityTestField != null) {
-    		int item1_quantityField = item1_quantityTestField;
-    		message.setItem1_quantity(item1_quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer item1_quantityTestField = model.getInteger("craftable_item_item1_quantity");
+		if (item1_quantityTestField != null) {
+			int item1_quantityField = item1_quantityTestField;
+			message.setItem1_quantity(item1_quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String item2TestField = model.getString("craftable_item_item2");
-    	if (item2TestField != null) {
-    		String item2Field = item2TestField;
-    		message.setItem2(item2Field);
-    		hasFields = true;
-    	}
+    	    			String item2TestField = model.getString("craftable_item_item2");
+		if (item2TestField != null) {
+			String item2Field = item2TestField;
+			message.setItem2(item2Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer item2_quantityTestField = model.getInteger("craftable_item_item2_quantity");
-    	if (item2_quantityTestField != null) {
-    		int item2_quantityField = item2_quantityTestField;
-    		message.setItem2_quantity(item2_quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer item2_quantityTestField = model.getInteger("craftable_item_item2_quantity");
+		if (item2_quantityTestField != null) {
+			int item2_quantityField = item2_quantityTestField;
+			message.setItem2_quantity(item2_quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String item3TestField = model.getString("craftable_item_item3");
-    	if (item3TestField != null) {
-    		String item3Field = item3TestField;
-    		message.setItem3(item3Field);
-    		hasFields = true;
-    	}
+    	    			String item3TestField = model.getString("craftable_item_item3");
+		if (item3TestField != null) {
+			String item3Field = item3TestField;
+			message.setItem3(item3Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer item3_quantityTestField = model.getInteger("craftable_item_item3_quantity");
-    	if (item3_quantityTestField != null) {
-    		int item3_quantityField = item3_quantityTestField;
-    		message.setItem3_quantity(item3_quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer item3_quantityTestField = model.getInteger("craftable_item_item3_quantity");
+		if (item3_quantityTestField != null) {
+			int item3_quantityField = item3_quantityTestField;
+			message.setItem3_quantity(item3_quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String item4TestField = model.getString("craftable_item_item4");
-    	if (item4TestField != null) {
-    		String item4Field = item4TestField;
-    		message.setItem4(item4Field);
-    		hasFields = true;
-    	}
+    	    			String item4TestField = model.getString("craftable_item_item4");
+		if (item4TestField != null) {
+			String item4Field = item4TestField;
+			message.setItem4(item4Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer item4_quantityTestField = model.getInteger("craftable_item_item4_quantity");
-    	if (item4_quantityTestField != null) {
-    		int item4_quantityField = item4_quantityTestField;
-    		message.setItem4_quantity(item4_quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer item4_quantityTestField = model.getInteger("craftable_item_item4_quantity");
+		if (item4_quantityTestField != null) {
+			int item4_quantityField = item4_quantityTestField;
+			message.setItem4_quantity(item4_quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -744,11 +759,11 @@ public final class CraftableItem implements Externalizable, Message<CraftableIte
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
     	//}
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

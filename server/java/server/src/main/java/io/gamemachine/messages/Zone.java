@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Zone.class);
 
 	public enum Status implements io.protostuff.EnumLite<Status>
     {
@@ -404,7 +409,12 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
     	       	    	model.setString("zone_id",id);
     	        		
     	//}
-    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (status != null) {
+    	       	    	model.setInteger("zone_status",status.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (name != null) {
     	       	    	model.setString("zone_name",name);
     	        		
@@ -420,37 +430,39 @@ public final class Zone implements Externalizable, Message<Zone>, Schema<Zone>, 
 		boolean hasFields = false;
     	Zone message = new Zone();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("zone_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
-    	
-    	    	
-    	    	    	    	    	    	    	
-    	    	    	String nameTestField = model.getString("zone_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("zone_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String unityClientTestField = model.getString("zone_unity_client");
-    	if (unityClientTestField != null) {
-    		String unityClientField = unityClientTestField;
-    		message.setUnityClient(unityClientField);
-    		hasFields = true;
-    	}
+    				message.setStatus(Status.valueOf(model.getInteger("zone_status")));
+    	    	    	    	    	    	
+    	    			String nameTestField = model.getString("zone_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	
+    	    			String unityClientTestField = model.getString("zone_unity_client");
+		if (unityClientTestField != null) {
+			String unityClientField = unityClientTestField;
+			message.setUnityClient(unityClientField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class UpdatePlayerItem implements Externalizable, Message<UpdatePlayerItem>, Schema<UpdatePlayerItem>{
+
+private static final Logger logger = LoggerFactory.getLogger(UpdatePlayerItem.class);
 
 
 
@@ -99,19 +104,19 @@ public final class UpdatePlayerItem implements Externalizable, Message<UpdatePla
 		boolean hasFields = false;
     	UpdatePlayerItem message = new UpdatePlayerItem();
     	    	    	    	    	
-    	    	    	Integer resultTestField = model.getInteger("update_player_item_result");
-    	if (resultTestField != null) {
-    		int resultField = resultTestField;
-    		message.setResult(resultField);
-    		hasFields = true;
-    	}
+    	    			Integer resultTestField = model.getInteger("update_player_item_result");
+		if (resultTestField != null) {
+			int resultField = resultTestField;
+			message.setResult(resultField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ClientManagerRegister implements Externalizable, Message<ClientManagerRegister>, Schema<ClientManagerRegister>{
+
+private static final Logger logger = LoggerFactory.getLogger(ClientManagerRegister.class);
 
 
 
@@ -116,37 +121,37 @@ public final class ClientManagerRegister implements Externalizable, Message<Clie
 		boolean hasFields = false;
     	ClientManagerRegister message = new ClientManagerRegister();
     	    	    	    	    	
-    	    	    	String eventsTestField = model.getString("client_manager_register_events");
-    	if (eventsTestField != null) {
-    		String eventsField = eventsTestField;
-    		message.setEvents(eventsField);
-    		hasFields = true;
-    	}
+    	    			String eventsTestField = model.getString("client_manager_register_events");
+		if (eventsTestField != null) {
+			String eventsField = eventsTestField;
+			message.setEvents(eventsField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String registerTypeTestField = model.getString("client_manager_register_register_type");
-    	if (registerTypeTestField != null) {
-    		String registerTypeField = registerTypeTestField;
-    		message.setRegisterType(registerTypeField);
-    		hasFields = true;
-    	}
+    	    			String registerTypeTestField = model.getString("client_manager_register_register_type");
+		if (registerTypeTestField != null) {
+			String registerTypeField = registerTypeTestField;
+			message.setRegisterType(registerTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String nameTestField = model.getString("client_manager_register_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("client_manager_register_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

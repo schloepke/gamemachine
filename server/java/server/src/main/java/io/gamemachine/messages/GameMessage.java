@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GameMessage implements Externalizable, Message<GameMessage>, Schema<GameMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 
 
 
@@ -345,73 +350,73 @@ public final class GameMessage implements Externalizable, Message<GameMessage>, 
 		boolean hasFields = false;
     	GameMessage message = new GameMessage();
     	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("game_message_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("game_message_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String messageIdTestField = model.getString("game_message_message_id");
-    	if (messageIdTestField != null) {
-    		String messageIdField = messageIdTestField;
-    		message.setMessageId(messageIdField);
-    		hasFields = true;
-    	}
+    	    			String messageIdTestField = model.getString("game_message_message_id");
+		if (messageIdTestField != null) {
+			String messageIdField = messageIdTestField;
+			message.setMessageId(messageIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer destinationIdTestField = model.getInteger("game_message_destination_id");
-    	if (destinationIdTestField != null) {
-    		int destinationIdField = destinationIdTestField;
-    		message.setDestinationId(destinationIdField);
-    		hasFields = true;
-    	}
+    	    			Integer destinationIdTestField = model.getInteger("game_message_destination_id");
+		if (destinationIdTestField != null) {
+			int destinationIdField = destinationIdTestField;
+			message.setDestinationId(destinationIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String destinationTestField = model.getString("game_message_destination");
-    	if (destinationTestField != null) {
-    		String destinationField = destinationTestField;
-    		message.setDestination(destinationField);
-    		hasFields = true;
-    	}
+    	    			String destinationTestField = model.getString("game_message_destination");
+		if (destinationTestField != null) {
+			String destinationField = destinationTestField;
+			message.setDestination(destinationField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String agentIdTestField = model.getString("game_message_agent_id");
-    	if (agentIdTestField != null) {
-    		String agentIdField = agentIdTestField;
-    		message.setAgentId(agentIdField);
-    		hasFields = true;
-    	}
+    	    			String agentIdTestField = model.getString("game_message_agent_id");
+		if (agentIdTestField != null) {
+			String agentIdField = agentIdTestField;
+			message.setAgentId(agentIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	    	    	    	    	    	    	    	
-    	    	    	Long authtokenTestField = model.getLong("game_message_authtoken");
-    	if (authtokenTestField != null) {
-    		long authtokenField = authtokenTestField;
-    		message.setAuthtoken(authtokenField);
-    		hasFields = true;
-    	}
+    	    			Long authtokenTestField = model.getLong("game_message_authtoken");
+		if (authtokenTestField != null) {
+			long authtokenField = authtokenTestField;
+			message.setAuthtoken(authtokenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long unityMessageIdTestField = model.getLong("game_message_unity_message_id");
-    	if (unityMessageIdTestField != null) {
-    		long unityMessageIdField = unityMessageIdTestField;
-    		message.setUnityMessageId(unityMessageIdField);
-    		hasFields = true;
-    	}
+    	    			Long unityMessageIdTestField = model.getLong("game_message_unity_message_id");
+		if (unityMessageIdTestField != null) {
+			long unityMessageIdField = unityMessageIdTestField;
+			message.setUnityMessageId(unityMessageIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

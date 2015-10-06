@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Attack implements Externalizable, Message<Attack>, Schema<Attack>{
+
+private static final Logger logger = LoggerFactory.getLogger(Attack.class);
 
 
 
@@ -121,37 +126,37 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 		boolean hasFields = false;
     	Attack message = new Attack();
     	    	    	    	    	
-    	    	    	String attackerTestField = model.getString("attack_attacker");
-    	if (attackerTestField != null) {
-    		String attackerField = attackerTestField;
-    		message.setAttacker(attackerField);
-    		hasFields = true;
-    	}
+    	    			String attackerTestField = model.getString("attack_attacker");
+		if (attackerTestField != null) {
+			String attackerField = attackerTestField;
+			message.setAttacker(attackerField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String targetTestField = model.getString("attack_target");
-    	if (targetTestField != null) {
-    		String targetField = targetTestField;
-    		message.setTarget(targetField);
-    		hasFields = true;
-    	}
+    	    			String targetTestField = model.getString("attack_target");
+		if (targetTestField != null) {
+			String targetField = targetTestField;
+			message.setTarget(targetField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String skillTestField = model.getString("attack_skill");
-    	if (skillTestField != null) {
-    		String skillField = skillTestField;
-    		message.setSkill(skillField);
-    		hasFields = true;
-    	}
+    	    			String skillTestField = model.getString("attack_skill");
+		if (skillTestField != null) {
+			String skillField = skillTestField;
+			message.setSkill(skillField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

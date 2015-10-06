@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class BuildObjectSlot implements Externalizable, Message<BuildObjectSlot>, Schema<BuildObjectSlot>{
+
+private static final Logger logger = LoggerFactory.getLogger(BuildObjectSlot.class);
 
 
 
@@ -138,55 +143,55 @@ public final class BuildObjectSlot implements Externalizable, Message<BuildObjec
 		boolean hasFields = false;
     	BuildObjectSlot message = new BuildObjectSlot();
     	    	    	    	    	
-    	    	    	String slotIdTestField = model.getString("build_object_slot_slot_id");
-    	if (slotIdTestField != null) {
-    		String slotIdField = slotIdTestField;
-    		message.setSlotId(slotIdField);
-    		hasFields = true;
-    	}
+    	    			String slotIdTestField = model.getString("build_object_slot_slot_id");
+		if (slotIdTestField != null) {
+			String slotIdField = slotIdTestField;
+			message.setSlotId(slotIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String buildObjectIdTestField = model.getString("build_object_slot_build_object_id");
-    	if (buildObjectIdTestField != null) {
-    		String buildObjectIdField = buildObjectIdTestField;
-    		message.setBuildObjectId(buildObjectIdField);
-    		hasFields = true;
-    	}
+    	    			String buildObjectIdTestField = model.getString("build_object_slot_build_object_id");
+		if (buildObjectIdTestField != null) {
+			String buildObjectIdField = buildObjectIdTestField;
+			message.setBuildObjectId(buildObjectIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long placedAtTestField = model.getLong("build_object_slot_placed_at");
-    	if (placedAtTestField != null) {
-    		long placedAtField = placedAtTestField;
-    		message.setPlacedAt(placedAtField);
-    		hasFields = true;
-    	}
+    	    			Long placedAtTestField = model.getLong("build_object_slot_placed_at");
+		if (placedAtTestField != null) {
+			long placedAtField = placedAtTestField;
+			message.setPlacedAt(placedAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean buildOverTimeTestField = model.getBoolean("build_object_slot_build_over_time");
-    	if (buildOverTimeTestField != null) {
-    		boolean buildOverTimeField = buildOverTimeTestField;
-    		message.setBuildOverTime(buildOverTimeField);
-    		hasFields = true;
-    	}
+    	    			Boolean buildOverTimeTestField = model.getBoolean("build_object_slot_build_over_time");
+		if (buildOverTimeTestField != null) {
+			boolean buildOverTimeField = buildOverTimeTestField;
+			message.setBuildOverTime(buildOverTimeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer buildTimeTestField = model.getInteger("build_object_slot_build_time");
-    	if (buildTimeTestField != null) {
-    		int buildTimeField = buildTimeTestField;
-    		message.setBuildTime(buildTimeField);
-    		hasFields = true;
-    	}
+    	    			Integer buildTimeTestField = model.getInteger("build_object_slot_build_time");
+		if (buildTimeTestField != null) {
+			int buildTimeField = buildTimeTestField;
+			message.setBuildTime(buildTimeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

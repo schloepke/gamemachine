@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class VisualEffect implements Externalizable, Message<VisualEffect>, Schema<VisualEffect>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(VisualEffect.class);
 
 
 
@@ -403,46 +408,46 @@ public final class VisualEffect implements Externalizable, Message<VisualEffect>
 		boolean hasFields = false;
     	VisualEffect message = new VisualEffect();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("visual_effect_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("visual_effect_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String prefabTestField = model.getString("visual_effect_prefab");
-    	if (prefabTestField != null) {
-    		String prefabField = prefabTestField;
-    		message.setPrefab(prefabField);
-    		hasFields = true;
-    	}
+    	    			String prefabTestField = model.getString("visual_effect_prefab");
+		if (prefabTestField != null) {
+			String prefabField = prefabTestField;
+			message.setPrefab(prefabField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	    	
-    	    	    	String typeTestField = model.getString("visual_effect_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("visual_effect_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer durationTestField = model.getInteger("visual_effect_duration");
-    	if (durationTestField != null) {
-    		int durationField = durationTestField;
-    		message.setDuration(durationField);
-    		hasFields = true;
-    	}
+    	    			Integer durationTestField = model.getInteger("visual_effect_duration");
+		if (durationTestField != null) {
+			int durationField = durationTestField;
+			message.setDuration(durationField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

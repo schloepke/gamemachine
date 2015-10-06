@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ChatInvite implements Externalizable, Message<ChatInvite>, Schema<ChatInvite>{
+
+private static final Logger logger = LoggerFactory.getLogger(ChatInvite.class);
 
 
 
@@ -127,46 +132,46 @@ public final class ChatInvite implements Externalizable, Message<ChatInvite>, Sc
 		boolean hasFields = false;
     	ChatInvite message = new ChatInvite();
     	    	    	    	    	
-    	    	    	String inviteeTestField = model.getString("chat_invite_invitee");
-    	if (inviteeTestField != null) {
-    		String inviteeField = inviteeTestField;
-    		message.setInvitee(inviteeField);
-    		hasFields = true;
-    	}
+    	    			String inviteeTestField = model.getString("chat_invite_invitee");
+		if (inviteeTestField != null) {
+			String inviteeField = inviteeTestField;
+			message.setInvitee(inviteeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String inviterTestField = model.getString("chat_invite_inviter");
-    	if (inviterTestField != null) {
-    		String inviterField = inviterTestField;
-    		message.setInviter(inviterField);
-    		hasFields = true;
-    	}
+    	    			String inviterTestField = model.getString("chat_invite_inviter");
+		if (inviterTestField != null) {
+			String inviterField = inviterTestField;
+			message.setInviter(inviterField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String channelNameTestField = model.getString("chat_invite_channel_name");
-    	if (channelNameTestField != null) {
-    		String channelNameField = channelNameTestField;
-    		message.setChannelName(channelNameField);
-    		hasFields = true;
-    	}
+    	    			String channelNameTestField = model.getString("chat_invite_channel_name");
+		if (channelNameTestField != null) {
+			String channelNameField = channelNameTestField;
+			message.setChannelName(channelNameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String invite_idTestField = model.getString("chat_invite_invite_id");
-    	if (invite_idTestField != null) {
-    		String invite_idField = invite_idTestField;
-    		message.setInvite_id(invite_idField);
-    		hasFields = true;
-    	}
+    	    			String invite_idTestField = model.getString("chat_invite_invite_id");
+		if (invite_idTestField != null) {
+			String invite_idField = invite_idTestField;
+			message.setInvite_id(invite_idField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

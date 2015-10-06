@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class PlayerConnect implements Externalizable, Message<PlayerConnect>, Schema<PlayerConnect>{
+
+private static final Logger logger = LoggerFactory.getLogger(PlayerConnect.class);
 
 
 
@@ -105,28 +110,28 @@ public final class PlayerConnect implements Externalizable, Message<PlayerConnec
 		boolean hasFields = false;
     	PlayerConnect message = new PlayerConnect();
     	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("player_connect_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("player_connect_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String passwordTestField = model.getString("player_connect_password");
-    	if (passwordTestField != null) {
-    		String passwordField = passwordTestField;
-    		message.setPassword(passwordField);
-    		hasFields = true;
-    	}
+    	    			String passwordTestField = model.getString("player_connect_password");
+		if (passwordTestField != null) {
+			String passwordField = passwordTestField;
+			message.setPassword(passwordField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

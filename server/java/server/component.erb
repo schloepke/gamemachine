@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -60,6 +61,8 @@ import io.gamemachine.core.ActorUtil;
 <% end %>
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -80,6 +83,8 @@ import io.gamemachine.core.CacheUpdate;
 @SuppressWarnings("unused")
 <%= decl %>
 {
+
+private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 
 <% message.nestedEnumGroups.each do |group| %>
 	public enum <%=group.name %> implements io.protostuff.EnumLite<<%=group.name %>>
@@ -523,7 +528,16 @@ import io.gamemachine.core.CacheUpdate;
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.<%=klass%>.close();
@@ -653,16 +667,19 @@ import io.gamemachine.core.CacheUpdate;
     
 	public void toModel(Model model) {
     	<% message.getFields.each do |field| %>
-    	<% next unless simple_value?(field) %>
+    	<% next unless simple_value?(field) || field.isEnumField %>
     	<% next if field.isRepeated %>
     	
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
-    	<% if field.name == 'recordId' %>
-    	model.setInteger("id",recordId);
+    	<% if field.name == 'recordId'%>
+    	//model.setInteger("id",recordId);
+    	
     	<% else %>
     	//if (<%= field.name %> != null) {
     	   <% if get_type(field) == 'ByteString' %>
     	    	model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	    <% elsif field.isEnumField %>
+    	    	model.setInteger("<%=sql_column_name(klass,field)%>",<%= field.name %>.ordinal());
     	    <% else %>
     	    	model.set<%=setter(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
     	    <% end %>
@@ -676,7 +693,7 @@ import io.gamemachine.core.CacheUpdate;
 		boolean hasFields = false;
     	<%=klass%> message = new <%=klass%>();
     	<% message.getFields.each do |field| %>
-    	<% next unless simple_value?(field) %>
+    	<% next unless simple_value?(field) || field.isEnumField %>
     	<% next if field.isRepeated %>
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
     	
@@ -685,32 +702,35 @@ import io.gamemachine.core.CacheUpdate;
     		message.setRecordId(model.getInteger("id"));
     		hasFields = true;
     	//}
+    	<% elsif field.isEnumField %>
+			message.set<%= field_name %>(<%=get_type(field) %>.valueOf(model.getInteger("<%=sql_column_name(klass,field)%>")));
     	<% else %>
     	<% if get_type(field) == 'ByteString' %>
+    	
     	<%=get_type(field) %> <%= field.name %>Field = null;
-    	Object <%= field.name %>Value = model.get("<%=sql_column_name(klass,field)%>");
-    	if (<%= field.name %>Value != null) {
-    		byte[] <%= field.name %>Bytes = Convert.toBytes(<%= field.name %>Value);
-    		<%= field.name %>Field = ByteString.copyFrom(<%= field.name %>Bytes);
-    	}
+		Object <%= field.name %>Value = model.get("<%=sql_column_name(klass,field)%>");
+		if (<%= field.name %>Value != null) {
+			byte[] <%= field.name %>Bytes = Convert.toBytes(<%= field.name %>Value);
+			<%= field.name %>Field = ByteString.copyFrom(<%= field.name %>Bytes);
+		}
     	    	
     	<% else %>
-    	<%=nullable(field) %> <%= field.name %>TestField = model.get<%=setter(field) %>("<%=sql_column_name(klass,field)%>");
-    	if (<%= field.name %>TestField != null) {
-    		<%=get_type(field) %> <%= field.name %>Field = <%= field.name %>TestField;
-    		message.set<%= field_name %>(<%= field.name %>Field);
-    		hasFields = true;
-    	}
+		<%=nullable(field) %> <%= field.name %>TestField = model.get<%=setter(field) %>("<%=sql_column_name(klass,field)%>");
+		if (<%= field.name %>TestField != null) {
+			<%=get_type(field) %> <%= field.name %>Field = <%= field.name %>TestField;
+			message.set<%= field_name %>(<%= field.name %>Field);
+			hasFields = true;
+		}
     	
     	<% end %>
     	
     	<% end %>
     	<% end %>
-    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+		if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 <% end %>
 

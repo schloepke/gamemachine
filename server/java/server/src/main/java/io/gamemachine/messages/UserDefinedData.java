@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class UserDefinedData implements Externalizable, Message<UserDefinedData>, Schema<UserDefinedData>{
+
+private static final Logger logger = LoggerFactory.getLogger(UserDefinedData.class);
 
 
 
@@ -347,226 +352,226 @@ public final class UserDefinedData implements Externalizable, Message<UserDefine
 		boolean hasFields = false;
     	UserDefinedData message = new UserDefinedData();
     	    	    	    	    	
-    	    	    	Integer commandTestField = model.getInteger("user_defined_data_command");
-    	if (commandTestField != null) {
-    		int commandField = commandTestField;
-    		message.setCommand(commandField);
-    		hasFields = true;
-    	}
+    	    			Integer commandTestField = model.getInteger("user_defined_data_command");
+		if (commandTestField != null) {
+			int commandField = commandTestField;
+			message.setCommand(commandField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer valueTestField = model.getInteger("user_defined_data_value");
-    	if (valueTestField != null) {
-    		int valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Integer valueTestField = model.getInteger("user_defined_data_value");
+		if (valueTestField != null) {
+			int valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt2TestField = model.getInteger("user_defined_data_userdef_int2");
-    	if (userdefInt2TestField != null) {
-    		int userdefInt2Field = userdefInt2TestField;
-    		message.setUserdefInt2(userdefInt2Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt2TestField = model.getInteger("user_defined_data_userdef_int2");
+		if (userdefInt2TestField != null) {
+			int userdefInt2Field = userdefInt2TestField;
+			message.setUserdefInt2(userdefInt2Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt3TestField = model.getInteger("user_defined_data_userdef_int3");
-    	if (userdefInt3TestField != null) {
-    		int userdefInt3Field = userdefInt3TestField;
-    		message.setUserdefInt3(userdefInt3Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt3TestField = model.getInteger("user_defined_data_userdef_int3");
+		if (userdefInt3TestField != null) {
+			int userdefInt3Field = userdefInt3TestField;
+			message.setUserdefInt3(userdefInt3Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt4TestField = model.getInteger("user_defined_data_userdef_int4");
-    	if (userdefInt4TestField != null) {
-    		int userdefInt4Field = userdefInt4TestField;
-    		message.setUserdefInt4(userdefInt4Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt4TestField = model.getInteger("user_defined_data_userdef_int4");
+		if (userdefInt4TestField != null) {
+			int userdefInt4Field = userdefInt4TestField;
+			message.setUserdefInt4(userdefInt4Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt5TestField = model.getInteger("user_defined_data_userdef_int5");
-    	if (userdefInt5TestField != null) {
-    		int userdefInt5Field = userdefInt5TestField;
-    		message.setUserdefInt5(userdefInt5Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt5TestField = model.getInteger("user_defined_data_userdef_int5");
+		if (userdefInt5TestField != null) {
+			int userdefInt5Field = userdefInt5TestField;
+			message.setUserdefInt5(userdefInt5Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt6TestField = model.getInteger("user_defined_data_userdef_int6");
-    	if (userdefInt6TestField != null) {
-    		int userdefInt6Field = userdefInt6TestField;
-    		message.setUserdefInt6(userdefInt6Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt6TestField = model.getInteger("user_defined_data_userdef_int6");
+		if (userdefInt6TestField != null) {
+			int userdefInt6Field = userdefInt6TestField;
+			message.setUserdefInt6(userdefInt6Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt7TestField = model.getInteger("user_defined_data_userdef_int7");
-    	if (userdefInt7TestField != null) {
-    		int userdefInt7Field = userdefInt7TestField;
-    		message.setUserdefInt7(userdefInt7Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt7TestField = model.getInteger("user_defined_data_userdef_int7");
+		if (userdefInt7TestField != null) {
+			int userdefInt7Field = userdefInt7TestField;
+			message.setUserdefInt7(userdefInt7Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt8TestField = model.getInteger("user_defined_data_userdef_int8");
-    	if (userdefInt8TestField != null) {
-    		int userdefInt8Field = userdefInt8TestField;
-    		message.setUserdefInt8(userdefInt8Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt8TestField = model.getInteger("user_defined_data_userdef_int8");
+		if (userdefInt8TestField != null) {
+			int userdefInt8Field = userdefInt8TestField;
+			message.setUserdefInt8(userdefInt8Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt9TestField = model.getInteger("user_defined_data_userdef_int9");
-    	if (userdefInt9TestField != null) {
-    		int userdefInt9Field = userdefInt9TestField;
-    		message.setUserdefInt9(userdefInt9Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt9TestField = model.getInteger("user_defined_data_userdef_int9");
+		if (userdefInt9TestField != null) {
+			int userdefInt9Field = userdefInt9TestField;
+			message.setUserdefInt9(userdefInt9Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt1TestField = model.getInteger("user_defined_data_userdef_int1");
-    	if (userdefInt1TestField != null) {
-    		int userdefInt1Field = userdefInt1TestField;
-    		message.setUserdefInt1(userdefInt1Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt1TestField = model.getInteger("user_defined_data_userdef_int1");
+		if (userdefInt1TestField != null) {
+			int userdefInt1Field = userdefInt1TestField;
+			message.setUserdefInt1(userdefInt1Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rxTestField = model.getInteger("user_defined_data_rx");
-    	if (rxTestField != null) {
-    		int rxField = rxTestField;
-    		message.setRx(rxField);
-    		hasFields = true;
-    	}
+    	    			Integer rxTestField = model.getInteger("user_defined_data_rx");
+		if (rxTestField != null) {
+			int rxField = rxTestField;
+			message.setRx(rxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ryTestField = model.getInteger("user_defined_data_ry");
-    	if (ryTestField != null) {
-    		int ryField = ryTestField;
-    		message.setRy(ryField);
-    		hasFields = true;
-    	}
+    	    			Integer ryTestField = model.getInteger("user_defined_data_ry");
+		if (ryTestField != null) {
+			int ryField = ryTestField;
+			message.setRy(ryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rzTestField = model.getInteger("user_defined_data_rz");
-    	if (rzTestField != null) {
-    		int rzField = rzTestField;
-    		message.setRz(rzField);
-    		hasFields = true;
-    	}
+    	    			Integer rzTestField = model.getInteger("user_defined_data_rz");
+		if (rzTestField != null) {
+			int rzField = rzTestField;
+			message.setRz(rzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rwTestField = model.getInteger("user_defined_data_rw");
-    	if (rwTestField != null) {
-    		int rwField = rwTestField;
-    		message.setRw(rwField);
-    		hasFields = true;
-    	}
+    	    			Integer rwTestField = model.getInteger("user_defined_data_rw");
+		if (rwTestField != null) {
+			int rwField = rwTestField;
+			message.setRw(rwField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer xTestField = model.getInteger("user_defined_data_x");
-    	if (xTestField != null) {
-    		int xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Integer xTestField = model.getInteger("user_defined_data_x");
+		if (xTestField != null) {
+			int xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yTestField = model.getInteger("user_defined_data_y");
-    	if (yTestField != null) {
-    		int yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Integer yTestField = model.getInteger("user_defined_data_y");
+		if (yTestField != null) {
+			int yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zTestField = model.getInteger("user_defined_data_z");
-    	if (zTestField != null) {
-    		int zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Integer zTestField = model.getInteger("user_defined_data_z");
+		if (zTestField != null) {
+			int zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt10TestField = model.getInteger("user_defined_data_userdef_int10");
-    	if (userdefInt10TestField != null) {
-    		int userdefInt10Field = userdefInt10TestField;
-    		message.setUserdefInt10(userdefInt10Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt10TestField = model.getInteger("user_defined_data_userdef_int10");
+		if (userdefInt10TestField != null) {
+			int userdefInt10Field = userdefInt10TestField;
+			message.setUserdefInt10(userdefInt10Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt11TestField = model.getInteger("user_defined_data_userdef_int11");
-    	if (userdefInt11TestField != null) {
-    		int userdefInt11Field = userdefInt11TestField;
-    		message.setUserdefInt11(userdefInt11Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt11TestField = model.getInteger("user_defined_data_userdef_int11");
+		if (userdefInt11TestField != null) {
+			int userdefInt11Field = userdefInt11TestField;
+			message.setUserdefInt11(userdefInt11Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt12TestField = model.getInteger("user_defined_data_userdef_int12");
-    	if (userdefInt12TestField != null) {
-    		int userdefInt12Field = userdefInt12TestField;
-    		message.setUserdefInt12(userdefInt12Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt12TestField = model.getInteger("user_defined_data_userdef_int12");
+		if (userdefInt12TestField != null) {
+			int userdefInt12Field = userdefInt12TestField;
+			message.setUserdefInt12(userdefInt12Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt13TestField = model.getInteger("user_defined_data_userdef_int13");
-    	if (userdefInt13TestField != null) {
-    		int userdefInt13Field = userdefInt13TestField;
-    		message.setUserdefInt13(userdefInt13Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt13TestField = model.getInteger("user_defined_data_userdef_int13");
+		if (userdefInt13TestField != null) {
+			int userdefInt13Field = userdefInt13TestField;
+			message.setUserdefInt13(userdefInt13Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt14TestField = model.getInteger("user_defined_data_userdef_int14");
-    	if (userdefInt14TestField != null) {
-    		int userdefInt14Field = userdefInt14TestField;
-    		message.setUserdefInt14(userdefInt14Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt14TestField = model.getInteger("user_defined_data_userdef_int14");
+		if (userdefInt14TestField != null) {
+			int userdefInt14Field = userdefInt14TestField;
+			message.setUserdefInt14(userdefInt14Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer userdefInt15TestField = model.getInteger("user_defined_data_userdef_int15");
-    	if (userdefInt15TestField != null) {
-    		int userdefInt15Field = userdefInt15TestField;
-    		message.setUserdefInt15(userdefInt15Field);
-    		hasFields = true;
-    	}
+    	    			Integer userdefInt15TestField = model.getInteger("user_defined_data_userdef_int15");
+		if (userdefInt15TestField != null) {
+			int userdefInt15Field = userdefInt15TestField;
+			message.setUserdefInt15(userdefInt15Field);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GmQuaternion implements Externalizable, Message<GmQuaternion>, Schema<GmQuaternion>{
+
+private static final Logger logger = LoggerFactory.getLogger(GmQuaternion.class);
 
 
 
@@ -127,46 +132,46 @@ public final class GmQuaternion implements Externalizable, Message<GmQuaternion>
 		boolean hasFields = false;
     	GmQuaternion message = new GmQuaternion();
     	    	    	    	    	
-    	    	    	Float xTestField = model.getFloat("gm_quaternion_x");
-    	if (xTestField != null) {
-    		float xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Float xTestField = model.getFloat("gm_quaternion_x");
+		if (xTestField != null) {
+			float xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float yTestField = model.getFloat("gm_quaternion_y");
-    	if (yTestField != null) {
-    		float yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Float yTestField = model.getFloat("gm_quaternion_y");
+		if (yTestField != null) {
+			float yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float zTestField = model.getFloat("gm_quaternion_z");
-    	if (zTestField != null) {
-    		float zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Float zTestField = model.getFloat("gm_quaternion_z");
+		if (zTestField != null) {
+			float zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float wTestField = model.getFloat("gm_quaternion_w");
-    	if (wTestField != null) {
-    		float wField = wTestField;
-    		message.setW(wField);
-    		hasFields = true;
-    	}
+    	    			Float wTestField = model.getFloat("gm_quaternion_w");
+		if (wTestField != null) {
+			float wField = wTestField;
+			message.setW(wField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

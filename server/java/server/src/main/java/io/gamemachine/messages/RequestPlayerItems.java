@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class RequestPlayerItems implements Externalizable, Message<RequestPlayerItems>, Schema<RequestPlayerItems>{
+
+private static final Logger logger = LoggerFactory.getLogger(RequestPlayerItems.class);
 
 
 
@@ -132,46 +137,46 @@ public final class RequestPlayerItems implements Externalizable, Message<Request
 		boolean hasFields = false;
     	RequestPlayerItems message = new RequestPlayerItems();
     	    	    	    	    	
-    	    	    	Boolean catalogTestField = model.getBoolean("request_player_items_catalog");
-    	if (catalogTestField != null) {
-    		boolean catalogField = catalogTestField;
-    		message.setCatalog(catalogField);
-    		hasFields = true;
-    	}
+    	    			Boolean catalogTestField = model.getBoolean("request_player_items_catalog");
+		if (catalogTestField != null) {
+			boolean catalogField = catalogTestField;
+			message.setCatalog(catalogField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("request_player_items_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("request_player_items_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer resultTestField = model.getInteger("request_player_items_result");
-    	if (resultTestField != null) {
-    		int resultField = resultTestField;
-    		message.setResult(resultField);
-    		hasFields = true;
-    	}
+    	    			Integer resultTestField = model.getInteger("request_player_items_result");
+		if (resultTestField != null) {
+			int resultField = resultTestField;
+			message.setResult(resultField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String queryTestField = model.getString("request_player_items_query");
-    	if (queryTestField != null) {
-    		String queryField = queryTestField;
-    		message.setQuery(queryField);
-    		hasFields = true;
-    	}
+    	    			String queryTestField = model.getString("request_player_items_query");
+		if (queryTestField != null) {
+			String queryField = queryTestField;
+			message.setQuery(queryField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

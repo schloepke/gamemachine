@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class BuildObjectChunk implements Externalizable, Message<BuildObjectChunk>, Schema<BuildObjectChunk>{
+
+private static final Logger logger = LoggerFactory.getLogger(BuildObjectChunk.class);
 
 
 
@@ -105,28 +110,29 @@ public final class BuildObjectChunk implements Externalizable, Message<BuildObje
 		boolean hasFields = false;
     	BuildObjectChunk message = new BuildObjectChunk();
     	    	    	    	    	
-    	    	    	ByteString dataField = null;
-    	Object dataValue = model.get("build_object_chunk_data");
-    	if (dataValue != null) {
-    		byte[] dataBytes = Convert.toBytes(dataValue);
-    		dataField = ByteString.copyFrom(dataBytes);
-    	}
+    	    	    	
+    	ByteString dataField = null;
+		Object dataValue = model.get("build_object_chunk_data");
+		if (dataValue != null) {
+			byte[] dataBytes = Convert.toBytes(dataValue);
+			dataField = ByteString.copyFrom(dataBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer chunkTestField = model.getInteger("build_object_chunk_chunk");
-    	if (chunkTestField != null) {
-    		int chunkField = chunkTestField;
-    		message.setChunk(chunkField);
-    		hasFields = true;
-    	}
+    	    			Integer chunkTestField = model.getInteger("build_object_chunk_chunk");
+		if (chunkTestField != null) {
+			int chunkField = chunkTestField;
+			message.setChunk(chunkField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

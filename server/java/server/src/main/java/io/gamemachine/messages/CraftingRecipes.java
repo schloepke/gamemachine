@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class CraftingRecipes implements Externalizable, Message<CraftingRecipes>, Schema<CraftingRecipes>{
+
+private static final Logger logger = LoggerFactory.getLogger(CraftingRecipes.class);
 
 
 
@@ -95,19 +100,19 @@ public final class CraftingRecipes implements Externalizable, Message<CraftingRe
 		boolean hasFields = false;
     	CraftingRecipes message = new CraftingRecipes();
     	    	    	    	    	    	
-    	    	    	String itemCatalogTestField = model.getString("crafting_recipes_item_catalog");
-    	if (itemCatalogTestField != null) {
-    		String itemCatalogField = itemCatalogTestField;
-    		message.setItemCatalog(itemCatalogField);
-    		hasFields = true;
-    	}
+    	    			String itemCatalogTestField = model.getString("crafting_recipes_item_catalog");
+		if (itemCatalogTestField != null) {
+			String itemCatalogField = itemCatalogTestField;
+			message.setItemCatalog(itemCatalogField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

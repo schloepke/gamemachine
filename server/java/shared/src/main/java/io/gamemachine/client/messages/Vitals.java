@@ -37,6 +37,41 @@ import io.protostuff.UninitializedMessageException;
 @SuppressWarnings("unused")
 public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vitals>{
 
+	public enum Type implements io.protostuff.EnumLite<Type>
+    {
+    	
+    	    	None(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
+        public final int number;
+        
+        private Type (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Type valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (None);
+    			    			case 1: return (Guard);
+    			    			case 2: return (AggressiveNpc);
+    			    			case 3: return (NeutralNpc);
+    			    			case 4: return (FriendlyNpc);
+    			    			case 5: return (AggressiveAnimal);
+    			    			case 6: return (NeutralAnimal);
+    			    			case 7: return (FriendlyAnimal);
+    			    			case 8: return (Player);
+    			    			case 9: return (Vehicle);
+    			    			case 10: return (Structure);
+    			                default: return null;
+            }
+        }
+    }
 
 
     public static Schema<Vitals> getSchema()
@@ -84,6 +119,8 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         			public int staminaDrain;
 	    
         			public String grid;
+	    
+        			public Type type; // = None:0;
 	    
       
     public Vitals()
@@ -315,6 +352,19 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 		this.grid = grid;
 		return this;	}
 	
+		    
+    public Boolean hasType()  {
+        return type == null ? false : true;
+    }
+        
+		public Type getType() {
+		return type;
+	}
+	
+	public Vitals setType(Type type) {
+		this.type = type;
+		return this;	}
+	
 	
   
     // java serialization
@@ -439,6 +489,10 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
             	                	                	message.grid = input.readString();
                 	break;
                 	                	
+                            	            	case 18:
+            	                	                    message.type = Type.valueOf(input.readEnum());
+                    break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -537,6 +591,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
             output.writeString(17, message.grid, false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.type != null)
+    	 	output.writeEnum(18, message.type.number, false);
+    	    	
+    	            	
     }
 
     public String getFieldName(int number)
@@ -560,6 +619,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         	        	case 15: return "playerId";
         	        	case 16: return "staminaDrain";
         	        	case 17: return "grid";
+        	        	case 18: return "type";
         	            default: return null;
         }
     }
@@ -590,6 +650,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	__fieldMap.put("playerId", 15);
     	    	__fieldMap.put("staminaDrain", 16);
     	    	__fieldMap.put("grid", 17);
+    	    	__fieldMap.put("type", 18);
     	    }
    
    public static List<String> getFields() {

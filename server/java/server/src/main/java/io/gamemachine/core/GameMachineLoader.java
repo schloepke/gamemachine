@@ -4,6 +4,7 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.game_systems.LatencyTest;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.process.ProcessManager;
 import io.gamemachine.routing.GameMessageRoute;

@@ -7,8 +7,9 @@ import io.gamemachine.messages.UpdatePlayerItem;
 
 import java.util.Map;
 
+import org.apache.commons.codec.binary.Base64;
+
 import plugins.inventoryservice.InventoryService;
-import sun.misc.BASE64Decoder;
 
 public class HttpHandler {
 	
@@ -39,8 +40,7 @@ public class HttpHandler {
 	// All requests that get here have a path that start with /api/game
 	public static Response processRequest(String path,Map<String,String> params, boolean authenticated) throws Exception {
 		if (path.startsWith("/api/game/inventory")) {
-			BASE64Decoder dec = new BASE64Decoder();
-			byte[] bytes = dec.decodeBuffer(params.get("content"));
+			byte[] bytes = Base64.decodeBase64(params.get("content"));
 			
 			if (path.startsWith("/api/game/inventory/request_player_items")) {
 				RequestPlayerItems request = RequestPlayerItems.parseFrom(bytes);

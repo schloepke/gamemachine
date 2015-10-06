@@ -35,7 +35,7 @@ public class JdbcStore implements Storable {
 		try {
 			pool.connect(connectionName, AppConfig.Jdbc.getHostname(), AppConfig.Jdbc.getPort(),
 					AppConfig.Jdbc.getDatabase(), AppConfig.Jdbc.getDs(), AppConfig.Jdbc.getUsername(),
-					AppConfig.Jdbc.getPassword());
+					AppConfig.Jdbc.getPassword(),AppConfig.Jdbc.getDriver(),AppConfig.Jdbc.getUrl());
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new RuntimeException("Unable to establish database connection " + e.getMessage());

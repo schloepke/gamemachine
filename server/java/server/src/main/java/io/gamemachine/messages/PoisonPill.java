@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class PoisonPill implements Externalizable, Message<PoisonPill>, Schema<PoisonPill>{
+
+private static final Logger logger = LoggerFactory.getLogger(PoisonPill.class);
 
 
 
@@ -94,19 +99,19 @@ public final class PoisonPill implements Externalizable, Message<PoisonPill>, Sc
 		boolean hasFields = false;
     	PoisonPill message = new PoisonPill();
     	    	    	    	    	
-    	    	    	Integer notusedTestField = model.getInteger("poison_pill_notused");
-    	if (notusedTestField != null) {
-    		int notusedField = notusedTestField;
-    		message.setNotused(notusedField);
-    		hasFields = true;
-    	}
+    	    			Integer notusedTestField = model.getInteger("poison_pill_notused");
+		if (notusedTestField != null) {
+			int notusedField = notusedTestField;
+			message.setNotused(notusedField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ChatRegister implements Externalizable, Message<ChatRegister>, Schema<ChatRegister>{
+
+private static final Logger logger = LoggerFactory.getLogger(ChatRegister.class);
 
 
 
@@ -105,28 +110,28 @@ public final class ChatRegister implements Externalizable, Message<ChatRegister>
 		boolean hasFields = false;
     	ChatRegister message = new ChatRegister();
     	    	    	    	    	
-    	    	    	String chatIdTestField = model.getString("chat_register_chat_id");
-    	if (chatIdTestField != null) {
-    		String chatIdField = chatIdTestField;
-    		message.setChatId(chatIdField);
-    		hasFields = true;
-    	}
+    	    			String chatIdTestField = model.getString("chat_register_chat_id");
+		if (chatIdTestField != null) {
+			String chatIdField = chatIdTestField;
+			message.setChatId(chatIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String registerAsTestField = model.getString("chat_register_register_as");
-    	if (registerAsTestField != null) {
-    		String registerAsField = registerAsTestField;
-    		message.setRegisterAs(registerAsField);
-    		hasFields = true;
-    	}
+    	    			String registerAsTestField = model.getString("chat_register_register_as");
+		if (registerAsTestField != null) {
+			String registerAsField = registerAsTestField;
+			message.setRegisterAs(registerAsField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

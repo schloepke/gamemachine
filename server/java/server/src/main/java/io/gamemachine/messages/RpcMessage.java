@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class RpcMessage implements Externalizable, Message<RpcMessage>, Schema<RpcMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(RpcMessage.class);
 
 	public enum MessageType implements io.protostuff.EnumLite<MessageType>
     {
@@ -129,6 +134,11 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
     	    }
     
 	public void toModel(Model model) {
+    	    	    	    	
+    	    	    	//if (messageType != null) {
+    	       	    	model.setInteger("rpc_message_message_type",messageType.ordinal());
+    	        		
+    	//}
     	    	    	    	    	    	
     	    	    	//if (messageId != null) {
     	       	    	model.setLong("rpc_message_message_id",messageId);
@@ -144,29 +154,31 @@ public final class RpcMessage implements Externalizable, Message<RpcMessage>, Sc
 	public static RpcMessage fromModel(Model model) {
 		boolean hasFields = false;
     	RpcMessage message = new RpcMessage();
+    	    	    	    	    	
+    				message.setMessageType(MessageType.valueOf(model.getInteger("rpc_message_message_type")));
     	    	    	    	    	    	    	
-    	    	    	Long messageIdTestField = model.getLong("rpc_message_message_id");
-    	if (messageIdTestField != null) {
-    		long messageIdField = messageIdTestField;
-    		message.setMessageId(messageIdField);
-    		hasFields = true;
-    	}
+    	    			Long messageIdTestField = model.getLong("rpc_message_message_id");
+		if (messageIdTestField != null) {
+			long messageIdField = messageIdTestField;
+			message.setMessageId(messageIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("rpc_message_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("rpc_message_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

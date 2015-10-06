@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpdate>, Schema<ObjectdbUpdate>{
+
+private static final Logger logger = LoggerFactory.getLogger(ObjectdbUpdate.class);
 
 
 
@@ -121,37 +126,37 @@ public final class ObjectdbUpdate implements Externalizable, Message<ObjectdbUpd
 		boolean hasFields = false;
     	ObjectdbUpdate message = new ObjectdbUpdate();
     	    	    	    	    	
-    	    	    	String currentEntityIdTestField = model.getString("objectdb_update_current_entity_id");
-    	if (currentEntityIdTestField != null) {
-    		String currentEntityIdField = currentEntityIdTestField;
-    		message.setCurrentEntityId(currentEntityIdField);
-    		hasFields = true;
-    	}
+    	    			String currentEntityIdTestField = model.getString("objectdb_update_current_entity_id");
+		if (currentEntityIdTestField != null) {
+			String currentEntityIdField = currentEntityIdTestField;
+			message.setCurrentEntityId(currentEntityIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String updateClassTestField = model.getString("objectdb_update_update_class");
-    	if (updateClassTestField != null) {
-    		String updateClassField = updateClassTestField;
-    		message.setUpdateClass(updateClassField);
-    		hasFields = true;
-    	}
+    	    			String updateClassTestField = model.getString("objectdb_update_update_class");
+		if (updateClassTestField != null) {
+			String updateClassField = updateClassTestField;
+			message.setUpdateClass(updateClassField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String updateMethodTestField = model.getString("objectdb_update_update_method");
-    	if (updateMethodTestField != null) {
-    		String updateMethodField = updateMethodTestField;
-    		message.setUpdateMethod(updateMethodField);
-    		hasFields = true;
-    	}
+    	    			String updateMethodTestField = model.getString("objectdb_update_update_method");
+		if (updateMethodTestField != null) {
+			String updateMethodField = updateMethodTestField;
+			message.setUpdateMethod(updateMethodField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

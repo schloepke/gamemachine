@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class CraftItem implements Externalizable, Message<CraftItem>, Schema<CraftItem>{
+
+private static final Logger logger = LoggerFactory.getLogger(CraftItem.class);
 
 
 
@@ -132,46 +137,46 @@ public final class CraftItem implements Externalizable, Message<CraftItem>, Sche
 		boolean hasFields = false;
     	CraftItem message = new CraftItem();
     	    	    	    	    	    	
-    	    	    	Integer resultTestField = model.getInteger("craft_item_result");
-    	if (resultTestField != null) {
-    		int resultField = resultTestField;
-    		message.setResult(resultField);
-    		hasFields = true;
-    	}
+    	    			Integer resultTestField = model.getInteger("craft_item_result");
+		if (resultTestField != null) {
+			int resultField = resultTestField;
+			message.setResult(resultField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("craft_item_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("craft_item_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer craftedQuantityTestField = model.getInteger("craft_item_crafted_quantity");
-    	if (craftedQuantityTestField != null) {
-    		int craftedQuantityField = craftedQuantityTestField;
-    		message.setCraftedQuantity(craftedQuantityField);
-    		hasFields = true;
-    	}
+    	    			Integer craftedQuantityTestField = model.getInteger("craft_item_crafted_quantity");
+		if (craftedQuantityTestField != null) {
+			int craftedQuantityField = craftedQuantityTestField;
+			message.setCraftedQuantity(craftedQuantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String craftedIdTestField = model.getString("craft_item_crafted_id");
-    	if (craftedIdTestField != null) {
-    		String craftedIdField = craftedIdTestField;
-    		message.setCraftedId(craftedIdField);
-    		hasFields = true;
-    	}
+    	    			String craftedIdTestField = model.getString("craft_item_crafted_id");
+		if (craftedIdTestField != null) {
+			String craftedIdField = craftedIdTestField;
+			message.setCraftedId(craftedIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

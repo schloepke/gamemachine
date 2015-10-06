@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ModelInfo implements Externalizable, Message<ModelInfo>, Schema<ModelInfo>{
+
+private static final Logger logger = LoggerFactory.getLogger(ModelInfo.class);
 
 
 
@@ -215,118 +220,118 @@ public final class ModelInfo implements Externalizable, Message<ModelInfo>, Sche
 		boolean hasFields = false;
     	ModelInfo message = new ModelInfo();
     	    	    	    	    	
-    	    	    	Float attachXTestField = model.getFloat("model_info_attach_x");
-    	if (attachXTestField != null) {
-    		float attachXField = attachXTestField;
-    		message.setAttachX(attachXField);
-    		hasFields = true;
-    	}
+    	    			Float attachXTestField = model.getFloat("model_info_attach_x");
+		if (attachXTestField != null) {
+			float attachXField = attachXTestField;
+			message.setAttachX(attachXField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float attachYTestField = model.getFloat("model_info_attach_y");
-    	if (attachYTestField != null) {
-    		float attachYField = attachYTestField;
-    		message.setAttachY(attachYField);
-    		hasFields = true;
-    	}
+    	    			Float attachYTestField = model.getFloat("model_info_attach_y");
+		if (attachYTestField != null) {
+			float attachYField = attachYTestField;
+			message.setAttachY(attachYField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float attachZTestField = model.getFloat("model_info_attach_z");
-    	if (attachZTestField != null) {
-    		float attachZField = attachZTestField;
-    		message.setAttachZ(attachZField);
-    		hasFields = true;
-    	}
+    	    			Float attachZTestField = model.getFloat("model_info_attach_z");
+		if (attachZTestField != null) {
+			float attachZField = attachZTestField;
+			message.setAttachZ(attachZField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float rotateXTestField = model.getFloat("model_info_rotate_x");
-    	if (rotateXTestField != null) {
-    		float rotateXField = rotateXTestField;
-    		message.setRotateX(rotateXField);
-    		hasFields = true;
-    	}
+    	    			Float rotateXTestField = model.getFloat("model_info_rotate_x");
+		if (rotateXTestField != null) {
+			float rotateXField = rotateXTestField;
+			message.setRotateX(rotateXField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float rotateYTestField = model.getFloat("model_info_rotate_y");
-    	if (rotateYTestField != null) {
-    		float rotateYField = rotateYTestField;
-    		message.setRotateY(rotateYField);
-    		hasFields = true;
-    	}
+    	    			Float rotateYTestField = model.getFloat("model_info_rotate_y");
+		if (rotateYTestField != null) {
+			float rotateYField = rotateYTestField;
+			message.setRotateY(rotateYField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float rotateZTestField = model.getFloat("model_info_rotate_z");
-    	if (rotateZTestField != null) {
-    		float rotateZField = rotateZTestField;
-    		message.setRotateZ(rotateZField);
-    		hasFields = true;
-    	}
+    	    			Float rotateZTestField = model.getFloat("model_info_rotate_z");
+		if (rotateZTestField != null) {
+			float rotateZField = rotateZTestField;
+			message.setRotateZ(rotateZField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float scaleXTestField = model.getFloat("model_info_scale_x");
-    	if (scaleXTestField != null) {
-    		float scaleXField = scaleXTestField;
-    		message.setScaleX(scaleXField);
-    		hasFields = true;
-    	}
+    	    			Float scaleXTestField = model.getFloat("model_info_scale_x");
+		if (scaleXTestField != null) {
+			float scaleXField = scaleXTestField;
+			message.setScaleX(scaleXField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float scaleYTestField = model.getFloat("model_info_scale_y");
-    	if (scaleYTestField != null) {
-    		float scaleYField = scaleYTestField;
-    		message.setScaleY(scaleYField);
-    		hasFields = true;
-    	}
+    	    			Float scaleYTestField = model.getFloat("model_info_scale_y");
+		if (scaleYTestField != null) {
+			float scaleYField = scaleYTestField;
+			message.setScaleY(scaleYField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float scaleZTestField = model.getFloat("model_info_scale_z");
-    	if (scaleZTestField != null) {
-    		float scaleZField = scaleZTestField;
-    		message.setScaleZ(scaleZField);
-    		hasFields = true;
-    	}
+    	    			Float scaleZTestField = model.getFloat("model_info_scale_z");
+		if (scaleZTestField != null) {
+			float scaleZField = scaleZTestField;
+			message.setScaleZ(scaleZField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String resourceTestField = model.getString("model_info_resource");
-    	if (resourceTestField != null) {
-    		String resourceField = resourceTestField;
-    		message.setResource(resourceField);
-    		hasFields = true;
-    	}
+    	    			String resourceTestField = model.getString("model_info_resource");
+		if (resourceTestField != null) {
+			String resourceField = resourceTestField;
+			message.setResource(resourceField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String prefabTestField = model.getString("model_info_prefab");
-    	if (prefabTestField != null) {
-    		String prefabField = prefabTestField;
-    		message.setPrefab(prefabField);
-    		hasFields = true;
-    	}
+    	    			String prefabTestField = model.getString("model_info_prefab");
+		if (prefabTestField != null) {
+			String prefabField = prefabTestField;
+			message.setPrefab(prefabField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String weapon_typeTestField = model.getString("model_info_weapon_type");
-    	if (weapon_typeTestField != null) {
-    		String weapon_typeField = weapon_typeTestField;
-    		message.setWeapon_type(weapon_typeField);
-    		hasFields = true;
-    	}
+    	    			String weapon_typeTestField = model.getString("model_info_weapon_type");
+		if (weapon_typeTestField != null) {
+			String weapon_typeField = weapon_typeTestField;
+			message.setWeapon_type(weapon_typeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

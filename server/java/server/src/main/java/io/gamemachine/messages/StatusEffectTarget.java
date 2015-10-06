@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class StatusEffectTarget implements Externalizable, Message<StatusEffectTarget>, Schema<StatusEffectTarget>{
+
+private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.class);
 
 	public enum Action implements io.protostuff.EnumLite<Action>
     {
@@ -238,7 +243,17 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
     	       	    	model.setLong("status_effect_target_last_tick",lastTick);
     	        		
     	//}
-    	    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (action != null) {
+    	       	    	model.setInteger("status_effect_target_action",action.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (passiveFlag != null) {
+    	       	    	model.setInteger("status_effect_target_passive_flag",passiveFlag.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (originPlayerId != null) {
     	       	    	model.setString("status_effect_target_origin_player_id",originPlayerId);
     	        		
@@ -249,82 +264,86 @@ public final class StatusEffectTarget implements Externalizable, Message<StatusE
 		boolean hasFields = false;
     	StatusEffectTarget message = new StatusEffectTarget();
     	    	    	    	    	
-    	    	    	String targetTestField = model.getString("status_effect_target_target");
-    	if (targetTestField != null) {
-    		String targetField = targetTestField;
-    		message.setTarget(targetField);
-    		hasFields = true;
-    	}
+    	    			String targetTestField = model.getString("status_effect_target_target");
+		if (targetTestField != null) {
+			String targetField = targetTestField;
+			message.setTarget(targetField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String skillTestField = model.getString("status_effect_target_skill");
-    	if (skillTestField != null) {
-    		String skillField = skillTestField;
-    		message.setSkill(skillField);
-    		hasFields = true;
-    	}
+    	    			String skillTestField = model.getString("status_effect_target_skill");
+		if (skillTestField != null) {
+			String skillField = skillTestField;
+			message.setSkill(skillField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	Integer rangeTestField = model.getInteger("status_effect_target_range");
-    	if (rangeTestField != null) {
-    		int rangeField = rangeTestField;
-    		message.setRange(rangeField);
-    		hasFields = true;
-    	}
+    	    			Integer rangeTestField = model.getInteger("status_effect_target_range");
+		if (rangeTestField != null) {
+			int rangeField = rangeTestField;
+			message.setRange(rangeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String originTestField = model.getString("status_effect_target_origin");
-    	if (originTestField != null) {
-    		String originField = originTestField;
-    		message.setOrigin(originField);
-    		hasFields = true;
-    	}
+    	    			String originTestField = model.getString("status_effect_target_origin");
+		if (originTestField != null) {
+			String originField = originTestField;
+			message.setOrigin(originField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ticksTestField = model.getInteger("status_effect_target_ticks");
-    	if (ticksTestField != null) {
-    		int ticksField = ticksTestField;
-    		message.setTicks(ticksField);
-    		hasFields = true;
-    	}
+    	    			Integer ticksTestField = model.getInteger("status_effect_target_ticks");
+		if (ticksTestField != null) {
+			int ticksField = ticksTestField;
+			message.setTicks(ticksField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long activeIdTestField = model.getLong("status_effect_target_active_id");
-    	if (activeIdTestField != null) {
-    		long activeIdField = activeIdTestField;
-    		message.setActiveId(activeIdField);
-    		hasFields = true;
-    	}
+    	    			Long activeIdTestField = model.getLong("status_effect_target_active_id");
+		if (activeIdTestField != null) {
+			long activeIdField = activeIdTestField;
+			message.setActiveId(activeIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long lastTickTestField = model.getLong("status_effect_target_last_tick");
-    	if (lastTickTestField != null) {
-    		long lastTickField = lastTickTestField;
-    		message.setLastTick(lastTickField);
-    		hasFields = true;
-    	}
+    	    			Long lastTickTestField = model.getLong("status_effect_target_last_tick");
+		if (lastTickTestField != null) {
+			long lastTickField = lastTickTestField;
+			message.setLastTick(lastTickField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	    	    	    	
-    	    	    	String originPlayerIdTestField = model.getString("status_effect_target_origin_player_id");
-    	if (originPlayerIdTestField != null) {
-    		String originPlayerIdField = originPlayerIdTestField;
-    		message.setOriginPlayerId(originPlayerIdField);
-    		hasFields = true;
-    	}
+    	    	    	    	    	    	
+    				message.setAction(Action.valueOf(model.getInteger("status_effect_target_action")));
+    	    	    	    	    	    	
+    				message.setPassiveFlag(PassiveFlag.valueOf(model.getInteger("status_effect_target_passive_flag")));
+    	    	    	    	    	    	
+    	    			String originPlayerIdTestField = model.getString("status_effect_target_origin_player_id");
+		if (originPlayerIdTestField != null) {
+			String originPlayerIdField = originPlayerIdTestField;
+			message.setOriginPlayerId(originPlayerIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GridVerticle implements Externalizable, Message<GridVerticle>, Schema<GridVerticle>{
+
+private static final Logger logger = LoggerFactory.getLogger(GridVerticle.class);
 
 
 
@@ -106,28 +111,28 @@ public final class GridVerticle implements Externalizable, Message<GridVerticle>
 		boolean hasFields = false;
     	GridVerticle message = new GridVerticle();
     	    	    	    	    	
-    	    	    	Float xTestField = model.getFloat("grid_verticle_x");
-    	if (xTestField != null) {
-    		float xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Float xTestField = model.getFloat("grid_verticle_x");
+		if (xTestField != null) {
+			float xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float yTestField = model.getFloat("grid_verticle_y");
-    	if (yTestField != null) {
-    		float yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Float yTestField = model.getFloat("grid_verticle_y");
+		if (yTestField != null) {
+			float yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

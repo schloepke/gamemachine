@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -44,6 +45,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -52,6 +55,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GuildMembers implements Externalizable, Message<GuildMembers>, Schema<GuildMembers>{
+
+private static final Logger logger = LoggerFactory.getLogger(GuildMembers.class);
 
 
 
@@ -189,7 +194,16 @@ public final class GuildMembers implements Externalizable, Message<GuildMembers>
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.GuildMembers.close();
@@ -305,7 +319,8 @@ public final class GuildMembers implements Externalizable, Message<GuildMembers>
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (playerId != null) {
     	       	    	model.setString("guild_members_player_id",playerId);
@@ -317,12 +332,12 @@ public final class GuildMembers implements Externalizable, Message<GuildMembers>
 		boolean hasFields = false;
     	GuildMembers message = new GuildMembers();
     	    	    	    	    	
-    	    	    	String guildIdTestField = model.getString("guild_members_guild_id");
-    	if (guildIdTestField != null) {
-    		String guildIdField = guildIdTestField;
-    		message.setGuildId(guildIdField);
-    		hasFields = true;
-    	}
+    	    			String guildIdTestField = model.getString("guild_members_guild_id");
+		if (guildIdTestField != null) {
+			String guildIdField = guildIdTestField;
+			message.setGuildId(guildIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -331,19 +346,19 @@ public final class GuildMembers implements Externalizable, Message<GuildMembers>
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("guild_members_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("guild_members_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

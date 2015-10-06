@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class NpcData implements Externalizable, Message<NpcData>, Schema<NpcData>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(NpcData.class);
 
 	public enum NpcType implements io.protostuff.EnumLite<NpcType>
     {
@@ -425,43 +430,50 @@ public final class NpcData implements Externalizable, Message<NpcData>, Schema<N
     	       	    	model.setString("npc_data_patrol_route",patrolRoute);
     	        		
     	//}
-    	    	    	    	    }
+    	    	    	    	    	    	
+    	    	    	//if (npcType != null) {
+    	       	    	model.setInteger("npc_data_npc_type",npcType.ordinal());
+    	        		
+    	//}
+    	    	    }
     
 	public static NpcData fromModel(Model model) {
 		boolean hasFields = false;
     	NpcData message = new NpcData();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("npc_data_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("npc_data_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String leaderTestField = model.getString("npc_data_leader");
-    	if (leaderTestField != null) {
-    		String leaderField = leaderTestField;
-    		message.setLeader(leaderField);
-    		hasFields = true;
-    	}
+    	    			String leaderTestField = model.getString("npc_data_leader");
+		if (leaderTestField != null) {
+			String leaderField = leaderTestField;
+			message.setLeader(leaderField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	    	
-    	    	    	String patrolRouteTestField = model.getString("npc_data_patrol_route");
-    	if (patrolRouteTestField != null) {
-    		String patrolRouteField = patrolRouteTestField;
-    		message.setPatrolRoute(patrolRouteField);
-    		hasFields = true;
-    	}
+    	    			String patrolRouteTestField = model.getString("npc_data_patrol_route");
+		if (patrolRouteTestField != null) {
+			String patrolRouteField = patrolRouteTestField;
+			message.setPatrolRoute(patrolRouteField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	    	
+    				message.setNpcType(NpcType.valueOf(model.getInteger("npc_data_npc_type")));
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

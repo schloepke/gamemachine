@@ -184,7 +184,15 @@ public class AppConfig {
 		private static String driver;
 		private static String username;
 		private static String password;
+		private static String url;
 		
+		public static String getUrl() {
+			return url;
+		}
+		
+		public static void SetUrl(String url) {
+			Jdbc.url = url;
+		}
 		
 		public static String getHostname() {
 			return hostname;

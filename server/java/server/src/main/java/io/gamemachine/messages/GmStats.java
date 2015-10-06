@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class GmStats implements Externalizable, Message<GmStats>, Schema<GmStats>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(GmStats.class);
 
 
 
@@ -459,100 +464,100 @@ public final class GmStats implements Externalizable, Message<GmStats>, Schema<G
 		boolean hasFields = false;
     	GmStats message = new GmStats();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("gm_stats_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("gm_stats_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String actionTestField = model.getString("gm_stats_action");
-    	if (actionTestField != null) {
-    		String actionField = actionTestField;
-    		message.setAction(actionField);
-    		hasFields = true;
-    	}
+    	    			String actionTestField = model.getString("gm_stats_action");
+		if (actionTestField != null) {
+			String actionField = actionTestField;
+			message.setAction(actionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long messageCountInTestField = model.getLong("gm_stats_message_count_in");
-    	if (messageCountInTestField != null) {
-    		long messageCountInField = messageCountInTestField;
-    		message.setMessageCountIn(messageCountInField);
-    		hasFields = true;
-    	}
+    	    			Long messageCountInTestField = model.getLong("gm_stats_message_count_in");
+		if (messageCountInTestField != null) {
+			long messageCountInField = messageCountInTestField;
+			message.setMessageCountIn(messageCountInField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long messageCountOutTestField = model.getLong("gm_stats_message_count_out");
-    	if (messageCountOutTestField != null) {
-    		long messageCountOutField = messageCountOutTestField;
-    		message.setMessageCountOut(messageCountOutField);
-    		hasFields = true;
-    	}
+    	    			Long messageCountOutTestField = model.getLong("gm_stats_message_count_out");
+		if (messageCountOutTestField != null) {
+			long messageCountOutField = messageCountOutTestField;
+			message.setMessageCountOut(messageCountOutField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long messageCountInOutTestField = model.getLong("gm_stats_message_count_in_out");
-    	if (messageCountInOutTestField != null) {
-    		long messageCountInOutField = messageCountInOutTestField;
-    		message.setMessageCountInOut(messageCountInOutField);
-    		hasFields = true;
-    	}
+    	    			Long messageCountInOutTestField = model.getLong("gm_stats_message_count_in_out");
+		if (messageCountInOutTestField != null) {
+			long messageCountInOutField = messageCountInOutTestField;
+			message.setMessageCountInOut(messageCountInOutField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long bytesOutTestField = model.getLong("gm_stats_bytes_out");
-    	if (bytesOutTestField != null) {
-    		long bytesOutField = bytesOutTestField;
-    		message.setBytesOut(bytesOutField);
-    		hasFields = true;
-    	}
+    	    			Long bytesOutTestField = model.getLong("gm_stats_bytes_out");
+		if (bytesOutTestField != null) {
+			long bytesOutField = bytesOutTestField;
+			message.setBytesOut(bytesOutField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer connectionCountTestField = model.getInteger("gm_stats_connection_count");
-    	if (connectionCountTestField != null) {
-    		int connectionCountField = connectionCountTestField;
-    		message.setConnectionCount(connectionCountField);
-    		hasFields = true;
-    	}
+    	    			Integer connectionCountTestField = model.getInteger("gm_stats_connection_count");
+		if (connectionCountTestField != null) {
+			int connectionCountField = connectionCountTestField;
+			message.setConnectionCount(connectionCountField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long playerBytesOutTestField = model.getLong("gm_stats_player_bytes_out");
-    	if (playerBytesOutTestField != null) {
-    		long playerBytesOutField = playerBytesOutTestField;
-    		message.setPlayerBytesOut(playerBytesOutField);
-    		hasFields = true;
-    	}
+    	    			Long playerBytesOutTestField = model.getLong("gm_stats_player_bytes_out");
+		if (playerBytesOutTestField != null) {
+			long playerBytesOutField = playerBytesOutTestField;
+			message.setPlayerBytesOut(playerBytesOutField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("gm_stats_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("gm_stats_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long bytesPerMessageOutTestField = model.getLong("gm_stats_bytes_per_message_out");
-    	if (bytesPerMessageOutTestField != null) {
-    		long bytesPerMessageOutField = bytesPerMessageOutTestField;
-    		message.setBytesPerMessageOut(bytesPerMessageOutField);
-    		hasFields = true;
-    	}
+    	    			Long bytesPerMessageOutTestField = model.getLong("gm_stats_bytes_per_message_out");
+		if (bytesPerMessageOutTestField != null) {
+			long bytesPerMessageOutField = bytesPerMessageOutTestField;
+			message.setBytesPerMessageOut(bytesPerMessageOutField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

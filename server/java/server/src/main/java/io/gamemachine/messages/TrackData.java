@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class TrackData implements Externalizable, Message<TrackData>, Schema<TrackData>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(TrackData.class);
 
 	public enum EntityType implements io.protostuff.EnumLite<EntityType>
     {
@@ -587,7 +592,17 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
     	       	    	model.setInteger("track_data_get_neighbors",getNeighbors);
     	        		
     	//}
-    	    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (neighborEntityType != null) {
+    	       	    	model.setInteger("track_data_neighbor_entity_type",neighborEntityType.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (entityType != null) {
+    	       	    	model.setInteger("track_data_entity_type",entityType.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (shortId != null) {
     	       	    	model.setInteger("track_data_short_id",shortId);
     	        		
@@ -668,226 +683,230 @@ public final class TrackData implements Externalizable, Message<TrackData>, Sche
 		boolean hasFields = false;
     	TrackData message = new TrackData();
     	    	    	    	    	
-    	    	    	Integer ixTestField = model.getInteger("track_data_ix");
-    	if (ixTestField != null) {
-    		int ixField = ixTestField;
-    		message.setIx(ixField);
-    		hasFields = true;
-    	}
+    	    			Integer ixTestField = model.getInteger("track_data_ix");
+		if (ixTestField != null) {
+			int ixField = ixTestField;
+			message.setIx(ixField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer iyTestField = model.getInteger("track_data_iy");
-    	if (iyTestField != null) {
-    		int iyField = iyTestField;
-    		message.setIy(iyField);
-    		hasFields = true;
-    	}
+    	    			Integer iyTestField = model.getInteger("track_data_iy");
+		if (iyTestField != null) {
+			int iyField = iyTestField;
+			message.setIy(iyField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer izTestField = model.getInteger("track_data_iz");
-    	if (izTestField != null) {
-    		int izField = izTestField;
-    		message.setIz(izField);
-    		hasFields = true;
-    	}
+    	    			Integer izTestField = model.getInteger("track_data_iz");
+		if (izTestField != null) {
+			int izField = izTestField;
+			message.setIz(izField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("track_data_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("track_data_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer xTestField = model.getInteger("track_data_x");
-    	if (xTestField != null) {
-    		int xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Integer xTestField = model.getInteger("track_data_x");
+		if (xTestField != null) {
+			int xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yTestField = model.getInteger("track_data_y");
-    	if (yTestField != null) {
-    		int yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Integer yTestField = model.getInteger("track_data_y");
+		if (yTestField != null) {
+			int yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zTestField = model.getInteger("track_data_z");
-    	if (zTestField != null) {
-    		int zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Integer zTestField = model.getInteger("track_data_z");
+		if (zTestField != null) {
+			int zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String gridNameTestField = model.getString("track_data_grid_name");
-    	if (gridNameTestField != null) {
-    		String gridNameField = gridNameTestField;
-    		message.setGridName(gridNameField);
-    		hasFields = true;
-    	}
+    	    			String gridNameTestField = model.getString("track_data_grid_name");
+		if (gridNameTestField != null) {
+			String gridNameField = gridNameTestField;
+			message.setGridName(gridNameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer getNeighborsTestField = model.getInteger("track_data_get_neighbors");
-    	if (getNeighborsTestField != null) {
-    		int getNeighborsField = getNeighborsTestField;
-    		message.setGetNeighbors(getNeighborsField);
-    		hasFields = true;
-    	}
+    	    			Integer getNeighborsTestField = model.getInteger("track_data_get_neighbors");
+		if (getNeighborsTestField != null) {
+			int getNeighborsField = getNeighborsTestField;
+			message.setGetNeighbors(getNeighborsField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	    	    	    	
-    	    	    	Integer shortIdTestField = model.getInteger("track_data_short_id");
-    	if (shortIdTestField != null) {
-    		int shortIdField = shortIdTestField;
-    		message.setShortId(shortIdField);
-    		hasFields = true;
-    	}
+    	    	    	    	    	    	
+    				message.setNeighborEntityType(EntityType.valueOf(model.getInteger("track_data_neighbor_entity_type")));
+    	    	    	    	    	    	
+    				message.setEntityType(EntityType.valueOf(model.getInteger("track_data_entity_type")));
+    	    	    	    	    	    	
+    	    			Integer shortIdTestField = model.getInteger("track_data_short_id");
+		if (shortIdTestField != null) {
+			int shortIdField = shortIdTestField;
+			message.setShortId(shortIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	Integer broadcastTestField = model.getInteger("track_data_broadcast");
-    	if (broadcastTestField != null) {
-    		int broadcastField = broadcastTestField;
-    		message.setBroadcast(broadcastField);
-    		hasFields = true;
-    	}
+    	    			Integer broadcastTestField = model.getInteger("track_data_broadcast");
+		if (broadcastTestField != null) {
+			int broadcastField = broadcastTestField;
+			message.setBroadcast(broadcastField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("track_data_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("track_data_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rxTestField = model.getInteger("track_data_rx");
-    	if (rxTestField != null) {
-    		int rxField = rxTestField;
-    		message.setRx(rxField);
-    		hasFields = true;
-    	}
+    	    			Integer rxTestField = model.getInteger("track_data_rx");
+		if (rxTestField != null) {
+			int rxField = rxTestField;
+			message.setRx(rxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ryTestField = model.getInteger("track_data_ry");
-    	if (ryTestField != null) {
-    		int ryField = ryTestField;
-    		message.setRy(ryField);
-    		hasFields = true;
-    	}
+    	    			Integer ryTestField = model.getInteger("track_data_ry");
+		if (ryTestField != null) {
+			int ryField = ryTestField;
+			message.setRy(ryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rzTestField = model.getInteger("track_data_rz");
-    	if (rzTestField != null) {
-    		int rzField = rzTestField;
-    		message.setRz(rzField);
-    		hasFields = true;
-    	}
+    	    			Integer rzTestField = model.getInteger("track_data_rz");
+		if (rzTestField != null) {
+			int rzField = rzTestField;
+			message.setRz(rzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rwTestField = model.getInteger("track_data_rw");
-    	if (rwTestField != null) {
-    		int rwField = rwTestField;
-    		message.setRw(rwField);
-    		hasFields = true;
-    	}
+    	    			Integer rwTestField = model.getInteger("track_data_rw");
+		if (rwTestField != null) {
+			int rwField = rwTestField;
+			message.setRw(rwField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer vaxisTestField = model.getInteger("track_data_vaxis");
-    	if (vaxisTestField != null) {
-    		int vaxisField = vaxisTestField;
-    		message.setVaxis(vaxisField);
-    		hasFields = true;
-    	}
+    	    			Integer vaxisTestField = model.getInteger("track_data_vaxis");
+		if (vaxisTestField != null) {
+			int vaxisField = vaxisTestField;
+			message.setVaxis(vaxisField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer haxisTestField = model.getInteger("track_data_haxis");
-    	if (haxisTestField != null) {
-    		int haxisField = haxisTestField;
-    		message.setHaxis(haxisField);
-    		hasFields = true;
-    	}
+    	    			Integer haxisTestField = model.getInteger("track_data_haxis");
+		if (haxisTestField != null) {
+			int haxisField = haxisTestField;
+			message.setHaxis(haxisField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer speedTestField = model.getInteger("track_data_speed");
-    	if (speedTestField != null) {
-    		int speedField = speedTestField;
-    		message.setSpeed(speedField);
-    		hasFields = true;
-    	}
+    	    			Integer speedTestField = model.getInteger("track_data_speed");
+		if (speedTestField != null) {
+			int speedField = speedTestField;
+			message.setSpeed(speedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float velXTestField = model.getFloat("track_data_vel_x");
-    	if (velXTestField != null) {
-    		float velXField = velXTestField;
-    		message.setVelX(velXField);
-    		hasFields = true;
-    	}
+    	    			Float velXTestField = model.getFloat("track_data_vel_x");
+		if (velXTestField != null) {
+			float velXField = velXTestField;
+			message.setVelX(velXField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float velZTestField = model.getFloat("track_data_vel_z");
-    	if (velZTestField != null) {
-    		float velZField = velZTestField;
-    		message.setVelZ(velZField);
-    		hasFields = true;
-    	}
+    	    			Float velZTestField = model.getFloat("track_data_vel_z");
+		if (velZTestField != null) {
+			float velZField = velZTestField;
+			message.setVelZ(velZField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zoneTestField = model.getInteger("track_data_zone");
-    	if (zoneTestField != null) {
-    		int zoneField = zoneTestField;
-    		message.setZone(zoneField);
-    		hasFields = true;
-    	}
+    	    			Integer zoneTestField = model.getInteger("track_data_zone");
+		if (zoneTestField != null) {
+			int zoneField = zoneTestField;
+			message.setZone(zoneField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer hiddenTestField = model.getInteger("track_data_hidden");
-    	if (hiddenTestField != null) {
-    		int hiddenField = hiddenTestField;
-    		message.setHidden(hiddenField);
-    		hasFields = true;
-    	}
+    	    			Integer hiddenTestField = model.getInteger("track_data_hidden");
+		if (hiddenTestField != null) {
+			int hiddenField = hiddenTestField;
+			message.setHidden(hiddenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yaxisTestField = model.getInteger("track_data_yaxis");
-    	if (yaxisTestField != null) {
-    		int yaxisField = yaxisTestField;
-    		message.setYaxis(yaxisField);
-    		hasFields = true;
-    	}
+    	    			Integer yaxisTestField = model.getInteger("track_data_yaxis");
+		if (yaxisTestField != null) {
+			int yaxisField = yaxisTestField;
+			message.setYaxis(yaxisField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

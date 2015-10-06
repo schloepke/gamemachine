@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Player implements Externalizable, Message<Player>, Schema<Player>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Player.class);
 
 
 
@@ -495,7 +500,16 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.Player.close();
@@ -639,7 +653,8 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (role != null) {
     	       	    	model.setString("player_role",role);
@@ -671,48 +686,48 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
 		boolean hasFields = false;
     	Player message = new Player();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("player_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("player_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean authenticatedTestField = model.getBoolean("player_authenticated");
-    	if (authenticatedTestField != null) {
-    		boolean authenticatedField = authenticatedTestField;
-    		message.setAuthenticated(authenticatedField);
-    		hasFields = true;
-    	}
+    	    			Boolean authenticatedTestField = model.getBoolean("player_authenticated");
+		if (authenticatedTestField != null) {
+			boolean authenticatedField = authenticatedTestField;
+			message.setAuthenticated(authenticatedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer authtokenTestField = model.getInteger("player_authtoken");
-    	if (authtokenTestField != null) {
-    		int authtokenField = authtokenTestField;
-    		message.setAuthtoken(authtokenField);
-    		hasFields = true;
-    	}
+    	    			Integer authtokenTestField = model.getInteger("player_authtoken");
+		if (authtokenTestField != null) {
+			int authtokenField = authtokenTestField;
+			message.setAuthtoken(authtokenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String passwordHashTestField = model.getString("player_password_hash");
-    	if (passwordHashTestField != null) {
-    		String passwordHashField = passwordHashTestField;
-    		message.setPasswordHash(passwordHashField);
-    		hasFields = true;
-    	}
+    	    			String passwordHashTestField = model.getString("player_password_hash");
+		if (passwordHashTestField != null) {
+			String passwordHashField = passwordHashTestField;
+			message.setPasswordHash(passwordHashField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gameIdTestField = model.getString("player_game_id");
-    	if (gameIdTestField != null) {
-    		String gameIdField = gameIdTestField;
-    		message.setGameId(gameIdField);
-    		hasFields = true;
-    	}
+    	    			String gameIdTestField = model.getString("player_game_id");
+		if (gameIdTestField != null) {
+			String gameIdField = gameIdTestField;
+			message.setGameId(gameIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -721,55 +736,55 @@ public final class Player implements Externalizable, Message<Player>, Schema<Pla
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String roleTestField = model.getString("player_role");
-    	if (roleTestField != null) {
-    		String roleField = roleTestField;
-    		message.setRole(roleField);
-    		hasFields = true;
-    	}
+    	    			String roleTestField = model.getString("player_role");
+		if (roleTestField != null) {
+			String roleField = roleTestField;
+			message.setRole(roleField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean lockedTestField = model.getBoolean("player_locked");
-    	if (lockedTestField != null) {
-    		boolean lockedField = lockedTestField;
-    		message.setLocked(lockedField);
-    		hasFields = true;
-    	}
+    	    			Boolean lockedTestField = model.getBoolean("player_locked");
+		if (lockedTestField != null) {
+			boolean lockedField = lockedTestField;
+			message.setLocked(lockedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ipTestField = model.getInteger("player_ip");
-    	if (ipTestField != null) {
-    		int ipField = ipTestField;
-    		message.setIp(ipField);
-    		hasFields = true;
-    	}
+    	    			Integer ipTestField = model.getInteger("player_ip");
+		if (ipTestField != null) {
+			int ipField = ipTestField;
+			message.setIp(ipField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long ipChangedAtTestField = model.getLong("player_ip_changed_at");
-    	if (ipChangedAtTestField != null) {
-    		long ipChangedAtField = ipChangedAtTestField;
-    		message.setIpChangedAt(ipChangedAtField);
-    		hasFields = true;
-    	}
+    	    			Long ipChangedAtTestField = model.getLong("player_ip_changed_at");
+		if (ipChangedAtTestField != null) {
+			long ipChangedAtField = ipChangedAtTestField;
+			message.setIpChangedAt(ipChangedAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("player_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("player_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

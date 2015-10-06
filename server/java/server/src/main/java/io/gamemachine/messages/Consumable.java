@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Consumable implements Externalizable, Message<Consumable>, Schema<Consumable>{
+
+private static final Logger logger = LoggerFactory.getLogger(Consumable.class);
 
 
 
@@ -105,28 +110,28 @@ public final class Consumable implements Externalizable, Message<Consumable>, Sc
 		boolean hasFields = false;
     	Consumable message = new Consumable();
     	    	    	    	    	
-    	    	    	String typeTestField = model.getString("consumable_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("consumable_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String sizeTestField = model.getString("consumable_size");
-    	if (sizeTestField != null) {
-    		String sizeField = sizeTestField;
-    		message.setSize(sizeField);
-    		hasFields = true;
-    	}
+    	    			String sizeTestField = model.getString("consumable_size");
+		if (sizeTestField != null) {
+			String sizeField = sizeTestField;
+			message.setSize(sizeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

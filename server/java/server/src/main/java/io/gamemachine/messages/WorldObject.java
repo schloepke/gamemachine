@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class WorldObject implements Externalizable, Message<WorldObject>, Schema<WorldObject>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(WorldObject.class);
 
 
 
@@ -544,7 +549,16 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.WorldObject.close();
@@ -688,7 +702,8 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (ownerId != null) {
     	       	    	model.setString("world_object_owner_id",ownerId);
@@ -780,30 +795,30 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
 		boolean hasFields = false;
     	WorldObject message = new WorldObject();
     	    	    	    	    	
-    	    	    	String playerItemIdTestField = model.getString("world_object_player_item_id");
-    	if (playerItemIdTestField != null) {
-    		String playerItemIdField = playerItemIdTestField;
-    		message.setPlayerItemId(playerItemIdField);
-    		hasFields = true;
-    	}
+    	    			String playerItemIdTestField = model.getString("world_object_player_item_id");
+		if (playerItemIdTestField != null) {
+			String playerItemIdField = playerItemIdTestField;
+			message.setPlayerItemId(playerItemIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer actionTestField = model.getInteger("world_object_action");
-    	if (actionTestField != null) {
-    		int actionField = actionTestField;
-    		message.setAction(actionField);
-    		hasFields = true;
-    	}
+    	    			Integer actionTestField = model.getInteger("world_object_action");
+		if (actionTestField != null) {
+			int actionField = actionTestField;
+			message.setAction(actionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("world_object_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("world_object_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -812,163 +827,163 @@ public final class WorldObject implements Externalizable, Message<WorldObject>, 
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String ownerIdTestField = model.getString("world_object_owner_id");
-    	if (ownerIdTestField != null) {
-    		String ownerIdField = ownerIdTestField;
-    		message.setOwnerId(ownerIdField);
-    		hasFields = true;
-    	}
+    	    			String ownerIdTestField = model.getString("world_object_owner_id");
+		if (ownerIdTestField != null) {
+			String ownerIdField = ownerIdTestField;
+			message.setOwnerId(ownerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer xTestField = model.getInteger("world_object_x");
-    	if (xTestField != null) {
-    		int xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Integer xTestField = model.getInteger("world_object_x");
+		if (xTestField != null) {
+			int xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yTestField = model.getInteger("world_object_y");
-    	if (yTestField != null) {
-    		int yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Integer yTestField = model.getInteger("world_object_y");
+		if (yTestField != null) {
+			int yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zTestField = model.getInteger("world_object_z");
-    	if (zTestField != null) {
-    		int zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Integer zTestField = model.getInteger("world_object_z");
+		if (zTestField != null) {
+			int zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rxTestField = model.getInteger("world_object_rx");
-    	if (rxTestField != null) {
-    		int rxField = rxTestField;
-    		message.setRx(rxField);
-    		hasFields = true;
-    	}
+    	    			Integer rxTestField = model.getInteger("world_object_rx");
+		if (rxTestField != null) {
+			int rxField = rxTestField;
+			message.setRx(rxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ryTestField = model.getInteger("world_object_ry");
-    	if (ryTestField != null) {
-    		int ryField = ryTestField;
-    		message.setRy(ryField);
-    		hasFields = true;
-    	}
+    	    			Integer ryTestField = model.getInteger("world_object_ry");
+		if (ryTestField != null) {
+			int ryField = ryTestField;
+			message.setRy(ryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rzTestField = model.getInteger("world_object_rz");
-    	if (rzTestField != null) {
-    		int rzField = rzTestField;
-    		message.setRz(rzField);
-    		hasFields = true;
-    	}
+    	    			Integer rzTestField = model.getInteger("world_object_rz");
+		if (rzTestField != null) {
+			int rzField = rzTestField;
+			message.setRz(rzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rwTestField = model.getInteger("world_object_rw");
-    	if (rwTestField != null) {
-    		int rwField = rwTestField;
-    		message.setRw(rwField);
-    		hasFields = true;
-    	}
+    	    			Integer rwTestField = model.getInteger("world_object_rw");
+		if (rwTestField != null) {
+			int rwField = rwTestField;
+			message.setRw(rwField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer maxHealthTestField = model.getInteger("world_object_max_health");
-    	if (maxHealthTestField != null) {
-    		int maxHealthField = maxHealthTestField;
-    		message.setMaxHealth(maxHealthField);
-    		hasFields = true;
-    	}
+    	    			Integer maxHealthTestField = model.getInteger("world_object_max_health");
+		if (maxHealthTestField != null) {
+			int maxHealthField = maxHealthTestField;
+			message.setMaxHealth(maxHealthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthTestField = model.getInteger("world_object_health");
-    	if (healthTestField != null) {
-    		int healthField = healthTestField;
-    		message.setHealth(healthField);
-    		hasFields = true;
-    	}
+    	    			Integer healthTestField = model.getInteger("world_object_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String parentIdTestField = model.getString("world_object_parent_id");
-    	if (parentIdTestField != null) {
-    		String parentIdField = parentIdTestField;
-    		message.setParentId(parentIdField);
-    		hasFields = true;
-    	}
+    	    			String parentIdTestField = model.getString("world_object_parent_id");
+		if (parentIdTestField != null) {
+			String parentIdField = parentIdTestField;
+			message.setParentId(parentIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean destructableTestField = model.getBoolean("world_object_destructable");
-    	if (destructableTestField != null) {
-    		boolean destructableField = destructableTestField;
-    		message.setDestructable(destructableField);
-    		hasFields = true;
-    	}
+    	    			Boolean destructableTestField = model.getBoolean("world_object_destructable");
+		if (destructableTestField != null) {
+			boolean destructableField = destructableTestField;
+			message.setDestructable(destructableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String prefabTestField = model.getString("world_object_prefab");
-    	if (prefabTestField != null) {
-    		String prefabField = prefabTestField;
-    		message.setPrefab(prefabField);
-    		hasFields = true;
-    	}
+    	    			String prefabTestField = model.getString("world_object_prefab");
+		if (prefabTestField != null) {
+			String prefabField = prefabTestField;
+			message.setPrefab(prefabField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer typeTestField = model.getInteger("world_object_type");
-    	if (typeTestField != null) {
-    		int typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			Integer typeTestField = model.getInteger("world_object_type");
+		if (typeTestField != null) {
+			int typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gridTestField = model.getString("world_object_grid");
-    	if (gridTestField != null) {
-    		String gridField = gridTestField;
-    		message.setGrid(gridField);
-    		hasFields = true;
-    	}
+    	    			String gridTestField = model.getString("world_object_grid");
+		if (gridTestField != null) {
+			String gridField = gridTestField;
+			message.setGrid(gridField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String currentUserTestField = model.getString("world_object_current_user");
-    	if (currentUserTestField != null) {
-    		String currentUserField = currentUserTestField;
-    		message.setCurrentUser(currentUserField);
-    		hasFields = true;
-    	}
+    	    			String currentUserTestField = model.getString("world_object_current_user");
+		if (currentUserTestField != null) {
+			String currentUserField = currentUserTestField;
+			message.setCurrentUser(currentUserField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer stateTestField = model.getInteger("world_object_state");
-    	if (stateTestField != null) {
-    		int stateField = stateTestField;
-    		message.setState(stateField);
-    		hasFields = true;
-    	}
+    	    			Integer stateTestField = model.getInteger("world_object_state");
+		if (stateTestField != null) {
+			int stateField = stateTestField;
+			message.setState(stateField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

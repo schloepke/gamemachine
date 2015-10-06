@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -44,6 +45,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -52,6 +55,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GuildAction implements Externalizable, Message<GuildAction>, Schema<GuildAction>{
+
+private static final Logger logger = LoggerFactory.getLogger(GuildAction.class);
 
 
 
@@ -214,7 +219,16 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.GuildAction.close();
@@ -355,7 +369,8 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (inviteId != null) {
     	       	    	model.setString("guild_action_invite_id",inviteId);
@@ -372,48 +387,48 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
 		boolean hasFields = false;
     	GuildAction message = new GuildAction();
     	    	    	    	    	
-    	    	    	String actionTestField = model.getString("guild_action_action");
-    	if (actionTestField != null) {
-    		String actionField = actionTestField;
-    		message.setAction(actionField);
-    		hasFields = true;
-    	}
+    	    			String actionTestField = model.getString("guild_action_action");
+		if (actionTestField != null) {
+			String actionField = actionTestField;
+			message.setAction(actionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String toTestField = model.getString("guild_action_to");
-    	if (toTestField != null) {
-    		String toField = toTestField;
-    		message.setTo(toField);
-    		hasFields = true;
-    	}
+    	    			String toTestField = model.getString("guild_action_to");
+		if (toTestField != null) {
+			String toField = toTestField;
+			message.setTo(toField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String fromTestField = model.getString("guild_action_from");
-    	if (fromTestField != null) {
-    		String fromField = fromTestField;
-    		message.setFrom(fromField);
-    		hasFields = true;
-    	}
+    	    			String fromTestField = model.getString("guild_action_from");
+		if (fromTestField != null) {
+			String fromField = fromTestField;
+			message.setFrom(fromField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String responseTestField = model.getString("guild_action_response");
-    	if (responseTestField != null) {
-    		String responseField = responseTestField;
-    		message.setResponse(responseField);
-    		hasFields = true;
-    	}
+    	    			String responseTestField = model.getString("guild_action_response");
+		if (responseTestField != null) {
+			String responseField = responseTestField;
+			message.setResponse(responseField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String guildIdTestField = model.getString("guild_action_guild_id");
-    	if (guildIdTestField != null) {
-    		String guildIdField = guildIdTestField;
-    		message.setGuildId(guildIdField);
-    		hasFields = true;
-    	}
+    	    			String guildIdTestField = model.getString("guild_action_guild_id");
+		if (guildIdTestField != null) {
+			String guildIdField = guildIdTestField;
+			message.setGuildId(guildIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -422,28 +437,28 @@ public final class GuildAction implements Externalizable, Message<GuildAction>, 
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String inviteIdTestField = model.getString("guild_action_invite_id");
-    	if (inviteIdTestField != null) {
-    		String inviteIdField = inviteIdTestField;
-    		message.setInviteId(inviteIdField);
-    		hasFields = true;
-    	}
+    	    			String inviteIdTestField = model.getString("guild_action_invite_id");
+		if (inviteIdTestField != null) {
+			String inviteIdField = inviteIdTestField;
+			message.setInviteId(inviteIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String guildNameTestField = model.getString("guild_action_guild_name");
-    	if (guildNameTestField != null) {
-    		String guildNameField = guildNameTestField;
-    		message.setGuildName(guildNameField);
-    		hasFields = true;
-    	}
+    	    			String guildNameTestField = model.getString("guild_action_guild_name");
+		if (guildNameTestField != null) {
+			String guildNameField = guildNameTestField;
+			message.setGuildName(guildNameField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class CraftingRecipe implements Externalizable, Message<CraftingRecipe>, Schema<CraftingRecipe>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(CraftingRecipe.class);
 
 
 
@@ -411,55 +416,55 @@ public final class CraftingRecipe implements Externalizable, Message<CraftingRec
 		boolean hasFields = false;
     	CraftingRecipe message = new CraftingRecipe();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("crafting_recipe_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("crafting_recipe_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	    	
-    	    	    	Boolean orderMattersTestField = model.getBoolean("crafting_recipe_order_matters");
-    	if (orderMattersTestField != null) {
-    		boolean orderMattersField = orderMattersTestField;
-    		message.setOrderMatters(orderMattersField);
-    		hasFields = true;
-    	}
+    	    			Boolean orderMattersTestField = model.getBoolean("crafting_recipe_order_matters");
+		if (orderMattersTestField != null) {
+			boolean orderMattersField = orderMattersTestField;
+			message.setOrderMatters(orderMattersField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float timeToCompleteTestField = model.getFloat("crafting_recipe_time_to_complete");
-    	if (timeToCompleteTestField != null) {
-    		float timeToCompleteField = timeToCompleteTestField;
-    		message.setTimeToComplete(timeToCompleteField);
-    		hasFields = true;
-    	}
+    	    			Float timeToCompleteTestField = model.getFloat("crafting_recipe_time_to_complete");
+		if (timeToCompleteTestField != null) {
+			float timeToCompleteField = timeToCompleteTestField;
+			message.setTimeToComplete(timeToCompleteField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	Integer maxUsesTestField = model.getInteger("crafting_recipe_max_uses");
-    	if (maxUsesTestField != null) {
-    		int maxUsesField = maxUsesTestField;
-    		message.setMaxUses(maxUsesField);
-    		hasFields = true;
-    	}
+    	    			Integer maxUsesTestField = model.getInteger("crafting_recipe_max_uses");
+		if (maxUsesTestField != null) {
+			int maxUsesField = maxUsesTestField;
+			message.setMaxUses(maxUsesField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean activeTestField = model.getBoolean("crafting_recipe_active");
-    	if (activeTestField != null) {
-    		boolean activeField = activeTestField;
-    		message.setActive(activeField);
-    		hasFields = true;
-    	}
+    	    			Boolean activeTestField = model.getBoolean("crafting_recipe_active");
+		if (activeTestField != null) {
+			boolean activeField = activeTestField;
+			message.setActive(activeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

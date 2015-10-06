@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class NeighborsRequest implements Externalizable, Message<NeighborsRequest>, Schema<NeighborsRequest>{
+
+private static final Logger logger = LoggerFactory.getLogger(NeighborsRequest.class);
 
 
 
@@ -105,28 +110,28 @@ public final class NeighborsRequest implements Externalizable, Message<Neighbors
 		boolean hasFields = false;
     	NeighborsRequest message = new NeighborsRequest();
     	    	    	    	    	
-    	    	    	String neighborEntityTypeTestField = model.getString("neighbors_request_neighbor_entity_type");
-    	if (neighborEntityTypeTestField != null) {
-    		String neighborEntityTypeField = neighborEntityTypeTestField;
-    		message.setNeighborEntityType(neighborEntityTypeField);
-    		hasFields = true;
-    	}
+    	    			String neighborEntityTypeTestField = model.getString("neighbors_request_neighbor_entity_type");
+		if (neighborEntityTypeTestField != null) {
+			String neighborEntityTypeField = neighborEntityTypeTestField;
+			message.setNeighborEntityType(neighborEntityTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gridNameTestField = model.getString("neighbors_request_grid_name");
-    	if (gridNameTestField != null) {
-    		String gridNameField = gridNameTestField;
-    		message.setGridName(gridNameField);
-    		hasFields = true;
-    	}
+    	    			String gridNameTestField = model.getString("neighbors_request_grid_name");
+		if (gridNameTestField != null) {
+			String gridNameField = gridNameTestField;
+			message.setGridName(gridNameField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

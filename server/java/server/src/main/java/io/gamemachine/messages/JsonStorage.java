@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class JsonStorage implements Externalizable, Message<JsonStorage>, Schema<JsonStorage>{
+
+private static final Logger logger = LoggerFactory.getLogger(JsonStorage.class);
 
 
 
@@ -94,19 +99,19 @@ public final class JsonStorage implements Externalizable, Message<JsonStorage>, 
 		boolean hasFields = false;
     	JsonStorage message = new JsonStorage();
     	    	    	    	    	
-    	    	    	String jsonTestField = model.getString("json_storage_json");
-    	if (jsonTestField != null) {
-    		String jsonField = jsonTestField;
-    		message.setJson(jsonField);
-    		hasFields = true;
-    	}
+    	    			String jsonTestField = model.getString("json_storage_json");
+		if (jsonTestField != null) {
+			String jsonField = jsonTestField;
+			message.setJson(jsonField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

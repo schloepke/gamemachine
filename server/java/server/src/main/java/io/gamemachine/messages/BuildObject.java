@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class BuildObject implements Externalizable, Message<BuildObject>, Schema<BuildObject>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
 
 
 
@@ -609,7 +614,16 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.BuildObject.close();
@@ -768,7 +782,8 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (ownerId != null) {
     	       	    	model.setString("build_object_owner_id",ownerId);
@@ -915,30 +930,30 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
 		boolean hasFields = false;
     	BuildObject message = new BuildObject();
     	    	    	    	    	
-    	    	    	String playerItemIdTestField = model.getString("build_object_player_item_id");
-    	if (playerItemIdTestField != null) {
-    		String playerItemIdField = playerItemIdTestField;
-    		message.setPlayerItemId(playerItemIdField);
-    		hasFields = true;
-    	}
+    	    			String playerItemIdTestField = model.getString("build_object_player_item_id");
+		if (playerItemIdTestField != null) {
+			String playerItemIdField = playerItemIdTestField;
+			message.setPlayerItemId(playerItemIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer actionTestField = model.getInteger("build_object_action");
-    	if (actionTestField != null) {
-    		int actionField = actionTestField;
-    		message.setAction(actionField);
-    		hasFields = true;
-    	}
+    	    			Integer actionTestField = model.getInteger("build_object_action");
+		if (actionTestField != null) {
+			int actionField = actionTestField;
+			message.setAction(actionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("build_object_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("build_object_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -947,262 +962,266 @@ public final class BuildObject implements Externalizable, Message<BuildObject>, 
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String ownerIdTestField = model.getString("build_object_owner_id");
-    	if (ownerIdTestField != null) {
-    		String ownerIdField = ownerIdTestField;
-    		message.setOwnerId(ownerIdField);
-    		hasFields = true;
-    	}
+    	    			String ownerIdTestField = model.getString("build_object_owner_id");
+		if (ownerIdTestField != null) {
+			String ownerIdField = ownerIdTestField;
+			message.setOwnerId(ownerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer xTestField = model.getInteger("build_object_x");
-    	if (xTestField != null) {
-    		int xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Integer xTestField = model.getInteger("build_object_x");
+		if (xTestField != null) {
+			int xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yTestField = model.getInteger("build_object_y");
-    	if (yTestField != null) {
-    		int yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Integer yTestField = model.getInteger("build_object_y");
+		if (yTestField != null) {
+			int yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zTestField = model.getInteger("build_object_z");
-    	if (zTestField != null) {
-    		int zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Integer zTestField = model.getInteger("build_object_z");
+		if (zTestField != null) {
+			int zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rxTestField = model.getInteger("build_object_rx");
-    	if (rxTestField != null) {
-    		int rxField = rxTestField;
-    		message.setRx(rxField);
-    		hasFields = true;
-    	}
+    	    			Integer rxTestField = model.getInteger("build_object_rx");
+		if (rxTestField != null) {
+			int rxField = rxTestField;
+			message.setRx(rxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ryTestField = model.getInteger("build_object_ry");
-    	if (ryTestField != null) {
-    		int ryField = ryTestField;
-    		message.setRy(ryField);
-    		hasFields = true;
-    	}
+    	    			Integer ryTestField = model.getInteger("build_object_ry");
+		if (ryTestField != null) {
+			int ryField = ryTestField;
+			message.setRy(ryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rzTestField = model.getInteger("build_object_rz");
-    	if (rzTestField != null) {
-    		int rzField = rzTestField;
-    		message.setRz(rzField);
-    		hasFields = true;
-    	}
+    	    			Integer rzTestField = model.getInteger("build_object_rz");
+		if (rzTestField != null) {
+			int rzField = rzTestField;
+			message.setRz(rzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rwTestField = model.getInteger("build_object_rw");
-    	if (rwTestField != null) {
-    		int rwField = rwTestField;
-    		message.setRw(rwField);
-    		hasFields = true;
-    	}
+    	    			Integer rwTestField = model.getInteger("build_object_rw");
+		if (rwTestField != null) {
+			int rwField = rwTestField;
+			message.setRw(rwField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthTestField = model.getInteger("build_object_health");
-    	if (healthTestField != null) {
-    		int healthField = healthTestField;
-    		message.setHealth(healthField);
-    		hasFields = true;
-    	}
+    	    			Integer healthTestField = model.getInteger("build_object_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer templateIdTestField = model.getInteger("build_object_template_id");
-    	if (templateIdTestField != null) {
-    		int templateIdField = templateIdTestField;
-    		message.setTemplateId(templateIdField);
-    		hasFields = true;
-    	}
+    	    			Integer templateIdTestField = model.getInteger("build_object_template_id");
+		if (templateIdTestField != null) {
+			int templateIdField = templateIdTestField;
+			message.setTemplateId(templateIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gridTestField = model.getString("build_object_grid");
-    	if (gridTestField != null) {
-    		String gridField = gridTestField;
-    		message.setGrid(gridField);
-    		hasFields = true;
-    	}
+    	    			String gridTestField = model.getString("build_object_grid");
+		if (gridTestField != null) {
+			String gridField = gridTestField;
+			message.setGrid(gridField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long updatedAtTestField = model.getLong("build_object_updated_at");
-    	if (updatedAtTestField != null) {
-    		long updatedAtField = updatedAtTestField;
-    		message.setUpdatedAt(updatedAtField);
-    		hasFields = true;
-    	}
+    	    			Long updatedAtTestField = model.getLong("build_object_updated_at");
+		if (updatedAtTestField != null) {
+			long updatedAtField = updatedAtTestField;
+			message.setUpdatedAt(updatedAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer stateTestField = model.getInteger("build_object_state");
-    	if (stateTestField != null) {
-    		int stateField = stateTestField;
-    		message.setState(stateField);
-    		hasFields = true;
-    	}
+    	    			Integer stateTestField = model.getInteger("build_object_state");
+		if (stateTestField != null) {
+			int stateField = stateTestField;
+			message.setState(stateField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer updateIdTestField = model.getInteger("build_object_update_id");
-    	if (updateIdTestField != null) {
-    		int updateIdField = updateIdTestField;
-    		message.setUpdateId(updateIdField);
-    		hasFields = true;
-    	}
+    	    			Integer updateIdTestField = model.getInteger("build_object_update_id");
+		if (updateIdTestField != null) {
+			int updateIdField = updateIdTestField;
+			message.setUpdateId(updateIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isFloorTestField = model.getBoolean("build_object_is_floor");
-    	if (isFloorTestField != null) {
-    		boolean isFloorField = isFloorTestField;
-    		message.setIsFloor(isFloorField);
-    		hasFields = true;
-    	}
+    	    			Boolean isFloorTestField = model.getBoolean("build_object_is_floor");
+		if (isFloorTestField != null) {
+			boolean isFloorField = isFloorTestField;
+			message.setIsFloor(isFloorField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isDestructableTestField = model.getBoolean("build_object_is_destructable");
-    	if (isDestructableTestField != null) {
-    		boolean isDestructableField = isDestructableTestField;
-    		message.setIsDestructable(isDestructableField);
-    		hasFields = true;
-    	}
+    	    			Boolean isDestructableTestField = model.getBoolean("build_object_is_destructable");
+		if (isDestructableTestField != null) {
+			boolean isDestructableField = isDestructableTestField;
+			message.setIsDestructable(isDestructableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean hasDoorTestField = model.getBoolean("build_object_has_door");
-    	if (hasDoorTestField != null) {
-    		boolean hasDoorField = hasDoorTestField;
-    		message.setHasDoor(hasDoorField);
-    		hasFields = true;
-    	}
+    	    			Boolean hasDoorTestField = model.getBoolean("build_object_has_door");
+		if (hasDoorTestField != null) {
+			boolean hasDoorField = hasDoorTestField;
+			message.setHasDoor(hasDoorField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer doorStatusTestField = model.getInteger("build_object_door_status");
-    	if (doorStatusTestField != null) {
-    		int doorStatusField = doorStatusTestField;
-    		message.setDoorStatus(doorStatusField);
-    		hasFields = true;
-    	}
+    	    			Integer doorStatusTestField = model.getInteger("build_object_door_status");
+		if (doorStatusTestField != null) {
+			int doorStatusField = doorStatusTestField;
+			message.setDoorStatus(doorStatusField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	ByteString groundBlockObjectField = null;
-    	Object groundBlockObjectValue = model.get("build_object_ground_block_object");
-    	if (groundBlockObjectValue != null) {
-    		byte[] groundBlockObjectBytes = Convert.toBytes(groundBlockObjectValue);
-    		groundBlockObjectField = ByteString.copyFrom(groundBlockObjectBytes);
-    	}
+    	    	    	
+    	ByteString groundBlockObjectField = null;
+		Object groundBlockObjectValue = model.get("build_object_ground_block_object");
+		if (groundBlockObjectValue != null) {
+			byte[] groundBlockObjectBytes = Convert.toBytes(groundBlockObjectValue);
+			groundBlockObjectField = ByteString.copyFrom(groundBlockObjectBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isGroundBlockTestField = model.getBoolean("build_object_is_ground_block");
-    	if (isGroundBlockTestField != null) {
-    		boolean isGroundBlockField = isGroundBlockTestField;
-    		message.setIsGroundBlock(isGroundBlockField);
-    		hasFields = true;
-    	}
+    	    			Boolean isGroundBlockTestField = model.getBoolean("build_object_is_ground_block");
+		if (isGroundBlockTestField != null) {
+			boolean isGroundBlockField = isGroundBlockTestField;
+			message.setIsGroundBlock(isGroundBlockField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer chunkTestField = model.getInteger("build_object_chunk");
-    	if (chunkTestField != null) {
-    		int chunkField = chunkTestField;
-    		message.setChunk(chunkField);
-    		hasFields = true;
-    	}
+    	    			Integer chunkTestField = model.getInteger("build_object_chunk");
+		if (chunkTestField != null) {
+			int chunkField = chunkTestField;
+			message.setChunk(chunkField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	ByteString terrainEditField = null;
-    	Object terrainEditValue = model.get("build_object_terrain_edit");
-    	if (terrainEditValue != null) {
-    		byte[] terrainEditBytes = Convert.toBytes(terrainEditValue);
-    		terrainEditField = ByteString.copyFrom(terrainEditBytes);
-    	}
+    	    	    	
+    	ByteString terrainEditField = null;
+		Object terrainEditValue = model.get("build_object_terrain_edit");
+		if (terrainEditValue != null) {
+			byte[] terrainEditBytes = Convert.toBytes(terrainEditValue);
+			terrainEditField = ByteString.copyFrom(terrainEditBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isTerrainEditTestField = model.getBoolean("build_object_is_terrain_edit");
-    	if (isTerrainEditTestField != null) {
-    		boolean isTerrainEditField = isTerrainEditTestField;
-    		message.setIsTerrainEdit(isTerrainEditField);
-    		hasFields = true;
-    	}
+    	    			Boolean isTerrainEditTestField = model.getBoolean("build_object_is_terrain_edit");
+		if (isTerrainEditTestField != null) {
+			boolean isTerrainEditField = isTerrainEditTestField;
+			message.setIsTerrainEdit(isTerrainEditField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	ByteString customBytesField = null;
-    	Object customBytesValue = model.get("build_object_custom_bytes");
-    	if (customBytesValue != null) {
-    		byte[] customBytesBytes = Convert.toBytes(customBytesValue);
-    		customBytesField = ByteString.copyFrom(customBytesBytes);
-    	}
+    	    	    	
+    	ByteString customBytesField = null;
+		Object customBytesValue = model.get("build_object_custom_bytes");
+		if (customBytesValue != null) {
+			byte[] customBytesBytes = Convert.toBytes(customBytesValue);
+			customBytesField = ByteString.copyFrom(customBytesBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	String customStringTestField = model.getString("build_object_custom_string");
-    	if (customStringTestField != null) {
-    		String customStringField = customStringTestField;
-    		message.setCustomString(customStringField);
-    		hasFields = true;
-    	}
+    	    			String customStringTestField = model.getString("build_object_custom_string");
+		if (customStringTestField != null) {
+			String customStringField = customStringTestField;
+			message.setCustomString(customStringField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String textureIdTestField = model.getString("build_object_texture_id");
-    	if (textureIdTestField != null) {
-    		String textureIdField = textureIdTestField;
-    		message.setTextureId(textureIdField);
-    		hasFields = true;
-    	}
+    	    			String textureIdTestField = model.getString("build_object_texture_id");
+		if (textureIdTestField != null) {
+			String textureIdField = textureIdTestField;
+			message.setTextureId(textureIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	ByteString slotsField = null;
-    	Object slotsValue = model.get("build_object_slots");
-    	if (slotsValue != null) {
-    		byte[] slotsBytes = Convert.toBytes(slotsValue);
-    		slotsField = ByteString.copyFrom(slotsBytes);
-    	}
+    	    	    	
+    	ByteString slotsField = null;
+		Object slotsValue = model.get("build_object_slots");
+		if (slotsValue != null) {
+			byte[] slotsBytes = Convert.toBytes(slotsValue);
+			slotsField = ByteString.copyFrom(slotsBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	Long placedAtTestField = model.getLong("build_object_placed_at");
-    	if (placedAtTestField != null) {
-    		long placedAtField = placedAtTestField;
-    		message.setPlacedAt(placedAtField);
-    		hasFields = true;
-    	}
+    	    			Long placedAtTestField = model.getLong("build_object_placed_at");
+		if (placedAtTestField != null) {
+			long placedAtField = placedAtTestField;
+			message.setPlacedAt(placedAtField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

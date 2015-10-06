@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class SiegeCommand implements Externalizable, Message<SiegeCommand>, Schema<SiegeCommand>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(SiegeCommand.class);
 
 
 
@@ -475,109 +480,109 @@ public final class SiegeCommand implements Externalizable, Message<SiegeCommand>
 		boolean hasFields = false;
     	SiegeCommand message = new SiegeCommand();
     	    	    	    	    	
-    	    	    	Integer startLoadTestField = model.getInteger("siege_command_start_load");
-    	if (startLoadTestField != null) {
-    		int startLoadField = startLoadTestField;
-    		message.setStartLoad(startLoadField);
-    		hasFields = true;
-    	}
+    	    			Integer startLoadTestField = model.getInteger("siege_command_start_load");
+		if (startLoadTestField != null) {
+			int startLoadField = startLoadTestField;
+			message.setStartLoad(startLoadField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer fireTestField = model.getInteger("siege_command_fire");
-    	if (fireTestField != null) {
-    		int fireField = fireTestField;
-    		message.setFire(fireField);
-    		hasFields = true;
-    	}
+    	    			Integer fireTestField = model.getInteger("siege_command_fire");
+		if (fireTestField != null) {
+			int fireField = fireTestField;
+			message.setFire(fireField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float forceTestField = model.getFloat("siege_command_force");
-    	if (forceTestField != null) {
-    		float forceField = forceTestField;
-    		message.setForce(forceField);
-    		hasFields = true;
-    	}
+    	    			Float forceTestField = model.getFloat("siege_command_force");
+		if (forceTestField != null) {
+			float forceField = forceTestField;
+			message.setForce(forceField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("siege_command_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("siege_command_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String hitIdTestField = model.getString("siege_command_hit_id");
-    	if (hitIdTestField != null) {
-    		String hitIdField = hitIdTestField;
-    		message.setHitId(hitIdField);
-    		hasFields = true;
-    	}
+    	    			String hitIdTestField = model.getString("siege_command_hit_id");
+		if (hitIdTestField != null) {
+			String hitIdField = hitIdTestField;
+			message.setHitId(hitIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String skillIdTestField = model.getString("siege_command_skill_id");
-    	if (skillIdTestField != null) {
-    		String skillIdField = skillIdTestField;
-    		message.setSkillId(skillIdField);
-    		hasFields = true;
-    	}
+    	    			String skillIdTestField = model.getString("siege_command_skill_id");
+		if (skillIdTestField != null) {
+			String skillIdField = skillIdTestField;
+			message.setSkillId(skillIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer startUseTestField = model.getInteger("siege_command_start_use");
-    	if (startUseTestField != null) {
-    		int startUseField = startUseTestField;
-    		message.setStartUse(startUseField);
-    		hasFields = true;
-    	}
+    	    			Integer startUseTestField = model.getInteger("siege_command_start_use");
+		if (startUseTestField != null) {
+			int startUseField = startUseTestField;
+			message.setStartUse(startUseField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer endUseTestField = model.getInteger("siege_command_end_use");
-    	if (endUseTestField != null) {
-    		int endUseField = endUseTestField;
-    		message.setEndUse(endUseField);
-    		hasFields = true;
-    	}
+    	    			Integer endUseTestField = model.getInteger("siege_command_end_use");
+		if (endUseTestField != null) {
+			int endUseField = endUseTestField;
+			message.setEndUse(endUseField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("siege_command_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("siege_command_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String targetTypeTestField = model.getString("siege_command_target_type");
-    	if (targetTypeTestField != null) {
-    		String targetTypeField = targetTypeTestField;
-    		message.setTargetType(targetTypeField);
-    		hasFields = true;
-    	}
+    	    			String targetTypeTestField = model.getString("siege_command_target_type");
+		if (targetTypeTestField != null) {
+			String targetTypeField = targetTypeTestField;
+			message.setTargetType(targetTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String targetIdTestField = model.getString("siege_command_target_id");
-    	if (targetIdTestField != null) {
-    		String targetIdField = targetIdTestField;
-    		message.setTargetId(targetIdField);
-    		hasFields = true;
-    	}
+    	    			String targetIdTestField = model.getString("siege_command_target_id");
+		if (targetIdTestField != null) {
+			String targetIdField = targetIdTestField;
+			message.setTargetId(targetIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

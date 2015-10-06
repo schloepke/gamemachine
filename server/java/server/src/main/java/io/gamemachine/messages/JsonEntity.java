@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class JsonEntity implements Externalizable, Message<JsonEntity>, Schema<JsonEntity>{
+
+private static final Logger logger = LoggerFactory.getLogger(JsonEntity.class);
 
 
 
@@ -105,28 +110,28 @@ public final class JsonEntity implements Externalizable, Message<JsonEntity>, Sc
 		boolean hasFields = false;
     	JsonEntity message = new JsonEntity();
     	    	    	    	    	
-    	    	    	String jsonTestField = model.getString("json_entity_json");
-    	if (jsonTestField != null) {
-    		String jsonField = jsonTestField;
-    		message.setJson(jsonField);
-    		hasFields = true;
-    	}
+    	    			String jsonTestField = model.getString("json_entity_json");
+		if (jsonTestField != null) {
+			String jsonField = jsonTestField;
+			message.setJson(jsonField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String klassTestField = model.getString("json_entity_klass");
-    	if (klassTestField != null) {
-    		String klassField = klassTestField;
-    		message.setKlass(klassField);
-    		hasFields = true;
-    	}
+    	    			String klassTestField = model.getString("json_entity_klass");
+		if (klassTestField != null) {
+			String klassField = klassTestField;
+			message.setKlass(klassField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

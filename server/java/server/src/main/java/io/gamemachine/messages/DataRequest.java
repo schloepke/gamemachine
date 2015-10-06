@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class DataRequest implements Externalizable, Message<DataRequest>, Schema<DataRequest>{
+
+private static final Logger logger = LoggerFactory.getLogger(DataRequest.class);
 
 
 
@@ -105,28 +110,28 @@ public final class DataRequest implements Externalizable, Message<DataRequest>, 
 		boolean hasFields = false;
     	DataRequest message = new DataRequest();
     	    	    	    	    	
-    	    	    	String requesterTestField = model.getString("data_request_requester");
-    	if (requesterTestField != null) {
-    		String requesterField = requesterTestField;
-    		message.setRequester(requesterField);
-    		hasFields = true;
-    	}
+    	    			String requesterTestField = model.getString("data_request_requester");
+		if (requesterTestField != null) {
+			String requesterField = requesterTestField;
+			message.setRequester(requesterField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String nameTestField = model.getString("data_request_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("data_request_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

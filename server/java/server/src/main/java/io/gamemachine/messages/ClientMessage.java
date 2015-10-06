@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ClientMessage implements Externalizable, Message<ClientMessage>, Schema<ClientMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(ClientMessage.class);
 
 
 
@@ -152,37 +157,37 @@ public final class ClientMessage implements Externalizable, Message<ClientMessag
 		boolean hasFields = false;
     	ClientMessage message = new ClientMessage();
     	    	    	    	    	    	    	    	    	    	    	
-    	    	    	Integer connection_typeTestField = model.getInteger("client_message_connection_type");
-    	if (connection_typeTestField != null) {
-    		int connection_typeField = connection_typeTestField;
-    		message.setConnection_type(connection_typeField);
-    		hasFields = true;
-    	}
+    	    			Integer connection_typeTestField = model.getInteger("client_message_connection_type");
+		if (connection_typeTestField != null) {
+			int connection_typeField = connection_typeTestField;
+			message.setConnection_type(connection_typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long sentAtTestField = model.getLong("client_message_sent_at");
-    	if (sentAtTestField != null) {
-    		long sentAtField = sentAtTestField;
-    		message.setSentAt(sentAtField);
-    		hasFields = true;
-    	}
+    	    			Long sentAtTestField = model.getLong("client_message_sent_at");
+		if (sentAtTestField != null) {
+			long sentAtField = sentAtTestField;
+			message.setSentAt(sentAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String gameIdTestField = model.getString("client_message_game_id");
-    	if (gameIdTestField != null) {
-    		String gameIdField = gameIdTestField;
-    		message.setGameId(gameIdField);
-    		hasFields = true;
-    	}
+    	    			String gameIdTestField = model.getString("client_message_game_id");
+		if (gameIdTestField != null) {
+			String gameIdField = gameIdTestField;
+			message.setGameId(gameIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

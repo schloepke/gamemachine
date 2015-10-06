@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class ClientConnection implements Externalizable, Message<ClientConnection>, Schema<ClientConnection>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(ClientConnection.class);
 
 
 
@@ -393,46 +398,46 @@ public final class ClientConnection implements Externalizable, Message<ClientCon
 		boolean hasFields = false;
     	ClientConnection message = new ClientConnection();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("client_connection_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("client_connection_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gatewayTestField = model.getString("client_connection_gateway");
-    	if (gatewayTestField != null) {
-    		String gatewayField = gatewayTestField;
-    		message.setGateway(gatewayField);
-    		hasFields = true;
-    	}
+    	    			String gatewayTestField = model.getString("client_connection_gateway");
+		if (gatewayTestField != null) {
+			String gatewayField = gatewayTestField;
+			message.setGateway(gatewayField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String serverTestField = model.getString("client_connection_server");
-    	if (serverTestField != null) {
-    		String serverField = serverTestField;
-    		message.setServer(serverField);
-    		hasFields = true;
-    	}
+    	    			String serverTestField = model.getString("client_connection_server");
+		if (serverTestField != null) {
+			String serverField = serverTestField;
+			message.setServer(serverField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String typeTestField = model.getString("client_connection_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("client_connection_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

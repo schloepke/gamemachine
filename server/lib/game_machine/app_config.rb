@@ -37,7 +37,8 @@ module GameMachine
       JavaLib::AppConfig::Jdbc.set_password(config.jdbc.password)
       JavaLib::AppConfig::Jdbc.set_ds(config.jdbc.ds)
       JavaLib::AppConfig::Jdbc.set_driver(config.jdbc.driver)
-
+      JavaLib::AppConfig::Jdbc.set_url(config.jdbc.url)
+      
       JavaLib::AppConfig::Couchbase.set_bucket(config.couchbase.bucket)
       JavaLib::AppConfig::Couchbase.set_password(config.couchbase.password)
       JavaLib::AppConfig::Couchbase.set_servers(config.couchbase.servers)

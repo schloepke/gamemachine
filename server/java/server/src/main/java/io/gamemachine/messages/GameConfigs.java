@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GameConfigs implements Externalizable, Message<GameConfigs>, Schema<GameConfigs>{
+
+private static final Logger logger = LoggerFactory.getLogger(GameConfigs.class);
 
 
 
@@ -83,11 +88,11 @@ public final class GameConfigs implements Externalizable, Message<GameConfigs>, 
 	public static GameConfigs fromModel(Model model) {
 		boolean hasFields = false;
     	GameConfigs message = new GameConfigs();
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

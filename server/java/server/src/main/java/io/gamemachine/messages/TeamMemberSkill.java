@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class TeamMemberSkill implements Externalizable, Message<TeamMemberSkill>, Schema<TeamMemberSkill>{
+
+private static final Logger logger = LoggerFactory.getLogger(TeamMemberSkill.class);
 
 
 
@@ -116,37 +121,37 @@ public final class TeamMemberSkill implements Externalizable, Message<TeamMember
 		boolean hasFields = false;
     	TeamMemberSkill message = new TeamMemberSkill();
     	    	    	    	    	
-    	    	    	String nameTestField = model.getString("team_member_skill_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("team_member_skill_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer valueTestField = model.getInteger("team_member_skill_value");
-    	if (valueTestField != null) {
-    		int valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Integer valueTestField = model.getInteger("team_member_skill_value");
+		if (valueTestField != null) {
+			int valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("team_member_skill_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("team_member_skill_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

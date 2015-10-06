@@ -122,11 +122,14 @@ module GameMachine
               sqlcontent[dbtype] << sql_out
             end
           end
-          #message.getFields.each do |field|
-          #  puts field.default_value_set
-          #  puts field.getJavaType
-          #  puts field.toString
-          #end
+          message.getFields.each do |field|
+            if field.isEnumField
+             
+            end
+            #puts field.default_value_set
+            #puts field.getJavaType
+            
+          end
         end
         
         ['sqlite','postgres','mysql'].each do |dbtype|
@@ -140,6 +143,9 @@ module GameMachine
 
       def sql_field(klass,field,dbtype,force_null=false)
         if dbtype == 'mysql'
+          if field.isEnumField
+            return "`#{sql_column_name(klass,field)}` int(11)"
+          end
           txt = case field.getJavaType.to_s
           when 'boolean'
             "`#{sql_column_name(klass,field)}` tinyint(4)"
@@ -157,6 +163,9 @@ module GameMachine
            "`#{sql_column_name(klass,field)}` varbinary(2048)"
           end
         elsif dbtype == 'postgres'
+          if field.isEnumField
+            return  "#{sql_column_name(klass,field)} integer"
+          end
           txt = case field.getJavaType.to_s
           when 'boolean'
             "#{sql_column_name(klass,field)} boolean"
@@ -174,6 +183,9 @@ module GameMachine
             "#{sql_column_name(klass,field)} bytea"
           end
         elsif dbtype == 'sqlite'
+          if field.isEnumField
+            return "#{sql_column_name(klass,field)} integer"
+          end
           txt = case field.getJavaType.to_s
           when 'boolean'
             "#{sql_column_name(klass,field)} boolean"

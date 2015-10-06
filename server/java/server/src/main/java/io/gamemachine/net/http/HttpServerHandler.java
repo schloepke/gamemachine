@@ -5,6 +5,16 @@ import static io.netty.handler.codec.http.HttpHeaders.Names.CONTENT_TYPE;
 import static io.netty.handler.codec.http.HttpMethod.POST;
 import static io.netty.handler.codec.http.HttpResponseStatus.BAD_REQUEST;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.commons.codec.binary.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.gamemachine.authentication.Authable;
 import io.gamemachine.authentication.Authentication;
 import io.gamemachine.authentication.AuthorizedPlayers;
@@ -14,6 +24,7 @@ import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
+import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
@@ -34,22 +45,9 @@ import io.netty.handler.codec.http.multipart.HttpPostRequestDecoder;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData;
 import io.netty.handler.codec.http.multipart.InterfaceHttpData.HttpDataType;
 import io.netty.util.CharsetUtil;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
-
 import plugins.HttpHandler;
 import plugins.landrush.BuildObjectHandler;
 import plugins.pvp_game.CharacterHandler;
-import sun.misc.BASE64Decoder;
-import io.gamemachine.messages.Character;
 
 public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpRequest> {
 
@@ -257,8 +255,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 				
 				if (req.getUri().startsWith("/api/build_objects/put")) {
-					BASE64Decoder dec = new BASE64Decoder();
-					byte[] bytes = dec.decodeBuffer(params.get("build_objects"));
+					byte[] bytes = Base64.decodeBase64(params.get("build_objects"));
 					BuildObjects buildObjects = BuildObjects.parseFrom(bytes);
 					for (BuildObject buildObject : buildObjects.buildObject) {
 						BuildObject.db().save(buildObject);

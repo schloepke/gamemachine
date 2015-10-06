@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, Schema<ObjectdbGet>{
+
+private static final Logger logger = LoggerFactory.getLogger(ObjectdbGet.class);
 
 
 
@@ -116,37 +121,37 @@ public final class ObjectdbGet implements Externalizable, Message<ObjectdbGet>, 
 		boolean hasFields = false;
     	ObjectdbGet message = new ObjectdbGet();
     	    	    	    	    	
-    	    	    	String entityIdTestField = model.getString("objectdb_get_entity_id");
-    	if (entityIdTestField != null) {
-    		String entityIdField = entityIdTestField;
-    		message.setEntityId(entityIdField);
-    		hasFields = true;
-    	}
+    	    			String entityIdTestField = model.getString("objectdb_get_entity_id");
+		if (entityIdTestField != null) {
+			String entityIdField = entityIdTestField;
+			message.setEntityId(entityIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("objectdb_get_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("objectdb_get_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String klassTestField = model.getString("objectdb_get_klass");
-    	if (klassTestField != null) {
-    		String klassField = klassTestField;
-    		message.setKlass(klassField);
-    		hasFields = true;
-    	}
+    	    			String klassTestField = model.getString("objectdb_get_klass");
+		if (klassTestField != null) {
+			String klassField = klassTestField;
+			message.setKlass(klassField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

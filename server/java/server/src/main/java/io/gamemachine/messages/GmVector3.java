@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GmVector3 implements Externalizable, Message<GmVector3>, Schema<GmVector3>{
+
+private static final Logger logger = LoggerFactory.getLogger(GmVector3.class);
 
 
 
@@ -160,73 +165,73 @@ public final class GmVector3 implements Externalizable, Message<GmVector3>, Sche
 		boolean hasFields = false;
     	GmVector3 message = new GmVector3();
     	    	    	    	    	
-    	    	    	Float xTestField = model.getFloat("gm_vector3_x");
-    	if (xTestField != null) {
-    		float xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Float xTestField = model.getFloat("gm_vector3_x");
+		if (xTestField != null) {
+			float xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float yTestField = model.getFloat("gm_vector3_y");
-    	if (yTestField != null) {
-    		float yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Float yTestField = model.getFloat("gm_vector3_y");
+		if (yTestField != null) {
+			float yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float zTestField = model.getFloat("gm_vector3_z");
-    	if (zTestField != null) {
-    		float zField = zTestField;
-    		message.setZ(zField);
-    		hasFields = true;
-    	}
+    	    			Float zTestField = model.getFloat("gm_vector3_z");
+		if (zTestField != null) {
+			float zField = zTestField;
+			message.setZ(zField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer xiTestField = model.getInteger("gm_vector3_xi");
-    	if (xiTestField != null) {
-    		int xiField = xiTestField;
-    		message.setXi(xiField);
-    		hasFields = true;
-    	}
+    	    			Integer xiTestField = model.getInteger("gm_vector3_xi");
+		if (xiTestField != null) {
+			int xiField = xiTestField;
+			message.setXi(xiField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yiTestField = model.getInteger("gm_vector3_yi");
-    	if (yiTestField != null) {
-    		int yiField = yiTestField;
-    		message.setYi(yiField);
-    		hasFields = true;
-    	}
+    	    			Integer yiTestField = model.getInteger("gm_vector3_yi");
+		if (yiTestField != null) {
+			int yiField = yiTestField;
+			message.setYi(yiField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ziTestField = model.getInteger("gm_vector3_zi");
-    	if (ziTestField != null) {
-    		int ziField = ziTestField;
-    		message.setZi(ziField);
-    		hasFields = true;
-    	}
+    	    			Integer ziTestField = model.getInteger("gm_vector3_zi");
+		if (ziTestField != null) {
+			int ziField = ziTestField;
+			message.setZi(ziField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer verticeTestField = model.getInteger("gm_vector3_vertice");
-    	if (verticeTestField != null) {
-    		int verticeField = verticeTestField;
-    		message.setVertice(verticeField);
-    		hasFields = true;
-    	}
+    	    			Integer verticeTestField = model.getInteger("gm_vector3_vertice");
+		if (verticeTestField != null) {
+			int verticeField = verticeTestField;
+			message.setVertice(verticeField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

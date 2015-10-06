@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class NodeStatus implements Externalizable, Message<NodeStatus>, Schema<NodeStatus>{
+
+private static final Logger logger = LoggerFactory.getLogger(NodeStatus.class);
 
 
 
@@ -176,82 +181,82 @@ public final class NodeStatus implements Externalizable, Message<NodeStatus>, Sc
 		boolean hasFields = false;
     	NodeStatus message = new NodeStatus();
     	    	    	    	    	
-    	    	    	Integer containerIdTestField = model.getInteger("node_status_container_id");
-    	if (containerIdTestField != null) {
-    		int containerIdField = containerIdTestField;
-    		message.setContainerId(containerIdField);
-    		hasFields = true;
-    	}
+    	    			Integer containerIdTestField = model.getInteger("node_status_container_id");
+		if (containerIdTestField != null) {
+			int containerIdField = containerIdTestField;
+			message.setContainerId(containerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String clusterNameTestField = model.getString("node_status_cluster_name");
-    	if (clusterNameTestField != null) {
-    		String clusterNameField = clusterNameTestField;
-    		message.setClusterName(clusterNameField);
-    		hasFields = true;
-    	}
+    	    			String clusterNameTestField = model.getString("node_status_cluster_name");
+		if (clusterNameTestField != null) {
+			String clusterNameField = clusterNameTestField;
+			message.setClusterName(clusterNameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer lastUpdatedTestField = model.getInteger("node_status_last_updated");
-    	if (lastUpdatedTestField != null) {
-    		int lastUpdatedField = lastUpdatedTestField;
-    		message.setLastUpdated(lastUpdatedField);
-    		hasFields = true;
-    	}
+    	    			Integer lastUpdatedTestField = model.getInteger("node_status_last_updated");
+		if (lastUpdatedTestField != null) {
+			int lastUpdatedField = lastUpdatedTestField;
+			message.setLastUpdated(lastUpdatedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String hostnameTestField = model.getString("node_status_hostname");
-    	if (hostnameTestField != null) {
-    		String hostnameField = hostnameTestField;
-    		message.setHostname(hostnameField);
-    		hasFields = true;
-    	}
+    	    			String hostnameTestField = model.getString("node_status_hostname");
+		if (hostnameTestField != null) {
+			String hostnameField = hostnameTestField;
+			message.setHostname(hostnameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer portTestField = model.getInteger("node_status_port");
-    	if (portTestField != null) {
-    		int portField = portTestField;
-    		message.setPort(portField);
-    		hasFields = true;
-    	}
+    	    			Integer portTestField = model.getInteger("node_status_port");
+		if (portTestField != null) {
+			int portField = portTestField;
+			message.setPort(portField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer clientCountTestField = model.getInteger("node_status_client_count");
-    	if (clientCountTestField != null) {
-    		int clientCountField = clientCountTestField;
-    		message.setClientCount(clientCountField);
-    		hasFields = true;
-    	}
+    	    			Integer clientCountTestField = model.getInteger("node_status_client_count");
+		if (clientCountTestField != null) {
+			int clientCountField = clientCountTestField;
+			message.setClientCount(clientCountField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Double loadAverageTestField = model.getDouble("node_status_load_average");
-    	if (loadAverageTestField != null) {
-    		double loadAverageField = loadAverageTestField;
-    		message.setLoadAverage(loadAverageField);
-    		hasFields = true;
-    	}
+    	    			Double loadAverageTestField = model.getDouble("node_status_load_average");
+		if (loadAverageTestField != null) {
+			double loadAverageField = loadAverageTestField;
+			message.setLoadAverage(loadAverageField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer heapUsedTestField = model.getInteger("node_status_heap_used");
-    	if (heapUsedTestField != null) {
-    		int heapUsedField = heapUsedTestField;
-    		message.setHeapUsed(heapUsedField);
-    		hasFields = true;
-    	}
+    	    			Integer heapUsedTestField = model.getInteger("node_status_heap_used");
+		if (heapUsedTestField != null) {
+			int heapUsedField = heapUsedTestField;
+			message.setHeapUsed(heapUsedField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

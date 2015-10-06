@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, Schema<PlayerSkill>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
@@ -703,7 +708,16 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.PlayerSkill.close();
@@ -841,7 +855,8 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (category != null) {
     	       	    	model.setString("player_skill_category",category);
@@ -933,21 +948,21 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
 		boolean hasFields = false;
     	PlayerSkill message = new PlayerSkill();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("player_skill_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("player_skill_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String nameTestField = model.getString("player_skill_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("player_skill_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -956,163 +971,163 @@ public final class PlayerSkill implements Externalizable, Message<PlayerSkill>, 
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String categoryTestField = model.getString("player_skill_category");
-    	if (categoryTestField != null) {
-    		String categoryField = categoryTestField;
-    		message.setCategory(categoryField);
-    		hasFields = true;
-    	}
+    	    			String categoryTestField = model.getString("player_skill_category");
+		if (categoryTestField != null) {
+			String categoryField = categoryTestField;
+			message.setCategory(categoryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String damageTypeTestField = model.getString("player_skill_damage_type");
-    	if (damageTypeTestField != null) {
-    		String damageTypeField = damageTypeTestField;
-    		message.setDamageType(damageTypeField);
-    		hasFields = true;
-    	}
+    	    			String damageTypeTestField = model.getString("player_skill_damage_type");
+		if (damageTypeTestField != null) {
+			String damageTypeField = damageTypeTestField;
+			message.setDamageType(damageTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String icon_pathTestField = model.getString("player_skill_icon_path");
-    	if (icon_pathTestField != null) {
-    		String icon_pathField = icon_pathTestField;
-    		message.setIcon_path(icon_pathField);
-    		hasFields = true;
-    	}
+    	    			String icon_pathTestField = model.getString("player_skill_icon_path");
+		if (icon_pathTestField != null) {
+			String icon_pathField = icon_pathTestField;
+			message.setIcon_path(icon_pathField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String descriptionTestField = model.getString("player_skill_description");
-    	if (descriptionTestField != null) {
-    		String descriptionField = descriptionTestField;
-    		message.setDescription(descriptionField);
-    		hasFields = true;
-    	}
+    	    			String descriptionTestField = model.getString("player_skill_description");
+		if (descriptionTestField != null) {
+			String descriptionField = descriptionTestField;
+			message.setDescription(descriptionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String resourceTestField = model.getString("player_skill_resource");
-    	if (resourceTestField != null) {
-    		String resourceField = resourceTestField;
-    		message.setResource(resourceField);
-    		hasFields = true;
-    	}
+    	    			String resourceTestField = model.getString("player_skill_resource");
+		if (resourceTestField != null) {
+			String resourceField = resourceTestField;
+			message.setResource(resourceField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer resourceCostTestField = model.getInteger("player_skill_resource_cost");
-    	if (resourceCostTestField != null) {
-    		int resourceCostField = resourceCostTestField;
-    		message.setResourceCost(resourceCostField);
-    		hasFields = true;
-    	}
+    	    			Integer resourceCostTestField = model.getInteger("player_skill_resource_cost");
+		if (resourceCostTestField != null) {
+			int resourceCostField = resourceCostTestField;
+			message.setResourceCost(resourceCostField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("player_skill_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("player_skill_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String weaponTypeTestField = model.getString("player_skill_weapon_type");
-    	if (weaponTypeTestField != null) {
-    		String weaponTypeField = weaponTypeTestField;
-    		message.setWeaponType(weaponTypeField);
-    		hasFields = true;
-    	}
+    	    			String weaponTypeTestField = model.getString("player_skill_weapon_type");
+		if (weaponTypeTestField != null) {
+			String weaponTypeField = weaponTypeTestField;
+			message.setWeaponType(weaponTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer rangeTestField = model.getInteger("player_skill_range");
-    	if (rangeTestField != null) {
-    		int rangeField = rangeTestField;
-    		message.setRange(rangeField);
-    		hasFields = true;
-    	}
+    	    			Integer rangeTestField = model.getInteger("player_skill_range");
+		if (rangeTestField != null) {
+			int rangeField = rangeTestField;
+			message.setRange(rangeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String statusEffectIdTestField = model.getString("player_skill_status_effect_id");
-    	if (statusEffectIdTestField != null) {
-    		String statusEffectIdField = statusEffectIdTestField;
-    		message.setStatusEffectId(statusEffectIdField);
-    		hasFields = true;
-    	}
+    	    			String statusEffectIdTestField = model.getString("player_skill_status_effect_id");
+		if (statusEffectIdTestField != null) {
+			String statusEffectIdField = statusEffectIdTestField;
+			message.setStatusEffectId(statusEffectIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer levelTestField = model.getInteger("player_skill_level");
-    	if (levelTestField != null) {
-    		int levelField = levelTestField;
-    		message.setLevel(levelField);
-    		hasFields = true;
-    	}
+    	    			Integer levelTestField = model.getInteger("player_skill_level");
+		if (levelTestField != null) {
+			int levelField = levelTestField;
+			message.setLevel(levelField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer resourceCostPerTickTestField = model.getInteger("player_skill_resource_cost_per_tick");
-    	if (resourceCostPerTickTestField != null) {
-    		int resourceCostPerTickField = resourceCostPerTickTestField;
-    		message.setResourceCostPerTick(resourceCostPerTickField);
-    		hasFields = true;
-    	}
+    	    			Integer resourceCostPerTickTestField = model.getInteger("player_skill_resource_cost_per_tick");
+		if (resourceCostPerTickTestField != null) {
+			int resourceCostPerTickField = resourceCostPerTickTestField;
+			message.setResourceCostPerTick(resourceCostPerTickField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer isComboPartTestField = model.getInteger("player_skill_is_combo_part");
-    	if (isComboPartTestField != null) {
-    		int isComboPartField = isComboPartTestField;
-    		message.setIsComboPart(isComboPartField);
-    		hasFields = true;
-    	}
+    	    			Integer isComboPartTestField = model.getInteger("player_skill_is_combo_part");
+		if (isComboPartTestField != null) {
+			int isComboPartField = isComboPartTestField;
+			message.setIsComboPart(isComboPartField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer isPassiveTestField = model.getInteger("player_skill_is_passive");
-    	if (isPassiveTestField != null) {
-    		int isPassiveField = isPassiveTestField;
-    		message.setIsPassive(isPassiveField);
-    		hasFields = true;
-    	}
+    	    			Integer isPassiveTestField = model.getInteger("player_skill_is_passive");
+		if (isPassiveTestField != null) {
+			int isPassiveField = isPassiveTestField;
+			message.setIsPassive(isPassiveField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String skillTypeTestField = model.getString("player_skill_skill_type");
-    	if (skillTypeTestField != null) {
-    		String skillTypeField = skillTypeTestField;
-    		message.setSkillType(skillTypeField);
-    		hasFields = true;
-    	}
+    	    			String skillTypeTestField = model.getString("player_skill_skill_type");
+		if (skillTypeTestField != null) {
+			String skillTypeField = skillTypeTestField;
+			message.setSkillType(skillTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String icon_uuidTestField = model.getString("player_skill_icon_uuid");
-    	if (icon_uuidTestField != null) {
-    		String icon_uuidField = icon_uuidTestField;
-    		message.setIcon_uuid(icon_uuidField);
-    		hasFields = true;
-    	}
+    	    			String icon_uuidTestField = model.getString("player_skill_icon_uuid");
+		if (icon_uuidTestField != null) {
+			String icon_uuidField = icon_uuidTestField;
+			message.setIcon_uuid(icon_uuidField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String statusEffectsTestField = model.getString("player_skill_status_effects");
-    	if (statusEffectsTestField != null) {
-    		String statusEffectsField = statusEffectsTestField;
-    		message.setStatusEffects(statusEffectsField);
-    		hasFields = true;
-    	}
+    	    			String statusEffectsTestField = model.getString("player_skill_status_effects");
+		if (statusEffectsTestField != null) {
+			String statusEffectsField = statusEffectsTestField;
+			message.setStatusEffects(statusEffectsField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

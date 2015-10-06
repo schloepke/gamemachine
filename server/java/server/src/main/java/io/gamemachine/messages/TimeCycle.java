@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class TimeCycle implements Externalizable, Message<TimeCycle>, Schema<TimeCycle>{
+
+private static final Logger logger = LoggerFactory.getLogger(TimeCycle.class);
 
 
 
@@ -105,28 +110,28 @@ public final class TimeCycle implements Externalizable, Message<TimeCycle>, Sche
 		boolean hasFields = false;
     	TimeCycle message = new TimeCycle();
     	    	    	    	    	
-    	    	    	Float currentTimeTestField = model.getFloat("time_cycle_current_time");
-    	if (currentTimeTestField != null) {
-    		float currentTimeField = currentTimeTestField;
-    		message.setCurrentTime(currentTimeField);
-    		hasFields = true;
-    	}
+    	    			Float currentTimeTestField = model.getFloat("time_cycle_current_time");
+		if (currentTimeTestField != null) {
+			float currentTimeField = currentTimeTestField;
+			message.setCurrentTime(currentTimeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float dayCycleLengthTestField = model.getFloat("time_cycle_day_cycle_length");
-    	if (dayCycleLengthTestField != null) {
-    		float dayCycleLengthField = dayCycleLengthTestField;
-    		message.setDayCycleLength(dayCycleLengthField);
-    		hasFields = true;
-    	}
+    	    			Float dayCycleLengthTestField = model.getFloat("time_cycle_day_cycle_length");
+		if (dayCycleLengthTestField != null) {
+			float dayCycleLengthField = dayCycleLengthTestField;
+			message.setDayCycleLength(dayCycleLengthField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

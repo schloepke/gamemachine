@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Character implements Externalizable, Message<Character>, Schema<Character>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Character.class);
 
 
 
@@ -509,7 +514,16 @@ public final class Character implements Externalizable, Message<Character>, Sche
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.Character.close();
@@ -646,7 +660,8 @@ public final class Character implements Externalizable, Message<Character>, Sche
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (playerId != null) {
     	       	    	model.setString("character_player_id",playerId);
@@ -703,30 +718,30 @@ public final class Character implements Externalizable, Message<Character>, Sche
 		boolean hasFields = false;
     	Character message = new Character();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("character_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("character_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String umaDataTestField = model.getString("character_uma_data");
-    	if (umaDataTestField != null) {
-    		String umaDataField = umaDataTestField;
-    		message.setUmaData(umaDataField);
-    		hasFields = true;
-    	}
+    	    			String umaDataTestField = model.getString("character_uma_data");
+		if (umaDataTestField != null) {
+			String umaDataField = umaDataTestField;
+			message.setUmaData(umaDataField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthTestField = model.getInteger("character_health");
-    	if (healthTestField != null) {
-    		int healthField = healthTestField;
-    		message.setHealth(healthField);
-    		hasFields = true;
-    	}
+    	    			Integer healthTestField = model.getInteger("character_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -735,100 +750,100 @@ public final class Character implements Externalizable, Message<Character>, Sche
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("character_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("character_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer partTestField = model.getInteger("character_part");
-    	if (partTestField != null) {
-    		int partField = partTestField;
-    		message.setPart(partField);
-    		hasFields = true;
-    	}
+    	    			Integer partTestField = model.getInteger("character_part");
+		if (partTestField != null) {
+			int partField = partTestField;
+			message.setPart(partField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer partsTestField = model.getInteger("character_parts");
-    	if (partsTestField != null) {
-    		int partsField = partsTestField;
-    		message.setParts(partsField);
-    		hasFields = true;
-    	}
+    	    			Integer partsTestField = model.getInteger("character_parts");
+		if (partsTestField != null) {
+			int partsField = partsTestField;
+			message.setParts(partsField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer worldxTestField = model.getInteger("character_worldx");
-    	if (worldxTestField != null) {
-    		int worldxField = worldxTestField;
-    		message.setWorldx(worldxField);
-    		hasFields = true;
-    	}
+    	    			Integer worldxTestField = model.getInteger("character_worldx");
+		if (worldxTestField != null) {
+			int worldxField = worldxTestField;
+			message.setWorldx(worldxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer worldyTestField = model.getInteger("character_worldy");
-    	if (worldyTestField != null) {
-    		int worldyField = worldyTestField;
-    		message.setWorldy(worldyField);
-    		hasFields = true;
-    	}
+    	    			Integer worldyTestField = model.getInteger("character_worldy");
+		if (worldyTestField != null) {
+			int worldyField = worldyTestField;
+			message.setWorldy(worldyField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer worldzTestField = model.getInteger("character_worldz");
-    	if (worldzTestField != null) {
-    		int worldzField = worldzTestField;
-    		message.setWorldz(worldzField);
-    		hasFields = true;
-    	}
+    	    			Integer worldzTestField = model.getInteger("character_worldz");
+		if (worldzTestField != null) {
+			int worldzField = worldzTestField;
+			message.setWorldz(worldzField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer zoneTestField = model.getInteger("character_zone");
-    	if (zoneTestField != null) {
-    		int zoneField = zoneTestField;
-    		message.setZone(zoneField);
-    		hasFields = true;
-    	}
+    	    			Integer zoneTestField = model.getInteger("character_zone");
+		if (zoneTestField != null) {
+			int zoneField = zoneTestField;
+			message.setZone(zoneField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer staminaTestField = model.getInteger("character_stamina");
-    	if (staminaTestField != null) {
-    		int staminaField = staminaTestField;
-    		message.setStamina(staminaField);
-    		hasFields = true;
-    	}
+    	    			Integer staminaTestField = model.getInteger("character_stamina");
+		if (staminaTestField != null) {
+			int staminaField = staminaTestField;
+			message.setStamina(staminaField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer magicTestField = model.getInteger("character_magic");
-    	if (magicTestField != null) {
-    		int magicField = magicTestField;
-    		message.setMagic(magicField);
-    		hasFields = true;
-    	}
+    	    			Integer magicTestField = model.getInteger("character_magic");
+		if (magicTestField != null) {
+			int magicField = magicTestField;
+			message.setMagic(magicField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean includeUmaDataTestField = model.getBoolean("character_include_uma_data");
-    	if (includeUmaDataTestField != null) {
-    		boolean includeUmaDataField = includeUmaDataTestField;
-    		message.setIncludeUmaData(includeUmaDataField);
-    		hasFields = true;
-    	}
+    	    			Boolean includeUmaDataTestField = model.getBoolean("character_include_uma_data");
+		if (includeUmaDataTestField != null) {
+			boolean includeUmaDataField = includeUmaDataTestField;
+			message.setIncludeUmaData(includeUmaDataField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

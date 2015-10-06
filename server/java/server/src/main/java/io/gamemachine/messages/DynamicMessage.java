@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class DynamicMessage implements Externalizable, Message<DynamicMessage>, Schema<DynamicMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(DynamicMessage.class);
 
 
 
@@ -105,28 +110,29 @@ public final class DynamicMessage implements Externalizable, Message<DynamicMess
 		boolean hasFields = false;
     	DynamicMessage message = new DynamicMessage();
     	    	    	    	    	
-    	    	    	String typeTestField = model.getString("dynamic_message_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("dynamic_message_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	ByteString messageField = null;
-    	Object messageValue = model.get("dynamic_message_message");
-    	if (messageValue != null) {
-    		byte[] messageBytes = Convert.toBytes(messageValue);
-    		messageField = ByteString.copyFrom(messageBytes);
-    	}
+    	    	    	
+    	ByteString messageField = null;
+		Object messageValue = model.get("dynamic_message_message");
+		if (messageValue != null) {
+			byte[] messageBytes = Convert.toBytes(messageValue);
+			messageField = ByteString.copyFrom(messageBytes);
+		}
     	    	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

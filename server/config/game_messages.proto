@@ -374,6 +374,19 @@ local_message StatusEffects {
 }
 
 local_message Vitals {
+  enum Type {
+    None = 0;
+    Guard = 1;
+    AggressiveNpc = 2;
+    NeutralNpc = 3;
+    FriendlyNpc = 4;
+    AggressiveAnimal = 5;
+    NeutralAnimal = 6;
+    FriendlyAnimal = 7;
+    Player = 8;
+    Vehicle = 9;
+    Structure = 10;
+  }
   required string id = 1;
   optional int32 health = 2;
   optional int32 stamina = 3;
@@ -391,6 +404,7 @@ local_message Vitals {
   optional string playerId = 15;
   optional int32 staminaDrain = 16;
   optional string grid = 17;
+  optional Type type = 18;
 }
 
 local_message VisualEffect {

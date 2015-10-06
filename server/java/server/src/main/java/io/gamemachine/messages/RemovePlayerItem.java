@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class RemovePlayerItem implements Externalizable, Message<RemovePlayerItem>, Schema<RemovePlayerItem>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(RemovePlayerItem.class);
 
 
 
@@ -393,46 +398,46 @@ public final class RemovePlayerItem implements Externalizable, Message<RemovePla
 		boolean hasFields = false;
     	RemovePlayerItem message = new RemovePlayerItem();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("remove_player_item_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("remove_player_item_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer quantityTestField = model.getInteger("remove_player_item_quantity");
-    	if (quantityTestField != null) {
-    		int quantityField = quantityTestField;
-    		message.setQuantity(quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer quantityTestField = model.getInteger("remove_player_item_quantity");
+		if (quantityTestField != null) {
+			int quantityField = quantityTestField;
+			message.setQuantity(quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer resultTestField = model.getInteger("remove_player_item_result");
-    	if (resultTestField != null) {
-    		int resultField = resultTestField;
-    		message.setResult(resultField);
-    		hasFields = true;
-    	}
+    	    			Integer resultTestField = model.getInteger("remove_player_item_result");
+		if (resultTestField != null) {
+			int resultField = resultTestField;
+			message.setResult(resultField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("remove_player_item_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("remove_player_item_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

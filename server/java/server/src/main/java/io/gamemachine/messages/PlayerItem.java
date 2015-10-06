@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class PlayerItem implements Externalizable, Message<PlayerItem>, Schema<PlayerItem>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(PlayerItem.class);
 
 
 
@@ -619,7 +624,16 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.PlayerItem.close();
@@ -795,7 +809,8 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (icon != null) {
     	       	    	model.setString("player_item_icon",icon);
@@ -937,57 +952,57 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
 		boolean hasFields = false;
     	PlayerItem message = new PlayerItem();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("player_item_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("player_item_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String nameTestField = model.getString("player_item_name");
-    	if (nameTestField != null) {
-    		String nameField = nameTestField;
-    		message.setName(nameField);
-    		hasFields = true;
-    	}
+    	    			String nameTestField = model.getString("player_item_name");
+		if (nameTestField != null) {
+			String nameField = nameTestField;
+			message.setName(nameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer quantityTestField = model.getInteger("player_item_quantity");
-    	if (quantityTestField != null) {
-    		int quantityField = quantityTestField;
-    		message.setQuantity(quantityField);
-    		hasFields = true;
-    	}
+    	    			Integer quantityTestField = model.getInteger("player_item_quantity");
+		if (quantityTestField != null) {
+			int quantityField = quantityTestField;
+			message.setQuantity(quantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String colorTestField = model.getString("player_item_color");
-    	if (colorTestField != null) {
-    		String colorField = colorTestField;
-    		message.setColor(colorField);
-    		hasFields = true;
-    	}
+    	    			String colorTestField = model.getString("player_item_color");
+		if (colorTestField != null) {
+			String colorField = colorTestField;
+			message.setColor(colorField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean weaponTestField = model.getBoolean("player_item_weapon");
-    	if (weaponTestField != null) {
-    		boolean weaponField = weaponTestField;
-    		message.setWeapon(weaponField);
-    		hasFields = true;
-    	}
+    	    			Boolean weaponTestField = model.getBoolean("player_item_weapon");
+		if (weaponTestField != null) {
+			boolean weaponField = weaponTestField;
+			message.setWeapon(weaponField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("player_item_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("player_item_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -996,253 +1011,253 @@ public final class PlayerItem implements Externalizable, Message<PlayerItem>, Sc
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String iconTestField = model.getString("player_item_icon");
-    	if (iconTestField != null) {
-    		String iconField = iconTestField;
-    		message.setIcon(iconField);
-    		hasFields = true;
-    	}
+    	    			String iconTestField = model.getString("player_item_icon");
+		if (iconTestField != null) {
+			String iconField = iconTestField;
+			message.setIcon(iconField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer harvestableTestField = model.getInteger("player_item_harvestable");
-    	if (harvestableTestField != null) {
-    		int harvestableField = harvestableTestField;
-    		message.setHarvestable(harvestableField);
-    		hasFields = true;
-    	}
+    	    			Integer harvestableTestField = model.getInteger("player_item_harvestable");
+		if (harvestableTestField != null) {
+			int harvestableField = harvestableTestField;
+			message.setHarvestable(harvestableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer craftingResourceTestField = model.getInteger("player_item_crafting_resource");
-    	if (craftingResourceTestField != null) {
-    		int craftingResourceField = craftingResourceTestField;
-    		message.setCraftingResource(craftingResourceField);
-    		hasFields = true;
-    	}
+    	    			Integer craftingResourceTestField = model.getInteger("player_item_crafting_resource");
+		if (craftingResourceTestField != null) {
+			int craftingResourceField = craftingResourceTestField;
+			message.setCraftingResource(craftingResourceField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer craftableTestField = model.getInteger("player_item_craftable");
-    	if (craftableTestField != null) {
-    		int craftableField = craftableTestField;
-    		message.setCraftable(craftableField);
-    		hasFields = true;
-    	}
+    	    			Integer craftableTestField = model.getInteger("player_item_craftable");
+		if (craftableTestField != null) {
+			int craftableField = craftableTestField;
+			message.setCraftable(craftableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean isConsumableTestField = model.getBoolean("player_item_is_consumable");
-    	if (isConsumableTestField != null) {
-    		boolean isConsumableField = isConsumableTestField;
-    		message.setIsConsumable(isConsumableField);
-    		hasFields = true;
-    	}
+    	    			Boolean isConsumableTestField = model.getBoolean("player_item_is_consumable");
+		if (isConsumableTestField != null) {
+			boolean isConsumableField = isConsumableTestField;
+			message.setIsConsumable(isConsumableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer typeTestField = model.getInteger("player_item_type");
-    	if (typeTestField != null) {
-    		int typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			Integer typeTestField = model.getInteger("player_item_type");
+		if (typeTestField != null) {
+			int typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer maxHealthTestField = model.getInteger("player_item_max_health");
-    	if (maxHealthTestField != null) {
-    		int maxHealthField = maxHealthTestField;
-    		message.setMaxHealth(maxHealthField);
-    		hasFields = true;
-    	}
+    	    			Integer maxHealthTestField = model.getInteger("player_item_max_health");
+		if (maxHealthTestField != null) {
+			int maxHealthField = maxHealthTestField;
+			message.setMaxHealth(maxHealthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthTestField = model.getInteger("player_item_health");
-    	if (healthTestField != null) {
-    		int healthField = healthTestField;
-    		message.setHealth(healthField);
-    		hasFields = true;
-    	}
+    	    			Integer healthTestField = model.getInteger("player_item_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer levelTestField = model.getInteger("player_item_level");
-    	if (levelTestField != null) {
-    		int levelField = levelTestField;
-    		message.setLevel(levelField);
-    		hasFields = true;
-    	}
+    	    			Integer levelTestField = model.getInteger("player_item_level");
+		if (levelTestField != null) {
+			int levelField = levelTestField;
+			message.setLevel(levelField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String characterIdTestField = model.getString("player_item_character_id");
-    	if (characterIdTestField != null) {
-    		String characterIdField = characterIdTestField;
-    		message.setCharacterId(characterIdField);
-    		hasFields = true;
-    	}
+    	    			String characterIdTestField = model.getString("player_item_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String containerIdTestField = model.getString("player_item_container_id");
-    	if (containerIdTestField != null) {
-    		String containerIdField = containerIdTestField;
-    		message.setContainerId(containerIdField);
-    		hasFields = true;
-    	}
+    	    			String containerIdTestField = model.getString("player_item_container_id");
+		if (containerIdTestField != null) {
+			String containerIdField = containerIdTestField;
+			message.setContainerId(containerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer updatedAtTestField = model.getInteger("player_item_updated_at");
-    	if (updatedAtTestField != null) {
-    		int updatedAtField = updatedAtTestField;
-    		message.setUpdatedAt(updatedAtField);
-    		hasFields = true;
-    	}
+    	    			Integer updatedAtTestField = model.getInteger("player_item_updated_at");
+		if (updatedAtTestField != null) {
+			int updatedAtField = updatedAtTestField;
+			message.setUpdatedAt(updatedAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String categoryTestField = model.getString("player_item_category");
-    	if (categoryTestField != null) {
-    		String categoryField = categoryTestField;
-    		message.setCategory(categoryField);
-    		hasFields = true;
-    	}
+    	    			String categoryTestField = model.getString("player_item_category");
+		if (categoryTestField != null) {
+			String categoryField = categoryTestField;
+			message.setCategory(categoryField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String locationIdTestField = model.getString("player_item_location_id");
-    	if (locationIdTestField != null) {
-    		String locationIdField = locationIdTestField;
-    		message.setLocationId(locationIdField);
-    		hasFields = true;
-    	}
+    	    			String locationIdTestField = model.getString("player_item_location_id");
+		if (locationIdTestField != null) {
+			String locationIdField = locationIdTestField;
+			message.setLocationId(locationIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer slotCountTestField = model.getInteger("player_item_slot_count");
-    	if (slotCountTestField != null) {
-    		int slotCountField = slotCountTestField;
-    		message.setSlotCount(slotCountField);
-    		hasFields = true;
-    	}
+    	    			Integer slotCountTestField = model.getInteger("player_item_slot_count");
+		if (slotCountTestField != null) {
+			int slotCountField = slotCountTestField;
+			message.setSlotCount(slotCountField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean stackableTestField = model.getBoolean("player_item_stackable");
-    	if (stackableTestField != null) {
-    		boolean stackableField = stackableTestField;
-    		message.setStackable(stackableField);
-    		hasFields = true;
-    	}
+    	    			Boolean stackableTestField = model.getBoolean("player_item_stackable");
+		if (stackableTestField != null) {
+			boolean stackableField = stackableTestField;
+			message.setStackable(stackableField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String locationTypeTestField = model.getString("player_item_location_type");
-    	if (locationTypeTestField != null) {
-    		String locationTypeField = locationTypeTestField;
-    		message.setLocationType(locationTypeField);
-    		hasFields = true;
-    	}
+    	    			String locationTypeTestField = model.getString("player_item_location_type");
+		if (locationTypeTestField != null) {
+			String locationTypeField = locationTypeTestField;
+			message.setLocationType(locationTypeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer stackMaxTestField = model.getInteger("player_item_stack_max");
-    	if (stackMaxTestField != null) {
-    		int stackMaxField = stackMaxTestField;
-    		message.setStackMax(stackMaxField);
-    		hasFields = true;
-    	}
+    	    			Integer stackMaxTestField = model.getInteger("player_item_stack_max");
+		if (stackMaxTestField != null) {
+			int stackMaxField = stackMaxTestField;
+			message.setStackMax(stackMaxField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer containerSlotTestField = model.getInteger("player_item_container_slot");
-    	if (containerSlotTestField != null) {
-    		int containerSlotField = containerSlotTestField;
-    		message.setContainerSlot(containerSlotField);
-    		hasFields = true;
-    	}
+    	    			Integer containerSlotTestField = model.getInteger("player_item_container_slot");
+		if (containerSlotTestField != null) {
+			int containerSlotField = containerSlotTestField;
+			message.setContainerSlot(containerSlotField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String icon_uuidTestField = model.getString("player_item_icon_uuid");
-    	if (icon_uuidTestField != null) {
-    		String icon_uuidField = icon_uuidTestField;
-    		message.setIcon_uuid(icon_uuidField);
-    		hasFields = true;
-    	}
+    	    			String icon_uuidTestField = model.getString("player_item_icon_uuid");
+		if (icon_uuidTestField != null) {
+			String icon_uuidField = icon_uuidTestField;
+			message.setIcon_uuid(icon_uuidField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String icon_pathTestField = model.getString("player_item_icon_path");
-    	if (icon_pathTestField != null) {
-    		String icon_pathField = icon_pathTestField;
-    		message.setIcon_path(icon_pathField);
-    		hasFields = true;
-    	}
+    	    			String icon_pathTestField = model.getString("player_item_icon_path");
+		if (icon_pathTestField != null) {
+			String icon_pathField = icon_pathTestField;
+			message.setIcon_path(icon_pathField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String referenceIdTestField = model.getString("player_item_reference_id");
-    	if (referenceIdTestField != null) {
-    		String referenceIdField = referenceIdTestField;
-    		message.setReferenceId(referenceIdField);
-    		hasFields = true;
-    	}
+    	    			String referenceIdTestField = model.getString("player_item_reference_id");
+		if (referenceIdTestField != null) {
+			String referenceIdField = referenceIdTestField;
+			message.setReferenceId(referenceIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean hiddenTestField = model.getBoolean("player_item_hidden");
-    	if (hiddenTestField != null) {
-    		boolean hiddenField = hiddenTestField;
-    		message.setHidden(hiddenField);
-    		hasFields = true;
-    	}
+    	    			Boolean hiddenTestField = model.getBoolean("player_item_hidden");
+		if (hiddenTestField != null) {
+			boolean hiddenField = hiddenTestField;
+			message.setHidden(hiddenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer maxQuantityTestField = model.getInteger("player_item_max_quantity");
-    	if (maxQuantityTestField != null) {
-    		int maxQuantityField = maxQuantityTestField;
-    		message.setMaxQuantity(maxQuantityField);
-    		hasFields = true;
-    	}
+    	    			Integer maxQuantityTestField = model.getInteger("player_item_max_quantity");
+		if (maxQuantityTestField != null) {
+			int maxQuantityField = maxQuantityTestField;
+			message.setMaxQuantity(maxQuantityField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean activeTestField = model.getBoolean("player_item_active");
-    	if (activeTestField != null) {
-    		boolean activeField = activeTestField;
-    		message.setActive(activeField);
-    		hasFields = true;
-    	}
+    	    			Boolean activeTestField = model.getBoolean("player_item_active");
+		if (activeTestField != null) {
+			boolean activeField = activeTestField;
+			message.setActive(activeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float weightTestField = model.getFloat("player_item_weight");
-    	if (weightTestField != null) {
-    		float weightField = weightTestField;
-    		message.setWeight(weightField);
-    		hasFields = true;
-    	}
+    	    			Float weightTestField = model.getFloat("player_item_weight");
+		if (weightTestField != null) {
+			float weightField = weightTestField;
+			message.setWeight(weightField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer templateBlockIdTestField = model.getInteger("player_item_template_block_id");
-    	if (templateBlockIdTestField != null) {
-    		int templateBlockIdField = templateBlockIdTestField;
-    		message.setTemplateBlockId(templateBlockIdField);
-    		hasFields = true;
-    	}
+    	    			Integer templateBlockIdTestField = model.getInteger("player_item_template_block_id");
+		if (templateBlockIdTestField != null) {
+			int templateBlockIdField = templateBlockIdTestField;
+			message.setTemplateBlockId(templateBlockIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

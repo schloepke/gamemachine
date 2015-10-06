@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class TrackDataResponse implements Externalizable, Message<TrackDataResponse>, Schema<TrackDataResponse>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(TrackDataResponse.class);
 
 	public enum REASON implements io.protostuff.EnumLite<REASON>
     {
@@ -390,25 +395,32 @@ public final class TrackDataResponse implements Externalizable, Message<TrackDat
     	       	    	model.setString("track_data_response_id",id);
     	        		
     	//}
-    	    	    	    }
+    	    	    	    	    	
+    	    	    	//if (reason != null) {
+    	       	    	model.setInteger("track_data_response_reason",reason.ordinal());
+    	        		
+    	//}
+    	    	    }
     
 	public static TrackDataResponse fromModel(Model model) {
 		boolean hasFields = false;
     	TrackDataResponse message = new TrackDataResponse();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("track_data_response_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("track_data_response_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	
+    				message.setReason(REASON.valueOf(model.getInteger("track_data_response_reason")));
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class TrackEntity implements Externalizable, Message<TrackEntity>, Schema<TrackEntity>{
+
+private static final Logger logger = LoggerFactory.getLogger(TrackEntity.class);
 
 
 
@@ -110,28 +115,28 @@ public final class TrackEntity implements Externalizable, Message<TrackEntity>, 
 		boolean hasFields = false;
     	TrackEntity message = new TrackEntity();
     	    	    	    	    	
-    	    	    	Boolean valueTestField = model.getBoolean("track_entity_value");
-    	if (valueTestField != null) {
-    		boolean valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Boolean valueTestField = model.getBoolean("track_entity_value");
+		if (valueTestField != null) {
+			boolean valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean internalTestField = model.getBoolean("track_entity_internal");
-    	if (internalTestField != null) {
-    		boolean internalField = internalTestField;
-    		message.setInternal(internalField);
-    		hasFields = true;
-    	}
+    	    			Boolean internalTestField = model.getBoolean("track_entity_internal");
+		if (internalTestField != null) {
+			boolean internalField = internalTestField;
+			message.setInternal(internalField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

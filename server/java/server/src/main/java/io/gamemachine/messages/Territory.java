@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Territory implements Externalizable, Message<Territory>, Schema<Territory>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Territory.class);
 
 
 
@@ -459,7 +464,16 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.Territory.close();
@@ -581,7 +595,8 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (keep != null) {
     	       	    	model.setString("territory_keep",keep);
@@ -593,21 +608,21 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
 		boolean hasFields = false;
     	Territory message = new Territory();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("territory_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("territory_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String ownerTestField = model.getString("territory_owner");
-    	if (ownerTestField != null) {
-    		String ownerField = ownerTestField;
-    		message.setOwner(ownerField);
-    		hasFields = true;
-    	}
+    	    			String ownerTestField = model.getString("territory_owner");
+		if (ownerTestField != null) {
+			String ownerField = ownerTestField;
+			message.setOwner(ownerField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -616,19 +631,19 @@ public final class Territory implements Externalizable, Message<Territory>, Sche
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String keepTestField = model.getString("territory_keep");
-    	if (keepTestField != null) {
-    		String keepField = keepTestField;
-    		message.setKeep(keepField);
-    		hasFields = true;
-    	}
+    	    			String keepTestField = model.getString("territory_keep");
+		if (keepTestField != null) {
+			String keepField = keepTestField;
+			message.setKeep(keepField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

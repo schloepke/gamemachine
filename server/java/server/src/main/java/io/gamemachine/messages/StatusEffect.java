@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class StatusEffect implements Externalizable, Message<StatusEffect>, Schema<StatusEffect>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class);
 
 	public enum Type implements io.protostuff.EnumLite<Type>
     {
@@ -489,6 +494,11 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	    }
     
 	public void toModel(Model model) {
+    	    	    	    	
+    	    	    	//if (type != null) {
+    	       	    	model.setInteger("status_effect_type",type.ordinal());
+    	        		
+    	//}
     	    	    	    	    	
     	    	    	//if (id != null) {
     	       	    	model.setString("status_effect_id",id);
@@ -524,7 +534,12 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
     	       	    	model.setString("status_effect_particle_effect",particleEffect);
     	        		
     	//}
-    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (damageType != null) {
+    	       	    	model.setInteger("status_effect_damage_type",damageType.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (icon_path != null) {
     	       	    	model.setString("status_effect_icon_path",icon_path);
     	        		
@@ -539,92 +554,96 @@ public final class StatusEffect implements Externalizable, Message<StatusEffect>
 	public static StatusEffect fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffect message = new StatusEffect();
+    	    	    	    	    	
+    				message.setType(Type.valueOf(model.getInteger("status_effect_type")));
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("status_effect_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    	    	Integer durationTestField = model.getInteger("status_effect_duration");
-    	if (durationTestField != null) {
-    		int durationField = durationTestField;
-    		message.setDuration(durationField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("status_effect_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer ticksTestField = model.getInteger("status_effect_ticks");
-    	if (ticksTestField != null) {
-    		int ticksField = ticksTestField;
-    		message.setTicks(ticksField);
-    		hasFields = true;
-    	}
+    	    			Integer durationTestField = model.getInteger("status_effect_duration");
+		if (durationTestField != null) {
+			int durationField = durationTestField;
+			message.setDuration(durationField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String attributeTestField = model.getString("status_effect_attribute");
-    	if (attributeTestField != null) {
-    		String attributeField = attributeTestField;
-    		message.setAttribute(attributeField);
-    		hasFields = true;
-    	}
+    	    			Integer ticksTestField = model.getInteger("status_effect_ticks");
+		if (ticksTestField != null) {
+			int ticksField = ticksTestField;
+			message.setTicks(ticksField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer minValueTestField = model.getInteger("status_effect_min_value");
-    	if (minValueTestField != null) {
-    		int minValueField = minValueTestField;
-    		message.setMinValue(minValueField);
-    		hasFields = true;
-    	}
+    	    			String attributeTestField = model.getString("status_effect_attribute");
+		if (attributeTestField != null) {
+			String attributeField = attributeTestField;
+			message.setAttribute(attributeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer maxValueTestField = model.getInteger("status_effect_max_value");
-    	if (maxValueTestField != null) {
-    		int maxValueField = maxValueTestField;
-    		message.setMaxValue(maxValueField);
-    		hasFields = true;
-    	}
+    	    			Integer minValueTestField = model.getInteger("status_effect_min_value");
+		if (minValueTestField != null) {
+			int minValueField = minValueTestField;
+			message.setMinValue(minValueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String particleEffectTestField = model.getString("status_effect_particle_effect");
-    	if (particleEffectTestField != null) {
-    		String particleEffectField = particleEffectTestField;
-    		message.setParticleEffect(particleEffectField);
-    		hasFields = true;
-    	}
-    	
-    	    	
-    	    	    	    	    	    	    	
-    	    	    	String icon_pathTestField = model.getString("status_effect_icon_path");
-    	if (icon_pathTestField != null) {
-    		String icon_pathField = icon_pathTestField;
-    		message.setIcon_path(icon_pathField);
-    		hasFields = true;
-    	}
+    	    			Integer maxValueTestField = model.getInteger("status_effect_max_value");
+		if (maxValueTestField != null) {
+			int maxValueField = maxValueTestField;
+			message.setMaxValue(maxValueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String icon_uuidTestField = model.getString("status_effect_icon_uuid");
-    	if (icon_uuidTestField != null) {
-    		String icon_uuidField = icon_uuidTestField;
-    		message.setIcon_uuid(icon_uuidField);
-    		hasFields = true;
-    	}
+    	    			String particleEffectTestField = model.getString("status_effect_particle_effect");
+		if (particleEffectTestField != null) {
+			String particleEffectField = particleEffectTestField;
+			message.setParticleEffect(particleEffectField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	
+    				message.setDamageType(DamageType.valueOf(model.getInteger("status_effect_damage_type")));
+    	    	    	    	    	    	
+    	    			String icon_pathTestField = model.getString("status_effect_icon_path");
+		if (icon_pathTestField != null) {
+			String icon_pathField = icon_pathTestField;
+			message.setIcon_path(icon_pathField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			String icon_uuidTestField = model.getString("status_effect_icon_uuid");
+		if (icon_uuidTestField != null) {
+			String icon_uuidField = icon_uuidTestField;
+			message.setIcon_uuid(icon_uuidField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

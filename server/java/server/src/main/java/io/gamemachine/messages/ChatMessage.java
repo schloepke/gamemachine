@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ChatMessage implements Externalizable, Message<ChatMessage>, Schema<ChatMessage>{
+
+private static final Logger logger = LoggerFactory.getLogger(ChatMessage.class);
 
 
 
@@ -131,37 +136,37 @@ public final class ChatMessage implements Externalizable, Message<ChatMessage>, 
 		boolean hasFields = false;
     	ChatMessage message = new ChatMessage();
     	    	    	    	    	    	
-    	    	    	String messageTestField = model.getString("chat_message_message");
-    	if (messageTestField != null) {
-    		String messageField = messageTestField;
-    		message.setMessage(messageField);
-    		hasFields = true;
-    	}
+    	    			String messageTestField = model.getString("chat_message_message");
+		if (messageTestField != null) {
+			String messageField = messageTestField;
+			message.setMessage(messageField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String typeTestField = model.getString("chat_message_type");
-    	if (typeTestField != null) {
-    		String typeField = typeTestField;
-    		message.setType(typeField);
-    		hasFields = true;
-    	}
+    	    			String typeTestField = model.getString("chat_message_type");
+		if (typeTestField != null) {
+			String typeField = typeTestField;
+			message.setType(typeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String senderIdTestField = model.getString("chat_message_sender_id");
-    	if (senderIdTestField != null) {
-    		String senderIdField = senderIdTestField;
-    		message.setSenderId(senderIdField);
-    		hasFields = true;
-    	}
+    	    			String senderIdTestField = model.getString("chat_message_sender_id");
+		if (senderIdTestField != null) {
+			String senderIdField = senderIdTestField;
+			message.setSenderId(senderIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

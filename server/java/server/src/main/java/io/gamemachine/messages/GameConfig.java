@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class GameConfig implements Externalizable, Message<GameConfig>, Schema<GameConfig>{
+
+private static final Logger logger = LoggerFactory.getLogger(GameConfig.class);
 
 
 
@@ -116,37 +121,37 @@ public final class GameConfig implements Externalizable, Message<GameConfig>, Sc
 		boolean hasFields = false;
     	GameConfig message = new GameConfig();
     	    	    	    	    	
-    	    	    	String configTestField = model.getString("game_config_config");
-    	if (configTestField != null) {
-    		String configField = configTestField;
-    		message.setConfig(configField);
-    		hasFields = true;
-    	}
+    	    			String configTestField = model.getString("game_config_config");
+		if (configTestField != null) {
+			String configField = configTestField;
+			message.setConfig(configField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer versionTestField = model.getInteger("game_config_version");
-    	if (versionTestField != null) {
-    		int versionField = versionTestField;
-    		message.setVersion(versionField);
-    		hasFields = true;
-    	}
+    	    			Integer versionTestField = model.getInteger("game_config_version");
+		if (versionTestField != null) {
+			int versionField = versionTestField;
+			message.setVersion(versionField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gameIdTestField = model.getString("game_config_game_id");
-    	if (gameIdTestField != null) {
-    		String gameIdField = gameIdTestField;
-    		message.setGameId(gameIdField);
-    		hasFields = true;
-    	}
+    	    			String gameIdTestField = model.getString("game_config_game_id");
+		if (gameIdTestField != null) {
+			String gameIdField = gameIdTestField;
+			message.setGameId(gameIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

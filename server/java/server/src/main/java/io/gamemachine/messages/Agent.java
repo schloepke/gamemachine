@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class Agent implements Externalizable, Message<Agent>, Schema<Agent>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(Agent.class);
 
 
 
@@ -415,64 +420,64 @@ public final class Agent implements Externalizable, Message<Agent>, Schema<Agent
 		boolean hasFields = false;
     	Agent message = new Agent();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("agent_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("agent_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String codeTestField = model.getString("agent_code");
-    	if (codeTestField != null) {
-    		String codeField = codeTestField;
-    		message.setCode(codeField);
-    		hasFields = true;
-    	}
+    	    			String codeTestField = model.getString("agent_code");
+		if (codeTestField != null) {
+			String codeField = codeTestField;
+			message.setCode(codeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String classnameTestField = model.getString("agent_classname");
-    	if (classnameTestField != null) {
-    		String classnameField = classnameTestField;
-    		message.setClassname(classnameField);
-    		hasFields = true;
-    	}
+    	    			String classnameTestField = model.getString("agent_classname");
+		if (classnameTestField != null) {
+			String classnameField = classnameTestField;
+			message.setClassname(classnameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean removeTestField = model.getBoolean("agent_remove");
-    	if (removeTestField != null) {
-    		boolean removeField = removeTestField;
-    		message.setRemove(removeField);
-    		hasFields = true;
-    	}
+    	    			Boolean removeTestField = model.getBoolean("agent_remove");
+		if (removeTestField != null) {
+			boolean removeField = removeTestField;
+			message.setRemove(removeField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String compileResultTestField = model.getString("agent_compile_result");
-    	if (compileResultTestField != null) {
-    		String compileResultField = compileResultTestField;
-    		message.setCompileResult(compileResultField);
-    		hasFields = true;
-    	}
+    	    			String compileResultTestField = model.getString("agent_compile_result");
+		if (compileResultTestField != null) {
+			String compileResultField = compileResultTestField;
+			message.setCompileResult(compileResultField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer concurrencyTestField = model.getInteger("agent_concurrency");
-    	if (concurrencyTestField != null) {
-    		int concurrencyField = concurrencyTestField;
-    		message.setConcurrency(concurrencyField);
-    		hasFields = true;
-    	}
+    	    			Integer concurrencyTestField = model.getInteger("agent_concurrency");
+		if (concurrencyTestField != null) {
+			int concurrencyField = concurrencyTestField;
+			message.setConcurrency(concurrencyField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

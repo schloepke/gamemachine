@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class CloudQueryResponse implements Externalizable, Message<CloudQueryResponse>, Schema<CloudQueryResponse>{
+
+private static final Logger logger = LoggerFactory.getLogger(CloudQueryResponse.class);
 
 
 
@@ -97,19 +102,19 @@ public final class CloudQueryResponse implements Externalizable, Message<CloudQu
 		boolean hasFields = false;
     	CloudQueryResponse message = new CloudQueryResponse();
     	    	    	    	    	
-    	    	    	String formatTestField = model.getString("cloud_query_response_format");
-    	if (formatTestField != null) {
-    		String formatField = formatTestField;
-    		message.setFormat(formatField);
-    		hasFields = true;
-    	}
+    	    			String formatTestField = model.getString("cloud_query_response_format");
+		if (formatTestField != null) {
+			String formatField = formatTestField;
+			message.setFormat(formatField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	    	    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

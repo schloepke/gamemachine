@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -59,6 +62,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, Schema<TerrainEdit>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(TerrainEdit.class);
 
 	public enum Type implements io.protostuff.EnumLite<Type>
     {
@@ -460,13 +465,19 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     	       	    	model.setInteger("terrain_edit_value",value);
     	        		
     	//}
-    	    	    	    	    	    	
+    	    	    	    	    	
+    	    	    	//if (type != null) {
+    	       	    	model.setInteger("terrain_edit_type",type.ordinal());
+    	        		
+    	//}
+    	    	    	    	    	
     	    	    	//if (id != null) {
     	       	    	model.setString("terrain_edit_id",id);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (texture != null) {
     	       	    	model.setInteger("terrain_edit_texture",texture);
@@ -493,48 +504,50 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
 		boolean hasFields = false;
     	TerrainEdit message = new TerrainEdit();
     	    	    	    	    	
-    	    	    	Integer xTestField = model.getInteger("terrain_edit_x");
-    	if (xTestField != null) {
-    		int xField = xTestField;
-    		message.setX(xField);
-    		hasFields = true;
-    	}
+    	    			Integer xTestField = model.getInteger("terrain_edit_x");
+		if (xTestField != null) {
+			int xField = xTestField;
+			message.setX(xField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer yTestField = model.getInteger("terrain_edit_y");
-    	if (yTestField != null) {
-    		int yField = yTestField;
-    		message.setY(yField);
-    		hasFields = true;
-    	}
+    	    			Integer yTestField = model.getInteger("terrain_edit_y");
+		if (yTestField != null) {
+			int yField = yTestField;
+			message.setY(yField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer detailLayerTestField = model.getInteger("terrain_edit_detail_layer");
-    	if (detailLayerTestField != null) {
-    		int detailLayerField = detailLayerTestField;
-    		message.setDetailLayer(detailLayerField);
-    		hasFields = true;
-    	}
+    	    			Integer detailLayerTestField = model.getInteger("terrain_edit_detail_layer");
+		if (detailLayerTestField != null) {
+			int detailLayerField = detailLayerTestField;
+			message.setDetailLayer(detailLayerField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer valueTestField = model.getInteger("terrain_edit_value");
-    	if (valueTestField != null) {
-    		int valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Integer valueTestField = model.getInteger("terrain_edit_value");
+		if (valueTestField != null) {
+			int valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("terrain_edit_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    	    	    	    	    	
+    				message.setType(Type.valueOf(model.getInteger("terrain_edit_type")));
+    	    	    	    	    	    	
+    	    			String idTestField = model.getString("terrain_edit_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
@@ -543,46 +556,46 @@ public final class TerrainEdit implements Externalizable, Message<TerrainEdit>, 
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	Integer textureTestField = model.getInteger("terrain_edit_texture");
-    	if (textureTestField != null) {
-    		int textureField = textureTestField;
-    		message.setTexture(textureField);
-    		hasFields = true;
-    	}
+    	    			Integer textureTestField = model.getInteger("terrain_edit_texture");
+		if (textureTestField != null) {
+			int textureField = textureTestField;
+			message.setTexture(textureField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float heightTestField = model.getFloat("terrain_edit_height");
-    	if (heightTestField != null) {
-    		float heightField = heightTestField;
-    		message.setHeight(heightField);
-    		hasFields = true;
-    	}
+    	    			Float heightTestField = model.getFloat("terrain_edit_height");
+		if (heightTestField != null) {
+			float heightField = heightTestField;
+			message.setHeight(heightField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long createdAtTestField = model.getLong("terrain_edit_created_at");
-    	if (createdAtTestField != null) {
-    		long createdAtField = createdAtTestField;
-    		message.setCreatedAt(createdAtField);
-    		hasFields = true;
-    	}
+    	    			Long createdAtTestField = model.getLong("terrain_edit_created_at");
+		if (createdAtTestField != null) {
+			long createdAtField = createdAtTestField;
+			message.setCreatedAt(createdAtField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String terrainTestField = model.getString("terrain_edit_terrain");
-    	if (terrainTestField != null) {
-    		String terrainField = terrainTestField;
-    		message.setTerrain(terrainField);
-    		hasFields = true;
-    	}
+    	    			String terrainTestField = model.getString("terrain_edit_terrain");
+		if (terrainTestField != null) {
+			String terrainField = terrainTestField;
+			message.setTerrain(terrainField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

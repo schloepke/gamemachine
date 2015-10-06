@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class StatusEffectResult implements Externalizable, Message<StatusEffectResult>, Schema<StatusEffectResult>{
+
+private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.class);
 
 
 
@@ -127,46 +132,46 @@ public final class StatusEffectResult implements Externalizable, Message<StatusE
 		boolean hasFields = false;
     	StatusEffectResult message = new StatusEffectResult();
     	    	    	    	    	
-    	    	    	String targetTestField = model.getString("status_effect_result_target");
-    	if (targetTestField != null) {
-    		String targetField = targetTestField;
-    		message.setTarget(targetField);
-    		hasFields = true;
-    	}
+    	    			String targetTestField = model.getString("status_effect_result_target");
+		if (targetTestField != null) {
+			String targetField = targetTestField;
+			message.setTarget(targetField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String originTestField = model.getString("status_effect_result_origin");
-    	if (originTestField != null) {
-    		String originField = originTestField;
-    		message.setOrigin(originField);
-    		hasFields = true;
-    	}
+    	    			String originTestField = model.getString("status_effect_result_origin");
+		if (originTestField != null) {
+			String originField = originTestField;
+			message.setOrigin(originField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer valueTestField = model.getInteger("status_effect_result_value");
-    	if (valueTestField != null) {
-    		int valueField = valueTestField;
-    		message.setValue(valueField);
-    		hasFields = true;
-    	}
+    	    			Integer valueTestField = model.getInteger("status_effect_result_value");
+		if (valueTestField != null) {
+			int valueField = valueTestField;
+			message.setValue(valueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String statusEffectIdTestField = model.getString("status_effect_result_status_effect_id");
-    	if (statusEffectIdTestField != null) {
-    		String statusEffectIdField = statusEffectIdTestField;
-    		message.setStatusEffectId(statusEffectIdField);
-    		hasFields = true;
-    	}
+    	    			String statusEffectIdTestField = model.getString("status_effect_result_status_effect_id");
+		if (statusEffectIdTestField != null) {
+			String statusEffectIdField = statusEffectIdTestField;
+			message.setStatusEffectId(statusEffectIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

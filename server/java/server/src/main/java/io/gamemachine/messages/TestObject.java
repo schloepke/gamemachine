@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -53,6 +54,8 @@ import org.javalite.activejdbc.Errors;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -65,6 +68,8 @@ import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
 public final class TestObject implements Externalizable, Message<TestObject>, Schema<TestObject>, PersistableMessage{
+
+private static final Logger logger = LoggerFactory.getLogger(TestObject.class);
 
 
 
@@ -486,7 +491,16 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 	    	if (res) {
 	    		message.setRecordId(model.getInteger("id"));
 	    	} else {
-	    		dbErrors = model.errors();
+	    		if (model.hasErrors()) {
+	    			logger.warn("Save has errors");
+	    			dbErrors = model.errors();
+		    		Map<String, String> errors = dbErrors;
+		    		for (String key : errors.keySet()) {
+		    			logger.warn(key+": "+errors.get(key));
+		    		}
+	    		} else {
+	    			logger.warn("Save failed unknown reason");
+	    		}
 	    	}
 	    	if (!inTransaction) {
 	    		io.gamemachine.orm.models.TestObject.close();
@@ -638,7 +652,8 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     	        		
     	//}
     	    	    	    	    	    	
-    	    	    	model.setInteger("id",recordId);
+    	    	    	//model.setInteger("id",recordId);
+    	
     	    	    	    	    	
     	    	    	//if (id != null) {
     	       	    	model.setString("test_object_id",id);
@@ -650,66 +665,67 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
 		boolean hasFields = false;
     	TestObject message = new TestObject();
     	    	    	    	    	
-    	    	    	String optionalStringTestField = model.getString("test_object_optional_string");
-    	if (optionalStringTestField != null) {
-    		String optionalStringField = optionalStringTestField;
-    		message.setOptionalString(optionalStringField);
-    		hasFields = true;
-    	}
+    	    			String optionalStringTestField = model.getString("test_object_optional_string");
+		if (optionalStringTestField != null) {
+			String optionalStringField = optionalStringTestField;
+			message.setOptionalString(optionalStringField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String requiredStringTestField = model.getString("test_object_required_string");
-    	if (requiredStringTestField != null) {
-    		String requiredStringField = requiredStringTestField;
-    		message.setRequiredString(requiredStringField);
-    		hasFields = true;
-    	}
+    	    			String requiredStringTestField = model.getString("test_object_required_string");
+		if (requiredStringTestField != null) {
+			String requiredStringField = requiredStringTestField;
+			message.setRequiredString(requiredStringField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	    	
-    	    	    	ByteString bstringField = null;
-    	Object bstringValue = model.get("test_object_bstring");
-    	if (bstringValue != null) {
-    		byte[] bstringBytes = Convert.toBytes(bstringValue);
-    		bstringField = ByteString.copyFrom(bstringBytes);
-    	}
+    	    	    	
+    	ByteString bstringField = null;
+		Object bstringValue = model.get("test_object_bstring");
+		if (bstringValue != null) {
+			byte[] bstringBytes = Convert.toBytes(bstringValue);
+			bstringField = ByteString.copyFrom(bstringBytes);
+		}
     	    	
     	    	
     	    	    	    	    	    	
-    	    	    	Boolean bvalueTestField = model.getBoolean("test_object_bvalue");
-    	if (bvalueTestField != null) {
-    		boolean bvalueField = bvalueTestField;
-    		message.setBvalue(bvalueField);
-    		hasFields = true;
-    	}
+    	    			Boolean bvalueTestField = model.getBoolean("test_object_bvalue");
+		if (bvalueTestField != null) {
+			boolean bvalueField = bvalueTestField;
+			message.setBvalue(bvalueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Double dvalueTestField = model.getDouble("test_object_dvalue");
-    	if (dvalueTestField != null) {
-    		double dvalueField = dvalueTestField;
-    		message.setDvalue(dvalueField);
-    		hasFields = true;
-    	}
+    	    			Double dvalueTestField = model.getDouble("test_object_dvalue");
+		if (dvalueTestField != null) {
+			double dvalueField = dvalueTestField;
+			message.setDvalue(dvalueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Float fvalueTestField = model.getFloat("test_object_fvalue");
-    	if (fvalueTestField != null) {
-    		float fvalueField = fvalueTestField;
-    		message.setFvalue(fvalueField);
-    		hasFields = true;
-    	}
+    	    			Float fvalueTestField = model.getFloat("test_object_fvalue");
+		if (fvalueTestField != null) {
+			float fvalueField = fvalueTestField;
+			message.setFvalue(fvalueField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long numbers64TestField = model.getLong("test_object_numbers64");
-    	if (numbers64TestField != null) {
-    		long numbers64Field = numbers64TestField;
-    		message.setNumbers64(numbers64Field);
-    		hasFields = true;
-    	}
+    	    			Long numbers64TestField = model.getLong("test_object_numbers64");
+		if (numbers64TestField != null) {
+			long numbers64Field = numbers64TestField;
+			message.setNumbers64(numbers64Field);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	    	
@@ -718,19 +734,19 @@ public final class TestObject implements Externalizable, Message<TestObject>, Sc
     		hasFields = true;
     	//}
     	    	    	    	    	    	
-    	    	    	String idTestField = model.getString("test_object_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("test_object_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

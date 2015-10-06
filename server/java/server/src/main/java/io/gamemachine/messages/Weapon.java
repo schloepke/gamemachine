@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Weapon implements Externalizable, Message<Weapon>, Schema<Weapon>{
+
+private static final Logger logger = LoggerFactory.getLogger(Weapon.class);
 
 
 
@@ -105,28 +110,28 @@ public final class Weapon implements Externalizable, Message<Weapon>, Schema<Wea
 		boolean hasFields = false;
     	Weapon message = new Weapon();
     	    	    	    	    	
-    	    	    	Integer attackTestField = model.getInteger("weapon_attack");
-    	if (attackTestField != null) {
-    		int attackField = attackTestField;
-    		message.setAttack(attackField);
-    		hasFields = true;
-    	}
+    	    			Integer attackTestField = model.getInteger("weapon_attack");
+		if (attackTestField != null) {
+			int attackField = attackTestField;
+			message.setAttack(attackField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer delayTestField = model.getInteger("weapon_delay");
-    	if (delayTestField != null) {
-    		int delayField = delayTestField;
-    		message.setDelay(delayField);
-    		hasFields = true;
-    	}
+    	    			Integer delayTestField = model.getInteger("weapon_delay");
+		if (delayTestField != null) {
+			int delayField = delayTestField;
+			message.setDelay(delayField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

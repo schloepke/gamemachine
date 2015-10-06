@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -47,6 +48,8 @@ import java.util.concurrent.TimeUnit;
 import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -60,6 +63,47 @@ import io.gamemachine.core.CacheUpdate;
 @SuppressWarnings("unused")
 public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vitals>, PersistableMessage{
 
+private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
+
+	public enum Type implements io.protostuff.EnumLite<Type>
+    {
+    	
+    	    	None(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
+        public final int number;
+        
+        private Type (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Type defaultValue() {
+        	return (None);
+        }
+        
+        public static Type valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (None);
+    			    			case 1: return (Guard);
+    			    			case 2: return (AggressiveNpc);
+    			    			case 3: return (NeutralNpc);
+    			    			case 4: return (FriendlyNpc);
+    			    			case 5: return (AggressiveAnimal);
+    			    			case 6: return (NeutralAnimal);
+    			    			case 7: return (FriendlyAnimal);
+    			    			case 8: return (Player);
+    			    			case 9: return (Vehicle);
+    			    			case 10: return (Structure);
+    			                default: return null;
+            }
+        }
+    }
 
 
     public static Schema<Vitals> getSchema()
@@ -158,6 +202,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         	
 							    public String grid= null;
 		    			    
+		
+    
+        	
+					public Type type = Type.defaultValue();
+			    
 		
     
         
@@ -442,7 +491,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	    	    	    	    	model.set("vitals_player_id",null);
     	    	    	    	    	    	model.set("vitals_stamina_drain",null);
     	    	    	    	    	    	model.set("vitals_grid",null);
-    	    }
+    	    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
@@ -530,169 +579,176 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	       	    	model.setString("vitals_grid",grid);
     	        		
     	//}
+    	    	    	    	    	
+    	    	    	//if (type != null) {
+    	       	    	model.setInteger("vitals_type",type.ordinal());
+    	        		
+    	//}
     	    	    }
     
 	public static Vitals fromModel(Model model) {
 		boolean hasFields = false;
     	Vitals message = new Vitals();
     	    	    	    	    	
-    	    	    	String idTestField = model.getString("vitals_id");
-    	if (idTestField != null) {
-    		String idField = idTestField;
-    		message.setId(idField);
-    		hasFields = true;
-    	}
+    	    			String idTestField = model.getString("vitals_id");
+		if (idTestField != null) {
+			String idField = idTestField;
+			message.setId(idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthTestField = model.getInteger("vitals_health");
-    	if (healthTestField != null) {
-    		int healthField = healthTestField;
-    		message.setHealth(healthField);
-    		hasFields = true;
-    	}
+    	    			Integer healthTestField = model.getInteger("vitals_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer staminaTestField = model.getInteger("vitals_stamina");
-    	if (staminaTestField != null) {
-    		int staminaField = staminaTestField;
-    		message.setStamina(staminaField);
-    		hasFields = true;
-    	}
+    	    			Integer staminaTestField = model.getInteger("vitals_stamina");
+		if (staminaTestField != null) {
+			int staminaField = staminaTestField;
+			message.setStamina(staminaField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer magicTestField = model.getInteger("vitals_magic");
-    	if (magicTestField != null) {
-    		int magicField = magicTestField;
-    		message.setMagic(magicField);
-    		hasFields = true;
-    	}
+    	    			Integer magicTestField = model.getInteger("vitals_magic");
+		if (magicTestField != null) {
+			int magicField = magicTestField;
+			message.setMagic(magicField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Long lastCombatTestField = model.getLong("vitals_last_combat");
-    	if (lastCombatTestField != null) {
-    		long lastCombatField = lastCombatTestField;
-    		message.setLastCombat(lastCombatField);
-    		hasFields = true;
-    	}
+    	    			Long lastCombatTestField = model.getLong("vitals_last_combat");
+		if (lastCombatTestField != null) {
+			long lastCombatField = lastCombatTestField;
+			message.setLastCombat(lastCombatField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer deadTestField = model.getInteger("vitals_dead");
-    	if (deadTestField != null) {
-    		int deadField = deadTestField;
-    		message.setDead(deadField);
-    		hasFields = true;
-    	}
+    	    			Integer deadTestField = model.getInteger("vitals_dead");
+		if (deadTestField != null) {
+			int deadField = deadTestField;
+			message.setDead(deadField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer armorTestField = model.getInteger("vitals_armor");
-    	if (armorTestField != null) {
-    		int armorField = armorTestField;
-    		message.setArmor(armorField);
-    		hasFields = true;
-    	}
+    	    			Integer armorTestField = model.getInteger("vitals_armor");
+		if (armorTestField != null) {
+			int armorField = armorTestField;
+			message.setArmor(armorField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer spellResistTestField = model.getInteger("vitals_spell_resist");
-    	if (spellResistTestField != null) {
-    		int spellResistField = spellResistTestField;
-    		message.setSpellResist(spellResistField);
-    		hasFields = true;
-    	}
+    	    			Integer spellResistTestField = model.getInteger("vitals_spell_resist");
+		if (spellResistTestField != null) {
+			int spellResistField = spellResistTestField;
+			message.setSpellResist(spellResistField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer elementalResistTestField = model.getInteger("vitals_elemental_resist");
-    	if (elementalResistTestField != null) {
-    		int elementalResistField = elementalResistTestField;
-    		message.setElementalResist(elementalResistField);
-    		hasFields = true;
-    	}
+    	    			Integer elementalResistTestField = model.getInteger("vitals_elemental_resist");
+		if (elementalResistTestField != null) {
+			int elementalResistField = elementalResistTestField;
+			message.setElementalResist(elementalResistField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer spellPenetrationTestField = model.getInteger("vitals_spell_penetration");
-    	if (spellPenetrationTestField != null) {
-    		int spellPenetrationField = spellPenetrationTestField;
-    		message.setSpellPenetration(spellPenetrationField);
-    		hasFields = true;
-    	}
+    	    			Integer spellPenetrationTestField = model.getInteger("vitals_spell_penetration");
+		if (spellPenetrationTestField != null) {
+			int spellPenetrationField = spellPenetrationTestField;
+			message.setSpellPenetration(spellPenetrationField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer magicRegenTestField = model.getInteger("vitals_magic_regen");
-    	if (magicRegenTestField != null) {
-    		int magicRegenField = magicRegenTestField;
-    		message.setMagicRegen(magicRegenField);
-    		hasFields = true;
-    	}
+    	    			Integer magicRegenTestField = model.getInteger("vitals_magic_regen");
+		if (magicRegenTestField != null) {
+			int magicRegenField = magicRegenTestField;
+			message.setMagicRegen(magicRegenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer healthRegenTestField = model.getInteger("vitals_health_regen");
-    	if (healthRegenTestField != null) {
-    		int healthRegenField = healthRegenTestField;
-    		message.setHealthRegen(healthRegenField);
-    		hasFields = true;
-    	}
+    	    			Integer healthRegenTestField = model.getInteger("vitals_health_regen");
+		if (healthRegenTestField != null) {
+			int healthRegenField = healthRegenTestField;
+			message.setHealthRegen(healthRegenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer staminaRegenTestField = model.getInteger("vitals_stamina_regen");
-    	if (staminaRegenTestField != null) {
-    		int staminaRegenField = staminaRegenTestField;
-    		message.setStaminaRegen(staminaRegenField);
-    		hasFields = true;
-    	}
+    	    			Integer staminaRegenTestField = model.getInteger("vitals_stamina_regen");
+		if (staminaRegenTestField != null) {
+			int staminaRegenField = staminaRegenTestField;
+			message.setStaminaRegen(staminaRegenField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer changedTestField = model.getInteger("vitals_changed");
-    	if (changedTestField != null) {
-    		int changedField = changedTestField;
-    		message.setChanged(changedField);
-    		hasFields = true;
-    	}
+    	    			Integer changedTestField = model.getInteger("vitals_changed");
+		if (changedTestField != null) {
+			int changedField = changedTestField;
+			message.setChanged(changedField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String playerIdTestField = model.getString("vitals_player_id");
-    	if (playerIdTestField != null) {
-    		String playerIdField = playerIdTestField;
-    		message.setPlayerId(playerIdField);
-    		hasFields = true;
-    	}
+    	    			String playerIdTestField = model.getString("vitals_player_id");
+		if (playerIdTestField != null) {
+			String playerIdField = playerIdTestField;
+			message.setPlayerId(playerIdField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	Integer staminaDrainTestField = model.getInteger("vitals_stamina_drain");
-    	if (staminaDrainTestField != null) {
-    		int staminaDrainField = staminaDrainTestField;
-    		message.setStaminaDrain(staminaDrainField);
-    		hasFields = true;
-    	}
+    	    			Integer staminaDrainTestField = model.getInteger("vitals_stamina_drain");
+		if (staminaDrainTestField != null) {
+			int staminaDrainField = staminaDrainTestField;
+			message.setStaminaDrain(staminaDrainField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gridTestField = model.getString("vitals_grid");
-    	if (gridTestField != null) {
-    		String gridField = gridTestField;
-    		message.setGrid(gridField);
-    		hasFields = true;
-    	}
+    	    			String gridTestField = model.getString("vitals_grid");
+		if (gridTestField != null) {
+			String gridField = gridTestField;
+			message.setGrid(gridField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    	    	    	    	    	
+    				message.setType(Type.valueOf(model.getInteger("vitals_type")));
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 
@@ -849,6 +905,15 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
 		this.grid = grid;
 		return this;	}
 	
+		            
+		public Type getType() {
+		return type;
+	}
+	
+	public Vitals setType(Type type) {
+		this.type = type;
+		return this;	}
+	
 	
   
     // java serialization
@@ -973,6 +1038,10 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
             	                	                	message.grid = input.readString();
                 	break;
                 	                	
+                            	            	case 18:
+            	                	                    message.type = Type.valueOf(input.readEnum());
+                    break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1088,6 +1157,11 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         }
     	    	
     	            	
+    	    	
+    	    	    	if(message.type != null)
+    	 	output.writeEnum(18, message.type.number, false);
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1144,6 +1218,9 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	//if(this.grid != null) {
     		System.out.println("grid="+this.grid);
     	//}
+    	    	//if(this.type != null) {
+    		System.out.println("type="+this.type);
+    	//}
     	    	System.out.println("END Vitals");
     }
     
@@ -1168,6 +1245,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
         	        	case 15: return "playerId";
         	        	case 16: return "staminaDrain";
         	        	case 17: return "grid";
+        	        	case 18: return "type";
         	            default: return null;
         }
     }
@@ -1198,6 +1276,7 @@ public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vit
     	    	__fieldMap.put("playerId", 15);
     	    	__fieldMap.put("staminaDrain", 16);
     	    	__fieldMap.put("grid", 17);
+    	    	__fieldMap.put("type", 18);
     	    }
    
    public static List<String> getFields() {

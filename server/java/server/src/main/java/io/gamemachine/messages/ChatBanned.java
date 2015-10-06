@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class ChatBanned implements Externalizable, Message<ChatBanned>, Schema<ChatBanned>{
+
+private static final Logger logger = LoggerFactory.getLogger(ChatBanned.class);
 
 
 
@@ -116,37 +121,37 @@ public final class ChatBanned implements Externalizable, Message<ChatBanned>, Sc
 		boolean hasFields = false;
     	ChatBanned message = new ChatBanned();
     	    	    	    	    	
-    	    	    	String banned_idTestField = model.getString("chat_banned_banned_id");
-    	if (banned_idTestField != null) {
-    		String banned_idField = banned_idTestField;
-    		message.setBanned_id(banned_idField);
-    		hasFields = true;
-    	}
+    	    			String banned_idTestField = model.getString("chat_banned_banned_id");
+		if (banned_idTestField != null) {
+			String banned_idField = banned_idTestField;
+			message.setBanned_id(banned_idField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String channelNnameTestField = model.getString("chat_banned_channel_nname");
-    	if (channelNnameTestField != null) {
-    		String channelNnameField = channelNnameTestField;
-    		message.setChannelNname(channelNnameField);
-    		hasFields = true;
-    	}
+    	    			String channelNnameTestField = model.getString("chat_banned_channel_nname");
+		if (channelNnameTestField != null) {
+			String channelNnameField = channelNnameTestField;
+			message.setChannelNname(channelNnameField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String reasonTestField = model.getString("chat_banned_reason");
-    	if (reasonTestField != null) {
-    		String reasonField = reasonTestField;
-    		message.setReason(reasonField);
-    		hasFields = true;
-    	}
+    	    			String reasonTestField = model.getString("chat_banned_reason");
+		if (reasonTestField != null) {
+			String reasonField = reasonTestField;
+			message.setReason(reasonField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 

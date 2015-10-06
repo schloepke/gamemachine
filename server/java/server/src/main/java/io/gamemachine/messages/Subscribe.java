@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.HashMap;
+import java.util.Map;
 import java.io.UnsupportedEncodingException;
 
 import io.protostuff.ByteString;
@@ -37,6 +38,8 @@ import java.nio.charset.Charset;
 
 
 import org.javalite.common.Convert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
@@ -45,6 +48,8 @@ import io.protostuff.UninitializedMessageException;
 
 @SuppressWarnings("unused")
 public final class Subscribe implements Externalizable, Message<Subscribe>, Schema<Subscribe>{
+
+private static final Logger logger = LoggerFactory.getLogger(Subscribe.class);
 
 
 
@@ -105,28 +110,28 @@ public final class Subscribe implements Externalizable, Message<Subscribe>, Sche
 		boolean hasFields = false;
     	Subscribe message = new Subscribe();
     	    	    	    	    	
-    	    	    	String topicTestField = model.getString("subscribe_topic");
-    	if (topicTestField != null) {
-    		String topicField = topicTestField;
-    		message.setTopic(topicField);
-    		hasFields = true;
-    	}
+    	    			String topicTestField = model.getString("subscribe_topic");
+		if (topicTestField != null) {
+			String topicField = topicTestField;
+			message.setTopic(topicField);
+			hasFields = true;
+		}
     	
     	    	
     	    	    	    	    	    	
-    	    	    	String gameIdTestField = model.getString("subscribe_game_id");
-    	if (gameIdTestField != null) {
-    		String gameIdField = gameIdTestField;
-    		message.setGameId(gameIdField);
-    		hasFields = true;
-    	}
+    	    			String gameIdTestField = model.getString("subscribe_game_id");
+		if (gameIdTestField != null) {
+			String gameIdField = gameIdTestField;
+			message.setGameId(gameIdField);
+			hasFields = true;
+		}
     	
     	    	
-    	    	    	if (hasFields) {
-    		return message;
-    	} else {
-    		return null;
-    	}
+    	    			if (hasFields) {
+			return message;
+		} else {
+			return null;
+		}
     }
 
 
