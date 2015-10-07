@@ -27,7 +27,7 @@ public class PlayerSeed extends GameMessageActor {
 	@Override
 	public void awake() {
 		ps = PlayerService.getInstance();
-		cs = CharacterService.getInstance();
+		cs = CharacterService.instance();
 		gameId = AppConfig.getDefaultGameId();
 		
 		Config config = Plugin.getConfig(PlayerSeed.class);

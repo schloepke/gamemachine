@@ -251,6 +251,11 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
 			    
 		
     
+        	
+							    public int zone= 0;
+		    			    
+		
+    
         
 	public static BuildObjectCache cache() {
 		return BuildObjectCache.getInstance();
@@ -763,7 +768,8 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	    	    	    	    	    	model.set("build_object_texture_id",null);
     	    	    	    	    	    	model.set("build_object_slots",null);
     	    	    	    	    	    	model.set("build_object_placed_at",null);
-    	    	    }
+    	    	    	    	    	    	    	model.set("build_object_zone",null);
+    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
@@ -876,7 +882,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	//}
     	    	    	    	    	
     	    	    	//if (groundBlockObject != null) {
-    	       	    	model.set("build_object_ground_block_object",groundBlockObject.toByteArray());
+    	       	        if (groundBlockObject != null) {
+    	    		model.set("build_object_ground_block_object",groundBlockObject.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	
@@ -891,7 +899,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	//}
     	    	    	    	    	
     	    	    	//if (terrainEdit != null) {
-    	       	    	model.set("build_object_terrain_edit",terrainEdit.toByteArray());
+    	       	        if (terrainEdit != null) {
+    	    		model.set("build_object_terrain_edit",terrainEdit.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	
@@ -901,7 +911,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	//}
     	    	    	    	    	
     	    	    	//if (customBytes != null) {
-    	       	    	model.set("build_object_custom_bytes",customBytes.toByteArray());
+    	       	        if (customBytes != null) {
+    	    		model.set("build_object_custom_bytes",customBytes.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	
@@ -916,7 +928,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	//}
     	    	    	    	    	
     	    	    	//if (slots != null) {
-    	       	    	model.set("build_object_slots",slots.toByteArray());
+    	       	        if (slots != null) {
+    	    		model.set("build_object_slots",slots.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	
@@ -924,7 +938,12 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	       	    	model.setLong("build_object_placed_at",placedAt);
     	        		
     	//}
-    	    	    	    }
+    	    	    	    	    	    	
+    	    	    	//if (zone != null) {
+    	       	    	model.setInteger("build_object_zone",zone);
+    	        		
+    	//}
+    	    	    }
     
 	public static BuildObject fromModel(Model model) {
 		boolean hasFields = false;
@@ -1217,7 +1236,16 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
 		}
     	
     	    	
-    	    	    			if (hasFields) {
+    	    	    	    	    	    	    	
+    	    			Integer zoneTestField = model.getInteger("build_object_zone");
+		if (zoneTestField != null) {
+			int zoneField = zoneTestField;
+			message.setZone(zoneField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    			if (hasFields) {
 			return message;
 		} else {
 			return null;
@@ -1522,6 +1550,15 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
 		this.slotInfo = slotInfo;
 		return this;	}
 	
+		            
+		public int getZone() {
+		return zone;
+	}
+	
+	public BuildObject setZone(int zone) {
+		this.zone = zone;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1710,6 +1747,10 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
             	                	                	message.slotInfo = input.mergeObject(message.slotInfo, SlotInfo.getSchema());
                     break;
                                     	
+                            	            	case 41:
+            	                	                	message.zone = input.readInt32();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1918,6 +1959,12 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     		output.writeObject(40, message.slotInfo, SlotInfo.getSchema(), false);
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.zone != null) {
+            output.writeInt32(41, message.zone, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -2022,6 +2069,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	    	//if(this.slotInfo != null) {
     		System.out.println("slotInfo="+this.slotInfo);
     	//}
+    	    	//if(this.zone != null) {
+    		System.out.println("zone="+this.zone);
+    	//}
     	    	System.out.println("END BuildObject");
     }
     
@@ -2062,6 +2112,7 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
         	        	case 37: return "slots";
         	        	case 38: return "placedAt";
         	        	case 40: return "slotInfo";
+        	        	case 41: return "zone";
         	            default: return null;
         }
     }
@@ -2108,6 +2159,7 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObject.class);
     	    	__fieldMap.put("slots", 37);
     	    	__fieldMap.put("placedAt", 38);
     	    	__fieldMap.put("slotInfo", 40);
+    	    	__fieldMap.put("zone", 41);
     	    }
    
    public static List<String> getFields() {

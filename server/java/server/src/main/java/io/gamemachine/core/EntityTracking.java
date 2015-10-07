@@ -158,10 +158,10 @@ public class EntityTracking extends UntypedActor {
 			broadcastTrackData.userDefinedData = trackData.userDefinedData;
 			broadcastTrackData.broadcast = 1;
 			broadcastTrackData.id = player.id;
-			broadcastTrackData.entityType = TrackData.EntityType.PLAYER;
+			broadcastTrackData.entityType = TrackData.EntityType.Player;
 
 			for (TrackData tdata : trackDatas) {
-				if (tdata.entityType == TrackData.EntityType.PLAYER) {
+				if (tdata.entityType == TrackData.EntityType.Player) {
 					Entity playerMessage = new Entity();
 					playerMessage.id = "b";
 					Neighbors neighbors = new Neighbors();
@@ -209,7 +209,7 @@ public class EntityTracking extends UntypedActor {
 		List<TrackData> trackDatas;
 		boolean isAgentController = (player.getRole().equals("agent_controller"));
 
-		if (neighborType != null && neighborType == EntityType.ALL) {
+		if (neighborType != null && neighborType == EntityType.All) {
 			// Only agents have access to entire grid
 			if (!isAgentController) {
 				logger.warn("Unauthorized attempt to get entire grid");
@@ -257,7 +257,7 @@ public class EntityTracking extends UntypedActor {
 	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
 
-		if (trackData.entityType == EntityType.PLAYER) {
+		if (trackData.entityType == EntityType.Player) {
 			if (!trackData.id.equals(playerId)) {
 				return;
 			}

@@ -1,4 +1,5 @@
 
+DROP TABLE IF EXISTS territories;
 CREATE TABLE territories (
   id bigserial NOT NULL,
 
@@ -11,6 +12,7 @@ CREATE TABLE territories (
   CONSTRAINT territory_pkey PRIMARY KEY (id)
 );
 alter table territories owner to gamemachine;
+DROP TABLE IF EXISTS guilds;
 CREATE TABLE guilds (
   id bigserial NOT NULL,
 
@@ -23,6 +25,7 @@ CREATE TABLE guilds (
   CONSTRAINT guild_pkey PRIMARY KEY (id)
 );
 alter table guilds owner to gamemachine;
+DROP TABLE IF EXISTS guild_members;
 CREATE TABLE guild_members (
   id bigserial NOT NULL,
 
@@ -33,6 +36,7 @@ CREATE TABLE guild_members (
   CONSTRAINT guild_members_pkey PRIMARY KEY (id)
 );
 alter table guild_members owner to gamemachine;
+DROP TABLE IF EXISTS guild_actions;
 CREATE TABLE guild_actions (
   id bigserial NOT NULL,
 
@@ -53,6 +57,7 @@ CREATE TABLE guild_actions (
   CONSTRAINT guild_action_pkey PRIMARY KEY (id)
 );
 alter table guild_actions owner to gamemachine;
+DROP TABLE IF EXISTS world_objects;
 CREATE TABLE world_objects (
   id bigserial NOT NULL,
 
@@ -99,6 +104,7 @@ CREATE TABLE world_objects (
   CONSTRAINT world_object_pkey PRIMARY KEY (id)
 );
 alter table world_objects owner to gamemachine;
+DROP TABLE IF EXISTS build_objects;
 CREATE TABLE build_objects (
   id bigserial NOT NULL,
 
@@ -130,7 +136,7 @@ CREATE TABLE build_objects (
 
   build_object_grid character varying(128) DEFAULT NULL,
 
-  build_object_updated_at integer DEFAULT NULL,
+  build_object_updated_at bigint DEFAULT NULL,
 
   build_object_state integer DEFAULT NULL,
 
@@ -162,7 +168,9 @@ CREATE TABLE build_objects (
 
   build_object_slots bytea DEFAULT NULL,
 
-  build_object_placed_at integer DEFAULT NULL,
+  build_object_placed_at bigint DEFAULT NULL,
+
+  build_object_zone integer DEFAULT NULL,
 
   slot_info_placed_block_id character varying(128) DEFAULT NULL,
     
@@ -171,6 +179,7 @@ CREATE TABLE build_objects (
   CONSTRAINT build_object_pkey PRIMARY KEY (id)
 );
 alter table build_objects owner to gamemachine;
+DROP TABLE IF EXISTS buildable_areas;
 CREATE TABLE buildable_areas (
   id bigserial NOT NULL,
 
@@ -191,6 +200,7 @@ CREATE TABLE buildable_areas (
   CONSTRAINT buildable_area_pkey PRIMARY KEY (id)
 );
 alter table buildable_areas owner to gamemachine;
+DROP TABLE IF EXISTS characters;
 CREATE TABLE characters (
   id bigserial NOT NULL,
 
@@ -219,6 +229,7 @@ CREATE TABLE characters (
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
 alter table characters owner to gamemachine;
+DROP TABLE IF EXISTS players;
 CREATE TABLE players (
   id bigserial NOT NULL,
 
@@ -238,13 +249,14 @@ CREATE TABLE players (
 
   player_ip integer DEFAULT NULL,
 
-  player_ip_changed_at integer DEFAULT NULL,
+  player_ip_changed_at bigint DEFAULT NULL,
 
   player_character_id character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_pkey PRIMARY KEY (id)
 );
 alter table players owner to gamemachine;
+DROP TABLE IF EXISTS player_skills;
 CREATE TABLE player_skills (
   id bigserial NOT NULL,
 
@@ -289,6 +301,7 @@ CREATE TABLE player_skills (
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
 alter table player_skills owner to gamemachine;
+DROP TABLE IF EXISTS craftable_items;
 CREATE TABLE craftable_items (
   id bigserial NOT NULL,
 
@@ -313,6 +326,7 @@ CREATE TABLE craftable_items (
   CONSTRAINT craftable_item_pkey PRIMARY KEY (id)
 );
 alter table craftable_items owner to gamemachine;
+DROP TABLE IF EXISTS player_items;
 CREATE TABLE player_items (
   id bigserial NOT NULL,
 
@@ -389,6 +403,7 @@ CREATE TABLE player_items (
   CONSTRAINT player_item_pkey PRIMARY KEY (id)
 );
 alter table player_items owner to gamemachine;
+DROP TABLE IF EXISTS test_objects;
 CREATE TABLE test_objects (
   id bigserial NOT NULL,
 
@@ -406,13 +421,14 @@ CREATE TABLE test_objects (
 
   test_object_fvalue double precision DEFAULT NULL,
 
-  test_object_numbers64 integer DEFAULT NULL,
+  test_object_numbers64 bigint DEFAULT NULL,
 
   test_object_id character varying(128) NOT NULL,
 
   CONSTRAINT test_object_pkey PRIMARY KEY (id)
 );
 alter table test_objects owner to gamemachine;
+DROP TABLE IF EXISTS zone_infos;
 CREATE TABLE zone_infos (
   id bigserial NOT NULL,
 

@@ -91,7 +91,9 @@ private static final Logger logger = LoggerFactory.getLogger(NativeBytes.class);
 	public void toModel(Model model) {
     	    	    	    	
     	    	    	//if (bytes != null) {
-    	       	    	model.set("native_bytes_bytes",bytes.toByteArray());
+    	       	        if (bytes != null) {
+    	    		model.set("native_bytes_bytes",bytes.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    }

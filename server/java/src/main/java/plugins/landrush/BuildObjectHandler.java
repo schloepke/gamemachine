@@ -1,5 +1,6 @@
 package plugins.landrush;
 
+import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
@@ -11,6 +12,9 @@ import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.Vitals;
+import plugins.combat.Common;
+import plugins.combat.VitalsHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -101,7 +105,7 @@ public class BuildObjectHandler extends GameMessageActor {
 	private void broadcast(GameMessage gameMessage) {
 		for (Grid grid : GameGrid.gridsStartingWith("default")) {
 			for (TrackData trackData : grid.getAll()) {
-				if (trackData.entityType != TrackData.EntityType.PLAYER) {
+				if (trackData.entityType != TrackData.EntityType.Player) {
 					continue;
 				}
 				PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
@@ -176,6 +180,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 		existing.state = 2;
 		existing.updatedAt = System.currentTimeMillis();
+		removeGridAndVitals(existing);
 		BuildObject.db().deleteWhere("build_object_id = ?", existing.id);
 		objectIndex.remove(existing.id);
 		addUpdate(existing, 2);
@@ -188,21 +193,42 @@ public class BuildObjectHandler extends GameMessageActor {
 			return;
 		}
 
+		buildObject.zone = CharacterService.instance().getZone(buildObject.ownerId);
 		buildObject.state = 1;
 		buildObject.ownerId = characterId;
 		buildObject.updatedAt = System.currentTimeMillis();
 		BuildObject.db().save(buildObject);
 		objectIndex.put(buildObject.id, buildObject);
 		addUpdate(buildObject, 1);
+		setGridAndVitals(buildObject);
 	}
 
 	private void load() {
 		for (BuildObject buildObject : BuildObject.db().findAll()) {
 			objectIndex.put(buildObject.id, buildObject);
+			setGridAndVitals(buildObject);
 		}
 		logger.warning(objectIndex.size()+" build objects loaded");
 	}
 
+	private void removeGridAndVitals(BuildObject buildObject) {
+		if (buildObject.isDestructable) {
+			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
+			grid.remove(buildObject.id);
+			VitalsHandler handler = VitalsHandler.getHandler("build_objects", buildObject.zone);
+			handler.remove(buildObject.id);
+		}
+	}
+	
+	private void setGridAndVitals(BuildObject buildObject) {
+		if (buildObject.isDestructable) {
+			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
+			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.Object);
+			VitalsHandler handler = VitalsHandler.getHandler("build_objects", buildObject.zone);
+			handler.findOrCreateObject(buildObject.id, Vitals.VitalsType.Object.number, buildObject.zone);
+		}
+	}
+	
 	@Override
 	public void onTick(String message) {
 		// TODO Auto-generated method stub

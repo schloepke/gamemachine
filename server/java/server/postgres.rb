@@ -1,5 +1,5 @@
 
-
+DROP TABLE IF EXISTS <%= klass.underscore.pluralize %>;
 CREATE TABLE <%= klass.underscore.pluralize %> (
   id bigserial NOT NULL,
   <% message.getFields.each do |field| %>

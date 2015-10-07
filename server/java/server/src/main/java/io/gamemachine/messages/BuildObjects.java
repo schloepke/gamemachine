@@ -694,7 +694,23 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObjects.class)
         return this;
     }
     
-        	        	
+        	    	    	    	    	
+    public BuildObjects removeBuildObjectByZone(BuildObject buildObject)  {
+    	if(this.buildObject == null)
+           return this;
+            
+       	Iterator<BuildObject> itr = this.buildObject.iterator();
+       	while (itr.hasNext()) {
+    	BuildObject obj = itr.next();
+    	
+    	    		if (buildObject.zone == obj.zone) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+            	
     
     
     

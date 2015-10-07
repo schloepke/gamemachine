@@ -80,7 +80,7 @@ public class NpcEntity extends GameMessageActor {
 	private void initTrackData() {
 		trackData = new TrackData();
 		trackData.id = id;
-		trackData.entityType = EntityType.NPC;
+		trackData.entityType = EntityType.Npc;
 		trackData.userDefinedData = new UserDefinedData();
 	}
 

@@ -200,6 +200,7 @@ local_persistent_message BuildObject {
   optional bytes slots = 37;
   optional int64 placedAt = 38;
   optional SlotInfo slotInfo = 40;
+  optional int32 zone = 41;
 }
   
  local_message SlotInfo {
@@ -378,6 +379,12 @@ local_message VitalsContainer {
 local_message Vitals {
   enum VitalsType {
     None = 0;
+    Character = 1;
+    Object = 2;
+  }
+  
+  enum SubType {
+    SubTypeNone = 0;
     Guard = 1;
     AggressiveNpc = 2;
     NeutralNpc = 3;
@@ -407,6 +414,8 @@ local_message Vitals {
   optional int32 staminaDrain = 16;
   optional string grid = 17;
   optional VitalsType type = 18;
+  optional int32 zone = 19;
+  optional SubType subType = 20;
 }
 
 local_message VisualEffect {
@@ -509,13 +518,12 @@ message TrackData {
   optional string gridName = 9;
   optional int32 getNeighbors = 10;
   enum EntityType {
-  	NONE = 0;
-    PLAYER = 1;
-    NPC = 2;
-    OTHER = 3;
-    ALL = 4;
-    SHIP = 5;
-    ANY = 6;
+    None = 0;
+  	Any = 1;
+    Player = 2;
+    Npc = 3;
+    Object = 4;
+    All = 5;
   }
   optional EntityType neighborEntityType = 11;
   required EntityType entityType = 12;
@@ -911,6 +919,7 @@ message GameMessage {
   optional BuildObjectChunks buildObjectChunks = 44;
   optional TerrainEdits terrainEdits = 45;
   optional UpdatePlayerItem updatePlayerItem = 46;
+  optional VitalsContainer vitalsContainer = 47;
 }
 
 message GameMessages {

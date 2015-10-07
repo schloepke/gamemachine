@@ -33,7 +33,7 @@ public class GameGrid {
 			int zone = 0;
 			String characterId = PlayerService.getInstance().getCharacter(playerId);
 			if (!Strings.isNullOrEmpty(characterId)) {
-				Character character = CharacterService.getInstance().find(playerId, characterId);
+				Character character = CharacterService.instance().find(playerId, characterId);
 				if (character.zone > 0) {
 					zone = character.zone;
 				}
@@ -54,9 +54,9 @@ public class GameGrid {
 				
 		String characterId = PlayerService.getInstance().getCharacter(playerId);
 		if (!Strings.isNullOrEmpty(characterId)) {
-			Character character = CharacterService.getInstance().find(playerId, characterId);
+			Character character = CharacterService.instance().find(playerId, characterId);
 			character.zone = zone;
-			CharacterService.getInstance().save(character);
+			CharacterService.instance().save(character);
 		}
 	}
 

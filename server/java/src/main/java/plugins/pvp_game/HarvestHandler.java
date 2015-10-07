@@ -75,7 +75,7 @@ public class HarvestHandler extends GameMessageActor {
 
 		if (trackDatas != null) {
 			for (TrackData trackData : trackDatas) {
-				if (trackData.entityType == EntityType.PLAYER) {
+				if (trackData.entityType == EntityType.Player) {
 					GameMessage msg = new GameMessage();
 					msg.harvest = harvest;
 				}

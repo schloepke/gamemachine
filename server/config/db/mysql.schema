@@ -125,7 +125,7 @@ CREATE TABLE `build_objects` (
 
   `build_object_grid` varchar(128) DEFAULT NULL,
 
-  `build_object_updated_at` int(11) DEFAULT NULL,
+  `build_object_updated_at` bigint DEFAULT NULL,
 
   `build_object_state` int(11) DEFAULT NULL,
 
@@ -157,7 +157,9 @@ CREATE TABLE `build_objects` (
 
   `build_object_slots` varbinary(2048) DEFAULT NULL,
 
-  `build_object_placed_at` int(11) DEFAULT NULL,
+  `build_object_placed_at` bigint DEFAULT NULL,
+
+  `build_object_zone` int(11) DEFAULT NULL,
 
       `slot_info_placed_block_id` varchar(128) DEFAULT NULL,
     
@@ -230,7 +232,7 @@ CREATE TABLE `players` (
 
   `player_ip` int(11) DEFAULT NULL,
 
-  `player_ip_changed_at` int(11) DEFAULT NULL,
+  `player_ip_changed_at` bigint DEFAULT NULL,
 
   `player_character_id` varchar(128) DEFAULT NULL,
 
@@ -394,7 +396,7 @@ CREATE TABLE `test_objects` (
 
   `test_object_fvalue` float DEFAULT NULL,
 
-  `test_object_numbers64` int(11) DEFAULT NULL,
+  `test_object_numbers64` bigint DEFAULT NULL,
 
   `test_object_id` varchar(128) NOT NULL,
 

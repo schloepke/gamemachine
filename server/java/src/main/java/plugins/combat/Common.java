@@ -18,6 +18,7 @@ public class Common {
 	public static Long deathTime = 15000L;
 	public static int worldOffset = 1000;
 	public static String gameId = "mygame";
+	public static double vitalsDistance = 50;
 	
 	public static Grid playerGrid(String playerId) {
 		return GameGrid.getGameGrid("default", playerId);
@@ -27,7 +28,7 @@ public class Common {
 		return GameGrid.getGameGrid("build_objects", playerId);
 	}
 	
-	public static List<String> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
+	public static List<TrackData> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
 		GmVector3 vec = new GmVector3();
 		vec.xi = x;
 		vec.yi = y;
@@ -35,7 +36,7 @@ public class Common {
 		return getTargetsInRange(range,vec,gridName, playerId);
 	}
 	
-	public static List<String> getTargetsInRange(int range, int x, int y, int z, Grid grid) {
+	public static List<TrackData> getTargetsInRange(int range, int x, int y, int z, Grid grid) {
 		GmVector3 vec = new GmVector3();
 		vec.xi = x;
 		vec.yi = y;
@@ -43,30 +44,40 @@ public class Common {
 		return getTargetsInRange(range,vec,grid);
 	}
 	
-	public static List<String> getTargetsInRange(int range, GmVector3 location, Grid grid) {
-		List<String> targets = new ArrayList<String>();
+	public static List<TrackData> getTargetsInRange(int range, GmVector3 location, Grid grid) {
+		List<TrackData> targets = new ArrayList<TrackData>();
 		for (TrackData trackData : grid.getAll()) {
 			
 			// Lets you choose a specific radius, as the spatial query is not exact.
 			if (range > 0) {
 				double distance = distance(location.xi,location.yi,location.zi,trackData);
 				if (distance <= range) {
-					targets.add(trackData.id);
+					targets.add(trackData);
 				}
 			} else {
-				targets.add(trackData.id);
+				targets.add(trackData);
 			}
 		}
 		return targets;
 	}
 	
-	public static List<String> getTargetsInRange(int range, GmVector3 location, String gridName, String playerId) {
+	public static List<TrackData> getTargetsInRange(int range, GmVector3 location, String gridName, String playerId) {
 		Grid grid = GameGrid.getGameGrid(gameId, gridName, playerId);
 		return getTargetsInRange(range,location,grid);
 	}
 
-	private static double scale(int i) {
+	public static double scale(int i) {
 		return (i / 100l) - worldOffset;
+	}
+	
+	public static double distance(TrackData tdata2, TrackData tdata) {
+		double x2 = scale(tdata.x);
+		double y2 = scale(tdata.y);
+		double z2 = scale(tdata.z);
+		double x1 = scale(tdata2.x);
+		double y1 = scale(tdata2.y);
+		double z1 = scale(tdata2.z);
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
 	}
 	
 	public static double distance(int x, int y, int z, TrackData tdata) {

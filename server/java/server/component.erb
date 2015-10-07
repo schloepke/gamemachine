@@ -677,7 +677,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     	<% else %>
     	//if (<%= field.name %> != null) {
     	   <% if get_type(field) == 'ByteString' %>
-    	    	model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	        if (<%= field.name %> != null) {
+    	    		model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	    	}
     	    <% elsif field.isEnumField %>
     	    	model.setInteger("<%=sql_column_name(klass,field)%>",<%= field.name %>.number);
     	    <% else %>

@@ -25,8 +25,15 @@ public class CombatHandler extends GameMessageActor {
 
 	@Override
 	public void awake() {
+		scheduleOnce(5000L,"vitals");
 	}
 
+	@Override
+	public void onTick(String message) {
+		VitalsHandler.UpdateVitals();
+		scheduleOnce(5000L,"vitals");
+	}
+	
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (gameMessage.attack != null) {
@@ -51,7 +58,7 @@ public class CombatHandler extends GameMessageActor {
 		
 	private void doAttack(Attack attack) {
 		int zone = GameGrid.getPlayerZone(playerId);
-		PlayerVitalsHandler vitalsHandler = PlayerVitalsHandler.getHandler("default", zone);
+		VitalsHandler vitalsHandler = VitalsHandler.getHandler("default", zone);
 		
 		logger.warning("Attack " + attack.attacker + " " + attack.target + " skill " + attack.skill);
 		PlayerSkill skill = PlayerSkillHandler.globalPlayerSkills.get(attack.skill);
@@ -100,7 +107,7 @@ public class CombatHandler extends GameMessageActor {
 
 		
 		StatusEffectHandler.tell("default",zone, target, getSelf());
-		StatusEffectHandler.tell("build_objects",zone, target, getSelf());
+		StatusEffectHandler.tell("build_objects",zone, target.clone(), getSelf());
 		
 		sendAttack(attack);
 	}

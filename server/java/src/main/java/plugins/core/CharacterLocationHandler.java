@@ -39,17 +39,17 @@ public class CharacterLocationHandler extends GameMessageActor  {
 	private void updateLocations() {
 		for (Grid grid : GameGrid.gridsStartingWith("default")) {
 			for (TrackData trackData : grid.getAll()) {
-				if (trackData.entityType != TrackData.EntityType.PLAYER) {
+				if (trackData.entityType != TrackData.EntityType.Player) {
 					continue;
 				}
 				String characterId = PlayerService.getInstance().getCharacter(trackData.id);
-				Character character  = CharacterService.getInstance().find(trackData.id, characterId);
+				Character character  = CharacterService.instance().find(trackData.id, characterId);
 				if (character != null) {
 					character.worldx = trackData.x;
 					character.worldy = trackData.y;
 					character.worldz = trackData.z;
 					character.zone = trackData.zone;
-					CharacterService.getInstance().save(character);
+					CharacterService.instance().save(character);
 				}
 			}
 		}

@@ -101,7 +101,9 @@ private static final Logger logger = LoggerFactory.getLogger(DynamicMessage.clas
     	//}
     	    	    	    	    	
     	    	    	//if (message != null) {
-    	       	    	model.set("dynamic_message_message",message.toByteArray());
+    	       	        if (message != null) {
+    	    		model.set("dynamic_message_message",message.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    }

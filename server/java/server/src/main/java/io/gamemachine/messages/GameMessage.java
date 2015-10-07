@@ -286,6 +286,11 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 			    
 		
     
+        	
+					public VitalsContainer vitalsContainer = null;
+			    
+		
+    
         
 
 
@@ -306,7 +311,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	    	    	    	    	model.set("game_message_agent_id",null);
     	    	    	    	    	    	    	    	    	    	    	    	    	    	model.set("game_message_authtoken",null);
     	    	    	    	    	    	model.set("game_message_unity_message_id",null);
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
@@ -344,7 +349,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	       	    	model.setLong("game_message_unity_message_id",unityMessageId);
     	        		
     	//}
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
     
 	public static GameMessage fromModel(Model model) {
 		boolean hasFields = false;
@@ -412,7 +417,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 		}
     	
     	    	
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    			if (hasFields) {
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    			if (hasFields) {
 			return message;
 		} else {
 			return null;
@@ -816,6 +821,15 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 		this.updatePlayerItem = updatePlayerItem;
 		return this;	}
 	
+		            
+		public VitalsContainer getVitalsContainer() {
+		return vitalsContainer;
+	}
+	
+	public GameMessage setVitalsContainer(VitalsContainer vitalsContainer) {
+		this.vitalsContainer = vitalsContainer;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1046,6 +1060,10 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
                                     	
                             	            	case 46:
             	                	                	message.updatePlayerItem = input.mergeObject(message.updatePlayerItem, UpdatePlayerItem.getSchema());
+                    break;
+                                    	
+                            	            	case 47:
+            	                	                	message.vitalsContainer = input.mergeObject(message.vitalsContainer, VitalsContainer.getSchema());
                     break;
                                     	
                             	            
@@ -1286,6 +1304,11 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     		output.writeObject(46, message.updatePlayerItem, UpdatePlayerItem.getSchema(), false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.vitalsContainer != null)
+    		output.writeObject(47, message.vitalsContainer, VitalsContainer.getSchema(), false);
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1423,6 +1446,9 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	//if(this.updatePlayerItem != null) {
     		System.out.println("updatePlayerItem="+this.updatePlayerItem);
     	//}
+    	    	//if(this.vitalsContainer != null) {
+    		System.out.println("vitalsContainer="+this.vitalsContainer);
+    	//}
     	    	System.out.println("END GameMessage");
     }
     
@@ -1474,6 +1500,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
         	        	case 44: return "buildObjectChunks";
         	        	case 45: return "terrainEdits";
         	        	case 46: return "updatePlayerItem";
+        	        	case 47: return "vitalsContainer";
         	            default: return null;
         }
     }
@@ -1531,6 +1558,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	__fieldMap.put("buildObjectChunks", 44);
     	    	__fieldMap.put("terrainEdits", 45);
     	    	__fieldMap.put("updatePlayerItem", 46);
+    	    	__fieldMap.put("vitalsContainer", 47);
     	    }
    
    public static List<String> getFields() {

@@ -68,7 +68,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 	public enum VitalsType implements io.protostuff.EnumLite<VitalsType>
     {
     	
-    	    	None(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
+    	    	None(0),    	    	Character(1),    	    	Object(2);    	        
         public final int number;
         
         private VitalsType (int number)
@@ -90,6 +90,37 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             switch(number) 
             {
             	    			case 0: return (None);
+    			    			case 1: return (Character);
+    			    			case 2: return (Object);
+    			                default: return null;
+            }
+        }
+    }
+	public enum SubType implements io.protostuff.EnumLite<SubType>
+    {
+    	
+    	    	SubTypeNone(0),    	    	Guard(1),    	    	AggressiveNpc(2),    	    	NeutralNpc(3),    	    	FriendlyNpc(4),    	    	AggressiveAnimal(5),    	    	NeutralAnimal(6),    	    	FriendlyAnimal(7),    	    	Player(8),    	    	Vehicle(9),    	    	Structure(10);    	        
+        public final int number;
+        
+        private SubType (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static SubType defaultValue() {
+        	return (SubTypeNone);
+        }
+        
+        public static SubType valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (SubTypeNone);
     			    			case 1: return (Guard);
     			    			case 2: return (AggressiveNpc);
     			    			case 3: return (NeutralNpc);
@@ -206,6 +237,16 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     
         	
 					public VitalsType type = VitalsType.defaultValue();
+			    
+		
+    
+        	
+							    public int zone= 0;
+		    			    
+		
+    
+        	
+					public SubType subType = SubType.defaultValue();
 			    
 		
     
@@ -491,6 +532,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	    	    	    	    	model.set("vitals_player_id",null);
     	    	    	    	    	    	model.set("vitals_stamina_drain",null);
     	    	    	    	    	    	model.set("vitals_grid",null);
+    	    	    	    	    	    	    	model.set("vitals_zone",null);
     	    	    }
     
 	public void toModel(Model model) {
@@ -582,6 +624,16 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	    	    	    	
     	    	    	//if (type != null) {
     	       	    	model.setInteger("vitals_type",type.number);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (zone != null) {
+    	       	    	model.setInteger("vitals_zone",zone);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (subType != null) {
+    	       	    	model.setInteger("vitals_sub_type",subType.number);
     	        		
     	//}
     	    	    }
@@ -744,6 +796,17 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	    	    	    	    	    	
     				message.setType(VitalsType.valueOf(model.getInteger("vitals_type")));
+    	    	    	    	    	    	
+    	    			Integer zoneTestField = model.getInteger("vitals_zone");
+		if (zoneTestField != null) {
+			int zoneField = zoneTestField;
+			message.setZone(zoneField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    				message.setSubType(SubType.valueOf(model.getInteger("vitals_sub_type")));
     	    			if (hasFields) {
 			return message;
 		} else {
@@ -914,6 +977,24 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		this.type = type;
 		return this;	}
 	
+		            
+		public int getZone() {
+		return zone;
+	}
+	
+	public Vitals setZone(int zone) {
+		this.zone = zone;
+		return this;	}
+	
+		            
+		public SubType getSubType() {
+		return subType;
+	}
+	
+	public Vitals setSubType(SubType subType) {
+		this.subType = subType;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1042,6 +1123,14 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             	                	                    message.type = VitalsType.valueOf(input.readEnum());
                     break;
                 	                	
+                            	            	case 19:
+            	                	                	message.zone = input.readInt32();
+                	break;
+                	                	
+                            	            	case 20:
+            	                	                    message.subType = SubType.valueOf(input.readEnum());
+                    break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1162,6 +1251,17 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	 	output.writeEnum(18, message.type.number, false);
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.zone != null) {
+            output.writeInt32(19, message.zone, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.subType != null)
+    	 	output.writeEnum(20, message.subType.number, false);
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1221,6 +1321,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
     	//}
+    	    	//if(this.zone != null) {
+    		System.out.println("zone="+this.zone);
+    	//}
+    	    	//if(this.subType != null) {
+    		System.out.println("subType="+this.subType);
+    	//}
     	    	System.out.println("END Vitals");
     }
     
@@ -1246,6 +1352,8 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
         	        	case 16: return "staminaDrain";
         	        	case 17: return "grid";
         	        	case 18: return "type";
+        	        	case 19: return "zone";
+        	        	case 20: return "subType";
         	            default: return null;
         }
     }
@@ -1277,6 +1385,8 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	__fieldMap.put("staminaDrain", 16);
     	    	__fieldMap.put("grid", 17);
     	    	__fieldMap.put("type", 18);
+    	    	__fieldMap.put("zone", 19);
+    	    	__fieldMap.put("subType", 20);
     	    }
    
    public static List<String> getFields() {

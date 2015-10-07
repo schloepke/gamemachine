@@ -31,7 +31,7 @@ public class NpcDemo extends GameMessageActor {
 		npcCount = config.getInt("npcCount");
 		
 		ps = PlayerService.getInstance();
-		cs = CharacterService.getInstance();
+		cs = CharacterService.instance();
 		gameId = AppConfig.getDefaultGameId();
 		createNpcs(npcCount,0,"z0");
 		//createNpcs(npcCount*3,1,"z1");
@@ -49,8 +49,9 @@ public class NpcDemo extends GameMessageActor {
 				character = cs.create(playerId, characterId, null);
 			}
 
-			GameGrid.setPlayerZone(playerId, zone);
+			
 			ps.setCharacter(playerId, characterId);
+			GameGrid.setPlayerZone(playerId, zone);
 			Props props = Props.create(NpcEntity.class, playerId, characterId);
 			ActorRef ref = getContext().actorOf(props, characterId);
 		}

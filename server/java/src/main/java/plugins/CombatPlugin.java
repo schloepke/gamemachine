@@ -11,6 +11,7 @@ import plugins.combat.Combat;
 import plugins.combat.CombatHandler;
 import plugins.combat.Common;
 import plugins.combat.PlayerSkillHandler;
+import plugins.combat.VitalsHandler;
 import plugins.combat.StatusEffectHandler;
 
 public class CombatPlugin extends Plugin {
@@ -18,6 +19,8 @@ public class CombatPlugin extends Plugin {
 	@Override
 	public void start() {
 
+		VitalsHandler.loadTemplates();
+		
 		GameMessageRoute.add(PlayerSkillHandler.name, PlayerSkillHandler.name, false);
 		ActorUtil.createActor(PlayerSkillHandler.class, PlayerSkillHandler.name);
 

@@ -68,7 +68,7 @@ private static final Logger logger = LoggerFactory.getLogger(TrackData.class);
 	public enum EntityType implements io.protostuff.EnumLite<EntityType>
     {
     	
-    	    	NONE(0),    	    	PLAYER(1),    	    	NPC(2),    	    	OTHER(3),    	    	ALL(4),    	    	SHIP(5),    	    	ANY(6);    	        
+    	    	None(0),    	    	Any(1),    	    	Player(2),    	    	Npc(3),    	    	Object(4),    	    	All(5);    	        
         public final int number;
         
         private EntityType (int number)
@@ -82,20 +82,19 @@ private static final Logger logger = LoggerFactory.getLogger(TrackData.class);
         }
         
         public static EntityType defaultValue() {
-        	return (NONE);
+        	return (None);
         }
         
         public static EntityType valueOf(int number)
         {
             switch(number) 
             {
-            	    			case 0: return (NONE);
-    			    			case 1: return (PLAYER);
-    			    			case 2: return (NPC);
-    			    			case 3: return (OTHER);
-    			    			case 4: return (ALL);
-    			    			case 5: return (SHIP);
-    			    			case 6: return (ANY);
+            	    			case 0: return (None);
+    			    			case 1: return (Any);
+    			    			case 2: return (Player);
+    			    			case 3: return (Npc);
+    			    			case 4: return (Object);
+    			    			case 5: return (All);
     			                default: return null;
             }
         }

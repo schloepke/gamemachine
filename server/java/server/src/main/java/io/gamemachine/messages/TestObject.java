@@ -628,7 +628,9 @@ private static final Logger logger = LoggerFactory.getLogger(TestObject.class);
     	//}
     	    	    	    	    	    	    	
     	    	    	//if (bstring != null) {
-    	       	    	model.set("test_object_bstring",bstring.toByteArray());
+    	       	        if (bstring != null) {
+    	    		model.set("test_object_bstring",bstring.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	

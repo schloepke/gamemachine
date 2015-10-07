@@ -66,7 +66,7 @@ public class PlayerService {
 			return;
 		}
 		
-		CharacterService.getInstance().deleteForPlayer(player.id);
+		CharacterService.instance().deleteForPlayer(player.id);
 		if (authType == OBJECT_DB) {
 			Player.store().delete(player.id);
 		} else if (authType == SQL_DB) {
@@ -113,7 +113,7 @@ public class PlayerService {
 
 		
 		if (authType == OBJECT_DB) {
-			CharacterService.getInstance().findPlayerCharacters(player.id);
+			CharacterService.instance().findPlayerCharacters(player.id);
 			Player.store().set(player);
 		} else if (authType == SQL_DB) {
 			if (!Player.db().save(player)) {
@@ -161,6 +161,10 @@ public class PlayerService {
 			}
 			return player;
 		}
+	}
+	
+	public int getZone(String playerId) {
+		return GameGrid.getPlayerZone(playerId);
 	}
 	
 	public boolean playerIsAgent(String playerId) {

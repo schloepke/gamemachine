@@ -35,6 +35,7 @@ import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.VisualEffect;
 import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.VitalsContainer;
 import plugins.inventoryservice.InventoryService;
 import scala.concurrent.duration.Duration;
 
@@ -52,8 +53,10 @@ public class StatusEffectHandler extends UntypedActor {
 	public static String name = StatusEffectHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
+	private String gridName = null;
+	private int zone = -1;
 	private Grid grid = null;
-	private PlayerVitalsHandler vitalsHandler = null;
+	private VitalsHandler vitalsHandler = null;
 
 	public static void tell(String gridName, int zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
 		ActorSelection sel = ActorUtil.getSelectionByName(actorName(gridName, zone));
@@ -65,8 +68,10 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	public StatusEffectHandler(String gridName, int zone) {
+		this.gridName = gridName;
+		this.zone = zone;
 		grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), gridName, zone);
-		vitalsHandler = PlayerVitalsHandler.getHandler(gridName, zone);
+		vitalsHandler = VitalsHandler.getHandler(gridName, zone);
 	}
 
 	@Override
@@ -111,7 +116,7 @@ public class StatusEffectHandler extends UntypedActor {
 			return;
 		}
 
-		Character character = CharacterService.getInstance().find(characterId);
+		Character character = CharacterService.instance().find(characterId);
 		if (character == null) {
 			logger.warning("Unable to find character for " + characterId);
 			return;
@@ -263,16 +268,15 @@ public class StatusEffectHandler extends UntypedActor {
 
 	}
 
-	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect statusEffect) {
+	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals, StatusEffect statusEffect) {
 		int value = statusEffect.minValue;
-		Vitals vitals = vitalsHandler.findOrCreate(target);
-		setPassiveEffect(statusEffect.type, vitals, value, false);
-		sendStatusEffectResult(statusEffect.id, statusEffectTarget, target, statusEffect.ticks);
+		setPassiveEffect(statusEffect.type, targetVitals, value, false);
+		sendStatusEffectResult(statusEffect.id, statusEffectTarget, targetVitals, statusEffect.ticks);
 
 		if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
 				&& statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
 			statusEffectTarget = statusEffectTarget.clone();
-			statusEffectTarget.target = target;
+			statusEffectTarget.target = targetVitals.id;
 			statusEffect = statusEffect.clone();
 			statusEffectTarget.statusEffect.clear();
 			statusEffectTarget.action = StatusEffectTarget.Action.Remove;
@@ -280,7 +284,7 @@ public class StatusEffectHandler extends UntypedActor {
 			// StatusEffectTarget.PassiveFlag.NA;
 			statusEffectTarget.addStatusEffect(statusEffect);
 			logger.warning(
-					"scheduling removal of " + statusEffect.type + " from " + vitals.id + " in " + statusEffect.ticks);
+					"scheduling removal of " + statusEffect.type + " from " + targetVitals.id + " in " + statusEffect.ticks);
 			getContext().system().scheduler().scheduleOnce(Duration.create((long) statusEffect.ticks, TimeUnit.SECONDS),
 					getSelf(), statusEffectTarget, getContext().dispatcher(), null);
 		}
@@ -335,9 +339,7 @@ public class StatusEffectHandler extends UntypedActor {
 				if (statusEffectTarget.target.equals(PlayerSkill.DamageType.Aoe.toString())) {
 					aoe = true;
 					location = statusEffectTarget.location;
-				}
-
-				if (statusEffectTarget.target.equals(PlayerSkill.DamageType.SelfAoe.toString())) {
+				} else if (statusEffectTarget.target.equals(PlayerSkill.DamageType.SelfAoe.toString())) {
 					aoe = true;
 					location = new GmVector3();
 					TrackData td = grid.get(statusEffectTarget.origin);
@@ -358,18 +360,13 @@ public class StatusEffectHandler extends UntypedActor {
 					if (statusEffectTarget.ticks == 0) {
 						sendVisualEffect(effect, statusEffectTarget.location);
 					}
-					for (String target : Common.getTargetsInRange(statusEffectTarget.range, location, grid)) {
-						Player player = PlayerService.getInstance().find(target);
-						if (player != null) {
-							String characterId = player.characterId;
-							applyStatusEffect(statusEffectTarget, characterId, effect);
-						} else {
-							logger.warning("Player not found " + target);
-						}
-
+					for (TrackData trackData : Common.getTargetsInRange(statusEffectTarget.range, location, grid)) {
+						Vitals vitals = vitalsHandler.fromTrackData(trackData, zone);
+						applyStatusEffect(statusEffectTarget, vitals, effect);
 					}
 				} else {
-					applyStatusEffect(statusEffectTarget, statusEffectTarget.target, effect);
+					Vitals vitals = vitalsHandler.findOrCreate(statusEffectTarget.target);
+					applyStatusEffect(statusEffectTarget, vitals, effect);
 				}
 			}
 			if (isPassive(effect)) {
@@ -389,21 +386,22 @@ public class StatusEffectHandler extends UntypedActor {
 		statusEffectTarget.ticks++;
 	}
 
-	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, String target, StatusEffect effect) {
+	
+	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals, StatusEffect effect) {
 		if (isPassive(effect)) {
-			setPassiveEffect(statusEffectTarget, target, effect);
+			setPassiveEffect(statusEffectTarget, targetVitals, effect);
 			return 0;
 		}
 
 		String origin = statusEffectTarget.origin;
 
-		Vitals vitals = vitalsHandler.findOrCreate(target);
-		if (vitals.dead == 1) {
+		
+		if (targetVitals.dead == 1) {
 			return 0;
 		}
-		vitals.lastCombat = System.currentTimeMillis();
+		targetVitals.lastCombat = System.currentTimeMillis();
 
-		Vitals targetTemplate = CharacterService.getInstance().getVitalsTemplate(vitals.id);
+		Vitals targetTemplate = VitalsHandler.getCharacterTemplate(targetVitals.id);
 
 		int targetBaseHealth = targetTemplate.health;
 		int value = getEffectValue(effect, statusEffectTarget.skill, origin);
@@ -411,26 +409,26 @@ public class StatusEffectHandler extends UntypedActor {
 		if (effect.type == StatusEffect.Type.AttributeDecrease) {
 
 			// no damage to self
-			if (vitals.id.equals(origin)) {
+			if (targetVitals.id.equals(origin)) {
 				return 0;
 			}
 
 			// or group members
-			if (inSameGroup(origin, vitals.id)) {
+			if (inSameGroup(origin, targetVitals.id)) {
 				return 0;
 			}
 
-			vitals.health -= value;
-			if (vitals.health < 0) {
-				vitals.health = 0;
+			targetVitals.health -= value;
+			if (targetVitals.health < 0) {
+				targetVitals.health = 0;
 			}
 		} else if (effect.type == StatusEffect.Type.AttributeIncrease) {
 
 			// only to self or group members
-			if (vitals.id.equals(origin) || inSameGroup(origin, vitals.id)) {
-				vitals.health += value;
-				if (vitals.health > targetBaseHealth) {
-					vitals.health = targetBaseHealth;
+			if (targetVitals.id.equals(origin) || inSameGroup(origin, targetVitals.id)) {
+				targetVitals.health += value;
+				if (targetVitals.health > targetBaseHealth) {
+					targetVitals.health = targetBaseHealth;
 				}
 			} else {
 				return 0;
@@ -438,10 +436,11 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 
 		if (value > 0) {
-			vitals.changed = 1;
-			logger.warning(
-					"target " + vitals.id + " damage " + value + " type " + effect.type + " health " + vitals.health);
-			sendStatusEffectResult(effect.id, statusEffectTarget, target, value);
+			targetVitals.changed = 1;
+			// logger.warning(
+			// "target " + vitals.id + " damage " + value + " type " +
+			// effect.type + " health " + vitals.health);
+			sendStatusEffectResult(effect.id, statusEffectTarget, targetVitals, value);
 		}
 
 		return value;
@@ -498,7 +497,7 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private int getEffectValue(StatusEffect effect, String skillId, String characterId) {
 		int base = Common.randInt(effect.minValue, effect.maxValue);
-		Character character = CharacterService.getInstance().find(characterId);
+		Character character = CharacterService.instance().find(characterId);
 		int level = skillLevel(skillId, character.id);
 		return base + level;
 	}
@@ -521,8 +520,8 @@ public class StatusEffectHandler extends UntypedActor {
 		vitals.changed = 1;
 	}
 
-	private void revive(Vitals vitals, Character character) {
-		Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
+	private void revive(Vitals vitals) {
+		Vitals template = VitalsHandler.getCharacterTemplate(vitals.id);
 		vitals.dead = 0;
 		vitals.health = template.health;
 		vitals.stamina = template.stamina;
@@ -534,7 +533,7 @@ public class StatusEffectHandler extends UntypedActor {
 		int regen;
 
 		for (Vitals vitals : vitalsHandler.getVitals()) {
-			if (vitals.type == Vitals.VitalsType.Guard) {
+			if (vitals.subType == Vitals.SubType.Guard) {
 				regen = 1000;
 			} else {
 				if ((System.currentTimeMillis() - vitals.lastCombat) <= 5000l) {
@@ -544,18 +543,21 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			Character character = CharacterService.getInstance().find(vitals.id);
-			Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
+			Vitals template = VitalsHandler.getTemplate(vitals);
 			int stamina = template.stamina;
 			int magic = template.magic;
 			int health = template.health;
 
 			if (vitals.dead == 1) {
+				if (vitals.type == Vitals.VitalsType.Object) {
+					continue;
+				}
+
 				if (deathTimer.containsKey(vitals.id)) {
 					Long timeDead = deathTimer.get(vitals.id);
 					Long timer = Common.deathTime;
 					if ((System.currentTimeMillis() - timeDead) > timer) {
-						revive(vitals, character);
+						revive(vitals);
 						deathTimer.remove(vitals.id);
 					}
 				}
@@ -592,7 +594,7 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			if (vitals.type == Vitals.VitalsType.Player) {
+			if (vitals.type == Vitals.VitalsType.Character) {
 				TrackData trackData = grid.get(vitals.id);
 				if (trackData != null) {
 					if (trackData.hidden == 1) {
@@ -621,12 +623,12 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 	}
 
-	private void sendStatusEffectResult(String statusEffectId, StatusEffectTarget statusEffectTarget, String target,
+	private void sendStatusEffectResult(String statusEffectId, StatusEffectTarget statusEffectTarget, Vitals targetVitals,
 			int value) {
 		GameMessage msg = new GameMessage();
 		StatusEffectResult result = new StatusEffectResult();
 		result.origin = statusEffectTarget.origin;
-		result.target = target;
+		result.target = targetVitals.id;
 		result.statusEffectId = statusEffectId;
 		result.value = value;
 		msg.statusEffectResult = result;
@@ -655,42 +657,91 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private void sendVitals() {
-		for (Vitals vitals : vitalsHandler.getVitals()) {
-			Vitals template = CharacterService.getInstance().getVitalsTemplate(vitals.id);
-			Boolean send = false;
-			if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
-					|| vitals.stamina < template.stamina) {
-				resetVitalTick(vitals.id);
-				send = true;
-				vitals.changed = 0;
-			} else {
-				int tick = nextVitalTick(vitals.id);
-				if (tick < 4) {
-					send = true;
+		List<Vitals> container;
+
+		if (gridName.equals("build_objects")) {
+			container = objectVitals();
+			if (container.size() > 0) {
+				for (TrackData trackData : grid.getAll()) {
+					sendObjectVitals(trackData, container);
 				}
 			}
 
-			if (send) {
-				GameMessage msg = new GameMessage();
-				Vitals otherVitals = new Vitals();
-				otherVitals.id = vitals.id;
-				otherVitals.health = vitals.health;
-				otherVitals.dead = vitals.dead;
-				msg.vitals = otherVitals;
-
+		} else {
+			container = livingVitals();
+			if (container.size() > 0) {
 				for (TrackData trackData : grid.getAll()) {
-
-					// Send full vitals to player, partial to other players
-					if (trackData.id.equals(msg.vitals.playerId)) {
-						GameMessage playerMsg = new GameMessage();
-						playerMsg.vitals = vitalsHandler.findOrCreate(msg.vitals.id);
-						PlayerCommands.sendGameMessage(playerMsg, trackData.id);
-					} else {
-						PlayerCommands.sendGameMessage(msg, trackData.id);
-					}
+					sendLivingVitals(trackData, container);
 				}
 			}
 		}
+	}
+
+	private void sendObjectVitals(TrackData trackData, List<Vitals> container) {
+		VitalsContainer toSend = new VitalsContainer();
+		for (Vitals vitals : container) {
+			TrackData vitalsTrackData = grid.get(vitals.id);
+
+			if (Common.distance(vitalsTrackData, trackData) <= Common.vitalsDistance) {
+				toSend.addVitals(vitals);
+			}
+		}
+
+		GameMessage msg = new GameMessage();
+		msg.vitalsContainer = toSend;
+		PlayerCommands.sendGameMessage(msg, trackData.id);
+	}
+
+	private void sendLivingVitals(TrackData trackData, List<Vitals> container) {
+		VitalsContainer toSend = new VitalsContainer();
+		for (Vitals vitals : container) {
+			String playerId = CharacterService.instance().find(vitals.id).playerId;
+			TrackData vitalsTrackData = grid.get(playerId);
+
+			if (Common.distance(vitalsTrackData, trackData) <= Common.vitalsDistance) {
+				toSend.addVitals(vitals);
+			}
+		}
+
+		GameMessage msg = new GameMessage();
+		msg.vitalsContainer = toSend;
+		PlayerCommands.sendGameMessage(msg, trackData.id);
+	}
+
+	private List<Vitals> objectVitals() {
+		List<Vitals> container = new ArrayList<Vitals>();
+		for (Vitals vitals : vitalsHandler.getVitals()) {
+			if (vitals.changed == 1) {
+				resetVitalTick(vitals.id);
+				vitals.changed = 0;
+			} else {
+				int tick = nextVitalTick(vitals.id);
+				if (tick >= 4) {
+					continue;
+				}
+			}
+			container.add(vitals);
+		}
+		return container;
+	}
+
+	private List<Vitals> livingVitals() {
+		List<Vitals> container = new ArrayList<Vitals>();
+		for (Vitals vitals : vitalsHandler.getVitals()) {
+			Vitals template = VitalsHandler.getTemplate(vitals);
+			if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
+					|| vitals.stamina < template.stamina) {
+				resetVitalTick(vitals.id);
+				vitals.changed = 0;
+			} else {
+				int tick = nextVitalTick(vitals.id);
+				if (tick >= 4) {
+					continue;
+				}
+			}
+			container.add(vitals);
+		}
+		return container;
 	}
 
 	@Override

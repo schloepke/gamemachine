@@ -216,13 +216,13 @@ public class Grid {
 					continue;
 				}
 
-				if (entityType == TrackData.EntityType.ANY || trackData.entityType == entityType) {
+				if (entityType == TrackData.EntityType.Any || trackData.entityType == entityType) {
 					Integer shortId = getShortId(trackData.id);
 					trackData.shortId = shortId;
 					
 					if (optsFlag == 2) {
 						result.add(trackData);
-					} else if (trackData.entityType == TrackData.EntityType.SHIP) {
+					} else if (trackData.entityType == TrackData.EntityType.Object) {
 						result.add(trackData);
 					} else {
 

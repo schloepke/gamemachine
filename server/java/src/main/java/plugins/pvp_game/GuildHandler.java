@@ -225,7 +225,7 @@ public class GuildHandler extends GameMessageActor {
 						gameMessage.guildAction.inviteId = inviteId;
 						
 						// fixme, player id will be null here most likely
-						String to = CharacterService.getInstance().find(guildAction.to).playerId;
+						String to = CharacterService.instance().find(guildAction.to).playerId;
 						invites.put(to, inviteId);
 						if (!Strings.isNullOrEmpty(to)) {
 							PlayerCommands.sendGameMessage(gameMessage, to);

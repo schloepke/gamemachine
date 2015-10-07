@@ -1,17 +1,6 @@
 package io.gamemachine.core;
 
-import io.gamemachine.config.AppConfig;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.CharacterNotification;
-import io.gamemachine.messages.Characters;
-import io.gamemachine.messages.Player;
-import io.gamemachine.messages.PlayerNotification;
-import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.VitalsContainer;
-import plugins.clientDbLoader.ClientDbLoader;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.messages.Character;
+import io.gamemachine.messages.CharacterNotification;
+import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.Vitals;
 
 public class CharacterService {
 
@@ -31,7 +25,7 @@ public class CharacterService {
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
 	public Map<String, Character> characters = new ConcurrentHashMap<String, Character>();
-	private Map<Integer,Vitals> templates = new HashMap<Integer,Vitals>();
+	
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
 	private CharacterService() {
@@ -42,7 +36,6 @@ public class CharacterService {
 			this.authType = 0;
 		}
 		
-		loadTemplates();
 		logger.info("CharacterService starting authType=" + authType);
 	}
 
@@ -50,39 +43,10 @@ public class CharacterService {
 		private static final CharacterService INSTANCE = new CharacterService();
 	}
 
-	public static CharacterService getInstance() {
+	public static CharacterService instance() {
 		return LazyHolder.INSTANCE;
 	}
 
-	private void loadTemplates() {
-		VitalsContainer container = ClientDbLoader.getVitalsContainer();
-		if (container != null) {
-			for (Vitals vitals : ClientDbLoader.getVitalsContainer().vitals) {
-				templates.put(vitals.type.number,vitals);
-			}
-		}
-	}
-	
-	public Vitals getVitalsTemplate(String characterId) {
-		Character character = find(characterId);
-		if (character == null) {
-			throw new RuntimeException("Unable to find character "+characterId);
-		}
-		return getVitalsTemplate(character);
-	}
-	
-	public Vitals getVitalsTemplate(Character character) {
-		Vitals vitals = templates.get(character.vitalsType).clone();
-		if (vitals == null) {
-			vitals = new Vitals();
-			vitals.health = 1000;
-			vitals.stamina = 1000;
-			vitals.magic = 1000;
-		}
-		vitals.id = character.id;
-		return vitals;
-	}
-	
 	public static class ObjectStoreHelper {
 		public static boolean update(Character character) {
 			Characters characters = getCharacters(character.playerId);
@@ -192,7 +156,7 @@ public class CharacterService {
 		character.setId(id);
 		character.setPlayerId(playerId);
 		character.setUmaData(umaData);
-		character.setVitalsType(Vitals.VitalsType.Player.number);
+		character.setVitalsType(Vitals.VitalsType.Character.number);
 		
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.update(character);
@@ -209,6 +173,11 @@ public class CharacterService {
 		return character;
 	}
 
+	public int getZone(String characterId) {
+		Character character = find(characterId);
+		return GameGrid.getPlayerZone(character.playerId);
+	}
+	
 	public List<Character> search(String searchString) {
 		List<Character> characters;
 

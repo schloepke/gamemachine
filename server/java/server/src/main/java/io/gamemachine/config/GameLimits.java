@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 
+import com.google.common.base.Strings;
 import com.google.common.util.concurrent.RateLimiter;
 
 public class GameLimits extends UntypedActor {
@@ -234,6 +235,9 @@ public class GameLimits extends UntypedActor {
 	}
 
 	public static void resetConnectionCount(String gameId) {
+		if (Strings.isNullOrEmpty(gameId)) {
+			return;
+		}
 		AtomicInteger counter = connectionCounts.get(gameId);
 		if (counter == null) {
 			counter = new AtomicInteger();
@@ -248,6 +252,9 @@ public class GameLimits extends UntypedActor {
 	}
 	
 	public static int getConnectionCount(String gameId) {
+		if (Strings.isNullOrEmpty(gameId)) {
+			return 0;
+		}
 		AtomicInteger counter = connectionCounts.get(gameId);
 		if (counter == null) {
 			counter = new AtomicInteger();
@@ -257,6 +264,9 @@ public class GameLimits extends UntypedActor {
 	}
 
 	public static void incrementMessageCountIn(String gameId) {
+		if (Strings.isNullOrEmpty(gameId)) {
+			return;
+		}
 		AtomicInteger counter = messageCountsIn.get(gameId);
 		if (counter == null) {
 			counter = new AtomicInteger();

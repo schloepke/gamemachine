@@ -48,8 +48,7 @@ if command == 'build' || command == 'bundle'
   else
     GameMachine::Console::Build.new(ARGV).run!
   end
-  print "Hit return to exit"
-  gets
+ 
 
 elsif command == 'server'
   #puts 'classpath is ' + java.lang.System.getProperty("java.class.path")

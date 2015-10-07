@@ -96,7 +96,9 @@ private static final Logger logger = LoggerFactory.getLogger(BuildObjectChunk.cl
 	public void toModel(Model model) {
     	    	    	    	
     	    	    	//if (data != null) {
-    	       	    	model.set("build_object_chunk_data",data.toByteArray());
+    	       	        if (data != null) {
+    	    		model.set("build_object_chunk_data",data.toByteArray());
+    	    	}
     	        		
     	//}
     	    	    	    	    	

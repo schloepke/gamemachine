@@ -153,6 +153,8 @@ CREATE TABLE build_objects (
 
   build_object_placed_at integer DEFAULT NULL,
 
+  build_object_zone integer DEFAULT NULL,
+
   slot_info_placed_block_id varchar(128) DEFAULT NULL,
     
   slot_info_slot_id varchar(128) DEFAULT NULL,

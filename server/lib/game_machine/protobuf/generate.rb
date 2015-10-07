@@ -154,7 +154,7 @@ module GameMachine
           when 'float'
             "`#{sql_column_name(klass,field)}` float"
           when 'long'
-            "`#{sql_column_name(klass,field)}` int(11)"
+            "`#{sql_column_name(klass,field)}` bigint"
           when 'int'
             "`#{sql_column_name(klass,field)}` int(11)"
           when 'String'
@@ -174,7 +174,7 @@ module GameMachine
           when 'float'
             "#{sql_column_name(klass,field)} double precision"
           when 'long'
-            "#{sql_column_name(klass,field)} integer"
+            "#{sql_column_name(klass,field)} bigint"
           when 'int'
             "#{sql_column_name(klass,field)} integer"
           when 'String'

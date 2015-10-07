@@ -219,7 +219,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/list")) {
-					byte[] resp = CharacterService.getInstance().findPlayerCharacters(params.get("playerId"));
+					byte[] resp = CharacterService.instance().findPlayerCharacters(params.get("playerId"));
 					Ok(ctx, resp);
 					return;
 				}
@@ -227,9 +227,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				if (req.getUri().startsWith("/api/characters/get")) {
 					Character character;
 					if (params.containsKey("otherPlayerId")) {
-						character = CharacterService.getInstance().find(params.get("otherPlayerId"),params.get("characterId"));
+						character = CharacterService.instance().find(params.get("otherPlayerId"),params.get("characterId"));
 					} else {
-						character = CharacterService.getInstance().find(params.get("characterId"));
+						character = CharacterService.instance().find(params.get("characterId"));
 					}
 					
 					if (character == null) {
@@ -264,7 +264,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/create")) {
-					Character character = CharacterService.getInstance().create(params.get("playerId"),	params.get("characterId"), params.get("umaData"));
+					Character character = CharacterService.instance().create(params.get("playerId"),	params.get("characterId"), params.get("umaData"));
 					if (character == null) {
 						character = new Character();
 						character.playerId = "na";
@@ -275,7 +275,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/delete")) {
-					CharacterService.getInstance().delete(params.get("playerId"),params.get("characterId"));
+					CharacterService.instance().delete(params.get("playerId"),params.get("characterId"));
 					Ok(ctx, params.get("characterId"));
 					return;
 				}
@@ -288,7 +288,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
 				if (isAdmin) {
 					if (req.getUri().startsWith("/api/admin/characters/list")) {
-						byte[] resp = CharacterService.getInstance().findPlayerCharacters(params.get("get_playerId"));
+						byte[] resp = CharacterService.instance().findPlayerCharacters(params.get("get_playerId"));
 						Ok(ctx, resp);
 						return;
 					}
@@ -306,7 +306,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					}
 
 					if (req.getUri().startsWith("/api/admin/characters/search")) {
-						List<Character> characterList = CharacterService.getInstance().search(params.get("search_string"));
+						List<Character> characterList = CharacterService.instance().search(params.get("search_string"));
 						if (characterList.size() > 40) {
 							characterList = characterList.subList(0, 40);
 						}
