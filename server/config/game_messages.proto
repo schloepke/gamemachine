@@ -336,6 +336,23 @@ local_message Vitals {
     Object = 2;
   }
   
+  enum Attribute {
+    AttributeNone = 0;
+    SpellResist = 1;
+    ElementalResist = 2;
+    SpellPenetration = 3;
+    MagicRegen = 4;
+    HealthRegen = 5;
+    StaminaRegen = 6;
+    Armor = 7;
+    Magic = 8;
+    Health = 9;
+    Stamina = 10;
+    Speed = 11;
+    AbilitySpeed = 12;
+    
+  }
+  
   enum SubType {
     SubTypeNone = 0;
     Guard = 1;
@@ -350,25 +367,31 @@ local_message Vitals {
     Structure = 10;
   }
   required string characterId = 1;
-  optional int32 health = 2;
-  optional int32 stamina = 3;
-  optional int32 magic = 4;
   optional int64 lastCombat = 5;
   optional int32 dead = 6;
-  optional int32 armor = 7;
-  optional int32 spellResist = 8;
-  optional int32 elementalResist = 9;
-  optional int32 spellPenetration = 10;
-  optional int32 magicRegen = 11;
-  optional int32 healthRegen = 12;
-  optional int32 staminaRegen = 13;
   optional int32 changed = 14;
   optional string entityId = 15;
-  optional int32 staminaDrain = 16;
   optional VitalsType type = 18;
   optional int32 zone = 19;
   optional SubType subType = 20;
   optional string templateName = 21;
+  optional int32 spellResist = 22;
+  optional int32 elementalResist = 23;
+  optional int32 spellPenetration = 24;
+  optional int32 magicRegen = 25;
+  optional int32 healthRegen = 26;
+  optional int32 staminaRegen = 27;
+  optional int32 armor = 28;
+  optional int32 magic = 29;
+  optional int32 health = 30;
+  optional int32 stamina = 31;
+  optional int32 speed = 32;
+  optional int32 abilitySpeed = 33;
+}
+
+local_message VitalsAttribute {
+  required int32 attribute = 1;
+  required int32 value = 2;
 }
 
 local_message VisualEffect {
@@ -556,27 +579,10 @@ local_message StatusEffect {
   	StatusEffectNone = 0;
     AttributeDecrease = 1;
     AttributeIncrease = 2;
-    Heal = 3;
-    Slow = 4;
-    Stun = 5;
-    Root = 6;
-    Death = 7;
-    ArmorIncrease = 8;
-    SpellResistIncrease = 9;
-    ElementalResistIncrease = 10;
-    SpellPenetrationIncrease = 11;
-    MagicRegenIncrease = 12;
-    HealthRegenIncrease = 13;
-    StaminaRegenIncrease = 14;
-    ArmorDecrease = 15;
-    SpellResistDecrease = 16;
-    ElementalResistDecrease = 17;
-    MagicRegenDecrease = 18;
-    HealthRegenDecrease = 19;
-    StaminaRegenDecrease = 20;
-    Speed = 21;
+    Stun = 3;
 }
 
+  
   enum DamageType {
     DamageTypeNone = 0;
     Physical = 1;
@@ -594,7 +600,6 @@ local_message StatusEffect {
   optional string id = 2;
   optional int32 duration = 3;
   optional int32 ticks = 4;
-  optional string attribute = 5;
   optional int32 minValue = 6;
   optional int32 maxValue = 7;
   optional string particleEffect = 8;
@@ -605,6 +610,7 @@ local_message StatusEffect {
   optional Resource resource = 13;
   optional int32 resourceCost = 14;
   optional int32 range = 15;
+  optional int32 attribute = 16;
 }
 
 local_message StatusEffects {

@@ -51,7 +51,6 @@ public class StatusEffectHandler extends UntypedActor {
 	private String gridName = null;
 	private int zone = -1;
 	private Grid grid = null;
-	private VitalsHandler vitalsHandler = null;
 
 	public static void tell(String gridName, int zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
 		ActorSelection sel = ActorUtil.getSelectionByName(actorName(gridName, zone));
@@ -66,7 +65,6 @@ public class StatusEffectHandler extends UntypedActor {
 		this.gridName = gridName;
 		this.zone = zone;
 		grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), gridName, zone);
-		vitalsHandler = VitalsHandler.getHandler(gridName, zone);
 	}
 
 	@Override
@@ -132,11 +130,11 @@ public class StatusEffectHandler extends UntypedActor {
 
 			if (statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
 				StatusEffect effect = statusEffectTarget.statusEffect.get(0);
-				setPassiveEffect(effect.type, vitals, effect.minValue, true);
+				//setPassiveEffect(effect.type, vitals, effect.minValue, true);
 				logger.warning("Removing " + effect.type + " from " + vitals.entityId);
 			} else {
 				for (StatusEffect effect : skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
-					setPassiveEffect(effect.type, vitals, effect.minValue, true);
+					//setPassiveEffect(effect.type, vitals, effect.minValue, true);
 				}
 			}
 			activeId = 0;
@@ -150,115 +148,19 @@ public class StatusEffectHandler extends UntypedActor {
 		return activeId;
 	}
 
-	private StatusEffect.Type reverseEffect(StatusEffect.Type type) {
-		StatusEffect.Type reversed;
+	
 
-		switch (type) {
-		case SpellResistIncrease:
-			reversed = Type.SpellResistDecrease;
-			break;
-		case SpellResistDecrease:
-			reversed = Type.SpellResistIncrease;
-			break;
-		case ElementalResistIncrease:
-			reversed = Type.ElementalResistDecrease;
-			break;
-		case ElementalResistDecrease:
-			reversed = Type.ElementalResistIncrease;
-			break;
-		case ArmorIncrease:
-			reversed = Type.ArmorDecrease;
-			break;
-		case ArmorDecrease:
-			reversed = Type.ArmorIncrease;
-			break;
-		case MagicRegenIncrease:
-			reversed = Type.MagicRegenDecrease;
-			break;
-		case HealthRegenIncrease:
-			reversed = Type.HealthRegenDecrease;
-			break;
-		case StaminaRegenIncrease:
-			reversed = Type.StaminaRegenDecrease;
-			break;
-		case MagicRegenDecrease:
-			reversed = Type.MagicRegenIncrease;
-			break;
-		case StaminaRegenDecrease:
-			reversed = Type.StaminaRegenIncrease;
-			break;
-		case Root:
-			reversed = Type.Root;
-			break;
-		default:
-			reversed = null;
-			break;
-		}
-		return reversed;
-	}
-
-	private void setPassiveEffect(StatusEffect.Type type, Vitals vitals, int value, boolean reverse) {
-
-		if (reverse) {
-			type = reverseEffect(type);
-		}
-
-		logger.warning("Passive effect " + type + " value " + value);
-		vitals.changed = 1;
-
-		switch (type) {
-		case SpellResistIncrease:
-			vitals.spellResist += value;
-			break;
-		case SpellResistDecrease:
-			vitals.spellResist -= value;
-			break;
-		case ElementalResistIncrease:
-			vitals.elementalResist += value;
-			break;
-		case ElementalResistDecrease:
-			vitals.elementalResist -= value;
-			break;
-		case ArmorIncrease:
-			vitals.armor += value;
-			break;
-		case ArmorDecrease:
-			vitals.armor -= value;
-			break;
-		case SpellPenetrationIncrease:
-			vitals.spellPenetration += value;
-			break;
-		case MagicRegenIncrease:
-			vitals.magicRegen += value;
-			break;
-		case HealthRegenIncrease:
-			vitals.healthRegen += value;
-			break;
-		case StaminaRegenIncrease:
-			vitals.staminaRegen += value;
-			break;
-		case MagicRegenDecrease:
-			vitals.magicRegen -= value;
-			break;
-		case StaminaRegenDecrease:
-			vitals.staminaRegen -= value;
-			break;
-		default:
-			break;
-		}
-
-	}
-
+	
 	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals,
 			StatusEffect statusEffect) {
 		int value = statusEffect.minValue;
-		setPassiveEffect(statusEffect.type, targetVitals, value, false);
+		//setPassiveEffect(statusEffect.type, targetVitals, value, false);
 		sendStatusEffectResult(statusEffect.id, statusEffectTarget, targetVitals, statusEffect.ticks);
 
 		if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
 				&& statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
 			statusEffectTarget = statusEffectTarget.clone();
-			statusEffectTarget.target = targetVitals.entityId;
+			statusEffectTarget.targetEntityId = targetVitals.entityId;
 			statusEffect = statusEffect.clone();
 			statusEffectTarget.statusEffect.clear();
 			statusEffectTarget.action = StatusEffectTarget.Action.Remove;
@@ -300,7 +202,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private boolean isPassive(StatusEffect statusEffect) {
-		if (statusEffect.type != StatusEffect.Type.Speed && statusEffect.type != StatusEffect.Type.AttributeIncrease
+		if (statusEffect.type != StatusEffect.Type.AttributeIncrease
 				&& statusEffect.type != StatusEffect.Type.AttributeDecrease) {
 			return true;
 		} else {
@@ -310,9 +212,9 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private Vitals fromTarget(StatusEffectTarget statusEffectTarget) {
 		if (statusEffectTarget.attack.targetType == Attack.TargetType.Character) {
-			return vitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.targetEntityId);
+			return VitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.targetEntityId);
 		} else if (statusEffectTarget.attack.targetType == Attack.TargetType.Object) {
-			return vitalsHandler.findOrCreateObjectVitals(statusEffectTarget.targetEntityId, Vitals.VitalsType.Object.number, zone);
+			return VitalsHandler.findOrCreateObjectVitals(statusEffectTarget.targetEntityId, Vitals.VitalsType.Object.number, zone);
 		} else {
 			throw new RuntimeException("Invalid target type " + statusEffectTarget.attack.targetType);
 		}
@@ -345,7 +247,7 @@ public class StatusEffectHandler extends UntypedActor {
 						sendVisualEffect(statusEffect, statusEffectTarget.location);
 					}
 					for (TrackData trackData : Common.getTargetsInRange(statusEffect.range, location, grid)) {
-						Vitals vitals = vitalsHandler.fromTrackData(trackData, zone);
+						Vitals vitals = VitalsHandler.fromTrackData(trackData, zone);
 						applyStatusEffect(statusEffectTarget, vitals, statusEffect);
 					}
 				} else {
@@ -381,7 +283,7 @@ public class StatusEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		Vitals originVitals = vitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.originCharacterId);
+		Vitals originVitals = VitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.originCharacterId);
 		originVitals.lastCombat = System.currentTimeMillis();
 
 		if (!DeductCost(originVitals, statusEffect)) {
@@ -392,10 +294,16 @@ public class StatusEffectHandler extends UntypedActor {
 
 		Vitals targetTemplate = VitalsHandler.getTemplate(targetVitals);
 
-		int targetBaseHealth = targetTemplate.health;
+		Vitals.Attribute attribute = Vitals.Attribute.valueOf(statusEffect.attribute);
+		
+		int targetBaseValue = VitalsHandler.getAttribute(targetTemplate,attribute);
+		int targetCurrentValue =  VitalsHandler.getAttribute(targetVitals,attribute);
+		
 		int value = getEffectValue(statusEffect, statusEffectTarget.attack.playerSkill,
 				statusEffectTarget.originCharacterId);
 
+		
+		
 		if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
 
 			if (targetVitals.type == Vitals.VitalsType.Character) {
@@ -410,9 +318,10 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			targetVitals.health -= value;
-			if (targetVitals.health < 0) {
-				targetVitals.health = 0;
+			
+			VitalsHandler.setAttribute(targetVitals, attribute, targetCurrentValue - value);
+			if (targetCurrentValue < 0) {
+				VitalsHandler.setAttribute(targetVitals, attribute, 0);
 			}
 		} else if (statusEffect.type == StatusEffect.Type.AttributeIncrease) {
 
@@ -421,8 +330,9 @@ public class StatusEffectHandler extends UntypedActor {
 				if (targetVitals.characterId.equals(statusEffectTarget.originCharacterId)
 						|| inSameGroup(statusEffectTarget.originCharacterId, targetVitals.characterId)) {
 					targetVitals.health += value;
-					if (targetVitals.health > targetBaseHealth) {
-						targetVitals.health = targetBaseHealth;
+					VitalsHandler.setAttribute(targetVitals, attribute, targetCurrentValue);
+					if (targetCurrentValue > targetBaseValue) {
+						VitalsHandler.setAttribute(targetVitals, attribute, targetBaseValue);
 					}
 				} else {
 					return 0;
@@ -525,7 +435,7 @@ public class StatusEffectHandler extends UntypedActor {
 	private void updateVitals() {
 		int regen;
 
-		for (Vitals vitals : vitalsHandler.getVitals()) {
+		for (Vitals vitals : VitalsHandler.getVitals()) {
 			if (vitals.subType == Vitals.SubType.Guard) {
 				regen = 1000;
 			} else {
@@ -585,19 +495,6 @@ public class StatusEffectHandler extends UntypedActor {
 				if (vitals.magic > magic) {
 					vitals.magic = magic;
 				}
-			}
-
-			if (vitals.type == Vitals.VitalsType.Character) {
-				TrackData trackData = grid.get(vitals.entityId);
-				if (trackData != null) {
-					if (trackData.hidden == 1) {
-						int drain = 4;
-						if (vitals.stamina >= drain) {
-							vitals.stamina -= drain;
-						}
-					}
-				}
-
 			}
 
 		}
@@ -703,7 +600,7 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private List<Vitals> objectVitals() {
 		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : vitalsHandler.getVitals()) {
+		for (Vitals vitals : VitalsHandler.getVitals()) {
 			if (vitals.changed == 1) {
 				resetVitalTick(vitals.entityId);
 				vitals.changed = 0;
@@ -720,7 +617,7 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private List<Vitals> livingVitals() {
 		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : vitalsHandler.getVitals()) {
+		for (Vitals vitals : VitalsHandler.getVitals()) {
 			Vitals template = VitalsHandler.getTemplate(vitals);
 			if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
 					|| vitals.stamina < template.stamina) {

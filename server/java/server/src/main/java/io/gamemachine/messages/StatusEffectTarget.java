@@ -385,22 +385,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     }
     
         	    	    	    	
-    public StatusEffectTarget removeStatusEffectByAttribute(StatusEffect statusEffect)  {
-    	if(this.statusEffect == null)
-           return this;
-            
-       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
-       	while (itr.hasNext()) {
-    	StatusEffect obj = itr.next();
-    	
-    	    		if (statusEffect.attribute.equals(obj.attribute)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public StatusEffectTarget removeStatusEffectByMinValue(StatusEffect statusEffect)  {
     	if(this.statusEffect == null)
            return this;
@@ -522,6 +506,22 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	StatusEffect obj = itr.next();
     	
     	    		if (statusEffect.range == obj.range) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public StatusEffectTarget removeStatusEffectByAttribute(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.attribute == obj.attribute) {
     	      			itr.remove();
     		}
 		}

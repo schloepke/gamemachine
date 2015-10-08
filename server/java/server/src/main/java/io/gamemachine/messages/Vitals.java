@@ -82,6 +82,47 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             }
         }
     }
+	public enum Attribute implements io.protostuff.EnumLite<Attribute>
+    {
+    	
+    	    	AttributeNone(0),    	    	SpellResist(1),    	    	ElementalResist(2),    	    	SpellPenetration(3),    	    	MagicRegen(4),    	    	HealthRegen(5),    	    	StaminaRegen(6),    	    	Armor(7),    	    	Magic(8),    	    	Health(9),    	    	Stamina(10),    	    	Speed(11),    	    	AbilitySpeed(12);    	        
+        public final int number;
+        
+        private Attribute (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Attribute defaultValue() {
+        	return (AttributeNone);
+        }
+        
+        public static Attribute valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (AttributeNone);
+    			    			case 1: return (SpellResist);
+    			    			case 2: return (ElementalResist);
+    			    			case 3: return (SpellPenetration);
+    			    			case 4: return (MagicRegen);
+    			    			case 5: return (HealthRegen);
+    			    			case 6: return (StaminaRegen);
+    			    			case 7: return (Armor);
+    			    			case 8: return (Magic);
+    			    			case 9: return (Health);
+    			    			case 10: return (Stamina);
+    			    			case 11: return (Speed);
+    			    			case 12: return (AbilitySpeed);
+    			                default: return null;
+            }
+        }
+    }
 	public enum SubType implements io.protostuff.EnumLite<SubType>
     {
     	
@@ -142,21 +183,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		
     
         	
-							    public int health= 0;
-		    			    
-		
-    
-        	
-							    public int stamina= 0;
-		    			    
-		
-    
-        	
-							    public int magic= 0;
-		    			    
-		
-    
-        	
 							    public long lastCombat= 0L;
 		    			    
 		
@@ -167,7 +193,32 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		
     
         	
-							    public int armor= 0;
+							    public int changed= 0;
+		    			    
+		
+    
+        	
+							    public String entityId= null;
+		    			    
+		
+    
+        	
+					public VitalsType type = VitalsType.defaultValue();
+			    
+		
+    
+        	
+							    public int zone= 0;
+		    			    
+		
+    
+        	
+					public SubType subType = SubType.defaultValue();
+			    
+		
+    
+        	
+							    public String templateName= null;
 		    			    
 		
     
@@ -202,37 +253,32 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		
     
         	
-							    public int changed= 0;
+							    public int armor= 0;
 		    			    
 		
     
         	
-							    public String entityId= null;
+							    public int magic= 0;
 		    			    
 		
     
         	
-							    public int staminaDrain= 0;
+							    public int health= 0;
 		    			    
 		
     
         	
-					public VitalsType type = VitalsType.defaultValue();
-			    
-		
-    
-        	
-							    public int zone= 0;
+							    public int stamina= 0;
 		    			    
 		
     
         	
-					public SubType subType = SubType.defaultValue();
-			    
+							    public int speed= 0;
+		    			    
 		
     
         	
-							    public String templateName= null;
+							    public int abilitySpeed= 0;
 		    			    
 		
     
@@ -250,44 +296,30 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 
 	public static void clearModel(Model model) {
     	    	    	    	    	    	model.set("vitals_character_id",null);
-    	    	    	    	    	    	model.set("vitals_health",null);
-    	    	    	    	    	    	model.set("vitals_stamina",null);
-    	    	    	    	    	    	model.set("vitals_magic",null);
     	    	    	    	    	    	model.set("vitals_last_combat",null);
     	    	    	    	    	    	model.set("vitals_dead",null);
-    	    	    	    	    	    	model.set("vitals_armor",null);
+    	    	    	    	    	    	model.set("vitals_changed",null);
+    	    	    	    	    	    	model.set("vitals_entity_id",null);
+    	    	    	    	    	    	    	model.set("vitals_zone",null);
+    	    	    	    	    	    	    	model.set("vitals_template_name",null);
     	    	    	    	    	    	model.set("vitals_spell_resist",null);
     	    	    	    	    	    	model.set("vitals_elemental_resist",null);
     	    	    	    	    	    	model.set("vitals_spell_penetration",null);
     	    	    	    	    	    	model.set("vitals_magic_regen",null);
     	    	    	    	    	    	model.set("vitals_health_regen",null);
     	    	    	    	    	    	model.set("vitals_stamina_regen",null);
-    	    	    	    	    	    	model.set("vitals_changed",null);
-    	    	    	    	    	    	model.set("vitals_entity_id",null);
-    	    	    	    	    	    	model.set("vitals_stamina_drain",null);
-    	    	    	    	    	    	    	model.set("vitals_zone",null);
-    	    	    	    	    	    	    	model.set("vitals_template_name",null);
+    	    	    	    	    	    	model.set("vitals_armor",null);
+    	    	    	    	    	    	model.set("vitals_magic",null);
+    	    	    	    	    	    	model.set("vitals_health",null);
+    	    	    	    	    	    	model.set("vitals_stamina",null);
+    	    	    	    	    	    	model.set("vitals_speed",null);
+    	    	    	    	    	    	model.set("vitals_ability_speed",null);
     	    }
     
 	public void toModel(Model model) {
     	    	    	    	
     	    	    	//if (characterId != null) {
     	       	    	model.setString("vitals_character_id",characterId);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (health != null) {
-    	       	    	model.setInteger("vitals_health",health);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (stamina != null) {
-    	       	    	model.setInteger("vitals_stamina",stamina);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (magic != null) {
-    	       	    	model.setInteger("vitals_magic",magic);
     	        		
     	//}
     	    	    	    	    	
@@ -301,8 +333,33 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (armor != null) {
-    	       	    	model.setInteger("vitals_armor",armor);
+    	    	    	//if (changed != null) {
+    	       	    	model.setInteger("vitals_changed",changed);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (entityId != null) {
+    	       	    	model.setString("vitals_entity_id",entityId);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (type != null) {
+    	       	    	model.setInteger("vitals_type",type.number);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (zone != null) {
+    	       	    	model.setInteger("vitals_zone",zone);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (subType != null) {
+    	       	    	model.setInteger("vitals_sub_type",subType.number);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (templateName != null) {
+    	       	    	model.setString("vitals_template_name",templateName);
     	        		
     	//}
     	    	    	    	    	
@@ -336,38 +393,33 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (changed != null) {
-    	       	    	model.setInteger("vitals_changed",changed);
+    	    	    	//if (armor != null) {
+    	       	    	model.setInteger("vitals_armor",armor);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (entityId != null) {
-    	       	    	model.setString("vitals_entity_id",entityId);
+    	    	    	//if (magic != null) {
+    	       	    	model.setInteger("vitals_magic",magic);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (staminaDrain != null) {
-    	       	    	model.setInteger("vitals_stamina_drain",staminaDrain);
+    	    	    	//if (health != null) {
+    	       	    	model.setInteger("vitals_health",health);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (type != null) {
-    	       	    	model.setInteger("vitals_type",type.number);
+    	    	    	//if (stamina != null) {
+    	       	    	model.setInteger("vitals_stamina",stamina);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (zone != null) {
-    	       	    	model.setInteger("vitals_zone",zone);
+    	    	    	//if (speed != null) {
+    	       	    	model.setInteger("vitals_speed",speed);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (subType != null) {
-    	       	    	model.setInteger("vitals_sub_type",subType.number);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (templateName != null) {
-    	       	    	model.setString("vitals_template_name",templateName);
+    	    	    	//if (abilitySpeed != null) {
+    	       	    	model.setInteger("vitals_ability_speed",abilitySpeed);
     	        		
     	//}
     	    	    }
@@ -380,33 +432,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		if (characterIdTestField != null) {
 			String characterIdField = characterIdTestField;
 			message.setCharacterId(characterIdField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer healthTestField = model.getInteger("vitals_health");
-		if (healthTestField != null) {
-			int healthField = healthTestField;
-			message.setHealth(healthField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer staminaTestField = model.getInteger("vitals_stamina");
-		if (staminaTestField != null) {
-			int staminaField = staminaTestField;
-			message.setStamina(staminaField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer magicTestField = model.getInteger("vitals_magic");
-		if (magicTestField != null) {
-			int magicField = magicTestField;
-			message.setMagic(magicField);
 			hasFields = true;
 		}
     	
@@ -430,10 +455,41 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			Integer armorTestField = model.getInteger("vitals_armor");
-		if (armorTestField != null) {
-			int armorField = armorTestField;
-			message.setArmor(armorField);
+    	    			Integer changedTestField = model.getInteger("vitals_changed");
+		if (changedTestField != null) {
+			int changedField = changedTestField;
+			message.setChanged(changedField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			String entityIdTestField = model.getString("vitals_entity_id");
+		if (entityIdTestField != null) {
+			String entityIdField = entityIdTestField;
+			message.setEntityId(entityIdField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    				message.setType(VitalsType.valueOf(model.getInteger("vitals_type")));
+    	    	    	    	    	    	
+    	    			Integer zoneTestField = model.getInteger("vitals_zone");
+		if (zoneTestField != null) {
+			int zoneField = zoneTestField;
+			message.setZone(zoneField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    				message.setSubType(SubType.valueOf(model.getInteger("vitals_sub_type")));
+    	    	    	    	    	    	
+    	    			String templateNameTestField = model.getString("vitals_template_name");
+		if (templateNameTestField != null) {
+			String templateNameField = templateNameTestField;
+			message.setTemplateName(templateNameField);
 			hasFields = true;
 		}
     	
@@ -493,50 +549,55 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			Integer changedTestField = model.getInteger("vitals_changed");
-		if (changedTestField != null) {
-			int changedField = changedTestField;
-			message.setChanged(changedField);
+    	    			Integer armorTestField = model.getInteger("vitals_armor");
+		if (armorTestField != null) {
+			int armorField = armorTestField;
+			message.setArmor(armorField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    	    			String entityIdTestField = model.getString("vitals_entity_id");
-		if (entityIdTestField != null) {
-			String entityIdField = entityIdTestField;
-			message.setEntityId(entityIdField);
+    	    			Integer magicTestField = model.getInteger("vitals_magic");
+		if (magicTestField != null) {
+			int magicField = magicTestField;
+			message.setMagic(magicField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    	    			Integer staminaDrainTestField = model.getInteger("vitals_stamina_drain");
-		if (staminaDrainTestField != null) {
-			int staminaDrainField = staminaDrainTestField;
-			message.setStaminaDrain(staminaDrainField);
+    	    			Integer healthTestField = model.getInteger("vitals_health");
+		if (healthTestField != null) {
+			int healthField = healthTestField;
+			message.setHealth(healthField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    				message.setType(VitalsType.valueOf(model.getInteger("vitals_type")));
-    	    	    	    	    	    	
-    	    			Integer zoneTestField = model.getInteger("vitals_zone");
-		if (zoneTestField != null) {
-			int zoneField = zoneTestField;
-			message.setZone(zoneField);
+    	    			Integer staminaTestField = model.getInteger("vitals_stamina");
+		if (staminaTestField != null) {
+			int staminaField = staminaTestField;
+			message.setStamina(staminaField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    				message.setSubType(SubType.valueOf(model.getInteger("vitals_sub_type")));
+    	    			Integer speedTestField = model.getInteger("vitals_speed");
+		if (speedTestField != null) {
+			int speedField = speedTestField;
+			message.setSpeed(speedField);
+			hasFields = true;
+		}
+    	
+    	    	
     	    	    	    	    	    	
-    	    			String templateNameTestField = model.getString("vitals_template_name");
-		if (templateNameTestField != null) {
-			String templateNameField = templateNameTestField;
-			message.setTemplateName(templateNameField);
+    	    			Integer abilitySpeedTestField = model.getInteger("vitals_ability_speed");
+		if (abilitySpeedTestField != null) {
+			int abilitySpeedField = abilitySpeedTestField;
+			message.setAbilitySpeed(abilitySpeedField);
 			hasFields = true;
 		}
     	
@@ -559,33 +620,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		return this;	}
 	
 		            
-		public int getHealth() {
-		return health;
-	}
-	
-	public Vitals setHealth(int health) {
-		this.health = health;
-		return this;	}
-	
-		            
-		public int getStamina() {
-		return stamina;
-	}
-	
-	public Vitals setStamina(int stamina) {
-		this.stamina = stamina;
-		return this;	}
-	
-		            
-		public int getMagic() {
-		return magic;
-	}
-	
-	public Vitals setMagic(int magic) {
-		this.magic = magic;
-		return this;	}
-	
-		            
 		public long getLastCombat() {
 		return lastCombat;
 	}
@@ -604,12 +638,57 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		return this;	}
 	
 		            
-		public int getArmor() {
-		return armor;
+		public int getChanged() {
+		return changed;
 	}
 	
-	public Vitals setArmor(int armor) {
-		this.armor = armor;
+	public Vitals setChanged(int changed) {
+		this.changed = changed;
+		return this;	}
+	
+		            
+		public String getEntityId() {
+		return entityId;
+	}
+	
+	public Vitals setEntityId(String entityId) {
+		this.entityId = entityId;
+		return this;	}
+	
+		            
+		public VitalsType getType() {
+		return type;
+	}
+	
+	public Vitals setType(VitalsType type) {
+		this.type = type;
+		return this;	}
+	
+		            
+		public int getZone() {
+		return zone;
+	}
+	
+	public Vitals setZone(int zone) {
+		this.zone = zone;
+		return this;	}
+	
+		            
+		public SubType getSubType() {
+		return subType;
+	}
+	
+	public Vitals setSubType(SubType subType) {
+		this.subType = subType;
+		return this;	}
+	
+		            
+		public String getTemplateName() {
+		return templateName;
+	}
+	
+	public Vitals setTemplateName(String templateName) {
+		this.templateName = templateName;
 		return this;	}
 	
 		            
@@ -667,66 +746,57 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		return this;	}
 	
 		            
-		public int getChanged() {
-		return changed;
+		public int getArmor() {
+		return armor;
 	}
 	
-	public Vitals setChanged(int changed) {
-		this.changed = changed;
+	public Vitals setArmor(int armor) {
+		this.armor = armor;
 		return this;	}
 	
 		            
-		public String getEntityId() {
-		return entityId;
+		public int getMagic() {
+		return magic;
 	}
 	
-	public Vitals setEntityId(String entityId) {
-		this.entityId = entityId;
+	public Vitals setMagic(int magic) {
+		this.magic = magic;
 		return this;	}
 	
 		            
-		public int getStaminaDrain() {
-		return staminaDrain;
+		public int getHealth() {
+		return health;
 	}
 	
-	public Vitals setStaminaDrain(int staminaDrain) {
-		this.staminaDrain = staminaDrain;
+	public Vitals setHealth(int health) {
+		this.health = health;
 		return this;	}
 	
 		            
-		public VitalsType getType() {
-		return type;
+		public int getStamina() {
+		return stamina;
 	}
 	
-	public Vitals setType(VitalsType type) {
-		this.type = type;
+	public Vitals setStamina(int stamina) {
+		this.stamina = stamina;
 		return this;	}
 	
 		            
-		public int getZone() {
-		return zone;
+		public int getSpeed() {
+		return speed;
 	}
 	
-	public Vitals setZone(int zone) {
-		this.zone = zone;
+	public Vitals setSpeed(int speed) {
+		this.speed = speed;
 		return this;	}
 	
 		            
-		public SubType getSubType() {
-		return subType;
+		public int getAbilitySpeed() {
+		return abilitySpeed;
 	}
 	
-	public Vitals setSubType(SubType subType) {
-		this.subType = subType;
-		return this;	}
-	
-		            
-		public String getTemplateName() {
-		return templateName;
-	}
-	
-	public Vitals setTemplateName(String templateName) {
-		this.templateName = templateName;
+	public Vitals setAbilitySpeed(int abilitySpeed) {
+		this.abilitySpeed = abilitySpeed;
 		return this;	}
 	
 	
@@ -789,18 +859,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             	                	                	message.characterId = input.readString();
                 	break;
                 	                	
-                            	            	case 2:
-            	                	                	message.health = input.readInt32();
-                	break;
-                	                	
-                            	            	case 3:
-            	                	                	message.stamina = input.readInt32();
-                	break;
-                	                	
-                            	            	case 4:
-            	                	                	message.magic = input.readInt32();
-                	break;
-                	                	
                             	            	case 5:
             	                	                	message.lastCombat = input.readInt64();
                 	break;
@@ -809,44 +867,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             	                	                	message.dead = input.readInt32();
                 	break;
                 	                	
-                            	            	case 7:
-            	                	                	message.armor = input.readInt32();
-                	break;
-                	                	
-                            	            	case 8:
-            	                	                	message.spellResist = input.readInt32();
-                	break;
-                	                	
-                            	            	case 9:
-            	                	                	message.elementalResist = input.readInt32();
-                	break;
-                	                	
-                            	            	case 10:
-            	                	                	message.spellPenetration = input.readInt32();
-                	break;
-                	                	
-                            	            	case 11:
-            	                	                	message.magicRegen = input.readInt32();
-                	break;
-                	                	
-                            	            	case 12:
-            	                	                	message.healthRegen = input.readInt32();
-                	break;
-                	                	
-                            	            	case 13:
-            	                	                	message.staminaRegen = input.readInt32();
-                	break;
-                	                	
                             	            	case 14:
             	                	                	message.changed = input.readInt32();
                 	break;
                 	                	
                             	            	case 15:
             	                	                	message.entityId = input.readString();
-                	break;
-                	                	
-                            	            	case 16:
-            	                	                	message.staminaDrain = input.readInt32();
                 	break;
                 	                	
                             	            	case 18:
@@ -863,6 +889,54 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
                 	                	
                             	            	case 21:
             	                	                	message.templateName = input.readString();
+                	break;
+                	                	
+                            	            	case 22:
+            	                	                	message.spellResist = input.readInt32();
+                	break;
+                	                	
+                            	            	case 23:
+            	                	                	message.elementalResist = input.readInt32();
+                	break;
+                	                	
+                            	            	case 24:
+            	                	                	message.spellPenetration = input.readInt32();
+                	break;
+                	                	
+                            	            	case 25:
+            	                	                	message.magicRegen = input.readInt32();
+                	break;
+                	                	
+                            	            	case 26:
+            	                	                	message.healthRegen = input.readInt32();
+                	break;
+                	                	
+                            	            	case 27:
+            	                	                	message.staminaRegen = input.readInt32();
+                	break;
+                	                	
+                            	            	case 28:
+            	                	                	message.armor = input.readInt32();
+                	break;
+                	                	
+                            	            	case 29:
+            	                	                	message.magic = input.readInt32();
+                	break;
+                	                	
+                            	            	case 30:
+            	                	                	message.health = input.readInt32();
+                	break;
+                	                	
+                            	            	case 31:
+            	                	                	message.stamina = input.readInt32();
+                	break;
+                	                	
+                            	            	case 32:
+            	                	                	message.speed = input.readInt32();
+                	break;
+                	                	
+                            	            	case 33:
+            	                	                	message.abilitySpeed = input.readInt32();
                 	break;
                 	                	
                             	            
@@ -885,24 +959,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	            	
     	    	
-    	    	    	if( (Integer)message.health != null) {
-            output.writeInt32(2, message.health, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.stamina != null) {
-            output.writeInt32(3, message.stamina, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.magic != null) {
-            output.writeInt32(4, message.magic, false);
-        }
-    	    	
-    	            	
-    	    	
     	    	    	if( (Long)message.lastCombat != null) {
             output.writeInt64(5, message.lastCombat, false);
         }
@@ -915,48 +971,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	            	
     	    	
-    	    	    	if( (Integer)message.armor != null) {
-            output.writeInt32(7, message.armor, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.spellResist != null) {
-            output.writeInt32(8, message.spellResist, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.elementalResist != null) {
-            output.writeInt32(9, message.elementalResist, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.spellPenetration != null) {
-            output.writeInt32(10, message.spellPenetration, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.magicRegen != null) {
-            output.writeInt32(11, message.magicRegen, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.healthRegen != null) {
-            output.writeInt32(12, message.healthRegen, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.staminaRegen != null) {
-            output.writeInt32(13, message.staminaRegen, false);
-        }
-    	    	
-    	            	
-    	    	
     	    	    	if( (Integer)message.changed != null) {
             output.writeInt32(14, message.changed, false);
         }
@@ -965,12 +979,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	    	    	if( (String)message.entityId != null) {
             output.writeString(15, message.entityId, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.staminaDrain != null) {
-            output.writeInt32(16, message.staminaDrain, false);
         }
     	    	
     	            	
@@ -996,6 +1004,78 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.spellResist != null) {
+            output.writeInt32(22, message.spellResist, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.elementalResist != null) {
+            output.writeInt32(23, message.elementalResist, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.spellPenetration != null) {
+            output.writeInt32(24, message.spellPenetration, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.magicRegen != null) {
+            output.writeInt32(25, message.magicRegen, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.healthRegen != null) {
+            output.writeInt32(26, message.healthRegen, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.staminaRegen != null) {
+            output.writeInt32(27, message.staminaRegen, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.armor != null) {
+            output.writeInt32(28, message.armor, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.magic != null) {
+            output.writeInt32(29, message.magic, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.health != null) {
+            output.writeInt32(30, message.health, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.stamina != null) {
+            output.writeInt32(31, message.stamina, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.speed != null) {
+            output.writeInt32(32, message.speed, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.abilitySpeed != null) {
+            output.writeInt32(33, message.abilitySpeed, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1004,23 +1084,29 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
     	//}
-    	    	//if(this.health != null) {
-    		System.out.println("health="+this.health);
-    	//}
-    	    	//if(this.stamina != null) {
-    		System.out.println("stamina="+this.stamina);
-    	//}
-    	    	//if(this.magic != null) {
-    		System.out.println("magic="+this.magic);
-    	//}
     	    	//if(this.lastCombat != null) {
     		System.out.println("lastCombat="+this.lastCombat);
     	//}
     	    	//if(this.dead != null) {
     		System.out.println("dead="+this.dead);
     	//}
-    	    	//if(this.armor != null) {
-    		System.out.println("armor="+this.armor);
+    	    	//if(this.changed != null) {
+    		System.out.println("changed="+this.changed);
+    	//}
+    	    	//if(this.entityId != null) {
+    		System.out.println("entityId="+this.entityId);
+    	//}
+    	    	//if(this.type != null) {
+    		System.out.println("type="+this.type);
+    	//}
+    	    	//if(this.zone != null) {
+    		System.out.println("zone="+this.zone);
+    	//}
+    	    	//if(this.subType != null) {
+    		System.out.println("subType="+this.subType);
+    	//}
+    	    	//if(this.templateName != null) {
+    		System.out.println("templateName="+this.templateName);
     	//}
     	    	//if(this.spellResist != null) {
     		System.out.println("spellResist="+this.spellResist);
@@ -1040,26 +1126,23 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	//if(this.staminaRegen != null) {
     		System.out.println("staminaRegen="+this.staminaRegen);
     	//}
-    	    	//if(this.changed != null) {
-    		System.out.println("changed="+this.changed);
+    	    	//if(this.armor != null) {
+    		System.out.println("armor="+this.armor);
     	//}
-    	    	//if(this.entityId != null) {
-    		System.out.println("entityId="+this.entityId);
+    	    	//if(this.magic != null) {
+    		System.out.println("magic="+this.magic);
     	//}
-    	    	//if(this.staminaDrain != null) {
-    		System.out.println("staminaDrain="+this.staminaDrain);
+    	    	//if(this.health != null) {
+    		System.out.println("health="+this.health);
     	//}
-    	    	//if(this.type != null) {
-    		System.out.println("type="+this.type);
+    	    	//if(this.stamina != null) {
+    		System.out.println("stamina="+this.stamina);
     	//}
-    	    	//if(this.zone != null) {
-    		System.out.println("zone="+this.zone);
+    	    	//if(this.speed != null) {
+    		System.out.println("speed="+this.speed);
     	//}
-    	    	//if(this.subType != null) {
-    		System.out.println("subType="+this.subType);
-    	//}
-    	    	//if(this.templateName != null) {
-    		System.out.println("templateName="+this.templateName);
+    	    	//if(this.abilitySpeed != null) {
+    		System.out.println("abilitySpeed="+this.abilitySpeed);
     	//}
     	    	System.out.println("END Vitals");
     }
@@ -1069,25 +1152,26 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
         switch(number)
         {
         	        	case 1: return "characterId";
-        	        	case 2: return "health";
-        	        	case 3: return "stamina";
-        	        	case 4: return "magic";
         	        	case 5: return "lastCombat";
         	        	case 6: return "dead";
-        	        	case 7: return "armor";
-        	        	case 8: return "spellResist";
-        	        	case 9: return "elementalResist";
-        	        	case 10: return "spellPenetration";
-        	        	case 11: return "magicRegen";
-        	        	case 12: return "healthRegen";
-        	        	case 13: return "staminaRegen";
         	        	case 14: return "changed";
         	        	case 15: return "entityId";
-        	        	case 16: return "staminaDrain";
         	        	case 18: return "type";
         	        	case 19: return "zone";
         	        	case 20: return "subType";
         	        	case 21: return "templateName";
+        	        	case 22: return "spellResist";
+        	        	case 23: return "elementalResist";
+        	        	case 24: return "spellPenetration";
+        	        	case 25: return "magicRegen";
+        	        	case 26: return "healthRegen";
+        	        	case 27: return "staminaRegen";
+        	        	case 28: return "armor";
+        	        	case 29: return "magic";
+        	        	case 30: return "health";
+        	        	case 31: return "stamina";
+        	        	case 32: return "speed";
+        	        	case 33: return "abilitySpeed";
         	            default: return null;
         }
     }
@@ -1102,25 +1186,26 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     static
     {
     	    	__fieldMap.put("characterId", 1);
-    	    	__fieldMap.put("health", 2);
-    	    	__fieldMap.put("stamina", 3);
-    	    	__fieldMap.put("magic", 4);
     	    	__fieldMap.put("lastCombat", 5);
     	    	__fieldMap.put("dead", 6);
-    	    	__fieldMap.put("armor", 7);
-    	    	__fieldMap.put("spellResist", 8);
-    	    	__fieldMap.put("elementalResist", 9);
-    	    	__fieldMap.put("spellPenetration", 10);
-    	    	__fieldMap.put("magicRegen", 11);
-    	    	__fieldMap.put("healthRegen", 12);
-    	    	__fieldMap.put("staminaRegen", 13);
     	    	__fieldMap.put("changed", 14);
     	    	__fieldMap.put("entityId", 15);
-    	    	__fieldMap.put("staminaDrain", 16);
     	    	__fieldMap.put("type", 18);
     	    	__fieldMap.put("zone", 19);
     	    	__fieldMap.put("subType", 20);
     	    	__fieldMap.put("templateName", 21);
+    	    	__fieldMap.put("spellResist", 22);
+    	    	__fieldMap.put("elementalResist", 23);
+    	    	__fieldMap.put("spellPenetration", 24);
+    	    	__fieldMap.put("magicRegen", 25);
+    	    	__fieldMap.put("healthRegen", 26);
+    	    	__fieldMap.put("staminaRegen", 27);
+    	    	__fieldMap.put("armor", 28);
+    	    	__fieldMap.put("magic", 29);
+    	    	__fieldMap.put("health", 30);
+    	    	__fieldMap.put("stamina", 31);
+    	    	__fieldMap.put("speed", 32);
+    	    	__fieldMap.put("abilitySpeed", 33);
     	    }
    
    public static List<String> getFields() {

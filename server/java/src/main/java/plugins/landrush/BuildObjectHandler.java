@@ -215,8 +215,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		if (buildObject.isDestructable) {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
 			grid.remove(buildObject.id);
-			VitalsHandler handler = VitalsHandler.getHandler("build_objects", buildObject.zone);
-			handler.remove(buildObject.id);
+			VitalsHandler.remove(buildObject.id);
 		}
 	}
 	
@@ -224,8 +223,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		if (buildObject.isDestructable) {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
 			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.Object);
-			VitalsHandler handler = VitalsHandler.getHandler("build_objects", buildObject.zone);
-			handler.findOrCreateObjectVitals(buildObject.id, Vitals.VitalsType.Object.number, buildObject.zone);
+			VitalsHandler.findOrCreateObjectVitals(buildObject.id, Vitals.VitalsType.Object.number, buildObject.zone);
 		}
 	}
 	

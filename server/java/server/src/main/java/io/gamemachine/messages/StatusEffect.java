@@ -68,7 +68,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 	public enum Type implements io.protostuff.EnumLite<Type>
     {
     	
-    	    	StatusEffectNone(0),    	    	AttributeDecrease(1),    	    	AttributeIncrease(2),    	    	Heal(3),    	    	Slow(4),    	    	Stun(5),    	    	Root(6),    	    	Death(7),    	    	ArmorIncrease(8),    	    	SpellResistIncrease(9),    	    	ElementalResistIncrease(10),    	    	SpellPenetrationIncrease(11),    	    	MagicRegenIncrease(12),    	    	HealthRegenIncrease(13),    	    	StaminaRegenIncrease(14),    	    	ArmorDecrease(15),    	    	SpellResistDecrease(16),    	    	ElementalResistDecrease(17),    	    	MagicRegenDecrease(18),    	    	HealthRegenDecrease(19),    	    	StaminaRegenDecrease(20),    	    	Speed(21);    	        
+    	    	StatusEffectNone(0),    	    	AttributeDecrease(1),    	    	AttributeIncrease(2),    	    	Stun(3);    	        
         public final int number;
         
         private Type (int number)
@@ -92,25 +92,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
             	    			case 0: return (StatusEffectNone);
     			    			case 1: return (AttributeDecrease);
     			    			case 2: return (AttributeIncrease);
-    			    			case 3: return (Heal);
-    			    			case 4: return (Slow);
-    			    			case 5: return (Stun);
-    			    			case 6: return (Root);
-    			    			case 7: return (Death);
-    			    			case 8: return (ArmorIncrease);
-    			    			case 9: return (SpellResistIncrease);
-    			    			case 10: return (ElementalResistIncrease);
-    			    			case 11: return (SpellPenetrationIncrease);
-    			    			case 12: return (MagicRegenIncrease);
-    			    			case 13: return (HealthRegenIncrease);
-    			    			case 14: return (StaminaRegenIncrease);
-    			    			case 15: return (ArmorDecrease);
-    			    			case 16: return (SpellResistDecrease);
-    			    			case 17: return (ElementalResistDecrease);
-    			    			case 18: return (MagicRegenDecrease);
-    			    			case 19: return (HealthRegenDecrease);
-    			    			case 20: return (StaminaRegenDecrease);
-    			    			case 21: return (Speed);
+    			    			case 3: return (Stun);
     			                default: return null;
             }
         }
@@ -214,11 +196,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		
     
         	
-							    public String attribute= null;
-		    			    
-		
-    
-        	
 							    public int minValue= 0;
 		    			    
 		
@@ -265,6 +242,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     
         	
 							    public int range= 0;
+		    			    
+		
+    
+        	
+							    public int attribute= 0;
 		    			    
 		
     
@@ -536,7 +518,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	    	    	    	    	    	model.set("status_effect_id",null);
     	    	    	    	    	    	model.set("status_effect_duration",null);
     	    	    	    	    	    	model.set("status_effect_ticks",null);
-    	    	    	    	    	    	model.set("status_effect_attribute",null);
     	    	    	    	    	    	model.set("status_effect_min_value",null);
     	    	    	    	    	    	model.set("status_effect_max_value",null);
     	    	    	    	    	    	model.set("status_effect_particle_effect",null);
@@ -545,6 +526,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	    	    	    	    	model.set("status_effect_ticks_performed",null);
     	    	    	    	    	    	    	model.set("status_effect_resource_cost",null);
     	    	    	    	    	    	model.set("status_effect_range",null);
+    	    	    	    	    	    	model.set("status_effect_attribute",null);
     	    }
     
 	public void toModel(Model model) {
@@ -566,11 +548,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	    	    	    	
     	    	    	//if (ticks != null) {
     	       	    	model.setInteger("status_effect_ticks",ticks);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (attribute != null) {
-    	       	    	model.setString("status_effect_attribute",attribute);
     	        		
     	//}
     	    	    	    	    	
@@ -623,6 +600,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	       	    	model.setInteger("status_effect_range",range);
     	        		
     	//}
+    	    	    	    	    	
+    	    	    	//if (attribute != null) {
+    	       	    	model.setInteger("status_effect_attribute",attribute);
+    	        		
+    	//}
     	    	    }
     
 	public static StatusEffect fromModel(Model model) {
@@ -653,15 +635,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		if (ticksTestField != null) {
 			int ticksField = ticksTestField;
 			message.setTicks(ticksField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			String attributeTestField = model.getString("status_effect_attribute");
-		if (attributeTestField != null) {
-			String attributeField = attributeTestField;
-			message.setAttribute(attributeField);
 			hasFields = true;
 		}
     	
@@ -742,6 +715,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		}
     	
     	    	
+    	    	    	    	    	    	
+    	    			Integer attributeTestField = model.getInteger("status_effect_attribute");
+		if (attributeTestField != null) {
+			int attributeField = attributeTestField;
+			message.setAttribute(attributeField);
+			hasFields = true;
+		}
+    	
+    	    	
     	    			if (hasFields) {
 			return message;
 		} else {
@@ -784,15 +766,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 	
 	public StatusEffect setTicks(int ticks) {
 		this.ticks = ticks;
-		return this;	}
-	
-		            
-		public String getAttribute() {
-		return attribute;
-	}
-	
-	public StatusEffect setAttribute(String attribute) {
-		this.attribute = attribute;
 		return this;	}
 	
 		            
@@ -885,6 +858,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		this.range = range;
 		return this;	}
 	
+		            
+		public int getAttribute() {
+		return attribute;
+	}
+	
+	public StatusEffect setAttribute(int attribute) {
+		this.attribute = attribute;
+		return this;	}
+	
 	
   
     // java serialization
@@ -957,10 +939,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
             	                	                	message.ticks = input.readInt32();
                 	break;
                 	                	
-                            	            	case 5:
-            	                	                	message.attribute = input.readString();
-                	break;
-                	                	
                             	            	case 6:
             	                	                	message.minValue = input.readInt32();
                 	break;
@@ -1001,6 +979,10 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
             	                	                	message.range = input.readInt32();
                 	break;
                 	                	
+                            	            	case 16:
+            	                	                	message.attribute = input.readInt32();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1032,12 +1014,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	
     	    	    	if( (Integer)message.ticks != null) {
             output.writeInt32(4, message.ticks, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (String)message.attribute != null) {
-            output.writeString(5, message.attribute, false);
         }
     	    	
     	            	
@@ -1099,6 +1075,12 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.attribute != null) {
+            output.writeInt32(16, message.attribute, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1115,9 +1097,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	//}
     	    	//if(this.ticks != null) {
     		System.out.println("ticks="+this.ticks);
-    	//}
-    	    	//if(this.attribute != null) {
-    		System.out.println("attribute="+this.attribute);
     	//}
     	    	//if(this.minValue != null) {
     		System.out.println("minValue="+this.minValue);
@@ -1149,6 +1128,9 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	//if(this.range != null) {
     		System.out.println("range="+this.range);
     	//}
+    	    	//if(this.attribute != null) {
+    		System.out.println("attribute="+this.attribute);
+    	//}
     	    	System.out.println("END StatusEffect");
     }
     
@@ -1160,7 +1142,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
         	        	case 2: return "id";
         	        	case 3: return "duration";
         	        	case 4: return "ticks";
-        	        	case 5: return "attribute";
         	        	case 6: return "minValue";
         	        	case 7: return "maxValue";
         	        	case 8: return "particleEffect";
@@ -1171,6 +1152,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
         	        	case 13: return "resource";
         	        	case 14: return "resourceCost";
         	        	case 15: return "range";
+        	        	case 16: return "attribute";
         	            default: return null;
         }
     }
@@ -1188,7 +1170,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	__fieldMap.put("id", 2);
     	    	__fieldMap.put("duration", 3);
     	    	__fieldMap.put("ticks", 4);
-    	    	__fieldMap.put("attribute", 5);
     	    	__fieldMap.put("minValue", 6);
     	    	__fieldMap.put("maxValue", 7);
     	    	__fieldMap.put("particleEffect", 8);
@@ -1199,6 +1180,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	__fieldMap.put("resource", 13);
     	    	__fieldMap.put("resourceCost", 14);
     	    	__fieldMap.put("range", 15);
+    	    	__fieldMap.put("attribute", 16);
     	    }
    
    public static List<String> getFields() {
