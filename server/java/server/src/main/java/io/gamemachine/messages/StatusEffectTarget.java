@@ -129,12 +129,7 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     static final String defaultScope = StatusEffectTarget.class.getSimpleName();
 
     	
-							    public String target= null;
-		    			    
-		
-    
-        	
-							    public String skill= null;
+							    public String targetEntityId= null;
 		    			    
 		
     
@@ -143,19 +138,9 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 			    
 		
     
-        	
-							    public int range= 0;
-		    			    
-		
-    
             public List<StatusEffect> statusEffect;
 	    	
-							    public String origin= null;
-		    			    
-		
-    
-        	
-							    public int ticks= 0;
+							    public String originCharacterId= null;
 		    			    
 		
     
@@ -180,8 +165,13 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 		
     
         	
-							    public String originPlayerId= null;
+							    public String originEntityId= null;
 		    			    
+		
+    
+        	
+					public Attack attack = null;
+			    
 		
     
         
@@ -197,40 +187,22 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 
 
 	public static void clearModel(Model model) {
-    	    	    	    	    	    	model.set("status_effect_target_target",null);
-    	    	    	    	    	    	model.set("status_effect_target_skill",null);
-    	    	    	    	    	    	    	model.set("status_effect_target_range",null);
-    	    	    	    	    	    	    	model.set("status_effect_target_origin",null);
-    	    	    	    	    	    	model.set("status_effect_target_ticks",null);
+    	    	    	    	    	    	model.set("status_effect_target_target_entity_id",null);
+    	    	    	    	    	    	    	    	model.set("status_effect_target_origin_character_id",null);
     	    	    	    	    	    	model.set("status_effect_target_active_id",null);
     	    	    	    	    	    	model.set("status_effect_target_last_tick",null);
-    	    	    	    	    	    	    	    	model.set("status_effect_target_origin_player_id",null);
-    	    }
+    	    	    	    	    	    	    	    	model.set("status_effect_target_origin_entity_id",null);
+    	    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	//if (target != null) {
-    	       	    	model.setString("status_effect_target_target",target);
+    	    	    	//if (targetEntityId != null) {
+    	       	    	model.setString("status_effect_target_target_entity_id",targetEntityId);
     	        		
     	//}
-    	    	    	    	    	
-    	    	    	//if (skill != null) {
-    	       	    	model.setString("status_effect_target_skill",skill);
-    	        		
-    	//}
-    	    	    	    	    	    	
-    	    	    	//if (range != null) {
-    	       	    	model.setInteger("status_effect_target_range",range);
-    	        		
-    	//}
-    	    	    	    	    	    	
-    	    	    	//if (origin != null) {
-    	       	    	model.setString("status_effect_target_origin",origin);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (ticks != null) {
-    	       	    	model.setInteger("status_effect_target_ticks",ticks);
+    	    	    	    	    	    	    	
+    	    	    	//if (originCharacterId != null) {
+    	       	    	model.setString("status_effect_target_origin_character_id",originCharacterId);
     	        		
     	//}
     	    	    	    	    	
@@ -254,56 +226,29 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (originPlayerId != null) {
-    	       	    	model.setString("status_effect_target_origin_player_id",originPlayerId);
+    	    	    	//if (originEntityId != null) {
+    	       	    	model.setString("status_effect_target_origin_entity_id",originEntityId);
     	        		
     	//}
-    	    	    }
+    	    	    	    }
     
 	public static StatusEffectTarget fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffectTarget message = new StatusEffectTarget();
     	    	    	    	    	
-    	    			String targetTestField = model.getString("status_effect_target_target");
-		if (targetTestField != null) {
-			String targetField = targetTestField;
-			message.setTarget(targetField);
+    	    			String targetEntityIdTestField = model.getString("status_effect_target_target_entity_id");
+		if (targetEntityIdTestField != null) {
+			String targetEntityIdField = targetEntityIdTestField;
+			message.setTargetEntityId(targetEntityIdField);
 			hasFields = true;
 		}
     	
     	    	
-    	    	    	    	    	    	
-    	    			String skillTestField = model.getString("status_effect_target_skill");
-		if (skillTestField != null) {
-			String skillField = skillTestField;
-			message.setSkill(skillField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	    	
-    	    			Integer rangeTestField = model.getInteger("status_effect_target_range");
-		if (rangeTestField != null) {
-			int rangeField = rangeTestField;
-			message.setRange(rangeField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	    	
-    	    			String originTestField = model.getString("status_effect_target_origin");
-		if (originTestField != null) {
-			String originField = originTestField;
-			message.setOrigin(originField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer ticksTestField = model.getInteger("status_effect_target_ticks");
-		if (ticksTestField != null) {
-			int ticksField = ticksTestField;
-			message.setTicks(ticksField);
+    	    	    	    	    	    	    	    	
+    	    			String originCharacterIdTestField = model.getString("status_effect_target_origin_character_id");
+		if (originCharacterIdTestField != null) {
+			String originCharacterIdField = originCharacterIdTestField;
+			message.setOriginCharacterId(originCharacterIdField);
 			hasFields = true;
 		}
     	
@@ -331,15 +276,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	    	    	    	    	    	
     				message.setPassiveFlag(PassiveFlag.valueOf(model.getInteger("status_effect_target_passive_flag")));
     	    	    	    	    	    	
-    	    			String originPlayerIdTestField = model.getString("status_effect_target_origin_player_id");
-		if (originPlayerIdTestField != null) {
-			String originPlayerIdField = originPlayerIdTestField;
-			message.setOriginPlayerId(originPlayerIdField);
+    	    			String originEntityIdTestField = model.getString("status_effect_target_origin_entity_id");
+		if (originEntityIdTestField != null) {
+			String originEntityIdField = originEntityIdTestField;
+			message.setOriginEntityId(originEntityIdField);
 			hasFields = true;
 		}
     	
     	    	
-    	    			if (hasFields) {
+    	    	    			if (hasFields) {
 			return message;
 		} else {
 			return null;
@@ -348,21 +293,12 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 
 
 	            
-		public String getTarget() {
-		return target;
+		public String getTargetEntityId() {
+		return targetEntityId;
 	}
 	
-	public StatusEffectTarget setTarget(String target) {
-		this.target = target;
-		return this;	}
-	
-		            
-		public String getSkill() {
-		return skill;
-	}
-	
-	public StatusEffectTarget setSkill(String skill) {
-		this.skill = skill;
+	public StatusEffectTarget setTargetEntityId(String targetEntityId) {
+		this.targetEntityId = targetEntityId;
 		return this;	}
 	
 		            
@@ -372,15 +308,6 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 	
 	public StatusEffectTarget setLocation(GmVector3 location) {
 		this.location = location;
-		return this;	}
-	
-		            
-		public int getRange() {
-		return range;
-	}
-	
-	public StatusEffectTarget setRange(int range) {
-		this.range = range;
 		return this;	}
 	
 		            
@@ -553,26 +480,65 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
         return this;
     }
     
+        	    	    	    	
+    public StatusEffectTarget removeStatusEffectByTicksPerformed(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.ticksPerformed == obj.ticksPerformed) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	    	
+    public StatusEffectTarget removeStatusEffectByResourceCost(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.resourceCost == obj.resourceCost) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public StatusEffectTarget removeStatusEffectByRange(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.range == obj.range) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
             	
     
     
     
 		            
-		public String getOrigin() {
-		return origin;
+		public String getOriginCharacterId() {
+		return originCharacterId;
 	}
 	
-	public StatusEffectTarget setOrigin(String origin) {
-		this.origin = origin;
-		return this;	}
-	
-		            
-		public int getTicks() {
-		return ticks;
-	}
-	
-	public StatusEffectTarget setTicks(int ticks) {
-		this.ticks = ticks;
+	public StatusEffectTarget setOriginCharacterId(String originCharacterId) {
+		this.originCharacterId = originCharacterId;
 		return this;	}
 	
 		            
@@ -612,12 +578,21 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 		return this;	}
 	
 		            
-		public String getOriginPlayerId() {
-		return originPlayerId;
+		public String getOriginEntityId() {
+		return originEntityId;
 	}
 	
-	public StatusEffectTarget setOriginPlayerId(String originPlayerId) {
-		this.originPlayerId = originPlayerId;
+	public StatusEffectTarget setOriginEntityId(String originEntityId) {
+		this.originEntityId = originEntityId;
+		return this;	}
+	
+		            
+		public Attack getAttack() {
+		return attack;
+	}
+	
+	public StatusEffectTarget setAttack(Attack attack) {
+		this.attack = attack;
 		return this;	}
 	
 	
@@ -677,32 +652,20 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
                 case 0:
                     return;
                             	case 1:
-            	                	                	message.target = input.readString();
-                	break;
-                	                	
-                            	            	case 2:
-            	                	                	message.skill = input.readString();
+            	                	                	message.targetEntityId = input.readString();
                 	break;
                 	                	
                             	            	case 3:
             	                	                	message.location = input.mergeObject(message.location, GmVector3.getSchema());
                     break;
                                     	
-                            	            	case 4:
-            	                	                	message.range = input.readInt32();
-                	break;
-                	                	
                             	            	case 5:
             	            		if(message.statusEffect == null)
                         message.statusEffect = new ArrayList<StatusEffect>();
                                         message.statusEffect.add(input.mergeObject(null, StatusEffect.getSchema()));
                                         break;
                             	            	case 6:
-            	                	                	message.origin = input.readString();
-                	break;
-                	                	
-                            	            	case 7:
-            	                	                	message.ticks = input.readInt32();
+            	                	                	message.originCharacterId = input.readString();
                 	break;
                 	                	
                             	            	case 8:
@@ -722,9 +685,13 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
                     break;
                 	                	
                             	            	case 12:
-            	                	                	message.originPlayerId = input.readString();
+            	                	                	message.originEntityId = input.readString();
                 	break;
                 	                	
+                            	            	case 13:
+            	                	                	message.attack = input.mergeObject(message.attack, Attack.getSchema());
+                    break;
+                                    	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -736,31 +703,17 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     public void writeTo(Output output, StatusEffectTarget message) throws IOException
     {
     	    	
-    	    	//if(message.target == null)
+    	    	//if(message.targetEntityId == null)
         //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.target != null) {
-            output.writeString(1, message.target, false);
-        }
-    	    	
-    	            	
-    	    	//if(message.skill == null)
-        //    throw new UninitializedMessageException(message);
-    	    	
-    	    	    	if( (String)message.skill != null) {
-            output.writeString(2, message.skill, false);
+    	    	    	if( (String)message.targetEntityId != null) {
+            output.writeString(1, message.targetEntityId, false);
         }
     	    	
     	            	
     	    	
     	    	    	if(message.location != null)
     		output.writeObject(3, message.location, GmVector3.getSchema(), false);
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.range != null) {
-            output.writeInt32(4, message.range, false);
-        }
     	    	
     	            	
     	    	
@@ -774,17 +727,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
             }
         }
     	            	
-    	    	//if(message.origin == null)
+    	    	//if(message.originCharacterId == null)
         //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.origin != null) {
-            output.writeString(6, message.origin, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.ticks != null) {
-            output.writeInt32(7, message.ticks, false);
+    	    	    	if( (String)message.originCharacterId != null) {
+            output.writeString(6, message.originCharacterId, false);
         }
     	    	
     	            	
@@ -815,9 +762,14 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	    	
     	            	
     	    	
-    	    	    	if( (String)message.originPlayerId != null) {
-            output.writeString(12, message.originPlayerId, false);
+    	    	    	if( (String)message.originEntityId != null) {
+            output.writeString(12, message.originEntityId, false);
         }
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.attack != null)
+    		output.writeObject(13, message.attack, Attack.getSchema(), false);
     	    	
     	            	
     }
@@ -825,26 +777,17 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
 	public void dumpObject()
     {
     	System.out.println("START StatusEffectTarget");
-    	    	//if(this.target != null) {
-    		System.out.println("target="+this.target);
-    	//}
-    	    	//if(this.skill != null) {
-    		System.out.println("skill="+this.skill);
+    	    	//if(this.targetEntityId != null) {
+    		System.out.println("targetEntityId="+this.targetEntityId);
     	//}
     	    	//if(this.location != null) {
     		System.out.println("location="+this.location);
     	//}
-    	    	//if(this.range != null) {
-    		System.out.println("range="+this.range);
-    	//}
     	    	//if(this.statusEffect != null) {
     		System.out.println("statusEffect="+this.statusEffect);
     	//}
-    	    	//if(this.origin != null) {
-    		System.out.println("origin="+this.origin);
-    	//}
-    	    	//if(this.ticks != null) {
-    		System.out.println("ticks="+this.ticks);
+    	    	//if(this.originCharacterId != null) {
+    		System.out.println("originCharacterId="+this.originCharacterId);
     	//}
     	    	//if(this.activeId != null) {
     		System.out.println("activeId="+this.activeId);
@@ -858,8 +801,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     	    	//if(this.passiveFlag != null) {
     		System.out.println("passiveFlag="+this.passiveFlag);
     	//}
-    	    	//if(this.originPlayerId != null) {
-    		System.out.println("originPlayerId="+this.originPlayerId);
+    	    	//if(this.originEntityId != null) {
+    		System.out.println("originEntityId="+this.originEntityId);
+    	//}
+    	    	//if(this.attack != null) {
+    		System.out.println("attack="+this.attack);
     	//}
     	    	System.out.println("END StatusEffectTarget");
     }
@@ -868,18 +814,16 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     {
         switch(number)
         {
-        	        	case 1: return "target";
-        	        	case 2: return "skill";
+        	        	case 1: return "targetEntityId";
         	        	case 3: return "location";
-        	        	case 4: return "range";
         	        	case 5: return "statusEffect";
-        	        	case 6: return "origin";
-        	        	case 7: return "ticks";
+        	        	case 6: return "originCharacterId";
         	        	case 8: return "activeId";
         	        	case 9: return "lastTick";
         	        	case 10: return "action";
         	        	case 11: return "passiveFlag";
-        	        	case 12: return "originPlayerId";
+        	        	case 12: return "originEntityId";
+        	        	case 13: return "attack";
         	            default: return null;
         }
     }
@@ -893,18 +837,16 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectTarget.
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-    	    	__fieldMap.put("target", 1);
-    	    	__fieldMap.put("skill", 2);
+    	    	__fieldMap.put("targetEntityId", 1);
     	    	__fieldMap.put("location", 3);
-    	    	__fieldMap.put("range", 4);
     	    	__fieldMap.put("statusEffect", 5);
-    	    	__fieldMap.put("origin", 6);
-    	    	__fieldMap.put("ticks", 7);
+    	    	__fieldMap.put("originCharacterId", 6);
     	    	__fieldMap.put("activeId", 8);
     	    	__fieldMap.put("lastTick", 9);
     	    	__fieldMap.put("action", 10);
     	    	__fieldMap.put("passiveFlag", 11);
-    	    	__fieldMap.put("originPlayerId", 12);
+    	    	__fieldMap.put("originEntityId", 12);
+    	    	__fieldMap.put("attack", 13);
     	    }
    
    public static List<String> getFields() {

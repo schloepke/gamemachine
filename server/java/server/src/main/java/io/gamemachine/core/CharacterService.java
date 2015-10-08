@@ -157,6 +157,7 @@ public class CharacterService {
 		character.setPlayerId(playerId);
 		character.setUmaData(umaData);
 		character.setVitalsType(Vitals.VitalsType.Character.number);
+		character.setVitalsSubType(Vitals.SubType.Player.number);
 		
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.update(character);
@@ -175,7 +176,7 @@ public class CharacterService {
 
 	public int getZone(String characterId) {
 		Character character = find(characterId);
-		return GameGrid.getPlayerZone(character.playerId);
+		return GameGrid.getEntityZone(character.playerId);
 	}
 	
 	public List<Character> search(String searchString) {

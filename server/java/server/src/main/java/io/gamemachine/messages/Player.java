@@ -1105,6 +1105,22 @@ private static final Logger logger = LoggerFactory.getLogger(Player.class);
         return this;
     }
     
+        	    	    	    	
+    public Player removeCharactersByVitalsSubType(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.vitalsSubType == obj.vitalsSubType) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
             	
     
     

@@ -225,7 +225,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
 			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.Object);
 			VitalsHandler handler = VitalsHandler.getHandler("build_objects", buildObject.zone);
-			handler.findOrCreateObject(buildObject.id, Vitals.VitalsType.Object.number, buildObject.zone);
+			handler.findOrCreateObjectVitals(buildObject.id, Vitals.VitalsType.Object.number, buildObject.zone);
 		}
 	}
 	

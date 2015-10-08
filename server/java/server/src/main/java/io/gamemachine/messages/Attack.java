@@ -51,6 +51,37 @@ public final class Attack implements Externalizable, Message<Attack>, Schema<Att
 
 private static final Logger logger = LoggerFactory.getLogger(Attack.class);
 
+	public enum TargetType implements io.protostuff.EnumLite<TargetType>
+    {
+    	
+    	    	None(0),    	    	Character(1),    	    	Object(2);    	        
+        public final int number;
+        
+        private TargetType (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static TargetType defaultValue() {
+        	return (None);
+        }
+        
+        public static TargetType valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (None);
+    			    			case 1: return (Character);
+    			    			case 2: return (Object);
+    			                default: return null;
+            }
+        }
+    }
 
 
     public static Schema<Attack> getSchema()
@@ -67,22 +98,27 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
     static final String defaultScope = Attack.class.getSimpleName();
 
     	
-							    public String attacker= null;
+							    public String attackerCharacterId= null;
 		    			    
 		
     
         	
-							    public String target= null;
+							    public String targetId= null;
 		    			    
 		
     
         	
-							    public String skill= null;
-		    			    
+					public PlayerSkill playerSkill = null;
+			    
 		
     
         	
 					public GmVector3 targetLocation = null;
+			    
+		
+    
+        	
+					public TargetType targetType = TargetType.defaultValue();
 			    
 		
     
@@ -99,60 +135,52 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
 
 
 	public static void clearModel(Model model) {
-    	    	    	    	    	    	model.set("attack_attacker",null);
-    	    	    	    	    	    	model.set("attack_target",null);
-    	    	    	    	    	    	model.set("attack_skill",null);
-    	    	    }
+    	    	    	    	    	    	model.set("attack_attacker_character_id",null);
+    	    	    	    	    	    	model.set("attack_target_id",null);
+    	    	    	    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	//if (attacker != null) {
-    	       	    	model.setString("attack_attacker",attacker);
+    	    	    	//if (attackerCharacterId != null) {
+    	       	    	model.setString("attack_attacker_character_id",attackerCharacterId);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (target != null) {
-    	       	    	model.setString("attack_target",target);
+    	    	    	//if (targetId != null) {
+    	       	    	model.setString("attack_target_id",targetId);
     	        		
     	//}
-    	    	    	    	    	
-    	    	    	//if (skill != null) {
-    	       	    	model.setString("attack_skill",skill);
+    	    	    	    	    	    	    	
+    	    	    	//if (targetType != null) {
+    	       	    	model.setInteger("attack_target_type",targetType.number);
     	        		
     	//}
-    	    	    	    }
+    	    	    }
     
 	public static Attack fromModel(Model model) {
 		boolean hasFields = false;
     	Attack message = new Attack();
     	    	    	    	    	
-    	    			String attackerTestField = model.getString("attack_attacker");
-		if (attackerTestField != null) {
-			String attackerField = attackerTestField;
-			message.setAttacker(attackerField);
+    	    			String attackerCharacterIdTestField = model.getString("attack_attacker_character_id");
+		if (attackerCharacterIdTestField != null) {
+			String attackerCharacterIdField = attackerCharacterIdTestField;
+			message.setAttackerCharacterId(attackerCharacterIdField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    	    			String targetTestField = model.getString("attack_target");
-		if (targetTestField != null) {
-			String targetField = targetTestField;
-			message.setTarget(targetField);
+    	    			String targetIdTestField = model.getString("attack_target_id");
+		if (targetIdTestField != null) {
+			String targetIdField = targetIdTestField;
+			message.setTargetId(targetIdField);
 			hasFields = true;
 		}
     	
     	    	
-    	    	    	    	    	    	
-    	    			String skillTestField = model.getString("attack_skill");
-		if (skillTestField != null) {
-			String skillField = skillTestField;
-			message.setSkill(skillField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    			if (hasFields) {
+    	    	    	    	    	    	    	    	
+    				message.setTargetType(TargetType.valueOf(model.getInteger("attack_target_type")));
+    	    			if (hasFields) {
 			return message;
 		} else {
 			return null;
@@ -161,30 +189,30 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
 
 
 	            
-		public String getAttacker() {
-		return attacker;
+		public String getAttackerCharacterId() {
+		return attackerCharacterId;
 	}
 	
-	public Attack setAttacker(String attacker) {
-		this.attacker = attacker;
+	public Attack setAttackerCharacterId(String attackerCharacterId) {
+		this.attackerCharacterId = attackerCharacterId;
 		return this;	}
 	
 		            
-		public String getTarget() {
-		return target;
+		public String getTargetId() {
+		return targetId;
 	}
 	
-	public Attack setTarget(String target) {
-		this.target = target;
+	public Attack setTargetId(String targetId) {
+		this.targetId = targetId;
 		return this;	}
 	
 		            
-		public String getSkill() {
-		return skill;
+		public PlayerSkill getPlayerSkill() {
+		return playerSkill;
 	}
 	
-	public Attack setSkill(String skill) {
-		this.skill = skill;
+	public Attack setPlayerSkill(PlayerSkill playerSkill) {
+		this.playerSkill = playerSkill;
 		return this;	}
 	
 		            
@@ -194,6 +222,15 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
 	
 	public Attack setTargetLocation(GmVector3 targetLocation) {
 		this.targetLocation = targetLocation;
+		return this;	}
+	
+		            
+		public TargetType getTargetType() {
+		return targetType;
+	}
+	
+	public Attack setTargetType(TargetType targetType) {
+		this.targetType = targetType;
 		return this;	}
 	
 	
@@ -253,21 +290,25 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
                 case 0:
                     return;
                             	case 1:
-            	                	                	message.attacker = input.readString();
+            	                	                	message.attackerCharacterId = input.readString();
                 	break;
                 	                	
                             	            	case 2:
-            	                	                	message.target = input.readString();
+            	                	                	message.targetId = input.readString();
                 	break;
                 	                	
                             	            	case 3:
-            	                	                	message.skill = input.readString();
-                	break;
-                	                	
+            	                	                	message.playerSkill = input.mergeObject(message.playerSkill, PlayerSkill.getSchema());
+                    break;
+                                    	
                             	            	case 4:
             	                	                	message.targetLocation = input.mergeObject(message.targetLocation, GmVector3.getSchema());
                     break;
                                     	
+                            	            	case 5:
+            	                	                    message.targetType = TargetType.valueOf(input.readEnum());
+                    break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -279,28 +320,23 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
     public void writeTo(Output output, Attack message) throws IOException
     {
     	    	
-    	    	//if(message.attacker == null)
-        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.attacker != null) {
-            output.writeString(1, message.attacker, false);
+    	    	    	if( (String)message.attackerCharacterId != null) {
+            output.writeString(1, message.attackerCharacterId, false);
         }
     	    	
     	            	
-    	    	//if(message.target == null)
-        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.target != null) {
-            output.writeString(2, message.target, false);
+    	    	    	if( (String)message.targetId != null) {
+            output.writeString(2, message.targetId, false);
         }
     	    	
     	            	
-    	    	//if(message.skill == null)
+    	    	//if(message.playerSkill == null)
         //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.skill != null) {
-            output.writeString(3, message.skill, false);
-        }
+    	    	    	if(message.playerSkill != null)
+    		output.writeObject(3, message.playerSkill, PlayerSkill.getSchema(), false);
     	    	
     	            	
     	    	
@@ -308,22 +344,30 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
     		output.writeObject(4, message.targetLocation, GmVector3.getSchema(), false);
     	    	
     	            	
+    	    	
+    	    	    	if(message.targetType != null)
+    	 	output.writeEnum(5, message.targetType.number, false);
+    	    	
+    	            	
     }
 
 	public void dumpObject()
     {
     	System.out.println("START Attack");
-    	    	//if(this.attacker != null) {
-    		System.out.println("attacker="+this.attacker);
+    	    	//if(this.attackerCharacterId != null) {
+    		System.out.println("attackerCharacterId="+this.attackerCharacterId);
     	//}
-    	    	//if(this.target != null) {
-    		System.out.println("target="+this.target);
+    	    	//if(this.targetId != null) {
+    		System.out.println("targetId="+this.targetId);
     	//}
-    	    	//if(this.skill != null) {
-    		System.out.println("skill="+this.skill);
+    	    	//if(this.playerSkill != null) {
+    		System.out.println("playerSkill="+this.playerSkill);
     	//}
     	    	//if(this.targetLocation != null) {
     		System.out.println("targetLocation="+this.targetLocation);
+    	//}
+    	    	//if(this.targetType != null) {
+    		System.out.println("targetType="+this.targetType);
     	//}
     	    	System.out.println("END Attack");
     }
@@ -332,10 +376,11 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
     {
         switch(number)
         {
-        	        	case 1: return "attacker";
-        	        	case 2: return "target";
-        	        	case 3: return "skill";
+        	        	case 1: return "attackerCharacterId";
+        	        	case 2: return "targetId";
+        	        	case 3: return "playerSkill";
         	        	case 4: return "targetLocation";
+        	        	case 5: return "targetType";
         	            default: return null;
         }
     }
@@ -349,10 +394,11 @@ private static final Logger logger = LoggerFactory.getLogger(Attack.class);
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-    	    	__fieldMap.put("attacker", 1);
-    	    	__fieldMap.put("target", 2);
-    	    	__fieldMap.put("skill", 3);
+    	    	__fieldMap.put("attackerCharacterId", 1);
+    	    	__fieldMap.put("targetId", 2);
+    	    	__fieldMap.put("playerSkill", 3);
     	    	__fieldMap.put("targetLocation", 4);
+    	    	__fieldMap.put("targetType", 5);
     	    }
    
    public static List<String> getFields() {

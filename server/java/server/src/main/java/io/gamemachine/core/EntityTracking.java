@@ -278,7 +278,7 @@ public class EntityTracking extends UntypedActor {
 		}
 
 		if (trackData.zone > 0) {
-			GameGrid.setPlayerZone(trackData.id, trackData.zone);
+			GameGrid.setEntityZone(trackData.id, trackData.zone);
 		}
 
 		if (!grid.set(trackData)) {

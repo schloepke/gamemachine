@@ -11,6 +11,7 @@ import plugins.combat.Combat;
 import plugins.combat.CombatHandler;
 import plugins.combat.Common;
 import plugins.combat.PlayerSkillHandler;
+import plugins.combat.StatusEffectDef;
 import plugins.combat.VitalsHandler;
 import plugins.combat.StatusEffectHandler;
 
@@ -18,7 +19,7 @@ public class CombatPlugin extends Plugin {
 
 	@Override
 	public void start() {
-
+		StatusEffectDef.createStatusEffects();
 		VitalsHandler.loadTemplates();
 		
 		GameMessageRoute.add(PlayerSkillHandler.name, PlayerSkillHandler.name, false);
@@ -36,13 +37,10 @@ public class CombatPlugin extends Plugin {
 	private void createEffectHandlers() {
 		for (int i = 0; i < 3; i++) {
 			GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "default" + i);
-			GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "aoe" + i);
 			GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "build_objects" + i);
 
 			GameMachineLoader.getActorSystem().actorOf(Props.create(StatusEffectHandler.class, "default", i),
 					StatusEffectHandler.actorName("default", i));
-			GameMachineLoader.getActorSystem().actorOf(Props.create(StatusEffectHandler.class, "aoe", i),
-					StatusEffectHandler.actorName("aoe", i));
 			GameMachineLoader.getActorSystem().actorOf(Props.create(StatusEffectHandler.class, "build_objects", i),
 					StatusEffectHandler.actorName("build_objects", i));
 

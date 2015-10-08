@@ -184,7 +184,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				if (req.getUri().startsWith("/api/players/get_zones")) {
 					List<ZoneInfo> infos = ZoneInfo.db().findAll();
 					ZoneInfos all = new ZoneInfos();
-					int current = GameGrid.getPlayerZone(playerId);
+					int current = GameGrid.getEntityZone(playerId);
 					for (ZoneInfo info : infos) {
 						if (info.number == current) {
 							info.current = true;
@@ -201,7 +201,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						return;
 					}
 					ZoneInfo info = ZoneInfo.db().findFirst("zone_info_id = ?", params.get("zone"));
-					GameGrid.setPlayerZone(playerId, info.number);
+					GameGrid.setEntityZone(playerId, info.number);
 					Ok(ctx, info.toByteArray());
 					return;
 				}

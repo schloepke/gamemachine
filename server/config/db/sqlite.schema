@@ -203,6 +203,8 @@ CREATE TABLE characters (
 
   character_vitals_type integer DEFAULT NULL,
 
+  character_vitals_sub_type integer DEFAULT NULL,
+
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
 CREATE TABLE players (
@@ -243,21 +245,13 @@ CREATE TABLE player_skills (
 
   player_skill_description varchar(128) DEFAULT NULL,
 
-  player_skill_resource varchar(128) DEFAULT NULL,
-
-  player_skill_resource_cost integer DEFAULT NULL,
-
   player_skill_character_id varchar(128) NOT NULL,
 
   player_skill_weapon_type varchar(128) DEFAULT NULL,
 
-  player_skill_range integer DEFAULT NULL,
-
   player_skill_status_effect_id varchar(128) DEFAULT NULL,
 
   player_skill_level integer DEFAULT NULL,
-
-  player_skill_resource_cost_per_tick integer DEFAULT NULL,
 
   player_skill_is_combo_part integer DEFAULT NULL,
 

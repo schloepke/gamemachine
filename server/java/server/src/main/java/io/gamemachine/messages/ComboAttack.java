@@ -418,7 +418,7 @@ private static final Logger logger = LoggerFactory.getLogger(ComboAttack.class);
         return this;
     }
             	    	    	    	
-    public ComboAttack removeAttackByAttacker(Attack attack)  {
+    public ComboAttack removeAttackByAttackerCharacterId(Attack attack)  {
     	if(this.attack == null)
            return this;
             
@@ -426,7 +426,7 @@ private static final Logger logger = LoggerFactory.getLogger(ComboAttack.class);
        	while (itr.hasNext()) {
     	Attack obj = itr.next();
     	
-    	    		if (attack.attacker.equals(obj.attacker)) {
+    	    		if (attack.attackerCharacterId.equals(obj.attackerCharacterId)) {
     	      			itr.remove();
     		}
 		}
@@ -434,7 +434,7 @@ private static final Logger logger = LoggerFactory.getLogger(ComboAttack.class);
     }
     
         	    	    	    	
-    public ComboAttack removeAttackByTarget(Attack attack)  {
+    public ComboAttack removeAttackByTargetId(Attack attack)  {
     	if(this.attack == null)
            return this;
             
@@ -442,30 +442,14 @@ private static final Logger logger = LoggerFactory.getLogger(ComboAttack.class);
        	while (itr.hasNext()) {
     	Attack obj = itr.next();
     	
-    	    		if (attack.target.equals(obj.target)) {
+    	    		if (attack.targetId.equals(obj.targetId)) {
     	      			itr.remove();
     		}
 		}
         return this;
     }
     
-        	    	    	    	
-    public ComboAttack removeAttackBySkill(Attack attack)  {
-    	if(this.attack == null)
-           return this;
-            
-       	Iterator<Attack> itr = this.attack.iterator();
-       	while (itr.hasNext()) {
-    	Attack obj = itr.next();
-    	
-    	    		if (attack.skill.equals(obj.skill)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	        	
+        	    	    	        	
     
     
     

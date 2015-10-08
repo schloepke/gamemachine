@@ -1,8 +1,7 @@
 package plugins.combat;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -22,85 +21,49 @@ import plugins.clientDbLoader.ClientDbLoader;
 
 public class VitalsHandler {
 
-	private static Map<Integer,Vitals> templates = new HashMap<Integer,Vitals>();
+	private static List<Vitals> templates;
 	private static final Logger logger = LoggerFactory.getLogger(VitalsHandler.class);
-	public ConcurrentHashMap<String, Vitals> playerVitals = new ConcurrentHashMap<String, Vitals>();
+	public ConcurrentHashMap<String, Vitals> entityVitals = new ConcurrentHashMap<String, Vitals>();
 	public static ConcurrentHashMap<String, VitalsHandler> handlers = new ConcurrentHashMap<String, VitalsHandler>();
 
 	public static void loadTemplates() {
 		VitalsContainer container = ClientDbLoader.getVitalsContainer();
 		if (container != null) {
-			for (Vitals vitals : ClientDbLoader.getVitalsContainer().vitals) {
-				templates.put(vitals.type.number,vitals);
-			}
+			templates = container.vitals;
 		}
 	}
-	
+
 	public Vitals fromTrackData(TrackData trackData, int zone) {
 		if (trackData.entityType == TrackData.EntityType.Object) {
-			return findOrCreateObject(trackData.id,Vitals.VitalsType.Object.number,zone);
-		} else if (trackData.entityType == TrackData.EntityType.Player || trackData.entityType == TrackData.EntityType.Npc){
+			return findOrCreateObjectVitals(trackData.id, Vitals.VitalsType.Object.number, zone);
+		} else if (trackData.entityType == TrackData.EntityType.Player
+				|| trackData.entityType == TrackData.EntityType.Npc) {
 			Player player = PlayerService.getInstance().find(trackData.id);
-			return findOrCreate(player.characterId);
+			return findOrCreateCharacterVitals(player.characterId);
 		} else {
-			throw new RuntimeException("Can't get vitals for entity type "+trackData.entityType.toString());
+			throw new RuntimeException("Can't get vitals for entity type " + trackData.entityType.toString());
 		}
 	}
-		
+
 	public static Vitals getTemplate(Vitals vitals) {
-		if (!templates.containsKey(vitals.type.number)) {
-			throw new RuntimeException("Vitals template not found "+vitals.type.number);
-		}
-		return templates.get(vitals.type.number).clone();
+		return getTemplate(vitals.type.number, vitals.subType.number);
 	}
-	
-	public static Vitals getObjectTemplate(String id, int vitalsType) {
-		Vitals vitals = null;
-		if (templates.containsKey(vitalsType)) {
-			vitals = templates.get(vitalsType).clone();
-		} else {
-			vitals = new Vitals();
-			vitals.health = 1000;
-			vitals.stamina = 1000;
-			vitals.magic = 1000;
-			vitals.type = Vitals.VitalsType.valueOf(vitalsType);
-		}
-		
-		vitals.id = id;
-		return vitals;
-	}
-	
-	public static Vitals getCharacterTemplate(String characterId) {
-		Character character = CharacterService.instance().find(characterId);
-		if (character == null) {
-			throw new RuntimeException("Unable to find character "+characterId);
-		}
-		return getCharacterTemplate(character);
-	}
-	
-	public static Vitals getCharacterTemplate(Character character) {
-		Vitals vitals = null;
-		if (templates.containsKey(character.vitalsType)) {
-			vitals = templates.get(character.vitalsType).clone();
-		} else {
-			vitals = new Vitals();
-			vitals.health = 1000;
-			vitals.stamina = 1000;
-			vitals.magic = 1000;
-			vitals.type = Vitals.VitalsType.valueOf(character.vitalsType);
-			if (vitals.type == null) {
-				throw new RuntimeException("No vitalsType for "+character.vitalsType);
+
+	public static Vitals getTemplate(int vitalsType, int vitalsSubType) {
+		for (Vitals template : templates) {
+			if (template.type.number == vitalsType && template.subType.number == vitalsSubType) {
+				return template.clone();
 			}
 		}
-		
-		vitals.id = character.id;
+		Vitals vitals = new Vitals();
+		vitals.health = 1000;
+		vitals.stamina = 1000;
+		vitals.magic = 1000;
+		vitals.type = Vitals.VitalsType.valueOf(vitalsType);
+		vitals.subType = Vitals.SubType.valueOf(vitalsSubType);
 		return vitals;
 	}
-	
-	public static Map<Integer,Vitals> getTemplates() {
-		return templates;
-	}
-	
+
 	public static VitalsHandler getHandler(String gridName, int zone) {
 		String key = gridName + zone;
 		if (!handlers.containsKey(key)) {
@@ -112,11 +75,11 @@ public class VitalsHandler {
 
 	public static void UpdateVitals() {
 		for (VitalsHandler handler : handlers.values()) {
-			for (Vitals vitals : handler.playerVitals.values()) {
-				if (!Strings.isNullOrEmpty(vitals.playerId)) {
-					int zone = GameGrid.getPlayerZone(vitals.playerId);
+			for (Vitals vitals : handler.entityVitals.values()) {
+				if (!Strings.isNullOrEmpty(vitals.entityId)) {
+					int zone = GameGrid.getEntityZone(vitals.entityId);
 					if (zone != vitals.zone) {
-						handler.remove(vitals.id);
+						handler.remove(vitals.entityId);
 					}
 				}
 			}
@@ -124,47 +87,49 @@ public class VitalsHandler {
 	}
 
 	public void remove(String id) {
-		if (playerVitals.containsKey(id)) {
-			playerVitals.remove(id);
+		if (entityVitals.containsKey(id)) {
+			entityVitals.remove(id);
 		}
 	}
 
 	public Collection<Vitals> getVitals() {
-		return playerVitals.values();
+		return entityVitals.values();
 	}
 
-	public Vitals findOrCreateObject(String objectId, int vitalsType, int zone) {
-		if (objectId == null) {
+	public Vitals findOrCreateObjectVitals(String entityId, int vitalsType, int zone) {
+		if (entityId == null) {
 			throw new RuntimeException("Object id is null!!");
 		}
 
-		if (!playerVitals.containsKey(objectId)) {
-			Vitals vitals = getObjectTemplate(objectId, vitalsType);
+		if (!entityVitals.containsKey(entityId)) {
+			Vitals vitals = getTemplate(vitalsType, Vitals.SubType.Structure.number);
 			vitals.zone = zone;
-			playerVitals.put(vitals.id, vitals);
+			vitals.entityId = entityId;
+			entityVitals.put(vitals.entityId, vitals);
 		}
-		return playerVitals.get(objectId);
+		return entityVitals.get(entityId);
 	}
 
-	public Vitals findOrCreate(String characterId) {
+	public Vitals findOrCreateCharacterVitals(String entityId) {
 
-		if (characterId == null) {
-			throw new RuntimeException("Character id is null!!");
+		if (entityId == null) {
+			throw new RuntimeException("Entity id is null!!");
 		}
 
-		if (!playerVitals.containsKey(characterId)) {
-			Character character = CharacterService.instance().find(characterId);
-			Player player = PlayerService.getInstance().findByCharacterId(characterId);
-			if (character == null) {
-				throw new RuntimeException("No character found with id " + characterId);
-			}
-
-			Vitals vitals = getCharacterTemplate(character);
+		if (!entityVitals.containsKey(entityId)) {
 			
-			vitals.playerId = player.id;
-			vitals.zone = GameGrid.getPlayerZone(player.id);
-			playerVitals.put(vitals.id, vitals);
+			Player player = PlayerService.getInstance().find(entityId);
+			if (player == null) {
+				throw new RuntimeException("No player found with id " + entityId);
+			}
+			Character character = CharacterService.instance().find(player.characterId);
+			Vitals vitals = getTemplate(character.vitalsType, character.vitalsSubType);
+
+			vitals.characterId = character.id;
+			vitals.entityId = player.id;
+			vitals.zone = GameGrid.getEntityZone(player.id);
+			entityVitals.put(vitals.entityId, vitals);
 		}
-		return playerVitals.get(characterId);
+		return entityVitals.get(entityId);
 	}
 }

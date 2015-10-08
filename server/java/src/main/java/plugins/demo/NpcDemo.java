@@ -51,7 +51,7 @@ public class NpcDemo extends GameMessageActor {
 
 			
 			ps.setCharacter(playerId, characterId);
-			GameGrid.setPlayerZone(playerId, zone);
+			GameGrid.setEntityZone(playerId, zone);
 			Props props = Props.create(NpcEntity.class, playerId, characterId);
 			ActorRef ref = getContext().actorOf(props, characterId);
 		}

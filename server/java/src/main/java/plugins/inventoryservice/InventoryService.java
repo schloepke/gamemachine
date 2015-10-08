@@ -1,5 +1,14 @@
 package plugins.inventoryservice;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
+
 import io.gamemachine.messages.AddPlayerItem;
 import io.gamemachine.messages.Cost;
 import io.gamemachine.messages.PlayerItem;
@@ -7,18 +16,20 @@ import io.gamemachine.messages.PlayerItems;
 import io.gamemachine.messages.RemovePlayerItem;
 import io.gamemachine.messages.RequestPlayerItems;
 import io.gamemachine.messages.UpdatePlayerItem;
-
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.common.base.Strings;
+import plugins.clientDbLoader.ClientDbLoader;
 
 public class InventoryService {
 
 	private static final Logger logger = LoggerFactory.getLogger(InventoryService.class);
 
+	private Map<String,PlayerItem> catalog = new HashMap<String,PlayerItem>();
+	
+	private InventoryService() {
+		for (PlayerItem playerItem : ClientDbLoader.getPlayerItems().playerItem) {
+			catalog.put(playerItem.name, playerItem);
+		}
+	}
+	
 	private static class LazyHolder {
 		private static final InventoryService INSTANCE = new InventoryService();
 	}
@@ -86,6 +97,11 @@ public class InventoryService {
 	}
 
 	public synchronized AddPlayerItem addPlayerItem(AddPlayerItem addPlayerItem) {
+		if (!catalog.containsKey(addPlayerItem.playerItem.name)) {
+			logger.warn("PlayerItem not in catalog " + addPlayerItem.playerItem.name);
+			addPlayerItem.result = 0;
+			return addPlayerItem;
+		}
 		
 		PlayerItem playerItem = addPlayerItem.playerItem;
 		PlayerItem existing = find(playerItem.id, playerItem.characterId);

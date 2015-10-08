@@ -26,35 +26,35 @@ public class GameGrid {
 	private static ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>> zoneToGridName = new ConcurrentHashMap<String, ConcurrentHashMap<Integer, String>>();
 	
 	
-	public static int getPlayerZone(String playerId) {
-		if (playerZone.containsKey(playerId)) {
-			return playerZone.get(playerId);
+	public static int getEntityZone(String entityId) {
+		if (playerZone.containsKey(entityId)) {
+			return playerZone.get(entityId);
 		} else {
 			int zone = 0;
-			String characterId = PlayerService.getInstance().getCharacter(playerId);
+			String characterId = PlayerService.getInstance().getCharacter(entityId);
 			if (!Strings.isNullOrEmpty(characterId)) {
-				Character character = CharacterService.instance().find(playerId, characterId);
+				Character character = CharacterService.instance().find(entityId, characterId);
 				if (character.zone > 0) {
 					zone = character.zone;
 				}
-				setPlayerZone(playerId,zone);
+				setEntityZone(entityId,zone);
 			}
 			
 			return zone;
 		}
 	}
 
-	public static void setPlayerZone(String playerId, int zone) {
-		playerZone.put(playerId, zone);
+	public static void setEntityZone(String entityId, int zone) {
+		playerZone.put(entityId, zone);
 		
 		// make sure player is removed from associated grid
 		for (Grid grid : GameGrid.getGridList()) {
-			grid.remove(playerId);
+			grid.remove(entityId);
 		}
 				
-		String characterId = PlayerService.getInstance().getCharacter(playerId);
+		String characterId = PlayerService.getInstance().getCharacter(entityId);
 		if (!Strings.isNullOrEmpty(characterId)) {
-			Character character = CharacterService.instance().find(playerId, characterId);
+			Character character = CharacterService.instance().find(entityId, characterId);
 			character.zone = zone;
 			CharacterService.instance().save(character);
 		}
@@ -182,13 +182,13 @@ public class GameGrid {
 	}
 	
 	public static Grid getGameGrid(String gameId, String gridName, String playerId) {
-		int zone = getPlayerZone(playerId);
+		int zone = getEntityZone(playerId);
 		return getGameGrid(gameId,gridName,zone);
 	}
 	
 	public static Grid getGameGrid(String gridName, String playerId) {
 		String gameId = PlayerService.getInstance().getGameId(playerId);
-		int zone = getPlayerZone(playerId);
+		int zone = getEntityZone(playerId);
 		return getGameGrid(gameId,gridName,zone);
 	}
 }

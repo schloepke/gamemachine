@@ -146,6 +146,11 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		    			    
 		
     
+        	
+							    public int vitalsSubType= 0;
+		    			    
+		
+    
         
 	public static CharacterCache cache() {
 		return CharacterCache.getInstance();
@@ -629,6 +634,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	    	model.set("character_zone",null);
     	    	    	    	    	    	model.set("character_include_uma_data",null);
     	    	    	    	    	    	model.set("character_vitals_type",null);
+    	    	    	    	    	    	model.set("character_vitals_sub_type",null);
     	    }
     
 	public void toModel(Model model) {
@@ -688,6 +694,11 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	
     	    	    	//if (vitalsType != null) {
     	       	    	model.setInteger("character_vitals_type",vitalsType);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (vitalsSubType != null) {
+    	       	    	model.setInteger("character_vitals_sub_type",vitalsSubType);
     	        		
     	//}
     	    	    }
@@ -795,6 +806,15 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		if (vitalsTypeTestField != null) {
 			int vitalsTypeField = vitalsTypeTestField;
 			message.setVitalsType(vitalsTypeField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			Integer vitalsSubTypeTestField = model.getInteger("character_vitals_sub_type");
+		if (vitalsSubTypeTestField != null) {
+			int vitalsSubTypeField = vitalsSubTypeTestField;
+			message.setVitalsSubType(vitalsSubTypeField);
 			hasFields = true;
 		}
     	
@@ -915,6 +935,15 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		this.vitalsType = vitalsType;
 		return this;	}
 	
+		            
+		public int getVitalsSubType() {
+		return vitalsSubType;
+	}
+	
+	public Character setVitalsSubType(int vitalsSubType) {
+		this.vitalsSubType = vitalsSubType;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1019,6 +1048,10 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
             	                	                	message.vitalsType = input.readInt32();
                 	break;
                 	                	
+                            	            	case 16:
+            	                	                	message.vitalsSubType = input.readInt32();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1106,6 +1139,12 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.vitalsSubType != null) {
+            output.writeInt32(16, message.vitalsSubType, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1147,6 +1186,9 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	//if(this.vitalsType != null) {
     		System.out.println("vitalsType="+this.vitalsType);
     	//}
+    	    	//if(this.vitalsSubType != null) {
+    		System.out.println("vitalsSubType="+this.vitalsSubType);
+    	//}
     	    	System.out.println("END Character");
     }
     
@@ -1166,6 +1208,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         	        	case 11: return "zone";
         	        	case 14: return "includeUmaData";
         	        	case 15: return "vitalsType";
+        	        	case 16: return "vitalsSubType";
         	            default: return null;
         }
     }
@@ -1191,6 +1234,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	__fieldMap.put("zone", 11);
     	    	__fieldMap.put("includeUmaData", 14);
     	    	__fieldMap.put("vitalsType", 15);
+    	    	__fieldMap.put("vitalsSubType", 16);
     	    }
    
    public static List<String> getFields() {

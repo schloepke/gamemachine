@@ -34,18 +34,8 @@ import io.gamemachine.util.LocalLinkedBuffer;
 import java.nio.charset.Charset;
 
 
-import java.lang.reflect.Field;
-import scala.concurrent.Await;
-import scala.concurrent.Future;
-import scala.concurrent.duration.Duration;
-import akka.actor.ActorSelection;
-import akka.pattern.AskableActorSelection;
-
-import akka.util.Timeout;
-import java.util.concurrent.TimeUnit;
 
 
-import io.gamemachine.core.ActorUtil;
 
 import org.javalite.common.Convert;
 import org.slf4j.Logger;
@@ -54,14 +44,10 @@ import org.javalite.activejdbc.Model;
 import io.protostuff.Schema;
 import io.protostuff.UninitializedMessageException;
 
-import io.gamemachine.core.PersistableMessage;
 
-
-import io.gamemachine.objectdb.Cache;
-import io.gamemachine.core.CacheUpdate;
 
 @SuppressWarnings("unused")
-public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vitals>, PersistableMessage{
+public final class Vitals implements Externalizable, Message<Vitals>, Schema<Vitals>{
 
 private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 
@@ -151,7 +137,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     static final String defaultScope = Vitals.class.getSimpleName();
 
     	
-							    public String id= null;
+							    public String characterId= null;
 		    			    
 		
     
@@ -221,17 +207,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		
     
         	
-							    public String playerId= null;
+							    public String entityId= null;
 		    			    
 		
     
         	
 							    public int staminaDrain= 0;
-		    			    
-		
-    
-        	
-							    public String grid= null;
 		    			    
 		
     
@@ -250,14 +231,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 			    
 		
     
+        	
+							    public String templateName= null;
+		    			    
+		
+    
         
-	public static VitalsCache cache() {
-		return VitalsCache.getInstance();
-	}
-	
-	public static VitalsStore store() {
-		return VitalsStore.getInstance();
-	}
 
 
     public Vitals()
@@ -265,257 +244,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
         
     }
 
-	static class CacheRef {
-	
-		private final CacheUpdate cacheUpdate;
-		private final String id;
-		
-		public CacheRef(CacheUpdate cacheUpdate, String id) {
-			this.cacheUpdate = cacheUpdate;
-			this.id = id;
-		}
-		
-		public void send() {
-			ActorSelection sel = ActorUtil.findLocalDistributed("cacheUpdateHandler", id);
-			sel.tell(cacheUpdate,null);
-		}
-		
-		public Vitals result(int timeout) {
-			ActorSelection sel = ActorUtil.findLocalDistributed("cacheUpdateHandler", id);
-			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
-			AskableActorSelection askable = new AskableActorSelection(sel);
-			Future<Object> future = askable.ask(cacheUpdate, t);
-			try {
-				Await.result(future, t.duration());
-				return cache().getCache().get(id);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-	}
-	
-	public static class VitalsCache {
-
-		private static HashMap<String, Field> cachefields = new HashMap<String, Field>();
-		private static Cache<String, Vitals> cache = new Cache<String, Vitals>(120, 5000);
-		
-		private VitalsCache() {
-		}
-		
-		private static class LazyHolder {
-			private static final VitalsCache INSTANCE = new VitalsCache();
-		}
-	
-		public static VitalsCache getInstance() {
-			return LazyHolder.INSTANCE;
-		}
-		
-	    public void init(int expiration, int size) {
-			cache = new Cache<String, Vitals>(expiration, size);
-		}
-	
-		public Cache<String, Vitals> getCache() {
-			return cache;
-		}
-		
-		public CacheRef setField(String id, String field, Object value) {
-			return updateField(id, field, value, CacheUpdate.SET);
-		}
-		
-		public CacheRef incrementField(String id, String field, Object value) {
-			return updateField(id, field, value, CacheUpdate.INCREMENT);
-		}
-		
-		public CacheRef decrementField(String id, String field, Object value) {
-			return updateField(id, field, value, CacheUpdate.DECREMENT);
-		}
-		
-		private CacheRef updateField(String id, String field, Object value, int updateType) {
-			CacheUpdate cacheUpdate = new CacheUpdate(VitalsCache.class, id, value, field, updateType);
-			return new CacheRef(cacheUpdate,id);
-		}
-		
-		public CacheRef set(Vitals message) {
-			CacheUpdate cacheUpdate = new CacheUpdate(VitalsCache.class, message);
-			return new CacheRef(cacheUpdate,message.id);
-		}
-	
-		public Vitals get(String id, int timeout) {
-			Vitals message = cache.get(id);
-			if (message == null) {
-				message = Vitals.store().get(id, timeout);
-			}
-			return message;
-		}
-			
-		public static Vitals setFromUpdate(CacheUpdate cacheUpdate) throws IllegalArgumentException, IllegalAccessException  {
-			Vitals message = null;
-			String field = cacheUpdate.getField();
-			if (field == null) {
-				message = (Vitals) cacheUpdate.getMessage();
-				if (message == null) {
-					throw new RuntimeException("Attempt to store empty message in cache");
-				}
-				cache.set(message.id, message);
-				Vitals.store().set(message);
-			} else {
-				message = Vitals.cache().get(cacheUpdate.getId(), 10);
-				if (message == null) {
-					throw new RuntimeException("Cannot set field on null message");
-				}
-				if (!cachefields.containsKey(field)) {
-	            	try {
-						cachefields.put(field, Vitals.class.getField(field));
-					} catch (NoSuchFieldException e) {
-						throw new RuntimeException("No such field "+field);
-					} catch (SecurityException e) {
-						throw new RuntimeException("Security Exception accessing field "+field);
-					}
-	        	}
-				Field f = cachefields.get(field);
-				Class<?> klass = f.getType();
-				if (cacheUpdate.getUpdateType() == CacheUpdate.SET) {
-					f.set(message, klass.cast(cacheUpdate.getFieldValue()));
-				} else {
-					int updateType = cacheUpdate.getUpdateType();
-					Object value = cacheUpdate.getFieldValue();
-					if (klass == Integer.TYPE || klass == Integer.class) {
-						Integer i;
-						if (updateType == CacheUpdate.INCREMENT) {
-							i = (Integer)f.get(message) + (Integer) value;
-							f.set(message, klass.cast(i));
-						} else if (updateType == CacheUpdate.DECREMENT) {
-							i = (Integer)f.get(message) - (Integer) value;
-							f.set(message, klass.cast(i));
-						}
-					} else if (klass == Long.TYPE || klass == Long.class) {
-						Long i;
-						if (updateType == CacheUpdate.INCREMENT) {
-							i = (Long)f.get(message) + (Long) value;
-							f.set(message, klass.cast(i));
-						} else if (updateType == CacheUpdate.DECREMENT) {
-							i = (Long)f.get(message) - (Long) value;
-							f.set(message, klass.cast(i));
-						}
-					} else if (klass == Double.TYPE || klass == Double.class) {
-						Double i;
-						if (updateType == CacheUpdate.INCREMENT) {
-							i = (Double)f.get(message) + (Double) value;
-							f.set(message, klass.cast(i));
-						} else if (updateType == CacheUpdate.DECREMENT) {
-							i = (Double)f.get(message) - (Double) value;
-							f.set(message, klass.cast(i));
-						}
-					} else if (klass == Float.TYPE || klass == Float.class) {
-						Float i;
-						if (updateType == CacheUpdate.INCREMENT) {
-							i = (Float)f.get(message) + (Float) value;
-							f.set(message, klass.cast(i));
-						} else if (updateType == CacheUpdate.DECREMENT) {
-							i = (Float)f.get(message) - (Float) value;
-							f.set(message, klass.cast(i));
-						}
-					}
-				}
-				cache.set(message.id, message);
-				Vitals.store().set(message);
-			}
-			return message;
-		}
-	
-	}
-	
-	public static class VitalsStore {
-	
-		private VitalsStore() {
-		}
-		
-		private static class LazyHolder {
-			private static final VitalsStore INSTANCE = new VitalsStore();
-		}
-	
-		public static VitalsStore getInstance() {
-			return LazyHolder.INSTANCE;
-		}
-		
-		public static String scopeId(String playerId, String id) {
-    		return playerId + "##" + id;
-    	}
-    
-	    public static String unscopeId(String id) {
-	    	if (id.contains("##")) {
-	    		String[] parts = id.split("##");
-	        	return parts[1];
-	    	} else {
-	    		throw new RuntimeException("Expected "+id+" to contain ##");
-	    	}
-	    }
-	    
-	    public static String defaultScope() {
-	    	return defaultScope;
-	    }
-		
-	    public void set(Vitals message) {
-	    	set(defaultScope(),message);
-		}
-	    
-	    public void delete(String id) {
-	    	delete(defaultScope(),id);
-	    }
-	    
-	    public Vitals get(String id, int timeout) {
-	    	return get(defaultScope(),id,timeout);
-	    }
-	    
-	    public void set(String scope, Vitals message) {
-	    	Vitals clone = message.clone();
-			clone.id = scopeId(scope,message.id);
-			ActorSelection sel = ActorUtil.findDistributed("object_store", clone.id);
-			sel.tell(clone, null);
-		}
-			
-		public void delete(String scope, String id) {
-			String scopedId = scopeId(scope,id);
-			ActorSelection sel = ActorUtil.findDistributed("object_store", scopedId);
-			ObjectdbDel del = new ObjectdbDel().setEntityId(scopedId);
-			sel.tell(del, null);
-		}
-			
-		public Vitals get(String scope, String id, int timeout) {
-			String scopedId = scopeId(scope,id);
-			ObjectdbGet get = new ObjectdbGet().setEntityId(scopedId).setKlass("Vitals");
-			ActorSelection sel = ActorUtil.findDistributed("object_store", scopedId);
-			Timeout t = new Timeout(Duration.create(timeout, TimeUnit.MILLISECONDS));
-			AskableActorSelection askable = new AskableActorSelection(sel);
-			Vitals message = null;
-			Object result;
-			Future<Object> future = askable.ask(get,t);
-			try {
-				result = Await.result(future, t.duration());
-				if (result instanceof Vitals) {
-					message = (Vitals)result;
-				} else if (result instanceof ObjectdbStatus) {
-					return null;
-				}
-			} catch (Exception e) {
-				throw new RuntimeException("Operation timed out");
-			}
-			if (message == null) {
-				return null;
-			}
-			message.id = unscopeId(message.id);
-			return message;
-		}
-		
-	}
-	
 
 	
 
 
 	public static void clearModel(Model model) {
-    	    	    	    	    	    	model.set("vitals_id",null);
+    	    	    	    	    	    	model.set("vitals_character_id",null);
     	    	    	    	    	    	model.set("vitals_health",null);
     	    	    	    	    	    	model.set("vitals_stamina",null);
     	    	    	    	    	    	model.set("vitals_magic",null);
@@ -529,16 +263,16 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	    	    	    	    	model.set("vitals_health_regen",null);
     	    	    	    	    	    	model.set("vitals_stamina_regen",null);
     	    	    	    	    	    	model.set("vitals_changed",null);
-    	    	    	    	    	    	model.set("vitals_player_id",null);
+    	    	    	    	    	    	model.set("vitals_entity_id",null);
     	    	    	    	    	    	model.set("vitals_stamina_drain",null);
-    	    	    	    	    	    	model.set("vitals_grid",null);
     	    	    	    	    	    	    	model.set("vitals_zone",null);
-    	    	    }
+    	    	    	    	    	    	    	model.set("vitals_template_name",null);
+    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	//if (id != null) {
-    	       	    	model.setString("vitals_id",id);
+    	    	    	//if (characterId != null) {
+    	       	    	model.setString("vitals_character_id",characterId);
     	        		
     	//}
     	    	    	    	    	
@@ -607,18 +341,13 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (playerId != null) {
-    	       	    	model.setString("vitals_player_id",playerId);
+    	    	    	//if (entityId != null) {
+    	       	    	model.setString("vitals_entity_id",entityId);
     	        		
     	//}
     	    	    	    	    	
     	    	    	//if (staminaDrain != null) {
     	       	    	model.setInteger("vitals_stamina_drain",staminaDrain);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (grid != null) {
-    	       	    	model.setString("vitals_grid",grid);
     	        		
     	//}
     	    	    	    	    	
@@ -636,16 +365,21 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	       	    	model.setInteger("vitals_sub_type",subType.number);
     	        		
     	//}
+    	    	    	    	    	
+    	    	    	//if (templateName != null) {
+    	       	    	model.setString("vitals_template_name",templateName);
+    	        		
+    	//}
     	    	    }
     
 	public static Vitals fromModel(Model model) {
 		boolean hasFields = false;
     	Vitals message = new Vitals();
     	    	    	    	    	
-    	    			String idTestField = model.getString("vitals_id");
-		if (idTestField != null) {
-			String idField = idTestField;
-			message.setId(idField);
+    	    			String characterIdTestField = model.getString("vitals_character_id");
+		if (characterIdTestField != null) {
+			String characterIdField = characterIdTestField;
+			message.setCharacterId(characterIdField);
 			hasFields = true;
 		}
     	
@@ -768,10 +502,10 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			String playerIdTestField = model.getString("vitals_player_id");
-		if (playerIdTestField != null) {
-			String playerIdField = playerIdTestField;
-			message.setPlayerId(playerIdField);
+    	    			String entityIdTestField = model.getString("vitals_entity_id");
+		if (entityIdTestField != null) {
+			String entityIdField = entityIdTestField;
+			message.setEntityId(entityIdField);
 			hasFields = true;
 		}
     	
@@ -781,15 +515,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		if (staminaDrainTestField != null) {
 			int staminaDrainField = staminaDrainTestField;
 			message.setStaminaDrain(staminaDrainField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			String gridTestField = model.getString("vitals_grid");
-		if (gridTestField != null) {
-			String gridField = gridTestField;
-			message.setGrid(gridField);
 			hasFields = true;
 		}
     	
@@ -807,6 +532,15 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	    	    	    	    	    	
     				message.setSubType(SubType.valueOf(model.getInteger("vitals_sub_type")));
+    	    	    	    	    	    	
+    	    			String templateNameTestField = model.getString("vitals_template_name");
+		if (templateNameTestField != null) {
+			String templateNameField = templateNameTestField;
+			message.setTemplateName(templateNameField);
+			hasFields = true;
+		}
+    	
+    	    	
     	    			if (hasFields) {
 			return message;
 		} else {
@@ -816,12 +550,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 
 
 	            
-		public String getId() {
-		return id;
+		public String getCharacterId() {
+		return characterId;
 	}
 	
-	public Vitals setId(String id) {
-		this.id = id;
+	public Vitals setCharacterId(String characterId) {
+		this.characterId = characterId;
 		return this;	}
 	
 		            
@@ -942,12 +676,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 		return this;	}
 	
 		            
-		public String getPlayerId() {
-		return playerId;
+		public String getEntityId() {
+		return entityId;
 	}
 	
-	public Vitals setPlayerId(String playerId) {
-		this.playerId = playerId;
+	public Vitals setEntityId(String entityId) {
+		this.entityId = entityId;
 		return this;	}
 	
 		            
@@ -957,15 +691,6 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 	
 	public Vitals setStaminaDrain(int staminaDrain) {
 		this.staminaDrain = staminaDrain;
-		return this;	}
-	
-		            
-		public String getGrid() {
-		return grid;
-	}
-	
-	public Vitals setGrid(String grid) {
-		this.grid = grid;
 		return this;	}
 	
 		            
@@ -993,6 +718,15 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
 	
 	public Vitals setSubType(SubType subType) {
 		this.subType = subType;
+		return this;	}
+	
+		            
+		public String getTemplateName() {
+		return templateName;
+	}
+	
+	public Vitals setTemplateName(String templateName) {
+		this.templateName = templateName;
 		return this;	}
 	
 	
@@ -1052,7 +786,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
                 case 0:
                     return;
                             	case 1:
-            	                	                	message.id = input.readString();
+            	                	                	message.characterId = input.readString();
                 	break;
                 	                	
                             	            	case 2:
@@ -1108,15 +842,11 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
                 	break;
                 	                	
                             	            	case 15:
-            	                	                	message.playerId = input.readString();
+            	                	                	message.entityId = input.readString();
                 	break;
                 	                	
                             	            	case 16:
             	                	                	message.staminaDrain = input.readInt32();
-                	break;
-                	                	
-                            	            	case 17:
-            	                	                	message.grid = input.readString();
                 	break;
                 	                	
                             	            	case 18:
@@ -1131,6 +861,10 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
             	                	                    message.subType = SubType.valueOf(input.readEnum());
                     break;
                 	                	
+                            	            	case 21:
+            	                	                	message.templateName = input.readString();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1142,11 +876,11 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     public void writeTo(Output output, Vitals message) throws IOException
     {
     	    	
-    	    	//if(message.id == null)
+    	    	//if(message.characterId == null)
         //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.id != null) {
-            output.writeString(1, message.id, false);
+    	    	    	if( (String)message.characterId != null) {
+            output.writeString(1, message.characterId, false);
         }
     	    	
     	            	
@@ -1229,20 +963,14 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	
     	            	
     	    	
-    	    	    	if( (String)message.playerId != null) {
-            output.writeString(15, message.playerId, false);
+    	    	    	if( (String)message.entityId != null) {
+            output.writeString(15, message.entityId, false);
         }
     	    	
     	            	
     	    	
     	    	    	if( (Integer)message.staminaDrain != null) {
             output.writeInt32(16, message.staminaDrain, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (String)message.grid != null) {
-            output.writeString(17, message.grid, false);
         }
     	    	
     	            	
@@ -1262,13 +990,19 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	 	output.writeEnum(20, message.subType.number, false);
     	    	
     	            	
+    	    	
+    	    	    	if( (String)message.templateName != null) {
+            output.writeString(21, message.templateName, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
     {
     	System.out.println("START Vitals");
-    	    	//if(this.id != null) {
-    		System.out.println("id="+this.id);
+    	    	//if(this.characterId != null) {
+    		System.out.println("characterId="+this.characterId);
     	//}
     	    	//if(this.health != null) {
     		System.out.println("health="+this.health);
@@ -1309,14 +1043,11 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	//if(this.changed != null) {
     		System.out.println("changed="+this.changed);
     	//}
-    	    	//if(this.playerId != null) {
-    		System.out.println("playerId="+this.playerId);
+    	    	//if(this.entityId != null) {
+    		System.out.println("entityId="+this.entityId);
     	//}
     	    	//if(this.staminaDrain != null) {
     		System.out.println("staminaDrain="+this.staminaDrain);
-    	//}
-    	    	//if(this.grid != null) {
-    		System.out.println("grid="+this.grid);
     	//}
     	    	//if(this.type != null) {
     		System.out.println("type="+this.type);
@@ -1327,6 +1058,9 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	//if(this.subType != null) {
     		System.out.println("subType="+this.subType);
     	//}
+    	    	//if(this.templateName != null) {
+    		System.out.println("templateName="+this.templateName);
+    	//}
     	    	System.out.println("END Vitals");
     }
     
@@ -1334,7 +1068,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     {
         switch(number)
         {
-        	        	case 1: return "id";
+        	        	case 1: return "characterId";
         	        	case 2: return "health";
         	        	case 3: return "stamina";
         	        	case 4: return "magic";
@@ -1348,12 +1082,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
         	        	case 12: return "healthRegen";
         	        	case 13: return "staminaRegen";
         	        	case 14: return "changed";
-        	        	case 15: return "playerId";
+        	        	case 15: return "entityId";
         	        	case 16: return "staminaDrain";
-        	        	case 17: return "grid";
         	        	case 18: return "type";
         	        	case 19: return "zone";
         	        	case 20: return "subType";
+        	        	case 21: return "templateName";
         	            default: return null;
         }
     }
@@ -1367,7 +1101,7 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-    	    	__fieldMap.put("id", 1);
+    	    	__fieldMap.put("characterId", 1);
     	    	__fieldMap.put("health", 2);
     	    	__fieldMap.put("stamina", 3);
     	    	__fieldMap.put("magic", 4);
@@ -1381,12 +1115,12 @@ private static final Logger logger = LoggerFactory.getLogger(Vitals.class);
     	    	__fieldMap.put("healthRegen", 12);
     	    	__fieldMap.put("staminaRegen", 13);
     	    	__fieldMap.put("changed", 14);
-    	    	__fieldMap.put("playerId", 15);
+    	    	__fieldMap.put("entityId", 15);
     	    	__fieldMap.put("staminaDrain", 16);
-    	    	__fieldMap.put("grid", 17);
     	    	__fieldMap.put("type", 18);
     	    	__fieldMap.put("zone", 19);
     	    	__fieldMap.put("subType", 20);
+    	    	__fieldMap.put("templateName", 21);
     	    }
    
    public static List<String> getFields() {

@@ -289,6 +289,7 @@ local_persistent_message Character {
   optional int32 zone = 11;
   optional bool includeUmaData = 14;
   optional int32 vitalsType = 15;
+  optional int32 vitalsSubType = 16;
   
 }
 
@@ -322,55 +323,7 @@ local_message EquippedItem {
   optional string playerId = 2;
 }
 
-local_message StatusEffect {
-  enum Type {
-  	StatusEffectNone = 0;
-    AttributeDecrease = 1;
-    AttributeIncrease = 2;
-    Heal = 3;
-    Slow = 4;
-    Stun = 5;
-    Root = 6;
-    Death = 7;
-    ArmorIncrease = 8;
-    SpellResistIncrease = 9;
-    ElementalResistIncrease = 10;
-    SpellPenetrationIncrease = 11;
-    MagicRegenIncrease = 12;
-    HealthRegenIncrease = 13;
-    StaminaRegenIncrease = 14;
-    ArmorDecrease = 15;
-    SpellResistDecrease = 16;
-    ElementalResistDecrease = 17;
-    MagicRegenDecrease = 18;
-    HealthRegenDecrease = 19;
-    StaminaRegenDecrease = 20;
-    Speed = 21;
-}
 
-  enum DamageType {
-    DamageTypeNone = 0;
-    Physical = 1;
-    Magic = 2;
-    Elemental = 3;
-  }
-  
-  optional Type type = 1;
-  optional string id = 2;
-  optional int32 duration = 3;
-  optional int32 ticks = 4;
-  optional string attribute = 5;
-  optional int32 minValue = 6;
-  optional int32 maxValue = 7;
-  optional string particleEffect = 8;
-  optional DamageType damageType = 9;
-  optional string icon_path = 10;
-  optional string icon_uuid = 11;
-}
-
-local_message StatusEffects {
-  repeated StatusEffect statusEffect = 1;
-}
 
 local_message VitalsContainer {
   repeated Vitals vitals = 1;
@@ -396,7 +349,7 @@ local_message Vitals {
     Vehicle = 9;
     Structure = 10;
   }
-  required string id = 1;
+  required string characterId = 1;
   optional int32 health = 2;
   optional int32 stamina = 3;
   optional int32 magic = 4;
@@ -410,12 +363,12 @@ local_message Vitals {
   optional int32 healthRegen = 12;
   optional int32 staminaRegen = 13;
   optional int32 changed = 14;
-  optional string playerId = 15;
+  optional string entityId = 15;
   optional int32 staminaDrain = 16;
-  optional string grid = 17;
   optional VitalsType type = 18;
   optional int32 zone = 19;
   optional SubType subType = 20;
+  optional string templateName = 21;
 }
 
 local_message VisualEffect {
@@ -428,44 +381,50 @@ local_message VisualEffect {
 }
 
 local_message StatusEffectResult {
-  required string target = 1;
-  required string origin = 2;
+  optional string targetCharacterId = 1;
+  optional string originCharacterId = 2;
   required int32 value = 3;
   required string statusEffectId = 4;
+  optional string targetEntityId = 5;
 }
 
 local_message StatusEffectTarget {
   enum Action {
-  	None = 0;
+    None = 0;
     Apply = 1;
     Remove = 2;
   }
   enum PassiveFlag {
-  	NA = 0;
+    NA = 0;
     AutoRemove = 1;
     ManualRemove = 2;
   }
-  required string target = 1;
-  required string skill = 2;
+ 
+  required string targetEntityId = 1;
   optional GmVector3 location = 3;
-  optional int32 range = 4;
   repeated StatusEffect statusEffect = 5;
-  required string origin = 6;
-  optional int32 ticks = 7;
+  required string originCharacterId = 6;
   optional int64 activeId = 8;
   optional int64 lastTick = 9;
   required Action action = 10;
   required PassiveFlag passiveFlag = 11;
-  optional string originPlayerId = 12;
+  optional string originEntityId = 12;
+  optional Attack attack = 13;
 }
 
 
 
 local_message Attack {
-  required string attacker = 1;
-  required string target = 2;
-  required string skill = 3;
+  enum TargetType {
+    None = 0;
+    Character = 1;
+    Object = 2;
+  }
+  optional string attackerCharacterId = 1;
+  optional string targetId = 2;
+  required PlayerSkill playerSkill = 3;
   optional GmVector3 targetLocation = 4;
+  optional TargetType targetType = 5;
 }
 
 local_message ComboAttack {
@@ -519,7 +478,7 @@ message TrackData {
   optional int32 getNeighbors = 10;
   enum EntityType {
     None = 0;
-  	Any = 1;
+    Any = 1;
     Player = 2;
     Npc = 3;
     Object = 4;
@@ -592,26 +551,79 @@ message DynamicMessage {
   required bytes message = 2;
 }
 
+local_message StatusEffect {
+  enum Type {
+  	StatusEffectNone = 0;
+    AttributeDecrease = 1;
+    AttributeIncrease = 2;
+    Heal = 3;
+    Slow = 4;
+    Stun = 5;
+    Root = 6;
+    Death = 7;
+    ArmorIncrease = 8;
+    SpellResistIncrease = 9;
+    ElementalResistIncrease = 10;
+    SpellPenetrationIncrease = 11;
+    MagicRegenIncrease = 12;
+    HealthRegenIncrease = 13;
+    StaminaRegenIncrease = 14;
+    ArmorDecrease = 15;
+    SpellResistDecrease = 16;
+    ElementalResistDecrease = 17;
+    MagicRegenDecrease = 18;
+    HealthRegenDecrease = 19;
+    StaminaRegenDecrease = 20;
+    Speed = 21;
+}
+
+  enum DamageType {
+    DamageTypeNone = 0;
+    Physical = 1;
+    Magic = 2;
+    Elemental = 3;
+  }
+  
+  enum Resource {
+    ResourceNone = 0;
+    ResourceMagic = 1;
+    ResourceStamina = 2;
+  }
+  
+  optional Type type = 1;
+  optional string id = 2;
+  optional int32 duration = 3;
+  optional int32 ticks = 4;
+  optional string attribute = 5;
+  optional int32 minValue = 6;
+  optional int32 maxValue = 7;
+  optional string particleEffect = 8;
+  optional DamageType damageType = 9;
+  optional string icon_path = 10;
+  optional string icon_uuid = 11;
+  optional int32 ticksPerformed = 12;
+  optional Resource resource = 13;
+  optional int32 resourceCost = 14;
+  optional int32 range = 15;
+}
+
+local_message StatusEffects {
+  repeated StatusEffect statusEffect = 1;
+}
+
 local_persistent_message PlayerSkill {
   enum DamageType {
     DamageTypeNone = 0;
 	Aoe = 1;
 	SingleTarget = 2;
 	Pbaoe = 3;
-	SelfAoe = 4;
-	Self = 5;
+	Self = 4;
   }
   
   enum SkillType {
     SkillTypeNone = 0;
     Active = 1;
     Passive = 2;
-  }
-  
-  enum Resource {
-    ResourceNone = 0;
-    Magic = 1;
-    Stamina = 2;
   }
   
   enum Category {
@@ -639,20 +651,16 @@ local_persistent_message PlayerSkill {
   optional string damageType = 5;
   optional string icon_path = 6;
   optional string description = 7;
-  optional string resource = 8;
-  optional int32 resourceCost = 9;
   required string characterId = 10;
   optional string weaponType = 11;
-  optional int32 range = 12;
+  
   optional string statusEffectId = 13;
   optional int32 level = 14;
-  optional int32 resourceCostPerTick = 15;
   optional int32 isComboPart = 16;
   optional int32 isPassive = 17;
   optional string skillType = 18;
   optional string icon_uuid = 19;
   optional string statusEffects = 20;
-  
 }
 
 message PlayerSkills {

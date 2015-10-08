@@ -147,6 +147,37 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
             }
         }
     }
+	public enum Resource implements io.protostuff.EnumLite<Resource>
+    {
+    	
+    	    	ResourceNone(0),    	    	ResourceMagic(1),    	    	ResourceStamina(2);    	        
+        public final int number;
+        
+        private Resource (int number)
+        {
+            this.number = number;
+        }
+        
+        public int getNumber()
+        {
+            return number;
+        }
+        
+        public static Resource defaultValue() {
+        	return (ResourceNone);
+        }
+        
+        public static Resource valueOf(int number)
+        {
+            switch(number) 
+            {
+            	    			case 0: return (ResourceNone);
+    			    			case 1: return (ResourceMagic);
+    			    			case 2: return (ResourceStamina);
+    			                default: return null;
+            }
+        }
+    }
 
 
     public static Schema<StatusEffect> getSchema()
@@ -214,6 +245,26 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     
         	
 							    public String icon_uuid= null;
+		    			    
+		
+    
+        	
+							    public int ticksPerformed= 0;
+		    			    
+		
+    
+        	
+					public Resource resource = Resource.defaultValue();
+			    
+		
+    
+        	
+							    public int resourceCost= 0;
+		    			    
+		
+    
+        	
+							    public int range= 0;
 		    			    
 		
     
@@ -491,6 +542,9 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	    	    	    	    	model.set("status_effect_particle_effect",null);
     	    	    	    	    	    	    	model.set("status_effect_icon_path",null);
     	    	    	    	    	    	model.set("status_effect_icon_uuid",null);
+    	    	    	    	    	    	model.set("status_effect_ticks_performed",null);
+    	    	    	    	    	    	    	model.set("status_effect_resource_cost",null);
+    	    	    	    	    	    	model.set("status_effect_range",null);
     	    }
     
 	public void toModel(Model model) {
@@ -547,6 +601,26 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	    	    	    	
     	    	    	//if (icon_uuid != null) {
     	       	    	model.setString("status_effect_icon_uuid",icon_uuid);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (ticksPerformed != null) {
+    	       	    	model.setInteger("status_effect_ticks_performed",ticksPerformed);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (resource != null) {
+    	       	    	model.setInteger("status_effect_resource",resource.number);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (resourceCost != null) {
+    	       	    	model.setInteger("status_effect_resource_cost",resourceCost);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (range != null) {
+    	       	    	model.setInteger("status_effect_range",range);
     	        		
     	//}
     	    	    }
@@ -635,6 +709,35 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		if (icon_uuidTestField != null) {
 			String icon_uuidField = icon_uuidTestField;
 			message.setIcon_uuid(icon_uuidField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			Integer ticksPerformedTestField = model.getInteger("status_effect_ticks_performed");
+		if (ticksPerformedTestField != null) {
+			int ticksPerformedField = ticksPerformedTestField;
+			message.setTicksPerformed(ticksPerformedField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    				message.setResource(Resource.valueOf(model.getInteger("status_effect_resource")));
+    	    	    	    	    	    	
+    	    			Integer resourceCostTestField = model.getInteger("status_effect_resource_cost");
+		if (resourceCostTestField != null) {
+			int resourceCostField = resourceCostTestField;
+			message.setResourceCost(resourceCostField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			Integer rangeTestField = model.getInteger("status_effect_range");
+		if (rangeTestField != null) {
+			int rangeField = rangeTestField;
+			message.setRange(rangeField);
 			hasFields = true;
 		}
     	
@@ -746,6 +849,42 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
 		this.icon_uuid = icon_uuid;
 		return this;	}
 	
+		            
+		public int getTicksPerformed() {
+		return ticksPerformed;
+	}
+	
+	public StatusEffect setTicksPerformed(int ticksPerformed) {
+		this.ticksPerformed = ticksPerformed;
+		return this;	}
+	
+		            
+		public Resource getResource() {
+		return resource;
+	}
+	
+	public StatusEffect setResource(Resource resource) {
+		this.resource = resource;
+		return this;	}
+	
+		            
+		public int getResourceCost() {
+		return resourceCost;
+	}
+	
+	public StatusEffect setResourceCost(int resourceCost) {
+		this.resourceCost = resourceCost;
+		return this;	}
+	
+		            
+		public int getRange() {
+		return range;
+	}
+	
+	public StatusEffect setRange(int range) {
+		this.range = range;
+		return this;	}
+	
 	
   
     // java serialization
@@ -846,6 +985,22 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
             	                	                	message.icon_uuid = input.readString();
                 	break;
                 	                	
+                            	            	case 12:
+            	                	                	message.ticksPerformed = input.readInt32();
+                	break;
+                	                	
+                            	            	case 13:
+            	                	                    message.resource = Resource.valueOf(input.readEnum());
+                    break;
+                	                	
+                            	            	case 14:
+            	                	                	message.resourceCost = input.readInt32();
+                	break;
+                	                	
+                            	            	case 15:
+            	                	                	message.range = input.readInt32();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -921,6 +1076,29 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.ticksPerformed != null) {
+            output.writeInt32(12, message.ticksPerformed, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if(message.resource != null)
+    	 	output.writeEnum(13, message.resource.number, false);
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.resourceCost != null) {
+            output.writeInt32(14, message.resourceCost, false);
+        }
+    	    	
+    	            	
+    	    	
+    	    	    	if( (Integer)message.range != null) {
+            output.writeInt32(15, message.range, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -959,6 +1137,18 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	//if(this.icon_uuid != null) {
     		System.out.println("icon_uuid="+this.icon_uuid);
     	//}
+    	    	//if(this.ticksPerformed != null) {
+    		System.out.println("ticksPerformed="+this.ticksPerformed);
+    	//}
+    	    	//if(this.resource != null) {
+    		System.out.println("resource="+this.resource);
+    	//}
+    	    	//if(this.resourceCost != null) {
+    		System.out.println("resourceCost="+this.resourceCost);
+    	//}
+    	    	//if(this.range != null) {
+    		System.out.println("range="+this.range);
+    	//}
     	    	System.out.println("END StatusEffect");
     }
     
@@ -977,6 +1167,10 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
         	        	case 9: return "damageType";
         	        	case 10: return "icon_path";
         	        	case 11: return "icon_uuid";
+        	        	case 12: return "ticksPerformed";
+        	        	case 13: return "resource";
+        	        	case 14: return "resourceCost";
+        	        	case 15: return "range";
         	            default: return null;
         }
     }
@@ -1001,6 +1195,10 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffect.class)
     	    	__fieldMap.put("damageType", 9);
     	    	__fieldMap.put("icon_path", 10);
     	    	__fieldMap.put("icon_uuid", 11);
+    	    	__fieldMap.put("ticksPerformed", 12);
+    	    	__fieldMap.put("resource", 13);
+    	    	__fieldMap.put("resourceCost", 14);
+    	    	__fieldMap.put("range", 15);
     	    }
    
    public static List<String> getFields() {

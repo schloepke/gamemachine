@@ -266,6 +266,54 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffects.class
         return this;
     }
     
+        	    	    	    	
+    public StatusEffects removeStatusEffectByTicksPerformed(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.ticksPerformed == obj.ticksPerformed) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	    	
+    public StatusEffects removeStatusEffectByResourceCost(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.resourceCost == obj.resourceCost) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
+        	    	    	    	
+    public StatusEffects removeStatusEffectByRange(StatusEffect statusEffect)  {
+    	if(this.statusEffect == null)
+           return this;
+            
+       	Iterator<StatusEffect> itr = this.statusEffect.iterator();
+       	while (itr.hasNext()) {
+    	StatusEffect obj = itr.next();
+    	
+    	    		if (statusEffect.range == obj.range) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
             	
     
     

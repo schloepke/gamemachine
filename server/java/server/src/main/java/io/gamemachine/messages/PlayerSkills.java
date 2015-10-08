@@ -235,38 +235,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkills.class)
     }
     
         	    	    	    	
-    public PlayerSkills removePlayerSkillByResource(PlayerSkill playerSkill)  {
-    	if(this.playerSkill == null)
-           return this;
-            
-       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
-       	while (itr.hasNext()) {
-    	PlayerSkill obj = itr.next();
-    	
-    	    		if (playerSkill.resource.equals(obj.resource)) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public PlayerSkills removePlayerSkillByResourceCost(PlayerSkill playerSkill)  {
-    	if(this.playerSkill == null)
-           return this;
-            
-       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
-       	while (itr.hasNext()) {
-    	PlayerSkill obj = itr.next();
-    	
-    	    		if (playerSkill.resourceCost == obj.resourceCost) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public PlayerSkills removePlayerSkillByCharacterId(PlayerSkill playerSkill)  {
     	if(this.playerSkill == null)
            return this;
@@ -299,22 +267,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkills.class)
     }
     
         	    	    	    	
-    public PlayerSkills removePlayerSkillByRange(PlayerSkill playerSkill)  {
-    	if(this.playerSkill == null)
-           return this;
-            
-       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
-       	while (itr.hasNext()) {
-    	PlayerSkill obj = itr.next();
-    	
-    	    		if (playerSkill.range == obj.range) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
     public PlayerSkills removePlayerSkillByStatusEffectId(PlayerSkill playerSkill)  {
     	if(this.playerSkill == null)
            return this;
@@ -340,22 +292,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkills.class)
     	PlayerSkill obj = itr.next();
     	
     	    		if (playerSkill.level == obj.level) {
-    	      			itr.remove();
-    		}
-		}
-        return this;
-    }
-    
-        	    	    	    	
-    public PlayerSkills removePlayerSkillByResourceCostPerTick(PlayerSkill playerSkill)  {
-    	if(this.playerSkill == null)
-           return this;
-            
-       	Iterator<PlayerSkill> itr = this.playerSkill.iterator();
-       	while (itr.hasNext()) {
-    	PlayerSkill obj = itr.next();
-    	
-    	    		if (playerSkill.resourceCostPerTick == obj.resourceCostPerTick) {
     	      			itr.remove();
     		}
 		}

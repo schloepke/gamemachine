@@ -74,7 +74,7 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 	public enum DamageType implements io.protostuff.EnumLite<DamageType>
     {
     	
-    	    	DamageTypeNone(0),    	    	Aoe(1),    	    	SingleTarget(2),    	    	Pbaoe(3),    	    	SelfAoe(4),    	    	Self(5);    	        
+    	    	DamageTypeNone(0),    	    	Aoe(1),    	    	SingleTarget(2),    	    	Pbaoe(3),    	    	Self(4);    	        
         public final int number;
         
         private DamageType (int number)
@@ -99,8 +99,7 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     			    			case 1: return (Aoe);
     			    			case 2: return (SingleTarget);
     			    			case 3: return (Pbaoe);
-    			    			case 4: return (SelfAoe);
-    			    			case 5: return (Self);
+    			    			case 4: return (Self);
     			                default: return null;
             }
         }
@@ -132,37 +131,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
             	    			case 0: return (SkillTypeNone);
     			    			case 1: return (Active);
     			    			case 2: return (Passive);
-    			                default: return null;
-            }
-        }
-    }
-	public enum Resource implements io.protostuff.EnumLite<Resource>
-    {
-    	
-    	    	ResourceNone(0),    	    	Magic(1),    	    	Stamina(2);    	        
-        public final int number;
-        
-        private Resource (int number)
-        {
-            this.number = number;
-        }
-        
-        public int getNumber()
-        {
-            return number;
-        }
-        
-        public static Resource defaultValue() {
-        	return (ResourceNone);
-        }
-        
-        public static Resource valueOf(int number)
-        {
-            switch(number) 
-            {
-            	    			case 0: return (ResourceNone);
-    			    			case 1: return (Magic);
-    			    			case 2: return (Stamina);
     			                default: return null;
             }
         }
@@ -286,16 +254,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 		
     
         	
-							    public String resource= null;
-		    			    
-		
-    
-        	
-							    public int resourceCost= 0;
-		    			    
-		
-    
-        	
 							    public String characterId= null;
 		    			    
 		
@@ -306,22 +264,12 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 		
     
         	
-							    public int range= 0;
-		    			    
-		
-    
-        	
 							    public String statusEffectId= null;
 		    			    
 		
     
         	
 							    public int level= 0;
-		    			    
-		
-    
-        	
-							    public int resourceCostPerTick= 0;
 		    			    
 		
     
@@ -828,14 +776,10 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	    	    	    	    	model.set("player_skill_damage_type",null);
     	    	    	    	    	    	model.set("player_skill_icon_path",null);
     	    	    	    	    	    	model.set("player_skill_description",null);
-    	    	    	    	    	    	model.set("player_skill_resource",null);
-    	    	    	    	    	    	model.set("player_skill_resource_cost",null);
     	    	    	    	    	    	model.set("player_skill_character_id",null);
     	    	    	    	    	    	model.set("player_skill_weapon_type",null);
-    	    	    	    	    	    	model.set("player_skill_range",null);
     	    	    	    	    	    	model.set("player_skill_status_effect_id",null);
     	    	    	    	    	    	model.set("player_skill_level",null);
-    	    	    	    	    	    	model.set("player_skill_resource_cost_per_tick",null);
     	    	    	    	    	    	model.set("player_skill_is_combo_part",null);
     	    	    	    	    	    	model.set("player_skill_is_passive",null);
     	    	    	    	    	    	model.set("player_skill_skill_type",null);
@@ -878,16 +822,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (resource != null) {
-    	       	    	model.setString("player_skill_resource",resource);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (resourceCost != null) {
-    	       	    	model.setInteger("player_skill_resource_cost",resourceCost);
-    	        		
-    	//}
-    	    	    	    	    	
     	    	    	//if (characterId != null) {
     	       	    	model.setString("player_skill_character_id",characterId);
     	        		
@@ -898,11 +832,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (range != null) {
-    	       	    	model.setInteger("player_skill_range",range);
-    	        		
-    	//}
-    	    	    	    	    	
     	    	    	//if (statusEffectId != null) {
     	       	    	model.setString("player_skill_status_effect_id",statusEffectId);
     	        		
@@ -910,11 +839,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	    	    	    	
     	    	    	//if (level != null) {
     	       	    	model.setInteger("player_skill_level",level);
-    	        		
-    	//}
-    	    	    	    	    	
-    	    	    	//if (resourceCostPerTick != null) {
-    	       	    	model.setInteger("player_skill_resource_cost_per_tick",resourceCostPerTick);
     	        		
     	//}
     	    	    	    	    	
@@ -1007,24 +931,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			String resourceTestField = model.getString("player_skill_resource");
-		if (resourceTestField != null) {
-			String resourceField = resourceTestField;
-			message.setResource(resourceField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer resourceCostTestField = model.getInteger("player_skill_resource_cost");
-		if (resourceCostTestField != null) {
-			int resourceCostField = resourceCostTestField;
-			message.setResourceCost(resourceCostField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
     	    			String characterIdTestField = model.getString("player_skill_character_id");
 		if (characterIdTestField != null) {
 			String characterIdField = characterIdTestField;
@@ -1043,15 +949,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	
     	    	
     	    	    	    	    	    	
-    	    			Integer rangeTestField = model.getInteger("player_skill_range");
-		if (rangeTestField != null) {
-			int rangeField = rangeTestField;
-			message.setRange(rangeField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
     	    			String statusEffectIdTestField = model.getString("player_skill_status_effect_id");
 		if (statusEffectIdTestField != null) {
 			String statusEffectIdField = statusEffectIdTestField;
@@ -1065,15 +962,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 		if (levelTestField != null) {
 			int levelField = levelTestField;
 			message.setLevel(levelField);
-			hasFields = true;
-		}
-    	
-    	    	
-    	    	    	    	    	    	
-    	    			Integer resourceCostPerTickTestField = model.getInteger("player_skill_resource_cost_per_tick");
-		if (resourceCostPerTickTestField != null) {
-			int resourceCostPerTickField = resourceCostPerTickTestField;
-			message.setResourceCostPerTick(resourceCostPerTickField);
 			hasFields = true;
 		}
     	
@@ -1195,24 +1083,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 		return this;	}
 	
 		            
-		public String getResource() {
-		return resource;
-	}
-	
-	public PlayerSkill setResource(String resource) {
-		this.resource = resource;
-		return this;	}
-	
-		            
-		public int getResourceCost() {
-		return resourceCost;
-	}
-	
-	public PlayerSkill setResourceCost(int resourceCost) {
-		this.resourceCost = resourceCost;
-		return this;	}
-	
-		            
 		public String getCharacterId() {
 		return characterId;
 	}
@@ -1231,15 +1101,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 		return this;	}
 	
 		            
-		public int getRange() {
-		return range;
-	}
-	
-	public PlayerSkill setRange(int range) {
-		this.range = range;
-		return this;	}
-	
-		            
 		public String getStatusEffectId() {
 		return statusEffectId;
 	}
@@ -1255,15 +1116,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
 	
 	public PlayerSkill setLevel(int level) {
 		this.level = level;
-		return this;	}
-	
-		            
-		public int getResourceCostPerTick() {
-		return resourceCostPerTick;
-	}
-	
-	public PlayerSkill setResourceCostPerTick(int resourceCostPerTick) {
-		this.resourceCostPerTick = resourceCostPerTick;
 		return this;	}
 	
 		            
@@ -1395,14 +1247,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
             	                	                	message.description = input.readString();
                 	break;
                 	                	
-                            	            	case 8:
-            	                	                	message.resource = input.readString();
-                	break;
-                	                	
-                            	            	case 9:
-            	                	                	message.resourceCost = input.readInt32();
-                	break;
-                	                	
                             	            	case 10:
             	                	                	message.characterId = input.readString();
                 	break;
@@ -1411,20 +1255,12 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
             	                	                	message.weaponType = input.readString();
                 	break;
                 	                	
-                            	            	case 12:
-            	                	                	message.range = input.readInt32();
-                	break;
-                	                	
                             	            	case 13:
             	                	                	message.statusEffectId = input.readString();
                 	break;
                 	                	
                             	            	case 14:
             	                	                	message.level = input.readInt32();
-                	break;
-                	                	
-                            	            	case 15:
-            	                	                	message.resourceCostPerTick = input.readInt32();
                 	break;
                 	                	
                             	            	case 16:
@@ -1502,18 +1338,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
         }
     	    	
     	            	
-    	    	
-    	    	    	if( (String)message.resource != null) {
-            output.writeString(8, message.resource, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.resourceCost != null) {
-            output.writeInt32(9, message.resourceCost, false);
-        }
-    	    	
-    	            	
     	    	//if(message.characterId == null)
         //    throw new UninitializedMessageException(message);
     	    	
@@ -1529,12 +1353,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	
     	            	
     	    	
-    	    	    	if( (Integer)message.range != null) {
-            output.writeInt32(12, message.range, false);
-        }
-    	    	
-    	            	
-    	    	
     	    	    	if( (String)message.statusEffectId != null) {
             output.writeString(13, message.statusEffectId, false);
         }
@@ -1543,12 +1361,6 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	
     	    	    	if( (Integer)message.level != null) {
             output.writeInt32(14, message.level, false);
-        }
-    	    	
-    	            	
-    	    	
-    	    	    	if( (Integer)message.resourceCostPerTick != null) {
-            output.writeInt32(15, message.resourceCostPerTick, false);
         }
     	    	
     	            	
@@ -1608,29 +1420,17 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	//if(this.description != null) {
     		System.out.println("description="+this.description);
     	//}
-    	    	//if(this.resource != null) {
-    		System.out.println("resource="+this.resource);
-    	//}
-    	    	//if(this.resourceCost != null) {
-    		System.out.println("resourceCost="+this.resourceCost);
-    	//}
     	    	//if(this.characterId != null) {
     		System.out.println("characterId="+this.characterId);
     	//}
     	    	//if(this.weaponType != null) {
     		System.out.println("weaponType="+this.weaponType);
     	//}
-    	    	//if(this.range != null) {
-    		System.out.println("range="+this.range);
-    	//}
     	    	//if(this.statusEffectId != null) {
     		System.out.println("statusEffectId="+this.statusEffectId);
     	//}
     	    	//if(this.level != null) {
     		System.out.println("level="+this.level);
-    	//}
-    	    	//if(this.resourceCostPerTick != null) {
-    		System.out.println("resourceCostPerTick="+this.resourceCostPerTick);
     	//}
     	    	//if(this.isComboPart != null) {
     		System.out.println("isComboPart="+this.isComboPart);
@@ -1661,14 +1461,10 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
         	        	case 5: return "damageType";
         	        	case 6: return "icon_path";
         	        	case 7: return "description";
-        	        	case 8: return "resource";
-        	        	case 9: return "resourceCost";
         	        	case 10: return "characterId";
         	        	case 11: return "weaponType";
-        	        	case 12: return "range";
         	        	case 13: return "statusEffectId";
         	        	case 14: return "level";
-        	        	case 15: return "resourceCostPerTick";
         	        	case 16: return "isComboPart";
         	        	case 17: return "isPassive";
         	        	case 18: return "skillType";
@@ -1694,14 +1490,10 @@ private static final Logger logger = LoggerFactory.getLogger(PlayerSkill.class);
     	    	__fieldMap.put("damageType", 5);
     	    	__fieldMap.put("icon_path", 6);
     	    	__fieldMap.put("description", 7);
-    	    	__fieldMap.put("resource", 8);
-    	    	__fieldMap.put("resourceCost", 9);
     	    	__fieldMap.put("characterId", 10);
     	    	__fieldMap.put("weaponType", 11);
-    	    	__fieldMap.put("range", 12);
     	    	__fieldMap.put("statusEffectId", 13);
     	    	__fieldMap.put("level", 14);
-    	    	__fieldMap.put("resourceCostPerTick", 15);
     	    	__fieldMap.put("isComboPart", 16);
     	    	__fieldMap.put("isPassive", 17);
     	    	__fieldMap.put("skillType", 18);

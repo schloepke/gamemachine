@@ -164,7 +164,7 @@ public class PlayerService {
 	}
 	
 	public int getZone(String playerId) {
-		return GameGrid.getPlayerZone(playerId);
+		return GameGrid.getEntityZone(playerId);
 	}
 	
 	public boolean playerIsAgent(String playerId) {

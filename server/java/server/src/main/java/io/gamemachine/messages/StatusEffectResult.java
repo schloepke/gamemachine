@@ -67,12 +67,12 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     static final String defaultScope = StatusEffectResult.class.getSimpleName();
 
     	
-							    public String target= null;
+							    public String targetCharacterId= null;
 		    			    
 		
     
         	
-							    public String origin= null;
+							    public String originCharacterId= null;
 		    			    
 		
     
@@ -83,6 +83,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     
         	
 							    public String statusEffectId= null;
+		    			    
+		
+    
+        	
+							    public String targetEntityId= null;
 		    			    
 		
     
@@ -99,21 +104,22 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
 
 
 	public static void clearModel(Model model) {
-    	    	    	    	    	    	model.set("status_effect_result_target",null);
-    	    	    	    	    	    	model.set("status_effect_result_origin",null);
+    	    	    	    	    	    	model.set("status_effect_result_target_character_id",null);
+    	    	    	    	    	    	model.set("status_effect_result_origin_character_id",null);
     	    	    	    	    	    	model.set("status_effect_result_value",null);
     	    	    	    	    	    	model.set("status_effect_result_status_effect_id",null);
+    	    	    	    	    	    	model.set("status_effect_result_target_entity_id",null);
     	    }
     
 	public void toModel(Model model) {
     	    	    	    	
-    	    	    	//if (target != null) {
-    	       	    	model.setString("status_effect_result_target",target);
+    	    	    	//if (targetCharacterId != null) {
+    	       	    	model.setString("status_effect_result_target_character_id",targetCharacterId);
     	        		
     	//}
     	    	    	    	    	
-    	    	    	//if (origin != null) {
-    	       	    	model.setString("status_effect_result_origin",origin);
+    	    	    	//if (originCharacterId != null) {
+    	       	    	model.setString("status_effect_result_origin_character_id",originCharacterId);
     	        		
     	//}
     	    	    	    	    	
@@ -126,25 +132,30 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     	       	    	model.setString("status_effect_result_status_effect_id",statusEffectId);
     	        		
     	//}
+    	    	    	    	    	
+    	    	    	//if (targetEntityId != null) {
+    	       	    	model.setString("status_effect_result_target_entity_id",targetEntityId);
+    	        		
+    	//}
     	    	    }
     
 	public static StatusEffectResult fromModel(Model model) {
 		boolean hasFields = false;
     	StatusEffectResult message = new StatusEffectResult();
     	    	    	    	    	
-    	    			String targetTestField = model.getString("status_effect_result_target");
-		if (targetTestField != null) {
-			String targetField = targetTestField;
-			message.setTarget(targetField);
+    	    			String targetCharacterIdTestField = model.getString("status_effect_result_target_character_id");
+		if (targetCharacterIdTestField != null) {
+			String targetCharacterIdField = targetCharacterIdTestField;
+			message.setTargetCharacterId(targetCharacterIdField);
 			hasFields = true;
 		}
     	
     	    	
     	    	    	    	    	    	
-    	    			String originTestField = model.getString("status_effect_result_origin");
-		if (originTestField != null) {
-			String originField = originTestField;
-			message.setOrigin(originField);
+    	    			String originCharacterIdTestField = model.getString("status_effect_result_origin_character_id");
+		if (originCharacterIdTestField != null) {
+			String originCharacterIdField = originCharacterIdTestField;
+			message.setOriginCharacterId(originCharacterIdField);
 			hasFields = true;
 		}
     	
@@ -167,6 +178,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
 		}
     	
     	    	
+    	    	    	    	    	    	
+    	    			String targetEntityIdTestField = model.getString("status_effect_result_target_entity_id");
+		if (targetEntityIdTestField != null) {
+			String targetEntityIdField = targetEntityIdTestField;
+			message.setTargetEntityId(targetEntityIdField);
+			hasFields = true;
+		}
+    	
+    	    	
     	    			if (hasFields) {
 			return message;
 		} else {
@@ -176,21 +196,21 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
 
 
 	            
-		public String getTarget() {
-		return target;
+		public String getTargetCharacterId() {
+		return targetCharacterId;
 	}
 	
-	public StatusEffectResult setTarget(String target) {
-		this.target = target;
+	public StatusEffectResult setTargetCharacterId(String targetCharacterId) {
+		this.targetCharacterId = targetCharacterId;
 		return this;	}
 	
 		            
-		public String getOrigin() {
-		return origin;
+		public String getOriginCharacterId() {
+		return originCharacterId;
 	}
 	
-	public StatusEffectResult setOrigin(String origin) {
-		this.origin = origin;
+	public StatusEffectResult setOriginCharacterId(String originCharacterId) {
+		this.originCharacterId = originCharacterId;
 		return this;	}
 	
 		            
@@ -209,6 +229,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
 	
 	public StatusEffectResult setStatusEffectId(String statusEffectId) {
 		this.statusEffectId = statusEffectId;
+		return this;	}
+	
+		            
+		public String getTargetEntityId() {
+		return targetEntityId;
+	}
+	
+	public StatusEffectResult setTargetEntityId(String targetEntityId) {
+		this.targetEntityId = targetEntityId;
 		return this;	}
 	
 	
@@ -268,11 +297,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
                 case 0:
                     return;
                             	case 1:
-            	                	                	message.target = input.readString();
+            	                	                	message.targetCharacterId = input.readString();
                 	break;
                 	                	
                             	            	case 2:
-            	                	                	message.origin = input.readString();
+            	                	                	message.originCharacterId = input.readString();
                 	break;
                 	                	
                             	            	case 3:
@@ -281,6 +310,10 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
                 	                	
                             	            	case 4:
             	                	                	message.statusEffectId = input.readString();
+                	break;
+                	                	
+                            	            	case 5:
+            	                	                	message.targetEntityId = input.readString();
                 	break;
                 	                	
                             	            
@@ -294,19 +327,15 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     public void writeTo(Output output, StatusEffectResult message) throws IOException
     {
     	    	
-    	    	//if(message.target == null)
-        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.target != null) {
-            output.writeString(1, message.target, false);
+    	    	    	if( (String)message.targetCharacterId != null) {
+            output.writeString(1, message.targetCharacterId, false);
         }
     	    	
     	            	
-    	    	//if(message.origin == null)
-        //    throw new UninitializedMessageException(message);
     	    	
-    	    	    	if( (String)message.origin != null) {
-            output.writeString(2, message.origin, false);
+    	    	    	if( (String)message.originCharacterId != null) {
+            output.writeString(2, message.originCharacterId, false);
         }
     	    	
     	            	
@@ -326,22 +355,31 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (String)message.targetEntityId != null) {
+            output.writeString(5, message.targetEntityId, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
     {
     	System.out.println("START StatusEffectResult");
-    	    	//if(this.target != null) {
-    		System.out.println("target="+this.target);
+    	    	//if(this.targetCharacterId != null) {
+    		System.out.println("targetCharacterId="+this.targetCharacterId);
     	//}
-    	    	//if(this.origin != null) {
-    		System.out.println("origin="+this.origin);
+    	    	//if(this.originCharacterId != null) {
+    		System.out.println("originCharacterId="+this.originCharacterId);
     	//}
     	    	//if(this.value != null) {
     		System.out.println("value="+this.value);
     	//}
     	    	//if(this.statusEffectId != null) {
     		System.out.println("statusEffectId="+this.statusEffectId);
+    	//}
+    	    	//if(this.targetEntityId != null) {
+    		System.out.println("targetEntityId="+this.targetEntityId);
     	//}
     	    	System.out.println("END StatusEffectResult");
     }
@@ -350,10 +388,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     {
         switch(number)
         {
-        	        	case 1: return "target";
-        	        	case 2: return "origin";
+        	        	case 1: return "targetCharacterId";
+        	        	case 2: return "originCharacterId";
         	        	case 3: return "value";
         	        	case 4: return "statusEffectId";
+        	        	case 5: return "targetEntityId";
         	            default: return null;
         }
     }
@@ -367,10 +406,11 @@ private static final Logger logger = LoggerFactory.getLogger(StatusEffectResult.
     private static final java.util.HashMap<String,Integer> __fieldMap = new java.util.HashMap<String,Integer>();
     static
     {
-    	    	__fieldMap.put("target", 1);
-    	    	__fieldMap.put("origin", 2);
+    	    	__fieldMap.put("targetCharacterId", 1);
+    	    	__fieldMap.put("originCharacterId", 2);
     	    	__fieldMap.put("value", 3);
     	    	__fieldMap.put("statusEffectId", 4);
+    	    	__fieldMap.put("targetEntityId", 5);
     	    }
    
    public static List<String> getFields() {

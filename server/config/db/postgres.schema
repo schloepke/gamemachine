@@ -226,6 +226,8 @@ CREATE TABLE characters (
 
   character_vitals_type integer DEFAULT NULL,
 
+  character_vitals_sub_type integer DEFAULT NULL,
+
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
 alter table characters owner to gamemachine;
@@ -272,21 +274,13 @@ CREATE TABLE player_skills (
 
   player_skill_description character varying(128) DEFAULT NULL,
 
-  player_skill_resource character varying(128) DEFAULT NULL,
-
-  player_skill_resource_cost integer DEFAULT NULL,
-
   player_skill_character_id character varying(128) NOT NULL,
 
   player_skill_weapon_type character varying(128) DEFAULT NULL,
 
-  player_skill_range integer DEFAULT NULL,
-
   player_skill_status_effect_id character varying(128) DEFAULT NULL,
 
   player_skill_level integer DEFAULT NULL,
-
-  player_skill_resource_cost_per_tick integer DEFAULT NULL,
 
   player_skill_is_combo_part integer DEFAULT NULL,
 
