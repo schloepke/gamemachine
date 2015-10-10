@@ -3,7 +3,6 @@ package io.gamemachine.core;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.GameLimits;
-import io.gamemachine.game_systems.LatencyTest;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.process.ProcessManager;
@@ -86,7 +85,6 @@ public class GameMachineLoader {
 		
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
-		actorSystem.actorOf(new RoundRobinPool(10).props(Props.create(LatencyTest.class)), LatencyTest.name);
 	
 		startCacheUpdateHandler();
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());

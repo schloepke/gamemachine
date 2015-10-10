@@ -24,8 +24,9 @@ public class CharacterService {
 	public static int timeout = 2000;
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
+
 	public Map<String, Character> characters = new ConcurrentHashMap<String, Character>();
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
 
 	private CharacterService() {
@@ -35,7 +36,7 @@ public class CharacterService {
 		} else {
 			this.authType = 0;
 		}
-		
+
 		logger.info("CharacterService starting authType=" + authType);
 	}
 
@@ -61,7 +62,7 @@ public class CharacterService {
 			}
 			chars.add(character);
 			Characters.store().set(characters);
-			
+
 			Character.store().set(character);
 			return true;
 		}
@@ -83,7 +84,7 @@ public class CharacterService {
 		public static Character getCharacter(String characterId) {
 			return Character.store().get(characterId, timeout);
 		}
-		
+
 		public static Characters getCharacters(String playerId) {
 			Characters characters = Characters.store().get(playerId, timeout);
 			if (characters == null) {
@@ -113,26 +114,26 @@ public class CharacterService {
 		characterNotification.playerId = playerId;
 		characterNotification.action = action;
 		ActorRef ref = ChatMediator.getInstance().get(channel);
-		ref.tell(new DistributedPubSubMediator.Publish(channel,characterNotification),null);
+		ref.tell(new DistributedPubSubMediator.Publish(channel, characterNotification), null);
 	}
-	
+
 	public void deleteForPlayer(String playerId) {
 		if (authType == OBJECT_DB) {
 			Characters.store().delete(playerId);
 		} else if (authType == SQL_DB) {
 			Character.db().deleteWhere("character_player_id = ?", playerId);
 		}
-		sendNotification(playerId,"all","delete");
+		sendNotification(playerId, "all", "delete");
 	}
 
 	public void delete(String playerId, String characterId) {
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.delete(playerId, characterId);
-			ObjectStoreHelper.delete(globalUser, characterId+"_global");
+			ObjectStoreHelper.delete(globalUser, characterId + "_global");
 		} else if (authType == SQL_DB) {
 			Character.db().deleteWhere("character_id = ?", characterId);
 		}
-		sendNotification(playerId,characterId,"delete");
+		sendNotification(playerId, characterId, "delete");
 	}
 
 	public void save(Character character) {
@@ -144,21 +145,18 @@ public class CharacterService {
 			}
 		}
 	}
-	
-	public Character create(String playerId, String id, String umaData) {
-		String globalCharacterId = id+"_global";
+
+	public Character create(String playerId, String characterId, Object data) {
+		String globalCharacterId = characterId + "_global";
 		Character global = find(globalUser, globalCharacterId);
 		if (global != null) {
 			return null;
 		}
 
 		Character character = new Character();
-		character.setId(id);
+		character.setId(characterId);
 		character.setPlayerId(playerId);
-		character.setUmaData(umaData);
-		character.setVitalsType(Vitals.VitalsType.Character.number);
-		character.setVitalsSubType(Vitals.SubType.Player.number);
-		
+
 		if (authType == OBJECT_DB) {
 			ObjectStoreHelper.update(character);
 			global = character.clone();
@@ -170,15 +168,26 @@ public class CharacterService {
 				throw new RuntimeException("Error saving Character " + character.id);
 			}
 		}
-		sendNotification(playerId,id,"create");
+		sendNotification(playerId, characterId, "create");
+
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+		if (gameEntityManager != null) {
+			gameEntityManager.OnCharacterCreated(character, data);
+		}
+
 		return character;
+	}
+
+	public void SetUmaData(Character character, String umaData) {
+		character.setUmaData(umaData);
+		Character.db().save(character);
 	}
 
 	public int getZone(String characterId) {
 		Character character = find(characterId);
 		return GameGrid.getEntityZone(character.playerId);
 	}
-	
+
 	public List<Character> search(String searchString) {
 		List<Character> characters;
 
@@ -212,7 +221,7 @@ public class CharacterService {
 			return null;
 		}
 	}
-	
+
 	public Character find(String playerId, String characterId) {
 		if (authType == OBJECT_DB) {
 			return ObjectStoreHelper.find(playerId, characterId);
@@ -226,7 +235,7 @@ public class CharacterService {
 				}
 				return character;
 			}
-			
+
 		} else {
 			return null;
 		}

@@ -224,9 +224,7 @@ CREATE TABLE characters (
 
   character_include_uma_data boolean DEFAULT NULL,
 
-  character_vitals_type integer DEFAULT NULL,
-
-  character_vitals_sub_type integer DEFAULT NULL,
+  character_vitals_template character varying(128) DEFAULT NULL,
 
   character_level integer DEFAULT NULL,
 
@@ -277,8 +275,6 @@ CREATE TABLE player_skills (
   player_skill_description character varying(128) DEFAULT NULL,
 
   player_skill_character_id character varying(128) NOT NULL,
-
-  player_skill_weapon_type character varying(128) DEFAULT NULL,
 
   player_skill_status_effect_id character varying(128) DEFAULT NULL,
 

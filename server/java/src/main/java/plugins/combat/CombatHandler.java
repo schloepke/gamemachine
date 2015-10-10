@@ -16,6 +16,7 @@ import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Character;
 
 public class CombatHandler extends GameMessageActor {
@@ -56,6 +57,18 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 	
+	private Vitals targetVitals(Attack.TargetType targetType, String entityId, int zone) {
+		if (targetType == Attack.TargetType.Character) {
+			return VitalsHandler.findOrCreateCharacterVitals(entityId, zone);
+		} else if (targetType == Attack.TargetType.Object) {
+			return VitalsHandler.findOrCreateObjectVitals(entityId,	Vitals.VitalsType.Object, zone);
+		} else if (targetType == Attack.TargetType.BuildObject) {
+			return VitalsHandler.findOrCreateObjectVitals(entityId,	Vitals.VitalsType.BuildObject, zone);
+		} else {
+			throw new RuntimeException("Invalid target type " + targetType);
+		}
+	}
+	
 	private void doAttack(Attack attack) {
 		boolean sendToObjectGrid = false;
 		boolean sendToDefaultGrid = false;
@@ -74,6 +87,7 @@ public class CombatHandler extends GameMessageActor {
 		logger.warning("Attack " + attack.attackerCharacterId + " " + attack.targetId + " skill " + attack.playerSkill.id);
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
+		statusEffectTarget.originVitals = VitalsHandler.findOrCreateCharacterVitals(playerId, zone);
 		
 		statusEffectTarget.attack = attack;
 		
@@ -104,10 +118,13 @@ public class CombatHandler extends GameMessageActor {
 					statusEffectTarget.targetEntityId = character.playerId;
 					sendToDefaultGrid = true;
 				}
+				
+				statusEffectTarget.targetVitals = targetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			}
 			
 		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Self.toString())) {
 			statusEffectTarget.targetEntityId = playerId;
+			statusEffectTarget.targetVitals = targetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			sendToDefaultGrid = true;
 			
 		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())) {

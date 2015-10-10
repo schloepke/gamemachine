@@ -209,9 +209,7 @@ CREATE TABLE `characters` (
 
   `character_include_uma_data` tinyint(4) DEFAULT NULL,
 
-  `character_vitals_type` int(11) DEFAULT NULL,
-
-  `character_vitals_sub_type` int(11) DEFAULT NULL,
+  `character_vitals_template` varchar(128) DEFAULT NULL,
 
   `character_level` int(11) DEFAULT NULL,
 
@@ -258,8 +256,6 @@ CREATE TABLE `player_skills` (
   `player_skill_description` varchar(128) DEFAULT NULL,
 
   `player_skill_character_id` varchar(128) NOT NULL,
-
-  `player_skill_weapon_type` varchar(128) DEFAULT NULL,
 
   `player_skill_status_effect_id` varchar(128) DEFAULT NULL,
 

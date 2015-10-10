@@ -264,11 +264,20 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/create")) {
-					Character character = CharacterService.instance().create(params.get("playerId"),	params.get("characterId"), params.get("umaData"));
+					String data = null;
+					if (params.containsKey("data")) {
+						data = params.get("data");
+					}
+					
+					Character character = CharacterService.instance().create(params.get("playerId"),	params.get("characterId"),data);
 					if (character == null) {
 						character = new Character();
 						character.playerId = "na";
 						character.id = "exists";
+					} else {
+						if (params.containsKey("umaData")) {
+							CharacterService.instance().SetUmaData(character, params.get("umaData"));
+						}
 					}
 					Ok(ctx, character.toByteArray());
 					return;

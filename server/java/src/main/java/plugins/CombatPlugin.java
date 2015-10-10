@@ -25,7 +25,6 @@ public class CombatPlugin extends Plugin {
 	@Override
 	public void start() {
 		StatusEffectDef.createStatusEffects();
-		VitalsHandler.loadTemplates();
 		
 		GameMessageRoute.add(VitalsHandler.name, VitalsHandler.name, false);
 		ActorUtil.createActor(VitalsHandler.class, VitalsHandler.name);
