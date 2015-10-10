@@ -29,7 +29,7 @@ public class ClientDbLoader extends GameMessageActor {
 			return Files.readAllBytes(path);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			throw new RuntimeException(e.getMessage());
 		}
 	}
 	
@@ -42,7 +42,7 @@ public class ClientDbLoader extends GameMessageActor {
 		if (new File(dbPath(name)).exists()) {
 			return VitalsContainer.parseFrom(LoadProtoFile(name));
 		} else {
-			return null;
+			return new VitalsContainer();
 		}
 	}
 	
@@ -51,7 +51,7 @@ public class ClientDbLoader extends GameMessageActor {
 		if (new File(dbPath(name)).exists()) {
 			return StatusEffects.parseFrom(LoadProtoFile(name));
 		} else {
-			return null;
+			return new StatusEffects();
 		}
 	}
 	
@@ -60,7 +60,7 @@ public class ClientDbLoader extends GameMessageActor {
 		if (new File(dbPath(name)).exists()) {
 			return PlayerSkills.parseFrom(LoadProtoFile(name));
 		} else {
-			return null;
+			return new PlayerSkills();
 		}
 	}
 	
@@ -69,7 +69,7 @@ public class ClientDbLoader extends GameMessageActor {
 		if (new File(dbPath(name)).exists()) {
 			return PlayerItems.parseFrom(LoadProtoFile(name));
 		} else {
-			return null;
+			return new PlayerItems();
 		}
 	}
 	
@@ -78,7 +78,7 @@ public class ClientDbLoader extends GameMessageActor {
 		if (new File(dbPath(name)).exists()) {
 			return CraftingRecipes.parseFrom(LoadProtoFile(name));
 		} else {
-			return null;
+			return new CraftingRecipes();
 		}
 	}
 	

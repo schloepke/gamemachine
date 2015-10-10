@@ -36,6 +36,8 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 public class Grid {
 
 	public String name;
@@ -218,6 +220,9 @@ public class Grid {
 
 				if (entityType == TrackData.EntityType.Any || trackData.entityType == entityType) {
 					Integer shortId = getShortId(trackData.id);
+					if (shortId == null) {
+						continue;
+					}
 					trackData.shortId = shortId;
 					
 					if (optsFlag == 2) {
@@ -311,7 +316,9 @@ public class Grid {
 		List<TrackData> trackdatas = new ArrayList<TrackData>();
 		for (TrackData td : objectIndex.values()) {
 			Integer shortId = getShortId(td.id);
-			td.shortId = shortId;
+			if (shortId != null) {
+				td.shortId = shortId;
+			}
 			trackdatas.add(td);
 		}
 		return trackdatas;
@@ -342,7 +349,9 @@ public class Grid {
 	public void RemoveExpired(Long max) {
 		List<String> ids = new ArrayList<String>();
 		for (TrackData td : objectIndex.values()) {
-			ids.add(td.id);
+			if (td.entityType == TrackData.EntityType.Player) {
+				ids.add(td.id);
+			}
 		}
 		
 		for (String id : ids) {

@@ -616,6 +616,22 @@ private static final Logger logger = LoggerFactory.getLogger(Characters.class);
         return this;
     }
     
+        	    	    	    	
+    public Characters removeCharactersByLevel(Character characters)  {
+    	if(this.characters == null)
+           return this;
+            
+       	Iterator<Character> itr = this.characters.iterator();
+       	while (itr.hasNext()) {
+    	Character obj = itr.next();
+    	
+    	    		if (characters.level == obj.level) {
+    	      			itr.remove();
+    		}
+		}
+        return this;
+    }
+    
             	
     
     

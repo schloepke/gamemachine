@@ -3,15 +3,30 @@ package io.gamemachine.core;
 import java.util.concurrent.TimeUnit;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSelection;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import scala.concurrent.duration.Duration;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerNotification;
+import io.gamemachine.routing.GameMessageRoute;
 
 public abstract class GameMessageActor extends GameActor {
 
+	public static void tell(GameMessage gameMessage, String name) {
+		GameMessageRoute route = GameMessageRoute.routeFor(name);
+		if (route != null) {
+			ActorSelection sel;
+			if (route.distributed) {
+				sel = ActorUtil.findDistributed(route.to, gameMessage.playerId);
+			} else {
+				sel = ActorUtil.getSelectionByName(route.to);
+			}
+			sel.tell(gameMessage, null);
+		}
+	}
+	
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof GameMessage) {
 			GameMessage gameMessage = (GameMessage) message;

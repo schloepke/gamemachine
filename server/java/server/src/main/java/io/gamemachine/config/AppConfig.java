@@ -14,6 +14,8 @@ public class AppConfig {
 	private static String env;
 	public static String envRoot;
 	private static String defaultGameId;
+	private static int worldOffset;
+	private static long gridExpiration;
 	private static Config gameConfig;
 	private static List<String> plugins = new ArrayList<String>();
 	
@@ -21,6 +23,22 @@ public class AppConfig {
 		String path = AppConfig.envRoot+File.separator+"config"+File.separator+env+".conf";
 		File file = new File(path);
 		return ConfigFactory.parseFile(file);
+	}
+	
+	public static void setGridExpiration(long gridExpiration) {
+		AppConfig.gridExpiration = gridExpiration;
+	}
+	
+	public static long getGridExpiration() {
+		return AppConfig.gridExpiration;
+	}
+	
+	public static void setWorldOffset(int worldOffset) {
+		AppConfig.worldOffset = worldOffset;
+	}
+	
+	public static int getWorldOffset() {
+		return AppConfig.worldOffset;
 	}
 	
 	public static List<String> getPlugins() {

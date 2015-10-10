@@ -1,32 +1,15 @@
 package plugins.combat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
-import io.gamemachine.core.PlayerService;
-import io.gamemachine.messages.TrackData;
-import scala.Console;
 import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.TrackData;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-public class Common {
-
-	public static Long npcdDeathTime = 180000L;
-	public static Long deathTime = 15000L;
-	public static int worldOffset = 1000;
-	public static String gameId = "mygame";
-	public static double vitalsDistance = 50;
-	
-	public static Grid playerGrid(String playerId) {
-		return GameGrid.getGameGrid("default", playerId);
-	}
-	
-	public static Grid objectGrid(String playerId) {
-		return GameGrid.getGameGrid("build_objects", playerId);
-	}
+public class AoeUtil {
 	
 	public static List<TrackData> getTargetsInRange(int range, int x, int y, int z, String gridName, String playerId) {
 		GmVector3 vec = new GmVector3();
@@ -62,12 +45,12 @@ public class Common {
 	}
 	
 	public static List<TrackData> getTargetsInRange(int range, GmVector3 location, String gridName, String playerId) {
-		Grid grid = GameGrid.getGameGrid(gameId, gridName, playerId);
+		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), gridName, playerId);
 		return getTargetsInRange(range,location,grid);
 	}
 
 	public static double scale(int i) {
-		return (i / 100l) - worldOffset;
+		return (i / 100l) - AppConfig.getWorldOffset();
 	}
 	
 	public static double distance(TrackData tdata2, TrackData tdata) {
@@ -107,14 +90,4 @@ public class Common {
 		return to;
 	}
 	
-	public static int randInt(int min, int max) {
-
-		// NOTE: Usually this should be a field rather than a method
-		// variable so that it is not re-seeded every call.
-		Random rand = new Random();
-
-		int randomNum = rand.nextInt((max - min) + 1) + min;
-
-		return randomNum;
-	}
 }

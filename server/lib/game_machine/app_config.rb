@@ -23,6 +23,8 @@ module GameMachine
       JavaLib::AppConfig.set_env_root(ENV['APP_ROOT'])
       JavaLib::AppConfig.set_env(GameMachine.env)
       JavaLib::AppConfig.set_default_game_id(config.default_game_id)
+      JavaLib::AppConfig.setWorldOffset(config.world_offset)
+      JavaLib::AppConfig.setGridExpiration(config.grid_expiration)
       JavaLib::AppConfig.set_orm(config.orm)
       JavaLib::AppConfig.set_plugins(config.plugins)
       JavaLib::AppConfig::Handlers.setAuth(config.handlers.auth)

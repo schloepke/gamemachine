@@ -666,13 +666,13 @@ private static final Logger logger = LoggerFactory.getLogger(Entity.class);
 
 	public ArrayList<String> componentNames() {
 		ArrayList<String> names = new ArrayList<String>();
-		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.guildAction != null) {
+		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.guildAction != null) {
 			names.add(this.guildAction.getClass().getSimpleName());
 		}
 	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.pvpGameMessage != null) {
 			names.add(this.pvpGameMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.player != null) {
+	  		  		  		  		  		  		  		  		  		  		  		if (this.player != null) {
 			names.add(this.player.getClass().getSimpleName());
 		}
 	  		  		if (this.trackData != null) {
@@ -681,7 +681,7 @@ private static final Logger logger = LoggerFactory.getLogger(Entity.class);
 	  		  		  		  		  		if (this.dynamicMessage != null) {
 			names.add(this.dynamicMessage.getClass().getSimpleName());
 		}
-	  		  		  		  		  		if (this.playerSkills != null) {
+	  		  		  		if (this.playerSkills != null) {
 			names.add(this.playerSkills.getClass().getSimpleName());
 		}
 	  		  		  		  		  		  		  		  		  		  		  		  		  		  		if (this.playerItems != null) {

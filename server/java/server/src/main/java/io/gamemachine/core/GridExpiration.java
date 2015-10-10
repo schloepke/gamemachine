@@ -1,7 +1,4 @@
-package plugins.pvp_game;
-
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.Grid;
+package io.gamemachine.core;
 
 import java.util.concurrent.TimeUnit;
 
@@ -9,6 +6,7 @@ import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import io.gamemachine.config.AppConfig;
 
 public class GridExpiration extends UntypedActor {
 	
@@ -20,16 +18,16 @@ public class GridExpiration extends UntypedActor {
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
 			for (Grid grid : GameGrid.gridsStartingWith("default")) {
-				grid.RemoveExpired(10000L);
+				grid.RemoveExpired(AppConfig.getGridExpiration());
 			}
-			tick(10000L, "tick");
+			tick(AppConfig.getGridExpiration(), "tick");
 		}
 	}
 
 		
 	@Override
 	public void preStart() {
-		tick(10000L, "tick");
+		tick(AppConfig.getGridExpiration(), "tick");
 	}
 
 	public void tick(long delay, String message) {

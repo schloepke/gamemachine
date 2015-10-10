@@ -213,6 +213,8 @@ CREATE TABLE `characters` (
 
   `character_vitals_sub_type` int(11) DEFAULT NULL,
 
+  `character_level` int(11) DEFAULT NULL,
+
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `players` (

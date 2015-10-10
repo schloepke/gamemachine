@@ -182,11 +182,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 		
     
         	
-					public VisualEffect visualEffect = null;
-			    
-		
-    
-        	
 					public WorldObjects worldObjects = null;
 			    
 		
@@ -311,7 +306,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	    	    	    	    	model.set("game_message_agent_id",null);
     	    	    	    	    	    	    	    	    	    	    	    	    	    	model.set("game_message_authtoken",null);
     	    	    	    	    	    	model.set("game_message_unity_message_id",null);
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
     
 	public void toModel(Model model) {
     	    	    	    	
@@ -349,7 +344,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	       	    	model.setLong("game_message_unity_message_id",unityMessageId);
     	        		
     	//}
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    }
     
 	public static GameMessage fromModel(Model model) {
 		boolean hasFields = false;
@@ -417,7 +412,7 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 		}
     	
     	    	
-    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    			if (hasFields) {
+    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    			if (hasFields) {
 			return message;
 		} else {
 			return null;
@@ -630,15 +625,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
 	
 	public GameMessage setDataRequest(DataRequest dataRequest) {
 		this.dataRequest = dataRequest;
-		return this;	}
-	
-		            
-		public VisualEffect getVisualEffect() {
-		return visualEffect;
-	}
-	
-	public GameMessage setVisualEffect(VisualEffect visualEffect) {
-		this.visualEffect = visualEffect;
 		return this;	}
 	
 		            
@@ -978,10 +964,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
             	                	                	message.dataRequest = input.mergeObject(message.dataRequest, DataRequest.getSchema());
                     break;
                                     	
-                            	            	case 26:
-            	                	                	message.visualEffect = input.mergeObject(message.visualEffect, VisualEffect.getSchema());
-                    break;
-                                    	
                             	            	case 27:
             	                	                	message.worldObjects = input.mergeObject(message.worldObjects, WorldObjects.getSchema());
                     break;
@@ -1200,11 +1182,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	
     	            	
     	    	
-    	    	    	if(message.visualEffect != null)
-    		output.writeObject(26, message.visualEffect, VisualEffect.getSchema(), false);
-    	    	
-    	            	
-    	    	
     	    	    	if(message.worldObjects != null)
     		output.writeObject(27, message.worldObjects, WorldObjects.getSchema(), false);
     	    	
@@ -1383,9 +1360,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	//if(this.dataRequest != null) {
     		System.out.println("dataRequest="+this.dataRequest);
     	//}
-    	    	//if(this.visualEffect != null) {
-    		System.out.println("visualEffect="+this.visualEffect);
-    	//}
     	    	//if(this.worldObjects != null) {
     		System.out.println("worldObjects="+this.worldObjects);
     	//}
@@ -1479,7 +1453,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
         	        	case 23: return "statusEffect";
         	        	case 24: return "statusEffectResult";
         	        	case 25: return "dataRequest";
-        	        	case 26: return "visualEffect";
         	        	case 27: return "worldObjects";
         	        	case 28: return "siegeCommand";
         	        	case 29: return "bounds";
@@ -1537,7 +1510,6 @@ private static final Logger logger = LoggerFactory.getLogger(GameMessage.class);
     	    	__fieldMap.put("statusEffect", 23);
     	    	__fieldMap.put("statusEffectResult", 24);
     	    	__fieldMap.put("dataRequest", 25);
-    	    	__fieldMap.put("visualEffect", 26);
     	    	__fieldMap.put("worldObjects", 27);
     	    	__fieldMap.put("siegeCommand", 28);
     	    	__fieldMap.put("bounds", 29);

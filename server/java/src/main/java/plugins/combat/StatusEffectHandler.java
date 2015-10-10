@@ -3,6 +3,7 @@ package plugins.combat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,16 +24,12 @@ import io.gamemachine.messages.Attack;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.DataRequest;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
-import io.gamemachine.messages.StatusEffect.Type;
-import io.gamemachine.messages.StatusEffectResult;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.VisualEffect;
 import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.VitalsContainer;
+import plugins.landrush.BuildObjectHandler;
 import scala.concurrent.duration.Duration;
 
 public class StatusEffectHandler extends UntypedActor {
@@ -40,7 +37,6 @@ public class StatusEffectHandler extends UntypedActor {
 	public static ConcurrentHashMap<String, StatusEffect> statusEffects = new ConcurrentHashMap<String, StatusEffect>();
 	public static ConcurrentHashMap<String, List<StatusEffect>> skillEffects = new ConcurrentHashMap<String, List<StatusEffect>>();
 
-	private Map<String, Integer> vitalTicks = new ConcurrentHashMap<String, Integer>();
 	private Map<String, Long> deathTimer = new ConcurrentHashMap<String, Long>();
 	private Map<Long, StatusEffectTarget> targets = new ConcurrentHashMap<Long, StatusEffectTarget>();
 
@@ -48,6 +44,7 @@ public class StatusEffectHandler extends UntypedActor {
 	private static String name = StatusEffectHandler.class.getSimpleName();
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
+	private long deathTime = 15000L;
 	private String gridName = null;
 	private int zone = -1;
 	private Grid grid = null;
@@ -72,7 +69,6 @@ public class StatusEffectHandler extends UntypedActor {
 		if (message instanceof StatusEffectTarget) {
 			StatusEffectTarget statusEffectTarget = (StatusEffectTarget) message;
 			useSkillOnTarget(statusEffectTarget);
-			sendVitals();
 		} else if (message instanceof String) {
 			if (message.equals("vitals_tick")) {
 				updateVitals();
@@ -103,7 +99,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private void skillUp(PlayerSkill playerSkill, String characterId) {
-		int chance = Common.randInt(1, 10);
+		int chance = randInt(1, 10);
 		if (chance < 5) {
 			return;
 		}
@@ -130,11 +126,12 @@ public class StatusEffectHandler extends UntypedActor {
 
 			if (statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
 				StatusEffect effect = statusEffectTarget.statusEffect.get(0);
-				//setPassiveEffect(effect.type, vitals, effect.minValue, true);
+				// setPassiveEffect(effect.type, vitals, effect.minValue, true);
 				logger.warning("Removing " + effect.type + " from " + vitals.entityId);
 			} else {
 				for (StatusEffect effect : skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
-					//setPassiveEffect(effect.type, vitals, effect.minValue, true);
+					// setPassiveEffect(effect.type, vitals, effect.minValue,
+					// true);
 				}
 			}
 			activeId = 0;
@@ -148,14 +145,10 @@ public class StatusEffectHandler extends UntypedActor {
 		return activeId;
 	}
 
-	
-
-	
 	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals,
 			StatusEffect statusEffect) {
 		int value = statusEffect.minValue;
 		//setPassiveEffect(statusEffect.type, targetVitals, value, false);
-		sendStatusEffectResult(statusEffect.id, statusEffectTarget, targetVitals, statusEffect.ticks);
 
 		if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
 				&& statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
@@ -214,7 +207,8 @@ public class StatusEffectHandler extends UntypedActor {
 		if (statusEffectTarget.attack.targetType == Attack.TargetType.Character) {
 			return VitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.targetEntityId);
 		} else if (statusEffectTarget.attack.targetType == Attack.TargetType.Object) {
-			return VitalsHandler.findOrCreateObjectVitals(statusEffectTarget.targetEntityId, Vitals.VitalsType.Object.number, zone);
+			return VitalsHandler.findOrCreateObjectVitals(statusEffectTarget.targetEntityId,
+					Vitals.VitalsType.Object.number, zone);
 		} else {
 			throw new RuntimeException("Invalid target type " + statusEffectTarget.attack.targetType);
 		}
@@ -222,37 +216,31 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private void applyStatusEffects(StatusEffectTarget statusEffectTarget) {
 		List<StatusEffect> effectsToRemove = null;
-
+		
+		Vitals originVitals = VitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.originEntityId);
+		originVitals.lastCombat = System.currentTimeMillis();
+		
 		for (StatusEffect statusEffect : statusEffectTarget.statusEffect) {
 			if (statusEffect.ticksPerformed < statusEffect.ticks) {
-				logger.warning("Tick " + statusEffect.ticksPerformed + " " + statusEffect.id);
-				boolean aoe = false;
-				GmVector3 location = null;
+				//logger.warning("Tick " + statusEffect.ticksPerformed + " " + statusEffect.id);
 
-				if (statusEffectTarget.attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())) {
-					aoe = true;
-					location = statusEffectTarget.location;
-				} else if (statusEffectTarget.attack.playerSkill.damageType
-						.equals(PlayerSkill.DamageType.Pbaoe.toString())) {
-					aoe = true;
-					location = new GmVector3();
-					TrackData td = grid.get(statusEffectTarget.originEntityId);
-					location.xi = td.x;
-					location.yi = td.y;
-					location.zi = td.z;
+				if (!DeductCost(originVitals, statusEffect)) {
+					statusEffect.ticksPerformed += 1;
+					continue;
 				}
+				
+				if (statusEffectTarget.attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())
+						|| statusEffectTarget.attack.playerSkill.damageType
+								.equals(PlayerSkill.DamageType.Pbaoe.toString())) {
 
-				if (aoe) {
-					if (statusEffect.ticksPerformed == 0) {
-						sendVisualEffect(statusEffect, statusEffectTarget.location);
-					}
-					for (TrackData trackData : Common.getTargetsInRange(statusEffect.range, location, grid)) {
+					for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range, statusEffectTarget.location,
+							grid)) {
 						Vitals vitals = VitalsHandler.fromTrackData(trackData, zone);
-						applyStatusEffect(statusEffectTarget, vitals, statusEffect);
+						applyStatusEffect(statusEffectTarget, originVitals, vitals, statusEffect);
 					}
 				} else {
 					Vitals vitals = fromTarget(statusEffectTarget);
-					applyStatusEffect(statusEffectTarget, vitals, statusEffect);
+					applyStatusEffect(statusEffectTarget, originVitals, vitals, statusEffect);
 				}
 				statusEffect.ticksPerformed += 1;
 			}
@@ -272,8 +260,9 @@ public class StatusEffectHandler extends UntypedActor {
 
 	}
 
-	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals,
+	private int applyStatusEffect(StatusEffectTarget statusEffectTarget, Vitals originVitals, Vitals targetVitals,
 			StatusEffect statusEffect) {
+		
 		if (isPassive(statusEffect)) {
 			setPassiveEffect(statusEffectTarget, targetVitals, statusEffect);
 			return 0;
@@ -283,27 +272,18 @@ public class StatusEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		Vitals originVitals = VitalsHandler.findOrCreateCharacterVitals(statusEffectTarget.originCharacterId);
-		originVitals.lastCombat = System.currentTimeMillis();
-
-		if (!DeductCost(originVitals, statusEffect)) {
-			return 0;
-		}
-
 		targetVitals.lastCombat = System.currentTimeMillis();
 
-		Vitals targetTemplate = VitalsHandler.getTemplate(targetVitals);
+		Vitals targetTemplate = VitalsHandler.getBase(targetVitals);
 
 		Vitals.Attribute attribute = Vitals.Attribute.valueOf(statusEffect.attribute);
-		
-		int targetBaseValue = VitalsHandler.getAttribute(targetTemplate,attribute);
-		int targetCurrentValue =  VitalsHandler.getAttribute(targetVitals,attribute);
-		
+
+		int targetBaseValue = VitalsHandler.getAttribute(targetTemplate, attribute);
+		int targetCurrentValue = VitalsHandler.getAttribute(targetVitals, attribute);
+
 		int value = getEffectValue(statusEffect, statusEffectTarget.attack.playerSkill,
 				statusEffectTarget.originCharacterId);
 
-		
-		
 		if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
 
 			if (targetVitals.type == Vitals.VitalsType.Character) {
@@ -318,7 +298,6 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			
 			VitalsHandler.setAttribute(targetVitals, attribute, targetCurrentValue - value);
 			if (targetCurrentValue < 0) {
 				VitalsHandler.setAttribute(targetVitals, attribute, 0);
@@ -341,10 +320,12 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 
 		if (value > 0) {
+			if (targetVitals.type == Vitals.VitalsType.Object && attribute == Vitals.Attribute.Health) {
+				BuildObjectHandler.setHealth(targetVitals.entityId, targetVitals.health);
+			}
+			
 			targetVitals.changed = 1;
-			// logger.warning("target " + targetVitals.id + " damage " + value +
-			// " type " + effect.type + " health " + targetVitals.health);
-			sendStatusEffectResult(statusEffect.id, statusEffectTarget, targetVitals, value);
+			 //logger.warning("target " + targetVitals.entityId + " damage " + value + " type " + statusEffect.type + " health " + targetVitals.health);
 		}
 
 		return value;
@@ -399,7 +380,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
-		int base = Common.randInt(statusEffect.minValue, statusEffect.maxValue);
+		int base = randInt(statusEffect.minValue, statusEffect.maxValue);
 		Character character = CharacterService.instance().find(characterId);
 		int level = skillLevel(playerSkill.id, character.id);
 		return base + level;
@@ -424,7 +405,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private void revive(Vitals vitals) {
-		Vitals template = VitalsHandler.getTemplate(vitals);
+		Vitals template = VitalsHandler.getBase(vitals);
 		vitals.dead = 0;
 		vitals.health = template.health;
 		vitals.stamina = template.stamina;
@@ -446,19 +427,21 @@ public class StatusEffectHandler extends UntypedActor {
 				}
 			}
 
-			Vitals template = VitalsHandler.getTemplate(vitals);
+			Vitals template = VitalsHandler.getBase(vitals);
 			int stamina = template.stamina;
 			int magic = template.magic;
 			int health = template.health;
 
 			if (vitals.dead == 1) {
 				if (vitals.type == Vitals.VitalsType.Object) {
+					BuildObjectHandler.setHealth(vitals.entityId, vitals.health);
+					VitalsHandler.remove(vitals.entityId);
 					continue;
 				}
 
 				if (deathTimer.containsKey(vitals.entityId)) {
 					Long timeDead = deathTimer.get(vitals.entityId);
-					Long timer = Common.deathTime;
+					Long timer = deathTime;
 					if ((System.currentTimeMillis() - timeDead) > timer) {
 						revive(vitals);
 						deathTimer.remove(vitals.entityId);
@@ -498,142 +481,13 @@ public class StatusEffectHandler extends UntypedActor {
 			}
 
 		}
-		sendVitals();
 	}
 
-	private void sendVisualEffect(StatusEffect statusEffect, GmVector3 location) {
-		GameMessage msg = new GameMessage();
-		VisualEffect v = new VisualEffect();
-		v.prefab = statusEffect.particleEffect;
-		v.duration = statusEffect.ticks;
-		v.startPosition = location;
-		msg.setVisualEffect(v);
-		for (TrackData trackData : grid.getAll()) {
-			PlayerCommands.sendGameMessage(msg, trackData.id);
-		}
+	public static int randInt(int min, int max) {
+		Random rand = new Random();
+		return rand.nextInt((max - min) + 1) + min;
 	}
-
-	private void sendStatusEffectResult(String statusEffectId, StatusEffectTarget statusEffectTarget,
-			Vitals targetVitals, int value) {
-		GameMessage msg = new GameMessage();
-		StatusEffectResult result = new StatusEffectResult();
-		result.originCharacterId = statusEffectTarget.originCharacterId;
-		result.targetEntityId = targetVitals.entityId;
-		result.targetCharacterId = targetVitals.characterId;
-		result.statusEffectId = statusEffectId;
-		result.value = value;
-		msg.statusEffectResult = result;
-
-		for (TrackData trackData : grid.getAll()) {
-			PlayerCommands.sendGameMessage(msg, trackData.id);
-		}
-	}
-
-	private int nextVitalTick(String id) {
-		if (vitalTicks.containsKey(id)) {
-			int tick = vitalTicks.get(id);
-			if (tick > 1000) {
-				tick = 50;
-			}
-			vitalTicks.put(id, tick + 1);
-			return tick;
-		} else {
-			vitalTicks.put(id, 0);
-			return 0;
-		}
-	}
-
-	private void resetVitalTick(String id) {
-		vitalTicks.put(id, 0);
-	}
-
-	private void sendVitals() {
-		List<Vitals> container;
-
-		if (gridName.equals("build_objects")) {
-			container = objectVitals();
-			if (container.size() > 0) {
-				for (TrackData trackData : grid.getAll()) {
-					sendObjectVitals(trackData, container);
-				}
-			}
-
-		} else {
-			container = livingVitals();
-			if (container.size() > 0) {
-				for (TrackData trackData : grid.getAll()) {
-					sendLivingVitals(trackData, container);
-				}
-			}
-		}
-	}
-
-	private void sendObjectVitals(TrackData trackData, List<Vitals> container) {
-		VitalsContainer toSend = new VitalsContainer();
-		for (Vitals vitals : container) {
-			TrackData vitalsTrackData = grid.get(vitals.entityId);
-
-			if (Common.distance(vitalsTrackData, trackData) <= Common.vitalsDistance) {
-				toSend.addVitals(vitals);
-			}
-		}
-
-		GameMessage msg = new GameMessage();
-		msg.vitalsContainer = toSend;
-		PlayerCommands.sendGameMessage(msg, trackData.id);
-	}
-
-	private void sendLivingVitals(TrackData trackData, List<Vitals> container) {
-		VitalsContainer toSend = new VitalsContainer();
-		for (Vitals vitals : container) {
-			TrackData vitalsTrackData = grid.get(vitals.entityId);
-
-			if (Common.distance(vitalsTrackData, trackData) <= Common.vitalsDistance) {
-				toSend.addVitals(vitals);
-			}
-		}
-
-		GameMessage msg = new GameMessage();
-		msg.vitalsContainer = toSend;
-		PlayerCommands.sendGameMessage(msg, trackData.id);
-	}
-
-	private List<Vitals> objectVitals() {
-		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : VitalsHandler.getVitals()) {
-			if (vitals.changed == 1) {
-				resetVitalTick(vitals.entityId);
-				vitals.changed = 0;
-			} else {
-				int tick = nextVitalTick(vitals.entityId);
-				if (tick >= 4) {
-					continue;
-				}
-			}
-			container.add(vitals);
-		}
-		return container;
-	}
-
-	private List<Vitals> livingVitals() {
-		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : VitalsHandler.getVitals()) {
-			Vitals template = VitalsHandler.getTemplate(vitals);
-			if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
-					|| vitals.stamina < template.stamina) {
-				resetVitalTick(vitals.entityId);
-				vitals.changed = 0;
-			} else {
-				int tick = nextVitalTick(vitals.entityId);
-				if (tick >= 4) {
-					continue;
-				}
-			}
-			container.add(vitals);
-		}
-		return container;
-	}
-
+	
 	@Override
 	public void preStart() {
 		tick(300L, "effects_tick");

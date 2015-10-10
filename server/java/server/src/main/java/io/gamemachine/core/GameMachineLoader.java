@@ -103,6 +103,7 @@ public class GameMachineLoader {
 			logger.warn("Zone manager disabled (requires orm=true)");
 		}
 		
+		actorSystem.actorOf(Props.create(GridExpiration.class), GridExpiration.class.getSimpleName());
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {

@@ -151,6 +151,11 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		    			    
 		
     
+        	
+							    public int level= 0;
+		    			    
+		
+    
         
 	public static CharacterCache cache() {
 		return CharacterCache.getInstance();
@@ -635,6 +640,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	    	model.set("character_include_uma_data",null);
     	    	    	    	    	    	model.set("character_vitals_type",null);
     	    	    	    	    	    	model.set("character_vitals_sub_type",null);
+    	    	    	    	    	    	model.set("character_level",null);
     	    }
     
 	public void toModel(Model model) {
@@ -699,6 +705,11 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	    	    	    	
     	    	    	//if (vitalsSubType != null) {
     	       	    	model.setInteger("character_vitals_sub_type",vitalsSubType);
+    	        		
+    	//}
+    	    	    	    	    	
+    	    	    	//if (level != null) {
+    	       	    	model.setInteger("character_level",level);
     	        		
     	//}
     	    	    }
@@ -815,6 +826,15 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		if (vitalsSubTypeTestField != null) {
 			int vitalsSubTypeField = vitalsSubTypeTestField;
 			message.setVitalsSubType(vitalsSubTypeField);
+			hasFields = true;
+		}
+    	
+    	    	
+    	    	    	    	    	    	
+    	    			Integer levelTestField = model.getInteger("character_level");
+		if (levelTestField != null) {
+			int levelField = levelTestField;
+			message.setLevel(levelField);
 			hasFields = true;
 		}
     	
@@ -944,6 +964,15 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
 		this.vitalsSubType = vitalsSubType;
 		return this;	}
 	
+		            
+		public int getLevel() {
+		return level;
+	}
+	
+	public Character setLevel(int level) {
+		this.level = level;
+		return this;	}
+	
 	
   
     // java serialization
@@ -1052,6 +1081,10 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
             	                	                	message.vitalsSubType = input.readInt32();
                 	break;
                 	                	
+                            	            	case 17:
+            	                	                	message.level = input.readInt32();
+                	break;
+                	                	
                             	            
                 default:
                     input.handleUnknownField(number, this);
@@ -1145,6 +1178,12 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         }
     	    	
     	            	
+    	    	
+    	    	    	if( (Integer)message.level != null) {
+            output.writeInt32(17, message.level, false);
+        }
+    	    	
+    	            	
     }
 
 	public void dumpObject()
@@ -1189,6 +1228,9 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	//if(this.vitalsSubType != null) {
     		System.out.println("vitalsSubType="+this.vitalsSubType);
     	//}
+    	    	//if(this.level != null) {
+    		System.out.println("level="+this.level);
+    	//}
     	    	System.out.println("END Character");
     }
     
@@ -1209,6 +1251,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
         	        	case 14: return "includeUmaData";
         	        	case 15: return "vitalsType";
         	        	case 16: return "vitalsSubType";
+        	        	case 17: return "level";
         	            default: return null;
         }
     }
@@ -1235,6 +1278,7 @@ private static final Logger logger = LoggerFactory.getLogger(Character.class);
     	    	__fieldMap.put("includeUmaData", 14);
     	    	__fieldMap.put("vitalsType", 15);
     	    	__fieldMap.put("vitalsSubType", 16);
+    	    	__fieldMap.put("level", 17);
     	    }
    
    public static List<String> getFields() {

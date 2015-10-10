@@ -18,6 +18,8 @@ module GameMachine
 
       conf.plugins = config.get_string_list('plugins').to_a
       conf.default_game_id = config.get_string('default_game_id')
+      conf.world_offset = config.get_int('world_offset')
+      conf.grid_expiration = config.get_long('grid_expiration')
       conf.environment = config.get_string('environment')
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')

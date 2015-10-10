@@ -3,6 +3,118 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+local_message VitalsContainer {
+  enum Type {
+    Character = 0;
+    Object = 1;
+  }
+  repeated Vitals vitals = 1;
+  required Type type = 2;
+}
+
+local_message Vitals {
+  enum VitalsType {
+    None = 0;
+    Character = 1;
+    Object = 2;
+  }
+    
+  enum Attribute {
+    AttributeNone = 0;
+    SpellResist = 1;
+    ElementalResist = 2;
+    SpellPenetration = 3;
+    MagicRegen = 4;
+    HealthRegen = 5;
+    StaminaRegen = 6;
+    Armor = 7;
+    Magic = 8;
+    Health = 9;
+    Stamina = 10;
+    Speed = 11;
+    AbilitySpeed = 12;
+    
+  }
+  
+  enum SubType {
+    SubTypeNone = 0;
+    Guard = 1;
+    AggressiveNpc = 2;
+    NeutralNpc = 3;
+    FriendlyNpc = 4;
+    AggressiveAnimal = 5;
+    NeutralAnimal = 6;
+    FriendlyAnimal = 7;
+    Player = 8;
+    Vehicle = 9;
+    Structure = 10;
+  }
+  required string characterId = 1;
+  optional int64 lastCombat = 5;
+  optional int32 dead = 6;
+  optional int32 changed = 14;
+  optional string entityId = 15;
+  optional VitalsType type = 18;
+  optional int32 zone = 19;
+  optional SubType subType = 20;
+  optional string templateName = 21;
+  optional int32 spellResist = 22;
+  optional int32 elementalResist = 23;
+  optional int32 spellPenetration = 24;
+  optional int32 magicRegen = 25;
+  optional int32 healthRegen = 26;
+  optional int32 staminaRegen = 27;
+  optional int32 armor = 28;
+  optional int32 magic = 29;
+  optional int32 health = 30;
+  optional int32 stamina = 31;
+  optional int32 speed = 32;
+  optional int32 abilitySpeed = 33;
+}
+
+local_message StatusEffect {
+  enum Type {
+  	StatusEffectNone = 0;
+    AttributeDecrease = 1;
+    AttributeIncrease = 2;
+    Stun = 3;
+}
+
+  
+  enum DamageType {
+    DamageTypeNone = 0;
+    Physical = 1;
+    Magic = 2;
+    Elemental = 3;
+  }
+  
+  enum Resource {
+    ResourceNone = 0;
+    ResourceMagic = 1;
+    ResourceStamina = 2;
+  }
+  
+  optional Type type = 1;
+  optional string id = 2;
+  optional int32 duration = 3;
+  optional int32 ticks = 4;
+  optional int32 minValue = 6;
+  optional int32 maxValue = 7;
+  optional string particleEffect = 8;
+  optional DamageType damageType = 9;
+  optional string icon_path = 10;
+  optional string icon_uuid = 11;
+  optional int32 ticksPerformed = 12;
+  optional Resource resource = 13;
+  optional int32 resourceCost = 14;
+  optional int32 range = 15;
+  optional int32 attribute = 16;
+}
+
+local_message StatusEffects {
+  repeated StatusEffect statusEffect = 1;
+}
+
 local_message TerrainEdit {
   enum Type {
   NONE = 0;
@@ -290,7 +402,7 @@ local_persistent_message Character {
   optional bool includeUmaData = 14;
   optional int32 vitalsType = 15;
   optional int32 vitalsSubType = 16;
-  
+  optional int32 level = 17;
 }
 
 local_message Characters {
@@ -323,85 +435,6 @@ local_message EquippedItem {
   optional string playerId = 2;
 }
 
-
-
-local_message VitalsContainer {
-  repeated Vitals vitals = 1;
-}
-
-local_message Vitals {
-  enum VitalsType {
-    None = 0;
-    Character = 1;
-    Object = 2;
-  }
-  
-  enum Attribute {
-    AttributeNone = 0;
-    SpellResist = 1;
-    ElementalResist = 2;
-    SpellPenetration = 3;
-    MagicRegen = 4;
-    HealthRegen = 5;
-    StaminaRegen = 6;
-    Armor = 7;
-    Magic = 8;
-    Health = 9;
-    Stamina = 10;
-    Speed = 11;
-    AbilitySpeed = 12;
-    
-  }
-  
-  enum SubType {
-    SubTypeNone = 0;
-    Guard = 1;
-    AggressiveNpc = 2;
-    NeutralNpc = 3;
-    FriendlyNpc = 4;
-    AggressiveAnimal = 5;
-    NeutralAnimal = 6;
-    FriendlyAnimal = 7;
-    Player = 8;
-    Vehicle = 9;
-    Structure = 10;
-  }
-  required string characterId = 1;
-  optional int64 lastCombat = 5;
-  optional int32 dead = 6;
-  optional int32 changed = 14;
-  optional string entityId = 15;
-  optional VitalsType type = 18;
-  optional int32 zone = 19;
-  optional SubType subType = 20;
-  optional string templateName = 21;
-  optional int32 spellResist = 22;
-  optional int32 elementalResist = 23;
-  optional int32 spellPenetration = 24;
-  optional int32 magicRegen = 25;
-  optional int32 healthRegen = 26;
-  optional int32 staminaRegen = 27;
-  optional int32 armor = 28;
-  optional int32 magic = 29;
-  optional int32 health = 30;
-  optional int32 stamina = 31;
-  optional int32 speed = 32;
-  optional int32 abilitySpeed = 33;
-}
-
-local_message VitalsAttribute {
-  required int32 attribute = 1;
-  required int32 value = 2;
-}
-
-local_message VisualEffect {
-  optional string id = 1;
-  optional string prefab = 2;
-  optional GmVector3 startPosition = 3;
-  optional GmVector3 endPosition = 4;
-  optional string type = 5;
-  optional int32 duration = 6;
-}
 
 local_message StatusEffectResult {
   optional string targetCharacterId = 1;
@@ -574,48 +607,7 @@ message DynamicMessage {
   required bytes message = 2;
 }
 
-local_message StatusEffect {
-  enum Type {
-  	StatusEffectNone = 0;
-    AttributeDecrease = 1;
-    AttributeIncrease = 2;
-    Stun = 3;
-}
 
-  
-  enum DamageType {
-    DamageTypeNone = 0;
-    Physical = 1;
-    Magic = 2;
-    Elemental = 3;
-  }
-  
-  enum Resource {
-    ResourceNone = 0;
-    ResourceMagic = 1;
-    ResourceStamina = 2;
-  }
-  
-  optional Type type = 1;
-  optional string id = 2;
-  optional int32 duration = 3;
-  optional int32 ticks = 4;
-  optional int32 minValue = 6;
-  optional int32 maxValue = 7;
-  optional string particleEffect = 8;
-  optional DamageType damageType = 9;
-  optional string icon_path = 10;
-  optional string icon_uuid = 11;
-  optional int32 ticksPerformed = 12;
-  optional Resource resource = 13;
-  optional int32 resourceCost = 14;
-  optional int32 range = 15;
-  optional int32 attribute = 16;
-}
-
-local_message StatusEffects {
-  repeated StatusEffect statusEffect = 1;
-}
 
 local_persistent_message PlayerSkill {
   enum DamageType {
@@ -912,7 +904,6 @@ message GameMessage {
   optional StatusEffect statusEffect = 23;
   optional StatusEffectResult statusEffectResult = 24;
   optional DataRequest dataRequest = 25;
-  optional VisualEffect visualEffect = 26;
   optional WorldObjects worldObjects = 27;
   optional SiegeCommand siegeCommand = 28;
   optional GmBounds bounds = 29;

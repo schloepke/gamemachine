@@ -13,7 +13,7 @@ import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-import plugins.combat.Common;
+import plugins.combat.AoeUtil;
 import plugins.combat.VitalsHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -77,6 +77,14 @@ public class BuildObjectHandler extends GameMessageActor {
 					setReply(gameMessage);
 				}
 			}
+		} else {
+			if (gameMessage.buildObjects.buildObject != null && gameMessage.buildObjects.buildObject.size() >= 1) {
+				BuildObject bo = gameMessage.buildObjects.buildObject.get(0);
+				if (bo != null && bo.action == 11) {
+					setHealth(bo);
+				}
+			}
+			
 		}
 	}
 
@@ -102,6 +110,32 @@ public class BuildObjectHandler extends GameMessageActor {
 		return buildObjects.toByteArray();
 	}
 	
+	public static void setHealth(String id, int health) {
+		BuildObjects buildObjects = new BuildObjects();
+		BuildObject buildObject = new BuildObject();
+		buildObject.id = id;
+		buildObject.health = health;
+		buildObject.action = 11;
+		buildObjects.addBuildObject(buildObject);
+		GameMessage gameMessage = new GameMessage();
+		gameMessage.buildObjects = buildObjects;
+		BuildObjectHandler.tell(gameMessage, BuildObjectHandler.name);
+	}
+	
+	private void setHealth(BuildObject buildObject) {
+		BuildObject existing = find(buildObject.id);
+		if (existing == null) {
+			return;
+		}
+		//logger.warning("setHealth "+buildObject.health);
+		if (buildObject.health <= 0) {
+			remove(buildObject);
+		} else {
+			existing.health = buildObject.health;
+			BuildObject.db().save(existing);
+		}
+	}
+	
 	private void broadcast(GameMessage gameMessage) {
 		for (Grid grid : GameGrid.gridsStartingWith("default")) {
 			for (TrackData trackData : grid.getAll()) {
@@ -112,6 +146,8 @@ public class BuildObjectHandler extends GameMessageActor {
 			}
 		}
 	}
+	
+	
 	
 	private void updateDoor(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
@@ -169,8 +205,6 @@ public class BuildObjectHandler extends GameMessageActor {
 			}
 		}
 	}
-
-	
 	
 	private void remove(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
