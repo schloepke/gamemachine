@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +16,7 @@ import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.VitalsContainer;
-import plugins.CombatPlugin;
+import plugins.CoreCombatPlugin;
 import scala.concurrent.duration.Duration;
 
 public class VitalsSender extends UntypedActor {
@@ -55,7 +55,7 @@ public class VitalsSender extends UntypedActor {
 	}
 
 	private void sendVitals() {
-		for (GridSet gridSet : CombatPlugin.gridsets) {
+		for (GridSet gridSet : StatusEffectManager.gridsets) {
 			for (TrackData playerTrackData : gridSet.playerGrid.getAll()) {
 				if (playerTrackData.entityType == TrackData.EntityType.Player) {
 					sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone));

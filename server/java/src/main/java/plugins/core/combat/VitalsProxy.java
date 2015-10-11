@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.ConcurrentHashMap;
@@ -46,7 +46,7 @@ public class VitalsProxy {
 		if (current - value < 0) {
 			set(vitals,name,0);
 		} else {
-			set(vitals,name,value);
+			set(vitals,name,current-value);
 		}
 	}
 	

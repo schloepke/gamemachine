@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import com.google.common.base.Strings;
 
@@ -39,16 +39,14 @@ public class CombatHandler extends GameMessageActor {
 			if (gameMessage.attack != null) {
 				doAttack(gameMessage.attack);
 				setReply(gameMessage);
-			} else if (gameMessage.dataRequest != null) {
-				// effectHandler.tell(gameMessage.dataRequest, getSelf());
 			}
 		}
 	}
 
-	private void sendAttack(Attack attack) {
+	private void sendAttack(Attack attack, int zone) {
 		GameMessage msg = new GameMessage();
 
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", playerId);
+		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
 		for (TrackData trackData : grid.getAll()) {
 			if (!playerId.equals(trackData.id)) {
 				msg.attack = attack;
@@ -94,7 +92,7 @@ public class CombatHandler extends GameMessageActor {
 		statusEffectTarget.originCharacterId = attack.attackerCharacterId;
 		statusEffectTarget.originEntityId = playerId;
 				
-		if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.SingleTarget.toString())) {
+		if (attack.playerSkill.category == PlayerSkill.Category.SingleTarget) {
 			if (Strings.isNullOrEmpty(attack.targetId)) {
 				logger.warning("SingleTarget with no targetId");
 				return;
@@ -113,12 +111,12 @@ public class CombatHandler extends GameMessageActor {
 				ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			}
 			
-		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Self.toString())) {
+		} else if (attack.playerSkill.category == PlayerSkill.Category.Self) {
 			statusEffectTarget.targetEntityId = playerId;
 			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			sendToDefaultGrid = true;
 			
-		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())) {
+		} else if (attack.playerSkill.category == PlayerSkill.Category.Aoe || attack.playerSkill.category == PlayerSkill.Category.AoeDot) {
 			if (attack.targetLocation == null) {
 				logger.warning("Aoe without targetLocation");
 				return;
@@ -128,7 +126,7 @@ public class CombatHandler extends GameMessageActor {
 			sendToObjectGrid = true;
 			sendToDefaultGrid = true;
 			
-		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Pbaoe.toString())) {
+		} else if (attack.playerSkill.category == PlayerSkill.Category.Pbaoe) {
 			
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
 			
@@ -151,14 +149,14 @@ public class CombatHandler extends GameMessageActor {
 		}
 		
 		if (sendToDefaultGrid) {
-			StatusEffectHandler.tell("default", zone, statusEffectTarget.clone(), getSelf());
+			StatusEffectManager.tell("default", zone, statusEffectTarget.clone(), getSelf());
 		}
 		
 		if (sendToObjectGrid) {
-			StatusEffectHandler.tell("build_objects", zone, statusEffectTarget.clone(), getSelf());
+			StatusEffectManager.tell("build_objects", zone, statusEffectTarget.clone(), getSelf());
 		}
 		
-		sendAttack(attack);
+		sendAttack(attack,zone);
 	}
 
 }

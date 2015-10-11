@@ -7,6 +7,7 @@ import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Vitals;
+import plugins.core.combat.ClientDbLoader;
 
 public class SimpleGameEntityManager implements GameEntityManager {
 

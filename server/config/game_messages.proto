@@ -17,19 +17,18 @@ local_message Vitals {
  
    
   enum Attribute {
-    AttributeNone = 0;
-    SpellResist = 1;
-    ElementalResist = 2;
-    SpellPenetration = 3;
-    MagicRegen = 4;
-    HealthRegen = 5;
-    StaminaRegen = 6;
-    Armor = 7;
-    Magic = 8;
-    Health = 9;
-    Stamina = 10;
-    MovementSpeed = 11;
-    AbilitySpeed = 12;
+    SpellResist = 0;
+    ElementalResist = 1;
+    SpellPenetration = 2;
+    MagicRegen = 3;
+    HealthRegen = 4;
+    StaminaRegen = 5;
+    Armor = 6;
+    Magic = 7;
+    Health = 8;
+    Stamina = 9;
+    MovementSpeed = 10;
+    AbilitySpeed = 11;
   }
   
   required string characterId = 1;
@@ -595,32 +594,22 @@ message DynamicMessage {
 
 
 local_persistent_message PlayerSkill {
-  enum DamageType {
-    DamageTypeNone = 0;
-	Aoe = 1;
-	SingleTarget = 2;
-	Pbaoe = 3;
-	Self = 4;
-  }
-  
   enum SkillType {
-    SkillTypeNone = 0;
-    Active = 1;
-    Passive = 2;
+    Active = 0;
+    Passive = 1;
   }
   
   enum Category {
-    CategoryNone = 0;
-    Weapon = 1;
-    Crafting = 2;
-    CategoryOther = 3;
+    SingleTarget = 0;
+	Aoe = 1;
+	Pbaoe = 2;
+	Self = 3;
+	AoeDot = 4;
   }
     
   required string id = 1;
   optional string name = 2;
   optional int32 recordId = 3;
-  optional string category = 4;
-  optional string damageType = 5;
   optional string icon_path = 6;
   optional string description = 7;
   required string characterId = 10;
@@ -629,9 +618,11 @@ local_persistent_message PlayerSkill {
   optional int32 level = 14;
   optional int32 isComboPart = 16;
   optional int32 isPassive = 17;
-  optional string skillType = 18;
   optional string icon_uuid = 19;
   optional string statusEffects = 20;
+  optional int32 maxStacks = 21;
+  optional Category category = 22;
+  optional SkillType skillType = 23;
 }
 
 message PlayerSkills {

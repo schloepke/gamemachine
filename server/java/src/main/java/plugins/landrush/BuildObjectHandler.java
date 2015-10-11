@@ -13,7 +13,7 @@ import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-import plugins.combat.VitalsHandler;
+import plugins.core.combat.VitalsHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;

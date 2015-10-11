@@ -1,6 +1,7 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -29,6 +30,10 @@ public class VitalsHandler extends GameMessageActor {
 		}
 	}
 
+	public static Collection<VitalsProxy> getVitals() {
+		return proxies.values();
+	}
+	
 	public static List<VitalsProxy> getVitalsForZone(int zone) {
 		List<VitalsProxy> zoneVitals = new ArrayList<VitalsProxy>();
 		for (VitalsProxy proxy : proxies.values()) {

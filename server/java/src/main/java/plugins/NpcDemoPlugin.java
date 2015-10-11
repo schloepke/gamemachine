@@ -1,12 +1,13 @@
 package plugins;
 
 import io.gamemachine.core.Plugin;
+import plugins.npcdemo.NpcDemo;
 
-public class CombatPlugin extends Plugin {
+public class NpcDemoPlugin extends Plugin {
 
 	@Override
 	public void start() {
-		
+		NpcDemo.createDemoNpcs();
 		
 	}
 

@@ -266,10 +266,6 @@ CREATE TABLE player_skills (
 
   player_skill_name character varying(128) DEFAULT NULL,
 
-  player_skill_category character varying(128) DEFAULT NULL,
-
-  player_skill_damage_type character varying(128) DEFAULT NULL,
-
   player_skill_icon_path character varying(128) DEFAULT NULL,
 
   player_skill_description character varying(128) DEFAULT NULL,
@@ -284,11 +280,15 @@ CREATE TABLE player_skills (
 
   player_skill_is_passive integer DEFAULT NULL,
 
-  player_skill_skill_type character varying(128) DEFAULT NULL,
-
   player_skill_icon_uuid character varying(128) DEFAULT NULL,
 
   player_skill_status_effects character varying(128) DEFAULT NULL,
+
+  player_skill_max_stacks integer DEFAULT NULL,
+
+  player_skill_category integer
+
+  player_skill_skill_type integer
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );

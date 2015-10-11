@@ -1,5 +1,5 @@
 
-package plugins.combat;
+package plugins.core.combat;
 
 import java.io.File;
 import java.io.IOException;

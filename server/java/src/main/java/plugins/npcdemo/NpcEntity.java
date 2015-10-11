@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.npcdemo;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameGrid;

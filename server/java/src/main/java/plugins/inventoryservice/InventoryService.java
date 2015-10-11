@@ -16,7 +16,7 @@ import io.gamemachine.messages.PlayerItems;
 import io.gamemachine.messages.RemovePlayerItem;
 import io.gamemachine.messages.RequestPlayerItems;
 import io.gamemachine.messages.UpdatePlayerItem;
-import plugins.combat.ClientDbLoader;
+import plugins.core.combat.ClientDbLoader;
 
 public class InventoryService {
 

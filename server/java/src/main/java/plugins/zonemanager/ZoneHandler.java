@@ -23,7 +23,6 @@ public class ZoneHandler extends GameMessageActor {
 	private Map<String, Zone.Status> statuses = new HashMap<String, Zone.Status>();
 	private static Map<String, Zone> zones = new HashMap<String, Zone>();
 
-	
 	public static String getUnityClientForZone(String name) {
 		if (zones.containsKey(name)) {
 			return zones.get(name).unityClient;
@@ -78,7 +77,7 @@ public class ZoneHandler extends GameMessageActor {
 		changeStatus(name, Zone.Status.DOWN);
 	}
 
-	public void startZone(String name) {
+	private void startZone(String name) {
 		Zone zone = new Zone();
 		zone.name = name;
 		zone.status = Zone.Status.UP;

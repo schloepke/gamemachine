@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import io.gamemachine.core.Grid;
 

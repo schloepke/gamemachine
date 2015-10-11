@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.PlayerSkills;
@@ -15,13 +15,15 @@ import com.google.common.base.Strings;
 
 import java.util.List;
 
-public class StatusEffectDef {
+public class StatusEffectData {
 
-	private static final Logger logger = LoggerFactory.getLogger(StatusEffectDef.class);
-
+	private static final Logger logger = LoggerFactory.getLogger(StatusEffectData.class);
+	public static ConcurrentHashMap<String, StatusEffect> statusEffects = new ConcurrentHashMap<String, StatusEffect>();
+	public static ConcurrentHashMap<String, List<StatusEffect>> skillEffects = new ConcurrentHashMap<String, List<StatusEffect>>();
+	
 	public static void createStatusEffects() {
-		StatusEffectHandler.statusEffects = new ConcurrentHashMap<String, StatusEffect>();
-		StatusEffectHandler.skillEffects = new ConcurrentHashMap<String, List<StatusEffect>>();
+		statusEffects = new ConcurrentHashMap<String, StatusEffect>();
+		skillEffects = new ConcurrentHashMap<String, List<StatusEffect>>();
 
 		StatusEffects effects = ClientDbLoader.getStatusEffects();
 		PlayerSkills playerSkills = ClientDbLoader.getPlayerSkills();
@@ -45,10 +47,10 @@ public class StatusEffectDef {
 	
 
 	private static void addSkill(String skill, StatusEffect e) {
-		if (!StatusEffectHandler.skillEffects.containsKey(skill)) {
-			StatusEffectHandler.skillEffects.put(skill, new ArrayList<StatusEffect>());
+		if (!skillEffects.containsKey(skill)) {
+			skillEffects.put(skill, new ArrayList<StatusEffect>());
 		}
-		StatusEffectHandler.skillEffects.get(skill).add(e);
-		StatusEffectHandler.statusEffects.put(e.id, e);
+		skillEffects.get(skill).add(e);
+		statusEffects.put(e.id, e);
 	}
 }

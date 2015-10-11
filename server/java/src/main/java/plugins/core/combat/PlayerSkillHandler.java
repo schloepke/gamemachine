@@ -1,4 +1,4 @@
-package plugins.combat;
+package plugins.core.combat;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
