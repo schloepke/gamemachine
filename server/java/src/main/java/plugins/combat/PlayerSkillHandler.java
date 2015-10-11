@@ -8,7 +8,6 @@ import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerSkill;
-import plugins.clientDbLoader.ClientDbLoader;
 
 public class PlayerSkillHandler extends GameMessageActor {
 

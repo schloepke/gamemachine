@@ -1,4 +1,4 @@
-package plugins.demo;
+package plugins.combat;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameGrid;

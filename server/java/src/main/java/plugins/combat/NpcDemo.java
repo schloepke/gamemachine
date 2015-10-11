@@ -1,24 +1,19 @@
-package plugins.demo;
+package plugins.combat;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.typesafe.config.Config;
 
-import io.gamemachine.messages.Character;
+import akka.actor.Props;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
-import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
-import plugins.combat.VitalsHandler;
-import akka.actor.ActorRef;
-import akka.actor.Props;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class NpcDemo  {
 
@@ -52,7 +47,7 @@ public class NpcDemo  {
 			
 			ps.setCharacter(playerId, characterId);
 			GameGrid.setEntityZone(playerId, zone);
-			Props.create(NpcEntity.class, playerId, characterId);
+			GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId));
 		}
 		logger.warn("NpcDemo started with "+npcCount+" npc's");
 	}

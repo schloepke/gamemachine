@@ -4,7 +4,6 @@ import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.PlayerSkills;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffects;
-import plugins.clientDbLoader.ClientDbLoader;
 
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;

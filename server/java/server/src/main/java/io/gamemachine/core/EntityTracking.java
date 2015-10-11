@@ -223,7 +223,7 @@ public class EntityTracking extends UntypedActor {
 		if (trackDatas.size() >= 1) {
 			toNeighbors(player, trackDatas, isAgentController);
 		} else {
-			// logger.warn("No Neighbors");
+			//logger.warn("No Neighbors "+grid.name+" "+grid.getObjectCount());
 		}
 	}
 

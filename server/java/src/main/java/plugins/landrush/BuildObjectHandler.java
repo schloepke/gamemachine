@@ -13,7 +13,6 @@ import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-import plugins.combat.AoeUtil;
 import plugins.combat.VitalsHandler;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -257,7 +256,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		if (buildObject.isDestructable) {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
 			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.Object);
-			VitalsHandler.findOrCreateObjectVitals(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
+			VitalsHandler.get(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
 		}
 	}
 	

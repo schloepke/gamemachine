@@ -57,13 +57,13 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 	
-	private Vitals targetVitals(Attack.TargetType targetType, String entityId, int zone) {
+	private void ensureTargetVitals(Attack.TargetType targetType, String entityId, int zone) {
 		if (targetType == Attack.TargetType.Character) {
-			return VitalsHandler.findOrCreateCharacterVitals(entityId, zone);
+			 VitalsHandler.ensure(entityId, zone);
 		} else if (targetType == Attack.TargetType.Object) {
-			return VitalsHandler.findOrCreateObjectVitals(entityId,	Vitals.VitalsType.Object, zone);
+			VitalsHandler.ensure(entityId,	Vitals.VitalsType.Object, zone);
 		} else if (targetType == Attack.TargetType.BuildObject) {
-			return VitalsHandler.findOrCreateObjectVitals(entityId,	Vitals.VitalsType.BuildObject, zone);
+			VitalsHandler.ensure(entityId,	Vitals.VitalsType.BuildObject, zone);
 		} else {
 			throw new RuntimeException("Invalid target type " + targetType);
 		}
@@ -87,22 +87,13 @@ public class CombatHandler extends GameMessageActor {
 		logger.warning("Attack " + attack.attackerCharacterId + " " + attack.targetId + " skill " + attack.playerSkill.id);
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
-		statusEffectTarget.originVitals = VitalsHandler.findOrCreateCharacterVitals(playerId, zone);
+		VitalsHandler.ensure(playerId, zone);
 		
 		statusEffectTarget.attack = attack;
 		
 		statusEffectTarget.originCharacterId = attack.attackerCharacterId;
 		statusEffectTarget.originEntityId = playerId;
-		
-		if (attack.playerSkill.skillType.equals(PlayerSkill.SkillType.Passive.toString())) {
-			logger.warning("Set passive flags");
-			statusEffectTarget.action = StatusEffectTarget.Action.Apply;
-			statusEffectTarget.passiveFlag = StatusEffectTarget.PassiveFlag.AutoRemove;
-		} else {
-			statusEffectTarget.action = StatusEffectTarget.Action.Apply;
-			statusEffectTarget.passiveFlag = StatusEffectTarget.PassiveFlag.NA;
-		}
-		
+				
 		if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.SingleTarget.toString())) {
 			if (Strings.isNullOrEmpty(attack.targetId)) {
 				logger.warning("SingleTarget with no targetId");
@@ -119,12 +110,12 @@ public class CombatHandler extends GameMessageActor {
 					sendToDefaultGrid = true;
 				}
 				
-				statusEffectTarget.targetVitals = targetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
+				ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			}
 			
 		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Self.toString())) {
 			statusEffectTarget.targetEntityId = playerId;
-			statusEffectTarget.targetVitals = targetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
+			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			sendToDefaultGrid = true;
 			
 		} else if (attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())) {

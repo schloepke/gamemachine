@@ -6,13 +6,16 @@ import java.util.List;
 import akka.actor.Props;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.combat.CombatHandler;
 import plugins.combat.GridSet;
+import plugins.combat.NpcDemo;
 import plugins.combat.PlayerSkillHandler;
+import plugins.combat.SimpleGameEntityManager;
 import plugins.combat.StatusEffectDef;
 import plugins.combat.StatusEffectHandler;
 import plugins.combat.VitalsHandler;
@@ -26,6 +29,9 @@ public class CombatPlugin extends Plugin {
 	public void start() {
 		StatusEffectDef.createStatusEffects();
 		
+		SimpleGameEntityManager characterManager = new SimpleGameEntityManager();
+		GameEntityManagerService.instance().setGameEntityManager(characterManager);
+				
 		GameMessageRoute.add(VitalsHandler.name, VitalsHandler.name, false);
 		ActorUtil.createActor(VitalsHandler.class, VitalsHandler.name);
 		
@@ -38,6 +44,8 @@ public class CombatPlugin extends Plugin {
 		createEffectHandlers();
 		
 		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsSender.class), VitalsSender.class.getSimpleName());
+		
+		NpcDemo.createDemoNpcs();
 	}
 
 	private void createEffectHandlers() {

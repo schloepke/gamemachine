@@ -1,14 +1,12 @@
-package plugins.demo;
+package plugins.combat;
 
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.Vitals.VitalsType;
-import plugins.clientDbLoader.ClientDbLoader;
 
 public class SimpleGameEntityManager implements GameEntityManager {
 
@@ -22,7 +20,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	
 	public Vitals getVitalsTemplate(String templateName) {
 		for (Vitals template : baseVitals) {
-			if (template.templateName == templateName) {
+			if (template.templateName.equals(templateName)) {
 				return template.clone();
 			}
 		}

@@ -91,7 +91,7 @@ local_message StatusEffect {
   optional Resource resource = 13;
   optional int32 resourceCost = 14;
   optional int32 range = 15;
-  optional int32 attribute = 16;
+  optional string attribute = 17;
 }
 
 local_message StatusEffects {
@@ -448,8 +448,6 @@ local_message StatusEffectTarget {
   required PassiveFlag passiveFlag = 11;
   optional string originEntityId = 12;
   optional Attack attack = 13;
-  optional Vitals targetVitals = 14;
-  optional Vitals originVitals = 15;
 }
 
 

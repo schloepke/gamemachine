@@ -19,7 +19,6 @@ import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.ChatSubscriptions;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.Grid;
-import io.gamemachine.messages.Attack;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
@@ -131,27 +130,31 @@ public class StatusEffectHandler extends UntypedActor {
 		return activeId;
 	}
 
-	private void setPassiveEffect(StatusEffectTarget statusEffectTarget, Vitals targetVitals,
-			StatusEffect statusEffect) {
-		int value = statusEffect.minValue;
-		//setPassiveEffect(statusEffect.type, targetVitals, value, false);
-
-		if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
-				&& statusEffectTarget.passiveFlag == StatusEffectTarget.PassiveFlag.AutoRemove) {
-			statusEffectTarget = statusEffectTarget.clone();
-			statusEffectTarget.targetEntityId = targetVitals.entityId;
-			statusEffect = statusEffect.clone();
-			statusEffectTarget.statusEffect.clear();
-			statusEffectTarget.action = StatusEffectTarget.Action.Remove;
-			// statusEffectTarget.passiveFlag =
-			// StatusEffectTarget.PassiveFlag.NA;
-			statusEffectTarget.addStatusEffect(statusEffect);
-			logger.warning("scheduling removal of " + statusEffect.type + " from " + targetVitals.entityId + " in "
-					+ statusEffect.ticks);
-			getContext().system().scheduler().scheduleOnce(Duration.create((long) statusEffect.ticks, TimeUnit.SECONDS),
-					getSelf(), statusEffectTarget, getContext().dispatcher(), null);
-		}
-	}
+	// private void setPassiveEffect(StatusEffectTarget statusEffectTarget,
+	// Vitals targetVitals,
+	// StatusEffect statusEffect) {
+	// int value = statusEffect.minValue;
+	// //setPassiveEffect(statusEffect.type, targetVitals, value, false);
+	//
+	// if (statusEffectTarget.action == StatusEffectTarget.Action.Apply
+	// && statusEffectTarget.passiveFlag ==
+	// StatusEffectTarget.PassiveFlag.AutoRemove) {
+	// statusEffectTarget = statusEffectTarget.clone();
+	// statusEffectTarget.targetEntityId = targetVitals.entityId;
+	// statusEffect = statusEffect.clone();
+	// statusEffectTarget.statusEffect.clear();
+	// statusEffectTarget.action = StatusEffectTarget.Action.Remove;
+	// // statusEffectTarget.passiveFlag =
+	// // StatusEffectTarget.PassiveFlag.NA;
+	// statusEffectTarget.addStatusEffect(statusEffect);
+	// logger.warning("scheduling removal of " + statusEffect.type + " from " +
+	// targetVitals.entityId + " in "
+	// + statusEffect.ticks);
+	// getContext().system().scheduler().scheduleOnce(Duration.create((long)
+	// statusEffect.ticks, TimeUnit.SECONDS),
+	// getSelf(), statusEffectTarget, getContext().dispatcher(), null);
+	// }
+	// }
 
 	private long setStatusEffects(StatusEffectTarget statusEffectTarget) {
 		boolean multi = false;
@@ -172,7 +175,7 @@ public class StatusEffectHandler extends UntypedActor {
 	}
 
 	private boolean hasActiveEffect(StatusEffectTarget statusEffectTarget) {
-		for (StatusEffect effect : statusEffectTarget.statusEffect) {
+		for (StatusEffect effect : statusEffectTarget.getStatusEffectList()) {
 			if (effect.ticksPerformed < effect.ticks) {
 				return true;
 			}
@@ -191,29 +194,32 @@ public class StatusEffectHandler extends UntypedActor {
 
 	private void applyAttributeEffects(StatusEffectTarget statusEffectTarget) {
 		List<StatusEffect> effectsToRemove = null;
-		
-		statusEffectTarget.originVitals.lastCombat = System.currentTimeMillis();
-		
-		for (StatusEffect statusEffect : statusEffectTarget.statusEffect) {
-			if (statusEffect.ticksPerformed < statusEffect.ticks) {
-				//logger.warning("Tick " + statusEffect.ticksPerformed + " " + statusEffect.id);
 
-				if (!DeductCost(statusEffectTarget.originVitals, statusEffect)) {
+		VitalsProxy originProxy = VitalsHandler.get(statusEffectTarget.originEntityId);
+		originProxy.vitals.lastCombat = System.currentTimeMillis();
+
+		for (StatusEffect statusEffect : statusEffectTarget.getStatusEffectList()) {
+			if (statusEffect.ticksPerformed < statusEffect.ticks) {
+				// logger.warning("Tick " + statusEffect.ticksPerformed + " " +
+				// statusEffect.id);
+
+				if (!DeductCost(originProxy, statusEffect)) {
 					statusEffect.ticksPerformed += 1;
 					continue;
 				}
-				
+
 				if (statusEffectTarget.attack.playerSkill.damageType.equals(PlayerSkill.DamageType.Aoe.toString())
 						|| statusEffectTarget.attack.playerSkill.damageType
 								.equals(PlayerSkill.DamageType.Pbaoe.toString())) {
 
-					for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range, statusEffectTarget.location,
-							grid)) {
-						Vitals targetVitals = VitalsHandler.fromTrackData(trackData, zone);
-						applyAttributeEffect(statusEffectTarget, statusEffectTarget.originVitals, targetVitals, statusEffect);
+					for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range,
+							statusEffectTarget.location, grid)) {
+						VitalsProxy targetVitals = VitalsHandler.fromTrackData(trackData, zone);
+						applyAttributeEffect(statusEffectTarget, originProxy, targetVitals, statusEffect);
 					}
 				} else {
-					applyAttributeEffect(statusEffectTarget, statusEffectTarget.originVitals, statusEffectTarget.targetVitals, statusEffect);
+					VitalsProxy targetProxy = VitalsHandler.get(statusEffectTarget.targetEntityId);
+					applyAttributeEffect(statusEffectTarget, originProxy, targetProxy, statusEffect);
 				}
 				statusEffect.ticksPerformed += 1;
 			}
@@ -225,67 +231,53 @@ public class StatusEffectHandler extends UntypedActor {
 			}
 		}
 
-		if (effectsToRemove != null) {
-			for (StatusEffect effect : effectsToRemove) {
-				statusEffectTarget.removeStatusEffectById(effect);
-			}
-		}
+		// if (effectsToRemove != null) {
+		// for (StatusEffect effect : effectsToRemove) {
+		// statusEffectTarget.removeStatusEffectById(effect);
+		// }
+		// }
 
 	}
 
-	private int applyAttributeEffect(StatusEffectTarget statusEffectTarget, Vitals originVitals, Vitals targetVitals,
-			StatusEffect statusEffect) {
-		
+	private int applyAttributeEffect(StatusEffectTarget statusEffectTarget, VitalsProxy originProxy,
+			VitalsProxy targetProxy, StatusEffect statusEffect) {
+
 		if (isPassive(statusEffect)) {
-			setPassiveEffect(statusEffectTarget, targetVitals, statusEffect);
+			// setPassiveEffect(statusEffectTarget, targetProxy, statusEffect);
 			return 0;
 		}
 
-		if (targetVitals.dead == 1) {
+		if (targetProxy.get("dead") == 1) {
 			return 0;
 		}
 
-		targetVitals.lastCombat = System.currentTimeMillis();
-
-		Vitals targetTemplate = VitalsHandler.getBase(targetVitals);
-
-		Vitals.Attribute attribute = Vitals.Attribute.valueOf(statusEffect.attribute);
-
-		int targetBaseValue = VitalsHandler.getAttribute(targetTemplate, attribute);
-		int targetCurrentValue = VitalsHandler.getAttribute(targetVitals, attribute);
+		targetProxy.vitals.lastCombat = System.currentTimeMillis();
 
 		int value = getEffectValue(statusEffect, statusEffectTarget.attack.playerSkill,
 				statusEffectTarget.originCharacterId);
 
 		if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
 
-			if (targetVitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
 				// no damage to self
-				if (targetVitals.characterId.equals(statusEffectTarget.originCharacterId)) {
+				if (targetProxy.vitals.characterId.equals(statusEffectTarget.originCharacterId)) {
 					return 0;
 				}
 
 				// or group members
-				if (inSameGroup(statusEffectTarget.originCharacterId, targetVitals.characterId)) {
+				if (inSameGroup(statusEffectTarget.originCharacterId, targetProxy.vitals.characterId)) {
 					return 0;
 				}
 			}
 
-			VitalsHandler.setAttribute(targetVitals, attribute, targetCurrentValue - value);
-			if (targetCurrentValue < 0) {
-				VitalsHandler.setAttribute(targetVitals, attribute, 0);
-			}
+			targetProxy.subtract(statusEffect.attribute, value);
 		} else if (statusEffect.type == StatusEffect.Type.AttributeIncrease) {
 
-			if (targetVitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
 				// only to self or group members
-				if (targetVitals.characterId.equals(statusEffectTarget.originCharacterId)
-						|| inSameGroup(statusEffectTarget.originCharacterId, targetVitals.characterId)) {
-					targetVitals.health += value;
-					VitalsHandler.setAttribute(targetVitals, attribute, targetCurrentValue);
-					if (targetCurrentValue > targetBaseValue) {
-						VitalsHandler.setAttribute(targetVitals, attribute, targetBaseValue);
-					}
+				if (targetProxy.vitals.characterId.equals(statusEffectTarget.originCharacterId)
+						|| inSameGroup(statusEffectTarget.originCharacterId, targetProxy.vitals.characterId)) {
+					targetProxy.add("health", value);
 				} else {
 					return 0;
 				}
@@ -293,34 +285,35 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 
 		if (value > 0) {
-			if (targetVitals.type == Vitals.VitalsType.Object && attribute == Vitals.Attribute.Health) {
-				BuildObjectHandler.setHealth(targetVitals.entityId, targetVitals.health);
+			if (targetProxy.vitals.type == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
+				BuildObjectHandler.setHealth(targetProxy.vitals.entityId, targetProxy.vitals.health);
 			}
-			
-			targetVitals.changed = 1;
-			 //logger.warning("target " + targetVitals.entityId + " damage " + value + " type " + statusEffect.type + " health " + targetVitals.health);
+
+			targetProxy.vitals.changed = 1;
+			logger.warning("target " + targetProxy.vitals.entityId + " damage " + value + " type " + statusEffect.type
+					+ " health " + targetProxy.vitals.health);
 		}
 
 		return value;
 	}
 
-	private boolean DeductCost(Vitals vitals, StatusEffect statusEffect) {
+	private boolean DeductCost(VitalsProxy vitalsProxy, StatusEffect statusEffect) {
 		if (statusEffect.resourceCost == 0) {
 			return true;
 		}
 
 		if (statusEffect.resource == StatusEffect.Resource.ResourceStamina) {
-			if (vitals.stamina < statusEffect.resourceCost) {
+			if (vitalsProxy.vitals.stamina < statusEffect.resourceCost) {
 				logger.warning("Insufficient stamina needed " + statusEffect.resourceCost);
 				return false;
 			}
-			vitals.stamina -= statusEffect.resourceCost;
+			vitalsProxy.vitals.stamina -= statusEffect.resourceCost;
 		} else if (statusEffect.resource == StatusEffect.Resource.ResourceMagic) {
-			if (vitals.magic < statusEffect.resourceCost) {
+			if (vitalsProxy.vitals.magic < statusEffect.resourceCost) {
 				logger.warning("Insufficient magic needed " + statusEffect.resourceCost);
 				return false;
 			}
-			vitals.magic -= statusEffect.resourceCost;
+			vitalsProxy.vitals.magic -= statusEffect.resourceCost;
 		}
 		return true;
 	}
@@ -369,78 +362,75 @@ public class StatusEffectHandler extends UntypedActor {
 		}
 	}
 
-	private void die(Vitals vitals) {
-		vitals.health = 0;
-		vitals.stamina = 0;
-		vitals.magic = 0;
-		vitals.dead = 1;
-		vitals.changed = 1;
+	private void die(VitalsProxy vitalsProxy) {
+		vitalsProxy.set("health", 0);
+		vitalsProxy.set("stamina", 0);
+		vitalsProxy.set("magic", 0);
+		vitalsProxy.vitals.dead = 1;
+		vitalsProxy.vitals.changed = 1;
 	}
 
-	private void revive(Vitals vitals) {
-		Vitals template = VitalsHandler.getBase(vitals);
-		vitals.dead = 0;
-		vitals.health = template.health;
-		vitals.stamina = template.stamina;
-		vitals.magic = template.magic;
-		vitals.changed = 1;
+	private void revive(VitalsProxy vitalsProxy) {
+		vitalsProxy.vitals.dead = 0;
+		vitalsProxy.setToBase("health");
+		vitalsProxy.setToBase("stamina");
+		vitalsProxy.setToBase("magic");
+		vitalsProxy.vitals.changed = 1;
 	}
 
 	private void updateVitals() {
-		int regen;
 
-		for (Vitals vitals : VitalsHandler.getVitals()) {
-			
-			Vitals template = VitalsHandler.getBase(vitals);
-			int stamina = template.stamina;
-			int magic = template.magic;
-			int health = template.health;
+		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
 
-			if (vitals.dead == 1) {
-				if (vitals.type == Vitals.VitalsType.Object) {
-					BuildObjectHandler.setHealth(vitals.entityId, vitals.health);
-					VitalsHandler.remove(vitals.entityId);
+			int stamina = vitalsProxy.baseVitals.stamina;
+			int magic = vitalsProxy.baseVitals.magic;
+			int health = vitalsProxy.baseVitals.health;
+
+			if (vitalsProxy.vitals.dead == 1) {
+				if (vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
+					BuildObjectHandler.setHealth(vitalsProxy.vitals.entityId, vitalsProxy.vitals.health);
+					VitalsHandler.remove(vitalsProxy.vitals.entityId);
 					continue;
 				}
 
-				if (deathTimer.containsKey(vitals.entityId)) {
-					Long timeDead = deathTimer.get(vitals.entityId);
+				if (deathTimer.containsKey(vitalsProxy.vitals.entityId)) {
+					Long timeDead = deathTimer.get(vitalsProxy.vitals.entityId);
 					Long timer = deathTime;
 					if ((System.currentTimeMillis() - timeDead) > timer) {
-						revive(vitals);
-						deathTimer.remove(vitals.entityId);
+						revive(vitalsProxy);
+						deathTimer.remove(vitalsProxy.vitals.entityId);
 					}
 				}
 				continue;
 			}
 
-			if (vitals.health <= 0) {
-				die(vitals);
-				deathTimer.put(vitals.entityId, System.currentTimeMillis());
+			if (vitalsProxy.vitals.health <= 0) {
+				die(vitalsProxy);
+				deathTimer.put(vitalsProxy.vitals.entityId, System.currentTimeMillis());
 				continue;
 			}
 
-			if (vitals.health < health) {
-				vitals.health += vitals.healthRegen;
-				vitals.changed = 1;
-				if (vitals.health > health) {
-					vitals.health = health;
+			if (vitalsProxy.vitals.health < health) {
+				vitalsProxy.vitals.health += vitalsProxy.vitals.healthRegen;
+				vitalsProxy.vitals.changed = 1;
+				if (vitalsProxy.vitals.health > health) {
+					vitalsProxy.vitals.health = health;
 				}
 			}
 
-			if (vitals.stamina < stamina) {
-				vitals.stamina +=vitals.staminaRegen;
-				vitals.changed = 1;
-				if (vitals.stamina > stamina) {
-					vitals.stamina = stamina;
+			if (vitalsProxy.vitals.stamina < stamina) {
+				vitalsProxy.vitals.stamina += vitalsProxy.vitals.staminaRegen;
+				vitalsProxy.vitals.changed = 1;
+				if (vitalsProxy.vitals.stamina > stamina) {
+					vitalsProxy.vitals.stamina = stamina;
 				}
 			}
 
-			if (vitals.magic < magic) {
-				vitals.magic += vitals.magicRegen;
-				vitals.changed = 1;
-				if (vitals.magic > magic) {
-					vitals.magic = magic;
+			if (vitalsProxy.vitals.magic < magic) {
+				vitalsProxy.vitals.magic += vitalsProxy.vitals.magicRegen;
+				vitalsProxy.vitals.changed = 1;
+				if (vitalsProxy.vitals.magic > magic) {
+					vitalsProxy.vitals.magic = magic;
 				}
 			}
 
@@ -451,7 +441,7 @@ public class StatusEffectHandler extends UntypedActor {
 		Random rand = new Random();
 		return rand.nextInt((max - min) + 1) + min;
 	}
-	
+
 	@Override
 	public void preStart() {
 		tick(300L, "effects_tick");

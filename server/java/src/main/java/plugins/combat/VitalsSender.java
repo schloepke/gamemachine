@@ -104,18 +104,18 @@ public class VitalsSender extends UntypedActor {
 
 	private List<Vitals> objectVitals(int zone) {
 		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : VitalsHandler.getVitalsForZone(zone)) {
-			if (vitals.type == Vitals.VitalsType.Object) {
-				if (vitals.changed == 1) {
-					resetVitalTick(vitals.entityId);
-					vitals.changed = 0;
+		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
+			if (vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
+				if (vitalsProxy.vitals.changed == 1) {
+					resetVitalTick(vitalsProxy.vitals.entityId);
+					vitalsProxy.vitals.changed = 0;
 				} else {
-					int tick = nextVitalTick(vitals.entityId);
+					int tick = nextVitalTick(vitalsProxy.vitals.entityId);
 					if (tick >= 4) {
 						continue;
 					}
 				}
-				container.add(vitals);
+				container.add(vitalsProxy.vitals);
 			}
 
 		}
@@ -124,9 +124,10 @@ public class VitalsSender extends UntypedActor {
 
 	private List<Vitals> livingVitals(int zone) {
 		List<Vitals> container = new ArrayList<Vitals>();
-		for (Vitals vitals : VitalsHandler.getVitalsForZone(zone)) {
+		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
+			Vitals vitals = vitalsProxy.vitals;
 			if (vitals.type == Vitals.VitalsType.Character) {
-				Vitals template = VitalsHandler.getBase(vitals);
+				Vitals template = vitalsProxy.baseVitals;
 				if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
 						|| vitals.stamina < template.stamina) {
 					resetVitalTick(vitals.entityId);
