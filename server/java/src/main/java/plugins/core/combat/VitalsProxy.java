@@ -63,6 +63,16 @@ public class VitalsProxy {
 		set(baseVitals,name,value);
 	}
 	
+	public void addBase(String name, int value) {
+		int current = get(baseVitals,name);
+		set(baseVitals,name,current+value);
+	}
+	
+	public void subtractBase(String name, int value) {
+		int current = get(baseVitals,name);
+		set(baseVitals,name,current-value);
+	}
+	
 	private int get(Vitals vitals, String name) {
 		try {
 			Field field = getField(name);

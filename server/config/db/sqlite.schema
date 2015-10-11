@@ -255,11 +255,7 @@ CREATE TABLE player_skills (
 
   player_skill_status_effects varchar(128) DEFAULT NULL,
 
-  player_skill_max_stacks integer DEFAULT NULL,
-
   player_skill_category integer
-
-  player_skill_skill_type integer
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );

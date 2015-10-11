@@ -91,6 +91,7 @@ local_message StatusEffect {
   optional int32 resourceCost = 14;
   optional int32 range = 15;
   optional string attribute = 17;
+  optional int32 maxStacks = 18;
 }
 
 local_message StatusEffects {
@@ -594,11 +595,6 @@ message DynamicMessage {
 
 
 local_persistent_message PlayerSkill {
-  enum SkillType {
-    Active = 0;
-    Passive = 1;
-  }
-  
   enum Category {
     SingleTarget = 0;
 	Aoe = 1;
@@ -620,9 +616,7 @@ local_persistent_message PlayerSkill {
   optional int32 isPassive = 17;
   optional string icon_uuid = 19;
   optional string statusEffects = 20;
-  optional int32 maxStacks = 21;
   optional Category category = 22;
-  optional SkillType skillType = 23;
 }
 
 message PlayerSkills {

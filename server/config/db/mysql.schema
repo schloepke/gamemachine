@@ -265,11 +265,7 @@ CREATE TABLE `player_skills` (
 
   `player_skill_status_effects` varchar(128) DEFAULT NULL,
 
-  `player_skill_max_stacks` int(11) DEFAULT NULL,
-
   `player_skill_category` int(11)
-
-  `player_skill_skill_type` int(11)
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
