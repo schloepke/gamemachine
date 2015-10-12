@@ -209,9 +209,9 @@ CREATE TABLE `characters` (
 
   `character_include_uma_data` tinyint(4) DEFAULT NULL,
 
-  `character_vitals_template` varchar(128) DEFAULT NULL,
-
   `character_level` int(11) DEFAULT NULL,
+
+  `character_vitals_template` int(11),
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -265,7 +265,7 @@ CREATE TABLE `player_skills` (
 
   `player_skill_status_effects` varchar(128) DEFAULT NULL,
 
-  `player_skill_category` int(11)
+  `player_skill_category` int(11),
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

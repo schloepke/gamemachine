@@ -19,13 +19,13 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	}
 	
 	
-	public Vitals getVitalsTemplate(String templateName) {
-		for (Vitals template : baseVitals) {
-			if (template.templateName.equals(templateName)) {
-				return template.clone();
+	public Vitals getVitalsTemplate(Vitals.Template template) {
+		for (Vitals vitals : baseVitals) {
+			if (vitals.template == template) {
+				return vitals.clone();
 			}
 		}
-		throw new RuntimeException("Unable to find vitals template "+templateName);
+		throw new RuntimeException("Unable to find vitals template "+template.toString());
 	}
 	
 	
@@ -33,7 +33,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 
 	@Override
 	public void OnCharacterCreated(Character character, Object data) {
-		character.vitalsTemplate = "player";
+		character.vitalsTemplate = Vitals.Template.PlayerTemplate;
 		Character.db().save(character);
 	}
 
@@ -52,7 +52,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	@Override
 	public Vitals getBaseVitals(String entityId, Vitals.VitalsType vitalsType) {
 		if (vitalsType == Vitals.VitalsType.BuildObject) {
-			return getVitalsTemplate("build_object");
+			return getVitalsTemplate(Vitals.Template.BuildObjectTemplate);
 		} else {
 			throw new RuntimeException("Invalid vitals type "+vitalsType.toString());
 		}

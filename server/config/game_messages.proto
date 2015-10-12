@@ -8,6 +8,13 @@ local_message VitalsContainer {
 }
 
 local_message Vitals {
+
+  enum Template {
+    PlayerTemplate = 0;
+    BuildObjectTemplate = 1;
+    NpcTemplate = 2;
+  }
+  
   enum VitalsType {
     None = 0;
     Character = 1;
@@ -38,7 +45,6 @@ local_message Vitals {
   optional string entityId = 15;
   optional VitalsType type = 18;
   optional int32 zone = 19;
-  optional string templateName = 21;
   optional int32 spellResist = 22;
   optional int32 elementalResist = 23;
   optional int32 spellPenetration = 24;
@@ -51,6 +57,7 @@ local_message Vitals {
   optional int32 stamina = 31;
   optional int32 movementSpeed = 32;
   optional int32 abilitySpeed = 33;
+  optional Template template = 34;
 }
 
 local_message StatusEffect {
@@ -383,8 +390,8 @@ local_persistent_message Character {
   optional int32 worldz = 10;
   optional int32 zone = 11;
   optional bool includeUmaData = 12;
-  optional string vitalsTemplate = 13;
   optional int32 level = 14;
+  optional Vitals.Template vitalsTemplate = 15;
 }
 
 local_message Characters {

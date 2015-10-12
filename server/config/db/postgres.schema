@@ -224,9 +224,9 @@ CREATE TABLE characters (
 
   character_include_uma_data boolean DEFAULT NULL,
 
-  character_vitals_template character varying(128) DEFAULT NULL,
-
   character_level integer DEFAULT NULL,
+
+  character_vitals_template integer,
 
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
@@ -284,7 +284,7 @@ CREATE TABLE player_skills (
 
   player_skill_status_effects character varying(128) DEFAULT NULL,
 
-  player_skill_category integer
+  player_skill_category integer,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );

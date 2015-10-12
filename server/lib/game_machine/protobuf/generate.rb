@@ -144,7 +144,7 @@ module GameMachine
       def sql_field(klass,field,dbtype,force_null=false)
         if dbtype == 'mysql'
           if field.isEnumField
-            return "`#{sql_column_name(klass,field)}` int(11)"
+            return "`#{sql_column_name(klass,field)}` int(11),"
           end
           txt = case field.getJavaType.to_s
           when 'boolean'
@@ -164,7 +164,7 @@ module GameMachine
           end
         elsif dbtype == 'postgres'
           if field.isEnumField
-            return  "#{sql_column_name(klass,field)} integer"
+            return  "#{sql_column_name(klass,field)} integer,"
           end
           txt = case field.getJavaType.to_s
           when 'boolean'
@@ -184,7 +184,7 @@ module GameMachine
           end
         elsif dbtype == 'sqlite'
           if field.isEnumField
-            return "#{sql_column_name(klass,field)} integer"
+            return "#{sql_column_name(klass,field)} integer,"
           end
           txt = case field.getJavaType.to_s
           when 'boolean'

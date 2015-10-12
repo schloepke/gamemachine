@@ -201,9 +201,9 @@ CREATE TABLE characters (
 
   character_include_uma_data boolean DEFAULT NULL,
 
-  character_vitals_template varchar(128) DEFAULT NULL,
-
   character_level integer DEFAULT NULL,
+
+  character_vitals_template integer,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
@@ -255,7 +255,7 @@ CREATE TABLE player_skills (
 
   player_skill_status_effects varchar(128) DEFAULT NULL,
 
-  player_skill_category integer
+  player_skill_category integer,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
