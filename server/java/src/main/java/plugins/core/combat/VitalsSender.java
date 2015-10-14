@@ -71,8 +71,8 @@ public class VitalsSender extends UntypedActor {
 		for (Vitals vitals : container) {
 			TrackData vitalsTrackData = grid.get(vitals.entityId);
 
-			if (cleanupBadVitals(vitalsTrackData, vitals)) {
-				logger.warning("Cleanup trackdata "+vitals.entityId);
+			// Dead most likely
+			if (vitalsTrackData == null) {
 				continue;
 			}
 
@@ -91,22 +91,12 @@ public class VitalsSender extends UntypedActor {
 		PlayerCommands.sendGameMessage(msg, playerTrackData.id);
 	}
 
-	// Vitals might end up existing after player disconnects. Lost
-	// messages, etc... Ensure we catch that here
-	private boolean cleanupBadVitals(TrackData trackData, Vitals vitals) {
-		if (trackData == null) {
-			VitalsHandler.remove(vitals.entityId);
-			return true;
-		} else {
-			return false;
-		}
-	}
-
 	private List<Vitals> objectVitals(int zone) {
 		List<Vitals> container = new ArrayList<Vitals>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
-			if (vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
-				if (vitalsProxy.vitals.changed == 1) {
+			if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject || vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
+				Vitals template = vitalsProxy.baseVitals;
+				if (vitalsProxy.vitals.changed == 1 || vitalsProxy.vitals.health < template.health) {
 					resetVitalTick(vitalsProxy.vitals.entityId);
 					vitalsProxy.vitals.changed = 0;
 				} else {

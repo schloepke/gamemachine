@@ -1,17 +1,20 @@
 package plugins.npcdemo;
 
+import java.util.Random;
+
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.Grid;
-import io.gamemachine.messages.UserDefinedData;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackData.EntityType;
+import io.gamemachine.messages.UserDefinedData;
 import io.gamemachine.util.Vector3;
-import java.util.Random;
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
+import plugins.core.combat.VitalsHandler;
+import plugins.core.combat.VitalsProxy;
 
 public class NpcEntity extends GameMessageActor {
 
@@ -29,7 +32,8 @@ public class NpcEntity extends GameMessageActor {
 	public Vector3 target;
 	private Random rand;
 	private long lastUpdate = 0;
-
+	private VitalsProxy vitalsProxy;
+	
 	public NpcEntity(String playerId, String characterId) {
 		id = playerId;
 	}
@@ -42,7 +46,7 @@ public class NpcEntity extends GameMessageActor {
 		target = randVector();
 		initTrackData();
 		lastUpdate = System.currentTimeMillis();
-		
+		vitalsProxy = VitalsHandler.get(id, 0);
 		scheduleOnce(tickInterval, "update");
 	}
 	
@@ -52,6 +56,12 @@ public class NpcEntity extends GameMessageActor {
 	
 	@Override
 	public void onTick(String message) {
+		if (vitalsProxy.vitals.dead == 1) {
+			grid.remove(id);
+			scheduleOnce(tickInterval, "update");
+			return;
+		}
+		
 		move();
 		double dist = position.distance2d(target);
 		if (dist <= 2) {

@@ -8,6 +8,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.CraftingRecipes;
 import io.gamemachine.messages.PlayerItems;
 import io.gamemachine.messages.PlayerSkills;
@@ -73,6 +74,15 @@ public class ClientDbLoader {
 			return CraftingRecipes.parseFrom(LoadProtoFile(name));
 		} else {
 			return new CraftingRecipes();
+		}
+	}
+	
+	public static BuildObjects getBuildObjects() {
+		String name = "BuildObjectsCatalog.proto";
+		if (new File(dbPath(name)).exists()) {
+			return BuildObjects.parseFrom(LoadProtoFile(name));
+		} else {
+			return new BuildObjects();
 		}
 	}
 	

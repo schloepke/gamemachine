@@ -7,6 +7,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.google.common.base.Strings;
+
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -64,8 +66,6 @@ public class ActiveEffectHandler extends UntypedActor {
 		}
 	}
 
-	
-
 	private long useSkillOnTarget(StatusEffectTarget statusEffectTarget) {
 		long activeId = setStatusEffects(statusEffectTarget);
 		applyEffects(statusEffectTarget);
@@ -108,11 +108,16 @@ public class ActiveEffectHandler extends UntypedActor {
 		}
 		return false;
 	}
-	
+
 	private int effectCount(String targetEntityId, String originEntityId, String effectId) {
 		int count = 0;
 		for (StatusEffectTarget target : targets.values()) {
-			
+
+			// Not all targets have a targetEntityId (aoe's)
+			if (Strings.isNullOrEmpty(target.targetEntityId)) {
+				continue;
+			}
+
 			if (target.targetEntityId.equals(targetEntityId) && target.originEntityId.equals(originEntityId)) {
 				for (StatusEffect effect : target.getStatusEffectList()) {
 					if (effect.id.equals(effectId) && effect.ticksPerformed < effect.ticks) {
@@ -123,10 +128,13 @@ public class ActiveEffectHandler extends UntypedActor {
 		}
 		return count;
 	}
-	
+
 	private List<StatusEffect> getStatusEffects(String entityId) {
 		List<StatusEffect> statusEffects = new ArrayList<StatusEffect>();
 		for (StatusEffectTarget target : targets.values()) {
+			if (Strings.isNullOrEmpty(target.targetEntityId)) {
+				continue;
+			}
 			if (target.targetEntityId.equals(entityId)) {
 				for (StatusEffect effect : target.getStatusEffectList()) {
 					statusEffects.add(effect);
@@ -136,12 +144,11 @@ public class ActiveEffectHandler extends UntypedActor {
 		return statusEffects;
 	}
 
-	
-
 	private long setStatusEffects(StatusEffectTarget statusEffectTarget) {
 		boolean multi = false;
 		for (StatusEffect effect : StatusEffectData.skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
-			if (effect.type == StatusEffect.Type.AttributeDecrease || effect.type == StatusEffect.Type.AttributeIncrease) {
+			if (effect.type == StatusEffect.Type.AttributeDecrease
+					|| effect.type == StatusEffect.Type.AttributeIncrease) {
 				statusEffectTarget.addStatusEffect(effect.clone());
 			}
 			if (effect.ticks > 1) {
@@ -185,13 +192,17 @@ public class ActiveEffectHandler extends UntypedActor {
 
 					for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range,
 							statusEffectTarget.location, grid)) {
-
+						
+						VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
+						
+						if (targetProxy.vitals.dead == 1) {
+							continue;
+						}
+						
 						if (statusEffectTarget.attack.playerSkill.category == PlayerSkill.Category.AoeDot) {
-							VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
 							convertToSingleTarget(statusEffectTarget, targetProxy.vitals.entityId);
 							continue;
 						} else {
-							VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
 							applyEffect(statusEffectTarget.attack.playerSkill, originProxy, targetProxy, statusEffect);
 						}
 
@@ -213,15 +224,16 @@ public class ActiveEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		int effectCountFromOrigin = effectCount(targetProxy.vitals.entityId,originProxy.vitals.entityId,statusEffect.id);
+		int effectCountFromOrigin = effectCount(targetProxy.vitals.entityId, originProxy.vitals.entityId,
+				statusEffect.id);
 		if (effectCountFromOrigin >= 2) {
-			//logger.warning("Effect from same origin present");
+			// logger.warning("Effect from same origin present");
 			return 0;
 		} else if (effectLimitReached(targetProxy.vitals.entityId, statusEffect.id)) {
-			//logger.warning("Effect limit reached");
+			// logger.warning("Effect limit reached");
 			return 0;
 		}
-		
+
 		targetProxy.vitals.lastCombat = System.currentTimeMillis();
 
 		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.vitals.characterId);
@@ -245,8 +257,8 @@ public class ActiveEffectHandler extends UntypedActor {
 
 			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
 				// only to self or group members
-				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId)
-						|| StatusEffectManager.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
+				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId) || StatusEffectManager
+						.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
 					targetProxy.add(statusEffect.attribute, value);
 				} else {
 					return 0;
@@ -260,13 +272,12 @@ public class ActiveEffectHandler extends UntypedActor {
 			}
 
 			targetProxy.vitals.changed = 1;
-			//logger.warning("Category " + playerSkill.category.toString() + " target " + targetProxy.vitals.entityId
-			//		+ " damage " + value + " type " + statusEffect.type + " health " + targetProxy.vitals.health);
+			logger.warning(playerSkill.id + " target " + targetProxy.vitals.entityId
+					+ " damage " + value + " type " + statusEffect.type + " health " + targetProxy.vitals.health);
 		}
 
 		return value;
 	}
-
 
 	@Override
 	public void preStart() {

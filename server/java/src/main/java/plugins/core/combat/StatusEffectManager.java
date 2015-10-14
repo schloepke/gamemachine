@@ -163,13 +163,13 @@ public class StatusEffectManager extends UntypedActor {
 
 		if (statusEffect.resource == StatusEffect.Resource.ResourceStamina) {
 			if (vitalsProxy.vitals.stamina < statusEffect.resourceCost) {
-				logger.warn("Insufficient stamina needed " + statusEffect.resourceCost);
+				logger.debug("Insufficient stamina needed " + statusEffect.resourceCost);
 				return false;
 			}
 			vitalsProxy.vitals.stamina -= statusEffect.resourceCost;
 		} else if (statusEffect.resource == StatusEffect.Resource.ResourceMagic) {
 			if (vitalsProxy.vitals.magic < statusEffect.resourceCost) {
-				logger.warn("Insufficient magic needed " + statusEffect.resourceCost);
+				logger.debug("Insufficient magic needed " + statusEffect.resourceCost);
 				return false;
 			}
 			vitalsProxy.vitals.magic -= statusEffect.resourceCost;
@@ -243,7 +243,7 @@ public class StatusEffectManager extends UntypedActor {
 			int health = vitalsProxy.baseVitals.health;
 
 			if (vitalsProxy.vitals.dead == 1) {
-				if (vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
+				if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject) {
 					BuildObjectHandler.setHealth(vitalsProxy.vitals.entityId, vitalsProxy.vitals.health);
 					VitalsHandler.remove(vitalsProxy.vitals.entityId);
 					continue;
@@ -266,24 +266,27 @@ public class StatusEffectManager extends UntypedActor {
 				continue;
 			}
 
-			if (vitalsProxy.vitals.health < health) {
-				vitalsProxy.vitals.health += vitalsProxy.vitals.healthRegen;
+			if (vitalsProxy.vitals.health < health && vitalsProxy.baseVitals.healthRegen > 0) {
+				vitalsProxy.vitals.health += vitalsProxy.baseVitals.healthRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.health > health) {
 					vitalsProxy.vitals.health = health;
 				}
+				if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject) {
+					BuildObjectHandler.setHealth(vitalsProxy.vitals.entityId, vitalsProxy.vitals.health);
+				}
 			}
 
-			if (vitalsProxy.vitals.stamina < stamina) {
-				vitalsProxy.vitals.stamina += vitalsProxy.vitals.staminaRegen;
+			if (vitalsProxy.vitals.stamina < stamina && vitalsProxy.baseVitals.staminaRegen > 0) {
+				vitalsProxy.vitals.stamina += vitalsProxy.baseVitals.staminaRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.stamina > stamina) {
 					vitalsProxy.vitals.stamina = stamina;
 				}
 			}
 
-			if (vitalsProxy.vitals.magic < magic) {
-				vitalsProxy.vitals.magic += vitalsProxy.vitals.magicRegen;
+			if (vitalsProxy.vitals.magic < magic && vitalsProxy.baseVitals.magicRegen > 0) {
+				vitalsProxy.vitals.magic += vitalsProxy.baseVitals.magicRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.magic > magic) {
 					vitalsProxy.vitals.magic = magic;
@@ -294,6 +297,7 @@ public class StatusEffectManager extends UntypedActor {
 	}
 	
 	private void die(VitalsProxy vitalsProxy) {
+		logger.debug("Die "+vitalsProxy.vitals.entityId);
 		vitalsProxy.set("health", 0);
 		vitalsProxy.set("stamina", 0);
 		vitalsProxy.set("magic", 0);
@@ -302,6 +306,7 @@ public class StatusEffectManager extends UntypedActor {
 	}
 
 	private void revive(VitalsProxy vitalsProxy) {
+		logger.debug("Revive "+vitalsProxy.vitals.entityId);
 		vitalsProxy.vitals.dead = 0;
 		vitalsProxy.setToBase("health");
 		vitalsProxy.setToBase("stamina");

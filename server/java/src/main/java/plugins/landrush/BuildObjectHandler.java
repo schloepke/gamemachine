@@ -185,7 +185,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		return updateCount.get();
 	}
 
-	private BuildObject find(String id) {
+	public static BuildObject find(String id) {
 		if (!objectIndex.containsKey(id)) {
 			BuildObject buildObject = BuildObject.db().findFirst("build_object_id = ?", id);
 			if (buildObject == null) {
@@ -255,7 +255,7 @@ public class BuildObjectHandler extends GameMessageActor {
 	private void setGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
-			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.Object);
+			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.BuildObject);
 			VitalsHandler.get(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
 		}
 	}
