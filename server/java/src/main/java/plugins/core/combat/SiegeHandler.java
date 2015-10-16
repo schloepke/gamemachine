@@ -1,0 +1,114 @@
+
+package plugins.core.combat;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.core.GameGrid;
+import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.Grid;
+import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.messages.BuildObject;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.SiegeCommand;
+import io.gamemachine.messages.TrackData;
+import plugins.landrush.BuildObjectHandler;
+
+public class SiegeHandler extends GameMessageActor {
+
+	public static String name = SiegeHandler.class.getSimpleName();
+	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
+
+	public Map<String, String> sieges = new HashMap<String, String>();
+
+	@Override
+	public void awake() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onGameMessage(GameMessage gameMessage) {
+
+		if (exactlyOnce(gameMessage)) {
+			if (gameMessage.siegeCommand.action == SiegeCommand.Action.Use) {
+				logger.warning("UseSiege");
+				useSiege(gameMessage);
+			} else if (gameMessage.siegeCommand.action == SiegeCommand.Action.Release) {
+				logger.warning("ReleaseSiege");
+				releaseSiege(gameMessage);
+			}
+		} else {
+			if (gameMessage.siegeCommand.action == SiegeCommand.Action.SetRotation) {
+				updateRotation(gameMessage);
+			}
+		}
+	}
+
+		
+	private boolean canUse(String buildObjectId, String ownerId) {
+		if (!sieges.containsKey(buildObjectId) && ownerId.equals(characterId)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean canRelease(String buildObjectId, String ownerId) {
+		if (sieges.containsKey(buildObjectId) && sieges.get(buildObjectId).equals(characterId)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private void releaseSiege(GameMessage gameMessage) {
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		if (existing != null) {
+			if (canRelease(existing.id, existing.ownerId)) {
+				sieges.remove(existing.id);
+				gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
+				setReply(gameMessage);
+				broadcast(gameMessage, existing.zone);
+				logger.warning("ReleaseSiege approved");
+			}
+		}
+	}
+
+	private void useSiege(GameMessage gameMessage) {
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		if (existing != null) {
+			if (canUse(existing.id, existing.ownerId) || canRelease(existing.id, existing.ownerId)) {
+				sieges.put(existing.id, characterId);
+				gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
+				setReply(gameMessage);
+				broadcast(gameMessage, existing.zone);
+				logger.warning("UseSiege approved");
+			}
+		}
+	}
+
+	private void updateRotation(GameMessage gameMessage) {
+		BuildObject existing = BuildObjectHandler.updateRotation(gameMessage.siegeCommand.buildObject);
+		if (existing != null) {
+			gameMessage.siegeCommand.buildObject = existing;
+			gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
+			broadcast(gameMessage, existing.zone);
+			logger.warning("broadcast sent");
+		}
+	}
+
+	private void broadcast(GameMessage gameMessage, int zone) {
+		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
+		for (TrackData trackData : grid.getAll()) {
+			if (trackData.entityType != TrackData.EntityType.Player) {
+				continue;
+			}
+			PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
+		}
+	}
+
+}
