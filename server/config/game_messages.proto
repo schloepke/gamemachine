@@ -269,8 +269,24 @@ local_persistent_message WorldObject {
 }
 
 local_persistent_message BuildObject {
+
+  enum Action {
+    None = 0;
+    Create = 1;
+    Remove = 2;
+    Update = 3;
+    UpdateProp = 4;
+    SetHealth = 5;
+    RemoveAll = 6;
+  }
+  
+  enum State {
+    Active = 0;
+    Removed = 1;
+  }
+  
   optional string playerItemId = 1;
-  optional int32 action = 2;
+  optional Action action = 2;
   optional string id = 3;
   optional int32 recordId = 4;
   optional string ownerId = 5;
@@ -285,7 +301,7 @@ local_persistent_message BuildObject {
   optional int32 templateId = 18;
   optional string grid = 19;
   optional int64 updatedAt = 22;
-  optional int32 state = 23;
+  optional State state = 23;
   optional int32 updateId = 24;
   optional bool isFloor = 25;
   optional bool isDestructable = 26;
@@ -323,8 +339,15 @@ local_persistent_message BuildObject {
  }
  
 local_message BuildObjects {
+  enum Action {
+    None = 0;
+    GetStatus = 1;
+    PropUpdate = 2;
+    SetRotation = 3;
+  }
+  
   repeated BuildObject buildObject = 1;
-  optional int32 action = 2;
+  optional Action action = 2;
   optional int32 requestedUpdateId = 3;
   optional int32 currentUpdate = 4;
 }
@@ -364,18 +387,24 @@ local_message WorldObjects {
 }
 
 local_message SiegeCommand {
-  optional int32 startLoad = 1;
-  optional int32 fire = 2;
-  optional float force = 3;
-  optional string id = 4;
-  optional string hitId = 5;
-  optional GmVector3 hit = 6;
-  optional string skillId = 7;
-  optional int32 startUse = 8;
-  optional int32 endUse = 9;
-  optional string playerId = 10;
-  optional string targetType = 11;
-  optional string targetId = 12;
+  enum Action {
+    ActionNone = 0;
+    SetRotation = 1;
+    Use = 2;
+    Release = 3;
+  }
+  
+  enum Result {
+    ResultNone = 0;
+    Approved = 1;
+    Declined = 2;
+  }
+  
+  optional Action action = 1;
+  optional BuildObject buildObject = 2;
+  optional Result result = 3;
+  optional string characterId = 4;
+  optional string buildObjectId = 5;
 }
  
 local_persistent_message Character {

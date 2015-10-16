@@ -8,6 +8,8 @@ import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
+import io.gamemachine.messages.PlayerSkill;
+import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
 import plugins.core.combat.ClientDbLoader;
 import plugins.landrush.BuildObjectHandler;
@@ -17,12 +19,15 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	private List<Vitals> baseVitals;
 	public Map<Integer,BuildObject> buildObjects = new ConcurrentHashMap<Integer,BuildObject>();
 	private ConcurrentHashMap<String, Vitals> characterVitals = new ConcurrentHashMap<String, Vitals>();
+	private CombatDamage combatDamage;
 	
 	public SimpleGameEntityManager() {
 		baseVitals = ClientDbLoader.getVitalsContainer().vitals;
 		for (BuildObject buildObject : ClientDbLoader.getBuildObjects().getBuildObjectList()) {
 			buildObjects.put(buildObject.templateId, buildObject);
 		}
+		
+		combatDamage = new CombatDamage();
 	}
 	
 	
@@ -68,6 +73,18 @@ public class SimpleGameEntityManager implements GameEntityManager {
 			throw new RuntimeException("Invalid vitals type "+vitalsType.toString());
 		}
 		
+	}
+
+
+	@Override
+	public int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
+		return combatDamage.getEffectValue(statusEffect, playerSkill, characterId);
+	}
+
+
+	@Override
+	public void skillUsed(PlayerSkill playerSkill, String characterId) {
+		combatDamage.skillUsed(playerSkill, characterId);
 	}
 
 }

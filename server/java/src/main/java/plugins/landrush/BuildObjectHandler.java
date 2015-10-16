@@ -51,10 +51,10 @@ public class BuildObjectHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		BuildObjects buildObjects = gameMessage.buildObjects;
-		
+
 		if (exactlyOnce(gameMessage)) {
-			if (buildObjects.action > 0) {
-				if (buildObjects.action == 1) {
+			if (buildObjects.action != BuildObjects.Action.None) {
+				if (buildObjects.action == BuildObjects.Action.GetStatus) {
 					buildObjects.currentUpdate = getUpdateCount();
 					setReply(gameMessage);
 				}
@@ -62,16 +62,16 @@ public class BuildObjectHandler extends GameMessageActor {
 				setReply(gameMessage);
 			} else {
 				BuildObject bo = gameMessage.buildObjects.buildObject.get(0);
-				if (bo.action == 1) {
+				if (bo.action == BuildObject.Action.Create) {
 					create(bo);
 					setReply(gameMessage);
-				} else if (bo.action == 2) {
+				} else if (bo.action == BuildObject.Action.Remove) {
 					remove(bo);
 					setReply(gameMessage);
-				} else if (bo.action == 5) {
+				} else if (bo.action == BuildObject.Action.RemoveAll) {
 					removeAll();
 					setReply(gameMessage);
-				} else if (bo.action == 10) {
+				} else if (bo.action == BuildObject.Action.UpdateProp) {
 					updateDoor(bo);
 					setReply(gameMessage);
 				}
@@ -79,11 +79,11 @@ public class BuildObjectHandler extends GameMessageActor {
 		} else {
 			if (gameMessage.buildObjects.buildObject != null && gameMessage.buildObjects.buildObject.size() >= 1) {
 				BuildObject bo = gameMessage.buildObjects.buildObject.get(0);
-				if (bo != null && bo.action == 11) {
+				if (bo != null && bo.action == BuildObject.Action.SetHealth) {
 					setHealth(bo);
 				}
 			}
-			
+
 		}
 	}
 
@@ -94,10 +94,10 @@ public class BuildObjectHandler extends GameMessageActor {
 				buildObjects.getBuildObjectList().add(buildObject);
 			}
 		} else {
-			for (int i = start; i<= end;i++) {
+			for (int i = start; i <= end; i++) {
 				Update update = getUpdate(i);
 				if (update == null) {
-					System.out.println("Update not found with id "+i);
+					System.out.println("Update not found with id " + i);
 					continue;
 				}
 				BuildObject buildObject = update.buildObject.clone();
@@ -105,28 +105,28 @@ public class BuildObjectHandler extends GameMessageActor {
 				buildObjects.addBuildObject(buildObject);
 			}
 		}
-		
+
 		return buildObjects.toByteArray();
 	}
-	
+
 	public static void setHealth(String id, int health) {
 		BuildObjects buildObjects = new BuildObjects();
 		BuildObject buildObject = new BuildObject();
 		buildObject.id = id;
 		buildObject.health = health;
-		buildObject.action = 11;
+		buildObject.action = BuildObject.Action.SetHealth;
 		buildObjects.addBuildObject(buildObject);
 		GameMessage gameMessage = new GameMessage();
 		gameMessage.buildObjects = buildObjects;
 		BuildObjectHandler.tell(gameMessage, BuildObjectHandler.name);
 	}
-	
+
 	private void setHealth(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
 		if (existing == null) {
 			return;
 		}
-		//logger.warning("setHealth "+buildObject.health);
+		// logger.warning("setHealth "+buildObject.health);
 		if (buildObject.health <= 0) {
 			remove(buildObject);
 		} else {
@@ -134,19 +134,32 @@ public class BuildObjectHandler extends GameMessageActor {
 			BuildObject.db().save(existing);
 		}
 	}
-	
-	private void broadcast(GameMessage gameMessage) {
-		for (Grid grid : GameGrid.gridsStartingWith("default")) {
-			for (TrackData trackData : grid.getAll()) {
-				if (trackData.entityType != TrackData.EntityType.Player) {
-					continue;
-				}
-				PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
+
+	private void broadcast(GameMessage gameMessage, int zone) {
+		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
+		for (TrackData trackData : grid.getAll()) {
+			if (trackData.entityType != TrackData.EntityType.Player) {
+				continue;
 			}
+			PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
 		}
 	}
-	
-	
+
+	public static BuildObject updateRotation(BuildObject buildObject) {
+		BuildObject existing = find(buildObject.id);
+		if (existing == null) {
+			return null;
+		}
+
+		buildObject.ownerId = existing.ownerId;
+		existing.rx = buildObject.rx;
+		existing.ry = buildObject.ry;
+		existing.rz = buildObject.rz;
+		existing.rw = buildObject.rw;
+		existing.updatedAt = System.currentTimeMillis();
+		BuildObject.db().save(existing);
+		return existing;
+	}
 	
 	private void updateDoor(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
@@ -158,14 +171,14 @@ public class BuildObjectHandler extends GameMessageActor {
 		existing.updatedAt = System.currentTimeMillis();
 		BuildObject.db().save(existing);
 		addUpdate(existing, 10);
-		
+
 		GameMessage gameMessage = new GameMessage();
 		gameMessage.buildObjects = new BuildObjects();
-		gameMessage.buildObjects.action = 10;
+		gameMessage.buildObjects.action = BuildObjects.Action.PropUpdate;
 		gameMessage.buildObjects.getBuildObjectList().add(existing);
-		broadcast(gameMessage);
+		broadcast(gameMessage,buildObject.zone);
 	}
-	
+
 	private static Update getUpdate(int key) {
 		if (updateJournal.containsKey(key)) {
 			return updateJournal.get(key);
@@ -204,14 +217,14 @@ public class BuildObjectHandler extends GameMessageActor {
 			}
 		}
 	}
-	
+
 	private void remove(BuildObject buildObject) {
 		BuildObject existing = find(buildObject.id);
 		if (existing == null) {
 			return;
 		}
 
-		existing.state = 2;
+		existing.state = BuildObject.State.Removed;
 		existing.updatedAt = System.currentTimeMillis();
 		removeGridAndVitals(existing);
 		BuildObject.db().deleteWhere("build_object_id = ?", existing.id);
@@ -227,7 +240,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		}
 
 		buildObject.zone = CharacterService.instance().getZone(buildObject.ownerId);
-		buildObject.state = 1;
+		buildObject.state = BuildObject.State.Active;
 		buildObject.ownerId = characterId;
 		buildObject.updatedAt = System.currentTimeMillis();
 		BuildObject.db().save(buildObject);
@@ -241,7 +254,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			objectIndex.put(buildObject.id, buildObject);
 			setGridAndVitals(buildObject);
 		}
-		logger.warning(objectIndex.size()+" build objects loaded");
+		logger.warning(objectIndex.size() + " build objects loaded");
 	}
 
 	private void removeGridAndVitals(BuildObject buildObject) {
@@ -251,7 +264,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			VitalsHandler.remove(buildObject.id);
 		}
 	}
-	
+
 	private void setGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
 			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
@@ -259,7 +272,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			VitalsHandler.get(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
 		}
 	}
-	
+
 	@Override
 	public void onTick(String message) {
 		// TODO Auto-generated method stub

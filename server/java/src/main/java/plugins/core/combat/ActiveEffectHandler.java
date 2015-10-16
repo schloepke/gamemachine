@@ -71,7 +71,7 @@ public class ActiveEffectHandler extends UntypedActor {
 		applyEffects(statusEffectTarget);
 		statusEffectTarget.lastTick = System.currentTimeMillis();
 
-		StatusEffectManager.skillUp(statusEffectTarget.attack.playerSkill, statusEffectTarget.originCharacterId);
+		StatusEffectManager.skillUsed(statusEffectTarget.attack.playerSkill, statusEffectTarget.originCharacterId);
 		return activeId;
 	}
 

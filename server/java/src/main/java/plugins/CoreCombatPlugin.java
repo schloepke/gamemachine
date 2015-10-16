@@ -7,6 +7,7 @@ import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.core.combat.CombatHandler;
 import plugins.core.combat.PlayerSkillHandler;
+import plugins.core.combat.SiegeHandler;
 import plugins.core.combat.StatusEffectData;
 import plugins.core.combat.StatusEffectManager;
 import plugins.core.combat.VitalsHandler;
@@ -33,7 +34,8 @@ public class CoreCombatPlugin extends Plugin {
 		
 		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsSender.class), VitalsSender.class.getSimpleName());
 		
-		
+		GameMessageRoute.add(SiegeHandler.name,SiegeHandler.name,false);
+		ActorUtil.createActor(SiegeHandler.class,SiegeHandler.name);
 	}
 
 	

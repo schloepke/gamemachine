@@ -18,6 +18,8 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.ChatSubscriptions;
+import io.gamemachine.core.GameEntityManager;
+import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.messages.Character;
@@ -89,46 +91,10 @@ public class StatusEffectManager extends UntypedActor {
 	}
 
 	public static int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
-		int base = randInt(statusEffect.minValue, statusEffect.maxValue);
-		Character character = CharacterService.instance().find(characterId);
-		int level = skillLevel(playerSkill.id, character.id);
-		return base + level;
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+		return gameEntityManager.getEffectValue(statusEffect, playerSkill, characterId);
 	}
 
-	public static void skillUp(PlayerSkill playerSkill, String characterId) {
-		int chance = randInt(1, 10);
-		if (chance < 5) {
-			return;
-		}
-
-		Character character = CharacterService.instance().find(characterId);
-		if (character == null) {
-			logger.warn("Unable to find character for " + characterId);
-			return;
-		}
-
-		if (PlayerSkillHandler.hasPlayerSkill(playerSkill.id, character.id)) {
-			PlayerSkill existing = PlayerSkillHandler.playerSkill(playerSkill.id, character.id);
-			existing.level += 1;
-			PlayerSkillHandler.savePlayerSkill(existing);
-			logger.warn("Skill up " + playerSkill.id + " level " + existing.level);
-		}
-	}
-	// Can be a skill or player item
-	public static int skillLevel(String id, String characterId) {
-		if (PlayerSkillHandler.hasPlayerSkill(id, characterId)) {
-			PlayerSkill playerSkill = PlayerSkillHandler.playerSkill(id, characterId);
-			return playerSkill.level;
-		} else {
-			return 0;
-		}
-	}
-
-	public static int randInt(int min, int max) {
-		Random rand = new Random();
-		return rand.nextInt((max - min) + 1) + min;
-	}
-	
 	public static boolean inGroup(String playerId) {
 		String playerGroup = ChatSubscriptions.playerGroup(playerId);
 		if (playerGroup.equals("nogroup")) {
@@ -138,6 +104,11 @@ public class StatusEffectManager extends UntypedActor {
 		}
 	}
 
+	public static void skillUsed(PlayerSkill playerSkill, String characterId) {
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+		gameEntityManager.skillUsed(playerSkill, characterId);
+	}
+	
 	public static String playerGroup(String playerId) {
 		return ChatSubscriptions.playerGroup(playerId);
 	}

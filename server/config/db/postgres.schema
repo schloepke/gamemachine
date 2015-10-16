@@ -110,7 +110,7 @@ CREATE TABLE build_objects (
 
   build_object_player_item_id character varying(128) DEFAULT NULL,
 
-  build_object_action integer DEFAULT NULL,
+  build_object_action integer,
 
   build_object_id character varying(128) DEFAULT NULL,
 
@@ -138,7 +138,7 @@ CREATE TABLE build_objects (
 
   build_object_updated_at bigint DEFAULT NULL,
 
-  build_object_state integer DEFAULT NULL,
+  build_object_state integer,
 
   build_object_update_id integer DEFAULT NULL,
 

@@ -93,7 +93,7 @@ CREATE TABLE build_objects (
 
   build_object_player_item_id varchar(128) DEFAULT NULL,
 
-  build_object_action integer DEFAULT NULL,
+  build_object_action integer,
 
   build_object_id varchar(128) DEFAULT NULL,
 
@@ -121,7 +121,7 @@ CREATE TABLE build_objects (
 
   build_object_updated_at integer DEFAULT NULL,
 
-  build_object_state integer DEFAULT NULL,
+  build_object_state integer,
 
   build_object_update_id integer DEFAULT NULL,
 
