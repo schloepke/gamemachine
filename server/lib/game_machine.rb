@@ -66,11 +66,6 @@ require_relative 'game_machine/cloud_updater'
 require_relative 'game_machine/codeblocks'
 require_relative 'game_machine/http_helper'
 
-if RbConfig::CONFIG['host_os'].match(/linux/i)
-  #require_relative 'game_machine/navigation'
-else
-  GameMachine.logger.info "Pathfinding disabled (windows support not yet available)"
-end
 
 java.util.concurrent.TimeUnit::MILLISECONDS
 java.util.concurrent.TimeUnit::SECONDS

@@ -3,6 +3,7 @@ package io.gamemachine.process;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.ProcessCommand;
 
 import java.util.List;
 import java.util.Map;
@@ -58,10 +59,22 @@ public class ProcessManager extends GameMessageActor {
 			boolean enabled = value.getBoolean("enabled");
 			
 			if (enabled) {
-				ProcessManager.add(info);
+				add(info);
 			} else {
 				logger.debug(info.executable+" not enabled, skipping");
 			}
+		}
+	}
+	
+	public static void DoCommand(ProcessCommand command) {
+		ExternalProcess process = new ExternalProcess(command.startScript,command.executable);
+		if (command.action == ProcessCommand.Action.Start) {
+			start(process);
+		} else if (command.action == ProcessCommand.Action.Stop) {
+			stop(process);
+		} else if (command.action == ProcessCommand.Action.Restart) {
+			stop(process);
+			start(process);
 		}
 	}
 	
@@ -75,7 +88,14 @@ public class ProcessManager extends GameMessageActor {
 		processList.put(key, info);
 	}
 	
-	private void start(ExternalProcess info) {
+	private static void stop(ExternalProcess info) {
+		info.stop();
+		if (processList.containsKey(info.name())) {
+			processList.remove(info.name());
+		}
+	}
+	
+	private static void start(ExternalProcess info) {
 		executor.execute(info);
 		processList.put(info.name(), info);
 	}

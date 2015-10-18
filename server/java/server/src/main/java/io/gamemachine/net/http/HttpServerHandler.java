@@ -28,8 +28,10 @@ import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
+import io.gamemachine.messages.ProcessCommand;
 import io.gamemachine.messages.ZoneInfo;
 import io.gamemachine.messages.ZoneInfos;
+import io.gamemachine.process.ProcessManager;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -242,6 +244,14 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						return;
 					}
 					Ok(ctx, character.toByteArray());
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/process_manager")) {
+					byte[] bytes = Base64.decodeBase64(params.get("process_command"));
+					ProcessCommand command = ProcessCommand.parseFrom(bytes);
+					ProcessManager.DoCommand(command);
+					Ok(ctx, "OK");
 					return;
 				}
 				

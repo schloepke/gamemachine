@@ -392,6 +392,7 @@ local_message SiegeCommand {
     SetRotation = 1;
     Use = 2;
     Release = 3;
+    Fire = 4;
   }
   
   enum Result {
@@ -405,6 +406,7 @@ local_message SiegeCommand {
   optional Result result = 3;
   optional string characterId = 4;
   optional string buildObjectId = 5;
+  optional string playerSkillId = 6;
 }
  
 local_persistent_message Character {
@@ -871,6 +873,20 @@ local_message ZoneInfos {
   repeated ZoneInfo zoneInfo = 1;
 }
 
+
+local_message ProcessCommand {
+  enum Action {
+    None = 0;
+    Start = 1;
+    Stop = 2;
+    Restart = 3;
+  }
+  
+  required Action action = 1;
+  optional string startScript = 2;
+  optional string executable = 3;
+}
+
 message GameMessage {
   // Used internally, do not change
   optional string playerId = 1;
@@ -919,6 +935,7 @@ message GameMessage {
   optional TerrainEdits terrainEdits = 45;
   optional UpdatePlayerItem updatePlayerItem = 46;
   optional VitalsContainer vitalsContainer = 47;
+  optional ProcessCommand processCommand = 48;
 }
 
 message GameMessages {

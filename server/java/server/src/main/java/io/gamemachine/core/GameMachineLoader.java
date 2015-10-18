@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import plugins.core.combat.VitalsHandler;
 import plugins.zonemanager.ZoneHandler;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
@@ -89,7 +90,8 @@ public class GameMachineLoader {
 		startCacheUpdateHandler();
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		
-		actorSystem.actorOf(Props.create(ProcessManager.class), ProcessManager.name);
+		GameMessageRoute.add(ProcessManager.name, ProcessManager.name, false);
+		ActorUtil.createActor(ProcessManager.class, ProcessManager.name);
 		
 		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
 			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());

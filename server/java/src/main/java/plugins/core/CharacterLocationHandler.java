@@ -8,6 +8,9 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
+
+import com.google.common.base.Strings;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 
@@ -42,7 +45,12 @@ public class CharacterLocationHandler extends GameMessageActor  {
 				if (trackData.entityType != TrackData.EntityType.Player) {
 					continue;
 				}
+				
 				String characterId = PlayerService.getInstance().getCharacter(trackData.id);
+				if (Strings.isNullOrEmpty(characterId)) {
+					continue;
+				}
+				
 				Character character  = CharacterService.instance().find(trackData.id, characterId);
 				if (character != null) {
 					character.worldx = trackData.x;

@@ -210,6 +210,10 @@ public class BuildObjectHandler extends GameMessageActor {
 		return objectIndex.get(id);
 	}
 
+	public static boolean exists(String id) {
+		return find(id) != null;
+	}
+	
 	private void removeAll() {
 		for (BuildObject bo : objectIndex.values()) {
 			if (bo.ownerId.equals(characterId)) {

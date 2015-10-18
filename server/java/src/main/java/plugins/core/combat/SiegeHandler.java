@@ -40,10 +40,13 @@ public class SiegeHandler extends GameMessageActor {
 			} else if (gameMessage.siegeCommand.action == SiegeCommand.Action.Release) {
 				logger.warning("ReleaseSiege");
 				releaseSiege(gameMessage);
-			}
+			} 
 		} else {
 			if (gameMessage.siegeCommand.action == SiegeCommand.Action.SetRotation) {
 				updateRotation(gameMessage);
+			} else if (gameMessage.siegeCommand.action == SiegeCommand.Action.Fire) {
+				logger.warning("FireSiege");
+				fireSiege(gameMessage);
 			}
 		}
 	}
@@ -65,6 +68,17 @@ public class SiegeHandler extends GameMessageActor {
 		}
 	}
 
+	private void fireSiege(GameMessage gameMessage) {
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		if (existing != null) {
+			if (canRelease(existing.id, existing.ownerId)) {
+				gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
+				broadcast(gameMessage, existing.zone);
+				logger.warning("FireSiege approved");
+			}
+		}
+	}
+	
 	private void releaseSiege(GameMessage gameMessage) {
 		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
 		if (existing != null) {

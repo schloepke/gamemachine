@@ -23,7 +23,7 @@ public class PlayerSkillHandler extends GameMessageActor {
 		List<PlayerSkill> skills = ClientDbLoader.getPlayerSkills().getPlayerSkillList();
 		for (PlayerSkill playerSkill : skills) {
 			globalPlayerSkills.put(playerSkill.id, playerSkill);
-			logger.warning("Loading skill "+playerSkill.id);
+			//logger.warning("Loading skill "+playerSkill.id);
 		}
 	}
 

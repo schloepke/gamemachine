@@ -17,6 +17,7 @@ import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
+import plugins.landrush.BuildObjectHandler;
 import io.gamemachine.messages.Character;
 
 public class CombatHandler extends GameMessageActor {
@@ -101,9 +102,15 @@ public class CombatHandler extends GameMessageActor {
 				
 				// No character = Object/vehicle/etc..
 				if (character == null) {
+					if (BuildObjectHandler.exists(attack.targetId)) {
+						attack.targetType = Attack.TargetType.BuildObject;
+					} else {
+						attack.targetType = Attack.TargetType.Object;
+					}
 					statusEffectTarget.targetEntityId = attack.targetId;
 					sendToObjectGrid = true;
 				} else {
+					attack.targetType = Attack.TargetType.Character;
 					statusEffectTarget.targetEntityId = character.playerId;
 					sendToDefaultGrid = true;
 				}
@@ -112,6 +119,7 @@ public class CombatHandler extends GameMessageActor {
 			}
 			
 		} else if (attack.playerSkill.category == PlayerSkill.Category.Self) {
+			attack.targetType = Attack.TargetType.Character;
 			statusEffectTarget.targetEntityId = playerId;
 			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone);
 			sendToDefaultGrid = true;
