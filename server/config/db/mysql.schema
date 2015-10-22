@@ -267,6 +267,8 @@ CREATE TABLE `player_skills` (
 
   `player_skill_category` int(11),
 
+  `player_skill_player_item_id` varchar(128) DEFAULT NULL,
+
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 CREATE TABLE `craftable_items` (
@@ -331,8 +333,6 @@ CREATE TABLE `player_items` (
 
   `player_item_updated_at` int(11) DEFAULT NULL,
 
-  `player_item_category` varchar(128) DEFAULT NULL,
-
   `player_item_location_id` varchar(128) DEFAULT NULL,
 
   `player_item_slot_count` int(11) DEFAULT NULL,
@@ -360,6 +360,12 @@ CREATE TABLE `player_items` (
   `player_item_weight` float NOT NULL,
 
   `player_item_template_block_id` int(11) DEFAULT NULL,
+
+  `player_item_prefab_uuid` varchar(128) DEFAULT NULL,
+
+  `player_item_prefab_path` varchar(128) DEFAULT NULL,
+
+  `player_item_category` int(11),
 
       `cost_amount` float DEFAULT NULL,
     

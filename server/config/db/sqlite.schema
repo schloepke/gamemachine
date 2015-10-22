@@ -257,6 +257,8 @@ CREATE TABLE player_skills (
 
   player_skill_category integer,
 
+  player_skill_player_item_id varchar(128) DEFAULT NULL,
+
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
 CREATE TABLE craftable_items (
@@ -319,8 +321,6 @@ CREATE TABLE player_items (
 
   player_item_updated_at integer DEFAULT NULL,
 
-  player_item_category varchar(128) DEFAULT NULL,
-
   player_item_location_id varchar(128) DEFAULT NULL,
 
   player_item_slot_count integer DEFAULT NULL,
@@ -348,6 +348,12 @@ CREATE TABLE player_items (
   player_item_weight double precision NOT NULL,
 
   player_item_template_block_id integer DEFAULT NULL,
+
+  player_item_prefab_uuid varchar(128) DEFAULT NULL,
+
+  player_item_prefab_path varchar(128) DEFAULT NULL,
+
+  player_item_category integer,
 
   cost_amount double precision DEFAULT NULL,
     

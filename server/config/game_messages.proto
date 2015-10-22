@@ -455,15 +455,6 @@ local_message EquippedItem {
   optional string playerId = 2;
 }
 
-
-local_message StatusEffectResult {
-  optional string targetCharacterId = 1;
-  optional string originCharacterId = 2;
-  required int32 value = 3;
-  required string statusEffectId = 4;
-  optional string targetEntityId = 5;
-}
-
 local_message StatusEffectTarget {
   enum Action {
     None = 0;
@@ -655,6 +646,7 @@ local_persistent_message PlayerSkill {
   optional string icon_uuid = 19;
   optional string statusEffects = 20;
   optional Category category = 22;
+  optional string playerItemId = 23;
 }
 
 message PlayerSkills {
@@ -711,6 +703,22 @@ local_message CraftingElement {
 // Inventory messages
 
 local_persistent_message PlayerItem {
+
+  enum Category {
+    None = 0;
+    Currency = 1;
+    Trinket = 2;
+    Armor = 3;
+    Weapon = 4;
+    Consumable = 5;
+    CraftingResource = 6;
+    Tool = 7;
+    BuildingBlock = 8;
+    GroundBlock = 9;
+    Container = 10;
+    Projectile = 11;
+  }
+  
   required string id = 1;
   required string name = 2;
   required int32 quantity = 3;
@@ -731,7 +739,7 @@ local_persistent_message PlayerItem {
   optional string characterId = 21;
   optional string containerId = 22;
   optional int32 updatedAt = 23;
-  optional string category = 24;
+  
   optional string locationId = 25;
   optional int32 slotCount = 26;
   optional bool stackable = 27;
@@ -746,6 +754,9 @@ local_persistent_message PlayerItem {
   required bool active = 36;
   required float weight = 37;
   optional int32 templateBlockId = 38;
+  optional string prefab_uuid = 39;
+  optional string prefab_path = 40;
+  optional Category category = 41;
 }
 
 local_message ModelInfo {
@@ -912,7 +923,6 @@ message GameMessage {
   optional Vitals vitals = 21;
   optional Attack attack = 22;
   optional StatusEffect statusEffect = 23;
-  optional StatusEffectResult statusEffectResult = 24;
   optional DataRequest dataRequest = 25;
   optional WorldObjects worldObjects = 27;
   optional SiegeCommand siegeCommand = 28;

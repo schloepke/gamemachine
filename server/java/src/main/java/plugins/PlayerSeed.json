@@ -1,0 +1,5 @@
+[
+{"id": "unity1", "characterId": "unity1Char", "passwordHash": "pass", "role": "agent_controller"},
+{"id": "unity2", "characterId": "unity2Char", "passwordHash": "pass", "role": "agent_controller"},
+{"id": "zone1", "characterId": "zone1Char", "passwordHash": "pass", "role": "agent_controller"}
+]

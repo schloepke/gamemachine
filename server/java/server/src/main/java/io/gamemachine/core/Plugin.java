@@ -3,6 +3,10 @@ package io.gamemachine.core;
 import io.gamemachine.config.AppConfig;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,6 +25,18 @@ public abstract class Plugin {
 	private static String pluginPath = AppConfig.envRoot+File.separator+"java"+File.separator+"src"+File.separator+"main"+File.separator+"java"+File.separator+"plugins";
 	
 	public abstract void start();
+	
+	public static String getJsonConfig(Class klass) {
+		String key = klass.getSimpleName();
+			String configPath = pluginPath+File.separator+key+".json";
+			Path path = Paths.get(configPath);
+			try {
+				return new String(Files.readAllBytes(path));
+			} catch (IOException e) {
+				e.printStackTrace();
+				return "";
+			}
+	}
 	
 	public static Config getConfig(Class klass) {
 		String key = klass.getSimpleName();

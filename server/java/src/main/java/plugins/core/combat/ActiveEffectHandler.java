@@ -24,7 +24,7 @@ import plugins.landrush.BuildObjectHandler;
 import scala.concurrent.duration.Duration;
 
 public class ActiveEffectHandler extends UntypedActor {
-
+	
 	private Map<Long, StatusEffectTarget> targets = new ConcurrentHashMap<Long, StatusEffectTarget>();
 
 	private AtomicLong counter = new AtomicLong();

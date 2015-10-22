@@ -1,6 +1,10 @@
 
 package plugins.core;
 
+import com.google.gson.Gson;
+
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
@@ -8,13 +12,6 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Player;
-
-import java.util.List;
-
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
-
-import com.typesafe.config.Config;
 
 public class PlayerSeed extends GameMessageActor {
 
@@ -24,31 +21,28 @@ public class PlayerSeed extends GameMessageActor {
 	private CharacterService cs;
 	private String gameId;
 	
+		
 	@Override
 	public void awake() {
 		ps = PlayerService.getInstance();
 		cs = CharacterService.instance();
 		gameId = AppConfig.getDefaultGameId();
 		
-		Config config = Plugin.getConfig(PlayerSeed.class);
-		List<String> playerDefs = config.getStringList("players");
-		for (String value : playerDefs) {
-			String[] parts = value.split(":");
-			String id = parts[0];
-			String charId = parts[1];
-			String role = parts[2];
-			String password = parts[3];
-			
-			Player player = ps.find(id);
+		Gson gson = new Gson();
+		String json = Plugin.getJsonConfig(PlayerSeed.class);
+		Player[] players = gson.fromJson(json, Player[].class);
+		
+		for (Player template : players) {
+			Player player = ps.find(template.id);
 			if (player == null) {
-				player = ps.create(id, gameId,role);
-				cs.create(id, charId, null);
+				player = ps.create(template.id, gameId,template.role);
+				cs.create(template.id, template.characterId, null);
 			}
 
-			ps.setPassword(id, password);
-			ps.setCharacter(id, charId);
-			ps.setRole(id, role);
-			logger.debug("Player "+id+" seeded with character "+charId+" role "+role);
+			ps.setPassword(player.id, template.passwordHash);
+			ps.setCharacter(player.id, template.characterId);
+			ps.setRole(player.id, template.role);
+			logger.debug("Player "+template.id+" seeded with character "+template.characterId+" role "+template.role);
 		}
 	}
 

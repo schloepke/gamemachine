@@ -1,10 +1,5 @@
 package io.gamemachine.config;
 
-import io.gamemachine.core.PlayerService;
-import io.gamemachine.core.UserApi;
-import io.gamemachine.core.UserApi.Response;
-import io.gamemachine.messages.ClientMessage;
-
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -13,11 +8,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scala.concurrent.duration.Duration;
-import akka.actor.UntypedActor;
-
 import com.google.common.base.Strings;
 import com.google.common.util.concurrent.RateLimiter;
+
+import akka.actor.UntypedActor;
+import io.gamemachine.core.PlayerService;
+import io.gamemachine.messages.ClientMessage;
+import scala.concurrent.duration.Duration;
 
 public class GameLimits extends UntypedActor {
 
@@ -41,48 +38,6 @@ public class GameLimits extends UntypedActor {
 	private static Map<String, AtomicInteger> playerBytesTransferred = new ConcurrentHashMap<String, AtomicInteger>();
 	
 	private static ConcurrentHashMap<String, RateLimiter> messageLimiters = new ConcurrentHashMap<String, RateLimiter>();
-
-	private UserApi userApi;
-
-	public GameLimits() {
-		String username = AppConfig.Gamecloud.getUser();
-		String apiKey = AppConfig.Gamecloud.getApiKey();
-		String hostname = AppConfig.Gamecloud.getHost();
-		//userApi = new UserApi(hostname, username, apiKey);
-	}
-
-	private void updateUserLimits() {
-		currentMessagesIn = 0;
-		currentMessagesOut = 0;
-		currentBytesOut = 0;
-		for (String gameId : messageCountsIn.keySet()) {
-			currentMessagesIn += getMessageCountIn(gameId);
-			currentMessagesOut += getMessageCountOut(gameId);
-			currentBytesOut += getBytesTransferred(gameId);
-			
-		}
-
-		for (String gameId : messageCountsIn.keySet()) {
-			int messageCountIn = getMessageCountIn(gameId);
-			int messageCountOut = getMessageCountOut(gameId);
-			int messageCount = messageCountIn + messageCountOut;
-			int transferred = getBytesTransferred(gameId);
-			int connectionCount = getConnectionCount(gameId);
-			Response response = userApi.updateCounts(gameId, messageCount, connectionCount, transferred);
-			if (response.status == 200) {
-				Integer messageLimit = response.params.get("message_limit").asInt();
-				messageLimits.put(gameId, messageLimit);
-				Integer connectionLimit = response.params.get("connection_limit").asInt();
-				connectionLimits.put(gameId, connectionLimit);
-
-				resetMessageCountOut(gameId);
-				resetMessageCountIn(gameId);
-				resetBytesTransferred(gameId);
-			} else {
-				logger.info("status:" + response.status + " " + response.body);
-			}
-		}
-	}
 
 	private void updateStats() {
 		currentMessagesIn = 0;

@@ -286,6 +286,8 @@ CREATE TABLE player_skills (
 
   player_skill_category integer,
 
+  player_skill_player_item_id character varying(128) DEFAULT NULL,
+
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
 alter table player_skills owner to gamemachine;
@@ -354,8 +356,6 @@ CREATE TABLE player_items (
 
   player_item_updated_at integer DEFAULT NULL,
 
-  player_item_category character varying(128) DEFAULT NULL,
-
   player_item_location_id character varying(128) DEFAULT NULL,
 
   player_item_slot_count integer DEFAULT NULL,
@@ -383,6 +383,12 @@ CREATE TABLE player_items (
   player_item_weight double precision NOT NULL,
 
   player_item_template_block_id integer DEFAULT NULL,
+
+  player_item_prefab_uuid character varying(128) DEFAULT NULL,
+
+  player_item_prefab_path character varying(128) DEFAULT NULL,
+
+  player_item_category integer,
 
   cost_amount double precision DEFAULT NULL,
     

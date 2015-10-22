@@ -1,12 +1,5 @@
 package io.gamemachine.config;
 
-import io.gamemachine.config.AppConfig.GridConfig;
-import io.gamemachine.core.CloudClient;
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.UserApi;
-import io.gamemachine.core.CloudClient.CloudResponse;
-import io.gamemachine.messages.GameConfigs;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -15,12 +8,17 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import scala.concurrent.duration.Duration;
-import akka.actor.UntypedActor;
-
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigException;
 import com.typesafe.config.ConfigFactory;
+
+import akka.actor.UntypedActor;
+import io.gamemachine.config.AppConfig.GridConfig;
+import io.gamemachine.core.CloudClient;
+import io.gamemachine.core.CloudClient.CloudResponse;
+import io.gamemachine.core.GameGrid;
+import io.gamemachine.messages.GameConfigs;
+import scala.concurrent.duration.Duration;
 
 public class GameConfig extends UntypedActor {
 
@@ -29,7 +27,6 @@ public class GameConfig extends UntypedActor {
 	private static Map<String, Config> gameConfigs = new ConcurrentHashMap<String, Config>();
 	
 	private Map<String,Integer> versions = new HashMap<String,Integer>();
-	private static Map<String,Boolean> lockStatus = new ConcurrentHashMap<String,Boolean>();
 	
 	
 	private static Config getConfig(String gameId) {
@@ -42,22 +39,7 @@ public class GameConfig extends UntypedActor {
 		return config;
 	}
 	
-	public static Boolean isGameLocked(String gameId) {
-		if (!lockStatus.containsKey(gameId)) {
-			Config config = getConfig(gameId);
-			Boolean locked = config.getBoolean("locked");
-			if (locked == null) {
-				lockStatus.put(gameId, false);
-				return false;
-			} else {
-				lockStatus.put(gameId, locked);
-				return locked;
-			}
-		}
-		return lockStatus.get(gameId);
 		
-	}
-	
 	public static GridConfig getGridConfig(String gameId, String gridName) {
 		Config config = getConfig(gameId);
 		
