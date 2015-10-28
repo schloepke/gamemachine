@@ -60,6 +60,7 @@ local_message Vitals {
   optional Template template = 34;
 }
 
+
 local_message StatusEffect {
   enum Type {
   	StatusEffectNone = 0;
@@ -99,6 +100,10 @@ local_message StatusEffect {
   optional int32 range = 15;
   optional string attribute = 17;
   optional int32 maxStacks = 18;
+  optional string effectPath = 19;
+  optional string effectUuid = 20;
+  optional UnityObject hitSound = 21;
+   optional UnityObject hitEffect = 22;
 }
 
 local_message StatusEffects {
@@ -423,6 +428,7 @@ local_persistent_message Character {
   optional bool includeUmaData = 12;
   optional int32 level = 14;
   optional Vitals.Template vitalsTemplate = 15;
+  optional string gameEntityPrefab = 16;
 }
 
 local_message Characters {
@@ -621,7 +627,11 @@ message DynamicMessage {
   required bytes message = 2;
 }
 
-
+local_message UnityObject {
+  optional string path = 1;
+  optional string uuid = 2;
+  optional string name = 3;
+}
 
 local_persistent_message PlayerSkill {
   enum Category {
@@ -646,8 +656,13 @@ local_persistent_message PlayerSkill {
   optional string icon_uuid = 19;
   optional string statusEffects = 20;
   optional Category category = 22;
-  optional string playerItemId = 23;
+  
+  optional UnityObject useEffect = 29;
+  optional UnityObject icon = 30;
+  optional UnityObject useSound = 32;
 }
+
+
 
 message PlayerSkills {
   repeated PlayerSkill playerSkill = 1;
@@ -727,7 +742,6 @@ local_persistent_message PlayerItem {
   optional Cost cost = 8;
   optional string playerId = 9;
   optional int32 recordId = 10;
-  optional string icon = 11;
   optional int32 harvestable = 12;
   optional int32 craftingResource = 13;
   optional int32 craftable = 14;
@@ -754,9 +768,9 @@ local_persistent_message PlayerItem {
   required bool active = 36;
   required float weight = 37;
   optional int32 templateBlockId = 38;
-  optional string prefab_uuid = 39;
-  optional string prefab_path = 40;
+  
   optional Category category = 41;
+  optional UnityObject icon = 43;
 }
 
 local_message ModelInfo {

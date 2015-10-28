@@ -161,9 +161,9 @@ CREATE TABLE `build_objects` (
 
   `build_object_zone` int(11) DEFAULT NULL,
 
-      `slot_info_placed_block_id` varchar(128) DEFAULT NULL,
+      slotInfo_`slot_info_placed_block_id` varchar(128) DEFAULT NULL,
     
-      `slot_info_slot_id` varchar(128) DEFAULT NULL,
+      slotInfo_`slot_info_slot_id` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -212,6 +212,8 @@ CREATE TABLE `characters` (
   `character_level` int(11) DEFAULT NULL,
 
   `character_vitals_template` int(11),
+
+  `character_game_entity_prefab` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -267,7 +269,23 @@ CREATE TABLE `player_skills` (
 
   `player_skill_category` int(11),
 
-  `player_skill_player_item_id` varchar(128) DEFAULT NULL,
+      useEffect_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      useEffect_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      useEffect_`unity_object_name` varchar(128) DEFAULT NULL,
+
+      icon_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      icon_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      icon_`unity_object_name` varchar(128) DEFAULT NULL,
+
+      useSound_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      useSound_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      useSound_`unity_object_name` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -308,8 +326,6 @@ CREATE TABLE `player_items` (
   `player_item_weapon` tinyint(4) DEFAULT NULL,
 
   `player_item_player_id` varchar(128) DEFAULT NULL,
-
-  `player_item_icon` varchar(128) DEFAULT NULL,
 
   `player_item_harvestable` int(11) DEFAULT NULL,
 
@@ -361,15 +377,17 @@ CREATE TABLE `player_items` (
 
   `player_item_template_block_id` int(11) DEFAULT NULL,
 
-  `player_item_prefab_uuid` varchar(128) DEFAULT NULL,
-
-  `player_item_prefab_path` varchar(128) DEFAULT NULL,
-
   `player_item_category` int(11),
 
-      `cost_amount` float DEFAULT NULL,
+      cost_`cost_amount` float DEFAULT NULL,
     
-      `cost_currency` varchar(128) DEFAULT NULL,
+      cost_`cost_currency` varchar(128) DEFAULT NULL,
+
+      icon_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      icon_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      icon_`unity_object_name` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

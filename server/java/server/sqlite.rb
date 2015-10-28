@@ -6,10 +6,10 @@ CREATE TABLE <%= klass.underscore.pluralize %> (
   <%= sql_field(klass,field,'sqlite') %>
   <% end %>
   
-  <% message_fields.each do |message_field| %>
+  <% message_fields.each_with_index do |message_field,i| %>
     <% klass_message = messages_index[message_field] %>
     <% klass_message.getFields.each do |field| %>
-  <%= sql_field(message_field,field,'sqlite',true) %>
+      <%= message_field_names[i] %>_<%= sql_field(message_field,field,'sqlite',true) %>
     <% end %>
   <% end %>
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL

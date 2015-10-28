@@ -512,15 +512,16 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.<%=klass%>();
-	    		message.toModel(model);
+	    		message.toModel(model,"");
 	    	} else {
-	    		message.toModel(model);
+	    		message.toModel(model,"");
 	    	}
-	    	<% message_fields.each do |message_field| %>
-	    	if (message.<%= varname(message_field) %> != null) {
-	    		message.<%= varname(message_field) %>.toModel(model);
+	    	<% message_fields.each_with_index do |message_field,i| %>
+	    	
+	    	if (message.<%= message_field_names[i] %> != null) {
+	    		message.<%= message_field_names[i] %>.toModel(model,"<%= message_field_names[i] %>_");
 	    	} else {
-	    		<%= message_field %>.clearModel(model);
+	    		<%= message_field %>.clearModel(model,"<%= message_field_names[i] %>_");
 	    	}
 	    	<% end %>
 	    	
@@ -589,9 +590,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	if (model == null) {
 	    		return null;
 	    	} else {
-	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-	    		<% message_fields.each do |message_field| %>
-	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model,"");
+	    		<% message_fields.each_with_index do |message_field,i| %>
+	    		<%= varname(klass) %>.<%= message_field_names[i] %> = <%= message_field %>.fromModel(model,"<%= message_field_names[i] %>_");
 	    		<% end %>
 	    		return <%= varname(klass) %>;
 	    	}
@@ -604,9 +605,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	if (model == null) {
 	    		return null;
 	    	} else {
-	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-	    		<% message_fields.each do |message_field| %>
-	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model,"");
+	    		<% message_fields.each_with_index do |message_field,i| %>
+	    		<%= varname(klass) %>.<%= message_field_names[i] %> = <%= message_field %>.fromModel(model,"<%= message_field_names[i] %>_");
 	    		<% end %>
 	    		return <%= varname(klass) %>;
 	    	}
@@ -617,9 +618,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	List<io.gamemachine.orm.models.<%=klass%>> models = io.gamemachine.orm.models.<%=klass%>.findAll();
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
 	    	for (io.gamemachine.orm.models.<%=klass%> model : models) {
-	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-	    		<% message_fields.each do |message_field| %>
-	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model,"");
+	    		<% message_fields.each_with_index do |message_field,i| %>
+	    		<%= varname(klass) %>.<%= message_field_names[i] %> = <%= message_field %>.fromModel(model,"<%= message_field_names[i] %>_");
 	    		<% end %>
 	    		messages.add(<%= varname(klass) %>);
 	    	}
@@ -638,9 +639,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	List<io.gamemachine.orm.models.<%=klass%>> models = io.gamemachine.orm.models.<%=klass%>.where(query, params);
 	    	List<<%=klass%>> messages = new ArrayList<<%=klass%>>();
 	    	for (io.gamemachine.orm.models.<%=klass%> model : models) {
-	    		<%=klass%> <%= varname(klass) %> = fromModel(model);
-	    		<% message_fields.each do |message_field| %>
-	    		<%= varname(klass) %>.<%= varname(message_field) %> = <%= message_field %>.fromModel(model);
+	    		<%=klass%> <%= varname(klass) %> = fromModel(model,"");
+	    		<% message_fields.each_with_index do |message_field,i| %>
+	    		<%= varname(klass) %>.<%=message_field_names[i] %> = <%= message_field %>.fromModel(model,"<%= message_field_names[i] %>_");
 	    		<% end %>
 	    		messages.add(<%= varname(klass) %>);
 	    	}
@@ -655,17 +656,17 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 
 <% unless klass == 'Entity' %>
 
-	public static void clearModel(Model model) {
+	public static void clearModel(Model model, String namePrefix) {
     	<% message.getFields.each do |field| %>
     	<% next unless simple_value?(field) %>
     	<% next if field.isRepeated %>
     	<% next if field.name == 'recordId' %>
     	<% field_name = field.name.slice(0,1).capitalize + field.name.slice(1..-1) %>
-    	model.set("<%=sql_column_name(klass,field)%>",null);
+    	model.set(namePrefix+"<%=sql_column_name(klass,field)%>",null);
     	<% end %>
     }
     
-	public void toModel(Model model) {
+	public void toModel(Model model, String namePrefix) {
     	<% message.getFields.each do |field| %>
     	<% next unless simple_value?(field) || field.isEnumField %>
     	<% next if field.isRepeated %>
@@ -678,12 +679,12 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     	//if (<%= field.name %> != null) {
     	   <% if get_type(field) == 'ByteString' %>
     	        if (<%= field.name %> != null) {
-    	    		model.set("<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	    		model.set(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
     	    	}
     	    <% elsif field.isEnumField %>
-    	    	model.setInteger("<%=sql_column_name(klass,field)%>",<%= field.name %>.number);
+    	    	model.setInteger(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>.number);
     	    <% else %>
-    	    	model.set<%=setter(field) %>("<%=sql_column_name(klass,field)%>",<%= field.name %>);
+    	    	model.set<%=setter(field) %>(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>);
     	    <% end %>
     		
     	//}
@@ -691,7 +692,7 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     	<% end %>
     }
     
-	public static <%=klass%> fromModel(Model model) {
+	public static <%=klass%> fromModel(Model model, String namePrefix) {
 		boolean hasFields = false;
     	<%=klass%> message = new <%=klass%>();
     	<% message.getFields.each do |field| %>
@@ -705,19 +706,19 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     		hasFields = true;
     	//}
     	<% elsif field.isEnumField %>
-			message.set<%= field_name %>(<%=get_type(field) %>.valueOf(model.getInteger("<%=sql_column_name(klass,field)%>")));
+			message.set<%= field_name %>(<%=get_type(field) %>.valueOf(model.getInteger(namePrefix+"<%=sql_column_name(klass,field)%>")));
     	<% else %>
     	<% if get_type(field) == 'ByteString' %>
     	
     	<%=get_type(field) %> <%= field.name %>Field = null;
-		Object <%= field.name %>Value = model.get("<%=sql_column_name(klass,field)%>");
+		Object <%= field.name %>Value = model.get(namePrefix+"<%=sql_column_name(klass,field)%>");
 		if (<%= field.name %>Value != null) {
 			byte[] <%= field.name %>Bytes = Convert.toBytes(<%= field.name %>Value);
 			<%= field.name %>Field = ByteString.copyFrom(<%= field.name %>Bytes);
 		}
     	    	
     	<% else %>
-		<%=nullable(field) %> <%= field.name %>TestField = model.get<%=setter(field) %>("<%=sql_column_name(klass,field)%>");
+		<%=nullable(field) %> <%= field.name %>TestField = model.get<%=setter(field) %>(namePrefix+"<%=sql_column_name(klass,field)%>");
 		if (<%= field.name %>TestField != null) {
 			<%=get_type(field) %> <%= field.name %>Field = <%= field.name %>TestField;
 			message.set<%= field_name %>(<%= field.name %>Field);

@@ -42,6 +42,7 @@ public class NpcDemo  {
 			if (player == null) {
 				player = ps.create(playerId, AppConfig.getDefaultGameId());
 				character = cs.create(playerId, characterId, null);
+				character.gameEntityPrefab = "npc1";
 			}
 
 			

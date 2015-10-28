@@ -172,9 +172,9 @@ CREATE TABLE build_objects (
 
   build_object_zone integer DEFAULT NULL,
 
-  slot_info_placed_block_id character varying(128) DEFAULT NULL,
+     slotInfo_slot_info_placed_block_id character varying(128) DEFAULT NULL,
     
-  slot_info_slot_id character varying(128) DEFAULT NULL,
+     slotInfo_slot_info_slot_id character varying(128) DEFAULT NULL,
 
   CONSTRAINT build_object_pkey PRIMARY KEY (id)
 );
@@ -227,6 +227,8 @@ CREATE TABLE characters (
   character_level integer DEFAULT NULL,
 
   character_vitals_template integer,
+
+  character_game_entity_prefab character varying(128) DEFAULT NULL,
 
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
@@ -286,7 +288,23 @@ CREATE TABLE player_skills (
 
   player_skill_category integer,
 
-  player_skill_player_item_id character varying(128) DEFAULT NULL,
+     useEffect_unity_object_path character varying(128) DEFAULT NULL,
+    
+     useEffect_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     useEffect_unity_object_name character varying(128) DEFAULT NULL,
+
+     icon_unity_object_path character varying(128) DEFAULT NULL,
+    
+     icon_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     icon_unity_object_name character varying(128) DEFAULT NULL,
+
+     useSound_unity_object_path character varying(128) DEFAULT NULL,
+    
+     useSound_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     useSound_unity_object_name character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
@@ -331,8 +349,6 @@ CREATE TABLE player_items (
   player_item_weapon boolean DEFAULT NULL,
 
   player_item_player_id character varying(128) DEFAULT NULL,
-
-  player_item_icon character varying(128) DEFAULT NULL,
 
   player_item_harvestable integer DEFAULT NULL,
 
@@ -384,15 +400,17 @@ CREATE TABLE player_items (
 
   player_item_template_block_id integer DEFAULT NULL,
 
-  player_item_prefab_uuid character varying(128) DEFAULT NULL,
-
-  player_item_prefab_path character varying(128) DEFAULT NULL,
-
   player_item_category integer,
 
-  cost_amount double precision DEFAULT NULL,
+     cost_cost_amount double precision DEFAULT NULL,
     
-  cost_currency character varying(128) DEFAULT NULL,
+     cost_cost_currency character varying(128) DEFAULT NULL,
+
+     icon_unity_object_path character varying(128) DEFAULT NULL,
+    
+     icon_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     icon_unity_object_name character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_item_pkey PRIMARY KEY (id)
 );

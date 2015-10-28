@@ -84,9 +84,11 @@ module GameMachine
         
         proto.getMessages.each do |message|
           message_fields = []
+          message_field_names = []
           message.get_fields.each do |field|
             if message_names.include?(field.getJavaType.to_s) && !field.is_repeated
               message_fields << field.get_java_type.to_s
+              message_field_names << field.name
             end
           end
           unless message_fields.empty?

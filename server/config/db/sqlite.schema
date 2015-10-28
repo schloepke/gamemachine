@@ -155,9 +155,9 @@ CREATE TABLE build_objects (
 
   build_object_zone integer DEFAULT NULL,
 
-  slot_info_placed_block_id varchar(128) DEFAULT NULL,
+      slotInfo_slot_info_placed_block_id varchar(128) DEFAULT NULL,
     
-  slot_info_slot_id varchar(128) DEFAULT NULL,
+      slotInfo_slot_info_slot_id varchar(128) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
@@ -204,6 +204,8 @@ CREATE TABLE characters (
   character_level integer DEFAULT NULL,
 
   character_vitals_template integer,
+
+  character_game_entity_prefab varchar(128) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
@@ -257,7 +259,23 @@ CREATE TABLE player_skills (
 
   player_skill_category integer,
 
-  player_skill_player_item_id varchar(128) DEFAULT NULL,
+      useEffect_unity_object_path varchar(128) DEFAULT NULL,
+    
+      useEffect_unity_object_uuid varchar(128) DEFAULT NULL,
+    
+      useEffect_unity_object_name varchar(128) DEFAULT NULL,
+
+      icon_unity_object_path varchar(128) DEFAULT NULL,
+    
+      icon_unity_object_uuid varchar(128) DEFAULT NULL,
+    
+      icon_unity_object_name varchar(128) DEFAULT NULL,
+
+      useSound_unity_object_path varchar(128) DEFAULT NULL,
+    
+      useSound_unity_object_uuid varchar(128) DEFAULT NULL,
+    
+      useSound_unity_object_name varchar(128) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
@@ -296,8 +314,6 @@ CREATE TABLE player_items (
   player_item_weapon boolean DEFAULT NULL,
 
   player_item_player_id varchar(128) DEFAULT NULL,
-
-  player_item_icon varchar(128) DEFAULT NULL,
 
   player_item_harvestable integer DEFAULT NULL,
 
@@ -349,15 +365,17 @@ CREATE TABLE player_items (
 
   player_item_template_block_id integer DEFAULT NULL,
 
-  player_item_prefab_uuid varchar(128) DEFAULT NULL,
-
-  player_item_prefab_path varchar(128) DEFAULT NULL,
-
   player_item_category integer,
 
-  cost_amount double precision DEFAULT NULL,
+      cost_cost_amount double precision DEFAULT NULL,
     
-  cost_currency varchar(128) DEFAULT NULL,
+      cost_cost_currency varchar(128) DEFAULT NULL,
+
+      icon_unity_object_path varchar(128) DEFAULT NULL,
+    
+      icon_unity_object_uuid varchar(128) DEFAULT NULL,
+    
+      icon_unity_object_name varchar(128) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
