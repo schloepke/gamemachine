@@ -2,12 +2,15 @@ package io.gamemachine.routing;
 
 import io.gamemachine.authentication.Authentication;
 import io.gamemachine.core.ActorUtil;
+import io.gamemachine.core.GameEntityManagerService;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.ChatDestroy;
 import io.gamemachine.messages.ClientConnection;
 import io.gamemachine.messages.ClientManagerRegister;
 import io.gamemachine.messages.ClientManagerUnregister;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.Player;
 
 import java.util.List;
 
@@ -68,6 +71,8 @@ public class RequestHandler extends UntypedActor {
 	}
 
 	public static void registerClient(ClientMessage clientMessage) {
+		Player player = clientMessage.getPlayer();
+		GameEntityManagerService.instance().getGameEntityManager().OnPlayerConnected(player.id);
 		logger.debug("register client " + clientMessage.getPlayer().getId());
 		ClientConnection clientConnection = clientMessage.getClientConnection();
 		String clientId = clientConnection.getId();

@@ -37,6 +37,7 @@ public class StatusEffectManager extends UntypedActor {
 	public static String name = StatusEffectManager.class.getSimpleName();
 	private Map<String, Long> deathTimer = new ConcurrentHashMap<String, Long>();
 	private long deathTime = 15000L;
+	private long outOfCombatTime = 10000L;
 	public static List<GridSet> gridsets = new ArrayList<GridSet>();
 	
 	
@@ -164,7 +165,7 @@ public class StatusEffectManager extends UntypedActor {
 		
 		for (int i = 0; i < zoneCount; i++) {
 			GridSet gridSet = new GridSet();
-			gridSet.zone = 0;
+			gridSet.zone = i;
 			
 			gridSet.playerGrid = GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "default" + i);
 			
@@ -237,8 +238,24 @@ public class StatusEffectManager extends UntypedActor {
 				continue;
 			}
 
-			if (vitalsProxy.vitals.health < health && vitalsProxy.baseVitals.healthRegen > 0) {
-				vitalsProxy.vitals.health += vitalsProxy.baseVitals.healthRegen;
+			int healthRegen = vitalsProxy.baseVitals.healthRegen;
+			int magicRegen = vitalsProxy.baseVitals.magicRegen;
+			int staminaRegen = vitalsProxy.baseVitals.staminaRegen;
+			
+			long lastCombat = System.currentTimeMillis() - vitalsProxy.vitals.lastCombat;
+			if (lastCombat < outOfCombatTime && vitalsProxy.baseVitals.combatRegenMod > 0) {
+				vitalsProxy.vitals.inCombat = true;
+				
+				healthRegen = Math.round(healthRegen * (vitalsProxy.baseVitals.combatRegenMod / 100f));
+				magicRegen = Math.round(magicRegen * (vitalsProxy.baseVitals.combatRegenMod/100f));
+				staminaRegen = Math.round(staminaRegen * (vitalsProxy.baseVitals.combatRegenMod/100f));
+				
+			} else {
+				vitalsProxy.vitals.inCombat = false;
+			}
+			
+			if (vitalsProxy.vitals.health < health && healthRegen > 0) {
+				vitalsProxy.vitals.health += healthRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.health > health) {
 					vitalsProxy.vitals.health = health;
@@ -248,16 +265,16 @@ public class StatusEffectManager extends UntypedActor {
 				}
 			}
 
-			if (vitalsProxy.vitals.stamina < stamina && vitalsProxy.baseVitals.staminaRegen > 0) {
-				vitalsProxy.vitals.stamina += vitalsProxy.baseVitals.staminaRegen;
+			if (vitalsProxy.vitals.stamina < stamina && staminaRegen > 0) {
+				vitalsProxy.vitals.stamina += staminaRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.stamina > stamina) {
 					vitalsProxy.vitals.stamina = stamina;
 				}
 			}
 
-			if (vitalsProxy.vitals.magic < magic && vitalsProxy.baseVitals.magicRegen > 0) {
-				vitalsProxy.vitals.magic += vitalsProxy.baseVitals.magicRegen;
+			if (vitalsProxy.vitals.magic < magic && magicRegen > 0) {
+				vitalsProxy.vitals.magic += magicRegen;
 				vitalsProxy.vitals.changed = 1;
 				if (vitalsProxy.vitals.magic > magic) {
 					vitalsProxy.vitals.magic = magic;
@@ -268,16 +285,17 @@ public class StatusEffectManager extends UntypedActor {
 	}
 	
 	private void die(VitalsProxy vitalsProxy) {
-		logger.debug("Die "+vitalsProxy.vitals.entityId);
+		logger.warn("Die "+vitalsProxy.vitals.entityId);
 		vitalsProxy.set("health", 0);
 		vitalsProxy.set("stamina", 0);
 		vitalsProxy.set("magic", 0);
 		vitalsProxy.vitals.dead = 1;
 		vitalsProxy.vitals.changed = 1;
+		vitalsProxy.vitals.inCombat = false;
 	}
 
 	private void revive(VitalsProxy vitalsProxy) {
-		logger.debug("Revive "+vitalsProxy.vitals.entityId);
+		logger.warn("Revive "+vitalsProxy.vitals.entityId);
 		vitalsProxy.vitals.dead = 0;
 		vitalsProxy.setToBase("health");
 		vitalsProxy.setToBase("stamina");

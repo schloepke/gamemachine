@@ -288,6 +288,10 @@ CREATE TABLE player_skills (
 
   player_skill_category integer,
 
+  player_skill_range integer DEFAULT NULL,
+
+  player_skill_weapon_type integer,
+
      useEffect_unity_object_path character varying(128) DEFAULT NULL,
     
      useEffect_unity_object_uuid character varying(128) DEFAULT NULL,
@@ -305,6 +309,12 @@ CREATE TABLE player_skills (
      useSound_unity_object_uuid character varying(128) DEFAULT NULL,
     
      useSound_unity_object_name character varying(128) DEFAULT NULL,
+
+     projectile_unity_object_path character varying(128) DEFAULT NULL,
+    
+     projectile_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     projectile_unity_object_name character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );
@@ -401,6 +411,8 @@ CREATE TABLE player_items (
   player_item_template_block_id integer DEFAULT NULL,
 
   player_item_category integer,
+
+  player_item_equipped boolean DEFAULT NULL,
 
      cost_cost_amount double precision DEFAULT NULL,
     

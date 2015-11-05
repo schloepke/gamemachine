@@ -51,7 +51,7 @@ public class PlayerService {
 		return LazyHolder.INSTANCE;
 	}
 
-	private void sendNotification(String playerId, String action) {
+	public void sendNotification(String playerId, String action) {
 		PlayerNotification playerNotification = new PlayerNotification();
 		playerNotification.playerId = playerId;
 		playerNotification.action = action;

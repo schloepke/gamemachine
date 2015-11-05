@@ -24,7 +24,7 @@ import plugins.landrush.BuildObjectHandler;
 import scala.concurrent.duration.Duration;
 
 public class ActiveEffectHandler extends UntypedActor {
-	
+
 	private Map<Long, StatusEffectTarget> targets = new ConcurrentHashMap<Long, StatusEffectTarget>();
 
 	private AtomicLong counter = new AtomicLong();
@@ -192,13 +192,13 @@ public class ActiveEffectHandler extends UntypedActor {
 
 					for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range,
 							statusEffectTarget.location, grid)) {
-						
+
 						VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
-						
+
 						if (targetProxy.vitals.dead == 1) {
 							continue;
 						}
-						
+
 						if (statusEffectTarget.attack.playerSkill.category == PlayerSkill.Category.AoeDot) {
 							convertToSingleTarget(statusEffectTarget, targetProxy.vitals.entityId);
 							continue;
@@ -238,11 +238,20 @@ public class ActiveEffectHandler extends UntypedActor {
 
 		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.vitals.characterId);
 
+		if (targetProxy.vitals.type == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
+			if (statusEffect.buildObjectDamageModifier > 0) {
+				value = Math.round(value * (statusEffect.buildObjectDamageModifier / 100f));
+			} else {
+				value = 0;
+			}
+		}
+
 		if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
 
 			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
-				// no damage to self
-				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId)) {
+				// no damage to self unless category is Self
+				if (playerSkill.category != PlayerSkill.Category.Self
+						&& targetProxy.vitals.characterId.equals(originProxy.vitals.characterId)) {
 					return 0;
 				}
 
@@ -272,8 +281,8 @@ public class ActiveEffectHandler extends UntypedActor {
 			}
 
 			targetProxy.vitals.changed = 1;
-			logger.warning(playerSkill.id + " target " + targetProxy.vitals.entityId
-					+ " damage " + value + " type " + statusEffect.type + " health " + targetProxy.vitals.health);
+			logger.warning(playerSkill.id + " target " + targetProxy.vitals.entityId + " damage " + value + " type "
+					+ statusEffect.type + " health " + targetProxy.vitals.health);
 		}
 
 		return value;

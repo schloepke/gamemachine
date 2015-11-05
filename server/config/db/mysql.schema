@@ -269,6 +269,10 @@ CREATE TABLE `player_skills` (
 
   `player_skill_category` int(11),
 
+  `player_skill_range` int(11) DEFAULT NULL,
+
+  `player_skill_weapon_type` int(11),
+
       useEffect_`unity_object_path` varchar(128) DEFAULT NULL,
     
       useEffect_`unity_object_uuid` varchar(128) DEFAULT NULL,
@@ -286,6 +290,12 @@ CREATE TABLE `player_skills` (
       useSound_`unity_object_uuid` varchar(128) DEFAULT NULL,
     
       useSound_`unity_object_name` varchar(128) DEFAULT NULL,
+
+      projectile_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      projectile_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      projectile_`unity_object_name` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -378,6 +388,8 @@ CREATE TABLE `player_items` (
   `player_item_template_block_id` int(11) DEFAULT NULL,
 
   `player_item_category` int(11),
+
+  `player_item_equipped` tinyint(4) DEFAULT NULL,
 
       cost_`cost_amount` float DEFAULT NULL,
     

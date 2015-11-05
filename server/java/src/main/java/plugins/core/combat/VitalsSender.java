@@ -9,14 +9,16 @@ import java.util.concurrent.TimeUnit;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import io.gamemachine.core.GameEntityManager;
+import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.VitalsContainer;
-import plugins.CoreCombatPlugin;
 import scala.concurrent.duration.Duration;
 
 public class VitalsSender extends UntypedActor {
@@ -58,17 +60,17 @@ public class VitalsSender extends UntypedActor {
 		for (GridSet gridSet : StatusEffectManager.gridsets) {
 			for (TrackData playerTrackData : gridSet.playerGrid.getAll()) {
 				if (playerTrackData.entityType == TrackData.EntityType.Player) {
-					sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone));
-					sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, objectVitals(gridSet.zone));
+					sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone),true);
+					sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, objectVitals(gridSet.zone),false);
 				}
 				
 			}
 		}
 	}
 
-	private void sendVitalsToPlayer(Grid grid, TrackData playerTrackData, List<Vitals> container) {
+	private void sendVitalsToPlayer(Grid grid, TrackData playerTrackData, List<Vitals> vitalsList, boolean sendBaseUpdate) {
 		VitalsContainer toSend = new VitalsContainer();
-		for (Vitals vitals : container) {
+		for (Vitals vitals : vitalsList) {
 			TrackData vitalsTrackData = grid.get(vitals.entityId);
 
 			// Dead most likely
@@ -86,6 +88,17 @@ public class VitalsSender extends UntypedActor {
 			}
 		}
 
+		if (sendBaseUpdate) {
+			GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+			Player player = PlayerService.getInstance().find(playerTrackData.id);
+			VitalsProxy proxy = VitalsHandler.get(player.id);
+			if (proxy != null) {
+				Vitals vitals = proxy.baseVitals.clone();
+				vitals.isBaseVitals = true;
+				toSend.addVitals(vitals);
+			}
+		}
+		
 		GameMessage msg = new GameMessage();
 		msg.vitalsContainer = toSend;
 		PlayerCommands.sendGameMessage(msg, playerTrackData.id);
@@ -96,12 +109,12 @@ public class VitalsSender extends UntypedActor {
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
 			if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject || vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
 				Vitals template = vitalsProxy.baseVitals;
-				if (vitalsProxy.vitals.changed == 1 || vitalsProxy.vitals.health < template.health) {
+				if (vitalsProxy.vitals.changed == 1) {
 					resetVitalTick(vitalsProxy.vitals.entityId);
 					vitalsProxy.vitals.changed = 0;
 				} else {
 					int tick = nextVitalTick(vitalsProxy.vitals.entityId);
-					if (tick >= 4) {
+					if (tick >= 10) {
 						continue;
 					}
 				}
@@ -116,6 +129,7 @@ public class VitalsSender extends UntypedActor {
 		List<Vitals> container = new ArrayList<Vitals>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
 			Vitals vitals = vitalsProxy.vitals;
+			//logger.warning("LivingVitals "+vitals.characterId+" "+vitals.health);
 			if (vitals.type == Vitals.VitalsType.Character) {
 				Vitals template = vitalsProxy.baseVitals;
 				if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic

@@ -58,6 +58,9 @@ local_message Vitals {
   optional int32 movementSpeed = 32;
   optional int32 abilitySpeed = 33;
   optional Template template = 34;
+  optional bool isBaseVitals = 35;
+  optional float combatRegenMod = 36;
+  optional bool inCombat = 37;
 }
 
 
@@ -103,7 +106,8 @@ local_message StatusEffect {
   optional string effectPath = 19;
   optional string effectUuid = 20;
   optional UnityObject hitSound = 21;
-   optional UnityObject hitEffect = 22;
+  optional UnityObject hitEffect = 22;
+  optional float buildObjectDamageModifier = 23;
 }
 
 local_message StatusEffects {
@@ -641,6 +645,18 @@ local_persistent_message PlayerSkill {
 	Self = 3;
 	AoeDot = 4;
   }
+ 
+ 
+  enum WeaponType {
+    None = 0;
+    Arrow = 1;
+    Bullet = 2;
+    MagicProjectile = 3;
+    SiegeProjectile = 4;
+    Melee = 5;
+    Magic = 6;
+    Siege = 7;
+   }
     
   required string id = 1;
   optional string name = 2;
@@ -660,6 +676,10 @@ local_persistent_message PlayerSkill {
   optional UnityObject useEffect = 29;
   optional UnityObject icon = 30;
   optional UnityObject useSound = 32;
+  
+  optional UnityObject projectile = 34;
+  optional int32 range = 35;
+  optional WeaponType weaponType = 36;
 }
 
 
@@ -771,6 +791,8 @@ local_persistent_message PlayerItem {
   
   optional Category category = 41;
   optional UnityObject icon = 43;
+  
+  optional bool equipped = 50;
 }
 
 local_message ModelInfo {
