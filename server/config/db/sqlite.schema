@@ -263,6 +263,8 @@ CREATE TABLE player_skills (
 
   player_skill_weapon_type integer,
 
+  player_skill_projectile_behavior integer,
+
       useEffect_unity_object_path varchar(128) DEFAULT NULL,
     
       useEffect_unity_object_uuid varchar(128) DEFAULT NULL,
@@ -286,6 +288,12 @@ CREATE TABLE player_skills (
       projectile_unity_object_uuid varchar(128) DEFAULT NULL,
     
       projectile_unity_object_name varchar(128) DEFAULT NULL,
+
+      hitEffect_unity_object_path varchar(128) DEFAULT NULL,
+    
+      hitEffect_unity_object_uuid varchar(128) DEFAULT NULL,
+    
+      hitEffect_unity_object_name varchar(128) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );

@@ -10,7 +10,7 @@ module GameMachine
       end
 
       def on_receive(message)
-        if message.is_a?(MessageLib::Entity) && message.has_chat_message
+        if message.is_a?(MessageLib::Entity) && message.chat_message
           receive_chat_message(message.chat_message)
         elsif message.is_a?(JavaLib::DistributedPubSubMediator::SubscribeAck)
         else

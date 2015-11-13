@@ -273,6 +273,8 @@ CREATE TABLE `player_skills` (
 
   `player_skill_weapon_type` int(11),
 
+  `player_skill_projectile_behavior` int(11),
+
       useEffect_`unity_object_path` varchar(128) DEFAULT NULL,
     
       useEffect_`unity_object_uuid` varchar(128) DEFAULT NULL,
@@ -296,6 +298,12 @@ CREATE TABLE `player_skills` (
       projectile_`unity_object_uuid` varchar(128) DEFAULT NULL,
     
       projectile_`unity_object_name` varchar(128) DEFAULT NULL,
+
+      hitEffect_`unity_object_path` varchar(128) DEFAULT NULL,
+    
+      hitEffect_`unity_object_uuid` varchar(128) DEFAULT NULL,
+    
+      hitEffect_`unity_object_name` varchar(128) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

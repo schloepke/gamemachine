@@ -657,7 +657,12 @@ local_persistent_message PlayerSkill {
     Magic = 6;
     Siege = 7;
    }
-    
+   
+   enum ProjectileBehavior {
+     StopOnFirstHit = 0;
+     ContinueOnPlayerHit = 1;
+   }
+   
   required string id = 1;
   optional string name = 2;
   optional int32 recordId = 3;
@@ -680,6 +685,9 @@ local_persistent_message PlayerSkill {
   optional UnityObject projectile = 34;
   optional int32 range = 35;
   optional WeaponType weaponType = 36;
+  
+  optional UnityObject hitEffect = 37;
+  optional ProjectileBehavior projectileBehavior = 38;
 }
 
 
@@ -888,6 +896,7 @@ message RpcMessage {
   optional GameMessage gameMessage = 2;
   optional int64 messageId = 3;
   optional string playerId = 4;
+  optional string method = 5;
 }
 
 local_message Zone {

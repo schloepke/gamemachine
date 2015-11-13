@@ -27,7 +27,7 @@ module GameMachine
             current_entity = MessageLib::Entity.new.set_id(id)
           end
 
-          if current_entity.has_subscribers
+          if current_entity.subscribers
             if subscriber_id_list = current_entity.subscribers.get_subscriber_id_list.to_a
               current_entity.subscribers.set_subscriber_id_list(nil)
               subscriber_id_list.each do |name|
@@ -45,7 +45,7 @@ module GameMachine
             current_entity = MessageLib::Entity.new.set_id(id)
           end
 
-          unless current_entity.has_subscribers
+          unless current_entity.subscribers
             current_entity.set_subscribers(MessageLib::Subscribers.new)
           end
 
@@ -71,9 +71,9 @@ module GameMachine
           return
         end
 
-        if message.has_chat_invite
+        if message.chat_invite
           send_invite(message.chat_invite)
-        elsif message.has_chat_register
+        elsif message.chat_register
           unless @chat_actors.has_key?(message.chat_register.chat_id)
             create_child(message.chat_register.chat_id,message.chat_register.register_as)
           end

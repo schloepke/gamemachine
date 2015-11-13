@@ -18,6 +18,8 @@ public class AppConfig {
 	private static long gridExpiration;
 	private static Config gameConfig;
 	private static List<String> plugins = new ArrayList<String>();
+	private static int akkaPort;
+	private static String akkaHost;
 	
 	public static Config getConfig() {
 		String path = AppConfig.envRoot+File.separator+"config"+File.separator+env+".conf";
@@ -87,6 +89,23 @@ public class AppConfig {
 	public static void setGameConfig(Config gameConfig) {
 		AppConfig.gameConfig = gameConfig;
 	}
+	
+	public static String getAkkaHost() {
+		return akkaHost;
+	}
+	
+	public static void setAkkaHost(String host) {
+		akkaHost = host;
+	}
+	
+	public static int getAkkaPort() {
+		return akkaPort;
+	}
+	
+	public static void setAkkaPort(int port) {
+		akkaPort = port;
+	}
+	
 	
 	public static class Client {
 		private static int idleTimeout;

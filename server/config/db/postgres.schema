@@ -292,6 +292,8 @@ CREATE TABLE player_skills (
 
   player_skill_weapon_type integer,
 
+  player_skill_projectile_behavior integer,
+
      useEffect_unity_object_path character varying(128) DEFAULT NULL,
     
      useEffect_unity_object_uuid character varying(128) DEFAULT NULL,
@@ -315,6 +317,12 @@ CREATE TABLE player_skills (
      projectile_unity_object_uuid character varying(128) DEFAULT NULL,
     
      projectile_unity_object_name character varying(128) DEFAULT NULL,
+
+     hitEffect_unity_object_path character varying(128) DEFAULT NULL,
+    
+     hitEffect_unity_object_uuid character varying(128) DEFAULT NULL,
+    
+     hitEffect_unity_object_name character varying(128) DEFAULT NULL,
 
   CONSTRAINT player_skill_pkey PRIMARY KEY (id)
 );

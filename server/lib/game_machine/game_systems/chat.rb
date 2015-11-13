@@ -50,24 +50,24 @@ module GameMachine
           return
         end
 
-        if entity.has_join_chat
+        if entity.join_chat
           self.class.logger.debug "Join chat"
           join_channels(entity.join_chat.get_chat_channel_list)
           send_status
         end
 
-        if entity.has_chat_message
+        if entity.chat_message
           self.class.logger.debug "Chat message"
           send_message(entity.chat_message)
         end
 
-        if entity.has_leave_chat
+        if entity.leave_chat
           self.class.logger.debug "Leave chat"
           leave_channels(entity.leave_chat.get_chat_channel_list)
           send_status
         end
 
-        if entity.has_chat_status
+        if entity.chat_status
           send_status
         end
       end
