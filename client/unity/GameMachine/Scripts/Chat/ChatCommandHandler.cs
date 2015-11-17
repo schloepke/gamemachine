@@ -40,7 +40,7 @@ namespace GameMachine.Chat {
             if (command.StartsWith("/speed")) {
                 command = command.Replace("/speed", "");
                 int speed = Int32.Parse(command);
-                string characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
+                //string characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
                 IGameEntityController controller = GameEntityManager.GetPlayerEntity().GetGameEntityController();
                 controller.SetRunSpeed(speed);
                 return CommandResult.Ok;

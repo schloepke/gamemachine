@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System;
+using GameMachine.Animation;
 
 namespace GameMachine {
     namespace Common {
@@ -10,10 +11,8 @@ namespace GameMachine {
             public bool onBoat = false;
             public bool controllingBoat = false;
             private RaycastHit boatHit;
-            private Vector3 platformCurrent;
             private Vector3 platformPrevious;
             public Transform activePlatform;
-            private Vector3 lastPlatformVelocity;
             private Vector3 activeLocalPlatformPoint;
             private Vector3 activeGlobalPlatformPoint;
             private Quaternion activeLocalPlatformRotation;
@@ -39,14 +38,12 @@ namespace GameMachine {
             private Vector3 velocity = Vector3.zero;
             private float inputX = 0;
             private float inputY = 0;
-            private float rotation = 0;
             public Vector3 lastPosition = Vector3.zero;
             private float animationSpeed = 1;
             public float moveSpeed = 0;
 
             private CharacterController characterController;
             private IGameEntityInput inputController;
-            private int jumpPhase = 0;
             private float moveY = 0;
             private Vector3 moveTo;
 
@@ -74,8 +71,8 @@ namespace GameMachine {
                 initialized = true;
             }
             
-            private void SetAnimation(int triggerId) {
-                animationController.RequestAnimation(triggerId);
+            private void SetAnimation(AnimationName name) {
+                animationController.SetAnimation(name);
             }
 
 
@@ -94,10 +91,19 @@ namespace GameMachine {
 
             public void ManualUpdate() {
                
+                if (gameEntity.IsDead()) {
+                    Debug.Log("Dead " + gameEntity.GetCharacterId());
+                    InputState.cameraDisabled = true;
+                    velocity.y -= gravity * Time.deltaTime;
+                    SetAnimation(AnimationName.Dead);
+                    return;
+                }
+
+                InputState.cameraDisabled = false;
+
                 // If on the ground, allow jumping
                 if (grounded) {
                     if (inputController.GetBool(GMKeyCode.Jumping)) {
-                        jumpPhase = 1;
                         velocity.y = jumpPower;
                         grounded = false;
                     }
@@ -180,11 +186,9 @@ namespace GameMachine {
                 // If the user is not holding right-mouse button, rotate the player with the X axis instead of strafing
                 if (!inputController.GetBool(GMKeyCode.MouseRight) && inputX != 0) {
                     transform.Rotate(new Vector3(0, inputX * (turnSpeed / 2.0f), 0));
-                    rotation = inputX;
                     inputX = 0;
 
                 } else {
-                    rotation = 0;
                 }
 
                 // Movement direction and speed
@@ -225,9 +229,9 @@ namespace GameMachine {
                 if (gameEntity.IsNpc()) {
                     grounded = true;
                 } else {
-                    if (!Physics.Raycast(transform.position, -Vector3.up, 0.2f)) {
-                        grounded = false;
-                    }
+                    //if (!Physics.Raycast(transform.position, -Vector3.up, 0.2f)) {
+                    //    grounded = false;
+                    //}
                 }
 
                 UpdateAnimations();
@@ -266,38 +270,38 @@ namespace GameMachine {
 
             private void UpdateAnimations() {
                 if (!grounded) {
-                    SetAnimation(AnimationController.runJumpId);
+                    SetAnimation(AnimationName.RunJump);
                     return;
                 }
 
                 if (moveSpeed > 0.01) {
                     if (gameEntity.IsNpc()) {
-                        SetAnimation(AnimationController.runId);
+                        SetAnimation(AnimationName.Run);
                     } else if (controllingBoat) {
-                        SetAnimation(AnimationController.idleId);
+                        SetAnimation(AnimationName.Idle);
                     } else if (swimming) {
-                        SetAnimation(AnimationController.swimId);
+                        SetAnimation(AnimationName.Swim);
                     } else if (running) {
 
                         if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
                             if (inputX < 0) {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.runLeftId);
+                                    SetAnimation(AnimationName.RunLeft);
                                 } else {
-                                    SetAnimation(AnimationController.runLeftId);
+                                    SetAnimation(AnimationName.RunLeft);
                                 }
                             } else {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.runRightId);
+                                    SetAnimation(AnimationName.RunRight);
                                 } else {
-                                    SetAnimation(AnimationController.runRightId);
+                                    SetAnimation(AnimationName.RunRight);
                                 }
                             }
                         } else {
                             if (inputY > 0) {
-                                SetAnimation(AnimationController.runId);
+                                SetAnimation(AnimationName.Run);
                             } else if (inputY < 0) {
-                                SetAnimation(AnimationController.runBackId);
+                                SetAnimation(AnimationName.RunBack);
                             }
 
                         }
@@ -307,26 +311,26 @@ namespace GameMachine {
                         if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
                             if (inputX < 0) {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.crouchLeftId);
+                                    SetAnimation(AnimationName.CrouchLeft);
                                 } else if (inputY < 0) {
-                                    SetAnimation(AnimationController.crouchRightId);
+                                    SetAnimation(AnimationName.CrouchRight);
                                 } else {
-                                    SetAnimation(AnimationController.crouchLeftId);
+                                    SetAnimation(AnimationName.CrouchLeft);
                                 }
                             } else {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.crouchRightId);
+                                    SetAnimation(AnimationName.CrouchRight);
                                 } else if (inputY < 0) {
-                                    SetAnimation(AnimationController.crouchLeftId);
+                                    SetAnimation(AnimationName.CrouchLeft);
                                 } else {
-                                    SetAnimation(AnimationController.crouchRightId);
+                                    SetAnimation(AnimationName.CrouchRight);
                                 }
                             }
                         } else {
                             if (inputY > 0) {
-                                SetAnimation(AnimationController.crouchWalkId);
+                                SetAnimation(AnimationName.CrouchWalk);
                             } else {
-                                SetAnimation(AnimationController.crouchBackId);
+                                SetAnimation(AnimationName.CrouchBack);
                             }
                         }
 
@@ -339,26 +343,26 @@ namespace GameMachine {
                         if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
                             if (inputX < 0) {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.idleLeftId);
+                                    SetAnimation(AnimationName.IdleLeft);
                                 } else if (inputY < 0) {
-                                    SetAnimation(AnimationController.idleRightId);
+                                    SetAnimation(AnimationName.IdleRight);
                                 } else {
-                                    SetAnimation(AnimationController.idleLeftId);
+                                    SetAnimation(AnimationName.IdleLeft);
                                 }
                             } else {
                                 if (inputY > 0) {
-                                    SetAnimation(AnimationController.idleRightId);
+                                    SetAnimation(AnimationName.IdleRight);
                                 } else if (inputY < 0) {
-                                    SetAnimation(AnimationController.idleLeftId);
+                                    SetAnimation(AnimationName.IdleLeft);
                                 } else {
-                                    SetAnimation(AnimationController.idleRightId);
+                                    SetAnimation(AnimationName.IdleRight);
                                 }
                             }
                         } else {
                             if (inputY > 0) {
-                                SetAnimation(AnimationController.walkId);
+                                SetAnimation(AnimationName.Walk);
                             } else {
-                                SetAnimation(AnimationController.walkBackId);
+                                SetAnimation(AnimationName.WalkBack);
                             }
                         }
 
@@ -370,12 +374,17 @@ namespace GameMachine {
                     }
                 } else {
                     if (swimming) {
-                        SetAnimation(AnimationController.swimIdleId);
+                        SetAnimation(AnimationName.SwimIdle);
                     } else {
                         if (inputController.GetBool(GMKeyCode.Hidden)) {
-                            SetAnimation(AnimationController.crouchIdleId);
+                            SetAnimation(AnimationName.CrouchIdle);
                         } else {
-                            SetAnimation(AnimationController.idleId);
+                            if (gameEntity.IsInCombat()) {
+                                SetAnimation(AnimationName.IdleCombat);
+                            } else {
+                                SetAnimation(AnimationName.Idle);
+                            }
+                            
                         }
 
                     }
@@ -387,7 +396,6 @@ namespace GameMachine {
 
                 if (boatHit.collider != null && boatHit.collider.gameObject.name == "boat_model") {
                     activePlatform = boatHit.collider.transform;
-                    platformCurrent = boatHit.point;
                     return true;
                 } else {
                     activePlatform = null;
@@ -414,8 +422,6 @@ namespace GameMachine {
                         characterController.Move(moveDistance);
                     }
 
-                    Vector3 lastPlatformVelocity = moveDistance / Time.deltaTime;
-
                     // If you want to support moving platform rotation as well:
                     Quaternion newGlobalPlatformRotation = activePlatform.rotation * activeLocalPlatformRotation;
                     Quaternion rotationDiff = newGlobalPlatformRotation * Quaternion.Inverse(activeGlobalPlatformRotation);
@@ -424,9 +430,7 @@ namespace GameMachine {
                     rotationDiff = Quaternion.FromToRotation(rotationDiff * transform.up, transform.up) * rotationDiff;
 
                     transform.rotation = rotationDiff * transform.rotation;
-                    //_t.rotation = Quaternion.Euler (0, _t.rotation.y, 0);
                 } else {
-                    lastPlatformVelocity = Vector3.zero;
                 }
             }
 

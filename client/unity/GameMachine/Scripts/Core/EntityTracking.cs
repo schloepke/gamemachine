@@ -56,8 +56,8 @@ namespace GameMachine.Core
 			}
 
 			trackData.id = GameMachine.Core.User.Instance.username;
-			if (trackData.entityType == null) {
-				trackData.entityType = TrackData.EntityType.PLAYER;
+			if (trackData.entityType == TrackData.EntityType.None) {
+				trackData.entityType = TrackData.EntityType.Player;
 			}
 			
 			Entity entity = new Entity ();

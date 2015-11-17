@@ -132,7 +132,9 @@ namespace GameMachine {
                     RotateCameraBehindTarget = true;
                     LockCameraBehindTarget = true;
                     float angles = Input.GetAxisRaw("Mouse X") * Time.smoothDeltaTime * mouseTurnSpeed;
-                    target.RotateAround(Vector3.up, angles);
+                    if (target != null) {
+                        target.RotateAround(Vector3.up, angles);
+                    }
                 }
 
                 // If we pressed mouse look, set rotation
@@ -151,7 +153,8 @@ namespace GameMachine {
                 }
 
                 if (!HasTarget) {
-                    Debug.LogError("No target found");
+                    Debug.LogWarning("No target found");
+                    Initialize();
                     return;
                 }
 

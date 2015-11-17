@@ -6,6 +6,10 @@ namespace GameMachine {
         public class Settings : MonoBehaviour {
             private static Settings instance;
 
+            public static string GetServerPath() {
+                return PlayerPrefs.GetString("serverPath");
+            }
+
             public float worldOffset = 0f;
             public float waterLevel = -100f;
 

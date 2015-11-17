@@ -10,6 +10,534 @@
 // Generated from: config/combined_messages.proto
 namespace io.gamemachine.messages
 {
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"VitalsContainer")]
+  public partial class VitalsContainer : global::ProtoBuf.IExtensible
+  {
+    public VitalsContainer() {}
+    
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.Vitals> _vitals = new global::System.Collections.Generic.List<io.gamemachine.messages.Vitals>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"vitals", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.Vitals> vitals
+    {
+      get { return _vitals; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Vitals")]
+  public partial class Vitals : global::ProtoBuf.IExtensible
+  {
+    public Vitals() {}
+    
+    private string _characterId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"characterId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string characterId
+    {
+      get { return _characterId; }
+      set { _characterId = value; }
+    }
+    private long _lastCombat = default(long);
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"lastCombat", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(long))]
+    public long lastCombat
+    {
+      get { return _lastCombat; }
+      set { _lastCombat = value; }
+    }
+    private int _dead = default(int);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"dead", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int dead
+    {
+      get { return _dead; }
+      set { _dead = value; }
+    }
+    private int _changed = default(int);
+    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"changed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int changed
+    {
+      get { return _changed; }
+      set { _changed = value; }
+    }
+    private string _entityId = "";
+    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"entityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string entityId
+    {
+      get { return _entityId; }
+      set { _entityId = value; }
+    }
+    private io.gamemachine.messages.Vitals.VitalsType _type = io.gamemachine.messages.Vitals.VitalsType.None;
+    [global::ProtoBuf.ProtoMember(18, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.Vitals.VitalsType.None)]
+    public io.gamemachine.messages.Vitals.VitalsType type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
+    private int _zone = default(int);
+    [global::ProtoBuf.ProtoMember(19, IsRequired = false, Name=@"zone", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int zone
+    {
+      get { return _zone; }
+      set { _zone = value; }
+    }
+    private int _spellResist = default(int);
+    [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"spellResist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int spellResist
+    {
+      get { return _spellResist; }
+      set { _spellResist = value; }
+    }
+    private int _elementalResist = default(int);
+    [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"elementalResist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int elementalResist
+    {
+      get { return _elementalResist; }
+      set { _elementalResist = value; }
+    }
+    private int _spellPenetration = default(int);
+    [global::ProtoBuf.ProtoMember(24, IsRequired = false, Name=@"spellPenetration", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int spellPenetration
+    {
+      get { return _spellPenetration; }
+      set { _spellPenetration = value; }
+    }
+    private int _magicRegen = default(int);
+    [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"magicRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int magicRegen
+    {
+      get { return _magicRegen; }
+      set { _magicRegen = value; }
+    }
+    private int _healthRegen = default(int);
+    [global::ProtoBuf.ProtoMember(26, IsRequired = false, Name=@"healthRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int healthRegen
+    {
+      get { return _healthRegen; }
+      set { _healthRegen = value; }
+    }
+    private int _staminaRegen = default(int);
+    [global::ProtoBuf.ProtoMember(27, IsRequired = false, Name=@"staminaRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int staminaRegen
+    {
+      get { return _staminaRegen; }
+      set { _staminaRegen = value; }
+    }
+    private int _armor = default(int);
+    [global::ProtoBuf.ProtoMember(28, IsRequired = false, Name=@"armor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int armor
+    {
+      get { return _armor; }
+      set { _armor = value; }
+    }
+    private int _magic = default(int);
+    [global::ProtoBuf.ProtoMember(29, IsRequired = false, Name=@"magic", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int magic
+    {
+      get { return _magic; }
+      set { _magic = value; }
+    }
+    private int _health = default(int);
+    [global::ProtoBuf.ProtoMember(30, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int health
+    {
+      get { return _health; }
+      set { _health = value; }
+    }
+    private int _stamina = default(int);
+    [global::ProtoBuf.ProtoMember(31, IsRequired = false, Name=@"stamina", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int stamina
+    {
+      get { return _stamina; }
+      set { _stamina = value; }
+    }
+    private int _movementSpeed = default(int);
+    [global::ProtoBuf.ProtoMember(32, IsRequired = false, Name=@"movementSpeed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int movementSpeed
+    {
+      get { return _movementSpeed; }
+      set { _movementSpeed = value; }
+    }
+    private int _abilitySpeed = default(int);
+    [global::ProtoBuf.ProtoMember(33, IsRequired = false, Name=@"abilitySpeed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int abilitySpeed
+    {
+      get { return _abilitySpeed; }
+      set { _abilitySpeed = value; }
+    }
+    private io.gamemachine.messages.Vitals.Template _template = io.gamemachine.messages.Vitals.Template.PlayerTemplate;
+    [global::ProtoBuf.ProtoMember(34, IsRequired = false, Name=@"template", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.Vitals.Template.PlayerTemplate)]
+    public io.gamemachine.messages.Vitals.Template template
+    {
+      get { return _template; }
+      set { _template = value; }
+    }
+    private bool _isBaseVitals = default(bool);
+    [global::ProtoBuf.ProtoMember(35, IsRequired = false, Name=@"isBaseVitals", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool isBaseVitals
+    {
+      get { return _isBaseVitals; }
+      set { _isBaseVitals = value; }
+    }
+    private float _combatRegenMod = default(float);
+    [global::ProtoBuf.ProtoMember(36, IsRequired = false, Name=@"combatRegenMod", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    [global::System.ComponentModel.DefaultValue(default(float))]
+    public float combatRegenMod
+    {
+      get { return _combatRegenMod; }
+      set { _combatRegenMod = value; }
+    }
+    private bool _inCombat = default(bool);
+    [global::ProtoBuf.ProtoMember(37, IsRequired = false, Name=@"inCombat", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool inCombat
+    {
+      get { return _inCombat; }
+      set { _inCombat = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Template")]
+    public enum Template
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"PlayerTemplate", Value=0)]
+      PlayerTemplate = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"BuildObjectTemplate", Value=1)]
+      BuildObjectTemplate = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"NpcTemplate", Value=2)]
+      NpcTemplate = 2
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"VitalsType")]
+    public enum VitalsType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Character", Value=1)]
+      Character = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Object", Value=2)]
+      Object = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"BuildObject", Value=3)]
+      BuildObject = 3
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"Attribute")]
+    public enum Attribute
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SpellResist", Value=0)]
+      SpellResist = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ElementalResist", Value=1)]
+      ElementalResist = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SpellPenetration", Value=2)]
+      SpellPenetration = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MagicRegen", Value=3)]
+      MagicRegen = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"HealthRegen", Value=4)]
+      HealthRegen = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"StaminaRegen", Value=5)]
+      StaminaRegen = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Armor", Value=6)]
+      Armor = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Magic", Value=7)]
+      Magic = 7,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Health", Value=8)]
+      Health = 8,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Stamina", Value=9)]
+      Stamina = 9,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MovementSpeed", Value=10)]
+      MovementSpeed = 10,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AbilitySpeed", Value=11)]
+      AbilitySpeed = 11
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StatusEffect")]
+  public partial class StatusEffect : global::ProtoBuf.IExtensible
+  {
+    public StatusEffect() {}
+    
+    private io.gamemachine.messages.StatusEffect.Type _type = io.gamemachine.messages.StatusEffect.Type.StatusEffectNone;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.StatusEffect.Type.StatusEffectNone)]
+    public io.gamemachine.messages.StatusEffect.Type type
+    {
+      get { return _type; }
+      set { _type = value; }
+    }
+    private string _id = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string id
+    {
+      get { return _id; }
+      set { _id = value; }
+    }
+    private int _duration = default(int);
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"duration", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int duration
+    {
+      get { return _duration; }
+      set { _duration = value; }
+    }
+    private int _ticks = default(int);
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"ticks", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int ticks
+    {
+      get { return _ticks; }
+      set { _ticks = value; }
+    }
+    private int _minValue = default(int);
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"minValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int minValue
+    {
+      get { return _minValue; }
+      set { _minValue = value; }
+    }
+    private int _maxValue = default(int);
+    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"maxValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int maxValue
+    {
+      get { return _maxValue; }
+      set { _maxValue = value; }
+    }
+    private string _particleEffect = "";
+    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"particleEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string particleEffect
+    {
+      get { return _particleEffect; }
+      set { _particleEffect = value; }
+    }
+    private io.gamemachine.messages.StatusEffect.DamageType _damageType = io.gamemachine.messages.StatusEffect.DamageType.DamageTypeNone;
+    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"damageType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.StatusEffect.DamageType.DamageTypeNone)]
+    public io.gamemachine.messages.StatusEffect.DamageType damageType
+    {
+      get { return _damageType; }
+      set { _damageType = value; }
+    }
+    private string _icon_path = "";
+    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"icon_path", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string icon_path
+    {
+      get { return _icon_path; }
+      set { _icon_path = value; }
+    }
+    private string _icon_uuid = "";
+    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"icon_uuid", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string icon_uuid
+    {
+      get { return _icon_uuid; }
+      set { _icon_uuid = value; }
+    }
+    private int _ticksPerformed = default(int);
+    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"ticksPerformed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int ticksPerformed
+    {
+      get { return _ticksPerformed; }
+      set { _ticksPerformed = value; }
+    }
+    private io.gamemachine.messages.StatusEffect.Resource _resource = io.gamemachine.messages.StatusEffect.Resource.ResourceNone;
+    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"resource", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.StatusEffect.Resource.ResourceNone)]
+    public io.gamemachine.messages.StatusEffect.Resource resource
+    {
+      get { return _resource; }
+      set { _resource = value; }
+    }
+    private int _resourceCost = default(int);
+    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"resourceCost", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int resourceCost
+    {
+      get { return _resourceCost; }
+      set { _resourceCost = value; }
+    }
+    private int _range = default(int);
+    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int range
+    {
+      get { return _range; }
+      set { _range = value; }
+    }
+    private string _attribute = "";
+    [global::ProtoBuf.ProtoMember(17, IsRequired = false, Name=@"attribute", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string attribute
+    {
+      get { return _attribute; }
+      set { _attribute = value; }
+    }
+    private int _maxStacks = default(int);
+    [global::ProtoBuf.ProtoMember(18, IsRequired = false, Name=@"maxStacks", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int maxStacks
+    {
+      get { return _maxStacks; }
+      set { _maxStacks = value; }
+    }
+    private string _effectPath = "";
+    [global::ProtoBuf.ProtoMember(19, IsRequired = false, Name=@"effectPath", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string effectPath
+    {
+      get { return _effectPath; }
+      set { _effectPath = value; }
+    }
+    private string _effectUuid = "";
+    [global::ProtoBuf.ProtoMember(20, IsRequired = false, Name=@"effectUuid", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string effectUuid
+    {
+      get { return _effectUuid; }
+      set { _effectUuid = value; }
+    }
+    private io.gamemachine.messages.UnityObject _hitSound = null;
+    [global::ProtoBuf.ProtoMember(21, IsRequired = false, Name=@"hitSound", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject hitSound
+    {
+      get { return _hitSound; }
+      set { _hitSound = value; }
+    }
+    private io.gamemachine.messages.UnityObject _hitEffect = null;
+    [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"hitEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject hitEffect
+    {
+      get { return _hitEffect; }
+      set { _hitEffect = value; }
+    }
+    private float _buildObjectDamageModifier = default(float);
+    [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"buildObjectDamageModifier", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
+    [global::System.ComponentModel.DefaultValue(default(float))]
+    public float buildObjectDamageModifier
+    {
+      get { return _buildObjectDamageModifier; }
+      set { _buildObjectDamageModifier = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Type")]
+    public enum Type
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"StatusEffectNone", Value=0)]
+      StatusEffectNone = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AttributeDecrease", Value=1)]
+      AttributeDecrease = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AttributeIncrease", Value=2)]
+      AttributeIncrease = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AttributeMaxIncrease", Value=3)]
+      AttributeMaxIncrease = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AttributeMaxDecrease", Value=4)]
+      AttributeMaxDecrease = 4
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"DamageType")]
+    public enum DamageType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"DamageTypeNone", Value=0)]
+      DamageTypeNone = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Physical", Value=1)]
+      Physical = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Magic", Value=2)]
+      Magic = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Elemental", Value=3)]
+      Elemental = 3
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"Resource")]
+    public enum Resource
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ResourceNone", Value=0)]
+      ResourceNone = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ResourceMagic", Value=1)]
+      ResourceMagic = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ResourceStamina", Value=2)]
+      ResourceStamina = 2
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StatusEffects")]
+  public partial class StatusEffects : global::ProtoBuf.IExtensible
+  {
+    public StatusEffects() {}
+    
+    private readonly global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect> _statusEffect = new global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect>();
+    [global::ProtoBuf.ProtoMember(1, Name=@"statusEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect> statusEffect
+    {
+      get { return _statusEffect; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"TerrainEdit")]
   public partial class TerrainEdit : global::ProtoBuf.IExtensible
   {
@@ -962,10 +1490,10 @@ namespace io.gamemachine.messages
       get { return _playerItemId; }
       set { _playerItemId = value; }
     }
-    private int _action = default(int);
+    private io.gamemachine.messages.BuildObject.Action _action = io.gamemachine.messages.BuildObject.Action.None;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int action
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.BuildObject.Action.None)]
+    public io.gamemachine.messages.BuildObject.Action action
     {
       get { return _action; }
       set { _action = value; }
@@ -1082,10 +1610,10 @@ namespace io.gamemachine.messages
       get { return _updatedAt; }
       set { _updatedAt = value; }
     }
-    private int _state = default(int);
+    private io.gamemachine.messages.BuildObject.State _state = io.gamemachine.messages.BuildObject.State.Active;
     [global::ProtoBuf.ProtoMember(23, IsRequired = false, Name=@"state", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int state
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.BuildObject.State.Active)]
+    public io.gamemachine.messages.BuildObject.State state
     {
       get { return _state; }
       set { _state = value; }
@@ -1218,6 +1746,51 @@ namespace io.gamemachine.messages
       get { return _slotInfo; }
       set { _slotInfo = value; }
     }
+    private int _zone = default(int);
+    [global::ProtoBuf.ProtoMember(41, IsRequired = false, Name=@"zone", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int zone
+    {
+      get { return _zone; }
+      set { _zone = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Action")]
+    public enum Action
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Create", Value=1)]
+      Create = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Remove", Value=2)]
+      Remove = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Update", Value=3)]
+      Update = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"UpdateProp", Value=4)]
+      UpdateProp = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SetHealth", Value=5)]
+      SetHealth = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"RemoveAll", Value=6)]
+      RemoveAll = 6
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"State")]
+    public enum State
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Active", Value=0)]
+      Active = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Removed", Value=1)]
+      Removed = 1
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1324,10 +1897,10 @@ namespace io.gamemachine.messages
       get { return _buildObject; }
     }
   
-    private int _action = default(int);
+    private io.gamemachine.messages.BuildObjects.Action _action = io.gamemachine.messages.BuildObjects.Action.None;
     [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int action
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.BuildObjects.Action.None)]
+    public io.gamemachine.messages.BuildObjects.Action action
     {
       get { return _action; }
       set { _action = value; }
@@ -1348,6 +1921,23 @@ namespace io.gamemachine.messages
       get { return _currentUpdate; }
       set { _currentUpdate = value; }
     }
+    [global::ProtoBuf.ProtoContract(Name=@"Action")]
+    public enum Action
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GetStatus", Value=1)]
+      GetStatus = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"PropUpdate", Value=2)]
+      PropUpdate = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SetRotation", Value=3)]
+      SetRotation = 3
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1528,102 +2118,88 @@ namespace io.gamemachine.messages
   {
     public SiegeCommand() {}
     
-    private int _startLoad = default(int);
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"startLoad", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int startLoad
+    private io.gamemachine.messages.SiegeCommand.Action _action = io.gamemachine.messages.SiegeCommand.Action.ActionNone;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.SiegeCommand.Action.ActionNone)]
+    public io.gamemachine.messages.SiegeCommand.Action action
     {
-      get { return _startLoad; }
-      set { _startLoad = value; }
+      get { return _action; }
+      set { _action = value; }
     }
-    private int _fire = default(int);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"fire", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int fire
-    {
-      get { return _fire; }
-      set { _fire = value; }
-    }
-    private float _force = default(float);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"force", DataFormat = global::ProtoBuf.DataFormat.FixedSize)]
-    [global::System.ComponentModel.DefaultValue(default(float))]
-    public float force
-    {
-      get { return _force; }
-      set { _force = value; }
-    }
-    private string _id = "";
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _hitId = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"hitId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string hitId
-    {
-      get { return _hitId; }
-      set { _hitId = value; }
-    }
-    private io.gamemachine.messages.GmVector3 _hit = null;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"hit", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private io.gamemachine.messages.BuildObject _buildObject = null;
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"buildObject", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.GmVector3 hit
+    public io.gamemachine.messages.BuildObject buildObject
     {
-      get { return _hit; }
-      set { _hit = value; }
+      get { return _buildObject; }
+      set { _buildObject = value; }
     }
-    private string _skillId = "";
-    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"skillId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private io.gamemachine.messages.SiegeCommand.Result _result = io.gamemachine.messages.SiegeCommand.Result.ResultNone;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"result", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.SiegeCommand.Result.ResultNone)]
+    public io.gamemachine.messages.SiegeCommand.Result result
+    {
+      get { return _result; }
+      set { _result = value; }
+    }
+    private string _characterId = "";
+    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"characterId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
-    public string skillId
+    public string characterId
     {
-      get { return _skillId; }
-      set { _skillId = value; }
+      get { return _characterId; }
+      set { _characterId = value; }
     }
-    private int _startUse = default(int);
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"startUse", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int startUse
-    {
-      get { return _startUse; }
-      set { _startUse = value; }
-    }
-    private int _endUse = default(int);
-    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"endUse", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int endUse
-    {
-      get { return _endUse; }
-      set { _endUse = value; }
-    }
-    private string _playerId = "";
-    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"playerId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _buildObjectId = "";
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"buildObjectId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
-    public string playerId
+    public string buildObjectId
     {
-      get { return _playerId; }
-      set { _playerId = value; }
+      get { return _buildObjectId; }
+      set { _buildObjectId = value; }
     }
-    private string _targetType = "";
-    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"targetType", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _playerSkillId = "";
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"playerSkillId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
-    public string targetType
+    public string playerSkillId
     {
-      get { return _targetType; }
-      set { _targetType = value; }
+      get { return _playerSkillId; }
+      set { _playerSkillId = value; }
     }
-    private string _targetId = "";
-    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"targetId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string targetId
+    [global::ProtoBuf.ProtoContract(Name=@"Action")]
+    public enum Action
     {
-      get { return _targetId; }
-      set { _targetId = value; }
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ActionNone", Value=0)]
+      ActionNone = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SetRotation", Value=1)]
+      SetRotation = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Use", Value=2)]
+      Use = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Release", Value=3)]
+      Release = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Fire", Value=4)]
+      Fire = 4
     }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"Result")]
+    public enum Result
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ResultNone", Value=0)]
+      ResultNone = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Approved", Value=1)]
+      Approved = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Declined", Value=2)]
+      Declined = 2
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -1648,14 +2224,6 @@ namespace io.gamemachine.messages
     {
       get { return _umaData; }
       set { _umaData = value; }
-    }
-    private int _health = default(int);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int health
-    {
-      get { return _health; }
-      set { _health = value; }
     }
     private int _recordId = default(int);
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"recordId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
@@ -1720,29 +2288,37 @@ namespace io.gamemachine.messages
       get { return _zone; }
       set { _zone = value; }
     }
-    private int _stamina = default(int);
-    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"stamina", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int stamina
-    {
-      get { return _stamina; }
-      set { _stamina = value; }
-    }
-    private int _magic = default(int);
-    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"magic", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int magic
-    {
-      get { return _magic; }
-      set { _magic = value; }
-    }
     private bool _includeUmaData = default(bool);
-    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"includeUmaData", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"includeUmaData", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(default(bool))]
     public bool includeUmaData
     {
       get { return _includeUmaData; }
       set { _includeUmaData = value; }
+    }
+    private int _level = default(int);
+    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"level", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int level
+    {
+      get { return _level; }
+      set { _level = value; }
+    }
+    private io.gamemachine.messages.Vitals.Template _vitalsTemplate = io.gamemachine.messages.Vitals.Template.PlayerTemplate;
+    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"vitalsTemplate", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.Vitals.Template.PlayerTemplate)]
+    public io.gamemachine.messages.Vitals.Template vitalsTemplate
+    {
+      get { return _vitalsTemplate; }
+      set { _vitalsTemplate = value; }
+    }
+    private string _gameEntityPrefab = "";
+    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"gameEntityPrefab", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string gameEntityPrefab
+    {
+      get { return _gameEntityPrefab; }
+      set { _gameEntityPrefab = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
@@ -1915,424 +2491,17 @@ namespace io.gamemachine.messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StatusEffect")]
-  public partial class StatusEffect : global::ProtoBuf.IExtensible
-  {
-    public StatusEffect() {}
-    
-    private io.gamemachine.messages.StatusEffect.Type _type = io.gamemachine.messages.StatusEffect.Type.AttributeDecrease;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.StatusEffect.Type.AttributeDecrease)]
-    public io.gamemachine.messages.StatusEffect.Type type
-    {
-      get { return _type; }
-      set { _type = value; }
-    }
-    private string _id = "";
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private int _duration = default(int);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"duration", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int duration
-    {
-      get { return _duration; }
-      set { _duration = value; }
-    }
-    private int _ticks = default(int);
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"ticks", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int ticks
-    {
-      get { return _ticks; }
-      set { _ticks = value; }
-    }
-    private string _attribute = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"attribute", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string attribute
-    {
-      get { return _attribute; }
-      set { _attribute = value; }
-    }
-    private int _minValue = default(int);
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"minValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int minValue
-    {
-      get { return _minValue; }
-      set { _minValue = value; }
-    }
-    private int _maxValue = default(int);
-    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"maxValue", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int maxValue
-    {
-      get { return _maxValue; }
-      set { _maxValue = value; }
-    }
-    private string _particleEffect = "";
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"particleEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string particleEffect
-    {
-      get { return _particleEffect; }
-      set { _particleEffect = value; }
-    }
-    private io.gamemachine.messages.StatusEffect.DamageType _damageType = io.gamemachine.messages.StatusEffect.DamageType.None;
-    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"damageType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.StatusEffect.DamageType.None)]
-    public io.gamemachine.messages.StatusEffect.DamageType damageType
-    {
-      get { return _damageType; }
-      set { _damageType = value; }
-    }
-    [global::ProtoBuf.ProtoContract(Name=@"Type")]
-    public enum Type
-    {
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"AttributeDecrease", Value=0)]
-      AttributeDecrease = 0,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"AttributeIncrease", Value=1)]
-      AttributeIncrease = 1,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Heal", Value=2)]
-      Heal = 2,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Slow", Value=3)]
-      Slow = 3,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Stun", Value=4)]
-      Stun = 4,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Root", Value=5)]
-      Root = 5,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Death", Value=6)]
-      Death = 6,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"ArmorIncrease", Value=7)]
-      ArmorIncrease = 7,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"SpellResistIncrease", Value=8)]
-      SpellResistIncrease = 8,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"ElementalResistIncrease", Value=9)]
-      ElementalResistIncrease = 9,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"SpellPenetrationIncrease", Value=10)]
-      SpellPenetrationIncrease = 10,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"MagicRegenIncrease", Value=11)]
-      MagicRegenIncrease = 11,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"HealthRegenIncrease", Value=12)]
-      HealthRegenIncrease = 12,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"StaminaRegenIncrease", Value=13)]
-      StaminaRegenIncrease = 13,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"ArmorDecrease", Value=14)]
-      ArmorDecrease = 14,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"SpellResistDecrease", Value=15)]
-      SpellResistDecrease = 15,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"ElementalResistDecrease", Value=16)]
-      ElementalResistDecrease = 16,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"MagicRegenDecrease", Value=17)]
-      MagicRegenDecrease = 17,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"HealthRegenDecrease", Value=18)]
-      HealthRegenDecrease = 18,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"StaminaRegenDecrease", Value=19)]
-      StaminaRegenDecrease = 19,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Speed", Value=20)]
-      Speed = 20
-    }
-  
-    [global::ProtoBuf.ProtoContract(Name=@"DamageType")]
-    public enum DamageType
-    {
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
-      None = 0,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Physical", Value=1)]
-      Physical = 1,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Magic", Value=2)]
-      Magic = 2,
-            
-      [global::ProtoBuf.ProtoEnum(Name=@"Elemental", Value=3)]
-      Elemental = 3
-    }
-  
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"Vitals")]
-  public partial class Vitals : global::ProtoBuf.IExtensible
-  {
-    public Vitals() {}
-    
-    private string _id;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private int _health = default(int);
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"health", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int health
-    {
-      get { return _health; }
-      set { _health = value; }
-    }
-    private int _stamina = default(int);
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"stamina", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int stamina
-    {
-      get { return _stamina; }
-      set { _stamina = value; }
-    }
-    private int _magic = default(int);
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"magic", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int magic
-    {
-      get { return _magic; }
-      set { _magic = value; }
-    }
-    private long _lastCombat = default(long);
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"lastCombat", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(long))]
-    public long lastCombat
-    {
-      get { return _lastCombat; }
-      set { _lastCombat = value; }
-    }
-    private int _dead = default(int);
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"dead", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int dead
-    {
-      get { return _dead; }
-      set { _dead = value; }
-    }
-    private int _armor = default(int);
-    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"armor", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int armor
-    {
-      get { return _armor; }
-      set { _armor = value; }
-    }
-    private int _spellResist = default(int);
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"spellResist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int spellResist
-    {
-      get { return _spellResist; }
-      set { _spellResist = value; }
-    }
-    private int _elementalResist = default(int);
-    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"elementalResist", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int elementalResist
-    {
-      get { return _elementalResist; }
-      set { _elementalResist = value; }
-    }
-    private int _spellPenetration = default(int);
-    [global::ProtoBuf.ProtoMember(10, IsRequired = false, Name=@"spellPenetration", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int spellPenetration
-    {
-      get { return _spellPenetration; }
-      set { _spellPenetration = value; }
-    }
-    private int _magicRegen = default(int);
-    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"magicRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int magicRegen
-    {
-      get { return _magicRegen; }
-      set { _magicRegen = value; }
-    }
-    private int _healthRegen = default(int);
-    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"healthRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int healthRegen
-    {
-      get { return _healthRegen; }
-      set { _healthRegen = value; }
-    }
-    private int _staminaRegen = default(int);
-    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"staminaRegen", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int staminaRegen
-    {
-      get { return _staminaRegen; }
-      set { _staminaRegen = value; }
-    }
-    private int _changed = default(int);
-    [global::ProtoBuf.ProtoMember(14, IsRequired = false, Name=@"changed", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int changed
-    {
-      get { return _changed; }
-      set { _changed = value; }
-    }
-    private string _grid = "";
-    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"grid", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string grid
-    {
-      get { return _grid; }
-      set { _grid = value; }
-    }
-    private int _staminaDrain = default(int);
-    [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"staminaDrain", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int staminaDrain
-    {
-      get { return _staminaDrain; }
-      set { _staminaDrain = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"VisualEffect")]
-  public partial class VisualEffect : global::ProtoBuf.IExtensible
-  {
-    public VisualEffect() {}
-    
-    private string _id = "";
-    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"id", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string id
-    {
-      get { return _id; }
-      set { _id = value; }
-    }
-    private string _prefab = "";
-    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"prefab", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string prefab
-    {
-      get { return _prefab; }
-      set { _prefab = value; }
-    }
-    private io.gamemachine.messages.GmVector3 _startPosition = null;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"startPosition", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.GmVector3 startPosition
-    {
-      get { return _startPosition; }
-      set { _startPosition = value; }
-    }
-    private io.gamemachine.messages.GmVector3 _endPosition = null;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"endPosition", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.GmVector3 endPosition
-    {
-      get { return _endPosition; }
-      set { _endPosition = value; }
-    }
-    private string _type = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"type", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string type
-    {
-      get { return _type; }
-      set { _type = value; }
-    }
-    private int _duration = default(int);
-    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"duration", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int duration
-    {
-      get { return _duration; }
-      set { _duration = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
-  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StatusEffectResult")]
-  public partial class StatusEffectResult : global::ProtoBuf.IExtensible
-  {
-    public StatusEffectResult() {}
-    
-    private string _target;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"target", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string target
-    {
-      get { return _target; }
-      set { _target = value; }
-    }
-    private string _origin;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"origin", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string origin
-    {
-      get { return _origin; }
-      set { _origin = value; }
-    }
-    private int _value;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"value", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    public int value
-    {
-      get { return _value; }
-      set { _value = value; }
-    }
-    private string _statusEffectId;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"statusEffectId", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string statusEffectId
-    {
-      get { return _statusEffectId; }
-      set { _statusEffectId = value; }
-    }
-    private global::ProtoBuf.IExtension extensionObject;
-    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
-      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
-  }
-  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"StatusEffectTarget")]
   public partial class StatusEffectTarget : global::ProtoBuf.IExtensible
   {
     public StatusEffectTarget() {}
     
-    private string _target;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"target", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string target
+    private string _targetEntityId;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"targetEntityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string targetEntityId
     {
-      get { return _target; }
-      set { _target = value; }
-    }
-    private string _skill;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"skill", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string skill
-    {
-      get { return _skill; }
-      set { _skill = value; }
+      get { return _targetEntityId; }
+      set { _targetEntityId = value; }
     }
     private io.gamemachine.messages.GmVector3 _location = null;
     [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"location", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -2342,14 +2511,6 @@ namespace io.gamemachine.messages
       get { return _location; }
       set { _location = value; }
     }
-    private int _range = default(int);
-    [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int range
-    {
-      get { return _range; }
-      set { _range = value; }
-    }
     private readonly global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect> _statusEffect = new global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect>();
     [global::ProtoBuf.ProtoMember(5, Name=@"statusEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public global::System.Collections.Generic.List<io.gamemachine.messages.StatusEffect> statusEffect
@@ -2357,20 +2518,12 @@ namespace io.gamemachine.messages
       get { return _statusEffect; }
     }
   
-    private string _origin;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"origin", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string origin
+    private string _originCharacterId;
+    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"originCharacterId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public string originCharacterId
     {
-      get { return _origin; }
-      set { _origin = value; }
-    }
-    private int _ticks = default(int);
-    [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"ticks", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int ticks
-    {
-      get { return _ticks; }
-      set { _ticks = value; }
+      get { return _originCharacterId; }
+      set { _originCharacterId = value; }
     }
     private long _activeId = default(long);
     [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"activeId", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
@@ -2401,6 +2554,22 @@ namespace io.gamemachine.messages
     {
       get { return _passiveFlag; }
       set { _passiveFlag = value; }
+    }
+    private string _originEntityId = "";
+    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"originEntityId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string originEntityId
+    {
+      get { return _originEntityId; }
+      set { _originEntityId = value; }
+    }
+    private io.gamemachine.messages.Attack _attack = null;
+    [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"attack", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.Attack attack
+    {
+      get { return _attack; }
+      set { _attack = value; }
     }
     [global::ProtoBuf.ProtoContract(Name=@"Action")]
     public enum Action
@@ -2440,26 +2609,28 @@ namespace io.gamemachine.messages
   {
     public Attack() {}
     
-    private string _attacker;
-    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"attacker", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string attacker
+    private string _attackerCharacterId = "";
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"attackerCharacterId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string attackerCharacterId
     {
-      get { return _attacker; }
-      set { _attacker = value; }
+      get { return _attackerCharacterId; }
+      set { _attackerCharacterId = value; }
     }
-    private string _target;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"target", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string target
+    private string _targetId = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"targetId", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string targetId
     {
-      get { return _target; }
-      set { _target = value; }
+      get { return _targetId; }
+      set { _targetId = value; }
     }
-    private string _skill;
-    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"skill", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string skill
+    private io.gamemachine.messages.PlayerSkill _playerSkill;
+    [global::ProtoBuf.ProtoMember(3, IsRequired = true, Name=@"playerSkill", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    public io.gamemachine.messages.PlayerSkill playerSkill
     {
-      get { return _skill; }
-      set { _skill = value; }
+      get { return _playerSkill; }
+      set { _playerSkill = value; }
     }
     private io.gamemachine.messages.GmVector3 _targetLocation = null;
     [global::ProtoBuf.ProtoMember(4, IsRequired = false, Name=@"targetLocation", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -2469,6 +2640,31 @@ namespace io.gamemachine.messages
       get { return _targetLocation; }
       set { _targetLocation = value; }
     }
+    private io.gamemachine.messages.Attack.TargetType _targetType = io.gamemachine.messages.Attack.TargetType.None;
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"targetType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.Attack.TargetType.None)]
+    public io.gamemachine.messages.Attack.TargetType targetType
+    {
+      get { return _targetType; }
+      set { _targetType = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"TargetType")]
+    public enum TargetType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Character", Value=1)]
+      Character = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Object", Value=2)]
+      Object = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"BuildObject", Value=3)]
+      BuildObject = 3
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -2786,9 +2982,9 @@ namespace io.gamemachine.messages
       get { return _getNeighbors; }
       set { _getNeighbors = value; }
     }
-    private io.gamemachine.messages.TrackData.EntityType _neighborEntityType = io.gamemachine.messages.TrackData.EntityType.NONE;
+    private io.gamemachine.messages.TrackData.EntityType _neighborEntityType = io.gamemachine.messages.TrackData.EntityType.None;
     [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"neighborEntityType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.NONE)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.TrackData.EntityType.None)]
     public io.gamemachine.messages.TrackData.EntityType neighborEntityType
     {
       get { return _neighborEntityType; }
@@ -2933,23 +3129,29 @@ namespace io.gamemachine.messages
     public enum EntityType
     {
             
-      [global::ProtoBuf.ProtoEnum(Name=@"NONE", Value=0)]
-      NONE = 0,
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"PLAYER", Value=1)]
-      PLAYER = 1,
+      [global::ProtoBuf.ProtoEnum(Name=@"Any", Value=1)]
+      Any = 1,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"NPC", Value=2)]
-      NPC = 2,
+      [global::ProtoBuf.ProtoEnum(Name=@"Player", Value=2)]
+      Player = 2,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"OTHER", Value=3)]
-      OTHER = 3,
+      [global::ProtoBuf.ProtoEnum(Name=@"Npc", Value=3)]
+      Npc = 3,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"ALL", Value=4)]
-      ALL = 4,
+      [global::ProtoBuf.ProtoEnum(Name=@"Object", Value=4)]
+      Object = 4,
             
-      [global::ProtoBuf.ProtoEnum(Name=@"SHIP", Value=5)]
-      SHIP = 5
+      [global::ProtoBuf.ProtoEnum(Name=@"All", Value=5)]
+      All = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"BuildObject", Value=6)]
+      BuildObject = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Vehicle", Value=7)]
+      Vehicle = 7
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -3233,6 +3435,40 @@ namespace io.gamemachine.messages
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
   }
   
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"UnityObject")]
+  public partial class UnityObject : global::ProtoBuf.IExtensible
+  {
+    public UnityObject() {}
+    
+    private string _path = "";
+    [global::ProtoBuf.ProtoMember(1, IsRequired = false, Name=@"path", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string path
+    {
+      get { return _path; }
+      set { _path = value; }
+    }
+    private string _uuid = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"uuid", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string uuid
+    {
+      get { return _uuid; }
+      set { _uuid = value; }
+    }
+    private string _name = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string name
+    {
+      get { return _name; }
+      set { _name = value; }
+    }
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
   [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"PlayerSkill")]
   public partial class PlayerSkill : global::ProtoBuf.IExtensible
   {
@@ -3245,8 +3481,9 @@ namespace io.gamemachine.messages
       get { return _id; }
       set { _id = value; }
     }
-    private string _name;
-    [global::ProtoBuf.ProtoMember(2, IsRequired = true, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _name = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"name", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
     public string name
     {
       get { return _name; }
@@ -3260,27 +3497,13 @@ namespace io.gamemachine.messages
       get { return _recordId; }
       set { _recordId = value; }
     }
-    private string _category;
-    [global::ProtoBuf.ProtoMember(4, IsRequired = true, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string category
-    {
-      get { return _category; }
-      set { _category = value; }
-    }
-    private string _damageType = "";
-    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"damageType", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    private string _icon_path = "";
+    [global::ProtoBuf.ProtoMember(6, IsRequired = false, Name=@"icon_path", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue("")]
-    public string damageType
+    public string icon_path
     {
-      get { return _damageType; }
-      set { _damageType = value; }
-    }
-    private string _icon;
-    [global::ProtoBuf.ProtoMember(6, IsRequired = true, Name=@"icon", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    public string icon
-    {
-      get { return _icon; }
-      set { _icon = value; }
+      get { return _icon_path; }
+      set { _icon_path = value; }
     }
     private string _description = "";
     [global::ProtoBuf.ProtoMember(7, IsRequired = false, Name=@"description", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -3290,44 +3513,12 @@ namespace io.gamemachine.messages
       get { return _description; }
       set { _description = value; }
     }
-    private string _resource = "";
-    [global::ProtoBuf.ProtoMember(8, IsRequired = false, Name=@"resource", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string resource
-    {
-      get { return _resource; }
-      set { _resource = value; }
-    }
-    private int _resourceCost = default(int);
-    [global::ProtoBuf.ProtoMember(9, IsRequired = false, Name=@"resourceCost", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int resourceCost
-    {
-      get { return _resourceCost; }
-      set { _resourceCost = value; }
-    }
     private string _characterId;
     [global::ProtoBuf.ProtoMember(10, IsRequired = true, Name=@"characterId", DataFormat = global::ProtoBuf.DataFormat.Default)]
     public string characterId
     {
       get { return _characterId; }
       set { _characterId = value; }
-    }
-    private string _weaponType = "";
-    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"weaponType", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string weaponType
-    {
-      get { return _weaponType; }
-      set { _weaponType = value; }
-    }
-    private int _range = default(int);
-    [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int range
-    {
-      get { return _range; }
-      set { _range = value; }
     }
     private string _statusEffectId = "";
     [global::ProtoBuf.ProtoMember(13, IsRequired = false, Name=@"statusEffectId", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -3345,14 +3536,6 @@ namespace io.gamemachine.messages
       get { return _level; }
       set { _level = value; }
     }
-    private int _resourceCostPerTick = default(int);
-    [global::ProtoBuf.ProtoMember(15, IsRequired = false, Name=@"resourceCostPerTick", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
-    [global::System.ComponentModel.DefaultValue(default(int))]
-    public int resourceCostPerTick
-    {
-      get { return _resourceCostPerTick; }
-      set { _resourceCostPerTick = value; }
-    }
     private int _isComboPart = default(int);
     [global::ProtoBuf.ProtoMember(16, IsRequired = false, Name=@"isComboPart", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -3369,6 +3552,154 @@ namespace io.gamemachine.messages
       get { return _isPassive; }
       set { _isPassive = value; }
     }
+    private string _icon_uuid = "";
+    [global::ProtoBuf.ProtoMember(19, IsRequired = false, Name=@"icon_uuid", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string icon_uuid
+    {
+      get { return _icon_uuid; }
+      set { _icon_uuid = value; }
+    }
+    private string _statusEffects = "";
+    [global::ProtoBuf.ProtoMember(20, IsRequired = false, Name=@"statusEffects", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string statusEffects
+    {
+      get { return _statusEffects; }
+      set { _statusEffects = value; }
+    }
+    private io.gamemachine.messages.PlayerSkill.Category _category = io.gamemachine.messages.PlayerSkill.Category.SingleTarget;
+    [global::ProtoBuf.ProtoMember(22, IsRequired = false, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.PlayerSkill.Category.SingleTarget)]
+    public io.gamemachine.messages.PlayerSkill.Category category
+    {
+      get { return _category; }
+      set { _category = value; }
+    }
+    private io.gamemachine.messages.UnityObject _useEffect = null;
+    [global::ProtoBuf.ProtoMember(29, IsRequired = false, Name=@"useEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject useEffect
+    {
+      get { return _useEffect; }
+      set { _useEffect = value; }
+    }
+    private io.gamemachine.messages.UnityObject _icon = null;
+    [global::ProtoBuf.ProtoMember(30, IsRequired = false, Name=@"icon", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject icon
+    {
+      get { return _icon; }
+      set { _icon = value; }
+    }
+    private io.gamemachine.messages.UnityObject _useSound = null;
+    [global::ProtoBuf.ProtoMember(32, IsRequired = false, Name=@"useSound", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject useSound
+    {
+      get { return _useSound; }
+      set { _useSound = value; }
+    }
+    private io.gamemachine.messages.UnityObject _projectile = null;
+    [global::ProtoBuf.ProtoMember(34, IsRequired = false, Name=@"projectile", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject projectile
+    {
+      get { return _projectile; }
+      set { _projectile = value; }
+    }
+    private int _range = default(int);
+    [global::ProtoBuf.ProtoMember(35, IsRequired = false, Name=@"range", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(default(int))]
+    public int range
+    {
+      get { return _range; }
+      set { _range = value; }
+    }
+    private io.gamemachine.messages.PlayerSkill.WeaponType _weaponType = io.gamemachine.messages.PlayerSkill.WeaponType.None;
+    [global::ProtoBuf.ProtoMember(36, IsRequired = false, Name=@"weaponType", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.PlayerSkill.WeaponType.None)]
+    public io.gamemachine.messages.PlayerSkill.WeaponType weaponType
+    {
+      get { return _weaponType; }
+      set { _weaponType = value; }
+    }
+    private io.gamemachine.messages.UnityObject _hitEffect = null;
+    [global::ProtoBuf.ProtoMember(37, IsRequired = false, Name=@"hitEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject hitEffect
+    {
+      get { return _hitEffect; }
+      set { _hitEffect = value; }
+    }
+    private io.gamemachine.messages.PlayerSkill.ProjectileBehavior _projectileBehavior = io.gamemachine.messages.PlayerSkill.ProjectileBehavior.StopOnFirstHit;
+    [global::ProtoBuf.ProtoMember(38, IsRequired = false, Name=@"projectileBehavior", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.PlayerSkill.ProjectileBehavior.StopOnFirstHit)]
+    public io.gamemachine.messages.PlayerSkill.ProjectileBehavior projectileBehavior
+    {
+      get { return _projectileBehavior; }
+      set { _projectileBehavior = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Category")]
+    public enum Category
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SingleTarget", Value=0)]
+      SingleTarget = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Aoe", Value=1)]
+      Aoe = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Pbaoe", Value=2)]
+      Pbaoe = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Self", Value=3)]
+      Self = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"AoeDot", Value=4)]
+      AoeDot = 4
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"WeaponType")]
+    public enum WeaponType
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Arrow", Value=1)]
+      Arrow = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Bullet", Value=2)]
+      Bullet = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"MagicProjectile", Value=3)]
+      MagicProjectile = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"SiegeProjectile", Value=4)]
+      SiegeProjectile = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Melee", Value=5)]
+      Melee = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Magic", Value=6)]
+      Magic = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Siege", Value=7)]
+      Siege = 7
+    }
+  
+    [global::ProtoBuf.ProtoContract(Name=@"ProjectileBehavior")]
+    public enum ProjectileBehavior
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"StopOnFirstHit", Value=0)]
+      StopOnFirstHit = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"ContinueOnPlayerHit", Value=1)]
+      ContinueOnPlayerHit = 1
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -3730,14 +4061,6 @@ namespace io.gamemachine.messages
       get { return _recordId; }
       set { _recordId = value; }
     }
-    private string _icon = "";
-    [global::ProtoBuf.ProtoMember(11, IsRequired = false, Name=@"icon", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string icon
-    {
-      get { return _icon; }
-      set { _icon = value; }
-    }
     private int _harvestable = default(int);
     [global::ProtoBuf.ProtoMember(12, IsRequired = false, Name=@"harvestable", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
     [global::System.ComponentModel.DefaultValue(default(int))]
@@ -3825,14 +4148,6 @@ namespace io.gamemachine.messages
     {
       get { return _updatedAt; }
       set { _updatedAt = value; }
-    }
-    private string _category = "";
-    [global::ProtoBuf.ProtoMember(24, IsRequired = false, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue("")]
-    public string category
-    {
-      get { return _category; }
-      set { _category = value; }
     }
     private string _locationId = "";
     [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"locationId", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -3943,6 +4258,71 @@ namespace io.gamemachine.messages
       get { return _templateBlockId; }
       set { _templateBlockId = value; }
     }
+    private io.gamemachine.messages.PlayerItem.Category _category = io.gamemachine.messages.PlayerItem.Category.None;
+    [global::ProtoBuf.ProtoMember(41, IsRequired = false, Name=@"category", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    [global::System.ComponentModel.DefaultValue(io.gamemachine.messages.PlayerItem.Category.None)]
+    public io.gamemachine.messages.PlayerItem.Category category
+    {
+      get { return _category; }
+      set { _category = value; }
+    }
+    private io.gamemachine.messages.UnityObject _icon = null;
+    [global::ProtoBuf.ProtoMember(43, IsRequired = false, Name=@"icon", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.UnityObject icon
+    {
+      get { return _icon; }
+      set { _icon = value; }
+    }
+    private bool _equipped = default(bool);
+    [global::ProtoBuf.ProtoMember(50, IsRequired = false, Name=@"equipped", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(default(bool))]
+    public bool equipped
+    {
+      get { return _equipped; }
+      set { _equipped = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Category")]
+    public enum Category
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Currency", Value=1)]
+      Currency = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Trinket", Value=2)]
+      Trinket = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Armor", Value=3)]
+      Armor = 3,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Weapon", Value=4)]
+      Weapon = 4,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Consumable", Value=5)]
+      Consumable = 5,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"CraftingResource", Value=6)]
+      CraftingResource = 6,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Tool", Value=7)]
+      Tool = 7,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"BuildingBlock", Value=8)]
+      BuildingBlock = 8,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"GroundBlock", Value=9)]
+      GroundBlock = 9,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Container", Value=10)]
+      Container = 10,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Projectile", Value=11)]
+      Projectile = 11
+    }
+  
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
       { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
@@ -4472,6 +4852,14 @@ namespace io.gamemachine.messages
       get { return _playerId; }
       set { _playerId = value; }
     }
+    private string _method = "";
+    [global::ProtoBuf.ProtoMember(5, IsRequired = false, Name=@"method", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string method
+    {
+      get { return _method; }
+      set { _method = value; }
+    }
     [global::ProtoBuf.ProtoContract(Name=@"MessageType")]
     public enum MessageType
     {
@@ -4640,6 +5028,56 @@ namespace io.gamemachine.messages
     public global::System.Collections.Generic.List<io.gamemachine.messages.ZoneInfo> zoneInfo
     {
       get { return _zoneInfo; }
+    }
+  
+    private global::ProtoBuf.IExtension extensionObject;
+    global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)
+      { return global::ProtoBuf.Extensible.GetExtensionObject(ref extensionObject, createIfMissing); }
+  }
+  
+  [global::System.Serializable, global::ProtoBuf.ProtoContract(Name=@"ProcessCommand")]
+  public partial class ProcessCommand : global::ProtoBuf.IExtensible
+  {
+    public ProcessCommand() {}
+    
+    private io.gamemachine.messages.ProcessCommand.Action _action;
+    [global::ProtoBuf.ProtoMember(1, IsRequired = true, Name=@"action", DataFormat = global::ProtoBuf.DataFormat.TwosComplement)]
+    public io.gamemachine.messages.ProcessCommand.Action action
+    {
+      get { return _action; }
+      set { _action = value; }
+    }
+    private string _startScript = "";
+    [global::ProtoBuf.ProtoMember(2, IsRequired = false, Name=@"startScript", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string startScript
+    {
+      get { return _startScript; }
+      set { _startScript = value; }
+    }
+    private string _executable = "";
+    [global::ProtoBuf.ProtoMember(3, IsRequired = false, Name=@"executable", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue("")]
+    public string executable
+    {
+      get { return _executable; }
+      set { _executable = value; }
+    }
+    [global::ProtoBuf.ProtoContract(Name=@"Action")]
+    public enum Action
+    {
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"None", Value=0)]
+      None = 0,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Start", Value=1)]
+      Start = 1,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Stop", Value=2)]
+      Stop = 2,
+            
+      [global::ProtoBuf.ProtoEnum(Name=@"Restart", Value=3)]
+      Restart = 3
     }
   
     private global::ProtoBuf.IExtension extensionObject;
@@ -4820,14 +5258,6 @@ namespace io.gamemachine.messages
       get { return _statusEffect; }
       set { _statusEffect = value; }
     }
-    private io.gamemachine.messages.StatusEffectResult _statusEffectResult = null;
-    [global::ProtoBuf.ProtoMember(24, IsRequired = false, Name=@"statusEffectResult", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.StatusEffectResult statusEffectResult
-    {
-      get { return _statusEffectResult; }
-      set { _statusEffectResult = value; }
-    }
     private io.gamemachine.messages.DataRequest _dataRequest = null;
     [global::ProtoBuf.ProtoMember(25, IsRequired = false, Name=@"dataRequest", DataFormat = global::ProtoBuf.DataFormat.Default)]
     [global::System.ComponentModel.DefaultValue(null)]
@@ -4835,14 +5265,6 @@ namespace io.gamemachine.messages
     {
       get { return _dataRequest; }
       set { _dataRequest = value; }
-    }
-    private io.gamemachine.messages.VisualEffect _visualEffect = null;
-    [global::ProtoBuf.ProtoMember(26, IsRequired = false, Name=@"visualEffect", DataFormat = global::ProtoBuf.DataFormat.Default)]
-    [global::System.ComponentModel.DefaultValue(null)]
-    public io.gamemachine.messages.VisualEffect visualEffect
-    {
-      get { return _visualEffect; }
-      set { _visualEffect = value; }
     }
     private io.gamemachine.messages.WorldObjects _worldObjects = null;
     [global::ProtoBuf.ProtoMember(27, IsRequired = false, Name=@"worldObjects", DataFormat = global::ProtoBuf.DataFormat.Default)]
@@ -5003,6 +5425,22 @@ namespace io.gamemachine.messages
     {
       get { return _updatePlayerItem; }
       set { _updatePlayerItem = value; }
+    }
+    private io.gamemachine.messages.VitalsContainer _vitalsContainer = null;
+    [global::ProtoBuf.ProtoMember(47, IsRequired = false, Name=@"vitalsContainer", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.VitalsContainer vitalsContainer
+    {
+      get { return _vitalsContainer; }
+      set { _vitalsContainer = value; }
+    }
+    private io.gamemachine.messages.ProcessCommand _processCommand = null;
+    [global::ProtoBuf.ProtoMember(48, IsRequired = false, Name=@"processCommand", DataFormat = global::ProtoBuf.DataFormat.Default)]
+    [global::System.ComponentModel.DefaultValue(null)]
+    public io.gamemachine.messages.ProcessCommand processCommand
+    {
+      get { return _processCommand; }
+      set { _processCommand = value; }
     }
     private global::ProtoBuf.IExtension extensionObject;
     global::ProtoBuf.IExtension global::ProtoBuf.IExtensible.GetExtensionObject(bool createIfMissing)

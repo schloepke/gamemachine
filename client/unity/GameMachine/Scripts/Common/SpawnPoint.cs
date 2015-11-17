@@ -6,9 +6,16 @@ namespace GameMachine {
     namespace Common {
         public class SpawnPoint : MonoBehaviour {
 
+            public enum SpawnType {
+                Normal,
+                FromLocalSaved,
+                SpawnObject
+            }
+
             public List<GameObject> defaultSpawnPoints = new List<GameObject>();
             public float heightOffset = 3f;
-            public bool forceLocal = false;
+            public float randomRangeForObjectSpawn = 20f;
+            public SpawnType spawnType;
             public bool spawned = false;
 
             public static SpawnPoint Instance() {
@@ -42,36 +49,77 @@ namespace GameMachine {
                 return new Vector3(x, y, z);
             }
 
-            public Vector3 SpawnpointExact() {
-                IGameEntity player = GameEntityManager.GetPlayerEntity();
-                if (player != null) {
-                    if (player.GetSpawnPoint() != Vector3.zero) {
-                        spawned = true;
-                        Debug.Log("Spawning from network spawnpoint");
-                        return player.GetSpawnPoint();
-                    }
-                }
-
-                Vector3 saved = GetSavedLocal();
-                if (saved != Vector3.zero) {
-                    spawned = true;
-                    Debug.Log("Spawning from local save spawnpoint");
-                    return new Vector3(saved.x, saved.y, saved.z);
-                }
-
+            public Vector3 GetObjectSpawnPoint() {
                 GameObject spawnPoint = GameObject.Find("spawnpoint");
                 if (spawnPoint == null) {
                     Debug.Log("Unable to find spawnpoint, giving up");
                     return Vector3.zero;
                 }
 
-                Vector3 groundedPosition = GroundedPosition(spawnPoint.transform.position, heightOffset);
+                Vector3 randomizedPoint = new Vector3(
+                    spawnPoint.transform.position.x + Random.Range(-randomRangeForObjectSpawn, randomRangeForObjectSpawn),
+                    spawnPoint.transform.position.y,
+                    spawnPoint.transform.position.z + Random.Range(-randomRangeForObjectSpawn, randomRangeForObjectSpawn)
+                    );
+
+                Vector3 groundedPosition = GroundedPosition(randomizedPoint, heightOffset);
                 if (groundedPosition != Vector3.zero) {
-                    spawned = true;
                     return groundedPosition;
                 } else {
                     Debug.Log("Unable to find grounded position from spawnpoint, giving up");
                     return Vector3.zero;
+                }
+            }
+
+            public Vector3 GetSavedSpawnPoint() {
+                return GetSavedLocal();
+            }
+
+            public Vector3 GetNetworkSpawnPoint() {
+                IGameEntity player = GameEntityManager.GetPlayerEntity();
+                if (player != null) {
+                    Vector3 networkSpawnPoint = player.GetSpawnPoint();
+                    if (networkSpawnPoint != Vector3.zero) {
+                        return networkSpawnPoint;
+                    }
+                }
+                return Vector3.zero;
+            }
+            
+            public Vector3 SpawnpointExact() {
+                if (spawnType == SpawnType.SpawnObject) {
+                    return GetObjectSpawnPoint();
+                } else if (spawnType == SpawnType.FromLocalSaved) {
+                    return GetSavedSpawnPoint();
+                }
+
+                Vector3 spawnpoint = Vector3.zero;
+
+                spawnpoint = GetNetworkSpawnPoint();
+                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
+                    return spawnpoint;
+                }
+
+                spawnpoint = GetSavedSpawnPoint();
+                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
+                    return spawnpoint;
+                }
+
+                spawnpoint = GetObjectSpawnPoint();
+                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
+                    return spawnpoint;
+                }
+
+
+                return spawnpoint;
+            }
+
+            public bool PointOverGround(Vector3 point) {
+                Vector3 groundedPosition = GroundedPosition(point);
+                if (groundedPosition != Vector3.zero) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
 
@@ -81,7 +129,6 @@ namespace GameMachine {
                 if (saved != Vector3.zero) {
                     groundedPosition = GroundedPosition(saved, heightOffset);
                     if (groundedPosition != Vector3.zero) {
-                        spawned = true;
                         return groundedPosition;
                     } else {
                         Debug.Log("Unable to find grounded position from last save point");
@@ -96,7 +143,6 @@ namespace GameMachine {
 
                 groundedPosition = GroundedPosition(spawnPoint.transform.position, heightOffset);
                 if (groundedPosition != Vector3.zero) {
-                    spawned = true;
                     return groundedPosition;
                 } else {
                     Debug.Log("Unable to find grounded position from spawnpoint, giving up");
@@ -126,9 +172,14 @@ namespace GameMachine {
                 RaycastHit[] hits;
                 hits = Physics.RaycastAll(start, Vector3.down, 1000f);
                 foreach (RaycastHit hit in hits) {
-                    if (hit.collider != null && (hit.collider.gameObject.name.StartsWith("Terrain") || hit.collider.gameObject.tag == "gm_placed_block")) {
-                        return new Vector3(position.x, hit.point.y + offset, position.z);
+                    if (hit.collider != null) {
+                        Terrain terrain = hit.collider.gameObject.GetComponent<Terrain>() as Terrain;
+                        if (terrain != null || hit.collider.gameObject.tag == "gm_placed_block") {
+                            Debug.Log("Found spawnpoint " + hit.collider.gameObject.name);
+                            return new Vector3(position.x, hit.point.y + offset, position.z);
+                        }
                     }
+                   
                 }
                 return Vector3.zero;
             }

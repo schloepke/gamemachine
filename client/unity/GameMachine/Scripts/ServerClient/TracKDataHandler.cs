@@ -23,7 +23,7 @@ namespace GameMachine {
                 td.x = -2;
                 td.y = -2;
                 td.z = 1;
-                td.neighborEntityType = TrackData.EntityType.ALL;
+                td.neighborEntityType = TrackData.EntityType.All;
 
                 gameEntityManager.UpdateTracking(td);
             }

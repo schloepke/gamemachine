@@ -56,19 +56,11 @@ namespace Consolation {
         Rect windowRect = new Rect(margin, margin, Screen.width - (margin * 2), Screen.height - (margin * 2));
 
         void OnEnable() {
-#if UNITY_5_0
 			Application.logMessageReceived += HandleLog;
-#else
-            Application.RegisterLogCallback(HandleLog);
-#endif
         }
 
         void OnDisable() {
-#if UNITY_5_0
 			Application.logMessageReceived -= HandleLog;
-#else
-            Application.RegisterLogCallback(null);
-#endif
         }
 
         void Update() {

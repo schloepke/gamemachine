@@ -200,14 +200,14 @@ namespace GameMachine {
 
             private static Dictionary<string, InputData> inputDatas = new Dictionary<string, InputData>();
             private static Dictionary<GMKeyCode, InputData> inputDatasByKeycode = new Dictionary<GMKeyCode, InputData>();
-            private Util util;
+            private GmUtil util;
             private TrackData trackData;
             private static bool loaded = false;
             public bool running = false;
 
             // Use this for initialization
             void Awake() {
-                util = Util.Instance;
+                util = GmUtil.Instance;
 
                 if (!loaded) {
                     CreateInputData();

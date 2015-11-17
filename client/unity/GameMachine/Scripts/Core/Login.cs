@@ -16,7 +16,7 @@ namespace GameMachine
             TCP
         }
 
-        private GameMachine.Core.App app;
+        private App app;
         private string authUri;
         private int port = 0;
         private string hostname;
@@ -37,12 +37,12 @@ namespace GameMachine
         {
             User user = User.Instance;
             user.SetUser(NetworkSettings.instance.username.ToString(), NetworkSettings.instance.password.ToString());
-            GameMachine.Core.Authentication.Success success = OnAuthenticationSuccess;
-            GameMachine.Core.Authentication.Error error = OnAuthenticationError;
+            Authentication.Success success = OnAuthenticationSuccess;
+            Authentication.Error error = OnAuthenticationError;
 			
-            app = gameObject.GetComponent <GameMachine.Core.App> () as GameMachine.Core.App;
+            app = gameObject.GetComponent<App>() as App;
             if (app == null) {
-                app = gameObject.AddComponent<GameMachine.Core.App>() as GameMachine.Core.App;
+                app = gameObject.AddComponent<App>() as App;
             }
 
             app.Login(NetworkSettings.instance.gameId, NetworkSettings.instance.hostname, NetworkSettings.instance.httpPort, user.username, user.password, success, error);
@@ -53,7 +53,7 @@ namespace GameMachine
             if (loginUi != null) {
                 loginUi.SetError (error.Replace (System.Environment.NewLine, ""));
             }
-            Login.userApp.OnLoginFailure (error);
+            userApp.OnLoginFailure (error);
         }
 
         private Protocol StringToProtocol(string prot) {
@@ -88,10 +88,10 @@ namespace GameMachine
 
 
             Debug.Log("Authtoken: " + authtoken + " Protocol:" + NetworkSettings.instance.protocol + " Hostname:" + hostname + " port:" + port);
-            GameMachine.Core.App.AppStarted callback = OnAppStarted;
+            App.AppStarted callback = OnAppStarted;
             app.OnAppStarted (callback);
-			
-            GameMachine.Core.App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
+
+            App.ConnectionTimeout connectionCallback = OnConnectionTimeout;
             app.OnConnectionTimeout (connectionCallback);
 
             NetworkSettings.instance.authtoken = Int32.Parse(authtoken);
@@ -105,7 +105,7 @@ namespace GameMachine
 
         public void OnConnectionTimeout ()
         {
-            Login.userApp.ConnectionTimeout ();
+            userApp.ConnectionTimeout ();
         }
 
        

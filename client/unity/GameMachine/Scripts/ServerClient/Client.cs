@@ -8,17 +8,17 @@ using GameMachine.Core;
 using System.IO;
 using ProtoBuf;
 using System.Linq;
-using Characters = io.gamemachine.messages.Characters;
-using Character = io.gamemachine.messages.Character;
-using Player = io.gamemachine.messages.Player;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace ServerClient {
         public class Client : MonoBehaviour, GameMachineApp, IPlayerApi, ILoginUI {
             public static bool connected = false;
+
+            public string levelToLoadOnLogin;
+            public GameObject gameMachine;
             private Login login;
-            private GameMachine.Core.App app;
-            
+            private App app;
 
             void Awake() {
                 Application.targetFrameRate = 60;
@@ -28,18 +28,23 @@ namespace GameMachine {
 
             void Start() {
                 Login.SetGameMachineApp(this);
-                login = gameObject.AddComponent<GameMachine.Login>() as GameMachine.Login;
+                login = gameObject.AddComponent<Login>() as Login;
                 login.SetLoginUi(this);
                 login.DoLogin();
             }
 
             public void OnLoggedIn() {
                 Debug.Log("Logged in");
-                app = gameObject.GetComponent<GameMachine.Core.App>() as GameMachine.Core.App;
+                app = gameObject.GetComponent<App>() as App;
                 NetworkSettings.instance.loggedIn = true;
-                GameObject go = GameComponent.Get<AssetLibrary>().Load("GameMachine");
+                GameObject go = GameObject.Instantiate(gameMachine);
                 go.name = "GameMachine";
                 PlayerApi.instance.GetPlayer(this);
+
+                if (!string.IsNullOrEmpty(levelToLoadOnLogin)) {
+                    Application.LoadLevel(levelToLoadOnLogin);
+                }
+               
             }
 
             public void OnLoginFailure(string error) {
@@ -64,6 +69,7 @@ namespace GameMachine {
                     app.client.Stop();
                 }
                 Destroy(this.gameObject);
+                Application.LoadLevel(Application.loadedLevel);
             }
 
 

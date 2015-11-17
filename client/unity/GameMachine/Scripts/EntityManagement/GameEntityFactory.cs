@@ -1,21 +1,40 @@
 ﻿using UnityEngine;
-using System.Collections;
-using TrackData = io.gamemachine.messages.TrackData;
-using Character = io.gamemachine.messages.Character;
+using io.gamemachine.messages;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GameMachine {
     namespace Common {
-        public class GameEntityFactory : MonoBehaviour, IGameEntityFactory {
+        public class GameEntityFactory : MonoBehaviour {
+            
+            [Serializable]
+            public class GameEntityPrefab {
+                public string id;
+                public GameObject prefab;
+            }
+
+            public static GameEntityFactory instance;
+
+            public bool setSpawnPoint = false;
+            public List<GameEntityPrefab> gameEntityPrefabs = new List<GameEntityPrefab>();
 
             void Awake() {
+                instance = this;
                 IGameEntity gameEntity = Create();
                if (gameEntity != null) {
                    GameEntityManager.SetPlayerEntity(gameEntity);
                }
             }
-
-            void Start() {
-                
+            
+            public GameObject GetGameEntityPrefab(string id) {
+                GameEntityPrefab  gameEntityPrefab = gameEntityPrefabs.Where(prefab => prefab.id == id).FirstOrDefault();
+                if (gameEntityPrefab != null) {
+                    return gameEntityPrefab.prefab;
+                } else {
+                    Debug.LogWarning("Unable to find game entity prefab " + id);
+                    return null;
+                }
             }
 
             public IGameEntity Create() {
@@ -58,35 +77,42 @@ namespace GameMachine {
                     Debug.Log("NULL character");
                 }
 
-                if (!spawnPoint.forceLocal && character.worldx != 0 && character.worldy != 0) {
-                    float x;
-                    float y;
-                    float z;
-
-                    x = Util.Instance.IntToFloat(character.worldx, true);
-                    z = Util.Instance.IntToFloat(character.worldy, true);
-                    y = Util.Instance.IntToFloat(character.worldz, true);
-
-                    spawnPosition = spawnPoint.GroundedPosition(new Vector3(x, y, z));
-                } else {
-                    spawnPosition = spawnPoint.SpawnpointOnTerrain();
-                }
-
+                spawnPosition = SpawnPoint.Instance().SpawnpointExact();
                 return Create(entityId, character, entityType, spawnPosition);
             }
 
             public IGameEntity Create(string entityId, Character character, TrackData trackData) {
                 SpawnPoint spawnPoint = GameComponent.Get<SpawnPoint>() as SpawnPoint;
-                Vector3 spawnPosition = Util.Instance.TrackdataToVector3(trackData);
+                Vector3 spawnPosition = GmUtil.Instance.TrackdataToVector3(trackData);
                 spawnPosition = spawnPoint.GroundedPosition(spawnPosition);
                 GameEntityType entityType = GameEntity.GameEntityTypeFromTrackData(trackData);
                 return Create(entityId, character, entityType, spawnPosition);
             }
 
             public IGameEntity Create(string entityId, Character character, GameEntityType entityType, Vector3 spawnPosition) {
-                GameObject go = GameComponent.Get<AssetLibrary>().Load("GameEntity");
+                GameObject go;
+                GameObject prefab = null;
+
+                if (!string.IsNullOrEmpty(character.gameEntityPrefab)) {
+                    prefab = GetGameEntityPrefab(character.gameEntityPrefab);
+                } else {
+                    if (gameEntityPrefabs.Count > 0) {
+                        prefab = gameEntityPrefabs[0].prefab;
+                    }
+                }
+                if (prefab == null) {
+                    throw new UnityException("Unable to spawn gameentity, no prefab found");
+                }
+
+                go = GameObject.Instantiate(prefab);
                 go.transform.parent = GetEntityContainer().transform;
-                go.transform.position = spawnPosition;
+
+                if (setSpawnPoint) {
+                    go.transform.position = spawnPosition;
+                    SpawnPoint.Instance().spawned = true;
+                    Debug.Log("Spawned at " + spawnPosition);
+                }
+                
                 GameEntity gameEntity = go.GetComponent<GameEntity>() as GameEntity;
                 LoadUmaModel(gameEntity);
                 gameEntity.Init(entityId, character, entityType);

@@ -4,6 +4,8 @@ using GameMachine.Core;
 using Character = io.gamemachine.messages.Character;
 using TrackData = io.gamemachine.messages.TrackData;
 using UserDefinedData = io.gamemachine.messages.UserDefinedData;
+using System;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace Common {
@@ -17,27 +19,24 @@ namespace GameMachine {
             private NetworkFields networkFields;
             private Vector3 serverLocation;
             private float lastUpdate;
-            private Transform model;
             private IGameEntityController gameEntityController;
             private Transform spawnpoint;
             public float inactivityTimeout = 2f;
             private bool canMove = true;
             private Vector3 networkSpawnPoint;
-
+            private Vitals vitals = null;
+            
             public static GameEntityType GameEntityTypeFromTrackData(TrackData trackData) {
                 GameEntityType entityType;
                 switch (trackData.entityType) {
-                    case TrackData.EntityType.PLAYER:
+                    case TrackData.EntityType.Player:
                         entityType = GameEntityType.Player;
                         break;
-                    case TrackData.EntityType.NPC:
+                    case TrackData.EntityType.Npc:
                         entityType = GameEntityType.Npc;
                         break;
-                    case TrackData.EntityType.SHIP:
+                    case TrackData.EntityType.Object:
                         entityType = GameEntityType.Vehicle;
-                        break;
-                    case TrackData.EntityType.OTHER:
-                        entityType = GameEntityType.Other;
                         break;
                     default:
                         entityType = GameEntityType.Other;
@@ -108,9 +107,9 @@ namespace GameMachine {
 
             private void SetSpawnPoint(Character character) {
                 if (character.worldx != 0 && character.worldy != 0) {
-                    float x = Util.Instance.IntToFloat(character.worldx, true);
-                    float z = Util.Instance.IntToFloat(character.worldy, true);
-                    float y = Util.Instance.IntToFloat(character.worldz, true);
+                    float x = GmUtil.Instance.IntToFloat(character.worldx, true);
+                    float z = GmUtil.Instance.IntToFloat(character.worldy, true);
+                    float y = GmUtil.Instance.IntToFloat(character.worldz, true);
                     networkSpawnPoint = new Vector3(x, y, z);
                 }
             }
@@ -150,7 +149,7 @@ namespace GameMachine {
 
                 TrackData trackData = networkFields.GetTrackData();
 
-                trackData.entityType = TrackData.EntityType.PLAYER;
+                trackData.entityType = TrackData.EntityType.Player;
                 return trackData;
             }
 
@@ -191,24 +190,30 @@ namespace GameMachine {
                 return networkFields;
             }
 
-
-            public void SetMovementState(int state) {
-                if (state == 0) {
-                    canMove = false;
-                } else {
-                    canMove = true;
+            public bool IsInCombat() {
+                if (vitals == null) {
+                    return false;
                 }
+                return vitals.inCombat;
             }
 
-
-
-            public void FreezeMovement(float duration) {
-                canMove = false;
-                Invoke("UnFreezeMovement", duration);
+            public bool IsDead() {
+                if (vitals == null) {
+                    return false;
+                }
+                return (vitals.dead == 1);
             }
 
-            private void UnFreezeMovement() {
-                canMove = true;
+            public void SetVitals(Vitals vitals) {
+                this.vitals = vitals;
+            }
+
+            public Vitals GetVitals() {
+                return vitals;
+            }
+
+            public bool HasVitals() {
+                return (vitals != null);
             }
         }
     }

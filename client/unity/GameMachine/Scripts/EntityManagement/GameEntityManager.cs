@@ -23,7 +23,7 @@ namespace GameMachine {
             private Dictionary<string, float> lastUpdate = new Dictionary<string, float>();
             private static IGameEntity playerEntity;
             private int badShortId = 0;
-            private IGameEntityFactory gameEntityFactory;
+            private GameEntityFactory gameEntityFactory;
             public float characterTimeout = 2f;
 
             public class CharacterData {
@@ -40,6 +40,14 @@ namespace GameMachine {
                 return entities.Values.ToList();
             }
 
+            public static IGameEntity GetGameEntity(string id) {
+                if (entities.ContainsKey(id)) {
+                    return entities[id];
+                } else {
+                    return null;
+                }
+            }
+
             public static IGameEntity GetPlayerEntity() {
                 return playerEntity;
             }
@@ -53,20 +61,19 @@ namespace GameMachine {
             }
 
             void Start() {
-                gameEntityFactory = (IGameEntityFactory)GameComponent.Get<IGameEntityFactory>("GameEntityFactory");
+                gameEntityFactory = GameEntityFactory.instance;
                 EntityTracking.Register(this);
             }
 
             public void TrackDataReceived(List<TrackData> trackDatas) {
                 IGameEntity entity;
                 foreach (TrackData trackData in trackDatas) {
-
                     // Vehicles
-                    if (trackData.entityType == TrackData.EntityType.SHIP) {
+                    if (trackData.entityType == TrackData.EntityType.Object) {
                         continue;
                     }
 
-                    if (trackData.id == "") {
+                    if (string.IsNullOrEmpty(trackData.id)) {
                         if (trackData.shortId > 0) {
                             if (shortIdToEntityId.ContainsKey(trackData.shortId)) {
                                 string entityId = shortIdToEntityId[trackData.shortId];
@@ -158,8 +165,9 @@ namespace GameMachine {
 
                 TrackData trackData = playerEntity.GetTrackData();
                 trackData.id = NetworkSettings.instance.username;
-                if (trackData.entityType == TrackData.EntityType.NONE) {
-                    trackData.entityType = TrackData.EntityType.PLAYER;
+                trackData.neighborEntityType = TrackData.EntityType.Any;
+                if (trackData.entityType == TrackData.EntityType.None) {
+                    trackData.entityType = TrackData.EntityType.Player;
                 }
 
                 if (badShortId != 0) {
@@ -184,7 +192,7 @@ namespace GameMachine {
 
             public void UpdateTracking(TrackData trackData) {
                 trackData.id = NetworkSettings.instance.username;
-                trackData.entityType = TrackData.EntityType.PLAYER;
+                trackData.entityType = TrackData.EntityType.Player;
 
                 if (badShortId != 0) {
                     trackData.getNeighbors = 2;

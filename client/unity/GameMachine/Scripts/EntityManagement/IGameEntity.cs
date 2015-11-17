@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using TrackData = io.gamemachine.messages.TrackData;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace Common {
@@ -20,9 +21,12 @@ namespace GameMachine {
             void UpdateFromTrackData(TrackData trackData, bool hasDelta);
             void Remove();
             NetworkFields GetNetworkFields();
-            void SetMovementState(int state);
-            void FreezeMovement(float duration);
             Vector3 GetSpawnPoint();
+            bool IsInCombat();
+            bool IsDead();
+            void SetVitals(Vitals vitals);
+            Vitals GetVitals();
+            bool HasVitals();
         }
     }
 }

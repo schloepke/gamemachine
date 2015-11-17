@@ -10,6 +10,7 @@ using Characters = io.gamemachine.messages.Characters;
 using Character = io.gamemachine.messages.Character;
 using Players = io.gamemachine.messages.Players;
 using Player = io.gamemachine.messages.Player;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace HttpApi {
@@ -17,6 +18,8 @@ namespace GameMachine {
 
             public static AdminApi instance;
 
+            public delegate void OnProcessCommand(bool result);
+            public OnProcessCommand onProcessCommand;
 
             void Awake() {
                 instance = this;
@@ -25,6 +28,30 @@ namespace GameMachine {
             // Use this for initialization
             void Start() {
 
+            }
+
+            public void SendProcessCommand(ProcessCommand command) {
+                StartCoroutine(SendProcessCommandRoutine(command));
+            }
+
+            public IEnumerator SendProcessCommandRoutine(ProcessCommand command) {
+                MemoryStream stream = new MemoryStream();
+                Serializer.Serialize(stream, command);
+                string data = System.Convert.ToBase64String(stream.ToArray());
+
+                string uri = NetworkSettings.instance.BaseUri() + "/api/process_manager";
+                var form = new WWWForm();
+                form.AddField("process_command", data);
+                WWW www = new WWW(uri, form.data, form.headers);
+                yield return www;
+
+                if (www.error != null) {
+                    Debug.Log(www.error);
+                    onProcessCommand(false);
+                } else {
+                    onProcessCommand(true);
+                    Debug.Log(www.text);
+                }
             }
 
             public void PlayerCharacters(string playerId, IAdminApi caller) {

@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using GameMachine.Core;
 
 namespace GameMachine {
     namespace Common {
@@ -19,7 +20,12 @@ namespace GameMachine {
             public SkinnedMeshRenderer[] playerRenderers;
             public string characterId = null;
             public bool useGameMachinePlayer = true;
+            public IGameEntity gameEntity;
             public bool useUMA = false;
+
+            public static bool IsNetworked() {
+                return ActorSystem.instance != null;
+            }
 
             public static GamePlayer Instance() {
                 if (instance != null) {
@@ -27,6 +33,7 @@ namespace GameMachine {
                 }
                 instance = GameObject.Find("GamePlayer").GetComponent<GamePlayer>() as GamePlayer;
                 if (instance.useGameMachinePlayer) {
+                    instance.gameEntity = GameEntityManager.GetPlayerEntity();
                     instance.characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
                     instance.playerTransform = GameEntityManager.GetPlayerEntity().GetTransform();
                     instance.playerRenderers = instance.playerTransform.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
