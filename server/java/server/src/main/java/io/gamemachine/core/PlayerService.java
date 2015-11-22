@@ -1,7 +1,9 @@
 package io.gamemachine.core;
 
 import io.gamemachine.authentication.Authentication;
+import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerNotification;

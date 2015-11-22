@@ -1,4 +1,4 @@
-package io.gamemachine.core;
+package io.gamemachine.chat;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -9,6 +9,7 @@ import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import akka.routing.RandomRoutingLogic;
+import io.gamemachine.core.GameMachineLoader;
 
 public class ChatMediator {
 

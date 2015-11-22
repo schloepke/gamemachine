@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.messages.BuildObjects;
+import io.gamemachine.messages.BuildableAreas;
 import io.gamemachine.messages.CraftingRecipes;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerItems;
@@ -88,6 +89,15 @@ public class ClientDbLoader {
 			return BuildObjects.parseFrom(LoadProtoFile(name));
 		} else {
 			return new BuildObjects();
+		}
+	}
+	
+	public static BuildableAreas getBuildableAreas() {
+		String name = "BuildableAreas.proto";
+		if (new File(dbPath(name)).exists()) {
+			return BuildableAreas.parseFrom(LoadProtoFile(name));
+		} else {
+			return new BuildableAreas();
 		}
 	}
 	

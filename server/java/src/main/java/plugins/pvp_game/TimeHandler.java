@@ -1,8 +1,8 @@
 package plugins.pvp_game;
 
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TimeCycle;
 import io.gamemachine.messages.TrackData;

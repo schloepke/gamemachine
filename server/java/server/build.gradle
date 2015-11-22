@@ -86,17 +86,20 @@ dependencies {
   compile 'org.mindrot:jbcrypt:0.3m'
   compile 'com.google.guava:guava:18.0'
   compile 'com.google.code.gson:gson:2.4'
-  compile "com.badlogicgames.gdx:gdx-ai:1.5.0"
+  
   compile 'org.zeroturnaround:zt-exec:1.8'
   //compile 'org.scalatest:scalatest_2.11:2.2.4'
   //compile 'junit:junit:4.12'
   compile 'org.javalite:activejdbc:1.4.11'
   compile 'org.javalite:activejdbc-instrumentation:1.4.11'
-  compile "com.github.xaguzman:pathfinding:0.2.6"
+ 
   compile 'org.testng:testng:6.9.4'
-  
   testCompile 'org.assertj:assertj-core:2.0.0'
   
+  //compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+  //compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+  //compile "com.badlogicgames.gdx:gdx-ai:1.6.0"
+  //compile "com.github.xaguzman:pathfinding:0.2.6"
   
 }
 

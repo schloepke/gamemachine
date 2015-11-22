@@ -1,5 +1,7 @@
 package io.gamemachine.core;
 
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.AgentTrackData;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.DynamicMessage;

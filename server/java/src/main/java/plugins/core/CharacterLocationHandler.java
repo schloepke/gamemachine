@@ -1,10 +1,10 @@
 package plugins.core;
 
 import io.gamemachine.core.CharacterService;
-import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;

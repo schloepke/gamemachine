@@ -1,4 +1,4 @@
-package io.gamemachine.core;
+package io.gamemachine.grid;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.gamemachine.core.PlayerService;
 /*
  * Implements fast 2d spatial hashing.  Neighbor queries return all entities that are in our cell and neighboring cells.  The bounding is a box not a radius,
  * so there is no way to get all entities within an exact range.  This is normally not an issue for large numbers of entities in a large open space, and if you are

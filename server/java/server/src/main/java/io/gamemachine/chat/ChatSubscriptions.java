@@ -1,4 +1,4 @@
-package io.gamemachine.core;
+package io.gamemachine.chat;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -6,6 +6,7 @@ import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import io.gamemachine.core.ActorUtil;
 
 
 public class ChatSubscriptions extends UntypedActor {

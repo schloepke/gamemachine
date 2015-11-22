@@ -16,7 +16,7 @@ import akka.actor.UntypedActor;
 import io.gamemachine.config.AppConfig.GridConfig;
 import io.gamemachine.core.CloudClient;
 import io.gamemachine.core.CloudClient.CloudResponse;
-import io.gamemachine.core.GameGrid;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.GameConfigs;
 import scala.concurrent.duration.Duration;
 

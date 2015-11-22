@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
-import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;

@@ -1,8 +1,10 @@
-package io.gamemachine.core;
+package io.gamemachine.grid;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameConfig;
 import io.gamemachine.config.AppConfig.GridConfig;
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Player;
 
 import java.util.ArrayList;

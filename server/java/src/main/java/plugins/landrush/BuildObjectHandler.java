@@ -1,25 +1,23 @@
 package plugins.landrush;
 
-import io.gamemachine.config.AppConfig;
-import io.gamemachine.core.CharacterService;
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.Grid;
-import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.core.PlayerService;
-import io.gamemachine.messages.BuildObject;
-import io.gamemachine.messages.BuildObjects;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.Vitals;
-import plugins.core.combat.VitalsHandler;
-
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerService;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
+import io.gamemachine.messages.BuildObject;
+import io.gamemachine.messages.BuildObjects;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.Vitals;
+import plugins.core.combat.VitalsHandler;
 
 public class BuildObjectHandler extends GameMessageActor {
 
@@ -51,7 +49,6 @@ public class BuildObjectHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		BuildObjects buildObjects = gameMessage.buildObjects;
-
 		if (exactlyOnce(gameMessage)) {
 			if (buildObjects.action != BuildObjects.Action.None) {
 				if (buildObjects.action == BuildObjects.Action.GetStatus) {

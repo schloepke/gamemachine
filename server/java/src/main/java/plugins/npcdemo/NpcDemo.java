@@ -8,10 +8,10 @@ import com.typesafe.config.Config;
 import akka.actor.Props;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
-import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
 
@@ -36,15 +36,18 @@ public class NpcDemo  {
 		for (int i = 1; i < count; i++) {
 			String playerId = prefix+"demonpc" + i;
 			String characterId = prefix+"demochr" + i;
-			Character character = null;
+			Character character = cs.find(playerId, characterId);
 
 			Player player = ps.find(playerId);
 			if (player == null) {
 				player = ps.create(playerId, AppConfig.getDefaultGameId());
+			}
+			
+			if (character == null) {
 				character = cs.create(playerId, characterId, null);
 				character.gameEntityPrefab = "npc1";
+				cs.save(character);
 			}
-
 			
 			ps.setCharacter(playerId, characterId);
 			GameGrid.setEntityZone(playerId, zone);

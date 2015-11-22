@@ -1,5 +1,9 @@
 package io.gamemachine.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import akka.actor.ActorSelection;
 import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GameMessages;
@@ -7,10 +11,11 @@ import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackDataResponse;
 import io.gamemachine.net.Connection;
 import io.gamemachine.routing.GameMessageRoute;
-import akka.actor.ActorSelection;
 
 public class PlayerCommands {
 
+	private static final Logger logger = LoggerFactory.getLogger(PlayerCommands.class);
+	
 	public static void SendLocal(GameMessage gameMessage, String destination) {
 		GameMessageRoute route = GameMessageRoute.routeFor(destination);
 		if (route != null) {

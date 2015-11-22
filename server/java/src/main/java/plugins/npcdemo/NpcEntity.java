@@ -5,9 +5,9 @@ import java.util.Random;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.Grid;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackData.EntityType;
@@ -26,8 +26,8 @@ public class NpcEntity extends GameMessageActor {
 	private Vector3 position;
 	private TrackData trackData;
 	public long tickInterval = 40l;
-	public float width = 490f;
-	public float start = -500f;
+	public float width = 990f;
+	public float start = 0f;
 	public double speed = 6d;
 	public Vector3 target;
 	private Random rand;
@@ -40,6 +40,7 @@ public class NpcEntity extends GameMessageActor {
 
 	@Override
 	public void awake() {
+		worldOffset =  AppConfig.getWorldOffset();
 		rand = new Random();
 		grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", id);
 		position = randVector();

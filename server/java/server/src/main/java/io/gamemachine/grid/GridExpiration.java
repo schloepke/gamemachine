@@ -1,4 +1,4 @@
-package io.gamemachine.core;
+package io.gamemachine.grid;
 
 import java.util.concurrent.TimeUnit;
 

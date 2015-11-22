@@ -13,7 +13,7 @@ import akka.event.LoggingAdapter;
 import akka.pattern.AskableActorSelection;
 import akka.util.Timeout;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.core.GameGrid;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.RpcMessage;

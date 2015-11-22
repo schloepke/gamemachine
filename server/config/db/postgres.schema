@@ -183,19 +183,37 @@ DROP TABLE IF EXISTS buildable_areas;
 CREATE TABLE buildable_areas (
   id bigserial NOT NULL,
 
+  buildable_area_id character varying(128) NOT NULL,
+
   buildable_area_owner_id character varying(128) NOT NULL,
 
-  buildable_area_px double precision NOT NULL,
+     size_gm_vector3_x double precision DEFAULT NULL,
+    
+     size_gm_vector3_y double precision DEFAULT NULL,
+    
+     size_gm_vector3_z double precision DEFAULT NULL,
+    
+     size_gm_vector3_xi integer DEFAULT NULL,
+    
+     size_gm_vector3_yi integer DEFAULT NULL,
+    
+     size_gm_vector3_zi integer DEFAULT NULL,
+    
+     size_gm_vector3_vertice integer DEFAULT NULL,
 
-  buildable_area_py double precision NOT NULL,
-
-  buildable_area_pz double precision NOT NULL,
-
-  buildable_area_sx integer NOT NULL,
-
-  buildable_area_sy integer NOT NULL,
-
-  buildable_area_sz integer NOT NULL,
+     position_gm_vector3_x double precision DEFAULT NULL,
+    
+     position_gm_vector3_y double precision DEFAULT NULL,
+    
+     position_gm_vector3_z double precision DEFAULT NULL,
+    
+     position_gm_vector3_xi integer DEFAULT NULL,
+    
+     position_gm_vector3_yi integer DEFAULT NULL,
+    
+     position_gm_vector3_zi integer DEFAULT NULL,
+    
+     position_gm_vector3_vertice integer DEFAULT NULL,
 
   CONSTRAINT buildable_area_pkey PRIMARY KEY (id)
 );

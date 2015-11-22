@@ -1,6 +1,6 @@
 package plugins.core.combat;
 
-import io.gamemachine.core.Grid;
+import io.gamemachine.grid.Grid;
 
 public class GridSet {
 

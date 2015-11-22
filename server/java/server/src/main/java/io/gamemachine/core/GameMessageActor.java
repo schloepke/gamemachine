@@ -8,6 +8,7 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSelection;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import scala.concurrent.duration.Duration;
+import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;

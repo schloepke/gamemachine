@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
+import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.grid.GameGrid;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;

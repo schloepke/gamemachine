@@ -1,9 +1,9 @@
 package plugins;
 
+import io.gamemachine.chat.ChatSubscriptions;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.core.ChatSubscriptions;
-import io.gamemachine.core.GridExpiration;
 import io.gamemachine.core.Plugin;
+import io.gamemachine.grid.GridExpiration;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.pvp_game.GuildHandler;
 import plugins.pvp_game.HarvestHandler;

@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.core.GameGrid;
-import io.gamemachine.core.Grid;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.TrackData;
 

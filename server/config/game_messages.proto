@@ -371,18 +371,25 @@ local_message BuildObjectChunks {
  }
 
 local_persistent_message BuildableArea {
-  required string ownerId = 1;
-  required float px = 2;
-  required float py = 3;
-  required float pz = 4;
-  required int32 sx = 5;
-  required int32 sy = 6;
-  required int32 sz = 7;
-  optional int32 recordId = 8;
+  required string id = 1;
+  required string ownerId = 2;
+  optional GmVector3 size = 3;
+  optional GmVector3 position = 4;
+  optional int32 recordId = 5;
 }
 
 local_message BuildableAreas {
+  enum Action {
+    None = 0;
+    GetAll = 1;
+    Claim = 2;
+    Register = 3;
+    Release = 4;
+  }
+  
   repeated BuildableArea buildableArea = 1;
+  optional Action action = 2;
+  
 }
  
 local_message GmBounds {

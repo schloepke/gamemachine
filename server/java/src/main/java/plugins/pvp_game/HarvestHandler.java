@@ -2,10 +2,10 @@ package plugins.pvp_game;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.AuthToken;
-import io.gamemachine.core.GameGrid;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.Grid;
 import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.AddPlayerItem;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Harvest;

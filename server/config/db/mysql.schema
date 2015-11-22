@@ -170,19 +170,37 @@ CREATE TABLE `build_objects` (
 CREATE TABLE `buildable_areas` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
 
+  `buildable_area_id` varchar(128) NOT NULL,
+
   `buildable_area_owner_id` varchar(128) NOT NULL,
 
-  `buildable_area_px` float NOT NULL,
+      size_`gm_vector3_x` float DEFAULT NULL,
+    
+      size_`gm_vector3_y` float DEFAULT NULL,
+    
+      size_`gm_vector3_z` float DEFAULT NULL,
+    
+      size_`gm_vector3_xi` int(11) DEFAULT NULL,
+    
+      size_`gm_vector3_yi` int(11) DEFAULT NULL,
+    
+      size_`gm_vector3_zi` int(11) DEFAULT NULL,
+    
+      size_`gm_vector3_vertice` int(11) DEFAULT NULL,
 
-  `buildable_area_py` float NOT NULL,
-
-  `buildable_area_pz` float NOT NULL,
-
-  `buildable_area_sx` int(11) NOT NULL,
-
-  `buildable_area_sy` int(11) NOT NULL,
-
-  `buildable_area_sz` int(11) NOT NULL,
+      position_`gm_vector3_x` float DEFAULT NULL,
+    
+      position_`gm_vector3_y` float DEFAULT NULL,
+    
+      position_`gm_vector3_z` float DEFAULT NULL,
+    
+      position_`gm_vector3_xi` int(11) DEFAULT NULL,
+    
+      position_`gm_vector3_yi` int(11) DEFAULT NULL,
+    
+      position_`gm_vector3_zi` int(11) DEFAULT NULL,
+    
+      position_`gm_vector3_vertice` int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
