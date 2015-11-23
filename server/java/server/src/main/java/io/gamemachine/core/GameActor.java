@@ -1,20 +1,22 @@
 package io.gamemachine.core;
 
-import io.gamemachine.messages.Entity;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.GameMessages;
-
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.common.base.Strings;
 
 import akka.actor.UntypedActor;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.GameMessages;
 
 public class GameActor extends UntypedActor {
 
-	private static ConcurrentHashMap<String, GameMessage> reliableMessages = new ConcurrentHashMap<String, GameMessage>();
-	private static ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
-
+	private ConcurrentHashMap<String, GameMessage> reliableMessages = new ConcurrentHashMap<String, GameMessage>();
+	private ConcurrentHashMap<String, Integer> reliableMessageStatus = new ConcurrentHashMap<String, Integer>();
+	private static Map<String, Long> idsToRemove = new  ConcurrentHashMap<String, Long>();
+	private long messageIdExpire = 5000L;
+			
 	public String playerId;
 	public String characterId;
 	public String messageId;
@@ -31,14 +33,22 @@ public class GameActor extends UntypedActor {
 
 	}
 
-	public static void removeReliableMessage(String id) {
-		if (reliableMessages.containsKey(id)) {
-			reliableMessages.remove(id);
-		}
+	public void removeExpiredMessageIds() {
+		for (String messageId : idsToRemove.keySet()) {
+			Long updatedAt = idsToRemove.get(messageId);
+			if ((System.currentTimeMillis() - updatedAt) > messageIdExpire) {
+				if (reliableMessages.containsKey(messageId)) {
+					reliableMessages.remove(messageId);
+				}
 
-		if (reliableMessageStatus.containsKey(id)) {
-			reliableMessageStatus.remove(id);
+				if (reliableMessageStatus.containsKey(messageId)) {
+					reliableMessageStatus.remove(messageId);
+				}
+				
+				idsToRemove.remove(messageId);
+			}
 		}
+		
 	}
 
 	public boolean setReply(GameMessage gameMessage) {
@@ -64,6 +74,7 @@ public class GameActor extends UntypedActor {
 
 	public boolean exactlyOnce(GameMessage gameMessage) {
 		if (!Strings.isNullOrEmpty(gameMessage.messageId)) {
+			idsToRemove.put(gameMessage.messageId, System.currentTimeMillis());
 			if (reliableMessageStatus.containsKey(gameMessage.messageId)) {
 				int status = reliableMessageStatus.get(gameMessage.messageId);
 				if (status == 1) {

@@ -18,6 +18,8 @@ import io.gamemachine.routing.RpcHandler;
 
 public abstract class GameMessageActor extends GameActor {
 
+	private long messageIdCheckTime = 5000L;
+	
 	public static void tell(GameMessage gameMessage, String name) {
 		GameMessageRoute route = GameMessageRoute.routeFor(name);
 		if (route != null) {
@@ -42,7 +44,13 @@ public abstract class GameMessageActor extends GameActor {
 				onPlayerDisconnect(clientManagerEvent.player_id);
 			}
 		} else if (message instanceof String) {
-			onTick((String)message);
+			String msgString = (String)message;
+			if (msgString.equals("checkMessageIds")) {
+				checkMessageIds();
+			} else {
+				onTick(msgString);
+			}
+			
 		} else if (message instanceof PlayerNotification) {
 			PlayerNotification playerNotification = (PlayerNotification)message;
 			onPlayerNotification(playerNotification);
@@ -54,11 +62,17 @@ public abstract class GameMessageActor extends GameActor {
 		}
 	}
 
+	private void checkMessageIds() {
+		scheduleOnce(messageIdCheckTime,"checkMessageIds");
+	}
+	
 	@Override
 	public void preStart() {
+		scheduleOnce(messageIdCheckTime,"checkMessageIds");
 		awake();
 	}
 
+	
 	public abstract void awake();
 
 	public abstract void onGameMessage(GameMessage gameMessage);

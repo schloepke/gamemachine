@@ -1,8 +1,13 @@
 package plugins.landrush;
 
+import java.util.List;
+
+import com.google.common.collect.Lists;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.messages.BuildableArea;
 import io.gamemachine.messages.BuildableAreas;
 import io.gamemachine.messages.GameMessage;
@@ -34,8 +39,23 @@ public class BuildableAreaManager extends GameMessageActor {
 				release(area);
 			}
 			
-			gameMessage.buildableAreas.buildableArea = BuildableArea.db().findAll();
+			gameMessage.buildableAreas = new BuildableAreas();
 			setReply(gameMessage);
+			
+			GameMessage msg = gameMessage.clone();
+			msg.messageId = null;
+			
+			List<BuildableArea> buildableAreas = BuildableArea.db().findAll();
+			List<List<BuildableArea>> subsets = Lists.partition(buildableAreas, 20);
+			for (List<BuildableArea> subset : subsets) {
+				for (BuildableArea buildableArea : subset) {
+					buildableArea.position = null;
+					buildableArea.size = null;
+				}
+				msg.buildableAreas.buildableArea = subset;
+				PlayerCommands.sendGameMessage(msg.clone(), playerId);
+			}
+			
 		}
 	}
 
@@ -44,6 +64,7 @@ public class BuildableAreaManager extends GameMessageActor {
 		if (existing != null) {
 			existing.ownerId = area.ownerId;
 			BuildableArea.db().save(existing);
+			logger.warning("Area "+existing.ownerId+" claimed by "+playerId);
 		}
 	}
 
@@ -52,6 +73,7 @@ public class BuildableAreaManager extends GameMessageActor {
 		if (existing != null) {
 			existing.ownerId = "system";
 			BuildableArea.db().save(existing);
+			logger.warning("Area "+existing.ownerId+" released by "+playerId);
 		}
 	}
 
