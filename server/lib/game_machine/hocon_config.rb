@@ -47,7 +47,7 @@ module GameMachine
       conf.gamecloud.user = config.get_string('gamecloud.user')
       conf.gamecloud.api_key = config.get_string('gamecloud.api_key')
 
-      conf.game = config.get_config('game')
+      conf.grids = config.get_config_list('grids')
       
       conf.couchbase.bucket = config.get_string('couchbase.bucket')
       conf.couchbase.password = config.get_string('couchbase.password')

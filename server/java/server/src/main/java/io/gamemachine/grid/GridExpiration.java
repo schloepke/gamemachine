@@ -17,9 +17,7 @@ public class GridExpiration extends UntypedActor {
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
-			for (Grid grid : GameGrid.gridsStartingWith("default")) {
-				grid.RemoveExpired(AppConfig.getGridExpiration());
-			}
+			GridManager.removeExpired();
 			tick(AppConfig.getGridExpiration(), "tick");
 		}
 	}

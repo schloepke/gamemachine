@@ -13,7 +13,7 @@ import akka.event.LoggingAdapter;
 import akka.pattern.AskableActorSelection;
 import akka.util.Timeout;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.RpcMessage;
@@ -23,16 +23,16 @@ import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
 
-public class RpcHandler extends UntypedActor {
+public class UnityRpcHandler extends UntypedActor {
 
 	public static Map<Long,ActorRef> pending = new ConcurrentHashMap<Long,ActorRef>();
 	public static AtomicLong messageId = new AtomicLong();
 	public static Timeout t = new Timeout(Duration.create(100, TimeUnit.MILLISECONDS));
 	
-	public static String name = RpcHandler.class.getSimpleName();
+	public static String name = UnityRpcHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	public static void callRpc(RpcMessage message, String playerId, ActorRef sender) {
+	public static void callUnity(RpcMessage message, String playerId, ActorRef sender) {
 		if (!Connection.hasConnection(playerId)) {
 			return;
 		}
@@ -41,7 +41,7 @@ public class RpcHandler extends UntypedActor {
 		sel.tell(message,sender);
 	}
 	
-	public static RpcMessage callRpc(RpcMessage message, String playerId) {
+	public static RpcMessage callUnity(RpcMessage message, String playerId) {
 		if (!Connection.hasConnection(playerId)) {
 			return null;
 		}
@@ -59,13 +59,13 @@ public class RpcHandler extends UntypedActor {
 	}
 
 	public static String PlayerIdToRpcPlayerId(String playerId) {
-		int zone = GameGrid.getEntityZone(playerId);
+		int zone = GridManager.getEntityZone(playerId);
 		return "zone"+zone;
 	}
 	
-	public static GameMessage callRpc(String methodName, GameMessage gameMessage, String playerId) {
+	public static GameMessage callUnity(String methodName, GameMessage gameMessage, String playerId) {
 		RpcMessage rpcMessage = createRpc(methodName,gameMessage);
-		RpcMessage response = callRpc(rpcMessage, playerId);
+		RpcMessage response = callUnity(rpcMessage, playerId);
 		if (response == null) {
 			return null;
 		} else {

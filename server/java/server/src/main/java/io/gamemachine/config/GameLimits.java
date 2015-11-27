@@ -314,38 +314,5 @@ public class GameLimits extends UntypedActor {
 		return counter.get();
 	}
 
-	public static boolean messageLimitExceeded(ClientMessage clientMessage) {
-		String gameId = PlayerService.getInstance().getGameId(clientMessage.getPlayer().getId());
-		if (gameId == null) {
-			return true;
-		}
-		if (checkLimit(gameId)) {
-			return false;
-		} else {
-			logger.info("Rate limit exceeded for " + gameId);
-			return true;
-		}
-	}
-
-	public static RateLimiter getLimiter(String gameId) {
-		if (!messageLimiters.containsKey(gameId)) {
-			Integer messageLimit = messageLimits.get(gameId);
-			if (messageLimit == null) {
-				messageLimit = 500;
-				messageLimits.put(gameId, messageLimit);
-			}
-			messageLimiters.put(gameId, RateLimiter.create(messageLimit));
-		}
-		return messageLimiters.get(gameId);
-	}
-
-	public static boolean checkLimit(String gameId) {
-		RateLimiter limiter = getLimiter(gameId);
-		if (limiter.tryAcquire()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+	
 }

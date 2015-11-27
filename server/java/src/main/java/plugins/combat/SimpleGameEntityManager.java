@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
@@ -87,7 +87,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	public void OnPlayerConnected(String playerId) {
 		logger.warn("OnPlayerConnect " + playerId);
 		Player player = PlayerService.getInstance().find(playerId);
-		int zone = GameGrid.getEntityZone(player.id);
+		int zone = GridManager.getEntityZone(player.id);
 	}
 
 	@Override

@@ -14,7 +14,7 @@ import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerNotification;
 import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.routing.RpcHandler;
+import io.gamemachine.routing.UnityRpcHandler;
 
 public abstract class GameMessageActor extends GameActor {
 
@@ -103,8 +103,8 @@ public abstract class GameMessageActor extends GameActor {
 		if (Strings.isNullOrEmpty(playerId)) {
 			return null;
 		}
-		String remotePlayerId = RpcHandler.PlayerIdToRpcPlayerId(playerId);
-		return RpcHandler.callRpc(methodName, gameMessage, remotePlayerId);
+		String remotePlayerId = UnityRpcHandler.PlayerIdToRpcPlayerId(playerId);
+		return UnityRpcHandler.callUnity(methodName, gameMessage, remotePlayerId);
 	}
 	
 	public final void scheduleOnce(long delay, String message) {

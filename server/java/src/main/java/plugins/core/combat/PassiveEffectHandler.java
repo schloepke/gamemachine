@@ -6,9 +6,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 import akka.actor.UntypedActor;
-import io.gamemachine.config.AppConfig;
-import io.gamemachine.grid.GameGrid;
 import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -47,7 +46,7 @@ public class PassiveEffectHandler extends UntypedActor {
 
 	public PassiveEffectHandler(String gridName, int zone) {
 		this.zone = zone;
-		grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), gridName, zone);
+		grid = GridManager.getGrid(zone,gridName);
 	}
 
 	@Override

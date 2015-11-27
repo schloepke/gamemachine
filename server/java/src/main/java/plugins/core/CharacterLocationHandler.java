@@ -1,9 +1,10 @@
 package plugins.core;
 
+import io.gamemachine.config.GridConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
@@ -40,7 +41,11 @@ public class CharacterLocationHandler extends GameMessageActor  {
 	}
 	
 	private void updateLocations() {
-		for (Grid grid : GameGrid.gridsStartingWith("default")) {
+		for (Grid grid : GridManager.getGrids()) {
+			if (grid.getType() != GridConfig.GridType.Moving) {
+				continue;
+			}
+			
 			for (TrackData trackData : grid.getAll()) {
 				if (trackData.entityType != TrackData.EntityType.Player) {
 					continue;

@@ -1,6 +1,6 @@
 package io.gamemachine.core;
 
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.AgentTrackData;
 import io.gamemachine.messages.ClientManagerEvent;
@@ -132,13 +132,13 @@ public class EntityTracking extends UntypedActor {
 	private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
 		Grid agentGrid;
 		for (TrackData trackData : agentTrackData.getTrackDataList()) {
-			agentGrid = gameGrid(player.id, trackData.gridName);
+			agentGrid = GridManager.getPlayerGrid(trackData.gridName, player.id);
 			setEntityLocation(player.id, agentGrid, trackData);
 		}
 	}
 
 	private void handleTrackData(TrackData trackData, Player player) {
-		Grid grid = gameGrid(player.id, trackData.gridName);
+		Grid grid = GridManager.getPlayerGrid(trackData.gridName, player.id);
 
 		if (grid == null) {
 			logger.warn("No grid found for " + player.id);
@@ -183,28 +183,8 @@ public class EntityTracking extends UntypedActor {
 		}
 	}
 
-	private Grid gameGrid(String playerId, String name) {
-		if (name == null) {
-			name = "default";
-		}
-		String gameId = playerService.getGameId(playerId);
-		if (gameId == null) {
-			return null;
-		} else {
-			return GameGrid.getGameGrid(gameId, name, playerId);
-		}
-	}
-
 	private void removePlayerData(ClientManagerEvent event) {
-		String gameId = playerService.getGameId(event.player_id);
-		if (gameId == null) {
-			return;
-		}
-		for (Grid grid : GameGrid.getGridList()) {
-			logger.debug("Removing " + event.player_id + " from grid " + name);
-			grid.remove(event.player_id);
-		}
-
+		GridManager.removeEntityFromZones(event.player_id);
 	}
 
 	private void SendNeighbors(Grid grid, int x, int y, Player player, EntityType neighborType, int neighborsFlag) {
@@ -280,7 +260,7 @@ public class EntityTracking extends UntypedActor {
 		}
 
 		if (trackData.zone > 0) {
-			GameGrid.setEntityZone(trackData.id, trackData.zone);
+			GridManager.setEntityZone(trackData.id, trackData.zone);
 		}
 
 		if (!grid.set(trackData)) {

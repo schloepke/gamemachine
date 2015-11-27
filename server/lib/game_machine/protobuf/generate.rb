@@ -52,7 +52,7 @@ module GameMachine
       end
       
       def sql_out(name)
-        File.join(config_path,'db',"#{name}.schema")
+        File.join(config_path,'db',"#{name}_generated.sql")
       end
       
       def model_src

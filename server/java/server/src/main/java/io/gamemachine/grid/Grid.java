@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.gamemachine.config.GridConfig;
 import io.gamemachine.core.PlayerService;
 /*
  * Implements fast 2d spatial hashing.  Neighbor queries return all entities that are in our cell and neighboring cells.  The bounding is a box not a radius,
@@ -46,7 +47,9 @@ public class Grid {
 	private int cellCount;
 	private int scaleFactor = 100;
 	private int shortIdQueueSize = 10000;
-
+	private int zone;
+	private GridConfig.GridType type;
+	
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
 
 	private ConcurrentHashMap<String, Long> updateStatus = new ConcurrentHashMap<String, Long>();
@@ -58,9 +61,13 @@ public class Grid {
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 
-	public Grid(String name, int max, int cellSize) {
+	
+	
+	public Grid(String name, int max, int cellSize, int zone, GridConfig.GridType type) {
 		this.name = name;
 		this.max = max;
+		this.zone = zone;
+		this.type = type;
 		this.cellSize = cellSize;
 		this.convFactor = 1.0f / this.cellSize;
 		this.width = (int) (this.max / this.cellSize);
@@ -71,6 +78,18 @@ public class Grid {
 		}
 	}
 
+	public static Grid createFromConfig(GridConfig gridConfig, int zone) {
+		return new Grid(gridConfig.name, gridConfig.gridSize, gridConfig.cellSize, zone, gridConfig.type);
+	}
+	
+	public int getZone() {
+		return this.zone;
+	}
+	
+	public GridConfig.GridType getType() {
+		return this.type;
+	}
+	
 	public class GridValue {
 
 		private TrackData trackData;

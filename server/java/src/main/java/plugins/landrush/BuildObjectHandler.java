@@ -5,13 +5,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerCommands;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GameGrid;
 import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.GameMessage;
@@ -133,7 +132,7 @@ public class BuildObjectHandler extends GameMessageActor {
 	}
 
 	private void broadcast(GameMessage gameMessage, int zone) {
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
+		Grid grid = GridManager.getGrid(zone,"default");
 		for (TrackData trackData : grid.getAll()) {
 			if (trackData.entityType != TrackData.EntityType.Player) {
 				continue;
@@ -260,7 +259,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 	private void removeGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
-			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
+			Grid grid = GridManager.getGrid(buildObject.zone, "build_objects");
 			grid.remove(buildObject.id);
 			VitalsHandler.remove(buildObject.id);
 		}
@@ -268,7 +267,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 	private void setGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
-			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "build_objects", buildObject.zone);
+			Grid grid = GridManager.getGrid(buildObject.zone, "build_objects");
 			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.BuildObject);
 			VitalsHandler.get(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
 		}

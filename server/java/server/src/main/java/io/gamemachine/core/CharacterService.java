@@ -12,7 +12,7 @@ import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;
@@ -187,7 +187,7 @@ public class CharacterService {
 
 	public int getZone(String characterId) {
 		Character character = find(characterId);
-		return GameGrid.getEntityZone(character.playerId);
+		return GridManager.getEntityZone(character.playerId);
 	}
 
 	public List<Character> search(String searchString) {

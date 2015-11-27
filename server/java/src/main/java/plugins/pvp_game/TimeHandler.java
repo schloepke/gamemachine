@@ -1,18 +1,18 @@
 package plugins.pvp_game;
 
-import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.grid.GameGrid;
-import io.gamemachine.grid.Grid;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.TimeCycle;
-import io.gamemachine.messages.TrackData;
-
 import java.util.concurrent.TimeUnit;
 
-import scala.concurrent.duration.Duration;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import io.gamemachine.config.GridConfig;
+import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridManager;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.TimeCycle;
+import io.gamemachine.messages.TrackData;
+import scala.concurrent.duration.Duration;
 
 public class TimeHandler extends UntypedActor {
 
@@ -28,13 +28,19 @@ public class TimeHandler extends UntypedActor {
 		timeCycle.dayCycleLength = 600f;
 		msg.timeCycle = timeCycle;
 
-		for (Grid grid : GameGrid.getGridList()) {
-			if (grid.name.startsWith("default")) {
-				for (TrackData trackData : grid.getAll()) {
-					PlayerCommands.sendGameMessage(msg, trackData.id);
+		for (Grid grid : GridManager.getGrids()) {
+			if (grid.getType() != GridConfig.GridType.Moving) {
+				continue;
+			}
+			
+			for (TrackData trackData : grid.getAll()) {
+				if (trackData.entityType != TrackData.EntityType.Player) {
+					continue;
 				}
+				PlayerCommands.sendGameMessage(msg, trackData.id);
 			}
 		}
+		
 		tick(2000L, "tick");
 	}
 

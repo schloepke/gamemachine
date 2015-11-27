@@ -2,7 +2,9 @@ package io.gamemachine.config;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
@@ -16,7 +18,6 @@ public class AppConfig {
 	private static String defaultGameId;
 	private static int worldOffset;
 	private static long gridExpiration;
-	private static Config gameConfig;
 	private static List<String> plugins = new ArrayList<String>();
 	private static int akkaPort;
 	private static String akkaHost;
@@ -58,6 +59,7 @@ public class AppConfig {
 	public static void setOrm(boolean orm) {
 		AppConfig.orm = orm;
 	}
+	
 	public static String getEnv() {
 		return env;
 	}
@@ -82,14 +84,6 @@ public class AppConfig {
 		AppConfig.defaultGameId = defaultGameId;
 	}
 
-	public static Config getGameConfig() {
-		return gameConfig;
-	}
-
-	public static void setGameConfig(Config gameConfig) {
-		AppConfig.gameConfig = gameConfig;
-	}
-	
 	public static String getAkkaHost() {
 		return akkaHost;
 	}
@@ -119,34 +113,6 @@ public class AppConfig {
 		}
 
 	}
-	
-	public static class GridConfig {
-		private final String name;
-		private final int gridSize;
-		private final int cellSize;
-		
-		public GridConfig(String name, String config) {
-			String[] parts = config.split(",");
-			this.name = name;
-			this.gridSize = Integer.parseInt(parts[0].trim());
-			this.cellSize = Integer.parseInt(parts[1].trim());
-		}
-
-		public String getName() {
-			return name;
-		}
-
-		public int getGridSize() {
-			return gridSize;
-		}
-
-		public int getCellSize() {
-			return cellSize;
-		}
-	}
-	
-	
-	
 	
     public static class Datastore {
     	private static String store;

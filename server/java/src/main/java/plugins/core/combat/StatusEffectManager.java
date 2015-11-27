@@ -3,7 +3,6 @@ package plugins.core.combat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -15,14 +14,11 @@ import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import io.gamemachine.chat.ChatSubscriptions;
-import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameMachineLoader;
-import io.gamemachine.grid.GameGrid;
-import io.gamemachine.messages.Character;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -167,9 +163,9 @@ public class StatusEffectManager extends UntypedActor {
 			GridSet gridSet = new GridSet();
 			gridSet.zone = i;
 			
-			gridSet.playerGrid = GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "default" + i);
+			gridSet.playerGrid = GridManager.createGrid(i,"default");
 			
-			gridSet.objectGrid = GameGrid.loadGameGrid(AppConfig.getDefaultGameId(), "build_objects" + i);
+			gridSet.objectGrid = GridManager.createGrid(i,"build_objects");
 			
 			gridsets.add(gridSet);
 			

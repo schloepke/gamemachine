@@ -1,22 +1,20 @@
 package plugins.pvp_game;
 
-import io.gamemachine.config.AppConfig;
+import java.util.List;
+
+import akka.event.Logging;
+import akka.event.LoggingAdapter;
 import io.gamemachine.core.AuthToken;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.grid.GameGrid;
 import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.AddPlayerItem;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Harvest;
 import io.gamemachine.messages.PlayerItem;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackData.EntityType;
-
-import java.util.List;
-
-import akka.event.Logging;
-import akka.event.LoggingAdapter;
 
 public class HarvestHandler extends GameMessageActor {
 
@@ -70,7 +68,7 @@ public class HarvestHandler extends GameMessageActor {
 	}
 	
 	private void broadcast(Harvest harvest) {
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", playerId);
+		Grid grid = GridManager.getPlayerGrid("default", playerId);
 		List<TrackData> trackDatas = grid.getAll();
 
 		if (trackDatas != null) {

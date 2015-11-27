@@ -1,33 +1,28 @@
 package io.gamemachine.core;
 
-import io.gamemachine.config.AppConfig;
-import io.gamemachine.config.GameConfig;
-import io.gamemachine.config.GameLimits;
-import io.gamemachine.grid.GridExpiration;
-import io.gamemachine.messages.Vitals;
-import io.gamemachine.objectdb.DbActor;
-import io.gamemachine.process.ProcessManager;
-import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.routing.Incoming;
-import io.gamemachine.routing.RequestHandler;
-import io.gamemachine.routing.RpcHandler;
-import io.gamemachine.routing.RpcTest;
-import io.gamemachine.zones.ZoneManager;
-
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import plugins.core.combat.VitalsHandler;
-import plugins.zonemanager.ZoneHandler;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import akka.routing.RoundRobinPool;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.config.GameLimits;
+import io.gamemachine.grid.GridExpiration;
+import io.gamemachine.messages.GameConfig;
+import io.gamemachine.objectdb.DbActor;
+import io.gamemachine.process.ProcessManager;
+import io.gamemachine.routing.GameMessageRoute;
+import io.gamemachine.routing.Incoming;
+import io.gamemachine.routing.RequestHandler;
+import io.gamemachine.routing.UnityRpcHandler;
+import io.gamemachine.routing.UnityRpcTest;
+import io.gamemachine.zones.ZoneManager;
 
 public class GameMachineLoader {
 
-	@SuppressWarnings("unused")
 	private static final Logger log = LoggerFactory.getLogger(GameMachineLoader.class);
 	public static final Logger logger = LoggerFactory.getLogger("game_machine");
 	private static ActorSystem actorSystem;
@@ -36,6 +31,10 @@ public class GameMachineLoader {
 		return actorSystem;
 	}
 
+	public static void preStart() {
+		
+	}
+	
 	// TODO move router count to a config
 	public static void StartEntityTracking() {
 		actorSystem.actorOf(new RoundRobinPool(30).props(Props.create(EntityTracking.class)), EntityTracking.name);
@@ -82,8 +81,8 @@ public class GameMachineLoader {
 		
 		actorSystem = newActorSystem;
 				
-		actorSystem.actorOf(Props.create(RpcHandler.class), RpcHandler.class.getSimpleName());
-		//actorSystem.actorOf(Props.create(RpcTest.class), RpcTest.class.getSimpleName());
+		actorSystem.actorOf(Props.create(UnityRpcHandler.class), UnityRpcHandler.class.getSimpleName());
+		actorSystem.actorOf(Props.create(UnityRpcTest.class), UnityRpcTest.class.getSimpleName());
 		
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);

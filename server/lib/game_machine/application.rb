@@ -5,6 +5,7 @@ module GameMachine
 
       def initialize!
         AppConfig.instance.load_config
+        JavaLib::GameMachineLoader.preStart
         akka.initialize!
       end
 
@@ -151,27 +152,6 @@ module GameMachine
           sleep 2
         end
 
-        # Mostly unused
-        if config.datastore.store == 'gamecloud'
-          Actor::Builder.new(CloudUpdater).start
-        end
-
-        Actor::Builder.new(SystemStats).start
-        Actor::Builder.new(Scheduler).start
-        Actor::Builder.new(SystemMonitor).start
-
-        if config.use_regions
-          # Our cluster singleton for managing regions
-          #Actor::Builder.new(GameSystems::RegionManager).singleton
-
-          # Hands out current region info to clients/other actors
-          #Actor::Builder.new(GameSystems::RegionService).start
-        end
-
-        if ENV['CLUSTER_TEST']
-          Actor::Builder.new(Killswitch).start
-          GameMachine.logger.warn "Killswitch activated"
-        end
       end
 
       def start_game_systems

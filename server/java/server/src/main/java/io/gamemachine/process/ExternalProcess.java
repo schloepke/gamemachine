@@ -118,4 +118,17 @@ public class ExternalProcess implements Runnable {
 	        return false;
 	    }
 	}
+	
+	public static int execute(String path) {
+		try {
+			logger.warn("Process " + path + " starting");
+			ProcessExecutor pex = new ProcessExecutor();
+			int rvalue = pex.command(path).execute().getExitValue();
+			logger.warn("Process "+ path+" exit value was " + rvalue);
+			return rvalue;
+		} catch (InvalidExitValueException | IOException | InterruptedException | TimeoutException e) {
+			logger.debug(e.getMessage(),e);
+			return -1;
+		}
+	}
 }

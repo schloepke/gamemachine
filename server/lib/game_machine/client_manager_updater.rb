@@ -19,14 +19,6 @@ module GameMachine
        message.is_a?(JavaLib::ClusterEvent::ReachableMember)
     end
 
-    def show_stats
-      local_player_count = local_players.size
-      player_count = players.size
-      SystemStats.log_statistic('local_players',local_player_count)
-      SystemStats.log_statistic('players',player_count)
-      #self.class.logger.info "#{Akka.instance.address} stats: local_players=#{local_player_count} players=#{player_count}"
-    end
-
     def create_client_event(client_id,player_id,event)
       client_event = MessageLib::ClientEvent.new.set_client_id(client_id).
         set_event(event).set_player_id(player_id)
@@ -65,7 +57,6 @@ module GameMachine
         if message == 'update_remote_members'
           update_remote_members('update',true)
 
-          show_stats
         end
       elsif cluster_event?(message)
         update_remote_member(message.member,'update')

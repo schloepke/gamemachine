@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.messages.GameMessage;
 
-public class RpcTest extends GameMessageActor {
+public class UnityRpcTest extends GameMessageActor {
 
-	private static final Logger log = LoggerFactory.getLogger(RpcTest.class);
+	private static final Logger log = LoggerFactory.getLogger(UnityRpcTest.class);
 	@Override
 	public void awake() {
 		scheduleOnce(1000l, "tick");
@@ -21,7 +21,7 @@ public class RpcTest extends GameMessageActor {
 		for (int i=0; i<1;i++) {
 			GameMessage gameMessage = new GameMessage();
 			//GameMessage response = callRpc("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage);
-			GameMessage response = RpcHandler.callRpc("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage, "unity1");
+			GameMessage response = UnityRpcHandler.callUnity("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage, "unity1");
 		}
 		
 		long endTime = System.nanoTime();

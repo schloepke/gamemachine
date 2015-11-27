@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.TrackData;
@@ -45,7 +45,7 @@ public class AoeUtil {
 	}
 	
 	public static List<TrackData> getTargetsInRange(int range, GmVector3 location, String gridName, String playerId) {
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), gridName, playerId);
+		Grid grid = GridManager.getPlayerGrid(gridName, playerId);
 		return getTargetsInRange(range,location,grid);
 	}
 

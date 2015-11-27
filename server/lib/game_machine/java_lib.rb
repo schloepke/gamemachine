@@ -72,8 +72,9 @@ module GameMachine
     include_package 'akka.camel.javaapi'
     include_package 'akka.camel'
     include_package 'io.gamemachine.chat'
-    java_import 'io.gamemachine.grid.Grid'
-    java_import 'io.gamemachine.grid.GameGrid'
+    
+    include_package 'io.gamemachine.grid'
+    include_package 'io.gamemachine.process'
     include_package 'io.gamemachine.core'
     include_package 'io.gamemachine.net'
     include_package 'io.gamemachine.codeblocks'

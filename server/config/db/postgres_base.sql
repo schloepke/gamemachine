@@ -1,4 +1,8 @@
 
+CREATE ROLE gamemachine WITH ENCRYPTED PASSWORD 'gamemachine' LOGIN CREATEDB CREATEROLE;
+CREATE DATABASE gamemachine WITH OWNER=gamemachine ENCODING='UTF8';
+\c gamemachine
+
  CREATE TABLE entities
 (
   id character varying(128) NOT NULL,

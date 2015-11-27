@@ -11,7 +11,7 @@ import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
-import io.gamemachine.grid.GameGrid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
 
@@ -50,7 +50,7 @@ public class NpcDemo  {
 			}
 			
 			ps.setCharacter(playerId, characterId);
-			GameGrid.setEntityZone(playerId, zone);
+			GridManager.setEntityZone(playerId, zone);
 			GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId));
 		}
 		logger.warn("NpcDemo started with "+npcCount+" npc's");

@@ -4,13 +4,13 @@ import com.google.common.base.Strings;
 
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerCommands;
-import io.gamemachine.grid.GameGrid;
 import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Attack;
+import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.PlayerSkill;
@@ -18,7 +18,6 @@ import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
 import plugins.landrush.BuildObjectHandler;
-import io.gamemachine.messages.Character;
 
 public class CombatHandler extends GameMessageActor {
 
@@ -47,7 +46,7 @@ public class CombatHandler extends GameMessageActor {
 	private void sendAttack(Attack attack, int zone) {
 		GameMessage msg = new GameMessage();
 
-		Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
+		Grid grid = GridManager.getGrid(zone, "default");
 		for (TrackData trackData : grid.getAll()) {
 			if (!playerId.equals(trackData.id)) {
 				msg.attack = attack;
@@ -72,7 +71,7 @@ public class CombatHandler extends GameMessageActor {
 		boolean sendToObjectGrid = false;
 		boolean sendToDefaultGrid = false;
 		
-		int zone = GameGrid.getEntityZone(playerId);
+		int zone = GridManager.getEntityZone(playerId);
 		if (attack.playerSkill == null) {
 			logger.warning("Attack without player skill, ignoring");
 			return;
@@ -136,7 +135,7 @@ public class CombatHandler extends GameMessageActor {
 			
 		} else if (attack.playerSkill.category == PlayerSkill.Category.Pbaoe) {
 			
-			Grid grid = GameGrid.getGameGrid(AppConfig.getDefaultGameId(), "default", zone);
+			Grid grid = GridManager.getGrid(zone,"default");
 			
 			TrackData td = grid.get(playerId);
 			if (td == null) {

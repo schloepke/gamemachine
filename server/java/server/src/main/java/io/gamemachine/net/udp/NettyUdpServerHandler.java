@@ -5,7 +5,7 @@ import io.gamemachine.core.MathHelper;
 import io.gamemachine.core.NetMessage;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
-import io.gamemachine.routing.RpcHandler;
+import io.gamemachine.routing.UnityRpcHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -43,7 +43,7 @@ public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<Dat
 
 	public NettyUdpServerHandler() {
 		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
-		this.rpc = ActorUtil.getSelectionByName(RpcHandler.name);
+		this.rpc = ActorUtil.getSelectionByName(UnityRpcHandler.name);
 	}
 
 	// @Override
