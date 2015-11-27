@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.messages.GameMessage;
 
 public class UnityRpcTest extends GameMessageActor {
@@ -17,11 +18,15 @@ public class UnityRpcTest extends GameMessageActor {
 
 	@Override
 	public void onTick(String message) {
+		String actorName = "ExampleActor";
 		long startTime = System.nanoTime();
 		for (int i=0; i<1;i++) {
 			GameMessage gameMessage = new GameMessage();
 			//GameMessage response = callRpc("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage);
-			GameMessage response = UnityRpcHandler.callUnity("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage, "unity1");
+			if (UnityGameMessageHandler.hasGameActor(actorName)) {
+				GameMessage response = PlayerMessage.askUnity(gameMessage, actorName);
+			}
+			
 		}
 		
 		long endTime = System.nanoTime();

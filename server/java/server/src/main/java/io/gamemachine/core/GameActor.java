@@ -69,7 +69,7 @@ public class GameActor extends UntypedActor {
 		entity.setId(messageId);
 		entity.setGameMessages(new GameMessages());
 		entity.gameMessages.addGameMessage(gameMessage);
-		PlayerCommands.sendToPlayer(entity, playerId);
+		PlayerMessage.tell(entity, playerId);
 	}
 
 	public boolean exactlyOnce(GameMessage gameMessage) {

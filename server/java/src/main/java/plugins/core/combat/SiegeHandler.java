@@ -8,7 +8,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.grid.GridManager;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.BuildObject;
@@ -121,7 +121,7 @@ public class SiegeHandler extends GameMessageActor {
 			if (trackData.entityType != TrackData.EntityType.Player) {
 				continue;
 			}
-			PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
+			PlayerMessage.tell(gameMessage.clone(), trackData.id);
 		}
 	}
 

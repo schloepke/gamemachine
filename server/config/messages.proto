@@ -461,5 +461,5 @@ message ClientMessage {
   optional uint64 sentAt = 10;
   optional TrackData trackData = 11;
   optional string gameId = 12;
-  optional RpcMessage rpcMessage = 13;
+  optional UnityGameMessage unityGameMessage = 13;
 }

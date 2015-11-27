@@ -2,7 +2,7 @@ package plugins.pvp_game;
 
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Guild;
 import io.gamemachine.messages.GuildAction;
@@ -150,7 +150,7 @@ public class GuildHandler extends GameMessageActor {
 				Guilds guilds = new Guilds();
 				guilds.guild = Guild.db().findAll();
 				gameMessage.guilds = guilds;
-				PlayerCommands.sendGameMessage(gameMessage, playerId);
+				PlayerMessage.tell(gameMessage, playerId);
 				
 			} else if (guildAction.action.equals("members")) {
 				guild = playerGuild(playerId);
@@ -159,7 +159,7 @@ public class GuildHandler extends GameMessageActor {
 					guilds.addGuild(guild);
 					gameMessage.guilds = guilds;
 					gameMessage.guildMemberList = members(guild.id);
-					PlayerCommands.sendGameMessage(gameMessage, playerId);	
+					PlayerMessage.tell(gameMessage, playerId);	
 				} else {
 					logger.warning(playerId+" is not in a guild ");
 					return;
@@ -178,7 +178,7 @@ public class GuildHandler extends GameMessageActor {
 				save(guild);
 				addMember(guild.id,playerId);
 				gameMessage.guildAction.response = "success";
-				PlayerCommands.sendGameMessage(gameMessage, playerId);
+				PlayerMessage.tell(gameMessage, playerId);
 			} else {
 				
 				if (!Strings.isNullOrEmpty(guildAction.guildId)) {
@@ -209,7 +209,7 @@ public class GuildHandler extends GameMessageActor {
 							
 							addMember(guild.id,playerId);
 							gameMessage.guildAction.response = "success";
-							PlayerCommands.sendGameMessage(gameMessage, playerId);
+							PlayerMessage.tell(gameMessage, playerId);
 							logger.warning(playerId+" joined guild "+guild.id);
 						} else {
 							logger.warning(inviteId +" does not match  "+guildAction.inviteId);
@@ -228,7 +228,7 @@ public class GuildHandler extends GameMessageActor {
 						String to = CharacterService.instance().find(guildAction.to).playerId;
 						invites.put(to, inviteId);
 						if (!Strings.isNullOrEmpty(to)) {
-							PlayerCommands.sendGameMessage(gameMessage, to);
+							PlayerMessage.tell(gameMessage, to);
 							logger.warning("Invite sent from "+playerId+" to "+guildAction.to);
 						} else {
 							logger.warning("Player id not found for "+guildAction.to);
@@ -236,7 +236,7 @@ public class GuildHandler extends GameMessageActor {
 						
 					} else {
 						gameMessage.guildAction.response = "Not owner";
-						PlayerCommands.sendGameMessage(gameMessage, playerId);
+						PlayerMessage.tell(gameMessage, playerId);
 					}
 						
 				} else if (guildAction.action.equals("leave")) {
@@ -246,7 +246,7 @@ public class GuildHandler extends GameMessageActor {
 					}
 					
 					gameMessage.guildAction.response = "success";
-					PlayerCommands.sendGameMessage(gameMessage, playerId);
+					PlayerMessage.tell(gameMessage, playerId);
 				
 				} else if (guildAction.action.equals("destroy")) {
 					if (playerId.equals(guild.ownerId)) {
@@ -255,7 +255,7 @@ public class GuildHandler extends GameMessageActor {
 					} else {
 						gameMessage.guildAction.response = "Not owner";
 					}
-					PlayerCommands.sendGameMessage(gameMessage, playerId);
+					PlayerMessage.tell(gameMessage, playerId);
 				}
 			}
 		}

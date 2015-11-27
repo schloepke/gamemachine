@@ -169,7 +169,7 @@ public class EntityTracking extends UntypedActor {
 					Neighbors neighbors = new Neighbors();
 					neighbors.addTrackData(broadcastTrackData);
 					playerMessage.setNeighbors(neighbors);
-					PlayerCommands.sendToPlayer(playerMessage, tdata.id);
+					PlayerMessage.tell(playerMessage, tdata.id);
 					// logger.warn("Broadcast sent to " + tdata.id);
 				}
 			}
@@ -236,6 +236,16 @@ public class EntityTracking extends UntypedActor {
 		SendToGateway(player, neighbors);
 	}
 
+	private void sendTrackDataResponse(String playerId, String id, TrackDataResponse.REASON reason) {
+		Entity entity = new Entity();
+		entity.id = "0";
+		TrackDataResponse response = new TrackDataResponse();
+		response.id = id;
+		response.reason = reason;
+		entity.setTrackDataResponse(response);
+		PlayerMessage.tell(entity, playerId);
+	}
+	
 	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
 
@@ -245,8 +255,7 @@ public class EntityTracking extends UntypedActor {
 			}
 			if (movementVerifier != null) {
 				if (!movementVerifier.verify(trackData)) {
-					PlayerCommands.sendTrackDataResponse(playerId, trackData.id,
-							TrackDataResponse.REASON.VALIDATION_FAILED);
+					sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.VALIDATION_FAILED);
 					return;
 				}
 			}
@@ -268,7 +277,7 @@ public class EntityTracking extends UntypedActor {
 			// Resend is most likely from a TrackData that contains a delta, but
 			// where we never received an initial
 			// TrackData with the full coordinates.
-			PlayerCommands.sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
+			sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
 		}
 	}
 

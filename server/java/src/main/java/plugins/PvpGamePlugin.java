@@ -3,24 +3,17 @@ package plugins;
 import io.gamemachine.chat.ChatSubscriptions;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Plugin;
-import io.gamemachine.grid.GridExpiration;
 import io.gamemachine.routing.GameMessageRoute;
 import plugins.pvp_game.GuildHandler;
-import plugins.pvp_game.HarvestHandler;
 import plugins.pvp_game.TimeHandler;
 
 public class PvpGamePlugin extends Plugin {
 
 	@Override
 	public void start() {
-		
-		GameMessageRoute.add(HarvestHandler.name,HarvestHandler.name,false);
-		
+			
 		
 		GameMessageRoute.add(GuildHandler.name,GuildHandler.name,false);
-		
-		ActorUtil.createActor(HarvestHandler.class, HarvestHandler.name);
-		
 		
 		
 		ActorUtil.createActor(TimeHandler.class, TimeHandler.name);

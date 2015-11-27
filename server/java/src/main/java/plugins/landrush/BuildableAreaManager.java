@@ -7,7 +7,7 @@ import com.google.common.collect.Lists;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.messages.BuildableArea;
 import io.gamemachine.messages.BuildableAreas;
 import io.gamemachine.messages.GameMessage;
@@ -53,7 +53,7 @@ public class BuildableAreaManager extends GameMessageActor {
 					buildableArea.size = null;
 				}
 				msg.buildableAreas.buildableArea = subset;
-				PlayerCommands.sendGameMessage(msg.clone(), playerId);
+				PlayerMessage.tell(msg.clone(), playerId);
 			}
 			
 		}

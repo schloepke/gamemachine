@@ -6,7 +6,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Attack;
@@ -50,7 +50,7 @@ public class CombatHandler extends GameMessageActor {
 		for (TrackData trackData : grid.getAll()) {
 			if (!playerId.equals(trackData.id)) {
 				msg.attack = attack;
-				PlayerCommands.sendGameMessage(msg, trackData.id);
+				PlayerMessage.tell(msg, trackData.id);
 			}
 		}
 	}

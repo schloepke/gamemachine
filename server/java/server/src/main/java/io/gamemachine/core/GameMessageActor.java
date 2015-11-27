@@ -14,7 +14,7 @@ import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerNotification;
 import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.routing.UnityRpcHandler;
+import io.gamemachine.routing.UnityGameMessageHandler;
 
 public abstract class GameMessageActor extends GameActor {
 
@@ -80,7 +80,7 @@ public abstract class GameMessageActor extends GameActor {
 	public void onTick(String message) {}
 
 	public final void sendGameMessage(GameMessage gameMessage, String playerId) {
-		PlayerCommands.sendGameMessage(gameMessage, playerId);
+		PlayerMessage.tell(gameMessage, playerId);
 	}
 
 	public void onPlayerDisconnect(String playerId){}
@@ -97,14 +97,6 @@ public abstract class GameMessageActor extends GameActor {
 	public final void subscribeToForCharacterNotifications() {
 		ActorRef ref = ChatMediator.getInstance().get(CharacterService.channel);
 		ref.tell(new DistributedPubSubMediator.Subscribe(CharacterService.channel,getSelf()),getSelf());
-	}
-	
-	public final GameMessage callRpc(String methodName, GameMessage gameMessage) {
-		if (Strings.isNullOrEmpty(playerId)) {
-			return null;
-		}
-		String remotePlayerId = UnityRpcHandler.PlayerIdToRpcPlayerId(playerId);
-		return UnityRpcHandler.callUnity(methodName, gameMessage, remotePlayerId);
 	}
 	
 	public final void scheduleOnce(long delay, String message) {

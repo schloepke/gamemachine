@@ -6,7 +6,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.config.GridConfig;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.GameMessage;
@@ -37,7 +37,7 @@ public class TimeHandler extends UntypedActor {
 				if (trackData.entityType != TrackData.EntityType.Player) {
 					continue;
 				}
-				PlayerCommands.sendGameMessage(msg, trackData.id);
+				PlayerMessage.tell(msg, trackData.id);
 			}
 		}
 		

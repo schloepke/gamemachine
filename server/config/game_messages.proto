@@ -894,16 +894,20 @@ persistent_message TestObject {
   
 }
 
-message RpcMessage {
+message UnityGameMessage {
   enum MessageType {
-  	NONE = 0;
-    TEST = 1;
+  	None = 0;
+    Ask = 1;
+    Register = 2;
+    Tell = 3;
   }
+  
   required MessageType messageType = 1;
   optional GameMessage gameMessage = 2;
   optional int64 messageId = 3;
   optional string playerId = 4;
-  optional string method = 5;
+  optional string actorName = 5;
+  
 }
 
 local_message Zone {
@@ -959,7 +963,7 @@ message GameMessage {
   optional string agentId = 5;
   optional DynamicMessage dynamicMessage = 6;
   optional PathData pathData = 7;
-
+    
   // User modifiable
   optional PlayerItems playerItems = 10;
   optional AddPlayerItem addPlayerItem = 11;

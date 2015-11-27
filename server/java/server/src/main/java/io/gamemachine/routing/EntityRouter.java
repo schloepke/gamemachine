@@ -2,7 +2,7 @@ package io.gamemachine.routing;
 
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.EntityTracking;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.Entity;
 import io.gamemachine.messages.GameMessage;
@@ -92,7 +92,7 @@ public class EntityRouter {
 			Player recipientPlayer = new Player();
 			recipientPlayer.setId(pd.player.getId());
 			entity.setPlayer(recipientPlayer).setSenderId(entity.getPlayer().getId());
-			PlayerCommands.sendToPlayer(entity, recipientPlayer.getId());
+			PlayerMessage.tell(entity, recipientPlayer.getId());
 			logger.debug("Message sent to player destination " + recipientPlayer.getId());
 			return;
 		}
@@ -126,7 +126,7 @@ public class EntityRouter {
 					if (pd.agent != null) {
 						gameMessage.setAgentId(pd.agent);
 					}
-					PlayerCommands.sendGameMessage(gameMessage, recipientPlayer.getId());
+					PlayerMessage.tell(gameMessage, recipientPlayer.getId());
 					logger.debug("GameMessage sent to " + recipientPlayer.getId());
 					continue;
 				}

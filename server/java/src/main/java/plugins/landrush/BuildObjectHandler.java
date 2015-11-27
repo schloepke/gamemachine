@@ -7,7 +7,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridManager;
@@ -137,7 +137,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			if (trackData.entityType != TrackData.EntityType.Player) {
 				continue;
 			}
-			PlayerCommands.sendGameMessage(gameMessage.clone(), trackData.id);
+			PlayerMessage.tell(gameMessage.clone(), trackData.id);
 		}
 	}
 

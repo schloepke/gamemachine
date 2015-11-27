@@ -17,7 +17,7 @@ import io.gamemachine.process.ProcessManager;
 import io.gamemachine.routing.GameMessageRoute;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
-import io.gamemachine.routing.UnityRpcHandler;
+import io.gamemachine.routing.UnityGameMessageHandler;
 import io.gamemachine.routing.UnityRpcTest;
 import io.gamemachine.zones.ZoneManager;
 
@@ -81,7 +81,7 @@ public class GameMachineLoader {
 		
 		actorSystem = newActorSystem;
 				
-		actorSystem.actorOf(Props.create(UnityRpcHandler.class), UnityRpcHandler.class.getSimpleName());
+		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
 		actorSystem.actorOf(Props.create(UnityRpcTest.class), UnityRpcTest.class.getSimpleName());
 		
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());

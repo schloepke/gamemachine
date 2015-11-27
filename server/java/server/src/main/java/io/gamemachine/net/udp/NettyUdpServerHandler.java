@@ -5,7 +5,7 @@ import io.gamemachine.core.MathHelper;
 import io.gamemachine.core.NetMessage;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
-import io.gamemachine.routing.UnityRpcHandler;
+import io.gamemachine.routing.UnityGameMessageHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;
@@ -43,7 +43,7 @@ public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<Dat
 
 	public NettyUdpServerHandler() {
 		this.inbound = ActorUtil.getSelectionByName(Incoming.name);
-		this.rpc = ActorUtil.getSelectionByName(UnityRpcHandler.name);
+		this.rpc = ActorUtil.getSelectionByName(UnityGameMessageHandler.name);
 	}
 
 	// @Override
@@ -107,8 +107,8 @@ public final class NettyUdpServerHandler extends SimpleChannelInboundHandler<Dat
 			clients.put(clientId, clientAddress);
 		}
 		
-		if (clientMessage.rpcMessage != null) {
-			rpc.tell(clientMessage.rpcMessage, null);
+		if (clientMessage.unityGameMessage != null) {
+			rpc.tell(clientMessage.unityGameMessage, null);
 			return;
 		}
 		

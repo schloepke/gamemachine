@@ -11,7 +11,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.GameEntityManagerService;
-import io.gamemachine.core.PlayerCommands;
+import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
@@ -101,7 +101,7 @@ public class VitalsSender extends UntypedActor {
 		
 		GameMessage msg = new GameMessage();
 		msg.vitalsContainer = toSend;
-		PlayerCommands.sendGameMessage(msg, playerTrackData.id);
+		PlayerMessage.tell(msg, playerTrackData.id);
 	}
 
 	private List<Vitals> objectVitals(int zone) {
