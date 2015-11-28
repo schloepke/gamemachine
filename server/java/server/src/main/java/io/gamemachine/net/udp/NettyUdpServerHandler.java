@@ -5,7 +5,7 @@ import io.gamemachine.core.MathHelper;
 import io.gamemachine.core.NetMessage;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.routing.Incoming;
-import io.gamemachine.routing.UnityGameMessageHandler;
+import io.gamemachine.unity.UnityGameMessageHandler;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandler.Sharable;

@@ -24,7 +24,7 @@ module GameMachine
       conf.orm = config.get_boolean('orm')
       conf.mono_enabled = config.get_boolean('mono_enabled')
       conf.seeds = config.get_string_list('seeds')
-
+      conf.agent_secret = config.get_string('agent_secret')
 
       conf.client.protocol = config.get_string('client.protocol')
       conf.client.idle_timeout = config.get_int('client.idle_timeout')

@@ -17,8 +17,8 @@ import io.gamemachine.process.ProcessManager;
 import io.gamemachine.routing.GameMessageRoute;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
-import io.gamemachine.routing.UnityGameMessageHandler;
-import io.gamemachine.routing.UnityRpcTest;
+import io.gamemachine.unity.UnityGameMessageHandler;
+import io.gamemachine.unity.UnityRpcTest;
 import io.gamemachine.zones.ZoneManager;
 
 public class GameMachineLoader {
@@ -78,7 +78,7 @@ public class GameMachineLoader {
 
 	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
-		
+				
 		actorSystem = newActorSystem;
 				
 		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
@@ -104,6 +104,8 @@ public class GameMachineLoader {
 		}
 		
 		actorSystem.actorOf(Props.create(GridExpiration.class), GridExpiration.class.getSimpleName());
+		
+		PlayerService.getInstance().createAgentControllers();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {

@@ -9,7 +9,7 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GameMessages;
 import io.gamemachine.messages.Player;
 import io.gamemachine.net.Connection;
-import io.gamemachine.routing.UnityGameMessageHandler;
+import io.gamemachine.unity.UnityGameMessageHandler;
 
 public class PlayerMessage {
 

@@ -15,10 +15,8 @@ public class Authentication {
 	private static ConcurrentHashMap<String, Integer> authenticatedUsers = new ConcurrentHashMap<String, Integer>();
 	private static final Logger logger = LoggerFactory.getLogger(Authentication.class);
 
-	private Authable playerAuth;
 
 	public Authentication() {
-		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
 	}
 
 	public static boolean isAuthenticated(Player player) {
@@ -65,19 +63,21 @@ public class Authentication {
 		if (isPublic()) {
 			return player.getAuthtoken();
 		} else {
-			return PlayerService.getInstance().getAuthtoken(player.getId());
+			return PlayerService.getInstance().getAuthtoken(player.id);
 		}
 	}
 
 	public boolean isPublic() {
-		return playerAuth.isPublic();
+		return PlayerAuthentication.getInstance().isPublic();
 	}
 
 	public boolean authtokenIsValid(Player player) {
 		// 0 signifies logged out in the db, it's reserved and clients should never send this
 		if (player.authtoken == 0) {
 			return false;
-		} else 	if (isPublic() || player.authtoken == authtokenForPlayer(player)) {
+		} else 	if (player.authtoken == authtokenForPlayer(player)) {
+			return true;
+		} else if (isPublic()) {
 			return true;
 		} else {
 			return false;

@@ -15,12 +15,10 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 	private final SslContext sslCtx;
 
 	private String actorName;
-	private HttpHelper httpHelper;
 	
-    public HttpServerInitializer(SslContext sslCtx, String actorName, HttpHelper httpHelper) {
+    public HttpServerInitializer(SslContext sslCtx, String actorName) {
         this.sslCtx = sslCtx;
         this.actorName = actorName;
-        this.httpHelper = httpHelper;
     }
 
     @Override
@@ -32,6 +30,6 @@ public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
         p.addLast(new HttpServerCodec());
         p.addLast(new HttpObjectAggregator(10000000));
         p.addLast(new ChunkedWriteHandler());
-        p.addLast(new HttpServerHandler(actorName,httpHelper));
+        p.addLast(new HttpServerHandler(actorName));
     }
 }

@@ -79,8 +79,7 @@ public class PlayerOutgoing extends UntypedActor {
 		clientMessage.setPlayer(new Player().setId(playerId));
 		Connection.removeConnection(playerId);
 		RequestHandler.unregisterClient(clientMessage);
-		PlayerService.getInstance().setAuthtoken(playerId, 0);
-		PlayerService.getInstance().setCharacter(playerId, null);
+		PlayerService.getInstance().logout(playerId);
 		getSelf().tell(akka.actor.PoisonPill.getInstance(), getSelf());
 	}
 	

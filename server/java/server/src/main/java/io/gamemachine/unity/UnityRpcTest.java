@@ -1,4 +1,4 @@
-package io.gamemachine.routing;
+package io.gamemachine.unity;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public class UnityRpcTest extends GameMessageActor {
 		for (int i=0; i<1;i++) {
 			GameMessage gameMessage = new GameMessage();
 			//GameMessage response = callRpc("GameMachine.ServerClient.RpcHandler.TestMethod", gameMessage);
-			if (UnityGameMessageHandler.hasGameActor(actorName)) {
+			if (UnityGameMessageHandler.hasActor(actorName)) {
 				GameMessage response = PlayerMessage.askUnity(gameMessage, actorName);
 			}
 			
@@ -31,7 +31,7 @@ public class UnityRpcTest extends GameMessageActor {
 		
 		long endTime = System.nanoTime();
 		long duration = (endTime - startTime) / 1000000;  //divide by 1000000 to get milliseconds.
-		log.warn("Time "+duration);
+		//log.warn("Time "+duration);
 		scheduleOnce(100l, "tick");
 	}
 	

@@ -34,12 +34,12 @@ public final class HttpServer implements Runnable {
     private Channel channel;
     private InetSocketAddress address;
     
-    public HttpServer(String host, int port, boolean useSsl,String actorName, HttpHelper httpHelper) {
+    public HttpServer(String host, int port, boolean useSsl,String actorName) {
     	this.host = host;
     	this.port = port;
     	this.useSsl = useSsl;
     	SslContext sslCtx = getSslContext();
-    	initializer = new HttpServerInitializer(sslCtx,actorName, httpHelper);
+    	initializer = new HttpServerInitializer(sslCtx,actorName);
     	this.address = new InetSocketAddress(host,port);
     }
     

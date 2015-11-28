@@ -14,7 +14,7 @@ import io.gamemachine.messages.ClientManagerEvent;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerNotification;
 import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.routing.UnityGameMessageHandler;
+import io.gamemachine.unity.UnityGameMessageHandler;
 
 public abstract class GameMessageActor extends GameActor {
 

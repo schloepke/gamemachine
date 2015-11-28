@@ -1,19 +1,10 @@
 package io.gamemachine.core;
 
-import io.gamemachine.authentication.Authentication;
-import io.gamemachine.chat.ChatMediator;
-import io.gamemachine.config.AppConfig;
-import io.gamemachine.grid.GridManager;
-import io.gamemachine.messages.Characters;
-import io.gamemachine.messages.Player;
-import io.gamemachine.messages.PlayerNotification;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.naming.OperationNotSupportedException;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.slf4j.Logger;
@@ -23,7 +14,13 @@ import com.google.common.base.Strings;
 
 import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
+import io.gamemachine.authentication.Authentication;
+import io.gamemachine.chat.ChatMediator;
+import io.gamemachine.config.AppConfig;
+import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Character;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.PlayerNotification;
 
 public class PlayerService {
 
@@ -33,7 +30,9 @@ public class PlayerService {
 	public static final int OBJECT_DB = 0;
 	public static final int SQL_DB = 1;
 	public Map<String, Player> players = new ConcurrentHashMap<String, Player>();
+	public Map<String, String> agentPasswords = new ConcurrentHashMap<String, String>();
 	private static final Logger logger = LoggerFactory.getLogger(PlayerService.class);
+	private int agentControllerCount = 50;
 	
 	private PlayerService() {
 		String auth = AppConfig.Handlers.getAuth();
@@ -53,6 +52,52 @@ public class PlayerService {
 		return LazyHolder.INSTANCE;
 	}
 
+	public String getAgentPassword(String playerId) {
+		return agentPasswords.get(playerId);
+	}
+	
+	public synchronized Player getAvailableAgent() {
+		List<Player> agents = Player.db().where("player_role = ?", "agent_controller");
+		for (Player agent : agents) {
+			if (!loggedIn(agent)) {
+				String password = UUID.randomUUID().toString();
+				agentPasswords.put(agent.id, password);
+				setPassword(agent.id, password);
+				return find(agent.id);
+			}
+		}
+		return null;
+	}
+	
+	public void createAgentControllers() {
+		CharacterService characterService = CharacterService.instance();
+		String gameId = AppConfig.getDefaultGameId();
+		String basename = "agent_";
+		int zone = 0;
+		
+		for (int i = 1; i < agentControllerCount; i++) {
+			String playerId = basename + i;
+			String characterId = basename+"c_" + i;
+			Character character = characterService.find(playerId, characterId);
+
+			Player player = find(playerId);
+			if (player == null) {
+				player = create(playerId, gameId);
+			}
+			
+			if (character == null) {
+				character = characterService.create(playerId, characterId, null);
+				characterService.save(character);
+			}
+			
+			logout(playerId);
+			setRole(playerId, "agent_controller");
+			setPassword(playerId, UUID.randomUUID().toString());
+			setCharacter(playerId, characterId);
+			GridManager.setEntityZone(playerId, zone);
+		}
+	}
+	
 	public void sendNotification(String playerId, String action) {
 		PlayerNotification playerNotification = new PlayerNotification();
 		playerNotification.playerId = playerId;
@@ -212,11 +257,11 @@ public class PlayerService {
 		return Authentication.isAuthenticated(playerId);
 	}
 	
-	public Integer getAuthtoken(String playerId) {
+	public int getAuthtoken(String playerId) {
 		clearCache(playerId);
 		Player player = find(playerId);
 		if (player == null) {
-			return null;
+			return 0;
 		} else {
 			return player.authtoken;
 		}
@@ -258,7 +303,20 @@ public class PlayerService {
 			Player.db().save(player);
 		}
 	}
-		
+	
+	public boolean loggedIn(Player player) {
+		if (player.authtoken == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+	
+	public void logout(String playerId) {
+		setAuthtoken(playerId, 0);
+		setCharacter(playerId,null);
+	}
+	
 	public void setAuthtoken(String playerId, int authtoken) {
 		Player player = find(playerId);
 		if (player == null) {

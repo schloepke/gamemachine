@@ -22,6 +22,7 @@ module GameMachine
     def set_java_config
       JavaLib::AppConfig.set_env_root(ENV['APP_ROOT'])
       JavaLib::AppConfig.set_env(GameMachine.env)
+      JavaLib::AppConfig.set_agent_secret(config.agent_secret)
       JavaLib::AppConfig.set_default_game_id(config.default_game_id)
       JavaLib::AppConfig.setWorldOffset(config.world_offset)
       JavaLib::AppConfig.setGridExpiration(config.grid_expiration)
@@ -53,6 +54,11 @@ module GameMachine
       JavaLib::GridConfigs::set_grid_configs(config.grids)
             
       JavaLib::AppConfig::Client.setIdleTimeout(config.client.idle_timeout)
+      JavaLib::AppConfig::Client.setProtocol(config.client.protocol)
+      JavaLib::AppConfig::Client.setTcpHost(config.tcp.host)
+      JavaLib::AppConfig::Client.setTcpPort(config.tcp.port)
+      JavaLib::AppConfig::Client.setUdpHost(config.udp.host)
+      JavaLib::AppConfig::Client.setUdpPort(config.udp.port)
     end
 
     def set_config_from_env

@@ -15,9 +15,10 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.gamemachine.authentication.Authable;
+import com.google.common.base.Strings;
+
 import io.gamemachine.authentication.Authentication;
-import io.gamemachine.authentication.AuthorizedPlayers;
+import io.gamemachine.authentication.PlayerAuthentication;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.PlayerService;
@@ -55,21 +56,17 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	private static final Logger logger = LoggerFactory.getLogger(HttpServerHandler.class);
 
 	public ChannelHandlerContext context = null;
-	private Authable playerAuth;
-	private HttpHelper httpHelper;
 
-	public HttpServerHandler(String actorName, HttpHelper httpHelper) {
-		this.httpHelper = httpHelper;
-		this.playerAuth = AuthorizedPlayers.getPlayerAuthentication();
+	public HttpServerHandler(String actorName) {
 	}
 
-	private Integer login(String playerId, String password) {
+	private int login(String playerId, String password) {
 		Player player = PlayerService.getInstance().find(playerId);
 		if (player == null) {
-			return null;
+			return 0;
 		}
 
-		return playerAuth.authorize(playerId, password);
+		return PlayerAuthentication.getInstance().authorize(playerId, password);
 	}
 
 	@Override
@@ -108,15 +105,35 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 
 			if (req.getUri().startsWith("/api")) {
-
+				
 				if (req.getUri().startsWith("/api/client/login/")) {
-					Integer authtoken = login(params.get("username"), params.get("password"));
-					if (authtoken == null) {
+					int authtoken = 0;
+					String username = null;
+					
+					if (!Strings.isNullOrEmpty(params.get("username")) && params.get("username").equals(AppConfig.getAgentSecret())) {
+						Player player = PlayerService.getInstance().getAvailableAgent();
+						if (player == null) {
+							logger.warn("Unable to assign agent");
+							NotAuthorized(ctx);
+							return;
+						}
+						
+						String password = PlayerService.getInstance().getAgentPassword(player.id);
+						authtoken = login(player.id, password);
+						username = player.id;
+						logger.warn("Agent "+player.id+" authtoken "+authtoken);
+					} else {
+						authtoken = login(params.get("username"), params.get("password"));
+						username = params.get("username");
+					}
+					
+					if (authtoken == 0) {
 						NotAuthorized(ctx);
 					} else {
-						String json = httpHelper.client_auth_response(authtoken);
+						String json = PlayerAuthentication.getInstance().authenticationResponse(authtoken,username);
 						Ok(ctx, json);
 					}
+					
 					return;
 				}
 

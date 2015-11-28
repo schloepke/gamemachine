@@ -21,6 +21,7 @@ public class AppConfig {
 	private static List<String> plugins = new ArrayList<String>();
 	private static int akkaPort;
 	private static String akkaHost;
+	private static String agentSecret;
 	
 	public static Config getConfig() {
 		String path = AppConfig.envRoot+File.separator+"config"+File.separator+env+".conf";
@@ -58,6 +59,14 @@ public class AppConfig {
 	
 	public static void setOrm(boolean orm) {
 		AppConfig.orm = orm;
+	}
+	
+	public static String getAgentSecret() {
+		return agentSecret;
+	}
+
+	public static void setAgentSecret(String agentSecret) {
+		AppConfig.agentSecret = agentSecret;
 	}
 	
 	public static String getEnv() {
@@ -103,7 +112,53 @@ public class AppConfig {
 	
 	public static class Client {
 		private static int idleTimeout;
-
+		private static String protocol;
+		private static String tcpHost;
+		private static int tcpPort;
+		private static String udpHost;
+		private static int udpPort;
+		
+		public static String getUdpHost() {
+			return udpHost;
+		}
+		
+		public static void setUdpHost(String udpHost) {
+			Client.udpHost = udpHost;
+		}
+		
+		public static int getUdpPort() {
+			return udpPort;
+		}
+		
+		public static void setUdpPort(int udpPort) {
+			Client.udpPort = udpPort;
+		}
+		
+		public static String getTcpHost() {
+			return tcpHost;
+		}
+		
+		public static void setTcpHost(String tcpHost) {
+			Client.tcpHost = tcpHost;
+		}
+		
+		public static int getTcpPort() {
+			return tcpPort;
+		}
+		
+		public static void setTcpPort(int tcpPort) {
+			Client.tcpPort = tcpPort;
+		}
+		
+		
+		public static String getProtocol() {
+			return protocol;
+		}
+		
+		public static void setProtocol(String protocol) {
+			Client.protocol = protocol;
+		}
+		
 		public static int getIdleTimeout() {
 			return idleTimeout;
 		}

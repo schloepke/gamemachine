@@ -2,15 +2,11 @@ module GameMachine
   module Commands
     class MiscCommands
 
-      attr_reader :player_manager, :mono_proxy
+      attr_reader :player_manager
       def initialize
-        @mono_proxy = JavaLib::MonoProxy.getInstance
         @player_manager = Application.config.player_manager
       end
 
-      def call_mono(klass,message)
-        mono_proxy.call(klass,message)
-      end
 
       def client_manager_register(name,events=[])
         register = MessageLib::ClientManagerRegister.new.

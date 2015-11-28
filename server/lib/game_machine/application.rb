@@ -49,7 +49,6 @@ module GameMachine
 
       def start
         orm_connect
-        JavaLib::AuthorizedPlayers.setPlayerAuthentication(Handlers::PlayerAuthentication.instance)
 
         start_actor_system
         data_store
@@ -101,7 +100,7 @@ module GameMachine
       end
 
       def start_http
-        http = NetLib::HttpServer.new(config.http.host,config.http.port,config.http.ssl,'message_gateway', HttpHelper.new)
+        http = NetLib::HttpServer.new(config.http.host,config.http.port,config.http.ssl,'message_gateway')
         http.start
       end
 
