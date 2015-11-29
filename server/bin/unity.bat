@@ -1,5 +1,8 @@
 
 @echo off
-SET UNITY_HOME=%~dp0
 
-"%UNITY_HOME%/game.exe" -batchmode -nographcis -logFile ./logfile
+set UNITY_HOME=%~dp0
+
+echo %UNITY_HOME%
+
+"%UNITY_HOME%..\unity\unityServer.exe" -batchmode -nographics -logFile ./logfile 

@@ -33,17 +33,20 @@ public class ExternalProcess implements Runnable {
 	public String startScript;
 	public String executable;
 	public Status status;
+	public String name;
+	public boolean running = false;
 	
-	public ExternalProcess(String startScript, String executable) {
+	public ExternalProcess(String name, String startScript, String executable) {
 		this.startScript = startScript;
 		this.executable = executable;
+		this.name = name;
 		this.status = Status.DOWN;
 	}
 	
 	public String name() {
-		return startScript + executable;
+		return name;
 	}
-	public OS os() {
+	public static OS os() {
 		if (System.getProperty("os.name").toLowerCase().indexOf("windows") > -1) {
 			return OS.WIN;
 		} else {
@@ -80,7 +83,9 @@ public class ExternalProcess implements Runnable {
 		try {
 			logger.warn("Process " + executable + " starting at " + startScript);
 			ProcessExecutor pex = new ProcessExecutor();
+			running = true;
 			int rvalue = pex.command(startScript).execute().getExitValue();
+			running = false;
 			status = Status.DOWN;
 			logger.warn("Process "+ startScript+" exit value was " + rvalue);
 		} catch (InvalidExitValueException | IOException | InterruptedException | TimeoutException e) {
@@ -89,34 +94,35 @@ public class ExternalProcess implements Runnable {
 	}
 	
 	public boolean isRunning() {
-		try {
-			Runtime rt = Runtime.getRuntime();
-			String pattern = "(.*)"+executable+"(.*)";
-			Pattern r = Pattern.compile(pattern);
-			
-	        String line;
-	        String command;
-	        if (os() == OS.WIN) {
-	        	command = "tasklist.exe";
-	        } else {
-	        	command = "ps -e";
-	        }
-	        
-	        Process p = rt.exec(command);
-	        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
-	        while ((line = input.readLine()) != null) {
-	        	Matcher m = r.matcher(line);
-	        	if (m.find()) {
-	        		input.close();
-	        		return true;
-	        	}
-	        }
-	        input.close();
-	        return false;
-	    } catch (Exception err) {
-	        logger.info(err.getMessage(),err);
-	        return false;
-	    }
+		return running;
+//		try {
+//			Runtime rt = Runtime.getRuntime();
+//			String pattern = "(.*)"+executable+"(.*)";
+//			Pattern r = Pattern.compile(pattern);
+//			
+//	        String line;
+//	        String command;
+//	        if (os() == OS.WIN) {
+//	        	command = "tasklist.exe";
+//	        } else {
+//	        	command = "ps -e";
+//	        }
+//	        
+//	        Process p = rt.exec(command);
+//	        BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+//	        while ((line = input.readLine()) != null) {
+//	        	Matcher m = r.matcher(line);
+//	        	if (m.find()) {
+//	        		input.close();
+//	        		return true;
+//	        	}
+//	        }
+//	        input.close();
+//	        return false;
+//	    } catch (Exception err) {
+//	        logger.info(err.getMessage(),err);
+//	        return false;
+//	    }
 	}
 	
 	public static int execute(String path) {

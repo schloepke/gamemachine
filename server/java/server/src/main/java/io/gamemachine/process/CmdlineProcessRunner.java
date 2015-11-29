@@ -1,12 +1,19 @@
 package io.gamemachine.process;
 
 public class CmdlineProcessRunner {
-	private static ProcessManager manager;
+	private static UnityProcessManager manager;
 
 	private static long checkInterval = 10000l;
 
 	public static void main(String[] args) throws InterruptedException {
-		manager = new ProcessManager(true);
+		
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+            public void run() {
+                UnityProcessManager.stopAll();
+            }
+        });
+		
+		manager = new UnityProcessManager(true);
 		manager.startAll();
 
 		while (true) {

@@ -7,7 +7,7 @@ public class AkkaProcessRunner extends GameMessageActor {
 	
 	public static String name = AkkaProcessRunner.class.getSimpleName();
 	
-	private static ProcessManager manager;
+	private static UnityProcessManager manager;
 
 	private long checkInterval = 10000l;
 	
@@ -15,7 +15,7 @@ public class AkkaProcessRunner extends GameMessageActor {
 	@Override
 	public void awake() {
 		if (manager == null) {
-			manager = new ProcessManager(false);
+			manager = new UnityProcessManager(false);
 			manager.startAll();
 		}
 		

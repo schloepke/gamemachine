@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -20,21 +20,49 @@ import com.typesafe.config.ConfigFactory;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.messages.ProcessCommand;
 
-public class ProcessManager {
-	private static final Logger logger = LoggerFactory.getLogger(ProcessManager.class);
+public class UnityProcessManager {
+	private static final Logger logger = LoggerFactory.getLogger(UnityProcessManager.class);
 	private static ExecutorService executor = Executors.newCachedThreadPool();
 	private static Map<String, ExternalProcess> processList = new ConcurrentHashMap<String, ExternalProcess>();
 	
 	private boolean isCommandLine = false;
 	
-	public ProcessManager(boolean isCommandLine) {
+	public UnityProcessManager(boolean isCommandLine) {
 		this.isCommandLine = isCommandLine;
+	}
+	
+	public String getUnityPath() {
+		if (isCommandLine) {
+			String cwd = Paths.get(".").toAbsolutePath().normalize().toString();
+			
+			if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
+				return cwd+File.separator+"bin"+File.separator+"unity.bat";
+			} else {
+				return cwd+File.separator+"bin"+File.separator+"unity.sh";
+			}
+			
+		} else {
+			if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
+				return AppConfig.envRoot+File.separator+"process_manager"+File.separator+"bin"+File.separator+"unity.bat";
+			} else {
+				return AppConfig.envRoot+File.separator+"process_manager"+File.separator+"bin"+File.separator+"unity.sh";
+			}
+			
+		}
+	}
+	
+	public String getUnityExe() {
+		if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
+			return "unityServer.exe";
+		} else {
+			return "unityServer";
+		}
 	}
 	
 	public Config getConfig() {
 		if (isCommandLine) {
 			String cwd = Paths.get(".").toAbsolutePath().normalize().toString();
-			String configPath = cwd+"/process_manager.conf";
+			String configPath = cwd+File.separator+"process_manager.conf";
 			Path path = Paths.get(configPath);
 			
 			try {
@@ -85,36 +113,18 @@ public class ProcessManager {
 			return;
 		}
 		
-		List<? extends Config> values = config.getConfigList("gamemachine.processes");
-		for (Config value : values) {
-			
-			ExternalProcess info = new ExternalProcess(value.getString("start_script"),value.getString("executable"));
-			boolean enabled = value.getBoolean("enabled");
-			
-			if (enabled) {
-				add(info);
-			} else {
-				logger.debug(info.executable+" not enabled, skipping");
-			}
+		int instanceCount = config.getInt("gamemachine.unity_processes");
+		for (int i = 0; i<instanceCount; i++) {
+			String name = UUID.randomUUID().toString();
+			ExternalProcess info = new ExternalProcess(name,getUnityPath(),getUnityExe());
+			add(info);
 		}
 	}
-	
-	public void DoCommand(ProcessCommand command) {
-		ExternalProcess process = new ExternalProcess(command.startScript,command.executable);
-		if (command.action == ProcessCommand.Action.Start) {
-			start(process);
-		} else if (command.action == ProcessCommand.Action.Stop) {
-			stop(process);
-		} else if (command.action == ProcessCommand.Action.Restart) {
-			stop(process);
-			start(process);
-		}
-	}
-	
+		
 	public void add(ExternalProcess info) {
-		String key = info.name();
+		String key = info.name;
 		if (exists(key)) {
-			logger.warn("Process " + info.executable + " exists, not adding");
+			logger.info("Process " + info.executable + " exists, not adding");
 			return;
 		}
 		
@@ -141,7 +151,7 @@ public class ProcessManager {
 				process.status = ExternalProcess.Status.DOWN;
 				start(process);
 			}
-			logger.warn("Process "+process.executable+" is "+process.status.toString());
+			logger.info("Process "+process.name+" is "+process.status.toString());
 		}
 	}
 	

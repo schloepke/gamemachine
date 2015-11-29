@@ -22,11 +22,20 @@ module GameMachine
       end
 
       def copy_process_manager
-        source = File.join(java_root,'build','install','server')
-        destination = File.join(ENV['APP_ROOT'],'process_manager')
-        FileUtils.rm_rf destination
-        FileUtils.mv(source,destination)
-        FileUtils.cp File.join(ENV['APP_ROOT'],'config','process_manager.conf'), File.join(ENV['APP_ROOT'],'process_manager')
+       
+        FileUtils.rm_rf File.join(ENV['APP_ROOT'],'process_manager','bin')
+        FileUtils.rm_rf File.join(ENV['APP_ROOT'],'process_manager','lib')
+        FileUtils.mv  File.join(java_root,'build','install','server','bin'), File.join(ENV['APP_ROOT'],'process_manager')
+        FileUtils.mv  File.join(java_root,'build','install','server','lib'), File.join(ENV['APP_ROOT'],'process_manager')
+          
+        FileUtils.mv File.join(ENV['APP_ROOT'],'process_manager','bin','server.bat'),
+          File.join(ENV['APP_ROOT'],'process_manager','bin','process_manager.bat')
+          
+        FileUtils.mv File.join(ENV['APP_ROOT'],'process_manager','bin','server'),
+                  File.join(ENV['APP_ROOT'],'process_manager','bin','process_manager')
+                    
+        FileUtils.cp File.join(ENV['APP_ROOT'],'bin','unity.bat'), File.join(ENV['APP_ROOT'],'process_manager','bin')
+        FileUtils.cp File.join(ENV['APP_ROOT'],'bin','unity.sh'), File.join(ENV['APP_ROOT'],'process_manager','bin')
       end
       
       

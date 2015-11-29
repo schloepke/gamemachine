@@ -1,6 +1,6 @@
 #!/bin/bash
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-cd $DIR
+cd $DIR/unity
 
-./game.x86_64 -batchmode -nographcis -logFile ./logfile
+./unityServer -batchmode -nographics -logFile ./logfile

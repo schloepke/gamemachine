@@ -15,7 +15,7 @@ import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.GameConfig;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.process.AkkaProcessRunner;
-import io.gamemachine.process.ProcessManager;
+import io.gamemachine.process.UnityProcessManager;
 import io.gamemachine.regions.RegionManager;
 import io.gamemachine.regions.ZoneService;
 import io.gamemachine.routing.GameMessageRoute;
@@ -119,7 +119,7 @@ public class GameMachineLoader {
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
-                ProcessManager.stopAll();
+                UnityProcessManager.stopAll();
                 getActorSystem().shutdown();
             }
         });
