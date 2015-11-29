@@ -6,3 +6,7 @@ mono/server/server.exe.mdb
 pathfinding/bin/
 pathfinding/recastnavigation
 pkg/
+process_manager/bin
+process_manager/lib
+process_manager/logfile
+process_manager/unity
