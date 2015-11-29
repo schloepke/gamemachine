@@ -57,14 +57,9 @@ module GameMachine
         start_core_systems
         start_handlers
 
-        if GameMachine.env == 'development'
-          start_development_systems
-        end
-
         start_game_systems
         load_games
-        start_mono
-
+       
         start_http
 
         GameMachine.logger.info("Game Machine start successful")
@@ -104,13 +99,7 @@ module GameMachine
         http.start
       end
 
-      def start_mono
-        if config.mono_enabled
-          GameMachine.logger.info "Starting mono server"
-          MonoServer.new.run!
-        end
-      end
-
+     
       def start_endpoints
         if config.tcp.enabled
           NetLib::TcpServer.start(config.tcp.host, config.tcp.port);
@@ -130,8 +119,6 @@ module GameMachine
         JavaLib::GameMachineLoader.start_request_handler(config.routers.request_handler)
       end
 
-      def start_development_systems
-      end
 
       # TODO configurize router sizes
       def start_core_systems

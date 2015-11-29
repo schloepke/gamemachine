@@ -17,7 +17,7 @@ public class GridExpiration extends UntypedActor {
 	@Override
 	public void onReceive(Object message) throws Exception {
 		if (message instanceof String) {
-			GridManager.removeExpired();
+			GridService.getInstance().removeExpired();
 			tick(AppConfig.getGridExpiration(), "tick");
 		}
 	}

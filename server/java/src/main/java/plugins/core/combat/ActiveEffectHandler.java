@@ -13,7 +13,7 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.grid.Grid;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -39,7 +39,7 @@ public class ActiveEffectHandler extends UntypedActor {
 
 	public ActiveEffectHandler(String gridName, int zone) {
 		this.zone = zone;
-		grid = GridManager.getGrid(zone,gridName);
+		grid = GridService.getInstance().getGrid(zone,gridName);
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class GameActor extends UntypedActor {
 	public void setPlayerId(String playerId) {
 		this.playerId = playerId;
 		if (this.playerId != null) {
-			this.characterId = PlayerService.getInstance().getCharacter(this.playerId);
+			this.characterId = PlayerService.getInstance().getCharacterId(this.playerId);
 		}
 	}
 

@@ -10,12 +10,13 @@ import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.Zone;
 import plugins.core.combat.VitalsHandler;
 
 public class BuildObjectHandler extends GameMessageActor {
@@ -132,7 +133,7 @@ public class BuildObjectHandler extends GameMessageActor {
 	}
 
 	private void broadcast(GameMessage gameMessage, int zone) {
-		Grid grid = GridManager.getGrid(zone,"default");
+		Grid grid = GridService.getInstance().getGrid(zone,"default");
 		for (TrackData trackData : grid.getAll()) {
 			if (trackData.entityType != TrackData.EntityType.Player) {
 				continue;
@@ -239,7 +240,8 @@ public class BuildObjectHandler extends GameMessageActor {
 			return;
 		}
 
-		buildObject.zone = CharacterService.instance().getZone(buildObject.ownerId);
+		Zone zone = CharacterService.instance().getZone(buildObject.ownerId);
+		buildObject.zone = zone.number;
 		buildObject.state = BuildObject.State.Active;
 		buildObject.ownerId = characterId;
 		buildObject.updatedAt = System.currentTimeMillis();
@@ -259,7 +261,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 	private void removeGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
-			Grid grid = GridManager.getGrid(buildObject.zone, "build_objects");
+			Grid grid = GridService.getInstance().getGrid(buildObject.zone, "build_objects");
 			grid.remove(buildObject.id);
 			VitalsHandler.remove(buildObject.id);
 		}
@@ -267,7 +269,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 	private void setGridAndVitals(BuildObject buildObject) {
 		if (buildObject.isDestructable) {
-			Grid grid = GridManager.getGrid(buildObject.zone, "build_objects");
+			Grid grid = GridService.getInstance().getGrid(buildObject.zone, "build_objects");
 			grid.set(buildObject.id, buildObject.x, buildObject.y, buildObject.z, TrackData.EntityType.BuildObject);
 			VitalsHandler.get(buildObject.id, Vitals.VitalsType.BuildObject, buildObject.zone);
 		}
@@ -281,7 +283,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 	@Override
 	public void onPlayerDisconnect(String playerId) {
-		String characterId = PlayerService.getInstance().getCharacter(playerId);
+		String characterId = PlayerService.getInstance().getCharacterId(playerId);
 
 	}
 

@@ -11,15 +11,18 @@ import akka.routing.RoundRobinPool;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.grid.GridExpiration;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.GameConfig;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.process.ProcessManager;
+import io.gamemachine.regions.RegionManager;
+import io.gamemachine.regions.ZoneService;
 import io.gamemachine.routing.GameMessageRoute;
 import io.gamemachine.routing.Incoming;
 import io.gamemachine.routing.RequestHandler;
 import io.gamemachine.unity.UnityGameMessageHandler;
-import io.gamemachine.unity.UnityRpcTest;
-import io.gamemachine.zones.ZoneManager;
+import io.gamemachine.unity.UnityInstanceManager;
+import io.gamemachine.unity.UnityInstanceTest;
 
 public class GameMachineLoader {
 
@@ -78,34 +81,40 @@ public class GameMachineLoader {
 
 	public void run(ActorSystem newActorSystem) {
 		Thread.currentThread().setName("game-machine");
-				
+			
+		if (!AppConfig.getOrm()) {
+			throw new RuntimeException("Orm is now required");
+		}
+		
 		actorSystem = newActorSystem;
-				
-		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
-		actorSystem.actorOf(Props.create(UnityRpcTest.class), UnityRpcTest.class.getSimpleName());
 		
 		actorSystem.actorOf(Props.create(EventStreamHandler.class), EventStreamHandler.class.getSimpleName());
 		actorSystem.actorOf(new RoundRobinPool(20).props(Props.create(RemoteEcho.class)), RemoteEcho.name);
 	
 		startCacheUpdateHandler();
+		
+		ZoneService.init();
+		GameMessageRoute.add(ZoneService.name, ZoneService.name, false);
+		ActorUtil.createActor(ZoneService.class, ZoneService.name);
+		
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		
 		GameMessageRoute.add(ProcessManager.name, ProcessManager.name, false);
 		ActorUtil.createActor(ProcessManager.class, ProcessManager.name);
 		
-		if (AppConfig.Datastore.getStore().equals("gamecloud")) {
-			actorSystem.actorOf(Props.create(GameConfig.class), GameConfig.class.getSimpleName());
-		}
-		
-		if (AppConfig.getOrm()) {
-			ZoneManager.start();
-		} else {
-			logger.warn("Zone manager disabled (requires orm=true)");
-		}
 		
 		actorSystem.actorOf(Props.create(GridExpiration.class), GridExpiration.class.getSimpleName());
 		
 		PlayerService.getInstance().createAgentControllers();
+		GridService.getInstance().createDefaultGrids();
+		
+		RegionManager.start();
+		
+		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
+		actorSystem.actorOf(Props.create(UnityInstanceTest.class), UnityInstanceTest.class.getSimpleName());
+		
+		GameMessageRoute.add(UnityInstanceManager.name,UnityInstanceManager.name,false);
+		ActorUtil.createActor(UnityInstanceManager.class,UnityInstanceManager.name);
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {
@@ -113,6 +122,7 @@ public class GameMachineLoader {
                 getActorSystem().shutdown();
             }
         });
+		
 
 	}
 

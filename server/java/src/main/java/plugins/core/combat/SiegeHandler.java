@@ -9,7 +9,7 @@ import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerMessage;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.GameMessage;
@@ -116,7 +116,7 @@ public class SiegeHandler extends GameMessageActor {
 	}
 
 	private void broadcast(GameMessage gameMessage, int zone) {
-		Grid grid = GridManager.getGrid(zone, "default");
+		Grid grid = GridService.getInstance().getGrid(zone, "default");
 		for (TrackData trackData : grid.getAll()) {
 			if (trackData.entityType != TrackData.EntityType.Player) {
 				continue;

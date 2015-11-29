@@ -4,11 +4,12 @@ import io.gamemachine.config.GridConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.regions.ZoneService;
 
 import com.google.common.base.Strings;
 
@@ -41,7 +42,7 @@ public class CharacterLocationHandler extends GameMessageActor  {
 	}
 	
 	private void updateLocations() {
-		for (Grid grid : GridManager.getGrids()) {
+		for (Grid grid : GridService.getInstance().getGrids()) {
 			if (grid.getType() != GridConfig.GridType.Moving) {
 				continue;
 			}
@@ -51,7 +52,7 @@ public class CharacterLocationHandler extends GameMessageActor  {
 					continue;
 				}
 				
-				String characterId = PlayerService.getInstance().getCharacter(trackData.id);
+				String characterId = PlayerService.getInstance().getCharacterId(trackData.id);
 				if (Strings.isNullOrEmpty(characterId)) {
 					continue;
 				}
@@ -61,7 +62,7 @@ public class CharacterLocationHandler extends GameMessageActor  {
 					character.worldx = trackData.x;
 					character.worldy = trackData.y;
 					character.worldz = trackData.z;
-					character.zone = trackData.zone;
+					character.zone = ZoneService.getZone(trackData.zone);
 					CharacterService.instance().save(character);
 				}
 			}

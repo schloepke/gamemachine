@@ -1,8 +1,10 @@
 package plugins.core.combat;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -18,12 +20,14 @@ import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameMachineLoader;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.ZoneInfo;
+import io.gamemachine.messages.Zone;
+import io.gamemachine.regions.ZoneService;
+import io.gamemachine.messages.RegionInfo;
 import plugins.landrush.BuildObjectHandler;
 import scala.concurrent.duration.Duration;
 
@@ -35,7 +39,7 @@ public class StatusEffectManager extends UntypedActor {
 	private long deathTime = 15000L;
 	private long outOfCombatTime = 10000L;
 	public static List<GridSet> gridsets = new ArrayList<GridSet>();
-	
+	public static Set<Integer> handlerZones = new HashSet<Integer>();
 	
 	public static void tell(String gridName, int zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
 		String actorName = null;
@@ -146,40 +150,50 @@ public class StatusEffectManager extends UntypedActor {
 	}
 	
 	public StatusEffectManager() {
-		createEffectHandlers();
+		createDefaultEffectHandlers();
 	}
 	
-	private void createEffectHandlers() {
+	private void createDefaultEffectHandlers() {
 		
-		int zoneCount = ZoneInfo.db().findAll().size();
+		int zoneCount = RegionInfo.db().findAll().size();
 		
 		if (zoneCount == 0) {
 			logger.warn("Combat system requires at least one zone configured");
 			return;
 		}
 		
-		
-		for (int i = 0; i < zoneCount; i++) {
-			GridSet gridSet = new GridSet();
-			gridSet.zone = i;
-			
-			gridSet.playerGrid = GridManager.createGrid(i,"default");
-			
-			gridSet.objectGrid = GridManager.createGrid(i,"build_objects");
-			
-			gridsets.add(gridSet);
-			
-			GameMachineLoader.getActorSystem().actorOf(Props.create(ActiveEffectHandler.class, "default", i),
-					ActiveEffectHandler.actorName("default", i));
-			GameMachineLoader.getActorSystem().actorOf(Props.create(ActiveEffectHandler.class, "build_objects", i),
-					ActiveEffectHandler.actorName("build_objects", i));
-			
-			GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "default", i),
-					PassiveEffectHandler.actorName("default", i));
-			GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "build_objects", i),
-					PassiveEffectHandler.actorName("build_objects", i));
-
+		for (Zone zone : ZoneService.staticZones()) {
+			createEffectHandler(zone.number);
 		}
+	}
+	
+	public static void createEffectHandler(int zone) {
+		if (handlerZones.contains(zone)) {
+			logger.warn("effect handler already created for zone "+zone);
+			return;
+		}
+		
+		GridSet gridSet = new GridSet();
+		gridSet.zone = zone;
+		
+		GridService.getInstance().createForZone(zone);
+		gridSet.playerGrid = GridService.getInstance().getGrid(zone,"default");
+		
+		gridSet.objectGrid = GridService.getInstance().getGrid(zone,"build_objects");
+		
+		gridsets.add(gridSet);
+		
+		GameMachineLoader.getActorSystem().actorOf(Props.create(ActiveEffectHandler.class, "default", zone),
+				ActiveEffectHandler.actorName("default", zone));
+		GameMachineLoader.getActorSystem().actorOf(Props.create(ActiveEffectHandler.class, "build_objects", zone),
+				ActiveEffectHandler.actorName("build_objects", zone));
+		
+		GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "default", zone),
+				PassiveEffectHandler.actorName("default", zone));
+		GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "build_objects", zone),
+				PassiveEffectHandler.actorName("build_objects", zone));
+		
+		handlerZones.add(zone);
 	}
 	
 	@Override

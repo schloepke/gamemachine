@@ -6,7 +6,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameMessageActor;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
@@ -42,7 +42,7 @@ public class NpcEntity extends GameMessageActor {
 	public void awake() {
 		worldOffset =  AppConfig.getWorldOffset();
 		rand = new Random();
-		grid = GridManager.getPlayerGrid("default", id);
+		grid = GridService.getInstance().getPlayerGrid(null, id);
 		position = randVector();
 		target = randVector();
 		initTrackData();

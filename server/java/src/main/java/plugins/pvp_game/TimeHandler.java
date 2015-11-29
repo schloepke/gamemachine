@@ -8,7 +8,7 @@ import akka.event.LoggingAdapter;
 import io.gamemachine.config.GridConfig;
 import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.grid.Grid;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TimeCycle;
 import io.gamemachine.messages.TrackData;
@@ -28,7 +28,7 @@ public class TimeHandler extends UntypedActor {
 		timeCycle.dayCycleLength = 600f;
 		msg.timeCycle = timeCycle;
 
-		for (Grid grid : GridManager.getGrids()) {
+		for (Grid grid : GridService.getInstance().getGrids()) {
 			if (grid.getType() != GridConfig.GridType.Moving) {
 				continue;
 			}

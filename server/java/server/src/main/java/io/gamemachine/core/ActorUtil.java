@@ -1,8 +1,8 @@
 package io.gamemachine.core;
 
 import io.gamemachine.objectdb.DbActor;
+import io.gamemachine.regions.RegionManager;
 import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.zones.ZoneManager;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;

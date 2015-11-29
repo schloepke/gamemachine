@@ -1,6 +1,6 @@
 package io.gamemachine.core;
 
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.AgentTrackData;
 import io.gamemachine.messages.ClientManagerEvent;
@@ -11,8 +11,10 @@ import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackDataResponse;
 import io.gamemachine.messages.TrackDataUpdate;
+import io.gamemachine.messages.Zone;
 import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.objectdb.Cache;
+import io.gamemachine.regions.ZoneService;
 
 import java.util.List;
 import java.util.Map;
@@ -132,13 +134,13 @@ public class EntityTracking extends UntypedActor {
 	private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
 		Grid agentGrid;
 		for (TrackData trackData : agentTrackData.getTrackDataList()) {
-			agentGrid = GridManager.getPlayerGrid(trackData.gridName, player.id);
+			agentGrid = GridService.getInstance().getPlayerGrid(trackData.gridName, player.id);
 			setEntityLocation(player.id, agentGrid, trackData);
 		}
 	}
 
 	private void handleTrackData(TrackData trackData, Player player) {
-		Grid grid = GridManager.getPlayerGrid(trackData.gridName, player.id);
+		Grid grid = GridService.getInstance().getPlayerGrid(trackData.gridName, player.id);
 
 		if (grid == null) {
 			logger.warn("No grid found for " + player.id);
@@ -184,7 +186,7 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void removePlayerData(ClientManagerEvent event) {
-		GridManager.removeEntityFromZones(event.player_id);
+		GridService.getInstance().removeEntityFromGrids(event.player_id);
 	}
 
 	private void SendNeighbors(Grid grid, int x, int y, Player player, EntityType neighborType, int neighborsFlag) {
@@ -268,8 +270,10 @@ public class EntityTracking extends UntypedActor {
 			trackData.setDynamicMessage(dynamicMessage);
 		}
 
-		if (trackData.zone > 0) {
-			GridManager.setEntityZone(trackData.id, trackData.zone);
+		Zone zone =  PlayerService.getInstance().getZone(trackData.id);
+		if (trackData.zone != zone.number) {
+			Zone playerZone = ZoneService.getZone(trackData.zone);
+			PlayerService.getInstance().setZone(trackData.id, playerZone);
 		}
 
 		if (!grid.set(trackData)) {

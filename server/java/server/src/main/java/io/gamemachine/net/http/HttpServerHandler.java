@@ -22,7 +22,7 @@ import io.gamemachine.authentication.PlayerAuthentication;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
@@ -30,9 +30,10 @@ import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
 import io.gamemachine.messages.ProcessCommand;
-import io.gamemachine.messages.ZoneInfo;
-import io.gamemachine.messages.ZoneInfos;
+import io.gamemachine.messages.RegionInfo;
+import io.gamemachine.messages.RegionInfos;
 import io.gamemachine.process.ProcessManager;
+import io.gamemachine.regions.ZoneService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
@@ -111,7 +112,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					String username = null;
 					
 					if (!Strings.isNullOrEmpty(params.get("username")) && params.get("username").equals(AppConfig.getAgentSecret())) {
-						Player player = PlayerService.getInstance().getAvailableAgent();
+						Player player = PlayerService.getInstance().assignAgent();
 						if (player == null) {
 							logger.warn("Unable to assign agent");
 							NotAuthorized(ctx);
@@ -201,26 +202,23 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/players/get_zones")) {
-					List<ZoneInfo> infos = ZoneInfo.db().findAll();
-					ZoneInfos all = new ZoneInfos();
-					int current = GridManager.getEntityZone(playerId);
-					for (ZoneInfo info : infos) {
-						if (info.number == current) {
-							info.current = true;
-						}
-						all.addZoneInfo(info);
+					List<RegionInfo> infos = RegionInfo.db().findAll();
+					RegionInfos all = new RegionInfos();
+					all.playerRegion =  PlayerService.getInstance().getRegion(playerId);
+					for (RegionInfo info : infos) {
+						all.addRegionInfo(info);
 					}
 					Ok(ctx, all.toByteArray());
 					return;
 				}
 				
 				if (req.getUri().startsWith("/api/players/set_zone")) {
-					if (params.get("zone") == null) {
+					if (params.get("region") == null) {
 						NotAuthorized(ctx);
 						return;
 					}
-					ZoneInfo info = ZoneInfo.db().findFirst("zone_info_id = ?", params.get("zone"));
-					GridManager.setEntityZone(playerId, info.number);
+					RegionInfo info = RegionInfo.db().findFirst("region_info_id = ?", params.get("region"));
+					PlayerService.getInstance().setRegion(playerId, info.id);
 					Ok(ctx, info.toByteArray());
 					return;
 				}

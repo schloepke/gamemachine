@@ -1,11 +1,11 @@
-package io.gamemachine.zones;
+package io.gamemachine.regions;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.ZoneInfo;
+import io.gamemachine.messages.RegionInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -27,31 +27,31 @@ import akka.event.LoggingAdapter;
 import com.google.common.base.Strings;
 import com.typesafe.config.Config;
 
-public class ZoneManager extends GameMessageActor {
+public class RegionManager extends GameMessageActor {
 
-	private static Map<String, ZoneInfo> zones = new ConcurrentHashMap<String, ZoneInfo>();
+	private static Map<String, RegionInfo> regions = new ConcurrentHashMap<String, RegionInfo>();
 	
-	public static String name = ZoneManager.class.getSimpleName();
+	public static String name = RegionManager.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	private CurrentClusterState state;
 	private Long updateInterval = 10000l;
 	
 	public static ActorRef getProxy() {
 		ActorSystem system = GameMachineLoader.getActorSystem();
-		return system.actorOf(ClusterSingletonProxy.defaultProps("user/singleton/" + ZoneManager.name, null),
+		return system.actorOf(ClusterSingletonProxy.defaultProps("user/singleton/" + RegionManager.name, null),
 				"singletonProxy");
 	}
 
 	public static void start() {
 		ActorSystem system = GameMachineLoader.getActorSystem();
 		system.actorOf(
-				ClusterSingletonManager.defaultProps(Props.create(ZoneManager.class), ZoneManager.name,
+				ClusterSingletonManager.defaultProps(Props.create(RegionManager.class), RegionManager.name,
 						PoisonPill.getInstance(), null), "singleton");
 	}
 
 	@Override
 	public void awake() {
-		logger.warning(ActorUtil.selfAddress()+" is now zone handler");
+		logger.warning(ActorUtil.selfAddress()+" is now region handler");
 		loadRegionConfig();
 		scheduleOnce(updateInterval, "tick");
 
@@ -78,30 +78,29 @@ public class ZoneManager extends GameMessageActor {
 
 	private void loadRegionConfig() {
 		Config config = AppConfig.getConfig();
-		List<? extends Config> values = config.getConfigList("gamemachine.zones");
+		List<? extends Config> values = config.getConfigList("gamemachine.regions");
 		for (Config value : values) {
-			String zoneName = value.getString("name");
-			String actorName = value.getString("actorName");
+			String regionName = value.getString("name");
 			int number = value.getInt("number");
 			
-			ZoneInfo info;
-			info = ZoneInfo.db().findFirst("zone_info_id = ?", zoneName);
+			RegionInfo info;
+			info = RegionInfo.db().findFirst("region_info_id = ?", regionName);
 			if (info == null) {
-				info = new ZoneInfo();
-				info.id = zoneName;
-				info.actorName = actorName;
+				info = new RegionInfo();
+				info.id = regionName;
 				info.number = number;
 				info.assigned = false;
-				ZoneInfo.db().save(info);
-				logger.warning("Saving new zone to db: "+info.id);
+				RegionInfo.db().save(info);
+				logger.warning("Saving new region to db: "+info.id);
 			}
-			zones.put(info.id, info);
+			
+			regions.put(info.id, info);
 		}
 		
-		for (ZoneInfo info : ZoneInfo.db().findAll()) {
-			if (!zones.containsKey(info.id)) {
-				ZoneInfo.db().delete(info.recordId);
-				logger.warning("Deleting unused zone "+info.id);
+		for (RegionInfo info : RegionInfo.db().findAll()) {
+			if (!regions.containsKey(info.id)) {
+				RegionInfo.db().delete(info.recordId);
+				logger.warning("Deleting unused region "+info.id);
 			}
 		}
 	}
@@ -114,7 +113,7 @@ public class ZoneManager extends GameMessageActor {
 		for (Member member : state.getMembers()) {
 			nodeCount = 0;
 			String address = member.address().toString();
-			for (ZoneInfo info : zones.values()) {
+			for (RegionInfo info : regions.values()) {
 				if (!Strings.isNullOrEmpty(info.node) && info.node.equals(address)) {
 					nodeCount++;
 				}
@@ -147,29 +146,31 @@ public class ZoneManager extends GameMessageActor {
 	private void updateStatus() {
 		state = Cluster.get(getContext().system()).state();
 		
-		for (ZoneInfo info : zones.values()) {
+		for (RegionInfo info : regions.values()) {
 			if (info.assigned) {
 				if (!isNodeUp(info.node)) {
-					logger.warning("Unassigning zone "+info.id+" from node "+info.node);
+					logger.warning("Unassigning region "+info.id+" from node "+info.node);
+					
 					info.node = null;
 					info.assigned = false;
-					ZoneInfo.db().save(info);
+					RegionInfo.db().save(info);
 					
 				}
 			}
 		}
 		
-		for (ZoneInfo info : zones.values()) {
+		for (RegionInfo info : regions.values()) {
 			if (!info.assigned) {
 				Member member = getBestNode();
 				if (member != null) {
 					info.node = member.address().toString();
 					info.hostname = addressToHostname(info.node);
 					info.assigned = true;
-					ZoneInfo.db().save(info);
-					logger.warning("Assigned zone "+info.id+" to node "+info.node);
+					RegionInfo.db().save(info);
+					
+					logger.warning("Assigned region "+info.id+" to node "+info.node);
 				} else {
-					logger.warning("Unable to find node to assign to zone "+info.id);
+					logger.warning("Unable to find node to assign to region "+info.id);
 				}
 			}
 		}

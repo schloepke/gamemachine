@@ -430,7 +430,7 @@ public class Grid {
 			}
 		} else {
 			trackData = newTrackData;
-			trackData.characterId = PlayerService.getInstance().getCharacter(trackData.id);
+			trackData.characterId = PlayerService.getInstance().getCharacterId(trackData.id);
 			if (trackData.characterId == null) {
 				// logger.warn("Null characterId for "+trackData.id);
 			}

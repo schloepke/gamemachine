@@ -1,5 +1,6 @@
 package io.gamemachine.config;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,10 @@ public class GridConfigs {
 			GridConfig gridConfig = new GridConfig(value);
 			gridConfigs.put(gridConfig.name,gridConfig);
 		}
+	}
+	
+	public static Collection<GridConfig> getGridConfigs() {
+		return gridConfigs.values();
 	}
 	
 	public static GridConfig getGridConfig(String name) {

@@ -435,11 +435,12 @@ local_persistent_message Character {
   optional int32 worldx = 8;
   optional int32 worldy = 9;
   optional int32 worldz = 10;
-  optional int32 zone = 11;
+  optional Zone zone = 11;
   optional bool includeUmaData = 12;
   optional int32 level = 14;
   optional Vitals.Template vitalsTemplate = 15;
   optional string gameEntityPrefab = 16;
+  optional string region = 17;
 }
 
 local_message Characters {
@@ -546,6 +547,8 @@ persistent_message Player {
   optional int64 ipChangedAt = 10;
   optional string characterId = 11;
   repeated Character characters = 12;
+  optional bool assignedUnityInstance = 13;
+  optional bool assigned = 14;
 }
 
 message TrackData {
@@ -911,6 +914,12 @@ message UnityGameMessage {
 }
 
 local_message Zone {
+  required string name = 1;
+  required int32 number = 2;
+  optional string region = 3;
+}
+
+local_message Region {
   enum Status {
 		NONE = 0;
 		UP = 1;
@@ -924,20 +933,19 @@ local_message Zone {
 	optional string unityClient = 4;
 }
 
-local_persistent_message ZoneInfo {
+local_persistent_message RegionInfo {
   required string id = 1;
   optional int32 recordId = 2;
   optional string node = 3;
-  required string actorName = 4;
   optional bool assigned = 5;
   optional int32 number = 6;
   optional string hostname = 7;
-  optional bool current = 8;
 }
 
-local_message ZoneInfos {
-  optional string id = 2;
-  repeated ZoneInfo zoneInfo = 1;
+local_message RegionInfos {
+  optional string id = 1;
+  repeated RegionInfo regionInfo = 2;
+  optional string playerRegion = 3;
 }
 
 
@@ -952,6 +960,27 @@ local_message ProcessCommand {
   required Action action = 1;
   optional string startScript = 2;
   optional string executable = 3;
+}
+
+
+local_message UnityInstanceData {
+  optional string scene = 1;
+ }
+
+local_message UnityInstanceStatus {
+  enum State {
+    None = 0;
+    Idle = 1;
+    Running = 2;
+  }
+  
+  required string name = 1;
+  required State state = 2;
+  optional int32 recordId = 3;
+  optional Zone zone = 4;
+  required State requestedState = 5;
+  optional string playerId = 6;
+  optional UnityInstanceData data = 7;
 }
 
 message GameMessage {
@@ -996,12 +1025,13 @@ message GameMessage {
   optional BuildObjects buildObjects = 40;
   optional BuildableAreas buildableAreas = 41;
   optional GmStats gmStats = 42;
-  optional Zone zone = 43;
+  optional Region region = 43;
   optional BuildObjectChunks buildObjectChunks = 44;
   optional TerrainEdits terrainEdits = 45;
   optional UpdatePlayerItem updatePlayerItem = 46;
   optional VitalsContainer vitalsContainer = 47;
   optional ProcessCommand processCommand = 48;
+  optional UnityInstanceStatus unityInstanceStatus = 49;
 }
 
 message GameMessages {

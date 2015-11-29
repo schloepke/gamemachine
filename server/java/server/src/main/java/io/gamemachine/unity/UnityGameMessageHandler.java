@@ -1,7 +1,8 @@
 package io.gamemachine.unity;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
@@ -22,7 +23,6 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.UnityGameMessage;
 import io.gamemachine.net.Connection;
 import io.gamemachine.net.udp.NettyUdpServerHandler;
-import io.gamemachine.routing.RoundRobin;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -31,9 +31,8 @@ public class UnityGameMessageHandler extends UntypedActor {
 
 	private static Map<Long, ActorRef> pending = new ConcurrentHashMap<Long, ActorRef>();
 	private static AtomicLong messageId = new AtomicLong();
-	private static Timeout t = new Timeout(Duration.create(100, TimeUnit.MILLISECONDS));
-	private static Map<String, ArrayList<String>> unityActors = new ConcurrentHashMap<String, ArrayList<String>>();
-	private static Map<String, RoundRobin<String>> roundRobins = new ConcurrentHashMap<String, RoundRobin<String>>();
+	private static Timeout t = new Timeout(Duration.create(30, TimeUnit.MILLISECONDS));
+	private static Map<String, HashSet<String>> unityActors = new ConcurrentHashMap<String, HashSet<String>>();
 
 	public static String name = UnityGameMessageHandler.class.getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(UnityGameMessageHandler.class);
@@ -50,20 +49,29 @@ public class UnityGameMessageHandler extends UntypedActor {
 		}
 	}
 
-	public static void tell(GameMessage gameMessage, String actorName) {
-		UnityGameMessage unityGameMessage = createUnityGameMessage(gameMessage, actorName,
+	public static boolean tell(GameMessage gameMessage, String actorName, String playerId) {
+		if (Strings.isNullOrEmpty(playerId)) {
+			return false;
+		}
+		UnityGameMessage unityGameMessage = createUnityGameMessage(gameMessage, actorName, playerId,
 				UnityGameMessage.MessageType.Tell);
+		
 		if (unityGameMessage == null) {
-			return;
+			return false;
 		}
 
 		ActorSelection sel = ActorUtil.getSelectionByName(name);
 		sel.tell(unityGameMessage, null);
+		return true;
 	}
 
-	public static GameMessage ask(GameMessage gameMessage, String actorName) {
-		UnityGameMessage unityGameMessage = createUnityGameMessage(gameMessage, actorName,
+	public static GameMessage ask(GameMessage gameMessage, String actorName, String playerId) {
+		if (Strings.isNullOrEmpty(playerId)) {
+			return null;
+		}
+		UnityGameMessage unityGameMessage = createUnityGameMessage(gameMessage, actorName, playerId,
 				UnityGameMessage.MessageType.Ask);
+		
 		if (unityGameMessage == null) {
 			return null;
 		}
@@ -76,54 +84,39 @@ public class UnityGameMessageHandler extends UntypedActor {
 		}
 	}
 
-	public static boolean hasActor(String actorName) {
-		if (unityActors.containsKey(actorName)) {
-			return true;
-		} else {
-			return false;
+	public static boolean hasActor(String actorName, String playerId) {
+		if (unityActors.containsKey(playerId)) {
+			Set<String> actors = unityActors.get(playerId);
+			if (actors.contains(actorName)) {
+				return true;
+			}
 		}
+		return false;
 	}
 
-	private static void ensureActorList(String actorName) {
-		if (!hasActor(actorName)) {
-			unityActors.put(actorName, new ArrayList<String>());
+	private static void ensureActors(String playerId) {
+		if (!unityActors.containsKey(playerId)) {
+			unityActors.put(playerId, new HashSet<String>());
 		}
 	}
 
 	private static synchronized void removeActor(String actorName, String playerId) {
-		ensureActorList(actorName);
-
-		unityActors.get(actorName).remove(playerId);
-		
-		RoundRobin<String> roundRobin = RoundRobin.create(unityActors.get(actorName));
-		roundRobins.put(actorName, roundRobin);
-		
+		ensureActors(playerId);
+		unityActors.get(playerId).remove(actorName);
 		logger.warn("removing unity actor " + actorName + " player id " + playerId);
 	}
 
 	private static synchronized void addActor(String actorName, String playerId) {
-		ensureActorList(actorName);
-
-		unityActors.get(actorName).add(playerId);
-
-		RoundRobin<String> roundRobin = RoundRobin.create(unityActors.get(actorName));
-		roundRobins.put(actorName, roundRobin);
-
+		ensureActors(playerId);
+		unityActors.get(playerId).add(actorName);
 		logger.warn("adding unity actor " + actorName + " player id " + playerId);
 	}
-	
-	private static String playerIdForActor(String actorName) {
-		if (roundRobins.containsKey(actorName)) {
-			return roundRobins.get(actorName).getOne();
-		} else {
-			return null;
-		}
-	}
 
-	private static UnityGameMessage createUnityGameMessage(GameMessage gameMessage, String actorName,
+	private static UnityGameMessage createUnityGameMessage(GameMessage gameMessage, String actorName, String playerId,
 			UnityGameMessage.MessageType messageType) {
-		if (!hasActor(actorName)) {
-			logger.warn("unity actor not found " + actorName);
+		
+		if (!hasActor(actorName, playerId)) {
+			logger.debug("unity actor not found " + actorName + " for " + playerId);
 			return null;
 		}
 
@@ -132,15 +125,10 @@ public class UnityGameMessageHandler extends UntypedActor {
 		unityGameMessage.actorName = actorName;
 		unityGameMessage.gameMessage = gameMessage;
 
-		String playerId = playerIdForActor(actorName);
-		if (Strings.isNullOrEmpty(playerId)) {
-			return null;
-		}
-		
 		unityGameMessage.playerId = playerId;
 
 		if (!Connection.hasConnection(playerId)) {
-			logger.warn("No connection found for playerId " + playerId);
+			logger.info("No connection found for playerId " + playerId);
 			removeActor(actorName, playerId);
 			return null;
 		} else {
@@ -154,7 +142,7 @@ public class UnityGameMessageHandler extends UntypedActor {
 
 		if (unityGameMessage.messageType == UnityGameMessage.MessageType.Register) {
 			addActor(unityGameMessage.actorName, unityGameMessage.playerId);
-			logger.warn("Registered unity actor " + unityGameMessage.actorName + " for playerId "
+			logger.info("Registered unity actor " + unityGameMessage.actorName + " for playerId "
 					+ unityGameMessage.playerId);
 			return;
 		}
@@ -166,10 +154,10 @@ public class UnityGameMessageHandler extends UntypedActor {
 					ref.tell(unityGameMessage, getSelf());
 					pending.remove(unityGameMessage.messageId);
 				} else {
-					logger.warn("message id not found " + unityGameMessage.messageId);
+					logger.info("message id not found " + unityGameMessage.messageId);
 				}
 			} else {
-				logger.warn("Unity responded to tell " + unityGameMessage.messageId);
+				logger.info("Unity responded to tell " + unityGameMessage.messageId);
 			}
 
 		} else {
@@ -186,8 +174,8 @@ public class UnityGameMessageHandler extends UntypedActor {
 
 				NettyUdpServerHandler.sendMessage(connection.clientId, clientMessage.toByteArray());
 			} else {
-				logger.warn("No connection found for playerId " + unityGameMessage.playerId);
-				removeActor(unityGameMessage.actorName,unityGameMessage.playerId);
+				logger.info("No connection found for playerId " + unityGameMessage.playerId);
+				removeActor(unityGameMessage.actorName, unityGameMessage.playerId);
 			}
 		}
 	}

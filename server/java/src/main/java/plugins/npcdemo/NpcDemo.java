@@ -11,9 +11,10 @@ import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
-import io.gamemachine.grid.GridManager;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.Zone;
+import io.gamemachine.regions.ZoneService;
 
 public class NpcDemo  {
 
@@ -28,11 +29,11 @@ public class NpcDemo  {
 		
 		ps = PlayerService.getInstance();
 		cs = CharacterService.instance();
-		createNpcs(npcCount,0,"z0");
+		createNpcs(npcCount,ZoneService.defaultZone(),"z0");
 		//createNpcs(npcCount*3,1,"z1");
 	}
 
-	private static void createNpcs(int count,int zone, String prefix) {
+	private static void createNpcs(int count,Zone zone, String prefix) {
 		for (int i = 1; i < count; i++) {
 			String playerId = prefix+"demonpc" + i;
 			String characterId = prefix+"demochr" + i;
@@ -50,7 +51,7 @@ public class NpcDemo  {
 			}
 			
 			ps.setCharacter(playerId, characterId);
-			GridManager.setEntityZone(playerId, zone);
+			PlayerService.getInstance().setZone(playerId, zone);
 			GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId));
 		}
 		logger.warn("NpcDemo started with "+npcCount+" npc's");

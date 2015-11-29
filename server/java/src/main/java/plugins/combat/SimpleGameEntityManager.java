@@ -10,13 +10,15 @@ import org.slf4j.LoggerFactory;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GridManager;
+import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.Zone;
+import io.gamemachine.regions.ZoneService;
 import plugins.core.combat.ClientDbLoader;
 import plugins.core.combat.VitalsHandler;
 import plugins.landrush.BuildObjectHandler;
@@ -87,7 +89,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	public void OnPlayerConnected(String playerId) {
 		logger.warn("OnPlayerConnect " + playerId);
 		Player player = PlayerService.getInstance().find(playerId);
-		int zone = GridManager.getEntityZone(player.id);
+		Zone zone =  PlayerService.getInstance().getZone(player.id);
 	}
 
 	@Override

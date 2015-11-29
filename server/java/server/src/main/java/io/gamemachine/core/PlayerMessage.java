@@ -9,7 +9,6 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GameMessages;
 import io.gamemachine.messages.Player;
 import io.gamemachine.net.Connection;
-import io.gamemachine.unity.UnityGameMessageHandler;
 
 public class PlayerMessage {
 
@@ -44,12 +43,4 @@ public class PlayerMessage {
 		sel.tell(entity, null);
 	}
 
-	public static void tellUnity(GameMessage gameMessage, String actorName) {
-		UnityGameMessageHandler.tell(gameMessage,actorName);
-	}
-	
-	public static GameMessage askUnity(GameMessage gameMessage, String actorName) {
-		return UnityGameMessageHandler.ask(gameMessage,actorName);
-	}
-	
 }
