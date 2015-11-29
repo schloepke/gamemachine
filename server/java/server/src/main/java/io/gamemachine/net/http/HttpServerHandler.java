@@ -32,7 +32,8 @@ import io.gamemachine.messages.Players;
 import io.gamemachine.messages.ProcessCommand;
 import io.gamemachine.messages.RegionInfo;
 import io.gamemachine.messages.RegionInfos;
-import io.gamemachine.process.ProcessManager;
+import io.gamemachine.messages.Zone;
+import io.gamemachine.process.AkkaProcessRunner;
 import io.gamemachine.regions.ZoneService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -202,24 +203,24 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/players/get_zones")) {
-					List<RegionInfo> infos = RegionInfo.db().findAll();
-					RegionInfos all = new RegionInfos();
-					all.playerRegion =  PlayerService.getInstance().getRegion(playerId);
-					for (RegionInfo info : infos) {
-						all.addRegionInfo(info);
-					}
-					Ok(ctx, all.toByteArray());
+					Ok(ctx, ZoneService.getPlayerZones(playerId).toByteArray());
 					return;
 				}
 				
 				if (req.getUri().startsWith("/api/players/set_zone")) {
-					if (params.get("region") == null) {
+					if (params.get("zone") == null) {
 						NotAuthorized(ctx);
 						return;
 					}
-					RegionInfo info = RegionInfo.db().findFirst("region_info_id = ?", params.get("region"));
-					PlayerService.getInstance().setRegion(playerId, info.id);
-					Ok(ctx, info.toByteArray());
+					
+					Zone zone = ZoneService.getZone(params.get("zone"));
+					if (zone == null) {
+						NotAuthorized(ctx);
+						return;
+					}
+					
+					PlayerService.getInstance().setZone(playerId, zone);
+					Ok(ctx, zone.toByteArray());
 					return;
 				}
 				
@@ -259,14 +260,6 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						return;
 					}
 					Ok(ctx, character.toByteArray());
-					return;
-				}
-				
-				if (req.getUri().startsWith("/api/process_manager")) {
-					byte[] bytes = Base64.decodeBase64(params.get("process_command"));
-					ProcessCommand command = ProcessCommand.parseFrom(bytes);
-					ProcessManager.DoCommand(command);
-					Ok(ctx, "OK");
 					return;
 				}
 				

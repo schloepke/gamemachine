@@ -150,7 +150,7 @@ public class RegionManager extends GameMessageActor {
 			if (info.assigned) {
 				if (!isNodeUp(info.node)) {
 					logger.warning("Unassigning region "+info.id+" from node "+info.node);
-					
+					info.hostname = null;
 					info.node = null;
 					info.assigned = false;
 					RegionInfo.db().save(info);

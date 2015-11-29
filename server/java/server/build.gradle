@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'eclipse'
 apply plugin:'scala'
 apply plugin: 'maven-publish'
-
+apply plugin: 'application'
 
 
 
@@ -19,13 +19,11 @@ buildscript {
     }
    }
   dependencies {
-    classpath 'com.github.jengelman.gradle.plugins:shadow:1.0.2'
     classpath 'org.javalite:activejdbc:1.4.11'
     classpath 'org.javalite:activejdbc-instrumentation:1.4.11'
     //classpath "com.github.maiflai:gradle-scalatest:0.7"
   }
 }
-apply plugin: 'com.github.johnrengelman.shadow'
 //apply plugin: "com.github.maiflai.scalatest"
 
 group = 'io.gamemachine'
@@ -103,7 +101,8 @@ dependencies {
   
 }
 
-import com.github.jengelman.gradle.plugins.shadow.transformers.AppendingTransformer
+mainClassName = "io.gamemachine.process.CmdlineProcessRunner"
+
 import org.javalite.instrumentation.Instrumentation
 
 
@@ -114,22 +113,10 @@ sourceSets {
 }
 
 
-shadowJar {
-  transform(AppendingTransformer) {
-    resource = 'reference.conf'
-  }
-}
-
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.2'
+  gradleVersion = '2.9'
 }
 
- 
- task install_shadowjar(type: Copy) {
-  into "$buildDir/../../../lib"
-    
-  from "$buildDir/libs"
-}
 
 task install_libs(type: Copy) {
   into "$buildDir/../lib"

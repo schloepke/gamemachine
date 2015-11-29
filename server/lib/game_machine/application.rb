@@ -58,7 +58,7 @@ module GameMachine
         start_handlers
 
         start_game_systems
-        load_games
+        load_plugins
        
         start_http
 
@@ -86,9 +86,7 @@ module GameMachine
         end
       end
 
-      def load_games
-        require_relative '../../games/routes.rb'
-        require_relative '../../games/boot.rb'
+      def load_plugins
         require_relative '../../java/src/main/java/plugins/plugins.rb'
 
         JavaLib::GameMachineLoader.start_java_game_actors

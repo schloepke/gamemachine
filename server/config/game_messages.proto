@@ -916,7 +916,15 @@ message UnityGameMessage {
 local_message Zone {
   required string name = 1;
   required int32 number = 2;
-  optional string region = 3;
+  required string region = 3;
+  required string hostname = 4;
+  optional bool isPublic = 5;
+  repeated string playerIds = 6;
+}
+
+local_message Zones {
+  repeated Zone zone = 1;
+  optional Zone current = 2;
 }
 
 local_message Region {

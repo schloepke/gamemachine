@@ -15,9 +15,11 @@ import com.typesafe.config.Config;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameMessageActor;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.RegionInfo;
 import io.gamemachine.messages.Zone;
+import io.gamemachine.messages.Zones;
 
 public class ZoneService extends GameMessageActor {
 
@@ -42,6 +44,21 @@ public class ZoneService extends GameMessageActor {
 		return defaults;
 	}
 
+	public static Zones getPlayerZones(String playerId) {
+		Zones playerZones = new Zones();
+		playerZones.current = PlayerService.getInstance().getZone(playerId);
+		playerZones.setZoneList(new ArrayList<Zone>(zones.values()));
+		for (Zone z : zones.values()) {
+			if (z.isPublic) {
+				playerZones.addZone(z);
+			} else if (z.getPlayerIdsList().contains(playerId)) {
+				playerZones.addZone(z);
+			}
+			
+		}
+		return playerZones;
+	}
+	
 	public static Zone defaultZone() {
 		return getZone(defaultZoneName);
 	}
@@ -65,8 +82,25 @@ public class ZoneService extends GameMessageActor {
 	}
 
 	public static Zone getZone(String name) {
+		return getZone(name,true,null);
+	}
+	
+	public static Zone getPrivateZone(String name) {
+		return getZone(name,true,null);
+	}
+	
+	public static Zone getPrivateZone(String name, List<String> playerIds) {
+		return getZone(name,true, playerIds);
+	}
+	
+	public static Zone getZone(String name, boolean isPublic, List<String> playerIds) {
 		if (zones.containsKey(name)) {
-			return zones.get(name);
+			Zone zone = zones.get(name);
+			if (zone.isPublic || zone.isPublic == isPublic) {
+				return zone;
+			} else {
+				return null;
+			}
 		} else {
 			try {
 				Integer number = zoneQueue.poll(10, TimeUnit.MILLISECONDS);
@@ -75,13 +109,12 @@ public class ZoneService extends GameMessageActor {
 					return null;
 				}
 				Zone zone = new Zone();
-				if (nameToRegion.containsKey(name)) {
-					zone.region = nameToRegion.get(name);
-				} else if (region != null) {
-					zone.region = region.id;
-				}
+				
 				zone.name = name;
 				zone.number = number;
+				zone.isPublic = isPublic;
+				zone.setPlayerIdsList(playerIds);
+				setRegion(zone);
 				zones.put(name, zone);
 				numberToName.put(number, zone.name);
 				return zone;
@@ -114,6 +147,10 @@ public class ZoneService extends GameMessageActor {
 		}
 	}
 
+	private static RegionInfo getRegion(String name) {
+		return RegionInfo.db().findFirst("region_info_id = ?", name);
+	}
+	
 	private static RegionInfo getRegion() {
 		String myAddress = ActorUtil.selfAddress();
 		for (RegionInfo info : RegionInfo.db().findAll()) {
@@ -129,14 +166,22 @@ public class ZoneService extends GameMessageActor {
 		scheduleOnce(updateInterval, "tick");
 	}
 
+	private static void setRegion(Zone zone) {
+		if (nameToRegion.containsKey(zone.name)) {
+			zone.region = nameToRegion.get(zone.name);
+			RegionInfo info = getRegion(zone.region);
+			if (info != null) {
+				zone.hostname = info.hostname;
+			}
+		} else if (region != null) {
+			zone.region = region.id;
+		}
+	}
+	
 	private void updateStatus() {
 		region = getRegion();
 		for (Zone zone : zones.values()) {
-			if (nameToRegion.containsKey(name)) {
-				zone.region = nameToRegion.get(name);
-			} else if (region != null) {
-				zone.region = region.id;
-			}
+			setRegion(zone);
 		}
 	}
 

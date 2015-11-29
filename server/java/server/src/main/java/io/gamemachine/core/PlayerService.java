@@ -257,32 +257,6 @@ public class PlayerService {
 		}
 	}
 
-	public String getRegion(String playerId) {
-		String characterId = getCharacterId(playerId);
-		if (!Strings.isNullOrEmpty(characterId)) {
-			Character character = CharacterService.instance().find(playerId, characterId);
-			if (Strings.isNullOrEmpty(character.region)) {
-
-			}
-			return character.region;
-		}
-
-		return null;
-	}
-
-	public void setRegion(String playerId, String region) {
-		GridService.getInstance().removeEntityFromGrids(playerId);
-
-		String characterId = getCharacterId(playerId);
-		if (!Strings.isNullOrEmpty(characterId)) {
-			Character character = CharacterService.instance().find(playerId, characterId);
-			character.region = region;
-			CharacterService.instance().save(character);
-		} else {
-			logger.warn("Unable to find character id for entityId " + playerId);
-		}
-	}
-
 	public void setZone(String playerId, Zone zone) {
 		playerZone.put(playerId, zone);
 

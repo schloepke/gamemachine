@@ -21,6 +21,15 @@ module GameMachine
         File.join(java_root,'gradlew')
       end
 
+      def copy_process_manager
+        source = File.join(java_root,'build','install','server')
+        destination = File.join(ENV['APP_ROOT'],'process_manager')
+        FileUtils.rm_rf destination
+        FileUtils.mv(source,destination)
+        FileUtils.cp File.join(ENV['APP_ROOT'],'config','process_manager.conf'), File.join(ENV['APP_ROOT'],'process_manager')
+      end
+      
+      
       def generate_csharp_code
         protogen_path = File.join(ENV['APP_ROOT'],'mono','bin','csharp','protogen_csharp.exe')
         proto_file = File.join(ENV['APP_ROOT'],'config','combined_messages.proto')
@@ -54,7 +63,7 @@ module GameMachine
 
       def build(clean=false)
         if clean
-          cmd = "cd #{java_root} && #{gradlew} clean assemble install_libs"
+          cmd = "cd #{java_root} && #{gradlew} clean assemble install_libs installDist"
         else
           cmd = "cd #{java_root} && #{gradlew} assemble install_libs"
         end
@@ -89,15 +98,20 @@ module GameMachine
             commands << generate_code
             commands << build(false)
             run_commands(commands)
+          elsif command == 'compile'
+            commands << build(false)
+            run_commands(commands)
           elsif command == 'clean'
             commands << generate_code
             remove_libs
             commands << build(true)
             run_commands(commands)
+            copy_process_manager
           else
             commands << generate_code
             commands << build(false)
             run_commands(commands)
+            copy_process_manager
           end
         end
       end

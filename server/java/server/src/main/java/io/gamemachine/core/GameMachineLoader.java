@@ -14,6 +14,7 @@ import io.gamemachine.grid.GridExpiration;
 import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.GameConfig;
 import io.gamemachine.objectdb.DbActor;
+import io.gamemachine.process.AkkaProcessRunner;
 import io.gamemachine.process.ProcessManager;
 import io.gamemachine.regions.RegionManager;
 import io.gamemachine.regions.ZoneService;
@@ -99,8 +100,8 @@ public class GameMachineLoader {
 		
 		actorSystem.actorOf(Props.create(GameLimits.class), GameLimits.class.getSimpleName());
 		
-		GameMessageRoute.add(ProcessManager.name, ProcessManager.name, false);
-		ActorUtil.createActor(ProcessManager.class, ProcessManager.name);
+		GameMessageRoute.add(AkkaProcessRunner.name, AkkaProcessRunner.name, false);
+		ActorUtil.createActor(AkkaProcessRunner.class, AkkaProcessRunner.name);
 		
 		
 		actorSystem.actorOf(Props.create(GridExpiration.class), GridExpiration.class.getSimpleName());
