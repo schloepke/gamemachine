@@ -21,7 +21,7 @@ public class UnityInstanceTest extends GameMessageActor {
 	
 	@Override
 	public void awake() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
 			String name = "testInstance" + i;
 			names.add(name);
 			GameMachineLoader.getActorSystem().actorOf(Props.create(TestInstance.class, name));

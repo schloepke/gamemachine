@@ -1,6 +1,7 @@
 
 package plugins.core;
 
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import akka.event.Logging;
@@ -33,6 +34,7 @@ public class PlayerSeed extends GameMessageActor {
 		Player[] players = gson.fromJson(json, Player[].class);
 		
 		for (Player template : players) {
+			template.role = Player.Role.AgentController;
 			Player player = ps.find(template.id);
 			if (player == null) {
 				player = ps.create(template.id, gameId,template.role);
@@ -42,6 +44,7 @@ public class PlayerSeed extends GameMessageActor {
 			ps.setPassword(player.id, template.passwordHash);
 			ps.setCharacter(player.id, template.characterId);
 			ps.setRole(player.id, template.role);
+			
 			logger.debug("Player "+template.id+" seeded with character "+template.characterId+" role "+template.role);
 		}
 	}

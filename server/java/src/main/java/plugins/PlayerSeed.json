@@ -1,7 +1,7 @@
 [
-{"id": "unity1", "characterId": "unity1Char", "passwordHash": "pass", "role": "agent_controller"},
-{"id": "unity2", "characterId": "unity2Char", "passwordHash": "pass", "role": "agent_controller"},
-{"id": "zone0", "characterId": "zone0Char", "passwordHash": "pass", "role": "agent_controller"},
-{"id": "zone1", "characterId": "zone1Char", "passwordHash": "pass", "role": "agent_controller"},
-{"id": "zone2", "characterId": "zone2Char", "passwordHash": "pass", "role": "agent_controller"}
+{"id": "unity1", "characterId": "unity1Char", "passwordHash": "pass"},
+{"id": "unity2", "characterId": "unity2Char", "passwordHash": "pass"},
+{"id": "zone0", "characterId": "zone0Char", "passwordHash": "pass"},
+{"id": "zone1", "characterId": "zone1Char", "passwordHash": "pass"},
+{"id": "zone2", "characterId": "zone2Char", "passwordHash": "pass"}
 ]

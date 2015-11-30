@@ -150,12 +150,18 @@ public class UnityProcessManager {
 	public void checkStatus() {
 		for (ExternalProcess process : processList.values()) {
 			if (process.isRunning()) {
+				if (process.status == ExternalProcess.Status.DOWN) {
+					logger.info("Process "+process.name+" is UP");
+				}
 				process.status = ExternalProcess.Status.UP;
 			} else {
+				if (process.status == ExternalProcess.Status.UP) {
+					logger.info("Process "+process.name+" is DOWN");
+				}
 				process.status = ExternalProcess.Status.DOWN;
 				start(process);
 			}
-			logger.info("Process "+process.name+" is "+process.status.toString());
+			
 		}
 	}
 	

@@ -30,35 +30,22 @@ public class EntityTracking extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
 	private static MovementVerifier movementVerifier = null;
-	private static Map<String, Cache<String, DynamicMessage>> dynamicMessageCaches = new ConcurrentHashMap<String, Cache<String, DynamicMessage>>();
 
 	public static String name = "fastpath_entity_tracking";
 
 	private PlayerService playerService;
-	private String role;
 	
 	public EntityTracking() {
 		Commands.clientManagerRegister(name);
 		playerService = PlayerService.getInstance();
 	}
 
-	private static Cache<String, DynamicMessage> getDynamicMessageCache(String gameId) {
-		Cache<String, DynamicMessage> cache = dynamicMessageCaches.get(gameId);
-		if (cache == null) {
-			cache = new Cache<String, DynamicMessage>(120, 10000);
-			dynamicMessageCaches.put(gameId, cache);
-		}
-		return cache;
-	}
-
+	
 	private void updateTrackData(TrackDataUpdate update, Player player) {
-		String gameId = playerService.getGameId(player.id);
-		// No access for clients
-		if (player.role.equals("player")) {
+		if (player.role == Player.Role.Player) {
 			return;
 		}
-		Cache<String, DynamicMessage> cache = getDynamicMessageCache(gameId);
-		cache.set(update.id, update.dynamicMessage);
+		
 	}
 
 	private boolean isValid(TrackData trackData,Player player) {
@@ -68,7 +55,7 @@ public class EntityTracking extends UntypedActor {
 		
 		if (playerService.isAuthenticated(player.id)) {
 			return true;
-		} else if (player.role.equals("agent_controller")) {
+		} else if (player.role == Player.Role.AgentController) {
 			return true;
 		} else {
 			return false;
@@ -89,7 +76,6 @@ public class EntityTracking extends UntypedActor {
 				logger.warn("Invalid request trackdata.id=" + trackData.id + " playerId="+player.id);
 				return;
 			}
-			role = player.role;
 			handleTrackData(trackData, player);
 			return;
 		}
@@ -102,7 +88,6 @@ public class EntityTracking extends UntypedActor {
 				logger.warn("Player for " + entity.player.id + " is null");
 				return;
 			}
-			role = player.role;
 			
 			if (entity.agentTrackData != null) {
 				handleAgentTrackData(entity.agentTrackData, player);
@@ -178,7 +163,10 @@ public class EntityTracking extends UntypedActor {
 			return;
 		}
 
-		setEntityLocation(player.id, grid, trackData);
+		if (player.role == Player.Role.Player) {
+			setEntityLocation(player.id, grid, trackData);
+		}
+		
 
 		if (trackData.getNeighbors >= 1) {
 			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType, trackData.getNeighbors);
@@ -191,7 +179,7 @@ public class EntityTracking extends UntypedActor {
 
 	private void SendNeighbors(Grid grid, int x, int y, Player player, EntityType neighborType, int neighborsFlag) {
 		List<TrackData> trackDatas;
-		boolean isAgentController = (player.getRole().equals("agent_controller"));
+		boolean isAgentController = (player.role == Player.Role.AgentController);
 
 		if (neighborType != null && neighborType == EntityType.All) {
 			// Only agents have access to entire grid
@@ -206,8 +194,6 @@ public class EntityTracking extends UntypedActor {
 
 		if (trackDatas.size() >= 1) {
 			toNeighbors(player, trackDatas, isAgentController);
-		} else {
-			//logger.warn("No Neighbors "+grid.name+" "+grid.getObjectCount());
 		}
 	}
 
@@ -262,14 +248,7 @@ public class EntityTracking extends UntypedActor {
 				}
 			}
 		}
-
-		String gameId = playerService.getGameId(playerId);
-		Cache<String, DynamicMessage> cache = getDynamicMessageCache(gameId);
-		DynamicMessage dynamicMessage = cache.get(trackData.getId());
-		if (dynamicMessage != null) {
-			trackData.setDynamicMessage(dynamicMessage);
-		}
-
+		
 		Zone zone =  PlayerService.getInstance().getZone(trackData.id);
 		if (trackData.zone != zone.number) {
 			Zone playerZone = ZoneService.getZone(trackData.zone);

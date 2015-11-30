@@ -60,12 +60,12 @@ public class PlayerService {
 	}
 
 	public List<Player> getAssignedAgents() {
-		return Player.db().where("player_role = ? and player_assigned = ?", "agent_controller", true);
+		return Player.db().where("player_role = ? and player_assigned = ?", Player.Role.AgentController.getNumber(), true);
 	}
 
 	public synchronized Player assignAgent() {
 		io.gamemachine.orm.models.Player.openTransaction();
-		List<Player> agents = Player.db().where(true, "player_role = ? and player_assigned = ?", "agent_controller",
+		List<Player> agents = Player.db().where(true, "player_role = ? and player_assigned = ?", Player.Role.AgentController.getNumber(),
 				false);
 		Player agent = agents.isEmpty() ? null : agents.get(0);
 
@@ -98,7 +98,7 @@ public class PlayerService {
 	public synchronized Player assignUnityAgent() {
 		io.gamemachine.orm.models.Player.openTransaction();
 		List<Player> agents = Player.db().where(true,
-				"player_role = ? and player_assigned = ? and player_assigned_unity_instance = ?", "agent_controller",
+				"player_role = ? and player_assigned = ? and player_assigned_unity_instance = ?", Player.Role.AgentController.getNumber(),
 				true, false);
 		
 		Player agent = agents.isEmpty() ? null : agents.get(0);
@@ -146,7 +146,7 @@ public class PlayerService {
 			}
 
 			logout(playerId);
-			setRole(playerId, "agent_controller");
+			setRole(playerId, Player.Role.AgentController);
 			setPassword(playerId, UUID.randomUUID().toString());
 			setCharacter(playerId, characterId);
 			setZone(playerId, zone);
@@ -196,10 +196,10 @@ public class PlayerService {
 	}
 
 	public Player create(String playerId, String gameId) {
-		return create(playerId, gameId, "player");
+		return create(playerId, gameId, Player.Role.Player);
 	}
 
-	public Player create(String playerId, String gameId, String role) {
+	public Player create(String playerId, String gameId, Player.Role role) {
 		Player player = find(playerId);
 		if (player != null) {
 			return player;
@@ -303,7 +303,7 @@ public class PlayerService {
 		if (player == null) {
 			return false;
 		} else {
-			if (player.role.equals("agent_controller")) {
+			if (player.role == Player.Role.AgentController) {
 				return true;
 			} else {
 				return false;
@@ -311,12 +311,12 @@ public class PlayerService {
 		}
 	}
 
-	public boolean playerHasRole(String playerId, String role) {
+	public boolean playerHasRole(String playerId, Player.Role role) {
 		Player player = find(playerId);
 		if (player == null) {
 			return false;
 		} else {
-			if (player.role.equals(role)) {
+			if (player.role == role) {
 				return true;
 			} else {
 				return false;
@@ -460,7 +460,7 @@ public class PlayerService {
 		}
 	}
 
-	public void setRole(String playerId, String role) {
+	public void setRole(String playerId, Player.Role role) {
 		Player player = find(playerId);
 		if (player == null) {
 			logger.warn("Player " + playerId + " not found");

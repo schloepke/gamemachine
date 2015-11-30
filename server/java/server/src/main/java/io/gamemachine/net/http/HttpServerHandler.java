@@ -176,7 +176,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
 				String playerId = params.get("playerId");
 				Integer authtoken = Integer.parseInt(params.get("authtoken"));
-				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, "admin");
+				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, Player.Role.Admin);
 				boolean authenticated = Authentication.hasValidAuthtoken(playerId, authtoken);
 
 				if (req.getUri().startsWith("/api/game")) {

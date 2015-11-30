@@ -535,13 +535,19 @@ local_message CraftItem {
 }
 
 persistent_message Player {
+  enum Role {
+    Player = 0;
+    AgentController = 1;
+    Admin = 2;
+  }
+  
   required string id = 1;
   optional bool authenticated = 2;
   optional int32 authtoken = 3;
   optional string passwordHash = 4;
   optional string gameId = 5;
   optional int32 recordId = 6;
-  optional string role = 7;
+  optional Role role = 7;
   optional bool locked = 8;
   optional int32 ip = 9;
   optional int64 ipChangedAt = 10;
