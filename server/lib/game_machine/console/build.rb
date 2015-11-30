@@ -33,9 +33,6 @@ module GameMachine
           
         FileUtils.mv File.join(ENV['APP_ROOT'],'process_manager','bin','server'),
                   File.join(ENV['APP_ROOT'],'process_manager','bin','process_manager')
-                    
-        FileUtils.cp File.join(ENV['APP_ROOT'],'bin','unity.bat'), File.join(ENV['APP_ROOT'],'process_manager','bin')
-        FileUtils.cp File.join(ENV['APP_ROOT'],'bin','unity.sh'), File.join(ENV['APP_ROOT'],'process_manager','bin')
       end
       
       

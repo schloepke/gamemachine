@@ -973,6 +973,7 @@ local_message ProcessCommand {
 
 local_message UnityInstanceData {
   optional string scene = 1;
+  optional string role = 2;
  }
 
 local_message UnityInstanceStatus {

@@ -31,25 +31,30 @@ public class UnityGameMessageHandler extends UntypedActor {
 
 	private static Map<Long, ActorRef> pending = new ConcurrentHashMap<Long, ActorRef>();
 	private static AtomicLong messageId = new AtomicLong();
-	private static Timeout t = new Timeout(Duration.create(30, TimeUnit.MILLISECONDS));
+	private static Timeout defaultTimeout = new Timeout(Duration.create(30, TimeUnit.MILLISECONDS));
+	private static Map<Integer,Timeout> timeouts = new ConcurrentHashMap<Integer, Timeout>();
 	private static Map<String, HashSet<String>> unityActors = new ConcurrentHashMap<String, HashSet<String>>();
 
 	public static String name = UnityGameMessageHandler.class.getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(UnityGameMessageHandler.class);
-
-	private static UnityGameMessage ask(UnityGameMessage message) {
-		ActorSelection sel = ActorUtil.getSelectionByName(name);
-		AskableActorSelection askable = new AskableActorSelection(sel);
-		Future<Object> future = askable.ask(message, t);
-		try {
-			Object result = Await.result(future, t.duration());
-			return (UnityGameMessage) result;
-		} catch (Exception e) {
-			return null;
+	private static ActorSelection sel;
+	private static AskableActorSelection askable;
+	
+	private static Timeout getTimeout(int t) {
+		if (!timeouts.containsKey(t)) {
+			Timeout timeout = new Timeout(Duration.create(t, TimeUnit.MILLISECONDS));
+			timeouts.put(t, timeout);
+			return timeout;
+		} else {
+			return timeouts.get(t);
 		}
 	}
-
+	
 	public static boolean tell(GameMessage gameMessage, String actorName, String playerId) {
+		if (sel == null) {
+			return false;
+		}
+		
 		if (Strings.isNullOrEmpty(playerId)) {
 			return false;
 		}
@@ -60,12 +65,42 @@ public class UnityGameMessageHandler extends UntypedActor {
 			return false;
 		}
 
-		ActorSelection sel = ActorUtil.getSelectionByName(name);
 		sel.tell(unityGameMessage, null);
 		return true;
 	}
 
+	private static UnityGameMessage ask(UnityGameMessage message, Timeout timeout, int attempts) {
+		if (askable == null) {
+			return null;
+		}
+		
+		Future<Object> future = askable.ask(message, timeout);
+		for (int i=0; i<attempts;i++) {
+			try {
+				Object result = Await.result(future, timeout.duration());
+				return (UnityGameMessage) result;
+			} catch (Exception e) {
+				//return null;
+			}
+		}
+		return null;
+	}
+	
 	public static GameMessage ask(GameMessage gameMessage, String actorName, String playerId) {
+		return ask(gameMessage,actorName,playerId,defaultTimeout, 1);
+	}
+	
+	public static GameMessage ask(GameMessage gameMessage, String actorName, String playerId, int timeoutSeconds) {
+		Timeout timeout = getTimeout(timeoutSeconds);
+		return ask(gameMessage,actorName,playerId,timeout, 1);
+	}
+	
+	public static GameMessage ask(GameMessage gameMessage, String actorName, String playerId, int timeoutSeconds, int attempts) {
+		Timeout timeout = getTimeout(timeoutSeconds);
+		return ask(gameMessage,actorName,playerId,timeout, attempts);
+	}
+	
+	public static GameMessage ask(GameMessage gameMessage, String actorName, String playerId, Timeout timeout, int attempts) {
 		if (Strings.isNullOrEmpty(playerId)) {
 			return null;
 		}
@@ -76,7 +111,7 @@ public class UnityGameMessageHandler extends UntypedActor {
 			return null;
 		}
 
-		UnityGameMessage response = ask(unityGameMessage);
+		UnityGameMessage response = ask(unityGameMessage, timeout, attempts);
 		if (response == null) {
 			return null;
 		} else {
@@ -136,6 +171,12 @@ public class UnityGameMessageHandler extends UntypedActor {
 		}
 	}
 
+	@Override
+	public void preStart() {
+		sel = ActorUtil.getSelectionByName(name);
+		askable = new AskableActorSelection(sel);
+	}
+	
 	@Override
 	public void onReceive(Object message) throws Exception {
 		UnityGameMessage unityGameMessage = (UnityGameMessage) message;

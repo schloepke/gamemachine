@@ -24,6 +24,7 @@ import io.gamemachine.routing.RequestHandler;
 import io.gamemachine.unity.UnityGameMessageHandler;
 import io.gamemachine.unity.UnityInstanceManager;
 import io.gamemachine.unity.UnityInstanceTest;
+import io.gamemachine.util.TestRunner;
 
 public class GameMachineLoader {
 
@@ -114,8 +115,7 @@ public class GameMachineLoader {
 		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
 		actorSystem.actorOf(Props.create(UnityInstanceTest.class), UnityInstanceTest.class.getSimpleName());
 		
-		GameMessageRoute.add(UnityInstanceManager.name,UnityInstanceManager.name,false);
-		ActorUtil.createActor(UnityInstanceManager.class,UnityInstanceManager.name);
+		TestRunner.run();
 		
 		Runtime.getRuntime().addShutdownHook(new Thread() {
             public void run() {

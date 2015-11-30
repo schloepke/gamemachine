@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,11 +17,11 @@ import java.util.concurrent.Executors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Joiner;
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
 
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.messages.ProcessCommand;
 
 public class UnityProcessManager {
 	private static final Logger logger = LoggerFactory.getLogger(UnityProcessManager.class);
@@ -31,31 +34,29 @@ public class UnityProcessManager {
 		this.isCommandLine = isCommandLine;
 	}
 	
-	public String getUnityPath() {
+	public String getUnityPath(int instance) {
+		List<String> instancePath;
+		
 		if (isCommandLine) {
 			String cwd = Paths.get(".").toAbsolutePath().normalize().toString();
-			
-			if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
-				return cwd+File.separator+"bin"+File.separator+"unity.bat";
-			} else {
-				return cwd+File.separator+"bin"+File.separator+"unity.sh";
-			}
-			
+			instancePath = new ArrayList<String>(Arrays.asList(cwd,"unity","instance"+instance));
 		} else {
-			if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
-				return AppConfig.envRoot+File.separator+"process_manager"+File.separator+"bin"+File.separator+"unity.bat";
-			} else {
-				return AppConfig.envRoot+File.separator+"process_manager"+File.separator+"bin"+File.separator+"unity.sh";
-			}
-			
+			instancePath = new ArrayList<String>(Arrays.asList(AppConfig.envRoot,"process_manager","unity","instance"+instance));
 		}
+		
+		if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
+			instancePath.add("start.bat");
+		} else {
+			instancePath.add("start.sh");
+		}
+		return Joiner.on(File.separator).join(instancePath);
 	}
 	
-	public String getUnityExe() {
+	public String getUnityExe(int instance) {
 		if (ExternalProcess.os() == ExternalProcess.OS.WIN) {
-			return "unityServer.exe";
+			return "unityServer"+instance+".exe";
 		} else {
-			return "unityServer";
+			return "unityServer"+instance;
 		}
 	}
 	
@@ -116,7 +117,10 @@ public class UnityProcessManager {
 		int instanceCount = config.getInt("gamemachine.unity_processes");
 		for (int i = 0; i<instanceCount; i++) {
 			String name = UUID.randomUUID().toString();
-			ExternalProcess info = new ExternalProcess(name,getUnityPath(),getUnityExe());
+			String exePath = getUnityPath(i);
+			String exeName = getUnityExe(i);
+			logger.warn("Adding instance "+exePath+" "+exeName);
+			ExternalProcess info = new ExternalProcess(exeName,exePath,exeName);
 			add(info);
 		}
 	}

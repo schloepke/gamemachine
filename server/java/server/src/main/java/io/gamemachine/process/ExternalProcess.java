@@ -1,16 +1,14 @@
 package io.gamemachine.process;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.concurrent.TimeoutException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.zeroturnaround.exec.InvalidExitValueException;
 import org.zeroturnaround.exec.ProcessExecutor;
+import org.zeroturnaround.exec.stream.LogOutputStream;
+import org.zeroturnaround.exec.stream.slf4j.Slf4jStream;
 
 import com.google.common.base.Strings;
 
@@ -84,10 +82,17 @@ public class ExternalProcess implements Runnable {
 			logger.warn("Process " + executable + " starting at " + startScript);
 			ProcessExecutor pex = new ProcessExecutor();
 			running = true;
-			int rvalue = pex.command(startScript).execute().getExitValue();
+			int rvalue = pex.command(startScript).redirectOutput(new LogOutputStream() {
+			      @Override
+			      protected void processLine(String line) {
+			        logger.warn(name+" STDOUT: "+line);
+			      }
+			    })
+			    .execute().getExitValue();
+			
 			running = false;
 			status = Status.DOWN;
-			logger.warn("Process "+ startScript+" exit value was " + rvalue);
+			logger.warn("Process "+ name+" exited with status "+rvalue);
 		} catch (InvalidExitValueException | IOException | InterruptedException | TimeoutException e) {
 			logger.debug(e.getMessage(),e);
 		}

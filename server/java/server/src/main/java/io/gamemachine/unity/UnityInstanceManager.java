@@ -57,6 +57,14 @@ public class UnityInstanceManager extends GameMessageActor {
 		}
 	}
 	
+	public static UnityInstance findOrCreateByName(String instanceName, UnityInstanceData data) {
+		if (instances.containsKey(instanceName)) {
+			return instances.get(instanceName);
+		} else {
+			return requestInstance(instanceName,data);
+		}
+	}
+	
 	public static UnityInstance requestInstance(String instanceName, UnityInstanceData data) {
 		if (instances.containsKey(instanceName)) {
 			return null;

@@ -27,6 +27,14 @@ public class UnityInstance {
 		return UnityGameMessageHandler.ask(gameMessage,actorName,status.playerId);
 	}
 	
+	public GameMessage ask(GameMessage gameMessage, String actorName, int timeout) {
+		return UnityGameMessageHandler.ask(gameMessage,actorName,status.playerId, timeout);
+	}
+	
+	public GameMessage ask(GameMessage gameMessage, String actorName, int timeout, int attempts) {
+		return UnityGameMessageHandler.ask(gameMessage,actorName,status.playerId, timeout, attempts);
+	}
+	
 	public UnityInstanceStatus ask(UnityInstanceStatus instance) {
 		GameMessage gameMessage = new GameMessage();
 		gameMessage.unityInstanceStatus = instance;

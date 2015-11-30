@@ -74,6 +74,11 @@ public class PlayerService {
 			agent.setPasswordHash(BCrypt.hashpw(password, BCrypt.gensalt()));
 			agent.setAssigned(true);
 			agentPasswords.put(agent.id, password);
+			
+			List<Character> characters = Character.db().where(true,"character_player_id = ?", agent.id);
+			Character character = characters.isEmpty() ? null : characters.get(0);
+			agent.setCharacterId(character.id);
+			
 			Player.db().save(agent, true);
 			players.put(agent.id, agent);
 		}
@@ -91,7 +96,8 @@ public class PlayerService {
 	}
 
 	public synchronized Player assignUnityAgent() {
-		List<Player> agents = Player.db().where(
+		io.gamemachine.orm.models.Player.openTransaction();
+		List<Player> agents = Player.db().where(true,
 				"player_role = ? and player_assigned = ? and player_assigned_unity_instance = ?", "agent_controller",
 				true, false);
 		
@@ -99,9 +105,10 @@ public class PlayerService {
 
 		if (agent != null) {
 			agent.setAssignedUnityInstance(true);
-			Player.db().save(agent);
+			Player.db().save(agent, true);
 			players.put(agent.id, agent);
 		}
+		io.gamemachine.orm.models.Player.commitTransaction();
 		return agent;
 	}
 

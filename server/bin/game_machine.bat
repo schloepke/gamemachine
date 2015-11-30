@@ -12,3 +12,5 @@ set JAVA_OPTS=-Xmx%MAX_HEAP% -Xmn%NEW_SIZE% -XX:NewSize=%NEW_SIZE% -XX:MaxNewSiz
  -XX:SurvivorRatio=190 -XX:TargetSurvivorRatio=90
 
 "%GM_HOME%/jruby/bin/jruby" -J-cp "%GM_CLASSPATH%" "%JAVA_OPTS%"  "%GM_HOME%/bin/game_machine" %*
+
+PAUSE

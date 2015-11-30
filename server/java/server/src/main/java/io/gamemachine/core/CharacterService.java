@@ -16,6 +16,7 @@ import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
@@ -246,6 +247,11 @@ public class CharacterService {
 		}
 	}
 
+	public Character findFirst(String playerId) {
+		List<Character> characters = Character.db().where("character_player_id = ?", playerId);
+		return characters.isEmpty() ? null : characters.get(0);
+	}
+	
 	public byte[] findPlayerCharacters(String playerId) {
 		if (authType == OBJECT_DB) {
 			return ObjectStoreHelper.getCharacters(playerId).toByteArray();
