@@ -10,8 +10,8 @@ public class DefaultMovementVerifier implements MovementVerifier {
 	private ConcurrentHashMap<String, Long> lastUpdates = new ConcurrentHashMap<String, Long>();
 	private double maxUnitsPerSecond;
 
-	private double distance(float px, float py, float x, float y) {
-		return Math.sqrt(Math.pow(x - px, 2) + Math.pow(y - py, 2));
+	private double distance(float px, float pz, float x, float z) {
+		return Math.sqrt(Math.pow(x - px, 2) + Math.pow(z - pz, 2));
 	}
 
 	public DefaultMovementVerifier(double maxUnitsPerSecond) {
@@ -33,7 +33,7 @@ public class DefaultMovementVerifier implements MovementVerifier {
 			TrackData previous = trackdatas.get(trackData.id);
 
 			// check distance traveled over time (basic speed hack prevention)
-			double distance = distance(previous.x, previous.y, trackData.x, trackData.y);
+			double distance = distance(previous.x, previous.z, trackData.x, trackData.z);
 			double unitsPerSecond = distance / seconds;
 			if (unitsPerSecond > maxUnitsPerSecond) {
 				return false;

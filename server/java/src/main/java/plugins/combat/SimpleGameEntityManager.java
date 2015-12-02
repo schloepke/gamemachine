@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
@@ -18,9 +17,7 @@ import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
-import io.gamemachine.regions.ZoneService;
 import plugins.core.combat.ClientDbLoader;
-import plugins.core.combat.VitalsHandler;
 import plugins.landrush.BuildObjectHandler;
 
 public class SimpleGameEntityManager implements GameEntityManager {
@@ -28,7 +25,6 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	private static final Logger logger = LoggerFactory.getLogger(SimpleGameEntityManager.class);
 	private List<Vitals> baseVitals;
 	public Map<Integer, BuildObject> buildObjects = new ConcurrentHashMap<Integer, BuildObject>();
-	private ConcurrentHashMap<String, Vitals> characterVitals = new ConcurrentHashMap<String, Vitals>();
 	private CombatDamage combatDamage;
 
 	public SimpleGameEntityManager() {
@@ -51,8 +47,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 
 	@Override
 	public void OnCharacterCreated(Character character, Object data) {
-		character.vitalsTemplate = Vitals.Template.PlayerTemplate;
-		Character.db().save(character);
+		//Character.db().save(character);
 	}
 
 	@Override
@@ -89,7 +84,6 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	public void OnPlayerConnected(String playerId) {
 		logger.warn("OnPlayerConnect " + playerId);
 		Player player = PlayerService.getInstance().find(playerId);
-		Zone zone =  PlayerService.getInstance().getZone(player.id);
 	}
 
 	@Override

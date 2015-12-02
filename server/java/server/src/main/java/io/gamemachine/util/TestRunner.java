@@ -4,8 +4,7 @@ import com.typesafe.config.Config;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.routing.GameMessageRoute;
-import io.gamemachine.unity.UnityInstanceManager;
+import io.gamemachine.unity.UnityInstanceTest;
 
 public class TestRunner {
 
@@ -21,7 +20,6 @@ public class TestRunner {
 	}
 	
 	public static void unityInstanceTest() {
-		GameMessageRoute.add(UnityInstanceManager.name,UnityInstanceManager.name,false);
-		ActorUtil.createActor(UnityInstanceManager.class,UnityInstanceManager.name);
+		ActorUtil.createActor(UnityInstanceTest.class,UnityInstanceTest.class.getSimpleName());
 	}
 }

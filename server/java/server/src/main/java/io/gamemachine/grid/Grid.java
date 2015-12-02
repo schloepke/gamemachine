@@ -39,6 +39,7 @@ import io.gamemachine.messages.TrackData.EntityType;
 
 public class Grid {
 
+	public int goffset = 50000;
 	public String name;
 	private int max;
 	private int cellSize = 0;
@@ -49,7 +50,7 @@ public class Grid {
 	private int shortIdQueueSize = 10000;
 	private int zone;
 	private GridConfig.GridType type;
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
 
 	private ConcurrentHashMap<String, Long> updateStatus = new ConcurrentHashMap<String, Long>();
@@ -61,8 +62,6 @@ public class Grid {
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 
-	
-	
 	public Grid(String name, int max, int cellSize, int zone, GridConfig.GridType type) {
 		this.name = name;
 		this.max = max;
@@ -81,15 +80,15 @@ public class Grid {
 	public static Grid createFromConfig(GridConfig gridConfig, int zone) {
 		return new Grid(gridConfig.name, gridConfig.gridSize, gridConfig.cellSize, zone, gridConfig.type);
 	}
-	
+
 	public int getZone() {
 		return this.zone;
 	}
-	
+
 	public GridConfig.GridType getType() {
 		return this.type;
 	}
-	
+
 	public class GridValue {
 
 		private TrackData trackData;
@@ -152,7 +151,7 @@ public class Grid {
 
 	public void dumpGrid() {
 		for (TrackData td : objectIndex.values()) {
-			System.out.println("id=" + td.id + " x=" + td.x / this.scaleFactor + " y=" + td.y / this.scaleFactor);
+			System.out.println("id=" + td.id + " x=" + td.x / this.scaleFactor + " z=" + td.z / this.scaleFactor);
 		}
 	}
 
@@ -185,37 +184,35 @@ public class Grid {
 		return playerGridValues;
 	}
 
-	public Set<Integer> cellsWithinBounds(int x, int y) {
+	public Set<Integer> cellsWithinBounds(int x, int z) {
 		Set<Integer> cells = new HashSet<Integer>();
 
 		int offset = this.cellSize;
 
 		int startX = (x - offset);
-		int startY = (y - offset);
+		int startY = (z - offset);
 
-		// subtract one from offset to keep it from hashing to the next cell
-		// boundary outside of range
 		int endX = (x + offset);
-		int endY = (y + offset);
+		int endY = (z + offset);
 
 		for (int rowNum = startX; rowNum <= endX; rowNum += offset) {
 			for (int colNum = startY; colNum <= endY; colNum += offset) {
-				if (rowNum >= 0 && colNum >= 0) {
-					cells.add(hash(rowNum, colNum));
-				}
+				cells.add(hash(rowNum, colNum));
 			}
 		}
 		return cells;
 	}
 
-	public ArrayList<TrackData> neighbors(String playerId, int px, int py, EntityType entityType, int optsFlag) {
-		int x = px / this.scaleFactor;
-		int y = py / this.scaleFactor;
+	public ArrayList<TrackData> neighbors(String playerId, int px, int pz, EntityType entityType, int optsFlag) {
 		ArrayList<TrackData> result;
-
 		Collection<TrackData> trackDatas;
 		result = new ArrayList<TrackData>();
-		Set<Integer> cells = cellsWithinBounds(x, y);
+		
+		int x = (px + goffset) / this.scaleFactor;
+		int z = (pz + goffset) / this.scaleFactor;
+		Set<Integer> cells = cellsWithinBounds(x, z);
+		//logger.warn("Cells count " + cells.size());
+		
 		long currentTime = System.currentTimeMillis();
 
 		ConcurrentHashMap<String, GridValue> playerGridValues = gridValuesForPlayer(playerId);
@@ -241,7 +238,7 @@ public class Grid {
 						continue;
 					}
 					trackData.shortId = shortId;
-					
+
 					if (optsFlag == 2) {
 						result.add(trackData);
 					} else if (trackData.entityType == TrackData.EntityType.Object) {
@@ -251,13 +248,6 @@ public class Grid {
 						GridValue gridValue = playerGridValues.get(trackData.id);
 
 						if (gridValue == null) {
-							
-							if (shortId == null) {
-								logger.warn("Unable to obtain short id");
-								continue;
-							}
-							
-							
 							gridValue = new GridValue(trackData, shortId);
 							playerGridValues.put(trackData.id, gridValue);
 							result.add(trackData);
@@ -283,16 +273,16 @@ public class Grid {
 			gridValue.trackData.ix = -(gridValue.x - trackData.x);
 		}
 
-		if (trackData.y >= gridValue.y) {
-			gridValue.trackData.iy = trackData.y - gridValue.y;
-		} else {
-			gridValue.trackData.iy = -(gridValue.y - trackData.y);
-		}
-
 		if (trackData.z >= gridValue.z) {
 			gridValue.trackData.iz = trackData.z - gridValue.z;
 		} else {
 			gridValue.trackData.iz = -(gridValue.z - trackData.z);
+		}
+
+		if (trackData.y >= gridValue.y) {
+			gridValue.trackData.iy = trackData.y - gridValue.y;
+		} else {
+			gridValue.trackData.iy = -(gridValue.y - trackData.y);
 		}
 
 		gridValue.x = trackData.x;
@@ -305,9 +295,8 @@ public class Grid {
 		gridValue.trackData.velX = trackData.velX;
 		gridValue.trackData.velZ = trackData.velZ;
 		gridValue.trackData.speed = trackData.speed;
-		
+
 		gridValue.trackData.hidden = trackData.hidden;
-		gridValue.trackData.dynamicMessage = trackData.dynamicMessage;
 		gridValue.trackData.userDefinedData = trackData.userDefinedData;
 	}
 
@@ -326,7 +315,7 @@ public class Grid {
 		if (gridValue == null) {
 			return null;
 		}
-		return neighbors(playerId, gridValue.x, gridValue.y, entityType, optsFlag);
+		return neighbors(playerId, gridValue.x, gridValue.z, entityType, optsFlag);
 	}
 
 	public List<TrackData> getAll() {
@@ -370,18 +359,18 @@ public class Grid {
 				ids.add(td.id);
 			}
 		}
-		
+
 		for (String id : ids) {
 			if (updateStatus.containsKey(id)) {
 				Long lastUpdate = updateStatus.get(id);
 				if ((System.currentTimeMillis() - lastUpdate) > max) {
 					remove(id);
-					//logger.warn("Expired "+id);
+					// logger.warn("Expired "+id);
 				}
 			}
 		}
 	}
-	
+
 	public Boolean set(String id, int x, int y, int z, EntityType entityType) {
 		TrackData trackData = new TrackData();
 		trackData.id = id;
@@ -420,7 +409,7 @@ public class Grid {
 		}
 
 		updateStatus.put(newTrackData.id, System.currentTimeMillis());
-		
+
 		TrackData trackData = null;
 		if (newTrackData.ix > 0) {
 			trackData = updateFromDelta(newTrackData);
@@ -440,7 +429,7 @@ public class Grid {
 
 		Integer oldCellValue = cellsIndex.get(id);
 
-		int cell = hash(trackData.x / this.scaleFactor, trackData.y / this.scaleFactor);
+		int cell = hash((trackData.x + goffset) / this.scaleFactor, (trackData.z + goffset) / this.scaleFactor);
 
 		if (oldCellValue != null) {
 			if (oldCellValue != cell) {
@@ -472,11 +461,12 @@ public class Grid {
 		return true;
 	}
 
-	public int hash2(int x, int y) {
-		return (int) (Math.floor(x / this.cellSize) + Math.floor(y / this.cellSize) * width);
+	public int hash2(int x, int z) {
+
+		return (int) (Math.floor(x / this.cellSize) + Math.floor(z / this.cellSize) * width);
 	}
 
-	public int hash(int x, int y) {
-		return (int) ((x * this.convFactor)) + (int) ((y * this.convFactor)) * this.width;
+	public int hash(int x, int z) {
+		return (int) ((x * this.convFactor)) + (int) ((z * this.convFactor)) * this.width;
 	}
 }

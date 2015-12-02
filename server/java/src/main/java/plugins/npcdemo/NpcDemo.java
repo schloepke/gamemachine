@@ -13,6 +13,7 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
 
@@ -45,7 +46,7 @@ public class NpcDemo  {
 			}
 			
 			if (character == null) {
-				character = cs.create(playerId, characterId, null);
+				character = cs.create(playerId, characterId, Vitals.Template.NpcTemplate,null);
 				character.gameEntityPrefab = "npc1";
 				cs.save(character);
 			}

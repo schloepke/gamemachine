@@ -20,14 +20,14 @@ public class NpcEntity extends GameMessageActor {
 
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	
-	private int worldOffset = 1000;
+	private int worldOffset = 0;
 	private String id;
 	private Grid grid;
 	private Vector3 position;
 	private TrackData trackData;
 	public long tickInterval = 40l;
 	public float width = 990f;
-	public float start = 0f;
+	public float start = -1000f;
 	public double speed = 6d;
 	public Vector3 target;
 	private Random rand;
@@ -44,6 +44,7 @@ public class NpcEntity extends GameMessageActor {
 		rand = new Random();
 		grid = GridService.getInstance().getPlayerGrid(null, id);
 		position = randVector();
+		//logger.warning("npc "+position);
 		target = randVector();
 		initTrackData();
 		lastUpdate = System.currentTimeMillis();
@@ -77,11 +78,11 @@ public class NpcEntity extends GameMessageActor {
 		double deltatime = deltaTime();
 		Vector3 dir = Vector3.zero();
 		dir.x = target.x - position.x;
-		dir.y = target.y - position.y;
+		dir.z = target.z - position.z;
 		dir.normalizeLocal();
 		
 		position.x += (dir.x * speed * deltatime);
-		position.y += (dir.y * speed * deltatime);
+		position.z += (dir.z * speed * deltatime);
 	}
 
 	private double deltaTime() {
@@ -110,8 +111,8 @@ public class NpcEntity extends GameMessageActor {
 	private Vector3 randVector() {
 		Vector3 np = new Vector3();
 		np.x = randFloat(start, start+width);
-		np.y = randFloat(start, start+width);
-		np.z = 40f;
+		np.z = randFloat(start, start+width);
+		np.y = 40f;
 		return np;
 	}
 

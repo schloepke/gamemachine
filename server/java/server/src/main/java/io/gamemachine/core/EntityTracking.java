@@ -169,7 +169,7 @@ public class EntityTracking extends UntypedActor {
 		
 
 		if (trackData.getNeighbors >= 1) {
-			SendNeighbors(grid, trackData.x, trackData.y, player, trackData.neighborEntityType, trackData.getNeighbors);
+			SendNeighbors(grid, trackData.x, trackData.z, player, trackData.neighborEntityType, trackData.getNeighbors);
 		}
 	}
 
@@ -177,7 +177,7 @@ public class EntityTracking extends UntypedActor {
 		GridService.getInstance().removeEntityFromGrids(event.player_id);
 	}
 
-	private void SendNeighbors(Grid grid, int x, int y, Player player, EntityType neighborType, int neighborsFlag) {
+	private void SendNeighbors(Grid grid, int x, int z, Player player, EntityType neighborType, int neighborsFlag) {
 		List<TrackData> trackDatas;
 		boolean isAgentController = (player.role == Player.Role.AgentController);
 
@@ -189,7 +189,7 @@ public class EntityTracking extends UntypedActor {
 			}
 			trackDatas = grid.getAll();
 		} else {
-			trackDatas = grid.neighbors(player.id, x, y, neighborType, neighborsFlag);
+			trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
 		}
 
 		if (trackDatas.size() >= 1) {
@@ -200,8 +200,8 @@ public class EntityTracking extends UntypedActor {
 	private void SendToGateway(Player player, Neighbors neighbors) {
 		Entity playerMessage = new Entity();
 		playerMessage.setNeighbors(neighbors);
-		playerMessage.setPlayer(player);
-		playerMessage.setId(player.id);
+		//playerMessage.setPlayer(player);
+		//playerMessage.setId(player.id);
 		ActorSelection sel = ActorUtil.getSelectionByName(player.id);
 		sel.tell(playerMessage, getSelf());
 	}

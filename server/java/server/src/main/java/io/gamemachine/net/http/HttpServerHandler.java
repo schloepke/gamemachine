@@ -32,6 +32,7 @@ import io.gamemachine.messages.Players;
 import io.gamemachine.messages.ProcessCommand;
 import io.gamemachine.messages.RegionInfo;
 import io.gamemachine.messages.RegionInfos;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.process.AkkaProcessRunner;
 import io.gamemachine.regions.ZoneService;
@@ -287,7 +288,11 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						data = params.get("data");
 					}
 					
-					Character character = CharacterService.instance().create(params.get("playerId"),	params.get("characterId"),data);
+					Character character = CharacterService.instance().create(
+							params.get("playerId"),
+							params.get("characterId"),
+							Vitals.Template.PlayerTemplate,
+							data);
 					if (character == null) {
 						character = new Character();
 						character.playerId = "na";

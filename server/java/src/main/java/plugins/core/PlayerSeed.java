@@ -13,6 +13,7 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Player;
+import io.gamemachine.messages.Vitals;
 
 public class PlayerSeed extends GameMessageActor {
 
@@ -38,7 +39,7 @@ public class PlayerSeed extends GameMessageActor {
 			Player player = ps.find(template.id);
 			if (player == null) {
 				player = ps.create(template.id, gameId,template.role);
-				cs.create(template.id, template.characterId, null);
+				cs.create(template.id, template.characterId, Vitals.Template.PlayerTemplate, null);
 			}
 
 			ps.setPassword(player.id, template.passwordHash);

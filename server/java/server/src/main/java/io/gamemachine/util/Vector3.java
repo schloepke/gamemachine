@@ -161,13 +161,17 @@ public class Vector3 {
 	}
 	
 	public double distance2d(Vector3 other) {
-		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
+		return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(z - other.z, 2));
 	}
 	
-	public double distance2d(double otherX, double otherY) {
-		return Math.sqrt(Math.pow(x - otherX, 2) + Math.pow(y - otherY, 2));
+	public double distance2d(double otherX, double otherZ) {
+		return Math.sqrt(Math.pow(x - otherX, 2) + Math.pow(z - otherZ, 2));
 	}
 
+	public static int distance2d(int x, int z, int otherX, int otherZ) {
+		return (int) Math.sqrt(Math.pow(x - otherX, 2) + Math.pow(z - otherZ, 2));
+	}
+	
 	// Project the vector onto the plane passing through the origin,
 	// perpendicular to the given normal
 	public Vector3 projectNormal(Vector3 normal) {

@@ -113,7 +113,10 @@ public class GameMachineLoader {
 		RegionManager.start();
 		
 		actorSystem.actorOf(Props.create(UnityGameMessageHandler.class), UnityGameMessageHandler.name);
-		actorSystem.actorOf(Props.create(UnityInstanceTest.class), UnityInstanceTest.class.getSimpleName());
+		
+		
+		GameMessageRoute.add(UnityInstanceManager.name,UnityInstanceManager.name,false);
+		ActorUtil.createActor(UnityInstanceManager.class,UnityInstanceManager.name);
 		
 		TestRunner.run();
 		

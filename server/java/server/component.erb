@@ -947,9 +947,25 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     	if(message.<%=field.name%> != null)
     	 	output.writeEnum(<%=field.number%>, message.<%=field.name%>.number, false);
     	<% else %>
+    	
+    	<% if nullable(field) == 'Integer' ||  nullable(field) == 'Long' %>
+    	if(message.<%=field.name%> != 0) {
+            output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+        }
+    	<% elsif nullable(field) == 'Float' %>
+    	if(message.<%=field.name%> != 0F) {
+            output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+        }
+        <% elsif nullable(field) == 'Double' %>
+    	if(message.<%=field.name%> != 0D) {
+            output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
+        }
+    	<% else %>
     	if( (<%=nullable(field)%>)message.<%=field.name%> != null) {
             output.write<%=field.getClass.getSimpleName%>(<%=field.number%>, message.<%=field.name%>, false);
         }
+    	<% end %>
+    	
     	<% end %>
     	
     	<% end %>

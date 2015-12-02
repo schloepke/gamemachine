@@ -98,7 +98,6 @@ public class PlayerOutgoing extends UntypedActor {
 			lastActivity = System.currentTimeMillis() / 1000l;
 			ClientMessage clientMessage = createClientMessage();
 			Entity entity = (Entity)message;
-			entity.setSendToPlayer(true);
 			clientMessage.addEntity(entity);
 			sendToClient(clientMessage);
 		}

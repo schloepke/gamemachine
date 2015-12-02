@@ -151,7 +151,7 @@ public class CharacterService {
 		}
 	}
 
-	public Character create(String playerId, String characterId, Object data) {
+	public Character create(String playerId, String characterId, Vitals.Template template, Object data) {
 		String globalCharacterId = characterId + "_global";
 		Character global = find(globalUser, globalCharacterId);
 		if (global != null) {
@@ -159,6 +159,7 @@ public class CharacterService {
 		}
 
 		Character character = new Character();
+		character.vitalsTemplate = template;
 		character.setId(characterId);
 		character.setPlayerId(playerId);
 

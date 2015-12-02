@@ -82,11 +82,11 @@ public class AoeUtil {
 		return to;
 	}
 	
-	public static io.gamemachine.util.Vector3 toVector3(int x, int y) {
+	public static io.gamemachine.util.Vector3 toVector3(int x, int z) {
 		io.gamemachine.util.Vector3 to = new io.gamemachine.util.Vector3();
 		to.x = scale(x);
-		to.y = scale(y);
-		to.z = 0l;
+		to.y = 0l;
+		to.z = scale(z);
 		return to;
 	}
 	

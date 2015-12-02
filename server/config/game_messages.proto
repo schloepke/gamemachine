@@ -704,6 +704,7 @@ local_persistent_message PlayerSkill {
   
   optional UnityObject hitEffect = 37;
   optional ProjectileBehavior projectileBehavior = 38;
+  optional bool targetCircle = 39;
 }
 
 

@@ -21,6 +21,7 @@ import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerNotification;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
 
@@ -141,7 +142,7 @@ public class PlayerService {
 			}
 
 			if (character == null) {
-				character = characterService.create(playerId, characterId, null);
+				character = characterService.create(playerId, characterId, Vitals.Template.PlayerTemplate, null);
 				characterService.save(character);
 			}
 
