@@ -36,15 +36,15 @@ public class PassiveEffectHandler extends UntypedActor {
 	public static String name = PassiveEffectHandler.class.getSimpleName();
 
 	private Map<Long, EffectInfo> targets = new ConcurrentHashMap<Long, EffectInfo>();
-	private int zone = -1;
+	private String zone = null;
 	private Grid grid = null;
 	private AtomicLong counter = new AtomicLong();
 
-	public static String actorName(String gridName, int zone) {
+	public static String actorName(String gridName, String zone) {
 		return PassiveEffectHandler.name + gridName + zone;
 	}
 
-	public PassiveEffectHandler(String gridName, int zone) {
+	public PassiveEffectHandler(String gridName, String zone) {
 		this.zone = zone;
 		grid = GridService.getInstance().getGrid(zone,gridName);
 	}

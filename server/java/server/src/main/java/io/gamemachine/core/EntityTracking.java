@@ -249,12 +249,6 @@ public class EntityTracking extends UntypedActor {
 			}
 		}
 		
-		Zone zone =  PlayerService.getInstance().getZone(trackData.id);
-		if (trackData.zone != zone.number) {
-			Zone playerZone = ZoneService.getZone(trackData.zone);
-			PlayerService.getInstance().setZone(trackData.id, playerZone);
-		}
-
 		if (!grid.set(trackData)) {
 
 			// Resend is most likely from a TrackData that contains a delta, but

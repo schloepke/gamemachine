@@ -80,7 +80,9 @@ public class VitalsSender extends UntypedActor {
 
 			double distance = AoeUtil.distance(vitalsTrackData, playerTrackData);
 			if (distance <= vitalsDistance) {
-				toSend.addVitals(vitals);
+				Vitals clone = vitals.clone();
+				clone.zoneName = null;
+				toSend.addVitals(clone);
 			} else {
 				if (vitals.type == Vitals.VitalsType.Object) {
 					//logger.warning("Distance too far "+distance);
@@ -104,7 +106,7 @@ public class VitalsSender extends UntypedActor {
 		PlayerMessage.tell(msg, playerTrackData.id);
 	}
 
-	private List<Vitals> objectVitals(int zone) {
+	private List<Vitals> objectVitals(String zone) {
 		List<Vitals> container = new ArrayList<Vitals>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
 			if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject || vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
@@ -125,7 +127,7 @@ public class VitalsSender extends UntypedActor {
 		return container;
 	}
 
-	private List<Vitals> livingVitals(int zone) {
+	private List<Vitals> livingVitals(String zone) {
 		List<Vitals> container = new ArrayList<Vitals>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
 			Vitals vitals = vitalsProxy.vitals;

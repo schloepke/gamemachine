@@ -30,14 +30,14 @@ public class ActiveEffectHandler extends UntypedActor {
 	public static String name = ActiveEffectHandler.class.getSimpleName();
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
-	private int zone = -1;
+	private String zone = null;
 	private Grid grid = null;
 
-	public static String actorName(String gridName, int zone) {
+	public static String actorName(String gridName, String zone) {
 		return ActiveEffectHandler.name + gridName + zone;
 	}
 
-	public ActiveEffectHandler(String gridName, int zone) {
+	public ActiveEffectHandler(String gridName, String zone) {
 		this.zone = zone;
 		grid = GridService.getInstance().getGrid(zone,gridName);
 	}

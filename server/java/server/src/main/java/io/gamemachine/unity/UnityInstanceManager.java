@@ -31,7 +31,7 @@ public class UnityInstanceManager extends GameMessageActor {
 		instance.ask(instance.status);
 		
 		PlayerService.getInstance().releastUnityAgent(instance.status.playerId);
-		GridService.getInstance().removeForZone(instance.status.zone.number);
+		GridService.getInstance().removeForZone(instance.status.zone.name);
 		ZoneService.releaseZone(instance.status.name);
 		instance.running = false;
 		instance.assigned = false;
@@ -94,7 +94,7 @@ public class UnityInstanceManager extends GameMessageActor {
 		status.state = UnityInstanceStatus.State.None;
 		status.zone = ZoneService.getZone(status.name);
 		PlayerService.getInstance().setZone(status.playerId,status.zone);
-		GridService.getInstance().createForZone(status.zone.number);
+		GridService.getInstance().createForZone(status.zone.name);
 		
 		zoneToName.put(status.zone.number, status.name);
 		instance.assigned = true;

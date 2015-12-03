@@ -39,9 +39,9 @@ public class StatusEffectManager extends UntypedActor {
 	private long deathTime = 15000L;
 	private long outOfCombatTime = 10000L;
 	public static List<GridSet> gridsets = new ArrayList<GridSet>();
-	public static Set<Integer> handlerZones = new HashSet<Integer>();
+	public static Set<String> handlerZones = new HashSet<String>();
 	
-	public static void tell(String gridName, int zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
+	public static void tell(String gridName, String zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
 		String actorName = null;
 		if (!hasEffects(statusEffectTarget)) {
 			logger.warn("No effects found for skill "+statusEffectTarget.attack.playerSkill.id);
@@ -163,11 +163,11 @@ public class StatusEffectManager extends UntypedActor {
 		}
 		
 		for (Zone zone : ZoneService.staticZones()) {
-			createEffectHandler(zone.number);
+			createEffectHandler(zone.name);
 		}
 	}
 	
-	public static void createEffectHandler(int zone) {
+	public static void createEffectHandler(String zone) {
 		if (handlerZones.contains(zone)) {
 			logger.warn("effect handler already created for zone "+zone);
 			return;

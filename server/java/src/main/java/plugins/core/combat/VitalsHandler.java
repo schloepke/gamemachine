@@ -34,17 +34,17 @@ public class VitalsHandler extends GameMessageActor {
 		return proxies.values();
 	}
 	
-	public static List<VitalsProxy> getVitalsForZone(int zone) {
+	public static List<VitalsProxy> getVitalsForZone(String zone) {
 		List<VitalsProxy> zoneVitals = new ArrayList<VitalsProxy>();
 		for (VitalsProxy proxy : proxies.values()) {
-			if (proxy.get("zone") == zone) {
+			if (proxy.vitals.zoneName.equals(zone)) {
 				zoneVitals.add(proxy);
 			}
 		}
 		return zoneVitals;
 	}
 
-	public static VitalsProxy fromTrackData(TrackData trackData, int zone) {
+	public static VitalsProxy fromTrackData(TrackData trackData, String zone) {
 		if (trackData.entityType == TrackData.EntityType.Object) {
 			return get(trackData.id, Vitals.VitalsType.Object, zone);
 		} else if (trackData.entityType == TrackData.EntityType.BuildObject) {
@@ -57,7 +57,7 @@ public class VitalsHandler extends GameMessageActor {
 		}
 	}
 
-	public static void ensure(String entityId, int zone) {
+	public static void ensure(String entityId, String zone) {
 		if (!proxies.containsKey(entityId)) {
 			Player player = PlayerService.getInstance().find(entityId);
 
@@ -66,18 +66,18 @@ public class VitalsHandler extends GameMessageActor {
 			Vitals vitals = gameEntityManager.getBaseVitals(player.characterId);
 			vitals.characterId = player.characterId;
 			vitals.entityId = player.id;
-			vitals.zone = zone;
+			vitals.zoneName = zone;
 			VitalsProxy proxy = new VitalsProxy(vitals);
 			proxies.put(vitals.entityId, proxy);
 		}
 	}
 
-	public static void ensure(String entityId, Vitals.VitalsType vitalsType, int zone) {
+	public static void ensure(String entityId, Vitals.VitalsType vitalsType, String zone) {
 		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
 
 		if (!proxies.containsKey(entityId)) {
 			Vitals vitals = gameEntityManager.getBaseVitals(entityId, vitalsType);
-			vitals.zone = zone;
+			vitals.zoneName = zone;
 			vitals.entityId = entityId;
 			VitalsProxy proxy = new VitalsProxy(vitals);
 			proxies.put(vitals.entityId, proxy);
@@ -88,12 +88,12 @@ public class VitalsHandler extends GameMessageActor {
 		return proxies.get(entityId);
 	}
 	
-	public static VitalsProxy get(String entityId, int zone) {
+	public static VitalsProxy get(String entityId, String zone) {
 		ensure(entityId, zone);
 		return proxies.get(entityId);
 	}
 
-	public static VitalsProxy get(String entityId, Vitals.VitalsType vitalsType, int zone) {
+	public static VitalsProxy get(String entityId, Vitals.VitalsType vitalsType, String zone) {
 		ensure(entityId, vitalsType, zone);
 		return proxies.get(entityId);
 	}

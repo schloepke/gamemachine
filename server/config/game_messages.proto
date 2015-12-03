@@ -44,7 +44,6 @@ local_message Vitals {
   optional int32 changed = 14;
   optional string entityId = 15;
   optional VitalsType type = 18;
-  optional int32 zone = 19;
   optional int32 spellResist = 22;
   optional int32 elementalResist = 23;
   optional int32 spellPenetration = 24;
@@ -61,6 +60,7 @@ local_message Vitals {
   optional bool isBaseVitals = 35;
   optional float combatRegenMod = 36;
   optional bool inCombat = 37;
+  optional string zoneName = 38;
 }
 
 
@@ -327,7 +327,7 @@ local_persistent_message BuildObject {
   optional bytes slots = 37;
   optional int64 placedAt = 38;
   optional SlotInfo slotInfo = 40;
-  optional int32 zone = 41;
+  optional string zone = 41;
 }
   
  local_message SlotInfo {
@@ -563,9 +563,9 @@ message TrackData {
   optional sint32 iz = 3;
   
   optional string id = 4;
-  optional int32 x = 5;
-  optional int32 y = 6;
-  optional int32 z = 7;
+  optional sint32 x = 5;
+  optional sint32 y = 6;
+  optional sint32 z = 7;
 
   optional DynamicMessage dynamicMessage = 8;
   optional string gridName = 9;
@@ -588,16 +588,15 @@ message TrackData {
   optional UserDefinedData userDefinedData = 14;
   optional int32 broadcast = 15;
   optional string characterId = 16;
-  optional int32 rx = 17;
-  optional int32 ry = 18;
-  optional int32 rz = 19;
-  optional int32 rw = 20;
+  optional sint32 rx = 17;
+  optional sint32 ry = 18;
+  optional sint32 rz = 19;
+  optional sint32 rw = 20;
   optional int32 vaxis = 21;
   optional int32 haxis = 22;
   optional int32 speed = 23;
   optional float velX = 24;
   optional float velZ = 25;
-  optional int32 zone = 26;
   optional int32 hidden = 27;
   optional int32 yaxis = 28;
 }

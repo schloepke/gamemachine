@@ -115,7 +115,7 @@ public class SiegeHandler extends GameMessageActor {
 		}
 	}
 
-	private void broadcast(GameMessage gameMessage, int zone) {
+	private void broadcast(GameMessage gameMessage, String zone) {
 		Grid grid = GridService.getInstance().getGrid(zone, "default");
 		for (TrackData trackData : grid.getAll()) {
 			if (trackData.entityType != TrackData.EntityType.Player) {

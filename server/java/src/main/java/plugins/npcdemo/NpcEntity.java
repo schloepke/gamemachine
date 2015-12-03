@@ -12,6 +12,7 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.messages.UserDefinedData;
+import io.gamemachine.regions.ZoneService;
 import io.gamemachine.util.Vector3;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
@@ -48,7 +49,7 @@ public class NpcEntity extends GameMessageActor {
 		target = randVector();
 		initTrackData();
 		lastUpdate = System.currentTimeMillis();
-		vitalsProxy = VitalsHandler.get(id, 0);
+		vitalsProxy = VitalsHandler.get(id, ZoneService.defaultZone().name);
 		scheduleOnce(tickInterval, "update");
 	}
 	
@@ -59,7 +60,8 @@ public class NpcEntity extends GameMessageActor {
 	@Override
 	public void onTick(String message) {
 		if (vitalsProxy.vitals.dead == 1) {
-			grid.remove(id);
+			sendTrackData();
+			lastUpdate = System.currentTimeMillis();
 			scheduleOnce(tickInterval, "update");
 			return;
 		}

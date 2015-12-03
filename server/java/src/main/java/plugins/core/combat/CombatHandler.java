@@ -45,7 +45,7 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 
-	private void sendAttack(Attack attack, int zone) {
+	private void sendAttack(Attack attack, String zone) {
 		GameMessage msg = new GameMessage();
 
 		Grid grid = GridService.getInstance().getGrid(zone, "default");
@@ -57,7 +57,7 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 	
-	private void ensureTargetVitals(Attack.TargetType targetType, String entityId, int zone) {
+	private void ensureTargetVitals(Attack.TargetType targetType, String entityId, String zone) {
 		if (targetType == Attack.TargetType.Character) {
 			 VitalsHandler.ensure(entityId, zone);
 		} else if (targetType == Attack.TargetType.Object) {
@@ -87,7 +87,7 @@ public class CombatHandler extends GameMessageActor {
 		logger.warning("Attack " + attack.attackerCharacterId + " " + attack.targetId + " skill " + attack.playerSkill.id);
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
-		VitalsHandler.ensure(playerId, zone.number);
+		VitalsHandler.ensure(playerId, zone.name);
 		
 		statusEffectTarget.attack = attack;
 		
@@ -116,13 +116,13 @@ public class CombatHandler extends GameMessageActor {
 					sendToDefaultGrid = true;
 				}
 				
-				ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.number);
+				ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.name);
 			}
 			
 		} else if (attack.playerSkill.category == PlayerSkill.Category.Self) {
 			attack.targetType = Attack.TargetType.Character;
 			statusEffectTarget.targetEntityId = playerId;
-			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.number);
+			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.name);
 			sendToDefaultGrid = true;
 			
 		} else if (attack.playerSkill.category == PlayerSkill.Category.Aoe || attack.playerSkill.category == PlayerSkill.Category.AoeDot) {
@@ -137,7 +137,7 @@ public class CombatHandler extends GameMessageActor {
 			
 		} else if (attack.playerSkill.category == PlayerSkill.Category.Pbaoe) {
 			
-			Grid grid = GridService.getInstance().getGrid(zone.number,"default");
+			Grid grid = GridService.getInstance().getGrid(zone.name,"default");
 			
 			TrackData td = grid.get(playerId);
 			if (td == null) {
@@ -158,14 +158,14 @@ public class CombatHandler extends GameMessageActor {
 		}
 		
 		if (sendToDefaultGrid) {
-			StatusEffectManager.tell("default", zone.number, statusEffectTarget.clone(), getSelf());
+			StatusEffectManager.tell("default", zone.name, statusEffectTarget.clone(), getSelf());
 		}
 		
 		if (sendToObjectGrid) {
-			StatusEffectManager.tell("build_objects", zone.number, statusEffectTarget.clone(), getSelf());
+			StatusEffectManager.tell("build_objects", zone.name, statusEffectTarget.clone(), getSelf());
 		}
 		
-		sendAttack(attack,zone.number);
+		sendAttack(attack,zone.name);
 	}
 
 }

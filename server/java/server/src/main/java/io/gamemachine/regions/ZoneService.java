@@ -27,7 +27,6 @@ public class ZoneService extends GameMessageActor {
 	private static final Logger logger = LoggerFactory.getLogger(ZoneService.class);
 	private static PriorityBlockingQueue<Integer> zoneQueue = new PriorityBlockingQueue<Integer>();
 	private static Map<String, Zone> zones = new ConcurrentHashMap<String, Zone>();
-	private static Map<Integer, String> numberToName = new ConcurrentHashMap<Integer, String>();
 	private static Map<String,String> nameToRegion = new ConcurrentHashMap<String,String>();
 	
 	private static int maxZones = 0;
@@ -68,19 +67,17 @@ public class ZoneService extends GameMessageActor {
 			Zone zone = zones.get(name);
 			zoneQueue.put(zone.number);
 			zones.remove(name);
-			numberToName.remove(zone.number);
 		}
 	}
 
-	public static Zone getZone(int number) {
-		if (numberToName.containsKey(number)) {
-			return getZone(numberToName.get(number));
+	public static boolean zoneExists(String name) {
+		if (zones.containsKey(name)) {
+			return true;
 		} else {
-			throw new RuntimeException("Zone not created " + number);
+			return false;
 		}
-
 	}
-
+	
 	public static Zone getZone(String name) {
 		return getZone(name,true,null);
 	}
@@ -116,7 +113,6 @@ public class ZoneService extends GameMessageActor {
 				zone.setPlayerIdsList(playerIds);
 				setRegion(zone);
 				zones.put(name, zone);
-				numberToName.put(number, zone.name);
 				return zone;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -134,16 +130,20 @@ public class ZoneService extends GameMessageActor {
 		maxZones = config.getInt("gamemachine.max_zones");
 
 		zoneQueue.clear();
-		for (int i = 0; i < maxZones; i++) {
+		for (int i = 20; i < maxZones; i++) {
 			zoneQueue.put(i);
 		}
 
 		List<? extends Config> values = config.getConfigList("gamemachine.zones");
 		for (Config value : values) {
-			String zoneName = value.getString("name");
-			String region = value.getString("region");
-			nameToRegion.put(zoneName,region);
-			getZone(zoneName);
+			Zone zone = new Zone();
+			zone.name = value.getString("name");
+			zone.region = value.getString("region");
+			zone.number = value.getInt("number");
+			zone.isPublic = true;
+			zones.put(zone.name, zone);
+			nameToRegion.put(zone.name,zone.region);
+			setRegion(zone);
 		}
 	}
 

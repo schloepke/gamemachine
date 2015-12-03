@@ -48,7 +48,7 @@ public class Grid {
 	private int cellCount;
 	private int scaleFactor = 100;
 	private int shortIdQueueSize = 10000;
-	private int zone;
+	private String zone;
 	private GridConfig.GridType type;
 
 	private static final Logger logger = LoggerFactory.getLogger(Grid.class);
@@ -62,7 +62,7 @@ public class Grid {
 	private ConcurrentHashMap<String, Integer> cellsIndex = new ConcurrentHashMap<String, Integer>();
 	private ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>> cells = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, TrackData>>();
 
-	public Grid(String name, int max, int cellSize, int zone, GridConfig.GridType type) {
+	public Grid(String name, int max, int cellSize, String zone, GridConfig.GridType type) {
 		this.name = name;
 		this.max = max;
 		this.zone = zone;
@@ -77,11 +77,11 @@ public class Grid {
 		}
 	}
 
-	public static Grid createFromConfig(GridConfig gridConfig, int zone) {
+	public static Grid createFromConfig(GridConfig gridConfig, String zone) {
 		return new Grid(gridConfig.name, gridConfig.gridSize, gridConfig.cellSize, zone, gridConfig.type);
 	}
 
-	public int getZone() {
+	public String getZone() {
 		return this.zone;
 	}
 

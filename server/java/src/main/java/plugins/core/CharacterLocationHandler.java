@@ -62,7 +62,6 @@ public class CharacterLocationHandler extends GameMessageActor  {
 					character.worldx = trackData.x;
 					character.worldy = trackData.y;
 					character.worldz = trackData.z;
-					character.zone = ZoneService.getZone(trackData.zone);
 					CharacterService.instance().save(character);
 				}
 			}

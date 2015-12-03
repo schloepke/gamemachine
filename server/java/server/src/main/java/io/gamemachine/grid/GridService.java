@@ -22,7 +22,7 @@ public class GridService {
 
 	private static final Logger logger = LoggerFactory.getLogger(GridService.class);
 
-	private static ConcurrentHashMap<Integer, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<Integer, ConcurrentHashMap<String, Grid>>();
+	private static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
 
 	private String defaultGrid;
 	
@@ -40,7 +40,7 @@ public class GridService {
 	}
 	
 	public void removeEntityFromGrids(String entityId) {
-		for (int zone : gameGrids.keySet()) {
+		for (String zone : gameGrids.keySet()) {
 			for (Grid grid : gameGrids.get(zone).values()) {
 				grid.remove(entityId);
 			}
@@ -48,7 +48,7 @@ public class GridService {
 	}
 	
 	public void removeExpired() {
-		for (int zone : gameGrids.keySet()) {
+		for (String zone : gameGrids.keySet()) {
 			for (Grid grid : gameGrids.get(zone).values()) {
 				grid.RemoveExpired(AppConfig.getGridExpiration());
 			}
@@ -57,7 +57,7 @@ public class GridService {
 	
 	public List<Grid> getGrids() {
 		List<Grid> grids = new ArrayList<Grid>();
-		for (int zone : gameGrids.keySet()) {
+		for (String zone : gameGrids.keySet()) {
 			for (Grid grid : gameGrids.get(zone).values()) {
 				grids.add(grid);
 			}
@@ -69,12 +69,12 @@ public class GridService {
 
 	public synchronized void createDefaultGrids() {
 		for (Zone zone : ZoneService.staticZones()) {
-			createForZone(zone.number);
+			createForZone(zone.name);
 		}
 		logger.warn("Created grids for "+ZoneService.staticZones().size()+" zones");
 	}
 	
-	public synchronized void createForZone(int zone) {
+	public synchronized void createForZone(String zone) {
 		gameGrids.put(zone, new ConcurrentHashMap<String,Grid>());
 		Map<String, Grid> grids = gameGrids.get(zone);
 		for (GridConfig gridConfig : GridConfigs.getGridConfigs()) {
@@ -83,13 +83,13 @@ public class GridService {
 		}
 	}
 	
-	public void removeForZone(int zone) {
+	public void removeForZone(String zone) {
 		if (gameGrids.containsKey(zone)) {
 			gameGrids.remove(zone);
 		}
 	}
 	
-	public Grid getGrid(int zone, String name) {
+	public Grid getGrid(String zone, String name) {
 		if (Strings.isNullOrEmpty(name)) {
 			name = defaultGrid;
 		}
@@ -106,7 +106,7 @@ public class GridService {
 
 	public Grid getPlayerGrid(String name, String playerId) {
 		Zone zone =  PlayerService.getInstance().getZone(playerId);
-		return getGrid(zone.number,name);
+		return getGrid(zone.name,name);
 	}
 	
 }

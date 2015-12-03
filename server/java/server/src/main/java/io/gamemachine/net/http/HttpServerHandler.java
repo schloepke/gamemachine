@@ -108,35 +108,36 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 
 			if (req.getUri().startsWith("/api")) {
-				
+
 				if (req.getUri().startsWith("/api/client/login/")) {
 					int authtoken = 0;
 					String username = null;
-					
-					if (!Strings.isNullOrEmpty(params.get("username")) && params.get("username").equals(AppConfig.getAgentSecret())) {
+
+					if (!Strings.isNullOrEmpty(params.get("username"))
+							&& params.get("username").equals(AppConfig.getAgentSecret())) {
 						Player player = PlayerService.getInstance().assignAgent();
 						if (player == null) {
 							logger.warn("Unable to assign agent");
 							NotAuthorized(ctx);
 							return;
 						}
-						
+
 						String password = PlayerService.getInstance().getAgentPassword(player.id);
 						authtoken = login(player.id, password);
 						username = player.id;
-						logger.warn("Agent "+player.id+" authtoken "+authtoken);
+						logger.warn("Agent " + player.id + " authtoken " + authtoken);
 					} else {
 						authtoken = login(params.get("username"), params.get("password"));
 						username = params.get("username");
 					}
-					
+
 					if (authtoken == 0) {
 						NotAuthorized(ctx);
 					} else {
-						String json = PlayerAuthentication.getInstance().authenticationResponse(authtoken,username);
+						String json = PlayerAuthentication.getInstance().authenticationResponse(authtoken, username);
 						Ok(ctx, json);
 					}
-					
+
 					return;
 				}
 
@@ -187,17 +188,17 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						return;
 					}
 					if (response instanceof HttpHandler.StringResponse) {
-						HttpHandler.StringResponse sr = (HttpHandler.StringResponse)response;
-						Ok(ctx,sr.content);
+						HttpHandler.StringResponse sr = (HttpHandler.StringResponse) response;
+						Ok(ctx, sr.content);
 					} else if (response instanceof HttpHandler.ByteResponse) {
-						HttpHandler.ByteResponse br = (HttpHandler.ByteResponse)response;
-						Ok(ctx,br.content);
+						HttpHandler.ByteResponse br = (HttpHandler.ByteResponse) response;
+						Ok(ctx, br.content);
 					} else {
 						logger.warn("Invalid response");
 					}
 					return;
 				}
-				
+
 				if (!authenticated) {
 					logger.warn("Http attempt without authentication");
 					return;
@@ -207,30 +208,35 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					Ok(ctx, ZoneService.getPlayerZones(playerId).toByteArray());
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/players/set_zone")) {
 					if (params.get("zone") == null) {
 						NotAuthorized(ctx);
 						return;
 					}
-					
+
+					if (!ZoneService.zoneExists(params.get("zone"))) {
+						NotAuthorized(ctx);
+						return;
+					}
+
 					Zone zone = ZoneService.getZone(params.get("zone"));
 					if (zone == null) {
 						NotAuthorized(ctx);
 						return;
 					}
-					
+
 					PlayerService.getInstance().setZone(playerId, zone);
 					Ok(ctx, zone.toByteArray());
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/players/get_other")) {
 					Player player = PlayerService.getInstance().find(params.get("otherPlayerId"));
 					Ok(ctx, player.toByteArray());
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/players/get")) {
 					Player player = PlayerService.getInstance().find(params.get("playerId"));
 					Ok(ctx, player.toByteArray());
@@ -246,32 +252,34 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				if (req.getUri().startsWith("/api/characters/get")) {
 					Character character;
 					if (params.containsKey("otherPlayerId")) {
-						character = CharacterService.instance().find(params.get("otherPlayerId"),params.get("characterId"));
+						character = CharacterService.instance().find(params.get("otherPlayerId"),
+								params.get("characterId"));
 					} else {
 						character = CharacterService.instance().find(params.get("characterId"));
 					}
-					
+
 					if (character == null) {
 						if (params.containsKey("otherPlayerId")) {
-							logger.info("no character for "+params.get("otherPlayerId")+" "+params.get("characterId"));
+							logger.info("no character for " + params.get("otherPlayerId") + " "
+									+ params.get("characterId"));
 						} else {
-							logger.info("no character for " +params.get("characterId"));
+							logger.info("no character for " + params.get("characterId"));
 						}
-						
+
 						return;
 					}
 					Ok(ctx, character.toByteArray());
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/build_objects/get")) {
 					int start = Integer.parseInt(params.get("start"));
 					int end = Integer.parseInt(params.get("end"));
-					byte[] resp = BuildObjectHandler.getBuildObjects(start,end);
+					byte[] resp = BuildObjectHandler.getBuildObjects(start, end);
 					Ok(ctx, resp);
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/build_objects/put")) {
 					byte[] bytes = Base64.decodeBase64(params.get("build_objects"));
 					BuildObjects buildObjects = BuildObjects.parseFrom(bytes);
@@ -287,12 +295,9 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					if (params.containsKey("data")) {
 						data = params.get("data");
 					}
-					
-					Character character = CharacterService.instance().create(
-							params.get("playerId"),
-							params.get("characterId"),
-							Vitals.Template.PlayerTemplate,
-							data);
+
+					Character character = CharacterService.instance().create(params.get("playerId"),
+							params.get("characterId"), Vitals.Template.PlayerTemplate, data);
 					if (character == null) {
 						character = new Character();
 						character.playerId = "na";
@@ -307,13 +312,13 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 
 				if (req.getUri().startsWith("/api/characters/delete")) {
-					CharacterService.instance().delete(params.get("playerId"),params.get("characterId"));
+					CharacterService.instance().delete(params.get("playerId"), params.get("characterId"));
 					Ok(ctx, params.get("characterId"));
 					return;
 				}
-				
+
 				if (req.getUri().startsWith("/api/characters/set_current")) {
-					PlayerService.getInstance().setCharacter(playerId,params.get("characterId"));
+					PlayerService.getInstance().setCharacter(playerId, params.get("characterId"));
 					Ok(ctx, "OK");
 					return;
 				}
@@ -324,9 +329,10 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 						Ok(ctx, resp);
 						return;
 					}
-					
+
 					if (req.getUri().startsWith("/api/admin/players/set_password")) {
-						PlayerService.getInstance().setPassword(params.get("set_player_id"), params.get("set_password"));
+						PlayerService.getInstance().setPassword(params.get("set_player_id"),
+								params.get("set_password"));
 						Ok(ctx, "OK");
 						return;
 					}
@@ -373,8 +379,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	}
 
 	private static void sendResponse(ChannelHandlerContext ctx, HttpResponseStatus status, String body) {
-		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, Unpooled.copiedBuffer(body,
-				CharsetUtil.UTF_8));
+		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
+				Unpooled.copiedBuffer(body, CharsetUtil.UTF_8));
 		response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
 		response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
 		ctx.writeAndFlush(response).addListener(ChannelFutureListener.CLOSE);
@@ -403,8 +409,8 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 	}
 
 	private static void sendError(ChannelHandlerContext ctx, HttpResponseStatus status) {
-		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status, Unpooled.copiedBuffer("Failure: "
-				+ status + "\r\n", CharsetUtil.UTF_8));
+		FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, status,
+				Unpooled.copiedBuffer("Failure: " + status + "\r\n", CharsetUtil.UTF_8));
 		response.headers().set(CONTENT_TYPE, "text/plain; charset=UTF-8");
 		response.headers().set(CONTENT_LENGTH, response.content().readableBytes());
 

@@ -213,7 +213,7 @@ public class PlayerService {
 		player.setAuthenticated(false);
 		player.setAuthtoken(0);
 		player.setIp(0);
-
+		
 		if (authType == OBJECT_DB) {
 			CharacterService.instance().findPlayerCharacters(player.id);
 			Player.store().set(player);

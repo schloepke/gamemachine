@@ -132,7 +132,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		}
 	}
 
-	private void broadcast(GameMessage gameMessage, int zone) {
+	private void broadcast(GameMessage gameMessage, String zone) {
 		Grid grid = GridService.getInstance().getGrid(zone,"default");
 		for (TrackData trackData : grid.getAll()) {
 			if (trackData.entityType != TrackData.EntityType.Player) {
@@ -241,7 +241,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		}
 
 		Zone zone = CharacterService.instance().getZone(buildObject.ownerId);
-		buildObject.zone = zone.number;
+		buildObject.zone = zone.name;
 		buildObject.state = BuildObject.State.Active;
 		buildObject.ownerId = characterId;
 		buildObject.updatedAt = System.currentTimeMillis();
