@@ -22,9 +22,12 @@ Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/
 
 - The most efficient space optimization in the industry.  Multiple techniques used to allow for hundreds of entities in visual range at low bandwidth rates.
 
-- UDP, TCP, and Http
+- UDP, TCP, and Http based on Netty.
 
 - Fully distributed chat/messaging system.
+
+- Region/zone handling that is fully distributed and simple to use.  Regions are automatically moved from down servers to another available node in the cluster.  Based on the proven Akka system. 
+
 
 
 
