@@ -2,32 +2,28 @@
 
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games.  Our focus is on providing easy to use abstractions for hard problems, allowing even client side developers to write game logic that is concurrent and performant, without having to deal with low level concurrency.
 
-## Version 2 is now out with a much simpler installation, unity packages, new features, and new documentation.
-
 Visit our new [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
 
-#### Highlights
 
-- Fully distributed platform that is inherently scalable to thousands of nodes.
+## What's new in version 3
 
-- No separate server types such as login server, zone server, etc..  All nodes can serve all functions.  Automatic failover, no single points of failure, and simplified deployment/dev ops.
- 
-- Good abstractions for concurrency that are simple to understand and use.  Modern approach using the actor model and messaging.
+- Lots of unity integration work.  Integrated process manager that can manage a pool of Unity instances.  From within game machine you can then request instances on demand, release them when you are done.  Full two way communication between Unity and Game Machine.  Process manager can run externally or embedded.
 
-- Fully integrated persistence.  Protocol buffer messages can be directly persisted to the the object store or sql database.  Database schema's auto generated from protocol buffer definitions.
+- Regions/zones were cleaned up.  Zones are now lightweight and used for both traditional mmo type zones and to handle smaller limited time instance matchups.  Unity instances are assigned zones either through a static config or on demand.  Zones are automatically assigned their own area of interest grid.
 
-- Multiple caching layers for various needs.  Fully atomic local caching with persistence write through plus distributed off heap caching.
+- Plugin system
 
-- Tunable write behind cache that decreases write load on the database.  Popular databases such as Postgres, Mysql, and Couchbase supported out of the box.
+- Several new plugins.  Most notable is a sophisticated combat system
 
--  Modular, pluggable systems for persistence and authentication.
+- Lots of bug fixing and cleanup.
 
-- Highly optimized spatial grid to track game entities and perform proximity queries.
-
-- UDP or TCP based on Netty
-
-- Chat system built on top of a distributed pub/sub architecture
+#### Installation
 
 
+Game Machine now requires an sql database, it's no longer optional.
+
+server/config/db has _base.sql files for postgres/mysql that have commands to create a user/databse and the required entities table.  Building Game Machine will then create a _generated.sql file per database type that has the schema for all of the tables generated from protobuf defintions.
+
+The docs in confluence aren't up to date yet, that's next.  There are a lot of smaller changes in areas outside the core api, mostly good stuff that makes life easier.  Until the docs are updated please post on the google group with any questions.
 
 
