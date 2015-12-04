@@ -1,23 +1,16 @@
 ﻿using UnityEngine;
 using System;
 using System.Linq;
-using GameMachine;
 using GameMachine.HttpApi;
 using GameMachine.Core;
-using Entity = io.gamemachine.messages.Entity;
-using EchoTest = io.gamemachine.messages.EchoTest;
-using System.Collections;
 using System.Collections.Generic;
-using TrackData = io.gamemachine.messages.TrackData;
-using ClientData = io.gamemachine.messages.UserDefinedData;
-using TrackDataResponse = io.gamemachine.messages.TrackDataResponse;
-using Character = io.gamemachine.messages.Character;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace Common {
 
-        public class GameEntityManager : MonoBehaviour, GameMachine.Trackable, ICharacterApi {
-            private static Dictionary<string, IGameEntity> entities = new Dictionary<string, IGameEntity>();
+        public class GameEntityManager : MonoBehaviour, Trackable, ICharacterApi {
+            private static Dictionary<string, IGameEntity> gameEntities = new Dictionary<string, IGameEntity>();
             private static Dictionary<string, CharacterData> characters = new Dictionary<string, CharacterData>();
             private Dictionary<int, string> shortIdToEntityId = new Dictionary<int, string>();
             private Dictionary<string, float> lastUpdate = new Dictionary<string, float>();
@@ -33,16 +26,21 @@ namespace GameMachine {
             }
 
             public static int GameEntityCount() {
-                return entities.Count;
+                return gameEntities.Values.Where(entity => entity.IsActive()).Count();
             }
 
-            public static List<IGameEntity> GetGameEntities() {
-                return entities.Values.ToList();
+            public static IEnumerable<IGameEntity> GetGameEntities() {
+                return gameEntities.Values.Where(entity => entity.IsActive());
             }
 
             public static IGameEntity GetGameEntity(string id) {
-                if (entities.ContainsKey(id)) {
-                    return entities[id];
+                if (gameEntities.ContainsKey(id)) {
+                    IGameEntity entity = gameEntities[id];
+                    if (entity.IsActive()) {
+                        return gameEntities[id];
+                    } else {
+                        return null;
+                    }
                 } else {
                     return null;
                 }
@@ -57,7 +55,9 @@ namespace GameMachine {
             }
 
             public static void RemoveGameEntity(string entityId) {
-                entities.Remove(entityId);
+                IGameEntity entity = gameEntities[entityId];
+                entity.SetActive(false);
+                entity.GetGameObject().SetActive(false);
             }
 
             void Start() {
@@ -77,13 +77,13 @@ namespace GameMachine {
                         if (trackData.shortId > 0) {
                             if (shortIdToEntityId.ContainsKey(trackData.shortId)) {
                                 string entityId = shortIdToEntityId[trackData.shortId];
-                                if (entities.ContainsKey(entityId)) {
-                                    entity = entities[entityId];
+                                if (gameEntities.ContainsKey(entityId)) {
+                                    entity = gameEntities[entityId];
                                     entity.UpdateFromTrackData(trackData, true);
                                     lastUpdate[entityId] = Time.time;
                                 }
                             } else {
-                                //Logger.Debug ("Entity for shortId  " + trackData.shortId + " not found type=" + trackData.entityType);
+                                //Debug.Log("Entity for shortId  " + trackData.shortId + " not found type=" + trackData.entityType);
                                 badShortId = trackData.shortId;
                             }
                         } else {
@@ -95,7 +95,7 @@ namespace GameMachine {
                             continue;
                         }
 
-                        if (!entities.ContainsKey(entityId)) {
+                        if (!gameEntities.ContainsKey(entityId)) {
 
 
                             if (trackData.shortId == 0) {
@@ -128,14 +128,22 @@ namespace GameMachine {
                                 }
                                 
                                 entity = gameEntityFactory.Create(entityId, characterData.character, trackData);
-                                entities[entityId] = entity;
+                                //entityObjects[entityId] = entity.GetGameObject();
+                                entity.SetActive(true);
+                                gameEntities[entityId] = entity;
                                 shortIdToEntityId[trackData.shortId] = entityId;
                                 lastUpdate[entityId] = Time.time;
                             }
                         }
 
 
-                        entity = entities[entityId];
+                        entity = gameEntities[entityId];
+
+                        if (!entity.IsActive()) {
+                            entity.GetGameObject().SetActive(true);
+                            entity.SetActive(true);
+                        }
+
                         entity.UpdateFromTrackData(trackData, false);
                         lastUpdate[entityId] = Time.time;
                     }

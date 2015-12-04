@@ -12,6 +12,7 @@ using ClientMessage = io.gamemachine.messages.ClientMessage;
 using Entity = io.gamemachine.messages.Entity;
 using PlayerLogout = io.gamemachine.messages.PlayerLogout;
 using System.IO;
+using UnityEngine;
 
 namespace GameMachine.Core
 {
@@ -73,7 +74,7 @@ namespace GameMachine.Core
         {
             this.authtoken = authtoken;
             this.playerId = playerId;
-            Logger.Debug (address);
+            Debug.Log(address);
 
             if (!IPAddress.TryParse (address, out this.address)) {
                 this.address = Dns.GetHostEntry (address).AddressList [0];
@@ -173,7 +174,7 @@ namespace GameMachine.Core
                 connecting = false;
                 if (failedConnectionCount > maxFailedConnections) {
                     running = false;
-                    Logger.Debug ("Tcp: Too many failed connection attempts, aborting");
+                    Debug.Log("Tcp: Too many failed connection attempts, aborting");
                     return;
                 }
                 failedConnectionCount++;
@@ -185,7 +186,7 @@ namespace GameMachine.Core
 
             NetworkStream networkStream = tcpClient.GetStream ();
             byte[] buffer = new byte[tcpClient.ReceiveBufferSize];
-            Logger.Debug ("Tcp: Connected");
+            Debug.Log("Tcp: Connected");
             networkStream.BeginRead (buffer, 0, buffer.Length, ReadCallback, buffer);
             Connected ();
         }
@@ -198,12 +199,12 @@ namespace GameMachine.Core
                 networkStream = tcpClient.GetStream ();
                 read = networkStream.EndRead (result);
             } catch {
-                Logger.Debug ("Error reading stream");
+                Debug.Log("Error reading stream");
                 return;
             }
 			
             if (read == 0) {
-                Logger.Debug ("Connection closed");
+                Debug.Log("Connection closed");
                 return;
             }
 

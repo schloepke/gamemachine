@@ -33,7 +33,7 @@ namespace GameMachine.Core
                 Debug.Log(www.error);
                 error (www.error);
             } else {
-                Logger.Debug (www.text);
+                Debug.Log(www.text);
                 Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>> (www.text);
                 success (values);
             }

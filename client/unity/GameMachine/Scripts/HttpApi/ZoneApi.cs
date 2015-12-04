@@ -1,15 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using GameMachine;
 using GameMachine.Common;
-using GameMachine.Core;
 using System.IO;
 using ProtoBuf;
-using System.Linq;
-using ZoneInfos = io.gamemachine.messages.ZoneInfos;
-using ZoneInfo = io.gamemachine.messages.ZoneInfo;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace HttpApi {
@@ -41,8 +35,8 @@ namespace GameMachine {
                     caller.OnGetZonesError(www.error);
                 } else {
                     MemoryStream stream = new MemoryStream(www.bytes);
-                    ZoneInfos infos = Serializer.Deserialize<ZoneInfos>(stream);
-                    caller.OnGetZones(infos);
+                    Zones zones = Serializer.Deserialize<Zones>(stream);
+                    caller.OnGetZones(zones);
                 }
             }
 
@@ -50,12 +44,12 @@ namespace GameMachine {
                 StartCoroutine(SetZoneRoutine(zone, caller));
             }
 
-            public IEnumerator SetZoneRoutine(string zone, IZoneApi caller) {
+            public IEnumerator SetZoneRoutine(string zoneName, IZoneApi caller) {
                 string uri = NetworkSettings.instance.BaseUri() + "/api/players/set_zone";
                 var form = new WWWForm();
                 form.AddField("playerId", NetworkSettings.instance.username);
                 form.AddField("authtoken", NetworkSettings.instance.authtoken);
-                form.AddField("zone", zone);
+                form.AddField("zone", zoneName);
                 WWW www = new WWW(uri, form.data, form.headers);
                 yield return www;
 
@@ -63,8 +57,8 @@ namespace GameMachine {
                     caller.OnSetZoneError(www.error);
                 } else {
                     MemoryStream stream = new MemoryStream(www.bytes);
-                    ZoneInfo info = Serializer.Deserialize<ZoneInfo>(stream);
-                    caller.OnSetZone(info);
+                    Zone zone = Serializer.Deserialize<Zone>(stream);
+                    caller.OnSetZone(zone);
                 }
             }
 

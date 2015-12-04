@@ -19,11 +19,12 @@ namespace GameMachine {
             private PlayerUI playerUI;
             private DefaultClient.Client client;
             private Login login;
-            public string mainScene = "main";
+            public string mainScene;
 
             void Awake() {
                 instance = this;
             }
+
             // Use this for initialization
             void Start() {
                 adminUI = transform.Find("admin").GetComponent<AdminUI>();
@@ -100,13 +101,18 @@ namespace GameMachine {
 
             public void OnCharacterSelected(Character character) {
                 NetworkSettings.instance.character = character;
-                if (character.zone != client.zoneInfo.number) {
-                    Debug.Log("Character zone != zoneinfo zone");
+                if (string.IsNullOrEmpty(client.zone.name)) {
+                    Debug.Log("Server assigned zone is null");
+                } else {
+                    if (character.zone.name != client.zone.name) {
+                        Debug.Log("Character zone " + character.zone.name + " != server assigned zone " + client.zone.name);
+                    }
+                    if (!NetworkSettings.instance.sameAddress(client.zone.hostname, NetworkSettings.instance.hostname)) {
+                        Debug.Log("Not connected to correct region host, reconnecting to " + client.zone.hostname);
+                        client.ReconnectToZone();
+                    }
                 }
-                if (NetworkSettings.instance.hostname != client.zoneInfo.hostname) {
-                    Debug.Log("Not connected to right host for zone, reconnecting");
-                    client.ReconnectToZone();
-                }
+                
                 
                 ResetUI();
                 Application.LoadLevel(mainScene);

@@ -42,18 +42,18 @@ namespace GameMachine {
                 PlayerPrefs.SetFloat("spawnz", position.z);
             }
 
-            public Vector3 GetSavedLocal() {
+            private Vector3 GetSavedLocal() {
                 float x = PlayerPrefs.GetFloat("spawnx");
                 float y = PlayerPrefs.GetFloat("spawny");
                 float z = PlayerPrefs.GetFloat("spawnz");
                 return new Vector3(x, y, z);
             }
 
-            public Vector3 GetObjectSpawnPoint() {
+            private Vector3 GetObjectSpawnPoint() {
                 GameObject spawnPoint = GameObject.Find("spawnpoint");
                 if (spawnPoint == null) {
-                    Debug.Log("Unable to find spawnpoint, giving up");
-                    return Vector3.zero;
+                    //Debug.Log("Unable to find spawnpoint, giving up");
+                    return GmUtil.Infinity;
                 }
 
                 Vector3 randomizedPoint = new Vector3(
@@ -62,51 +62,67 @@ namespace GameMachine {
                     spawnPoint.transform.position.z + Random.Range(-randomRangeForObjectSpawn, randomRangeForObjectSpawn)
                     );
 
-                Vector3 groundedPosition = GroundedPosition(randomizedPoint, heightOffset);
-                if (groundedPosition != Vector3.zero) {
+                Vector3 groundedPosition = GroundedPosition(randomizedPoint);
+                if (groundedPosition != GmUtil.Infinity) {
                     return groundedPosition;
                 } else {
                     Debug.Log("Unable to find grounded position from spawnpoint, giving up");
-                    return Vector3.zero;
+                    return GmUtil.Infinity;
                 }
             }
 
-            public Vector3 GetSavedSpawnPoint() {
+            private Vector3 GetSavedSpawnPoint() {
                 return GetSavedLocal();
             }
 
-            public Vector3 GetNetworkSpawnPoint() {
+            private Vector3 GetNetworkSpawnPoint() {
                 IGameEntity player = GameEntityManager.GetPlayerEntity();
                 if (player != null) {
                     Vector3 networkSpawnPoint = player.GetSpawnPoint();
-                    if (networkSpawnPoint != Vector3.zero) {
+                    if (networkSpawnPoint != GmUtil.Infinity) {
                         return networkSpawnPoint;
                     }
                 }
-                return Vector3.zero;
+                return GmUtil.Infinity;
             }
             
-            public Vector3 SpawnpointExact() {
+            public Vector3 SpawnpointExact(bool logType) {
                 if (spawnType == SpawnType.SpawnObject) {
                     return GetObjectSpawnPoint();
                 } else if (spawnType == SpawnType.FromLocalSaved) {
                     return GetSavedSpawnPoint();
                 }
 
-                Vector3 spawnpoint = Vector3.zero;
-
-                spawnpoint = GetNetworkSpawnPoint();
-                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
-                    return spawnpoint;
-                }
-
-                spawnpoint = GetSavedSpawnPoint();
-                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
-                    return spawnpoint;
+                Vector3 spawnpoint = GmUtil.Infinity;
+                
+                if (GamePlayer.IsNetworked()) {
+                    spawnpoint = GetNetworkSpawnPoint();
+                    if (spawnpoint != Vector3.zero) {
+                        spawnpoint = GroundedPosition(spawnpoint);
+                        if (spawnpoint != GmUtil.Infinity) {
+                            if (logType) {
+                                Debug.Log("SpawnPoint from network " + spawnpoint);
+                            }
+                            return spawnpoint;
+                        }
+                    }
+                } else {
+                    spawnpoint = GetSavedSpawnPoint();
+                    spawnpoint = GroundedPosition(spawnpoint);
+                    if (spawnpoint != GmUtil.Infinity) {
+                        if (logType) {
+                            Debug.Log("SpawnPoint from saved " + spawnpoint);
+                        }
+                        return spawnpoint;
+                    }
                 }
 
                 spawnpoint = GetObjectSpawnPoint();
-                if (spawnpoint != Vector3.zero && PointOverGround(spawnpoint)) {
+                spawnpoint = GroundedPosition(spawnpoint);
+                if (spawnpoint != GmUtil.Infinity) {
+                    if (logType) {
+                        Debug.Log("SpawnPoint from object "+spawnpoint);
+                    }
                     return spawnpoint;
                 }
 
@@ -114,21 +130,12 @@ namespace GameMachine {
                 return spawnpoint;
             }
 
-            public bool PointOverGround(Vector3 point) {
-                Vector3 groundedPosition = GroundedPosition(point);
-                if (groundedPosition != Vector3.zero) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-
             public Vector3 SpawnpointOnTerrain() {
                 Vector3 groundedPosition;
                 Vector3 saved = GetSavedLocal();
-                if (saved != Vector3.zero) {
+                if (saved != GmUtil.Infinity) {
                     groundedPosition = GroundedPosition(saved, heightOffset);
-                    if (groundedPosition != Vector3.zero) {
+                    if (groundedPosition != GmUtil.Infinity) {
                         return groundedPosition;
                     } else {
                         Debug.Log("Unable to find grounded position from last save point");
@@ -138,15 +145,15 @@ namespace GameMachine {
                 GameObject spawnPoint = GameObject.Find("spawnpoint");
                 if (spawnPoint == null) {
                     Debug.Log("Unable to find spawnpoint, giving up");
-                    return Vector3.zero;
+                    return GmUtil.Infinity;
                 }
 
                 groundedPosition = GroundedPosition(spawnPoint.transform.position, heightOffset);
-                if (groundedPosition != Vector3.zero) {
+                if (groundedPosition != GmUtil.Infinity) {
                     return groundedPosition;
                 } else {
                     Debug.Log("Unable to find grounded position from spawnpoint, giving up");
-                    return Vector3.zero;
+                    return GmUtil.Infinity;
                 }
             }
 
@@ -167,7 +174,7 @@ namespace GameMachine {
                 return GroundedPosition(position, heightOffset);
             }
 
-            public Vector3 GroundedPosition(Vector3 position, float offset) {
+            private Vector3 GroundedPosition(Vector3 position, float offset) {
                 Vector3 start = new Vector3(position.x, 900f, position.z);
                 RaycastHit[] hits;
                 hits = Physics.RaycastAll(start, Vector3.down, 1000f);
@@ -175,13 +182,14 @@ namespace GameMachine {
                     if (hit.collider != null) {
                         Terrain terrain = hit.collider.gameObject.GetComponent<Terrain>() as Terrain;
                         if (terrain != null || hit.collider.gameObject.tag == "gm_placed_block") {
-                            Debug.Log("Found spawnpoint " + hit.collider.gameObject.name);
-                            return new Vector3(position.x, hit.point.y + offset, position.z);
+                            Vector3 toReturn = new Vector3(position.x, hit.point.y + offset, position.z);
+                            //Debug.Log("Found spawnpoint " + hit.collider.gameObject.name +" at "+ toReturn);
+                            return toReturn;
                         }
                     }
                    
                 }
-                return Vector3.zero;
+                return GmUtil.Infinity;
             }
         }
     }

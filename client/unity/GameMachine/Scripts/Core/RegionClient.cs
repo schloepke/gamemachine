@@ -46,7 +46,7 @@ namespace GameMachine.Core
          
         public void Disconnect ()
         {
-            Logger.Debug ("Region client: disconnecting from current region");
+            Debug.Log("Region client: disconnecting from current region");
             running = false;
             regionStartedCalled = false;
             connected = false;
@@ -69,7 +69,7 @@ namespace GameMachine.Core
                 Disconnect ();
             }
 
-            Logger.Debug ("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
+            Debug.Log("RegionClient.Connect " + region + ":" + host + ":" + authtoken);
             if (App.protocol == Login.Protocol.UDP) {
                 client = new AsyncUdpClient (host, port, username, authtoken);
             } else {
@@ -84,7 +84,7 @@ namespace GameMachine.Core
             GameMachine.Core.App.remoteEcho.OnRegionEchoReceived (callback);
             running = true;
             currentRegion = region;
-            Logger.Debug ("Region client running - waiting to verify connection");
+            Debug.Log("Region client running - waiting to verify connection");
         }
 
         public void Connect (string region)
@@ -97,7 +97,7 @@ namespace GameMachine.Core
         {
             if (!connected) {
                 connected = true;
-                Logger.Debug ("Region client connected " + currentRegion);
+                Debug.Log("Region client connected " + currentRegion);
                 if (!regionStartedCalled) {
                     regionClientStarted ();
                     regionStartedCalled = true;
@@ -132,9 +132,9 @@ namespace GameMachine.Core
                 
                 if ((Time.time - lastEchoReceived) >= echoTimeout) {
                     connected = false;
-                    Logger.Debug ("RegionEcho timeout");
+                    Debug.Log("RegionEcho timeout");
                     if ((Time.time - lastEchoReceived) >= disconnectTime) {
-                        Logger.Debug ("Region Connection timeout");
+                        Debug.Log("Region Connection timeout");
                         if (connectionTimeout != null) {
                             Disconnect ();
                             connectionTimeout ();

@@ -16,6 +16,7 @@ namespace GameMachine {
 
             public ControllerType controllerType = ControllerType.ThirdPerson;
 
+            public Collider playerCollider;
             public Transform playerTransform;
             public SkinnedMeshRenderer[] playerRenderers;
             public string characterId = null;
@@ -34,9 +35,15 @@ namespace GameMachine {
                 instance = GameObject.Find("GamePlayer").GetComponent<GamePlayer>() as GamePlayer;
                 if (instance.useGameMachinePlayer) {
                     instance.gameEntity = GameEntityManager.GetPlayerEntity();
-                    instance.characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
-                    instance.playerTransform = GameEntityManager.GetPlayerEntity().GetTransform();
-                    instance.playerRenderers = instance.playerTransform.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                    if (instance.gameEntity != null) {
+                        instance.characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
+                        instance.playerTransform = GameEntityManager.GetPlayerEntity().GetTransform();
+                        instance.playerRenderers = instance.playerTransform.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                        instance.playerCollider = instance.playerTransform.gameObject.GetComponent<Collider>() as Collider;
+                    } else {
+                        Debug.Log("Game player not present, assuming running as server");
+                    }
+                    
                     
                 }
                 return instance;

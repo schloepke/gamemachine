@@ -6,6 +6,7 @@ namespace GameMachine {
     namespace Common {
 
         public enum GMKeyCode {
+            None,
             Jumping,
             Vaxis,
             Haxis,
@@ -34,8 +35,7 @@ namespace GameMachine {
             UserdefValue13,
             UserdefValue14,
             UserdefValue15,
-            UserdefVector3,
-            UserdefQuaternion,
+            SecondaryVector3
         }
     }
 }

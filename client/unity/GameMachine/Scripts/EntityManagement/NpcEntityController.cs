@@ -90,6 +90,11 @@ namespace GameMachine {
             }
 
             public void ManualUpdate() {
+                if (gameEntity.IsDead()) {
+                    velocity.y -= gravity * Time.deltaTime;
+                    SetAnimation(AnimationName.Dead);
+                    return;
+                }
 
                 // If on the ground, allow jumping
                 if (grounded) {

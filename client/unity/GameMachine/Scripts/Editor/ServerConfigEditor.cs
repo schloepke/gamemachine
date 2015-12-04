@@ -1,13 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEditor;
-using GameMachine;
 using System.Collections.Generic;
-using Ionic.Zip;
 using System.IO;
-using System.Linq;
-using GameMachine.Common;
-using System.Text;
+using System;
 
 namespace GameMachine {
     [CustomEditor(typeof(ServerConfig))]
@@ -66,8 +61,12 @@ namespace GameMachine {
                 if (GUILayout.Button("Start Game Machine", GUILayout.Width(300))) {
                     RunGameMachine("server", serverConfig.configName);
                 }
-                if (GUILayout.Button("Build Game Machine", GUILayout.Width(300))) {
+                if (GUILayout.Button("Build Game Machine (full)", GUILayout.Width(300))) {
                     RunGameMachine("build clean", serverConfig.configName);
+                }
+
+                if (GUILayout.Button("Build Game Machine (compile only)", GUILayout.Width(300))) {
+                    RunGameMachine("build compile", serverConfig.configName);
                 }
             }
 
@@ -78,15 +77,17 @@ namespace GameMachine {
             EditorGUILayout.Separator();
             EditorGUILayout.LabelField("Unity server", EditorStyles.boldLabel);
             prop = so.FindProperty("buildScenes");
-            EditorGUILayout.PropertyField(prop, true); // True means show children
+            EditorGUILayout.PropertyField(prop, true);
             EditorGUILayout.Separator();
 
             prop = so.FindProperty("runHeadless");
             prop.boolValue = EditorGUILayout.Toggle("Run headless", prop.boolValue);
             EditorGUILayout.Separator();
 
+           
+
             buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Target", buildTarget);
-            EditorGUILayout.BeginVertical(GUILayout.Height(40));
+            EditorGUILayout.BeginVertical(GUILayout.Height(20));
             EditorGUILayout.Space();
             EditorGUILayout.EndVertical();
 
@@ -94,25 +95,32 @@ namespace GameMachine {
                 lastUpdate = TimeUtil.EpochTime();
                 ProcessTracker.UpdateProcesses();
             }
+           
 
             if (ProcessTracker.HasProcess(unityProcess)) {
-                if (GUILayout.Button("Stop", GUILayout.Width(300))) {
+                if (GUILayout.Button("Stop Unity", GUILayout.Width(300))) {
                     ProcessTracker.Stop(unityProcess);
                 }
             } else {
-                if (File.Exists(ExePath())) {
-                    if (GUILayout.Button("Start", GUILayout.Width(300))) {
-                        StartUnity(so.FindProperty("runHeadless").boolValue);
-                    }
-                }
                 if (buildTarget == BuildTarget.StandaloneWindows ||
                     buildTarget == BuildTarget.StandaloneWindows64 ||
+                    buildTarget == BuildTarget.StandaloneLinux ||
+                    buildTarget == BuildTarget.StandaloneLinux64 ||
                     buildTarget == BuildTarget.StandaloneOSXIntel ||
                     buildTarget == BuildTarget.StandaloneOSXIntel64 ||
                     buildTarget == BuildTarget.StandaloneOSXUniversal) {
 
                     if (GUILayout.Button("Build", GUILayout.Width(300))) {
+                        if (Directory.Exists(PublishPath())) {
+                            Directory.Delete(PublishPath(), true);
+                        }
                         Build();
+                    }
+                }
+
+                if (File.Exists(ExePath())) {
+                    if (GUILayout.Button("Start single instance", GUILayout.Width(300))) {
+                        StartUnity(so.FindProperty("runHeadless").boolValue);
                     }
                 }
             }
@@ -122,7 +130,24 @@ namespace GameMachine {
                     System.Diagnostics.Process.Start("notepad.exe", Logfile());
                 }
             }
-            
+
+            EditorGUILayout.BeginVertical(GUILayout.Height(20));
+            EditorGUILayout.Space();
+            EditorGUILayout.EndVertical();
+
+            EditorGUILayout.LabelField("Unity process manager", EditorStyles.boldLabel);
+            EditorGUILayout.Separator();
+
+            prop = so.FindProperty("deployCount");
+            prop.intValue = EditorGUILayout.IntField("Deploy instance count", prop.intValue);
+            EditorGUILayout.Separator();
+
+
+            if (File.Exists(ExePath())) {
+                if (GUILayout.Button("Deploy " + serverConfig.deployCount + " instances to process manager", GUILayout.Width(300))) {
+                    Deploy();
+                }
+            }
 
         }
 
@@ -133,7 +158,7 @@ namespace GameMachine {
             string fileName;
 
             if (IsWindows()) {
-                fileName = serverConfig.serverPath + "/bin/game_machine_simple.bat";
+                fileName = serverConfig.serverPath + "/bin/game_machine.bat";
             } else {
                 fileName = serverConfig.serverPath + "/bin/game_machine.sh";
             }
@@ -147,7 +172,7 @@ namespace GameMachine {
 
             System.Diagnostics.Process proc = ProcessTracker.Start(gameMachineProcess, fileName, arguments, workingDirectory);
 
-            if (command == "build clean") {
+            if (command.StartsWith("build")) {
                 proc.WaitForExit();
                 ProcessTracker.RemoveProcess(proc.Id);
                 Debug.Log("Copying messages.cs");
@@ -157,17 +182,47 @@ namespace GameMachine {
                 }
             }
         }
-
-
+        
         public static bool IsWindows() {
             return System.IO.Path.DirectorySeparatorChar == '\\';
+        }
+
+        private void Deploy() {
+            string baseDir = serverConfig.serverPath + "/process_manager/unity";
+            if (Directory.Exists(baseDir)) {
+                Directory.Delete(baseDir, true);
+            }
+
+            for (int i = 0; i < serverConfig.deployCount; i++) {
+                string targetDir = serverConfig.serverPath + "/process_manager/unity/instance" + i;
+                FileUtils.DirectoryCopy(PublishPath(), targetDir, true);
+                CreateStartFile(i, "windows");
+                CreateStartFile(i, "linux");
+
+                string exeOld;
+                string exeNew;
+
+                string dataOld = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer_Data";
+                string dataNew = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer" + i + "_Data";
+
+                Directory.Move(dataOld, dataNew);
+
+                if (IsWindowsBuild()) {
+                    exeOld = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer.exe";
+                    exeNew = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer" + i + ".exe";
+                } else {
+                    exeOld = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer";
+                    exeNew = serverConfig.serverPath + "/process_manager/unity/instance" + i + "/unityServer" + i;
+                }
+                Directory.Move(exeOld, exeNew);
+            }
         }
 
         private void Build() {
             List<string> scenePaths = new List<string>();
             serverConfig.buildScenes.ForEach(scene => scenePaths.Add(AssetDatabase.GetAssetPath(scene)));
-           
-            EnsurePath();
+
+            EnsurePublishPath();
             BuildOptions options = BuildOptions.Development;
             BuildPipeline.BuildPlayer(scenePaths.ToArray(), ExePath(), buildTarget, options);
         }
@@ -177,43 +232,58 @@ namespace GameMachine {
             string arguments = " -logFile ./logfile";
 
             if (headless) {
-                arguments = " -batchmode -nographcis -logFile ./logfile";
+                arguments = " -batchmode -nographics -logFile ./logfile";
             }
-            
-            string workingDirectory = Path();
+
+            string workingDirectory = PublishPath();
             ProcessTracker.Start(unityProcess, fileName, arguments, workingDirectory);
         }
 
-        private void EnsurePath() {
-            if (!Directory.Exists(Path())) {
-                Directory.CreateDirectory(Path());
+        private void EnsurePublishPath() {
+            if (!Directory.Exists(PublishPath())) {
+                Directory.CreateDirectory(PublishPath());
             }
         }
 
         private string Logfile() {
-            return Path() + "/logfile";
+            return PublishPath() + "/logfile";
         }
 
         private string ExePath() {
             if (buildTarget.ToString().Contains("Windows")) {
-                return Path() + "/" + buildName + ".exe";
+                return PublishPath() + "/" + buildName + ".exe";
             } else {
-                return Path() + "/" + buildName;
+                return PublishPath() + "/" + buildName;
             }
         }
 
-        private string Path() {
-            return System.IO.Path.GetFullPath(Application.dataPath + "/../GameMachine");
+        private string PublishPath() {
+            return System.IO.Path.GetFullPath(Application.dataPath + "/../game_machine_publish");
         }
 
+        private bool IsWindowsBuild() {
+            return (buildTarget == BuildTarget.StandaloneWindows || buildTarget == BuildTarget.StandaloneWindows64);
+        }
 
-        private void ZipBuild() {
-            using (ZipFile zip = new ZipFile()) {
-                zip.AddDirectory(Path());
-                zip.CompressionLevel = Ionic.Zlib.CompressionLevel.BestCompression;
-                zip.Comment = "This zip was created at " + System.DateTime.Now.ToString("G");
-                zip.Save(string.Format("test{0}.zip", 1));
+        private void CreateStartFile(int instance, string os) {
+
+            string startFile;
+            List<string> lines = new List<string>();
+            string newline = Environment.NewLine;
+            if (os == "windows") {
+                lines.Add("@echo off");
+                lines.Add("set UNITY_HOME=%~dp0");
+                lines.Add("echo %UNITY_HOME%");
+                lines.Add(@"""%UNITY_HOME%unityServer" + instance + @".exe"" -batchmode -nographics -logFile ./logfile");
+                startFile = serverConfig.serverPath + "/process_manager/unity/instance" + instance + "/start.bat";
+            } else {
+                newline = "\n";
+                lines.Add("#!/bin/bash");
+                lines.Add(@"DIR=$( cd ""$(dirname ""${BASH_SOURCE[0]}"" )"" && pwd )");
+                lines.Add(@"$DIR/unityServer" + instance + @" -batchmode -nographics -logFile ./logfile");
+                startFile = serverConfig.serverPath + "/process_manager/unity/instance" + instance + "/start.sh";
             }
+            File.WriteAllText(startFile, string.Join(newline, lines.ToArray()));
         }
     }
 }

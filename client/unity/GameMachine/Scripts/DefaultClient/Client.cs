@@ -1,19 +1,8 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using System.Collections;
-using System.Collections.Generic;
-using GameMachine;
 using GameMachine.HttpApi;
 using GameMachine.Common;
 using GameMachine.Core;
-using System.IO;
-using ProtoBuf;
-using System.Linq;
-using Characters = io.gamemachine.messages.Characters;
-using Character = io.gamemachine.messages.Character;
-using Player = io.gamemachine.messages.Player;
-using ZoneInfo = io.gamemachine.messages.ZoneInfo;
-using ZoneInfos = io.gamemachine.messages.ZoneInfos;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace DefaultClient {
@@ -21,13 +10,10 @@ namespace GameMachine {
             public static Client instance;
             public static bool connected = false;
             public bool setZone = false;
-            public string currentZone;
-            public List<string> zones = new List<string>();
             private bool reconnecting = false;
-            public ZoneInfos zoneInfos;
-            public ZoneInfo zoneInfo;
-            public bool forceReconnectOnZone = false;
-            public bool zoneSupport = false;
+            private Zones zones = null;
+            public Zone zone = null;
+            public bool spawnOnMainSceneLoad = false;
 
             void Awake() {
                 instance = this;
@@ -41,27 +27,14 @@ namespace GameMachine {
             }
 
             void Update() {
-                if (zoneSupport && setZone) {
-                    setZone = false;
-                    if (!string.IsNullOrEmpty(currentZone)) {
-                        ReconnectToZone();
-                    }
-                    
-                }
+
             }
 
             public void ReconnectToZone() {
-                if (zoneInfos == null) {
-                    Debug.Log("ZoneInfos not loaded, ignoring zone change request");
+                if (zones == null) {
+                    Debug.Log("zones not loaded, ignoring zone change request");
                 }
-
-                foreach (ZoneInfo info in zoneInfos.zoneInfo) {
-                    if (info.id == currentZone) {
-                        Debug.Log("Setting new zone to " + info.id);
-                        ZoneApi.instance.SetZone(info.id, this);
-                        return;
-                    }
-                }
+                ZoneApi.instance.SetZone(zone.name, this);
             }
 
             public void Reconnect() {
@@ -72,12 +45,12 @@ namespace GameMachine {
                 Destroy(gameObject.GetComponent<App>());
                 reconnecting = true;
                 Invoke("DoReconnect", 1f);
-                
+
             }
 
             void DoReconnect() {
                 Login.SetGameMachineApp(this);
-                Login login = gameObject.AddComponent<GameMachine.Login>() as GameMachine.Login;
+                Login login = gameObject.AddComponent<Login>() as Login;
                 login.SetLoginUi(this);
                 login.DoLogin();
             }
@@ -86,13 +59,9 @@ namespace GameMachine {
                 Debug.Log("Logged in");
                 NetworkSettings.instance.loggedIn = true;
 
-                if (zoneSupport) {
-                    ZoneApi.instance.GetZones(this);
-                }
-                
-                if (reconnecting) {
+                ZoneApi.instance.GetZones(this);
 
-                } else {
+                if (!reconnecting) {
                     PlayerApi.instance.GetPlayer(this);
                 }
                 reconnecting = false;
@@ -114,6 +83,14 @@ namespace GameMachine {
 
             private void OnLevelWasLoaded(int level) {
                 if (Application.loadedLevelName == UIController.instance.mainScene) {
+                    if (spawnOnMainSceneLoad) {
+                        Vector3 spawnPosition = SpawnPoint.Instance().SpawnpointExact(true);
+                        Transform player = GamePlayer.Instance().playerTransform;
+                        player.position = spawnPosition;
+
+                        SpawnPoint.Instance().spawned = true;
+                        Debug.Log("Player spawned at " + player.position);
+                    }
                 }
             }
 
@@ -126,7 +103,7 @@ namespace GameMachine {
             }
 
             void IPlayerApi.OnPlayer(Player player) {
-                if (player.role == "admin") {
+                if (player.role == Player.Role.Admin) {
                     NetworkSettings.instance.isAdmin = true;
                 }
                 UIController.instance.LoadCharacters();
@@ -156,16 +133,9 @@ namespace GameMachine {
                 Debug.Log("login error " + error);
             }
 
-            public void OnGetZones(ZoneInfos infos) {
-                zoneInfos = infos;
-                zones.Clear();
-                foreach (ZoneInfo info in zoneInfos.zoneInfo) {
-                    zones.Add(info.id);
-                    if (info.current) {
-                        zoneInfo = info;
-                        currentZone = info.id;
-                    }
-                }
+            public void OnGetZones(Zones zones) {
+                this.zones = zones;
+                zone = zones.current;
                 Debug.Log("Zones loaded");
             }
 
@@ -173,19 +143,22 @@ namespace GameMachine {
                 throw new System.NotImplementedException();
             }
 
-            public void OnSetZone(ZoneInfo info) {
-                NetworkSettings.instance.character.zone = info.number;
-                if (info.hostname == NetworkSettings.instance.hostname) {
-                    if (forceReconnectOnZone) {
-                        Reconnect();
-                    } else {
-                        ZoneApi.instance.GetZones(this);
-                    }
+            public void OnSetZone(Zone zone) {
+                NetworkSettings.instance.character.region = zone.region;
+                NetworkSettings.instance.character.zone = zone;
+               
+                if (string.IsNullOrEmpty(zone.hostname)) {
+                    Debug.Log("Zone hostname is null");
+                    return;
+                }
+
+                if (NetworkSettings.instance.sameAddress(zone.hostname,NetworkSettings.instance.hostname)) {
+                    ZoneApi.instance.GetZones(this);
                 } else {
-                    NetworkSettings.instance.hostname = info.hostname;
+                    NetworkSettings.instance.hostname = zone.hostname;
                     Reconnect();
                 }
-                
+
             }
 
             public void OnSetZoneError(string error) {

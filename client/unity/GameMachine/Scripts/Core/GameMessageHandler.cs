@@ -93,7 +93,7 @@ namespace GameMachine.Core
 				gameMessage.destinationId = (int)destination;
 			}
 			if (reliable) {
-				gameMessage.messageId = Guid.NewGuid ().ToString ();
+                gameMessage.messageId = Convert.ToBase64String(Guid.NewGuid().ToByteArray());
 			}
 			gameMessages.Add (gameMessage);
             SendGameMessages();

@@ -46,8 +46,8 @@ namespace GameMachine.Chat {
                 return CommandResult.Ok;
             } else if (command.StartsWith("/zone")) {
                 command = command.Replace("/zone", "").Trim();
-                GameMachine.DefaultClient.Client.instance.currentZone = command;
-                GameMachine.DefaultClient.Client.instance.setZone = true;
+                //GameMachine.DefaultClient.Client.instance.currentZone = command;
+                //GameMachine.DefaultClient.Client.instance.setZone = true;
                 return CommandResult.Ok;
             } else if (command.StartsWith("/count")) {
                 chatUI.LocalMessage(Color.yellow, GameEntityManager.GameEntityCount().ToString());

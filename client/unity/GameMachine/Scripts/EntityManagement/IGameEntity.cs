@@ -26,7 +26,12 @@ namespace GameMachine {
             bool IsDead();
             void SetVitals(Vitals vitals);
             Vitals GetVitals();
+            
             bool HasVitals();
+            bool IsActive();
+            void SetActive(bool active);
+            GameObject GetGameObject();
+            void SetHealthbar(bool active, float percent);
         }
     }
 }

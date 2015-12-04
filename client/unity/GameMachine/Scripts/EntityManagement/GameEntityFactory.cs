@@ -70,26 +70,18 @@ namespace GameMachine {
                 return Create(Settings.Instance().defaultEntityId, character, entityType);
             }
 
-            public IGameEntity Create(string entityId, Character character, GameEntityType entityType) {
-                Vector3 spawnPosition;
-                SpawnPoint spawnPoint = SpawnPoint.Instance();
-                if (character == null) {
-                    Debug.Log("NULL character");
-                }
-
-                spawnPosition = SpawnPoint.Instance().SpawnpointExact();
-                return Create(entityId, character, entityType, spawnPosition);
-            }
-
             public IGameEntity Create(string entityId, Character character, TrackData trackData) {
                 SpawnPoint spawnPoint = GameComponent.Get<SpawnPoint>() as SpawnPoint;
                 Vector3 spawnPosition = GmUtil.Instance.TrackdataToVector3(trackData);
                 spawnPosition = spawnPoint.GroundedPosition(spawnPosition);
                 GameEntityType entityType = GameEntity.GameEntityTypeFromTrackData(trackData);
-                return Create(entityId, character, entityType, spawnPosition);
+                IGameEntity gameEntity = Create(entityId, character, entityType);
+                gameEntity.GetTransform().position = spawnPosition;
+                SpawnPoint.Instance().spawned = true;
+                return gameEntity;
             }
 
-            public IGameEntity Create(string entityId, Character character, GameEntityType entityType, Vector3 spawnPosition) {
+            public IGameEntity Create(string entityId, Character character, GameEntityType entityType) {
                 GameObject go;
                 GameObject prefab = null;
 
@@ -107,12 +99,6 @@ namespace GameMachine {
                 go = GameObject.Instantiate(prefab);
                 go.transform.parent = GetEntityContainer().transform;
 
-                if (setSpawnPoint) {
-                    go.transform.position = spawnPosition;
-                    SpawnPoint.Instance().spawned = true;
-                    Debug.Log("Spawned at " + spawnPosition);
-                }
-                
                 GameEntity gameEntity = go.GetComponent<GameEntity>() as GameEntity;
                 LoadUmaModel(gameEntity);
                 gameEntity.Init(entityId, character, entityType);

@@ -45,9 +45,13 @@ namespace GameMachine {
             loaded = false;
         }
 
-        public T Clone(T data) {
+        public T Clone() {
             string str = JsonConvert.SerializeObject(data, Formatting.Indented);
             return JsonConvert.DeserializeObject<T>(str);
+        }
+
+        public override string ToString() {
+            return json;
         }
 
         private void Load() {

@@ -92,7 +92,6 @@ namespace GameMachine {
             public void ManualUpdate() {
                
                 if (gameEntity.IsDead()) {
-                    Debug.Log("Dead " + gameEntity.GetCharacterId());
                     InputState.cameraDisabled = true;
                     velocity.y -= gravity * Time.deltaTime;
                     SetAnimation(AnimationName.Dead);

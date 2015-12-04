@@ -41,21 +41,13 @@ namespace GameMachine.Core
 			Update (trackData);
 		}
 
-		public static void SendTrackData (TrackData trackData)
-		{
-			EntityTracking entityTracking = ActorSystem.instance.Find ("EntityTracking") as EntityTracking;
-			ActorSystem.sendImmediate = true;
-			entityTracking.Update (trackData);
-			ActorSystem.sendImmediate = false;
-		}
-
 		public void Update (TrackData trackData)
 		{
 			if (trackData == null) {
 				return;
 			}
 
-			trackData.id = GameMachine.Core.User.Instance.username;
+			trackData.id = User.Instance.username;
 			if (trackData.entityType == TrackData.EntityType.None) {
 				trackData.entityType = TrackData.EntityType.Player;
 			}

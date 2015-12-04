@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using Character = io.gamemachine.messages.Character;
+using System.Net;
 
 namespace GameMachine {
     namespace Common {
@@ -13,6 +14,7 @@ namespace GameMachine {
             public string username = "TestPlayer";
             public string password = "pass";
             public string hostname = "127.0.0.1";
+            public string httpHost = "127.0.0.1";
 
             [Header("Populated post login")]
             public string characterId;
@@ -28,16 +30,13 @@ namespace GameMachine {
             public int udpPort = 24130;
             public int tcpPort = 8910;
 
-            [Header("Region connections")]
-            public bool useRegions = false;
-
             [Header("Are we running as a server client/agent controller")]
             public bool serverClient = false;
             private string httpPrefix;
 
             void Awake() {
                 instance = this;
-
+                
                 if (httpUseSSL) {
                     httpPrefix = "https://";
                 } else {
@@ -46,7 +45,19 @@ namespace GameMachine {
             }
 
             public string BaseUri() {
-                return httpPrefix + hostname + ":" + httpPort;
+                return httpPrefix + httpHost + ":" + httpPort;
+            }
+
+            public bool sameAddress(string address1, string address2) {
+                IPHostEntry one = Dns.GetHostEntry(address1);
+                IPHostEntry two = Dns.GetHostEntry(address2);
+                IPAddress ipOne = one.AddressList[0];
+                IPAddress ipTwo = two.AddressList[0];
+                if (ipOne.ToString() == ipTwo.ToString()) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
 
         }

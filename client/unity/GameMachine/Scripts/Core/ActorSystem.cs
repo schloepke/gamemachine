@@ -1,14 +1,8 @@
 using System;
 using System.Reflection;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using GameMachine;
-using Entity = io.gamemachine.messages.Entity;
-using JsonEntity = io.gamemachine.messages.JsonEntity;
-using Newtonsoft.Json;
-using System.IO;
-using ProtoBuf;
 using UnityEngine;
+using io.gamemachine.messages;
 
 namespace GameMachine.Core {
     public class ActorSystem : MonoBehaviour {
@@ -170,7 +164,7 @@ namespace GameMachine.Core {
         public void DeliverByDestination(Entity entity) {
             UntypedActor actor = Find(entity.destination);
             if (actor.GetType().Name == "DeadLetters") {
-                Logger.Debug("Incoming entity has invalid destination: " + entity.destination);
+                Debug.Log("Incoming entity has invalid destination: " + entity.destination);
             } else {
                 actor.Tell(entity);
             }
@@ -198,7 +192,7 @@ namespace GameMachine.Core {
                                 //Logger.Debug("Found component " + component);
                             }
                         } else {
-                            Logger.Debug("Bad Component " + component);
+                            Debug.Log("Bad Component " + component);
                         }
 
                     }

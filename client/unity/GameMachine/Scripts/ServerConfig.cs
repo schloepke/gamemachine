@@ -11,5 +11,6 @@ namespace GameMachine {
         public string configName;
         public bool runHeadless = false;
         public List<Object> buildScenes;
+        public int deployCount = 5;
     }
 }

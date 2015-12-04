@@ -1,16 +1,13 @@
-﻿using UnityEngine;
-using System.Collections;
-using ZoneInfos = io.gamemachine.messages.ZoneInfos;
-using ZoneInfo = io.gamemachine.messages.ZoneInfo;
+﻿using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace HttpApi {
         public interface IZoneApi {
 
-            void OnGetZones(ZoneInfos infos);
+            void OnGetZones(Zones zones);
             void OnGetZonesError(string error);
 
-            void OnSetZone(ZoneInfo info);
+            void OnSetZone(Zone zone);
             void OnSetZoneError(string error);
         }
     }

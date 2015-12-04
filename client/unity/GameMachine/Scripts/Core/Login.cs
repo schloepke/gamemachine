@@ -45,7 +45,7 @@ namespace GameMachine
                 app = gameObject.AddComponent<App>() as App;
             }
 
-            app.Login(NetworkSettings.instance.gameId, NetworkSettings.instance.hostname, NetworkSettings.instance.httpPort, user.username, user.password, success, error);
+            app.Login(NetworkSettings.instance.gameId, NetworkSettings.instance.httpHost, NetworkSettings.instance.httpPort, user.username, user.password, success, error);
         }
 
         void OnAuthenticationError (string error)
@@ -67,6 +67,13 @@ namespace GameMachine
         void OnAuthenticationSuccess (Dictionary<string, string> info)
         {
             string authtoken = info ["authtoken"];
+
+            if (NetworkSettings.instance.username != info["username"]) {
+                NetworkSettings.instance.username = info["username"];
+                User.Instance.username = NetworkSettings.instance.username;
+                Debug.Log("username reset " + NetworkSettings.instance.username);
+            }
+
             if (info ["protocol"] != "ANY") {
                 NetworkSettings.instance.protocol = StringToProtocol(info["protocol"]);
 

@@ -126,8 +126,8 @@ namespace GameMachine.Core
 			ClientMessage message = Deserialize (bytes);
 
             if (receivedPlayerConnected) {
-                if (message.rpcMessage != null) {
-                    ClientMessageQueue.rpcQueue.Enqueue(message.rpcMessage);
+                if (message.unityGameMessage != null) {
+                    ClientMessageQueue.unityGameMessageQueue.Enqueue(message.unityGameMessage);
                 } else {
                     foreach (Entity entity in message.entity) {
                         ClientMessageQueue.entityQueue.Enqueue(entity);

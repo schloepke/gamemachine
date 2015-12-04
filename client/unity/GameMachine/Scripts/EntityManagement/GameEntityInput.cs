@@ -18,7 +18,8 @@ namespace GameMachine {
             private bool hidden = false;
 
             void Awake() {
-                networkFields = gameObject.GetComponent<NetworkFields>() as NetworkFields;
+                IGameEntity gameEntity = gameObject.GetComponent<IGameEntity>() as IGameEntity;
+                networkFields = gameEntity.GetNetworkFields();
             }
 
 

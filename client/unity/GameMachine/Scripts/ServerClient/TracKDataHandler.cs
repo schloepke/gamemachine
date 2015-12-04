@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
-using TrackData = io.gamemachine.messages.TrackData;
-using Entity = io.gamemachine.messages.Entity;
 using GameMachine.Common;
 using GameMachine.Core;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace ServerClient {
@@ -21,8 +19,8 @@ namespace GameMachine {
 
                 TrackData td = new TrackData();
                 td.x = -2;
-                td.y = -2;
-                td.z = 1;
+                td.y = 1;
+                td.z = -2;
                 td.neighborEntityType = TrackData.EntityType.All;
 
                 gameEntityManager.UpdateTracking(td);

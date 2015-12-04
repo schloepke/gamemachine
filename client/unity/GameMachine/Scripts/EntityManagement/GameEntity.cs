@@ -1,22 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
-using GameMachine.Core;
-using Character = io.gamemachine.messages.Character;
-using TrackData = io.gamemachine.messages.TrackData;
-using UserDefinedData = io.gamemachine.messages.UserDefinedData;
-using System;
 using io.gamemachine.messages;
+using System;
 
 namespace GameMachine {
     namespace Common {
 
         public class GameEntity : MonoBehaviour, IGameEntity {
 
+            public NetworkFieldsDb networkFieldsDb;
+            public GameObject healthbarTemplate;
+            private GameObject healthbar;
+            private MeshRenderer healthbarHealth;
+            private MeshRenderer healthbarBg;
+
+            private NetworkFields networkFieldsDef;
+
             private GameEntityType entityType = GameEntityType.None;
             private string entityId;
             private Character character;
             private IGameEntityInput inputController;
-            private NetworkFields networkFields;
             private Vector3 serverLocation;
             private float lastUpdate;
             private IGameEntityController gameEntityController;
@@ -25,7 +27,8 @@ namespace GameMachine {
             private bool canMove = true;
             private Vector3 networkSpawnPoint;
             private Vitals vitals = null;
-            
+            private bool active = false;
+
             public static GameEntityType GameEntityTypeFromTrackData(TrackData trackData) {
                 GameEntityType entityType;
                 switch (trackData.entityType) {
@@ -62,7 +65,10 @@ namespace GameMachine {
             void Awake() {
                 gameEntityController = gameObject.GetComponent<IGameEntityController>() as IGameEntityController;
                 inputController = gameObject.GetComponent<IGameEntityInput>() as IGameEntityInput;
-                networkFields = gameObject.GetComponent<NetworkFields>() as NetworkFields;
+                networkFieldsDb.GetData();
+                networkFieldsDef = networkFieldsDb.Clone();
+                networkFieldsDef.Init();
+                
             }
 
             void Start() {
@@ -73,9 +79,9 @@ namespace GameMachine {
                 if (gameEntityController.IsInitialized() && canMove) {
                     gameEntityController.ManualUpdate();
                     if (!IsPlayer()) {
+                        UpdateHealthbar();
                         if (Time.time - lastUpdate > inactivityTimeout) {
                             GameEntityManager.RemoveGameEntity(entityId);
-                            Remove();
                         }
                     }
                 }
@@ -105,11 +111,37 @@ namespace GameMachine {
                 return networkSpawnPoint;
             }
 
+            private void UpdateHealthbar() {
+                if (healthbarHealth.enabled) {
+                    Camera cam = GameEntityCamera.instance.cam;
+                    healthbar.transform.LookAt(healthbar.transform.position + cam.transform.rotation * Vector3.forward, cam.transform.rotation * Vector3.up);
+                }
+            }
+
+            public void SetHealthbar(bool active, float scale) {
+                healthbarHealth.enabled = active;
+                healthbarBg.enabled = active;
+                if (active) {
+                    Transform t = healthbarHealth.transform;
+                    t.localScale = new Vector3(scale, t.localScale.y, t.localScale.z);
+                }
+            }
+
+            private void AddHealthbar() {
+                healthbar = GameObject.Instantiate(healthbarTemplate, transform.position, transform.rotation) as GameObject;
+                healthbar.name = "healthbar";
+                healthbar.transform.position = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
+                healthbar.transform.parent = transform;
+                healthbarHealth = healthbar.transform.Find("health").GetComponent<MeshRenderer>() as MeshRenderer;
+                healthbarBg = healthbar.transform.Find("background").GetComponent<MeshRenderer>() as MeshRenderer;
+                SetHealthbar(false, 0f);
+            }
+
             private void SetSpawnPoint(Character character) {
-                if (character.worldx != 0 && character.worldy != 0) {
-                    float x = GmUtil.Instance.IntToFloat(character.worldx, true);
-                    float z = GmUtil.Instance.IntToFloat(character.worldy, true);
-                    float y = GmUtil.Instance.IntToFloat(character.worldz, true);
+                if (character.worldx != 0 && character.worldz != 0) {
+                    float x = GmUtil.Instance.IntToFloat(character.worldx);
+                    float y = GmUtil.Instance.IntToFloat(character.worldy);
+                    float z = GmUtil.Instance.IntToFloat(character.worldz);
                     networkSpawnPoint = new Vector3(x, y, z);
                 }
             }
@@ -121,11 +153,14 @@ namespace GameMachine {
 
                 gameObject.name = character.id;
                 gameObject.tag = Settings.Instance().gameEntityTag;
+                
 
                 if (this.entityType == GameEntityType.Player) {
                     inputController.SetControllerType("local");
                 } else {
                     inputController.SetControllerType("remote");
+                    gameObject.layer = LayerMask.NameToLayer(Settings.Instance().gameEntityTag);
+                    AddHealthbar();
                 }
 
                 SetSpawnPoint(character);
@@ -141,13 +176,13 @@ namespace GameMachine {
                 forward.y = 0;
                 float heading = Quaternion.LookRotation(forward).eulerAngles.y;
 
-                networkFields.SetVector3(GMKeyCode.Position, transform.position);
-                networkFields.SetFloat(GMKeyCode.Heading, heading);
-                networkFields.SetFloat(GMKeyCode.Vaxis, inputController.GetFloat(GMKeyCode.Vaxis));
-                networkFields.SetFloat(GMKeyCode.Haxis, inputController.GetFloat(GMKeyCode.Haxis));
-                networkFields.SetBool(GMKeyCode.MouseRight, inputController.GetBool(GMKeyCode.MouseRight));
+                networkFieldsDef.SetPosition(transform.position);
+                networkFieldsDef.SetFloat(GMKeyCode.Heading, heading);
+                networkFieldsDef.SetFloat(GMKeyCode.Vaxis, inputController.GetFloat(GMKeyCode.Vaxis));
+                networkFieldsDef.SetFloat(GMKeyCode.Haxis, inputController.GetFloat(GMKeyCode.Haxis));
+                networkFieldsDef.SetBool(GMKeyCode.MouseRight, inputController.GetBool(GMKeyCode.MouseRight));
 
-                TrackData trackData = networkFields.GetTrackData();
+                TrackData trackData = networkFieldsDef.GetTrackData();
 
                 trackData.entityType = TrackData.EntityType.Player;
                 return trackData;
@@ -158,9 +193,9 @@ namespace GameMachine {
                     entityType = GameEntityTypeFromTrackData(trackData);
                 }
 
-                networkFields.UpdateFromNetwork(trackData, hasDelta);
+                networkFieldsDef.UpdateFromNetwork(trackData, hasDelta);
 
-                serverLocation = networkFields.GetVector3(GMKeyCode.Position);
+                serverLocation = networkFieldsDef.GetPosition();
 
                 lastUpdate = Time.time;
             }
@@ -187,7 +222,7 @@ namespace GameMachine {
 
 
             public NetworkFields GetNetworkFields() {
-                return networkFields;
+                return networkFieldsDef;
             }
 
             public bool IsInCombat() {
@@ -214,6 +249,18 @@ namespace GameMachine {
 
             public bool HasVitals() {
                 return (vitals != null);
+            }
+
+            public bool IsActive() {
+                return active;
+            }
+
+            public void SetActive(bool active) {
+                this.active = active;
+            }
+
+            public GameObject GetGameObject() {
+                return gameObject;
             }
         }
     }

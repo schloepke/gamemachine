@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
-using GameMachine;
-using Entity = io.gamemachine.messages.Entity;
 
 namespace GameMachine.Core {
     public class App : MonoBehaviour {
@@ -10,7 +7,7 @@ namespace GameMachine.Core {
 
         private double lastEcho = -1000;
         private double echosPerSecond = 1.0f;
-        public static float gameTickInterval = 0.050f;
+        public static float gameTickInterval = 0.060f;
         private double echoInterval;
         private double lastEchoReceived = 0;
         private AppStarted appStarted;

@@ -10,7 +10,6 @@ namespace GameMachine {
                 return PlayerPrefs.GetString("serverPath");
             }
 
-            public float worldOffset = 0f;
             public float waterLevel = -100f;
 
             [Header("Default user/character in non networked scenes")]
@@ -22,10 +21,7 @@ namespace GameMachine {
 
             [Header("Game entity camera obstacle mask")]
             public LayerMask cameraObstacles = 0;
-
-            [Header("World interaction mask")]
-            public LayerMask worldInteractionMask = 0;
-
+            
             public static Settings Instance() {
                 if (instance != null) {
                     return instance;

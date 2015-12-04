@@ -95,10 +95,7 @@ namespace GameMachine {
 
             public void SendRequest() {
                 GmStats stats = new GmStats();
-                GameMachine.Core.ActorSystem.sendImmediate = true;
                 messageHandler.SendReliable(stats, routeName);
-                messageHandler.SendGameMessages();
-                GameMachine.Core.ActorSystem.sendImmediate = false;
             }
         }
     }
