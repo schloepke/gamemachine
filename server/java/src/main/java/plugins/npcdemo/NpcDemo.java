@@ -23,10 +23,14 @@ public class NpcDemo  {
 	private static PlayerService ps;
 	private static CharacterService cs;
 	private static int npcCount;
+	private static int mapSize;
+	private static int startPoint;
 	
 	public static void createDemoNpcs() {
 		Config config = Plugin.getConfig(NpcDemo.class);
 		npcCount = config.getInt("npcCount");
+		mapSize = config.getInt("mapSize");
+		startPoint = config.getInt("startPoint");
 		
 		ps = PlayerService.getInstance();
 		cs = CharacterService.instance();
@@ -53,7 +57,7 @@ public class NpcDemo  {
 			
 			ps.setCharacter(playerId, characterId);
 			PlayerService.getInstance().setZone(playerId, zone);
-			GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId));
+			GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId, mapSize, startPoint));
 		}
 		logger.warn("NpcDemo started with "+npcCount+" npc's");
 	}

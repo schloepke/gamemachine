@@ -13,6 +13,9 @@ local_message Vitals {
     PlayerTemplate = 0;
     BuildObjectTemplate = 1;
     NpcTemplate = 2;
+    GuardTemplate = 3;
+    CitizenTemplate = 4;
+    BanditTemplate = 5;
   }
   
   enum VitalsType {
@@ -108,6 +111,7 @@ local_message StatusEffect {
   optional UnityObject hitSound = 21;
   optional UnityObject hitEffect = 22;
   optional float buildObjectDamageModifier = 23;
+  optional bool allowMultipleFromSameOrigin = 24;
 }
 
 local_message StatusEffects {
@@ -155,12 +159,12 @@ local_message GroundBlockObject {
   optional int32 verticeCount = 5;
   optional string tag = 6;
   optional string layer = 7;
-  optional int32 gbLayer = 8;
+  optional sint32 gbLayer = 8;
   optional bool molded = 9;
   optional Status status = 10;
   optional bool canRemove = 11;
   optional bool isTop = 12;
-  optional int32 gbType = 13;
+  optional sint32 gbType = 13;
 }
 
 local_message Ping {
@@ -277,21 +281,26 @@ local_persistent_message WorldObject {
   optional int32 state = 21;
 }
 
-local_persistent_message BuildObject {
+local_persistent_message BuildObjectDatas {
+  required string id = 1;
+  optional string data = 2;
+  optional int32 recordId = 3;
+  optional string characterId = 4;
+}
+
+local_message BuildObject {
 
   enum Action {
     None = 0;
-    Create = 1;
-    Remove = 2;
-    Update = 3;
-    UpdateProp = 4;
-    SetHealth = 5;
-    RemoveAll = 6;
+    Save = 1;
+    UpdateProp = 2;
+    SetHealth = 3;
   }
   
   enum State {
     Active = 0;
     Removed = 1;
+    Destroyed = 2;
   }
   
   optional string playerItemId = 1;
@@ -316,10 +325,10 @@ local_persistent_message BuildObject {
   optional bool isDestructable = 26;
   optional bool hasDoor = 27;
   optional int32 doorStatus = 28;
-  optional bytes groundBlockObject = 29;
+  optional GroundBlockObject groundBlockObject = 29;
   optional bool isGroundBlock = 30;
   optional int32 chunk = 31;
-  optional bytes terrainEdit = 32;
+  optional TerrainEdit terrainEdit = 32;
   optional bool isTerrainEdit = 33;
   optional bytes customBytes = 34;
   optional string customString = 35;
@@ -328,6 +337,7 @@ local_persistent_message BuildObject {
   optional int64 placedAt = 38;
   optional SlotInfo slotInfo = 40;
   optional string zone = 41;
+  optional int32 version = 42;
 }
   
  local_message SlotInfo {
@@ -353,6 +363,7 @@ local_message BuildObjects {
     GetStatus = 1;
     PropUpdate = 2;
     SetRotation = 3;
+    HttpSave = 4;
   }
   
   repeated BuildObject buildObject = 1;
@@ -441,6 +452,22 @@ local_persistent_message Character {
   optional Vitals.Template vitalsTemplate = 15;
   optional string gameEntityPrefab = 16;
   optional string region = 17;
+  optional string itemSlotData = 18;
+}
+  
+local_message ItemSlots {
+  repeated ItemSlot itemSlots = 1;
+}
+
+local_message ItemSlot {
+  optional string playerItemId = 1;
+  optional PlayerItem.Slot slot = 2;
+  optional string slotId = 3;
+  optional string playerItemName = 4;
+}
+
+local_message CharacterUpdate {
+  optional Character character = 1;
 }
 
 local_message Characters {
@@ -468,11 +495,6 @@ local_message UseItem {
   required string playerId = 4;
 }
 
-local_message EquippedItem {
-  optional string id = 1;
-  optional string playerId = 2;
-}
-
 local_message StatusEffectTarget {
   enum Action {
     None = 0;
@@ -494,29 +516,47 @@ local_message StatusEffectTarget {
   required Action action = 10;
   required PassiveFlag passiveFlag = 11;
   optional string originEntityId = 12;
-  optional Attack attack = 13;
+  optional SkillRequest skillRequest = 13;
 }
 
 
+local_message GmTarget {
+  enum Type {
+  	None = 0;
+    Block = 1;
+    GameEntity = 2;
+    Tree = 3;
+    Flag = 4;
+    Ground = 5;
+    Location = 6;
+  }
+  
+  optional Type type = 1;
+  optional string gameObjectId = 2;
+  optional string characterId = 3;
+  optional string blockId = 4;
+  optional GmVector3 location = 5;
+  optional string ownerId = 6;
+  optional string displayName = 7;
+}
 
-local_message Attack {
+local_message SkillRequest {
   enum TargetType {
     None = 0;
     Character = 1;
     Object = 2;
     BuildObject = 3;
   }
+ 
   optional string attackerCharacterId = 1;
   optional string targetId = 2;
   required PlayerSkill playerSkill = 3;
   optional GmVector3 targetLocation = 4;
   optional TargetType targetType = 5;
+  optional GmTarget target = 6;
+  optional bool relayOnly = 7;
 }
 
-local_message ComboAttack {
-  required string id = 1;
-  repeated Attack attack = 2;
-}
 
 local_message Harvest {
   required string id = 1;
@@ -679,14 +719,13 @@ local_persistent_message PlayerSkill {
    }
    
   required string id = 1;
-  optional string name = 2;
   optional int32 recordId = 3;
   optional string icon_path = 6;
   optional string description = 7;
   required string characterId = 10;
   
   optional string statusEffectId = 13;
-  optional int32 level = 14;
+  
   optional int32 isComboPart = 16;
   optional int32 isPassive = 17;
   optional string icon_uuid = 19;
@@ -704,6 +743,8 @@ local_persistent_message PlayerSkill {
   optional UnityObject hitEffect = 37;
   optional ProjectileBehavior projectileBehavior = 38;
   optional bool targetCircle = 39;
+  optional float maxLevel = 40;
+  optional float level = 41;
 }
 
 
@@ -778,6 +819,25 @@ local_persistent_message PlayerItem {
     Projectile = 11;
   }
   
+  enum WeaponType {
+    OneHanded = 0;
+    TwoHanded = 1;
+  }
+  
+  enum Slot {
+    NoSlot = 0;
+    Shoulder = 1;
+    Chest = 2;
+    Waist = 3;
+    Head = 4;
+    Hands = 5;
+    Legs = 6;
+    Feet = 7;
+    Accessory = 8;
+    WeaponMain = 9;
+    WeaponOff = 10;
+  }
+  
   required string id = 1;
   required string name = 2;
   required int32 quantity = 3;
@@ -817,6 +877,9 @@ local_persistent_message PlayerItem {
   optional UnityObject icon = 43;
   
   optional bool equipped = 50;
+  optional Slot slot = 51;
+  optional WeaponType weaponType = 52;
+  optional string passiveSkillId = 53;
 }
 
 local_message ModelInfo {
@@ -1021,7 +1084,7 @@ message GameMessage {
   optional UseSkill useSkill = 19;
   optional PlayerSkills playerSkills = 20;
   optional Vitals vitals = 21;
-  optional Attack attack = 22;
+  optional SkillRequest skillRequest = 22;
   optional StatusEffect statusEffect = 23;
   optional DataRequest dataRequest = 25;
   optional WorldObjects worldObjects = 27;
@@ -1034,8 +1097,6 @@ message GameMessage {
   optional GuildMemberList guildMemberList = 34;
   optional Territory territory = 35;
   optional Territories territories = 36;
-  optional EquippedItem equippedItem = 37;
-  optional ComboAttack comboAttack = 38;
   optional NpcData npcData = 39;
   optional BuildObjects buildObjects = 40;
   optional BuildableAreas buildableAreas = 41;
@@ -1047,6 +1108,7 @@ message GameMessage {
   optional VitalsContainer vitalsContainer = 47;
   optional ProcessCommand processCommand = 48;
   optional UnityInstanceStatus unityInstanceStatus = 49;
+  optional CharacterUpdate characterUpdate = 50;
 }
 
 message GameMessages {

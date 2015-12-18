@@ -15,11 +15,11 @@ public class CombatDamage {
 
 	private static final Logger logger = LoggerFactory.getLogger(CombatDamage.class);
 	
-	public int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
+	public int getEffectValue(StatusEffect statusEffect, String playerSkillId, String characterId) {
 		int base = randInt(statusEffect.minValue, statusEffect.maxValue);
 		Character character = CharacterService.instance().find(characterId);
-		int level = skillLevel(playerSkill.id, character.id);
-		return base * level * effectiveCharacterLevel(character);
+		float level = skillLevel(playerSkillId, character.id);
+		return base * (int)level * effectiveCharacterLevel(character);
 	}
 	
 	private int effectiveCharacterLevel(Character character) {
@@ -35,9 +35,9 @@ public class CombatDamage {
 		return rand.nextInt((max - min) + 1) + min;
 	}
 	
-	public void skillUsed(PlayerSkill playerSkill, String characterId) {
-		int chance = randInt(1, 10);
-		if (chance < 5) {
+	public void skillUsed(String playerSkillId, String characterId) {
+		int chance = randInt(1, 20);
+		if (chance > 1) {
 			return;
 		}
 
@@ -47,20 +47,14 @@ public class CombatDamage {
 			return;
 		}
 
-		if (PlayerSkillHandler.hasPlayerSkill(playerSkill.id, character.id)) {
-			PlayerSkill existing = PlayerSkillHandler.playerSkill(playerSkill.id, character.id);
-			existing.level += 1;
-			PlayerSkillHandler.savePlayerSkill(existing);
-			logger.warn("Skill up " + playerSkill.id + " level " + existing.level);
-		}
+		PlayerSkill skill = PlayerSkillHandler.findSkill(playerSkillId, character.id, true);
+		skill.level += new Random().nextFloat();
+		PlayerSkillHandler.saveSkill(skill,character.id);
+		logger.warn("Skill up " + playerSkillId + " level " + skill.level);
+		
 	}
-	// Can be a skill or player item
-	private int skillLevel(String id, String characterId) {
-		if (PlayerSkillHandler.hasPlayerSkill(id, characterId)) {
-			PlayerSkill playerSkill = PlayerSkillHandler.playerSkill(id, characterId);
-			return playerSkill.level;
-		} else {
-			return 1;
-		}
+	private float skillLevel(String id, String characterId) {
+		PlayerSkill skill = PlayerSkillHandler.findSkill(id, characterId, true);
+		return skill.level;
 	}
 }

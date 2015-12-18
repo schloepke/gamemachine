@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
+import com.google.common.collect.Lists;
+
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
@@ -60,8 +62,19 @@ public class VitalsSender extends UntypedActor {
 		for (GridSet gridSet : StatusEffectManager.gridsets) {
 			for (TrackData playerTrackData : gridSet.playerGrid.getAll()) {
 				if (playerTrackData.entityType == TrackData.EntityType.Player) {
-					sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone),true);
-					sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, objectVitals(gridSet.zone),false);
+					
+					List<List<Vitals>> sublists = Lists.partition(livingVitals(gridSet.zone), 20);
+					for (List<Vitals> sublist : sublists) {
+						sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, sublist,true);
+					}
+					
+					sublists = Lists.partition(objectVitals(gridSet.zone), 20);
+					for (List<Vitals> sublist : sublists) {
+						sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, sublist,false);
+					}
+					
+					//sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone),true);
+					//sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, objectVitals(gridSet.zone),false);
 				}
 				
 			}

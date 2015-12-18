@@ -27,16 +27,18 @@ public class NpcEntity extends GameMessageActor {
 	private Vector3 position;
 	private TrackData trackData;
 	public long tickInterval = 40l;
-	public float width = 990f;
-	public float start = -1000f;
-	public double speed = 6d;
+	public float mapSize = 990f;
+	public float startPoint = -1000f;
+	public double speed = 5d;
 	public Vector3 target;
 	private Random rand;
 	private long lastUpdate = 0;
 	private VitalsProxy vitalsProxy;
 	
-	public NpcEntity(String playerId, String characterId) {
+	public NpcEntity(String playerId, String characterId, int mapSize, int startPoint) {
 		id = playerId;
+		this.mapSize = mapSize;
+		this.startPoint = startPoint;
 	}
 
 	@Override
@@ -112,8 +114,8 @@ public class NpcEntity extends GameMessageActor {
 
 	private Vector3 randVector() {
 		Vector3 np = new Vector3();
-		np.x = randFloat(start, start+width);
-		np.z = randFloat(start, start+width);
+		np.x = randFloat(startPoint, startPoint+mapSize);
+		np.z = randFloat(startPoint, startPoint+mapSize);
 		np.y = 40f;
 		return np;
 	}

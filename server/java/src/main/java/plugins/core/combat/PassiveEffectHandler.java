@@ -74,7 +74,7 @@ public class PassiveEffectHandler extends UntypedActor {
 	}
 
 	private void setStatusEffects(StatusEffectTarget statusEffectTarget) {
-		for (StatusEffect effect : StatusEffectData.skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
+		for (StatusEffect effect : StatusEffectData.skillEffects.get(statusEffectTarget.skillRequest.playerSkill.id)) {
 			if (effect.type == StatusEffect.Type.AttributeMaxDecrease || effect.type == StatusEffect.Type.AttributeMaxIncrease) {
 				statusEffectTarget.addStatusEffect(effect.clone());
 			}
@@ -99,18 +99,18 @@ public class PassiveEffectHandler extends UntypedActor {
 				continue;
 			}
 
-			if (statusEffectTarget.attack.playerSkill.category == PlayerSkill.Category.Aoe
-					|| statusEffectTarget.attack.playerSkill.category == PlayerSkill.Category.AoeDot
-					|| statusEffectTarget.attack.playerSkill.category == PlayerSkill.Category.Pbaoe) {
+			if (statusEffectTarget.skillRequest.playerSkill.category == PlayerSkill.Category.Aoe
+					|| statusEffectTarget.skillRequest.playerSkill.category == PlayerSkill.Category.AoeDot
+					|| statusEffectTarget.skillRequest.playerSkill.category == PlayerSkill.Category.Pbaoe) {
 
 				for (TrackData trackData : AoeUtil.getTargetsInRange(statusEffect.range, statusEffectTarget.location,
 						grid)) {
 					VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
-					applyEffect(statusEffectTarget.attack.playerSkill, originProxy, targetProxy, statusEffect);
+					applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy, statusEffect);
 				}
 			} else {
 				VitalsProxy targetProxy = VitalsHandler.get(statusEffectTarget.targetEntityId);
-				applyEffect(statusEffectTarget.attack.playerSkill, originProxy, targetProxy, statusEffect);
+				applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy, statusEffect);
 			}
 		}
 	}

@@ -14,8 +14,8 @@ public class PlayerSkillHandler extends GameMessageActor {
 	public static String name = PlayerSkillHandler.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
-	public static ConcurrentHashMap<String, PlayerSkill> globalPlayerSkills = new ConcurrentHashMap<String, PlayerSkill>();
-	public static ConcurrentHashMap<String, ConcurrentHashMap<String, PlayerSkill>> playerSkills = new ConcurrentHashMap<String, ConcurrentHashMap<String, PlayerSkill>>();
+	private static ConcurrentHashMap<String, PlayerSkill> globalPlayerSkills = new ConcurrentHashMap<String, PlayerSkill>();
+	private static ConcurrentHashMap<String, ConcurrentHashMap<String, PlayerSkill>> playerSkills = new ConcurrentHashMap<String, ConcurrentHashMap<String, PlayerSkill>>();
 
 		
 	@Override
@@ -27,7 +27,11 @@ public class PlayerSkillHandler extends GameMessageActor {
 		}
 	}
 
-	public static boolean hasPlayerSkill(String id, String characterId) {
+	public static PlayerSkill getTemplate(String id) {
+		return globalPlayerSkills.get(id).clone();
+	}
+	
+	public static boolean hasSkill(String id, String characterId) {
 		if (playerSkills.containsKey(characterId)) {
 			if (playerSkills.get(characterId).containsKey(id)) {
 				return true;
@@ -36,19 +40,32 @@ public class PlayerSkillHandler extends GameMessageActor {
 		return false;
 	}
 	
-	public static PlayerSkill playerSkill(String id, String characterId) {
+	public static PlayerSkill findSkill(String id, String characterId, boolean createIfNotExist) {
 		if (!playerSkills.containsKey(characterId)) {
-			throw new RuntimeException("cannot find player skills for "+characterId);
+			playerSkills.put(characterId, new ConcurrentHashMap<String, PlayerSkill>());
 		}
 		ConcurrentHashMap<String, PlayerSkill> skills = playerSkills.get(characterId);
-		return skills.get(id);
+		
+		PlayerSkill skill = null;
+		if (skills.containsKey(id)) {
+			return skills.get(id);
+		} else if (createIfNotExist) {
+			skill = getTemplate(id);
+			skill.level = 1;
+			saveSkill(skill,characterId);
+			return skill;
+		} else {
+			return null;
+		}
 	}
 	
-	public static void savePlayerSkill(PlayerSkill playerSkill) {
-		if (!playerSkills.containsKey(playerSkill.characterId)) {
-			throw new RuntimeException("cannot find player skills for "+playerSkill.characterId);
+	public static void saveSkill(PlayerSkill playerSkill, String characterId) {
+		if (!playerSkills.containsKey(characterId)) {
+			playerSkills.put(characterId, new ConcurrentHashMap<String, PlayerSkill>());
 		}
-		ConcurrentHashMap<String, PlayerSkill> skills = playerSkills.get(playerSkill.characterId);
+		
+		playerSkill.characterId = characterId;
+		ConcurrentHashMap<String, PlayerSkill> skills = playerSkills.get(characterId);
 		skills.put(playerSkill.id, playerSkill);
 		PlayerSkill.db().save(playerSkill);
 	}

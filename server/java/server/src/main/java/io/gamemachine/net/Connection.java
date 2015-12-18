@@ -1,6 +1,7 @@
 package io.gamemachine.net;
 
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ public class Connection {
 	public long clientId;
 	public int ip;
 	private boolean playerIsAgent = false;
+	public String uuid;
 
 	public Connection(int protocol, int ip, ClientConnection clientConnection, String playerId, long clientId) {
 		this.protocol = protocol;
@@ -37,11 +39,16 @@ public class Connection {
 		PlayerService playerService = PlayerService.getInstance();
 		this.gameId = playerService.getGameId(playerId);
 		this.playerIsAgent = playerService.playerIsAgent(playerId);
+		this.uuid = UUID.randomUUID().toString();
 		playerService.setIp(this.playerId, this.ip);
 	}
 
 	public static Connection getConnection(String playerId) {
 		return connections.get(playerId);
+	}
+	
+	public static String getId(String playerId) {
+		return connections.get(playerId).uuid;
 	}
 	
 	public static Set<String> getConnectedPlayerIds() {

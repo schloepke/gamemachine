@@ -7,16 +7,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Player;
-import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.Zone;
 import plugins.core.combat.ClientDbLoader;
 import plugins.landrush.BuildObjectHandler;
 
@@ -62,7 +62,16 @@ public class SimpleGameEntityManager implements GameEntityManager {
 			Vitals vitals = getVitalsTemplate(Vitals.Template.BuildObjectTemplate);
 
 			BuildObject buildObject = BuildObjectHandler.find(entityId);
-			vitals.health = buildObjects.get(buildObject.templateId).health;
+			if (buildObject == null) {
+				logger.warn("Null build object "+entityId);
+				return vitals;
+			}
+			
+			// ground blocks don't have template ids.  Should implement
+			if (buildObjects.containsKey(buildObject.templateId)) {
+				vitals.health = buildObjects.get(buildObject.templateId).health;
+			}
+			
 			return vitals;
 		} else {
 			throw new RuntimeException("Invalid vitals type " + vitalsType.toString());
@@ -71,13 +80,13 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	}
 
 	@Override
-	public int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
-		return combatDamage.getEffectValue(statusEffect, playerSkill, characterId);
+	public int getEffectValue(StatusEffect statusEffect, String playerSkillId, String characterId) {
+		return combatDamage.getEffectValue(statusEffect, playerSkillId, characterId);
 	}
 
 	@Override
-	public void skillUsed(PlayerSkill playerSkill, String characterId) {
-		combatDamage.skillUsed(playerSkill, characterId);
+	public void skillUsed(String playerSkillId, String characterId) {
+		combatDamage.skillUsed(playerSkillId, characterId);
 	}
 
 	@Override

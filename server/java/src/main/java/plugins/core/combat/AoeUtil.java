@@ -33,7 +33,8 @@ public class AoeUtil {
 			
 			// Lets you choose a specific radius, as the spatial query is not exact.
 			if (range > 0) {
-				double distance = distance(location.xi,location.yi,location.zi,trackData);
+				//double distance = distance(location.xi,location.yi,location.zi,trackData);
+				double distance = distance2d(location.xi,location.zi,trackData);
 				if (distance <= range) {
 					targets.add(trackData);
 				}
@@ -70,8 +71,15 @@ public class AoeUtil {
 		double x1 = scale(x);
 		double y1 = scale(y);
 		double z1 = scale(z);
-		//Console.out().println(x1+"."+y1+"."+z1+" - "+x2+"."+y2+"."+z2);
 		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(y1 - y2, 2) + Math.pow(z1 - z2, 2));
+	}
+	
+	public static double distance2d(int x, int z, TrackData tdata) {
+		double x2 = scale(tdata.x);
+		double z2 = scale(tdata.z);
+		double x1 = scale(x);
+		double z1 = scale(z);
+		return Math.sqrt(Math.pow(x1 - x2, 2) + Math.pow(z1 - z2, 2));
 	}
 	
 	public static io.gamemachine.util.Vector3 toVector3(GmVector3 from) {

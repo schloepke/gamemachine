@@ -106,9 +106,9 @@ public class SiegeHandler extends GameMessageActor {
 	}
 
 	private void updateRotation(GameMessage gameMessage) {
-		BuildObject existing = BuildObjectHandler.updateRotation(gameMessage.siegeCommand.buildObject);
+		BuildObject existing = BuildObjectHandler.updateRotation(gameMessage.siegeCommand.buildObject, gameMessage.playerId);
 		if (existing != null) {
-			gameMessage.siegeCommand.buildObject = existing;
+			//gameMessage.siegeCommand.buildObject = existing;
 			gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
 			broadcast(gameMessage, existing.zone);
 			logger.warning("broadcast sent");

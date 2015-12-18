@@ -60,7 +60,7 @@ module GameMachine
 
       def generate_code
         generate_java_code
-        generate_csharp_code
+        #generate_csharp_code
       end
 
       def remove_libs
