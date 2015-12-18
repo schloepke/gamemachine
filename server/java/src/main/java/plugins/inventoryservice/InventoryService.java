@@ -113,7 +113,7 @@ public class InventoryService {
 		
 		playerItem.updatedAt = (int) System.currentTimeMillis();
 		PlayerItem.db().save(playerItem);
-		logger.warn("PlayerItem added " + playerItem.id);
+		//logger.warn("PlayerItem added " + playerItem.id);
 		addPlayerItem.result = 1;
 		return addPlayerItem;
 	}
@@ -125,7 +125,7 @@ public class InventoryService {
 		if (existing == null) {
 			playerItem.updatedAt = (int) System.currentTimeMillis();
 			PlayerItem.db().save(playerItem);
-			logger.warn("PlayerItem added " + playerItem.id);
+			//logger.warn("PlayerItem added " + playerItem.id);
 			updatePlayerItem.result = 1;
 			return updatePlayerItem;
 		}
@@ -134,7 +134,7 @@ public class InventoryService {
 		playerItem.updatedAt = (int) System.currentTimeMillis();
 		PlayerItem.db().save(playerItem);
 		updatePlayerItem.result = 1;
-		logger.warn("PlayerItem updated " + playerItem.id);
+		//logger.warn("PlayerItem updated " + playerItem.id);
 		return updatePlayerItem;
 
 	}

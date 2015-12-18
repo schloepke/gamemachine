@@ -290,10 +290,10 @@ message GmVector3 {
   optional float x = 1;
   optional float y = 2;
   optional float z = 3;
-  optional int32 xi = 4;
-  optional int32 yi = 5;
-  optional int32 zi = 6;
-  optional int32 vertice = 7;
+  optional sint32 xi = 4;
+  optional sint32 yi = 5;
+  optional sint32 zi = 6;
+  optional sint32 vertice = 7;
 }
 
 

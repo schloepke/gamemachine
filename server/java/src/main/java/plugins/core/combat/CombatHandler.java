@@ -10,7 +10,7 @@ import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridService;
-import io.gamemachine.messages.Attack;
+import io.gamemachine.messages.SkillRequest;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GmVector3;
@@ -38,104 +38,109 @@ public class CombatHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (exactlyOnce(gameMessage)) {
-			if (gameMessage.attack != null) {
-				doAttack(gameMessage.attack);
+			if (gameMessage.skillRequest != null) {
+				doAttack(gameMessage.skillRequest);
 				setReply(gameMessage);
 			}
 		}
 	}
 
-	private void sendAttack(Attack attack, String zone) {
+	private void sendAttack(SkillRequest skillRequest, String zone) {
 		GameMessage msg = new GameMessage();
 
 		Grid grid = GridService.getInstance().getGrid(zone, "default");
 		for (TrackData trackData : grid.getAll()) {
 			if (!playerId.equals(trackData.id)) {
-				msg.attack = attack;
+				msg.skillRequest = skillRequest;
 				PlayerMessage.tell(msg, trackData.id);
 			}
 		}
 	}
 	
-	private void ensureTargetVitals(Attack.TargetType targetType, String entityId, String zone) {
-		if (targetType == Attack.TargetType.Character) {
+	private void ensureTargetVitals(SkillRequest.TargetType targetType, String entityId, String zone) {
+		if (targetType == SkillRequest.TargetType.Character) {
 			 VitalsHandler.ensure(entityId, zone);
-		} else if (targetType == Attack.TargetType.Object) {
+		} else if (targetType == SkillRequest.TargetType.Object) {
 			VitalsHandler.ensure(entityId,	Vitals.VitalsType.Object, zone);
-		} else if (targetType == Attack.TargetType.BuildObject) {
+		} else if (targetType == SkillRequest.TargetType.BuildObject) {
 			VitalsHandler.ensure(entityId,	Vitals.VitalsType.BuildObject, zone);
 		} else {
 			throw new RuntimeException("Invalid target type " + targetType);
 		}
 	}
 	
-	private void doAttack(Attack attack) {
+	private void doAttack(SkillRequest skillRequest) {
 		boolean sendToObjectGrid = false;
 		boolean sendToDefaultGrid = false;
 		
 		Zone zone =  PlayerService.getInstance().getZone(playerId);
-		if (attack.playerSkill == null) {
+		if (skillRequest.playerSkill == null) {
 			logger.warning("Attack without player skill, ignoring");
 			return;
 		}
 
-		if (Strings.isNullOrEmpty(attack.attackerCharacterId)) {
+		if (Strings.isNullOrEmpty(skillRequest.attackerCharacterId)) {
 			logger.warning("Attack without attackerCharacterId, ignoring");
 			return;
 		}
 		
-		logger.warning("Attack " + attack.attackerCharacterId + " " + attack.targetId + " skill " + attack.playerSkill.id);
+		logger.warning("Attack " + skillRequest.attackerCharacterId + " " + skillRequest.targetId + " skill " + skillRequest.playerSkill.id+" "+skillRequest.playerSkill.statusEffects);
+		
+		if (skillRequest.relayOnly) {
+			sendAttack(skillRequest,zone.name);
+			return;
+		}
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
 		VitalsHandler.ensure(playerId, zone.name);
 		
-		statusEffectTarget.attack = attack;
+		statusEffectTarget.skillRequest = skillRequest;
 		
-		statusEffectTarget.originCharacterId = attack.attackerCharacterId;
+		statusEffectTarget.originCharacterId = skillRequest.attackerCharacterId;
 		statusEffectTarget.originEntityId = playerId;
 				
-		if (attack.playerSkill.category == PlayerSkill.Category.SingleTarget) {
-			if (Strings.isNullOrEmpty(attack.targetId)) {
+		if (skillRequest.playerSkill.category == PlayerSkill.Category.SingleTarget) {
+			if (Strings.isNullOrEmpty(skillRequest.targetId)) {
 				logger.warning("SingleTarget with no targetId");
 				return;
 			} else {
-				Character character = CharacterService.instance().find(attack.targetId);
+				Character character = CharacterService.instance().find(skillRequest.targetId);
 				
 				// No character = Object/vehicle/etc..
 				if (character == null) {
-					if (BuildObjectHandler.exists(attack.targetId)) {
-						attack.targetType = Attack.TargetType.BuildObject;
+					if (BuildObjectHandler.exists(skillRequest.targetId)) {
+						skillRequest.targetType = SkillRequest.TargetType.BuildObject;
 					} else {
-						attack.targetType = Attack.TargetType.Object;
+						skillRequest.targetType = SkillRequest.TargetType.Object;
 					}
-					statusEffectTarget.targetEntityId = attack.targetId;
+					statusEffectTarget.targetEntityId = skillRequest.targetId;
 					sendToObjectGrid = true;
 				} else {
-					attack.targetType = Attack.TargetType.Character;
+					skillRequest.targetType = SkillRequest.TargetType.Character;
 					statusEffectTarget.targetEntityId = character.playerId;
 					sendToDefaultGrid = true;
 				}
 				
-				ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.name);
+				ensureTargetVitals(skillRequest.targetType, statusEffectTarget.targetEntityId, zone.name);
 			}
 			
-		} else if (attack.playerSkill.category == PlayerSkill.Category.Self) {
-			attack.targetType = Attack.TargetType.Character;
+		} else if (skillRequest.playerSkill.category == PlayerSkill.Category.Self) {
+			skillRequest.targetType = SkillRequest.TargetType.Character;
 			statusEffectTarget.targetEntityId = playerId;
-			ensureTargetVitals(attack.targetType, statusEffectTarget.targetEntityId, zone.name);
+			ensureTargetVitals(skillRequest.targetType, statusEffectTarget.targetEntityId, zone.name);
 			sendToDefaultGrid = true;
 			
-		} else if (attack.playerSkill.category == PlayerSkill.Category.Aoe || attack.playerSkill.category == PlayerSkill.Category.AoeDot) {
-			if (attack.targetLocation == null) {
+		} else if (skillRequest.playerSkill.category == PlayerSkill.Category.Aoe || skillRequest.playerSkill.category == PlayerSkill.Category.AoeDot) {
+			if (skillRequest.targetLocation == null) {
 				logger.warning("Aoe without targetLocation");
 				return;
 			}
 			
-			statusEffectTarget.location = attack.targetLocation;
+			statusEffectTarget.location = skillRequest.targetLocation;
 			sendToObjectGrid = true;
 			sendToDefaultGrid = true;
 			
-		} else if (attack.playerSkill.category == PlayerSkill.Category.Pbaoe) {
+		} else if (skillRequest.playerSkill.category == PlayerSkill.Category.Pbaoe) {
 			
 			Grid grid = GridService.getInstance().getGrid(zone.name,"default");
 			
@@ -165,7 +170,7 @@ public class CombatHandler extends GameMessageActor {
 			StatusEffectManager.tell("build_objects", zone.name, statusEffectTarget.clone(), getSelf());
 		}
 		
-		sendAttack(attack,zone.name);
+		sendAttack(skillRequest,zone.name);
 	}
 
 }

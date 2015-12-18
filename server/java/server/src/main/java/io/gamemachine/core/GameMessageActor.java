@@ -17,6 +17,11 @@ public abstract class GameMessageActor extends GameActor {
 
 	private long messageIdCheckTime = 5000L;
 	
+	public static void tell(GameMessage gameMessage, String playerId, String name) {
+		gameMessage.playerId = playerId;
+		tell(gameMessage, name);
+	}
+	
 	public static void tell(GameMessage gameMessage, String name) {
 		GameMessageRoute route = GameMessageRoute.routeFor(name);
 		if (route != null) {

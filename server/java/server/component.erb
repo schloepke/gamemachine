@@ -506,9 +506,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 	    	}
 	    	
 	    	io.gamemachine.orm.models.<%=klass%> model = null;
-	    	//if (message.hasRecordId()) {
+	    	if (message.recordId > 0) {
 	    		model = io.gamemachine.orm.models.<%=klass%>.findFirst("id = ?", message.recordId);
-	    	//}
+	    	}
 	    	
 	    	if (model == null) {
 	    		model = new io.gamemachine.orm.models.<%=klass%>();
@@ -678,8 +678,10 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
     	<% else %>
     	//if (<%= field.name %> != null) {
     	   <% if get_type(field) == 'ByteString' %>
-    	        if (<%= field.name %> != null) {
-    	    		model.set(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
+    	        if (<%= field.name %> == null) {
+    	    		model.set(namePrefix+"<%=sql_column_name(klass,field)%>",null);
+    	    	} else {
+    	    	    model.set(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>.toByteArray());
     	    	}
     	    <% elsif field.isEnumField %>
     	    	model.setInteger(namePrefix+"<%=sql_column_name(klass,field)%>",<%= field.name %>.number);

@@ -21,20 +21,17 @@ import io.gamemachine.authentication.Authentication;
 import io.gamemachine.authentication.PlayerAuthentication;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
-import io.gamemachine.grid.GridService;
-import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
-import io.gamemachine.messages.ProcessCommand;
-import io.gamemachine.messages.RegionInfo;
-import io.gamemachine.messages.RegionInfos;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
-import io.gamemachine.process.AkkaProcessRunner;
 import io.gamemachine.regions.ZoneService;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFutureListener;
@@ -272,24 +269,27 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					return;
 				}
 
-				if (req.getUri().startsWith("/api/build_objects/get")) {
-					int start = Integer.parseInt(params.get("start"));
-					int end = Integer.parseInt(params.get("end"));
-					byte[] resp = BuildObjectHandler.getBuildObjects(start, end);
+				if (req.getUri().startsWith("/api/build_objects/get_recent")) {
+					byte[] resp = BuildObjectHandler.getBuildObjects(playerId, false);
+					Ok(ctx, resp);
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/build_objects/get_all")) {
+					byte[] resp = BuildObjectHandler.getBuildObjects(playerId, true);
 					Ok(ctx, resp);
 					return;
 				}
 
-				if (req.getUri().startsWith("/api/build_objects/put")) {
+				if (req.getUri().startsWith("/api/build_objects/save")) {
 					byte[] bytes = Base64.decodeBase64(params.get("build_objects"));
-					BuildObjects buildObjects = BuildObjects.parseFrom(bytes);
-					for (BuildObject buildObject : buildObjects.buildObject) {
-						BuildObject.db().save(buildObject);
-					}
+					GameMessage gameMessage = new GameMessage();
+					gameMessage.buildObjects = BuildObjects.parseFrom(bytes);
+					GameMessageActor.tell(gameMessage, playerId, BuildObjectHandler.name);
 					Ok(ctx, "OK");
 					return;
 				}
-
+				
 				if (req.getUri().startsWith("/api/characters/create")) {
 					String data = null;
 					if (params.containsKey("data")) {
@@ -319,6 +319,12 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 
 				if (req.getUri().startsWith("/api/characters/set_current")) {
 					PlayerService.getInstance().setCharacter(playerId, params.get("characterId"));
+					Ok(ctx, "OK");
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/characters/set_item_slots")) {
+					CharacterService.instance().SetItemSlots(params.get("characterId"), params.get("item_slots"));
 					Ok(ctx, "OK");
 					return;
 				}

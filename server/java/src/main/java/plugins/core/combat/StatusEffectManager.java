@@ -44,7 +44,7 @@ public class StatusEffectManager extends UntypedActor {
 	public static void tell(String gridName, String zone, StatusEffectTarget statusEffectTarget, ActorRef sender) {
 		String actorName = null;
 		if (!hasEffects(statusEffectTarget)) {
-			logger.warn("No effects found for skill "+statusEffectTarget.attack.playerSkill.id);
+			logger.warn("No effects found for skill "+statusEffectTarget.skillRequest.playerSkill.id);
 			return;
 		}
 		
@@ -64,7 +64,7 @@ public class StatusEffectManager extends UntypedActor {
 	
 
 	private static boolean hasEffects(StatusEffectTarget statusEffectTarget) {
-		if ( StatusEffectData.skillEffects.containsKey(statusEffectTarget.attack.playerSkill.id)) {
+		if ( StatusEffectData.skillEffects.containsKey(statusEffectTarget.skillRequest.playerSkill.id)) {
 			return true;
 		} else {
 			return false;
@@ -73,7 +73,7 @@ public class StatusEffectManager extends UntypedActor {
 	
 	private static int passiveEffectCount(StatusEffectTarget statusEffectTarget) {
 		int count = 0;
-		for (StatusEffect statusEffect : StatusEffectData.skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
+		for (StatusEffect statusEffect : StatusEffectData.skillEffects.get(statusEffectTarget.skillRequest.playerSkill.id)) {
 			if (statusEffect.type == StatusEffect.Type.AttributeMaxDecrease || statusEffect.type == StatusEffect.Type.AttributeMaxIncrease) {
 				count++;
 			}
@@ -83,7 +83,7 @@ public class StatusEffectManager extends UntypedActor {
 	
 	private static int activeEffectCount(StatusEffectTarget statusEffectTarget) {
 		int count = 0;
-		for (StatusEffect statusEffect : StatusEffectData.skillEffects.get(statusEffectTarget.attack.playerSkill.id)) {
+		for (StatusEffect statusEffect : StatusEffectData.skillEffects.get(statusEffectTarget.skillRequest.playerSkill.id)) {
 			if (statusEffect.type == StatusEffect.Type.AttributeDecrease || statusEffect.type == StatusEffect.Type.AttributeIncrease) {
 				count++;
 			}
@@ -93,7 +93,7 @@ public class StatusEffectManager extends UntypedActor {
 
 	public static int getEffectValue(StatusEffect statusEffect, PlayerSkill playerSkill, String characterId) {
 		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
-		return gameEntityManager.getEffectValue(statusEffect, playerSkill, characterId);
+		return gameEntityManager.getEffectValue(statusEffect, playerSkill.id, characterId);
 	}
 
 	public static boolean inGroup(String playerId) {
@@ -107,7 +107,7 @@ public class StatusEffectManager extends UntypedActor {
 
 	public static void skillUsed(PlayerSkill playerSkill, String characterId) {
 		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
-		gameEntityManager.skillUsed(playerSkill, characterId);
+		gameEntityManager.skillUsed(playerSkill.id, characterId);
 	}
 	
 	public static String playerGroup(String playerId) {
@@ -135,13 +135,13 @@ public class StatusEffectManager extends UntypedActor {
 
 		if (statusEffect.resource == StatusEffect.Resource.ResourceStamina) {
 			if (vitalsProxy.vitals.stamina < statusEffect.resourceCost) {
-				logger.debug("Insufficient stamina needed " + statusEffect.resourceCost);
+				logger.warn("Insufficient stamina needed " + statusEffect.resourceCost);
 				return false;
 			}
 			vitalsProxy.vitals.stamina -= statusEffect.resourceCost;
 		} else if (statusEffect.resource == StatusEffect.Resource.ResourceMagic) {
 			if (vitalsProxy.vitals.magic < statusEffect.resourceCost) {
-				logger.debug("Insufficient magic needed " + statusEffect.resourceCost);
+				logger.warn("Insufficient magic needed " + statusEffect.resourceCost);
 				return false;
 			}
 			vitalsProxy.vitals.magic -= statusEffect.resourceCost;
@@ -225,12 +225,6 @@ public class StatusEffectManager extends UntypedActor {
 			int health = vitalsProxy.baseVitals.health;
 
 			if (vitalsProxy.vitals.dead == 1) {
-				if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject) {
-					BuildObjectHandler.setHealth(vitalsProxy.vitals.entityId, vitalsProxy.vitals.health);
-					VitalsHandler.remove(vitalsProxy.vitals.entityId);
-					continue;
-				}
-
 				if (deathTimer.containsKey(vitalsProxy.vitals.entityId)) {
 					Long timeDead = deathTimer.get(vitalsProxy.vitals.entityId);
 					Long timer = deathTime;
@@ -244,7 +238,10 @@ public class StatusEffectManager extends UntypedActor {
 
 			if (vitalsProxy.vitals.health <= 0) {
 				die(vitalsProxy);
-				deathTimer.put(vitalsProxy.vitals.entityId, System.currentTimeMillis());
+				if (vitalsProxy.vitals.type != Vitals.VitalsType.BuildObject) {
+					deathTimer.put(vitalsProxy.vitals.entityId, System.currentTimeMillis());
+				}
+				
 				continue;
 			}
 

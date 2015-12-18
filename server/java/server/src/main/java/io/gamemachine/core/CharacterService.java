@@ -12,12 +12,17 @@ import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
+import io.gamemachine.messages.CharacterUpdate;
 import io.gamemachine.messages.Characters;
+import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
+import io.protostuff.ByteString;
 
 public class CharacterService {
 
@@ -107,6 +112,18 @@ public class CharacterService {
 		return character;
 	}
 
+	public void SetItemSlots(String characterId, String slots) {
+		Character character = find(characterId);
+		character.setItemSlotData(slots);
+		Character.db().save(character);
+		
+		GameMessage gameMessage = new GameMessage();
+		CharacterUpdate update = new CharacterUpdate();
+		update.character = character;
+		gameMessage.characterUpdate = update;
+		PlayerMessage.broadcast(gameMessage, character.zone.name);
+	}
+	
 	public void SetUmaData(Character character, String umaData) {
 		character.setUmaData(umaData);
 		Character.db().save(character);

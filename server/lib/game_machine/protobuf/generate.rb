@@ -160,7 +160,7 @@ module GameMachine
           when 'int'
             "`#{sql_column_name(klass,field)}` int(11)"
           when 'String'
-            "`#{sql_column_name(klass,field)}` varchar(128)"
+            "`#{sql_column_name(klass,field)}` varchar(1024)"
           when 'ByteString'
            "`#{sql_column_name(klass,field)}` varbinary(2048)"
           end
@@ -180,7 +180,7 @@ module GameMachine
           when 'int'
             "#{sql_column_name(klass,field)} integer"
           when 'String'
-            "#{sql_column_name(klass,field)} character varying(128)"
+            "#{sql_column_name(klass,field)} TEXT"
           when 'ByteString'
             "#{sql_column_name(klass,field)} bytea"
           end
@@ -200,7 +200,7 @@ module GameMachine
           when 'int'
             "#{sql_column_name(klass,field)} integer"
           when 'String'
-            "#{sql_column_name(klass,field)} varchar(128)"
+            "#{sql_column_name(klass,field)} varchar(1024)"
           when 'ByteString'
             "#{sql_column_name(klass,field)} blob"
           end
