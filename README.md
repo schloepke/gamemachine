@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Welcome to Game Machine
 
 The goal of Game Machine is to provide an inherently scalable, modern architecture for real-time multiplayer games.  Our focus is on providing easy to use abstractions for hard problems, allowing even client side developers to write game logic that is concurrent and performant, without having to deal with low level concurrency.
@@ -63,4 +62,3 @@ Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/
 
 
 
->>>>>>> origin
