@@ -61,7 +61,7 @@ public class NpcEntity extends GameMessageActor {
 	
 	@Override
 	public void onTick(String message) {
-		if (vitalsProxy.vitals.dead == 1) {
+		if (vitalsProxy.isDead()) {
 			sendTrackData();
 			lastUpdate = System.currentTimeMillis();
 			scheduleOnce(tickInterval, "update");

@@ -173,7 +173,7 @@ public class ActiveEffectHandler extends UntypedActor {
 			return;
 		}
 
-		originProxy.vitals.lastCombat = System.currentTimeMillis();
+		originProxy.setLastCombat(System.currentTimeMillis());
 
 		for (StatusEffect statusEffect : statusEffectTarget.getStatusEffectList()) {
 			//logger.warning("Status Effect "+statusEffect.id +" "+statusEffect.ticksPerformed+" "+statusEffect.ticks);
@@ -195,12 +195,12 @@ public class ActiveEffectHandler extends UntypedActor {
 
 						VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
 
-						if (targetProxy.vitals.dead == 1) {
+						if (targetProxy.isDead()) {
 							continue;
 						}
 
 						if (statusEffectTarget.skillRequest.playerSkill.category == PlayerSkill.Category.AoeDot) {
-							convertToSingleTarget(statusEffectTarget, targetProxy.vitals.entityId);
+							convertToSingleTarget(statusEffectTarget, targetProxy.getEntityId());
 							continue;
 						} else {
 							applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy, statusEffect);
@@ -220,25 +220,25 @@ public class ActiveEffectHandler extends UntypedActor {
 	private int applyEffect(PlayerSkill playerSkill, VitalsProxy originProxy, VitalsProxy targetProxy,
 			StatusEffect statusEffect) {
 
-		if (targetProxy.vitals.dead == 1) {
+		if (targetProxy.isDead()) {
 			return 0;
 		}
 
-		int effectCountFromOrigin = effectCount(targetProxy.vitals.entityId, originProxy.vitals.entityId,
+		int effectCountFromOrigin = effectCount(targetProxy.getEntityId(), originProxy.getEntityId(),
 				statusEffect.id);
 		if (!statusEffect.allowMultipleFromSameOrigin && effectCountFromOrigin >= 2) {
 			logger.warning("Effect from same origin present");
 			return 0;
-		} else if (effectLimitReached(targetProxy.vitals.entityId, statusEffect.id)) {
+		} else if (effectLimitReached(targetProxy.getEntityId(), statusEffect.id)) {
 			logger.warning("Effect limit reached");
 			return 0;
 		}
 
-		targetProxy.vitals.lastCombat = System.currentTimeMillis();
+		targetProxy.setLastCombat(System.currentTimeMillis());
 
-		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.vitals.characterId);
+		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.getCharacterId());
 
-		if (targetProxy.vitals.type == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
+		if (targetProxy.getType() == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
 			if (statusEffect.buildObjectDamageModifier > 0) {
 				value = Math.round(value * (statusEffect.buildObjectDamageModifier / 100f));
 			} else {
@@ -248,15 +248,15 @@ public class ActiveEffectHandler extends UntypedActor {
 
 		if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
 
-			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.getType() == Vitals.VitalsType.Character) {
 				// no damage to self unless category is Self
 				if (playerSkill.category != PlayerSkill.Category.Self
-						&& targetProxy.vitals.characterId.equals(originProxy.vitals.characterId)) {
+						&& targetProxy.getCharacterId().equals(originProxy.getCharacterId())) {
 					return 0;
 				}
 
 				// or group members
-				if (StatusEffectManager.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
+				if (StatusEffectManager.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
 					logger.warning("GROUP DAMAGE");
 					return 0;
 				}
@@ -265,10 +265,10 @@ public class ActiveEffectHandler extends UntypedActor {
 			targetProxy.subtract(statusEffect.attribute, value);
 		} else if (statusEffect.type == StatusEffect.Type.AttributeIncrease) {
 
-			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.getType() == Vitals.VitalsType.Character) {
 				// only to self or group members
-				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId) || StatusEffectManager
-						.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
+				if (targetProxy.getCharacterId().equals(originProxy.getCharacterId()) || StatusEffectManager
+						.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
 					targetProxy.add(statusEffect.attribute, value);
 				} else {
 					return 0;
@@ -277,13 +277,12 @@ public class ActiveEffectHandler extends UntypedActor {
 		}
 
 		if (value > 0) {
-			if (targetProxy.vitals.type == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
-				BuildObjectHandler.setHealth(targetProxy.vitals.entityId, targetProxy.vitals.health);
+			if (targetProxy.getType() == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
+				BuildObjectHandler.setHealth(targetProxy.getEntityId(), targetProxy.get("health"));
 			}
 
-			targetProxy.vitals.changed = 1;
-			logger.warning(statusEffect.id + " target " + targetProxy.vitals.entityId + " damage " + value + " type "
-					+ statusEffect.type + " health " + targetProxy.vitals.health);
+			logger.warning(statusEffect.id + " target " + targetProxy.getEntityId() + " damage " + value + " type "
+					+ statusEffect.type + " health " + targetProxy.get("health"));
 		}
 
 		return value;

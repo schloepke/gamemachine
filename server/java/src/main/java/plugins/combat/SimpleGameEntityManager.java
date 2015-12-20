@@ -14,6 +14,7 @@ import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
+import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
@@ -99,6 +100,12 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	public void OnPlayerDisConnected(String playerId) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void ItemSlotsUpdated(String characterId, ItemSlots itemSlots) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

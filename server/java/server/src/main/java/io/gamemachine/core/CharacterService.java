@@ -5,8 +5,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.base.Strings;
 
 import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
@@ -112,10 +115,15 @@ public class CharacterService {
 		return character;
 	}
 
-	public void SetItemSlots(String characterId, String slots) {
+	public void setItemSlots(String characterId, String slotsData) {
 		Character character = find(characterId);
-		character.setItemSlotData(slots);
+		character.setItemSlotData(slotsData);
 		Character.db().save(character);
+		
+		byte[] bytes = Base64.decodeBase64(slotsData);
+		ItemSlots itemSlots = ItemSlots.parseFrom(bytes);
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+		gameEntityManager.ItemSlotsUpdated(characterId, itemSlots);
 		
 		GameMessage gameMessage = new GameMessage();
 		CharacterUpdate update = new CharacterUpdate();
@@ -129,6 +137,23 @@ public class CharacterService {
 		Character.db().save(character);
 	}
 
+	public void setItemSlots(String characterId, ItemSlots itemSlots) {
+		Character character = find(characterId);
+		character.itemSlotData = Base64.encodeBase64String(itemSlots.toByteArray());
+		Character.db().save(character);
+	}
+	
+	public ItemSlots getItemSlots(String characterId) {
+		Character character = find(characterId);
+		
+		if (Strings.isNullOrEmpty(character.itemSlotData)) {
+			return new ItemSlots();
+		} else {
+			byte[] bytes = Base64.decodeBase64(character.itemSlotData);
+			return ItemSlots.parseFrom(bytes);
+		}
+	}
+	
 	public Zone getZone(String characterId) {
 		Character character = find(characterId);
 		return character.zone;

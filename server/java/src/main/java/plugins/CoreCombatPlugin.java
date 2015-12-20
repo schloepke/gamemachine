@@ -5,6 +5,7 @@ import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
+import plugins.core.combat.ClientDbLoader;
 import plugins.core.combat.CombatHandler;
 import plugins.core.combat.PlayerSkillHandler;
 import plugins.core.combat.SiegeHandler;

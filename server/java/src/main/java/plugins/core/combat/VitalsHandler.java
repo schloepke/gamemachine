@@ -17,6 +17,9 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
+import io.gamemachine.messages.VitalsContainer;
+import io.gamemachine.messages.VitalsRequest;
+import io.gamemachine.messages.Zone;
 
 public class VitalsHandler extends GameMessageActor {
 
@@ -37,7 +40,7 @@ public class VitalsHandler extends GameMessageActor {
 	public static List<VitalsProxy> getVitalsForZone(String zone) {
 		List<VitalsProxy> zoneVitals = new ArrayList<VitalsProxy>();
 		for (VitalsProxy proxy : proxies.values()) {
-			if (proxy.vitals.zoneName.equals(zone)) {
+			if (proxy.getZoneName().equals(zone)) {
 				zoneVitals.add(proxy);
 			}
 		}
@@ -57,7 +60,7 @@ public class VitalsHandler extends GameMessageActor {
 		}
 	}
 
-	public static void ensure(String entityId, String zone) {
+	public static void ensureCharacterVitals(String entityId, String zone) {
 		if (!proxies.containsKey(entityId)) {
 			Player player = PlayerService.getInstance().find(entityId);
 
@@ -89,7 +92,7 @@ public class VitalsHandler extends GameMessageActor {
 	}
 	
 	public static VitalsProxy get(String entityId, String zone) {
-		ensure(entityId, zone);
+		ensureCharacterVitals(entityId, zone);
 		return proxies.get(entityId);
 	}
 
@@ -111,8 +114,23 @@ public class VitalsHandler extends GameMessageActor {
 
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
-		// TODO Auto-generated method stub
-
+		if (gameMessage.vitalsRequest != null) {
+			VitalsRequest request = gameMessage.vitalsRequest;
+			Zone zone =  PlayerService.getInstance().getZone(request.entityId);
+			
+			if (request.vitalsType == Vitals.VitalsType.Character) {
+				ensureCharacterVitals(request.entityId, zone.name);
+			} else {
+				ensure(request.entityId, request.vitalsType, zone.name);
+			}
+			
+			VitalsContainer container = new VitalsContainer();
+			VitalsProxy proxy = VitalsHandler.get(request.entityId);
+			container.addVitals(proxy.getVitals());
+			gameMessage.vitalsContainer = container;
+			gameMessage.vitalsRequest = null;
+			sendGameMessage(gameMessage,playerId);
+		}
 	}
 
 	public void onPlayerDisconnect(String playerId) {

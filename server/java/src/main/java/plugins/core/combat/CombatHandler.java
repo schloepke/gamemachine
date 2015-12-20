@@ -59,7 +59,7 @@ public class CombatHandler extends GameMessageActor {
 	
 	private void ensureTargetVitals(SkillRequest.TargetType targetType, String entityId, String zone) {
 		if (targetType == SkillRequest.TargetType.Character) {
-			 VitalsHandler.ensure(entityId, zone);
+			 VitalsHandler.ensureCharacterVitals(entityId, zone);
 		} else if (targetType == SkillRequest.TargetType.Object) {
 			VitalsHandler.ensure(entityId,	Vitals.VitalsType.Object, zone);
 		} else if (targetType == SkillRequest.TargetType.BuildObject) {
@@ -92,7 +92,7 @@ public class CombatHandler extends GameMessageActor {
 		}
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
-		VitalsHandler.ensure(playerId, zone.name);
+		VitalsHandler.ensureCharacterVitals(playerId, zone.name);
 		
 		statusEffectTarget.skillRequest = skillRequest;
 		

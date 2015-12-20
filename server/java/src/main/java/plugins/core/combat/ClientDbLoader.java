@@ -18,6 +18,7 @@ import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerItems;
 import io.gamemachine.messages.PlayerSkills;
 import io.gamemachine.messages.StatusEffects;
+import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.VitalsContainer;
 import plugins.core.PlayerSeed;
 
@@ -46,7 +47,7 @@ public class ClientDbLoader {
 			return new VitalsContainer();
 		}
 	}
-	
+		
 	public static StatusEffects getStatusEffects() {
 		String name = "StatusEffectCatalog.proto";
 		if (new File(dbPath(name)).exists()) {

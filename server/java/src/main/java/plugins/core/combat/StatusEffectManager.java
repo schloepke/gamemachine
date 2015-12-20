@@ -134,17 +134,17 @@ public class StatusEffectManager extends UntypedActor {
 		}
 
 		if (statusEffect.resource == StatusEffect.Resource.ResourceStamina) {
-			if (vitalsProxy.vitals.stamina < statusEffect.resourceCost) {
+			if (vitalsProxy.get("stamina") < statusEffect.resourceCost) {
 				logger.warn("Insufficient stamina needed " + statusEffect.resourceCost);
 				return false;
 			}
-			vitalsProxy.vitals.stamina -= statusEffect.resourceCost;
+			vitalsProxy.subtract("stamina", statusEffect.resourceCost);
 		} else if (statusEffect.resource == StatusEffect.Resource.ResourceMagic) {
-			if (vitalsProxy.vitals.magic < statusEffect.resourceCost) {
+			if (vitalsProxy.get("magic") < statusEffect.resourceCost) {
 				logger.warn("Insufficient magic needed " + statusEffect.resourceCost);
 				return false;
 			}
-			vitalsProxy.vitals.magic -= statusEffect.resourceCost;
+			vitalsProxy.subtract("magic", statusEffect.resourceCost);
 		}
 		return true;
 	}
@@ -220,94 +220,78 @@ public class StatusEffectManager extends UntypedActor {
 
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitals()) {
 
-			int stamina = vitalsProxy.baseVitals.stamina;
-			int magic = vitalsProxy.baseVitals.magic;
-			int health = vitalsProxy.baseVitals.health;
+			int maxStamina = vitalsProxy.getMax("stamina");
+			int maxMagic = vitalsProxy.getMax("magic");
+			int maxHealth = vitalsProxy.getMax("health");
 
-			if (vitalsProxy.vitals.dead == 1) {
-				if (deathTimer.containsKey(vitalsProxy.vitals.entityId)) {
-					Long timeDead = deathTimer.get(vitalsProxy.vitals.entityId);
+			if (vitalsProxy.isDead()) {
+				if (deathTimer.containsKey(vitalsProxy.getEntityId())) {
+					Long timeDead = deathTimer.get(vitalsProxy.getEntityId());
 					Long timer = deathTime;
 					if ((System.currentTimeMillis() - timeDead) > timer) {
 						revive(vitalsProxy);
-						deathTimer.remove(vitalsProxy.vitals.entityId);
+						deathTimer.remove(vitalsProxy.getEntityId());
 					}
 				}
 				continue;
 			}
 
-			if (vitalsProxy.vitals.health <= 0) {
+			if (vitalsProxy.get("health") <= 0) {
 				die(vitalsProxy);
-				if (vitalsProxy.vitals.type != Vitals.VitalsType.BuildObject) {
-					deathTimer.put(vitalsProxy.vitals.entityId, System.currentTimeMillis());
+				if (vitalsProxy.getType() != Vitals.VitalsType.BuildObject) {
+					deathTimer.put(vitalsProxy.getEntityId(), System.currentTimeMillis());
 				}
 				
 				continue;
 			}
 
-			int healthRegen = vitalsProxy.baseVitals.healthRegen;
-			int magicRegen = vitalsProxy.baseVitals.magicRegen;
-			int staminaRegen = vitalsProxy.baseVitals.staminaRegen;
+			int healthRegen = vitalsProxy.getMax("healthRegen");
+			int magicRegen = vitalsProxy.getMax("magicRegen");
+			int staminaRegen = vitalsProxy.getMax("staminaRegen");
 			
-			long lastCombat = System.currentTimeMillis() - vitalsProxy.vitals.lastCombat;
-			if (lastCombat < outOfCombatTime && vitalsProxy.baseVitals.combatRegenMod > 0) {
-				vitalsProxy.vitals.inCombat = true;
+			long lastCombat = System.currentTimeMillis() - vitalsProxy.getLastCombat();
+			if (lastCombat < outOfCombatTime && vitalsProxy.getCombatRegenMod() > 0) {
+				vitalsProxy.setInCombat(true);
 				
-				healthRegen = Math.round(healthRegen * (vitalsProxy.baseVitals.combatRegenMod / 100f));
-				magicRegen = Math.round(magicRegen * (vitalsProxy.baseVitals.combatRegenMod/100f));
-				staminaRegen = Math.round(staminaRegen * (vitalsProxy.baseVitals.combatRegenMod/100f));
+				healthRegen = Math.round(healthRegen * (vitalsProxy.getCombatRegenMod() / 100f));
+				magicRegen = Math.round(magicRegen * (vitalsProxy.getCombatRegenMod()/100f));
+				staminaRegen = Math.round(staminaRegen * (vitalsProxy.getCombatRegenMod()/100f));
 				
 			} else {
-				vitalsProxy.vitals.inCombat = false;
+				vitalsProxy.setInCombat(false);
 			}
 			
-			if (vitalsProxy.vitals.health < health && healthRegen > 0) {
-				vitalsProxy.vitals.health += healthRegen;
-				vitalsProxy.vitals.changed = 1;
-				if (vitalsProxy.vitals.health > health) {
-					vitalsProxy.vitals.health = health;
-				}
-				if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject) {
-					BuildObjectHandler.setHealth(vitalsProxy.vitals.entityId, vitalsProxy.vitals.health);
+			if (vitalsProxy.get("health") < maxHealth && healthRegen > 0) {
+				vitalsProxy.add("health", healthRegen);
+				if (vitalsProxy.getType() == Vitals.VitalsType.BuildObject) {
+					BuildObjectHandler.setHealth(vitalsProxy.getEntityId(), vitalsProxy.get("health"));
 				}
 			}
 
-			if (vitalsProxy.vitals.stamina < stamina && staminaRegen > 0) {
-				vitalsProxy.vitals.stamina += staminaRegen;
-				vitalsProxy.vitals.changed = 1;
-				if (vitalsProxy.vitals.stamina > stamina) {
-					vitalsProxy.vitals.stamina = stamina;
-				}
+			if (vitalsProxy.get("stamina") < maxStamina && staminaRegen > 0) {
+				vitalsProxy.add("stamina",staminaRegen);
 			}
 
-			if (vitalsProxy.vitals.magic < magic && magicRegen > 0) {
-				vitalsProxy.vitals.magic += magicRegen;
-				vitalsProxy.vitals.changed = 1;
-				if (vitalsProxy.vitals.magic > magic) {
-					vitalsProxy.vitals.magic = magic;
-				}
+			if (vitalsProxy.get("magic") < maxMagic && magicRegen > 0) {
+				vitalsProxy.add("magic", magicRegen);
 			}
 
 		}
 	}
 	
 	private void die(VitalsProxy vitalsProxy) {
-		logger.warn("Die "+vitalsProxy.vitals.entityId);
+		logger.warn("Die "+vitalsProxy.getEntityId());
+		vitalsProxy.setDead(1);
 		vitalsProxy.set("health", 0);
 		vitalsProxy.set("stamina", 0);
 		vitalsProxy.set("magic", 0);
-		vitalsProxy.vitals.dead = 1;
-		vitalsProxy.vitals.changed = 1;
-		vitalsProxy.vitals.inCombat = false;
+		vitalsProxy.setInCombat(false);
 	}
 
 	private void revive(VitalsProxy vitalsProxy) {
-		logger.warn("Revive "+vitalsProxy.vitals.entityId);
-		vitalsProxy.vitals.dead = 0;
-		vitalsProxy.setToBase("health");
-		vitalsProxy.setToBase("stamina");
-		vitalsProxy.setToBase("magic");
-		vitalsProxy.vitals.changed = 1;
+		logger.warn("Revive "+vitalsProxy.getEntityId());
+		vitalsProxy.setDead(0);
+		vitalsProxy.reset();
 	}
 	
 }

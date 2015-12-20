@@ -91,7 +91,7 @@ public class PassiveEffectHandler extends UntypedActor {
 			return;
 		}
 
-		originProxy.vitals.lastCombat = System.currentTimeMillis();
+		originProxy.setLastCombat(System.currentTimeMillis());
 
 		for (StatusEffect statusEffect : statusEffectTarget.getStatusEffectList()) {
 			if (!StatusEffectManager.DeductCost(originProxy, statusEffect)) {
@@ -118,39 +118,39 @@ public class PassiveEffectHandler extends UntypedActor {
 	private void applyEffect(PlayerSkill playerSkill, VitalsProxy originProxy, VitalsProxy targetProxy,
 			StatusEffect statusEffect) {
 
-		if (targetProxy.vitals.dead == 1) {
+		if (targetProxy.isDead()) {
 			return;
 		}
 
-		if (hasEffect(targetProxy.vitals.entityId, statusEffect.id)) {
+		if (hasEffect(targetProxy.getEntityId(), statusEffect.id)) {
 			return;
 		}
 
-		targetProxy.vitals.lastCombat = System.currentTimeMillis();
-		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.vitals.characterId);
+		targetProxy.setLastCombat(System.currentTimeMillis());
+		int value = StatusEffectManager.getEffectValue(statusEffect, playerSkill, originProxy.getCharacterId());
 
 		if (statusEffect.type == StatusEffect.Type.AttributeMaxDecrease) {
 
-			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.getType() == Vitals.VitalsType.Character) {
 				// no damage to self
-				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId)) {
+				if (targetProxy.getCharacterId().equals(originProxy.getCharacterId())) {
 					return;
 				}
 
 				// or group members
-				if (StatusEffectManager.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
+				if (StatusEffectManager.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
 					return;
 				}
 			}
 
-			targetProxy.subtractBase(statusEffect.attribute, value);
+			targetProxy.subtractMax(statusEffect.attribute, value);
 		} else if (statusEffect.type == StatusEffect.Type.AttributeMaxIncrease) {
 
-			if (targetProxy.vitals.type == Vitals.VitalsType.Character) {
+			if (targetProxy.getType() == Vitals.VitalsType.Character) {
 				// only to self or group members
-				if (targetProxy.vitals.characterId.equals(originProxy.vitals.characterId) || StatusEffectManager
-						.inSameGroup(originProxy.vitals.characterId, targetProxy.vitals.characterId)) {
-					targetProxy.addBase(statusEffect.attribute, value);
+				if (targetProxy.getCharacterId().equals(originProxy.getCharacterId()) || StatusEffectManager
+						.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
+					targetProxy.addMax(statusEffect.attribute, value);
 				} else {
 					return;
 				}
@@ -167,9 +167,9 @@ public class PassiveEffectHandler extends UntypedActor {
 			long time = info.statusEffect.ticks * 1000L;
 			if (System.currentTimeMillis() - info.createdAt >= time) {
 				if (info.statusEffect.type == StatusEffect.Type.AttributeMaxDecrease) {
-					info.vitalsProxy.addBase(info.statusEffect.attribute, info.value);
+					info.vitalsProxy.addMax(info.statusEffect.attribute, info.value);
 				} else if (info.statusEffect.type == StatusEffect.Type.AttributeMaxIncrease) {
-					info.vitalsProxy.subtractBase(info.statusEffect.attribute, info.value);
+					info.vitalsProxy.subtractMax(info.statusEffect.attribute, info.value);
 				}
 				targets.remove(key);
 			}
@@ -178,7 +178,7 @@ public class PassiveEffectHandler extends UntypedActor {
 
 	private boolean hasEffect(String entityId, String effectId) {
 		for (EffectInfo info : targets.values()) {
-			if (info.vitalsProxy.vitals.entityId.equals(entityId) && info.statusEffect.id.equals(effectId)) {
+			if (info.vitalsProxy.getEntityId().equals(entityId) && info.statusEffect.id.equals(effectId)) {
 				return true;
 			}
 		}

@@ -11,16 +11,13 @@ import com.google.common.collect.Lists;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import io.gamemachine.core.GameEntityManager;
-import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.PlayerMessage;
-import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.VitalsContainer;
+import io.gamemachine.messages.VitalsUpdateContainer;
 import scala.concurrent.duration.Duration;
 
 public class VitalsSender extends UntypedActor {
@@ -40,51 +37,29 @@ public class VitalsSender extends UntypedActor {
 		}
 	}
 
-	private int nextVitalTick(String id) {
-		if (vitalTicks.containsKey(id)) {
-			int tick = vitalTicks.get(id);
-			if (tick > 1000) {
-				tick = 50;
-			}
-			vitalTicks.put(id, tick + 1);
-			return tick;
-		} else {
-			vitalTicks.put(id, 0);
-			return 0;
-		}
-	}
-
-	private void resetVitalTick(String id) {
-		vitalTicks.put(id, 0);
-	}
-
 	private void sendVitals() {
 		for (GridSet gridSet : StatusEffectManager.gridsets) {
 			for (TrackData playerTrackData : gridSet.playerGrid.getAll()) {
 				if (playerTrackData.entityType == TrackData.EntityType.Player) {
 					
-					List<List<Vitals>> sublists = Lists.partition(livingVitals(gridSet.zone), 20);
-					for (List<Vitals> sublist : sublists) {
-						sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, sublist,true);
+					List<List<VitalsProxy>> sublists = Lists.partition(livingVitals(gridSet.zone), 20);
+					for (List<VitalsProxy> sublist : sublists) {
+						sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, sublist);
 					}
 					
 					sublists = Lists.partition(objectVitals(gridSet.zone), 20);
-					for (List<Vitals> sublist : sublists) {
-						sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, sublist,false);
+					for (List<VitalsProxy> sublist : sublists) {
+						sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, sublist);
 					}
-					
-					//sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, livingVitals(gridSet.zone),true);
-					//sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, objectVitals(gridSet.zone),false);
 				}
-				
 			}
 		}
 	}
 
-	private void sendVitalsToPlayer(Grid grid, TrackData playerTrackData, List<Vitals> vitalsList, boolean sendBaseUpdate) {
-		VitalsContainer toSend = new VitalsContainer();
-		for (Vitals vitals : vitalsList) {
-			TrackData vitalsTrackData = grid.get(vitals.entityId);
+	private void sendVitalsToPlayer(Grid grid, TrackData playerTrackData, List<VitalsProxy> proxies) {
+		VitalsUpdateContainer toSend = new VitalsUpdateContainer();
+		for (VitalsProxy proxy : proxies) {
+			TrackData vitalsTrackData = grid.get(proxy.getEntityId());
 
 			// Dead most likely
 			if (vitalsTrackData == null) {
@@ -93,71 +68,42 @@ public class VitalsSender extends UntypedActor {
 
 			double distance = AoeUtil.distance(vitalsTrackData, playerTrackData);
 			if (distance <= vitalsDistance) {
-				Vitals clone = vitals.clone();
-				clone.zoneName = null;
-				toSend.addVitals(clone);
+				toSend.addVitalsUpdate(proxy.getVitalsUpdate().clone());
 			} else {
-				if (vitals.type == Vitals.VitalsType.Object) {
+				if (proxy.getType() == Vitals.VitalsType.Object) {
 					//logger.warning("Distance too far "+distance);
 				}
 			}
 		}
 
-		if (sendBaseUpdate) {
-			GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
-			Player player = PlayerService.getInstance().find(playerTrackData.id);
-			VitalsProxy proxy = VitalsHandler.get(player.id);
-			if (proxy != null) {
-				Vitals vitals = proxy.baseVitals.clone();
-				vitals.isBaseVitals = true;
-				toSend.addVitals(vitals);
-			}
-		}
-		
 		GameMessage msg = new GameMessage();
-		msg.vitalsContainer = toSend;
+		msg.vitalsUpdateContainer = toSend;
 		PlayerMessage.tell(msg, playerTrackData.id);
 	}
 
-	private List<Vitals> objectVitals(String zone) {
-		List<Vitals> container = new ArrayList<Vitals>();
+	private List<VitalsProxy> objectVitals(String zone) {
+		List<VitalsProxy> container = new ArrayList<VitalsProxy>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
-			if (vitalsProxy.vitals.type == Vitals.VitalsType.BuildObject || vitalsProxy.vitals.type == Vitals.VitalsType.Object) {
-				Vitals template = vitalsProxy.baseVitals;
-				if (vitalsProxy.vitals.changed == 1) {
-					resetVitalTick(vitalsProxy.vitals.entityId);
-					vitalsProxy.vitals.changed = 0;
-				} else {
-					int tick = nextVitalTick(vitalsProxy.vitals.entityId);
-					if (tick >= 10) {
-						continue;
-					}
+			if (vitalsProxy.getType() == Vitals.VitalsType.BuildObject || vitalsProxy.getType() == Vitals.VitalsType.Object) {
+				if (vitalsProxy.hasChanged()) {
+					container.add(vitalsProxy);
 				}
-				container.add(vitalsProxy.vitals);
 			}
-
 		}
 		return container;
 	}
 
-	private List<Vitals> livingVitals(String zone) {
-		List<Vitals> container = new ArrayList<Vitals>();
+	private List<VitalsProxy> livingVitals(String zone) {
+		List<VitalsProxy> container = new ArrayList<VitalsProxy>();
 		for (VitalsProxy vitalsProxy : VitalsHandler.getVitalsForZone(zone)) {
-			Vitals vitals = vitalsProxy.vitals;
 			//logger.warning("LivingVitals "+vitals.characterId+" "+vitals.health);
-			if (vitals.type == Vitals.VitalsType.Character) {
-				Vitals template = vitalsProxy.baseVitals;
-				if (vitals.changed == 1 || vitals.health < template.health || vitals.magic < template.magic
-						|| vitals.stamina < template.stamina) {
-					resetVitalTick(vitals.entityId);
-					vitals.changed = 0;
-				} else {
-					int tick = nextVitalTick(vitals.entityId);
-					if (tick >= 4) {
-						continue;
-					}
+			if (vitalsProxy.getType() == Vitals.VitalsType.Character) {
+				if (vitalsProxy.hasChanged() ||
+						vitalsProxy.get("health") < vitalsProxy.getMax("health") ||
+						vitalsProxy.get("magic") < vitalsProxy.getMax("magic") ||
+						vitalsProxy.get("stamina") < vitalsProxy.getMax("stamina")) {
+					container.add(vitalsProxy);
 				}
-				container.add(vitals);
 			}
 		}
 		return container;

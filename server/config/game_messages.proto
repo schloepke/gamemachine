@@ -16,6 +16,7 @@ local_message Vitals {
     GuardTemplate = 3;
     CitizenTemplate = 4;
     BanditTemplate = 5;
+    PlayerItemTemplate = 6;
   }
   
   enum VitalsType {
@@ -23,6 +24,7 @@ local_message Vitals {
     Character = 1;
     Object = 2;
     BuildObject = 3;
+    PlayerItem = 4;
   }
  
    
@@ -41,10 +43,9 @@ local_message Vitals {
     AbilitySpeed = 11;
   }
   
-  required string characterId = 1;
+  optional string characterId = 1;
   optional int64 lastCombat = 5;
   optional int32 dead = 6;
-  optional int32 changed = 14;
   optional string entityId = 15;
   optional VitalsType type = 18;
   optional int32 spellResist = 22;
@@ -64,8 +65,41 @@ local_message Vitals {
   optional float combatRegenMod = 36;
   optional bool inCombat = 37;
   optional string zoneName = 38;
+ optional string id = 40;
+ 
+  optional int32 spellResistMax = 41;
+  optional int32 elementalResistMax = 42;
+  optional int32 spellPenetrationMax = 43;
+  optional int32 magicRegenMax = 44;
+  optional int32 healthRegenMax = 45;
+  optional int32 staminaRegenMax = 46;
+  optional int32 armorMax = 47;
+  optional int32 magicMax = 48;
+  optional int32 healthMax = 49;
+  optional int32 staminaMax = 50;
+  optional int32 movementSpeedMax = 51;
+  optional int32 abilitySpeedMax = 52;
+  
+  optional int32 updateId = 53;
 }
 
+local_message VitalsUpdateContainer {
+  repeated VitalsUpdate vitalsUpdate = 1;
+}
+
+local_message VitalsRequest {
+  optional string entityId = 1;
+  optional Vitals.VitalsType vitalsType = 2;
+}
+
+local_message VitalsUpdate {
+  repeated string attribute = 1;
+  repeated int32 value = 2;
+  repeated int32 max = 3;
+  optional int32 dead = 4;
+  optional bool inCombat = 5;
+  optional int32 updateId = 6;
+}
 
 local_message StatusEffect {
   enum Type {
@@ -879,7 +913,6 @@ local_persistent_message PlayerItem {
   optional bool equipped = 50;
   optional Slot slot = 51;
   optional WeaponType weaponType = 52;
-  optional string passiveSkillId = 53;
 }
 
 local_message ModelInfo {
@@ -1109,6 +1142,8 @@ message GameMessage {
   optional ProcessCommand processCommand = 48;
   optional UnityInstanceStatus unityInstanceStatus = 49;
   optional CharacterUpdate characterUpdate = 50;
+  optional VitalsUpdateContainer vitalsUpdateContainer = 51;
+  optional VitalsRequest vitalsRequest = 52;
 }
 
 message GameMessages {

@@ -23,7 +23,7 @@ public class EncodingTest {
 		trackData.z = 555;
 
 		byte[] data = trackData.toByteArray();
-		logger.warn("TrackData length " + data.length);
+		//logger.warn("TrackData length " + data.length);
 
 		LinkedBuffer buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
 		final ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -33,7 +33,7 @@ public class EncodingTest {
 			output.writeInt32(1, 555, false);
 			output.writeInt32(1, 555, false);
 			data = output.toByteArray();
-			logger.warn("Raw length " + data.length);
+			//logger.warn("Raw length " + data.length);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
