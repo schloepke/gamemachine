@@ -324,7 +324,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 				
 				if (req.getUri().startsWith("/api/characters/set_item_slots")) {
-					CharacterService.instance().setItemSlots(params.get("characterId"), params.get("item_slots"));
+					CharacterService.instance().setItemSlots(params.get("playerId"), params.get("characterId"), params.get("item_slots"));
 					Ok(ctx, "OK");
 					return;
 				}

@@ -54,6 +54,12 @@ public class RequestHandler extends UntypedActor {
 		String playerId = clientMessage.getPlayer().getId();
 		String clientId = clientMessage.getClientConnection().getId();
 		Authentication.unregisterPlayer(playerId);
+		
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
+		if (gameEntityManager != null) {
+			gameEntityManager.OnPlayerDisConnected(playerId);
+		}
+		
 		ClientManagerUnregister unregister = new ClientManagerUnregister();
 		unregister.setRegisterType("client");
 		unregister.setName(clientId);

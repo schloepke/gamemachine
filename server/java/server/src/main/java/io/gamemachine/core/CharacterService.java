@@ -115,7 +115,7 @@ public class CharacterService {
 		return character;
 	}
 
-	public void setItemSlots(String characterId, String slotsData) {
+	public void setItemSlots(String playerId, String characterId, String slotsData) {
 		Character character = find(characterId);
 		character.setItemSlotData(slotsData);
 		Character.db().save(character);
@@ -123,7 +123,7 @@ public class CharacterService {
 		byte[] bytes = Base64.decodeBase64(slotsData);
 		ItemSlots itemSlots = ItemSlots.parseFrom(bytes);
 		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
-		gameEntityManager.ItemSlotsUpdated(characterId, itemSlots);
+		gameEntityManager.ItemSlotsUpdated(playerId, characterId, itemSlots);
 		
 		GameMessage gameMessage = new GameMessage();
 		CharacterUpdate update = new CharacterUpdate();

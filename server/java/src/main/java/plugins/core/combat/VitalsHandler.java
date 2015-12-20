@@ -8,12 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.Commands;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
@@ -72,6 +74,9 @@ public class VitalsHandler extends GameMessageActor {
 			vitals.zoneName = zone;
 			VitalsProxy proxy = new VitalsProxy(vitals);
 			proxies.put(vitals.entityId, proxy);
+			
+			ItemSlots itemSlots = CharacterService.instance().getItemSlots(player.characterId);
+			gameEntityManager.ItemSlotsUpdated(entityId, player.characterId, itemSlots);
 		}
 	}
 
@@ -136,5 +141,6 @@ public class VitalsHandler extends GameMessageActor {
 	public void onPlayerDisconnect(String playerId) {
 		logger.warn("PlayerDisconnect " + playerId);
 		VitalsHandler.remove(playerId);
+		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
 	}
 }

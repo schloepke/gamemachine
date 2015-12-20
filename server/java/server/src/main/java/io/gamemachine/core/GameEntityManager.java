@@ -13,5 +13,5 @@ public interface GameEntityManager {
 	void OnPlayerDisConnected(String playerId);
 	int getEffectValue(StatusEffect statusEffect, String playerSkillId, String characterId);
 	void skillUsed(String playerSkillId, String characterId);
-	void ItemSlotsUpdated(String characterId, ItemSlots itemSlots);
+	void ItemSlotsUpdated(String playerId, String characterId, ItemSlots itemSlots);
 }

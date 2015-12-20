@@ -7,7 +7,7 @@ local_message VitalsContainer {
   repeated Vitals vitals = 1;
 }
 
-local_message Vitals {
+local_persistent_message Vitals {
 
   enum Template {
     PlayerTemplate = 0;
@@ -81,6 +81,7 @@ local_message Vitals {
   optional int32 abilitySpeedMax = 52;
   
   optional int32 updateId = 53;
+  optional int32 recordId = 54;
 }
 
 local_message VitalsUpdateContainer {

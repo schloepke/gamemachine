@@ -27,7 +27,8 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	private List<Vitals> baseVitals;
 	public Map<Integer, BuildObject> buildObjects = new ConcurrentHashMap<Integer, BuildObject>();
 	private CombatDamage combatDamage;
-
+	private ItemVitals itemVitals;
+	
 	public SimpleGameEntityManager() {
 		baseVitals = ClientDbLoader.getVitalsContainer().vitals;
 		for (BuildObject buildObject : ClientDbLoader.getBuildObjects().getBuildObjectList()) {
@@ -35,6 +36,7 @@ public class SimpleGameEntityManager implements GameEntityManager {
 		}
 
 		combatDamage = new CombatDamage();
+		itemVitals = new ItemVitals();
 	}
 
 	private Vitals getVitalsTemplate(Vitals.Template template) {
@@ -92,20 +94,17 @@ public class SimpleGameEntityManager implements GameEntityManager {
 
 	@Override
 	public void OnPlayerConnected(String playerId) {
-		logger.warn("OnPlayerConnect " + playerId);
-		Player player = PlayerService.getInstance().find(playerId);
+		itemVitals.removePlayer(playerId);
 	}
 
 	@Override
 	public void OnPlayerDisConnected(String playerId) {
-		// TODO Auto-generated method stub
-
+		itemVitals.removePlayer(playerId);
 	}
 
 	@Override
-	public void ItemSlotsUpdated(String characterId, ItemSlots itemSlots) {
-		// TODO Auto-generated method stub
-		
+	public void ItemSlotsUpdated(String playerId, String characterId, ItemSlots itemSlots) {
+		itemVitals.ItemSlotsUpdated(playerId, characterId, itemSlots);
 	}
 
 }
