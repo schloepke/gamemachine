@@ -129,7 +129,7 @@ public class CharacterService {
 		CharacterUpdate update = new CharacterUpdate();
 		update.character = character;
 		gameMessage.characterUpdate = update;
-		PlayerMessage.broadcast(gameMessage, character.zone.name);
+		PlayerMessage.broadcast(gameMessage.clone(), character.zone.name);
 	}
 	
 	public void SetUmaData(Character character, String umaData) {

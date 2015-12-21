@@ -9,12 +9,14 @@ import akka.event.LoggingAdapter;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerMessage;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.SiegeCommand;
 import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.Zone;
 import plugins.landrush.BuildObjectHandler;
 
 public class SiegeHandler extends GameMessageActor {
@@ -23,7 +25,7 @@ public class SiegeHandler extends GameMessageActor {
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
 	public Map<String, String> sieges = new HashMap<String, String>();
-
+	
 	@Override
 	public void awake() {
 		// TODO Auto-generated method stub
@@ -69,7 +71,8 @@ public class SiegeHandler extends GameMessageActor {
 	}
 
 	private void fireSiege(GameMessage gameMessage) {
-		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId, zone.name);
 		if (existing != null) {
 			if (canRelease(existing.id, existing.ownerId)) {
 				gameMessage.siegeCommand.result = SiegeCommand.Result.Approved;
@@ -80,7 +83,8 @@ public class SiegeHandler extends GameMessageActor {
 	}
 	
 	private void releaseSiege(GameMessage gameMessage) {
-		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId, zone.name);
 		if (existing != null) {
 			if (canRelease(existing.id, existing.ownerId)) {
 				sieges.remove(existing.id);
@@ -93,7 +97,8 @@ public class SiegeHandler extends GameMessageActor {
 	}
 
 	private void useSiege(GameMessage gameMessage) {
-		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId);
+		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		BuildObject existing = BuildObjectHandler.find(gameMessage.siegeCommand.buildObjectId, zone.name);
 		if (existing != null) {
 			if (canUse(existing.id, existing.ownerId) || canRelease(existing.id, existing.ownerId)) {
 				sieges.put(existing.id, characterId);

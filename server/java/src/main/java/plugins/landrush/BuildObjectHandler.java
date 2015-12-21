@@ -2,6 +2,7 @@ package plugins.landrush;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -29,6 +30,7 @@ import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.net.Connection;
 import io.gamemachine.objectdb.Cache;
+import io.gamemachine.regions.ZoneService;
 import plugins.core.combat.VitalsHandler;
 
 // Player initial load get everything
@@ -50,62 +52,17 @@ public class BuildObjectHandler extends GameMessageActor {
 	public static String name = BuildObjectHandler.class.getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(BuildObjectHandler.class);
 
-	public static Map<String, BuildObject> objectIndex = new ConcurrentHashMap<String, BuildObject>();
-	public static AtomicInteger updateCount = new AtomicInteger();
-	public static Cache<String, Integer> versionCache = new Cache<String, Integer>(60, 10000);
-	public static Map<String, Map<String, Integer>> playerVersions = new ConcurrentHashMap<String, Map<String, Integer>>();
+	private BuildObjectCache cache;
+	private Zone zone;
+	
+	
 
-	@Override
-	public void awake() {
-		load();
-
-	}
-
-	@Override
-	public void onGameMessage(GameMessage gameMessage) {
-		BuildObjects buildObjects = gameMessage.buildObjects;
-		if (exactlyOnce(gameMessage)) {
-			BuildObject bo = gameMessage.buildObjects.buildObject.get(0);
-			processBuildObject(bo, characterId);
-			setReply(gameMessage);
-		} else {
-			if (buildObjects.action == BuildObjects.Action.GetStatus) {
-				buildObjects.currentUpdate = updateCount.get();
-				PlayerMessage.tell(gameMessage, playerId);
-			} else if (buildObjects.buildObject != null && buildObjects.buildObject.size() >= 1) {
-
-				if (buildObjects.action == BuildObjects.Action.HttpSave) {
-					for (BuildObject bo : buildObjects.buildObject) {
-						processBuildObject(bo, characterId);
-					}
-
-				} else {
-					BuildObject bo = buildObjects.buildObject.get(0);
-					if (bo != null && bo.action == BuildObject.Action.SetHealth) {
-						setHealth(bo, characterId);
-					}
-				}
-			}
-
-		}
-	}
-
-	private void processBuildObject(BuildObject bo, String characterId) {
-		if (bo.action == BuildObject.Action.UpdateProp) {
-			updateDoor(bo, characterId);
-		} else if (bo.action == BuildObject.Action.Save) {
-			save(bo, characterId, characterId);
-		} else {
-			logger.warn("Invalid action " + bo.action);
-		}
-	}
-
-	private static Integer getPlayerVersion(String characterId, String id) {
-		if (!playerVersions.containsKey(characterId)) {
+	private static Integer getPlayerVersion(String characterId, String id, BuildObjectCache cache) {
+		if (!cache.playerVersions.containsKey(characterId)) {
 			logger.warn("No version info for " + characterId);
 			return null;
 		}
-		Map<String, Integer> versions = playerVersions.get(characterId);
+		Map<String, Integer> versions = cache.playerVersions.get(characterId);
 		if (versions.containsKey(id)) {
 			return versions.get(id);
 		} else {
@@ -113,30 +70,33 @@ public class BuildObjectHandler extends GameMessageActor {
 		}
 	}
 
-	private static void setPlayerVersion(String characterId, String id, int version) {
-		if (!playerVersions.containsKey(characterId)) {
-			playerVersions.put(characterId, new ConcurrentHashMap<String, Integer>());
+	private static void setPlayerVersion(String characterId, String id, int version, BuildObjectCache cache) {
+		if (!cache.playerVersions.containsKey(characterId)) {
+			cache.playerVersions.put(characterId, new ConcurrentHashMap<String, Integer>());
 		}
-		Map<String, Integer> versions = playerVersions.get(characterId);
+		Map<String, Integer> versions = cache.playerVersions.get(characterId);
 		versions.put(id, version);
 	}
 
 	public static byte[] getBuildObjects(String playerId, boolean all) {
+		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		BuildObjectCache cache = BuildObjectCache.get(zone.name);
+		
 		BuildObjects buildObjects = new BuildObjects();
 		String characterId = PlayerService.getInstance().getCharacterId(playerId);
 
 		if (all) {
-			playerVersions.put(characterId, new ConcurrentHashMap<String, Integer>());
-			for (BuildObject bo : objectIndex.values()) {
+			cache.playerVersions.put(characterId, new ConcurrentHashMap<String, Integer>());
+			for (BuildObject bo : cache.objectIndex.values()) {
 				buildObjects.addBuildObject(bo);
-				setPlayerVersion(characterId, bo.id, bo.version);
+				setPlayerVersion(characterId, bo.id, bo.version,cache);
 			}
 		} else {
-			Map<String, Integer> versions = versionCache.asMap();
+			Map<String, Integer> versions = cache.versionCache.asMap();
 
 			for (String key : versions.keySet()) {
 				Integer version = versions.get(key);
-				Integer playerVersion = getPlayerVersion(characterId, key);
+				Integer playerVersion = getPlayerVersion(characterId, key,cache);
 
 				// Up to date
 				if (playerVersion == version) {
@@ -145,7 +105,7 @@ public class BuildObjectHandler extends GameMessageActor {
 
 				// logger.warn(key +" = "+version + " "+ playerVersion);
 
-				BuildObject buildObject = objectIndex.get(key);
+				BuildObject buildObject = cache.objectIndex.get(key);
 
 				// Only need to send changes not initiated by player
 				if (buildObject.ownerId.equals(characterId)) {
@@ -162,77 +122,44 @@ public class BuildObjectHandler extends GameMessageActor {
 				}
 
 				buildObjects.addBuildObject(buildObject);
-				setPlayerVersion(characterId, key, version);
+				setPlayerVersion(characterId, key, version,cache);
 			}
 		}
 
 		return buildObjects.toByteArray();
 	}
 
-	private static void broadcast(GameMessage gameMessage, String zone) {
-		Grid grid = GridService.getInstance().getGrid(zone, "default");
-		for (TrackData trackData : grid.getAll()) {
-			if (trackData.entityType != TrackData.EntityType.Player) {
-				continue;
-			}
-			PlayerMessage.tell(gameMessage.clone(), trackData.id);
-		}
+	public static boolean exists(String id, String zone) {
+		return find(id, zone) != null;
 	}
-
-	public static BuildObject updateRotation(BuildObject buildObject, String playerId) {
-		String characterId = PlayerService.getInstance().getCharacterId(playerId);
-		BuildObject existing = find(buildObject.id);
-		if (existing == null) {
-			return null;
-		}
-
-		existing.rx = buildObject.rx;
-		existing.ry = buildObject.ry;
-		existing.rz = buildObject.rz;
-		existing.rw = buildObject.rw;
-		//save(existing, characterId, characterId);
-		return existing;
-	}
-
-	private void updateDoor(BuildObject buildObject, String characterId) {
-		BuildObject existing = find(buildObject.id);
-		if (existing == null) {
-			return;
-		}
-
-		existing.doorStatus = buildObject.doorStatus;
-		save(existing, characterId, characterId);
-
-		GameMessage gameMessage = new GameMessage();
-		gameMessage.buildObjects = new BuildObjects();
-		gameMessage.buildObjects.action = BuildObjects.Action.PropUpdate;
-		gameMessage.buildObjects.getBuildObjectList().add(existing);
-		broadcast(gameMessage, existing.zone);
-	}
-
-	public static BuildObject find(String id) {
-		if (!objectIndex.containsKey(id)) {
-			BuildObjectDatas data = BuildObjectDatas.db().findFirst("build_object_datas_id = ?", id);
+	
+	public static BuildObject find(String id, String zone) {
+		BuildObjectCache cache = BuildObjectCache.get(zone);
+		
+		if (!cache.objectIndex.containsKey(id)) {
+			BuildObjectDatas data = BuildObjectDatas.db().findFirst("build_object_datas_id = ? AND build_object_datas_zone = ?", id, zone);
 			if (data == null) {
 				return null;
 			} else {
 				byte[] bytes = Base64.decodeBase64(data.data);
 				BuildObject buildObject = BuildObject.parseFrom(bytes);
-				objectIndex.put(id, buildObject);
+				cache.objectIndex.put(id, buildObject);
 			}
 		}
-		return objectIndex.get(id);
+		return cache.objectIndex.get(id);
 	}
 
-	public static void save(BuildObject buildObject, String characterId, String origin) {
-		Zone zone = CharacterService.instance().getZone(characterId);
-
+	private static void save(BuildObject buildObject, String characterId, String origin) {
+		Zone zone =  CharacterService.instance().getZone(characterId);
+		BuildObjectCache cache = BuildObjectCache.get(zone.name);
+		
 		BuildObject existing = null;
-		BuildObjectDatas data = BuildObjectDatas.db().findFirst("build_object_datas_id = ?", buildObject.id);
+		BuildObjectDatas data = BuildObjectDatas.db().findFirst("build_object_datas_id = ? AND build_object_datas_zone = ?", buildObject.id, zone.name);
 		if (data == null) {
 			data = new BuildObjectDatas();
 			data.id = buildObject.id;
 			data.characterId = characterId;
+			data.zone = zone.name;
 			buildObject.version += 1;
 		} else {
 			byte[] bytes = Base64.decodeBase64(data.data);
@@ -254,14 +181,14 @@ public class BuildObjectHandler extends GameMessageActor {
 		BuildObjectDatas.db().save(data, true);
 		io.gamemachine.orm.models.BuildObjectDatas.commitTransaction();
 
-		versionCache.set(buildObject.id, buildObject.version);
+		cache.versionCache.set(buildObject.id, buildObject.version);
 		if (origin.equals(characterId)) {
-			setPlayerVersion(characterId, buildObject.id, buildObject.version);
+			setPlayerVersion(characterId, buildObject.id, buildObject.version,cache);
 		}
 		
 
-		objectIndex.put(buildObject.id, buildObject);
-		updateCount.getAndIncrement();
+		cache.objectIndex.put(buildObject.id, buildObject);
+		cache.updateCount.getAndIncrement();
 
 		if (buildObject.state == BuildObject.State.Removed) {
 			removeGridAndVitals(buildObject);
@@ -269,46 +196,16 @@ public class BuildObjectHandler extends GameMessageActor {
 			setGridAndVitals(buildObject);
 		}
 	}
-
-	public static boolean exists(String id) {
-		return find(id) != null;
-	}
-
-	private void load() {
-		for (BuildObjectDatas data : BuildObjectDatas.db().findAll()) {
-			byte[] bytes = Base64.decodeBase64(data.data);
-			BuildObject buildObject = BuildObject.parseFrom(bytes);
-			if (buildObject.state == BuildObject.State.Removed) {
-				continue;
-			}
-			objectIndex.put(buildObject.id, buildObject);
-			setGridAndVitals(buildObject);
-		}
-		logger.warn(objectIndex.size() + " build objects loaded");
-	}
-
-	public static void setHealth(String id, int health) {
-		BuildObjects buildObjects = new BuildObjects();
-		BuildObject buildObject = new BuildObject();
-		buildObject.id = id;
-		buildObject.health = health;
-		buildObject.action = BuildObject.Action.SetHealth;
-		buildObjects.addBuildObject(buildObject);
-		GameMessage gameMessage = new GameMessage();
-		gameMessage.buildObjects = buildObjects;
-		BuildObjectHandler.tell(gameMessage, BuildObjectHandler.name);
-	}
-
-	private void setHealth(BuildObject buildObject, String characterId) {
-		BuildObject existing = find(buildObject.id);
+	
+	public static void setHealth(String id, int health, String zone) {
+		BuildObject existing = find(id, zone);
 		if (existing == null) {
 			return;
 		}
-		logger.warn("setHealth " + buildObject.health);
-		if (buildObject.health <= 0) {
+		if (health <= 0) {
 			existing.state = BuildObject.State.Removed;
 		}
-		existing.health = buildObject.health;
+		existing.health = health;
 		save(existing, existing.ownerId, "system");
 	}
 
@@ -333,6 +230,110 @@ public class BuildObjectHandler extends GameMessageActor {
 			}
 		}
 	}
+	
+	private static void broadcast(GameMessage gameMessage, String zone) {
+		Grid grid = GridService.getInstance().getGrid(zone, "default");
+		for (TrackData trackData : grid.getAll()) {
+			if (trackData.entityType != TrackData.EntityType.Player) {
+				continue;
+			}
+			PlayerMessage.tell(gameMessage.clone(), trackData.id);
+		}
+	}
+
+	public static BuildObject updateRotation(BuildObject buildObject, String playerId) {
+		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		BuildObject existing = find(buildObject.id, zone.name);
+		if (existing == null) {
+			return null;
+		}
+
+		existing.rx = buildObject.rx;
+		existing.ry = buildObject.ry;
+		existing.rz = buildObject.rz;
+		existing.rw = buildObject.rw;
+		//save(existing, characterId, characterId);
+		return existing;
+	}
+
+	@Override
+	public void awake() {
+		for (Zone z : ZoneService.staticZones()) {
+			zone = z;
+			cache = BuildObjectCache.get(zone.name);
+			load();
+		}
+		cache = null;
+	}
+
+	@Override
+	public void onGameMessage(GameMessage gameMessage) {
+		zone =  CharacterService.instance().getZone(characterId);
+		cache = BuildObjectCache.get(zone.name);
+		
+		BuildObjects buildObjects = gameMessage.buildObjects;
+		if (exactlyOnce(gameMessage)) {
+			BuildObject bo = gameMessage.buildObjects.buildObject.get(0);
+			processBuildObject(bo, characterId);
+			setReply(gameMessage);
+		} else {
+			if (buildObjects.action == BuildObjects.Action.GetStatus) {
+				buildObjects.currentUpdate = cache.updateCount.get();
+				PlayerMessage.tell(gameMessage, playerId);
+			} else if (buildObjects.buildObject != null && buildObjects.buildObject.size() >= 1) {
+
+				if (buildObjects.action == BuildObjects.Action.HttpSave) {
+					for (BuildObject bo : buildObjects.buildObject) {
+						processBuildObject(bo, characterId);
+					}
+
+				}
+			}
+		}
+	}
+
+	private void processBuildObject(BuildObject bo, String characterId) {
+		if (bo.action == BuildObject.Action.UpdateProp) {
+			updateDoor(bo);
+		} else if (bo.action == BuildObject.Action.Save) {
+			save(bo, characterId, characterId);
+		} else {
+			logger.warn("Invalid action " + bo.action);
+		}
+	}
+	
+	private void updateDoor(BuildObject buildObject) {
+		BuildObject existing = find(buildObject.id, zone.name);
+		if (existing == null) {
+			return;
+		}
+
+		existing.doorStatus = buildObject.doorStatus;
+		save(existing, characterId, characterId);
+
+		GameMessage gameMessage = new GameMessage();
+		gameMessage.buildObjects = new BuildObjects();
+		gameMessage.buildObjects.action = BuildObjects.Action.PropUpdate;
+		BuildObject reply = buildObject.clone();
+		gameMessage.buildObjects.getBuildObjectList().add(reply);
+		broadcast(gameMessage, existing.zone);
+	}
+
+	private void load() {
+		List<BuildObjectDatas> datas = BuildObjectDatas.db().where("build_object_datas_zone = ?", zone.name);
+		for (BuildObjectDatas data : datas) {
+			byte[] bytes = Base64.decodeBase64(data.data);
+			BuildObject buildObject = BuildObject.parseFrom(bytes);
+			if (buildObject.state == BuildObject.State.Removed) {
+				continue;
+			}
+			cache.objectIndex.put(buildObject.id, buildObject);
+			setGridAndVitals(buildObject);
+		}
+		logger.warn(cache.objectIndex.size() + " build objects loaded");
+	}
+
+	
 
 	@Override
 	public void onTick(String message) {

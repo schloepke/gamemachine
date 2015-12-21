@@ -7,7 +7,7 @@ import io.gamemachine.messages.Vitals;
 public interface GameEntityManager {
 
 	Vitals getBaseVitals(String characterId);
-	Vitals getBaseVitals(String entityId, Vitals.VitalsType vitalsType);
+	Vitals getBaseVitals(String entityId, Vitals.VitalsType vitalsType, String zone);
 	void OnCharacterCreated(Character character, Object data);
 	void OnPlayerConnected(String playerId);
 	void OnPlayerDisConnected(String playerId);

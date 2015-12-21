@@ -179,21 +179,23 @@ public class EntityTracking extends UntypedActor {
 
 	private void SendNeighbors(Grid grid, int x, int z, Player player, EntityType neighborType, int neighborsFlag) {
 		List<TrackData> trackDatas;
-		boolean isAgentController = (player.role == Player.Role.AgentController);
+//		boolean isAgentController = (player.role == Player.Role.AgentController);
+//
+//		if (neighborType != null && neighborType == EntityType.All) {
+//			// Only agents have access to entire grid
+//			if (!isAgentController) {
+//				logger.warn("Unauthorized attempt to get entire grid");
+//				return;
+//			}
+//			trackDatas = grid.getAll();
+//		} else {
+//			trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
+//		}
 
-		if (neighborType != null && neighborType == EntityType.All) {
-			// Only agents have access to entire grid
-			if (!isAgentController) {
-				logger.warn("Unauthorized attempt to get entire grid");
-				return;
-			}
-			trackDatas = grid.getAll();
-		} else {
-			trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
-		}
-
+		trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
+		
 		if (trackDatas.size() >= 1) {
-			toNeighbors(player, trackDatas, isAgentController);
+			toNeighbors(player, trackDatas, false);
 		}
 	}
 

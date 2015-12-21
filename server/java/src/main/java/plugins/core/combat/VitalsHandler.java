@@ -84,7 +84,7 @@ public class VitalsHandler extends GameMessageActor {
 		GameEntityManager gameEntityManager = GameEntityManagerService.instance().getGameEntityManager();
 
 		if (!proxies.containsKey(entityId)) {
-			Vitals vitals = gameEntityManager.getBaseVitals(entityId, vitalsType);
+			Vitals vitals = gameEntityManager.getBaseVitals(entityId, vitalsType, zone);
 			vitals.zoneName = zone;
 			vitals.entityId = entityId;
 			VitalsProxy proxy = new VitalsProxy(vitals);

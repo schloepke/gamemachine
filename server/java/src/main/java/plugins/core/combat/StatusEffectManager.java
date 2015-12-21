@@ -3,10 +3,7 @@ package plugins.core.combat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,22 +19,17 @@ import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.PlayerSkill;
+import io.gamemachine.messages.RegionInfo;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
-import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
-import io.gamemachine.messages.RegionInfo;
-import plugins.landrush.BuildObjectHandler;
-import scala.concurrent.duration.Duration;
 
 public class StatusEffectManager extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatusEffectManager.class);
 	public static String name = StatusEffectManager.class.getSimpleName();
-	private Map<String, Long> deathTimer = new ConcurrentHashMap<String, Long>();
-	private long deathTime = 15000L;
-	private long outOfCombatTime = 10000L;
+	
 	public static List<GridSet> gridsets = new ArrayList<GridSet>();
 	public static Set<String> handlerZones = new HashSet<String>();
 	
@@ -193,105 +185,19 @@ public class StatusEffectManager extends UntypedActor {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "build_objects", zone),
 				PassiveEffectHandler.actorName("build_objects", zone));
 		
+		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsRegen.class, "default", zone),
+				VitalsRegen.actorName("default", zone));
+		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsRegen.class, "build_objects", zone),
+				VitalsRegen.actorName("build_objects", zone));
+		
 		handlerZones.add(zone);
 	}
-	
-	@Override
-	public void onReceive(Object message) throws Exception {
-		if (message instanceof String) {
-			if (message.equals("vitals_tick")) {
-				updateVitals();
-				tick(1000L, "vitals_tick");
-			}
-		}
-	}
+
 
 	@Override
-	public void preStart() {
-		tick(1000L, "vitals_tick");
-	}
-
-	public void tick(long delay, String message) {
-		getContext().system().scheduler().scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS), getSelf(),
-				message, getContext().dispatcher(), null);
-	}
-	
-	private void updateVitals() {
-
-		for (VitalsProxy vitalsProxy : VitalsHandler.getVitals()) {
-
-			int maxStamina = vitalsProxy.getMax("stamina");
-			int maxMagic = vitalsProxy.getMax("magic");
-			int maxHealth = vitalsProxy.getMax("health");
-
-			if (vitalsProxy.isDead()) {
-				if (deathTimer.containsKey(vitalsProxy.getEntityId())) {
-					Long timeDead = deathTimer.get(vitalsProxy.getEntityId());
-					Long timer = deathTime;
-					if ((System.currentTimeMillis() - timeDead) > timer) {
-						revive(vitalsProxy);
-						deathTimer.remove(vitalsProxy.getEntityId());
-					}
-				}
-				continue;
-			}
-
-			if (vitalsProxy.get("health") <= 0) {
-				die(vitalsProxy);
-				if (vitalsProxy.getType() != Vitals.VitalsType.BuildObject) {
-					deathTimer.put(vitalsProxy.getEntityId(), System.currentTimeMillis());
-				}
-				
-				continue;
-			}
-
-			int healthRegen = vitalsProxy.getMax("healthRegen");
-			int magicRegen = vitalsProxy.getMax("magicRegen");
-			int staminaRegen = vitalsProxy.getMax("staminaRegen");
-			
-			long lastCombat = System.currentTimeMillis() - vitalsProxy.getLastCombat();
-			if (lastCombat < outOfCombatTime && vitalsProxy.getCombatRegenMod() > 0) {
-				vitalsProxy.setInCombat(true);
-				
-				healthRegen = Math.round(healthRegen * (vitalsProxy.getCombatRegenMod() / 100f));
-				magicRegen = Math.round(magicRegen * (vitalsProxy.getCombatRegenMod()/100f));
-				staminaRegen = Math.round(staminaRegen * (vitalsProxy.getCombatRegenMod()/100f));
-				
-			} else {
-				vitalsProxy.setInCombat(false);
-			}
-			
-			if (vitalsProxy.get("health") < maxHealth && healthRegen > 0) {
-				vitalsProxy.add("health", healthRegen);
-				if (vitalsProxy.getType() == Vitals.VitalsType.BuildObject) {
-					BuildObjectHandler.setHealth(vitalsProxy.getEntityId(), vitalsProxy.get("health"));
-				}
-			}
-
-			if (vitalsProxy.get("stamina") < maxStamina && staminaRegen > 0) {
-				vitalsProxy.add("stamina",staminaRegen);
-			}
-
-			if (vitalsProxy.get("magic") < maxMagic && magicRegen > 0) {
-				vitalsProxy.add("magic", magicRegen);
-			}
-
-		}
-	}
-	
-	private void die(VitalsProxy vitalsProxy) {
-		logger.warn("Die "+vitalsProxy.getEntityId());
-		vitalsProxy.setDead(1);
-		vitalsProxy.set("health", 0);
-		vitalsProxy.set("stamina", 0);
-		vitalsProxy.set("magic", 0);
-		vitalsProxy.setInCombat(false);
-	}
-
-	private void revive(VitalsProxy vitalsProxy) {
-		logger.warn("Revive "+vitalsProxy.getEntityId());
-		vitalsProxy.setDead(0);
-		vitalsProxy.reset();
+	public void onReceive(Object arg0) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }

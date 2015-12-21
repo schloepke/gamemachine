@@ -108,7 +108,7 @@ public class CombatHandler extends GameMessageActor {
 				
 				// No character = Object/vehicle/etc..
 				if (character == null) {
-					if (BuildObjectHandler.exists(skillRequest.targetId)) {
+					if (BuildObjectHandler.exists(skillRequest.targetId, zone.name)) {
 						skillRequest.targetType = SkillRequest.TargetType.BuildObject;
 					} else {
 						skillRequest.targetType = SkillRequest.TargetType.Object;

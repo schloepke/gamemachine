@@ -7,17 +7,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Strings;
-
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameEntityManager;
-import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.BuildObject;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.ItemSlots;
-import io.gamemachine.messages.Player;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.Vitals;
+import plugins.combat.ItemVitals.ItemVitalsRequest;
 import plugins.core.combat.ClientDbLoader;
 import plugins.landrush.BuildObjectHandler;
 
@@ -27,7 +24,6 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	private List<Vitals> baseVitals;
 	public Map<Integer, BuildObject> buildObjects = new ConcurrentHashMap<Integer, BuildObject>();
 	private CombatDamage combatDamage;
-	private ItemVitals itemVitals;
 	
 	public SimpleGameEntityManager() {
 		baseVitals = ClientDbLoader.getVitalsContainer().vitals;
@@ -36,7 +32,6 @@ public class SimpleGameEntityManager implements GameEntityManager {
 		}
 
 		combatDamage = new CombatDamage();
-		itemVitals = new ItemVitals();
 	}
 
 	private Vitals getVitalsTemplate(Vitals.Template template) {
@@ -60,11 +55,11 @@ public class SimpleGameEntityManager implements GameEntityManager {
 	}
 
 	@Override
-	public Vitals getBaseVitals(String entityId, Vitals.VitalsType vitalsType) {
+	public Vitals getBaseVitals(String entityId, Vitals.VitalsType vitalsType, String zone) {
 		if (vitalsType == Vitals.VitalsType.BuildObject) {
 			Vitals vitals = getVitalsTemplate(Vitals.Template.BuildObjectTemplate);
 
-			BuildObject buildObject = BuildObjectHandler.find(entityId);
+			BuildObject buildObject = BuildObjectHandler.find(entityId, zone);
 			if (buildObject == null) {
 				logger.warn("Null build object "+entityId);
 				return vitals;
@@ -94,17 +89,28 @@ public class SimpleGameEntityManager implements GameEntityManager {
 
 	@Override
 	public void OnPlayerConnected(String playerId) {
-		itemVitals.removePlayer(playerId);
+		ItemVitalsRequest request = new ItemVitals.ItemVitalsRequest();
+		request.playerId = playerId;
+		request.action = "remove";
+		ItemVitals.tell(request);
 	}
 
 	@Override
 	public void OnPlayerDisConnected(String playerId) {
-		itemVitals.removePlayer(playerId);
+		ItemVitalsRequest request = new ItemVitals.ItemVitalsRequest();
+		request.playerId = playerId;
+		request.action = "remove";
+		ItemVitals.tell(request);
 	}
 
 	@Override
 	public void ItemSlotsUpdated(String playerId, String characterId, ItemSlots itemSlots) {
-		itemVitals.ItemSlotsUpdated(playerId, characterId, itemSlots);
+		ItemVitalsRequest request = new ItemVitals.ItemVitalsRequest();
+		request.playerId = playerId;
+		request.characterId = characterId;
+		request.itemSlots = itemSlots;
+		request.action = "update";
+		ItemVitals.tell(request);
 	}
 
 }

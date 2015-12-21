@@ -278,7 +278,7 @@ public class ActiveEffectHandler extends UntypedActor {
 
 		if (value > 0) {
 			if (targetProxy.getType() == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
-				BuildObjectHandler.setHealth(targetProxy.getEntityId(), targetProxy.get("health"));
+				BuildObjectHandler.setHealth(targetProxy.getEntityId(), targetProxy.get("health"), originProxy.getZoneName());
 			}
 
 			logger.warning(statusEffect.id + " target " + targetProxy.getEntityId() + " damage " + value + " type "

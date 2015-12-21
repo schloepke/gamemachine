@@ -10,7 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Strings;
 
-import io.gamemachine.core.PlayerService;
+import akka.actor.ActorSelection;
+import akka.actor.UntypedActor;
+import io.gamemachine.core.ActorUtil;
 import io.gamemachine.messages.ItemSlot;
 import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Vitals;
@@ -18,12 +20,26 @@ import plugins.core.combat.ClientDbLoader;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
 
-public class ItemVitals {
+public class ItemVitals extends UntypedActor {
 
+	public static class ItemVitalsRequest {
+		public String playerId;
+		public String characterId;
+		public ItemSlots itemSlots;
+		public String action;
+	}
+	
+	public static String name = ItemVitals.class.getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(ItemVitals.class);
-	private Map<String,Vitals> vitalsIndex = new ConcurrentHashMap<String,Vitals>();
-	private Map<String,ConcurrentHashMap<String,Vitals>> characterItemVitals = new ConcurrentHashMap<String,ConcurrentHashMap<String,Vitals>>();
+	private static Map<String,Vitals> vitalsIndex = new ConcurrentHashMap<String,Vitals>();
+	private static Map<String,ConcurrentHashMap<String,Vitals>> characterItemVitals = new ConcurrentHashMap<String,ConcurrentHashMap<String,Vitals>>();
 	private List<Vitals> vitalsTemplates;
+	
+	
+	public static void tell(ItemVitalsRequest request) {
+		ActorSelection sel = ActorUtil.getSelectionByName(name);
+		sel.tell(request, null);
+	}
 	
 	public ItemVitals() {
 		vitalsTemplates = ClientDbLoader.getVitalsContainer().vitals;
@@ -40,7 +56,7 @@ public class ItemVitals {
 		return characterItemVitals.get(characterId);
 	}
 	
-	public Vitals getTemplate(String playerItemName) {
+	private Vitals getTemplate(String playerItemName) {
 		for (Vitals vitals : vitalsTemplates) {
 			if (Strings.isNullOrEmpty(vitals.id)) {
 				continue;
@@ -83,7 +99,7 @@ public class ItemVitals {
 		}
 	}
 	
-	public void ItemSlotsUpdated(String playerId, String characterId, ItemSlots itemSlots) {
+	private void ItemSlotsUpdated(String playerId, String characterId, ItemSlots itemSlots) {
 		Map<String,Vitals> itemVitals = getPlayerItemVitals(playerId);
 		for (String playerItemId : itemVitals.keySet()) {
 			Vitals vitals = itemVitals.get(playerItemId);
@@ -97,6 +113,16 @@ public class ItemVitals {
 			itemVitals.put(slot.playerItemId, vitals);
 		}
 		
+	}
+
+	@Override
+	public void onReceive(Object message) throws Exception {
+		ItemVitalsRequest request = (ItemVitalsRequest)message;
+		if (request.action.equals("update")) {
+			ItemSlotsUpdated(request.playerId, request.characterId, request.itemSlots);
+		} else if (request.action.equals("remove")) {
+			removePlayer(request.playerId);
+		}
 	}
 	
 }

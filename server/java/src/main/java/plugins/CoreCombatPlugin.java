@@ -5,6 +5,7 @@ import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameMachineLoader;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
+import plugins.combat.ItemVitals;
 import plugins.core.combat.ClientDbLoader;
 import plugins.core.combat.CombatHandler;
 import plugins.core.combat.PlayerSkillHandler;
@@ -34,6 +35,8 @@ public class CoreCombatPlugin extends Plugin {
 		ActorUtil.createActor(CombatHandler.class, CombatHandler.name);
 		
 		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsSender.class), VitalsSender.class.getSimpleName());
+		
+		GameMachineLoader.getActorSystem().actorOf(Props.create(ItemVitals.class), ItemVitals.name);
 		
 		GameMessageRoute.add(SiegeHandler.name,SiegeHandler.name,false);
 		ActorUtil.createActor(SiegeHandler.class,SiegeHandler.name);
