@@ -8,13 +8,18 @@ LandRush is the companion to Game Machine for the Unity client.  It's been in de
 testing it with a small group.  Core features are as follows.
 
 - Runtime world building/terraforming.  This provides a framework for placing objects in the world that are fully destructable by the combat system.  Also includes terraforming and underground building.  Create huge underground structures.
+- Player skill system.
+- Player items.
+- Player attributes/vitals.
 - Client side combat system that works with the server combat system.  Advanced targeting/hitbox system.
 - Siege combat.
 - Harvesting/Inventory/Crafting
 
-All of the above is of course multiplayer.  Siege weapons rotations and firing is all server authoritative and other players see exactly what you see.
+Combat system is flexible enough to handle most any type of system you can think of.  Skills trigger one or more effects which can be single target, self, aoe, aoe dot, or pbaoe.  Effects can be one shot or tick over time. Special damage modifiers for structures vs players, and siege vs players or structures.  Api hooks that let you control damage scaling and progression based on anything you like. 
 
-The building system and harvesting and crafting are all integrated into a complete game loop.  Terraforming and digging give resources that can be used to create objects that are placed using the building system, and then you can destroy it all with the combat system.
+Players and player items have attributes such as health, stamina, resists, movement speed, etc..  These are user defined and fully integrated with the combat system.  
+
+The building system and harvesting and crafting are all integrated into a complete game loop.  Terraforming and digging give resources that can be used to create player items or objects that are placed using the building system, and then you can destroy it all with the combat system.
 
 If you are interested in beta testing contact chris@ochsnet.com.  Serious inquries only please.  I need people who are willing to provide feedback.  Beta testers get a free copy with updates for life.
 
