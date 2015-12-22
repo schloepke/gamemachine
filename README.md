@@ -2,6 +2,22 @@
 
 Game Machine is a modern platform for large scale realtime games such as mmo's and moba's.   Massive scalability and ease of use make it the most productive platform for creating complex multiplayer games.  
 
+#### Looking for beta testers for a new client side mmo framework
+
+LandRush is the companion to Game Machine for the Unity client.  It's been in development for over 8 months now and I'm ready to start
+testing it with a small group.  Core features are as follows.
+
+- Runtime world building/terraforming.  This provides a framework for placing objects in the world that are fully destructable by the combat system.  Also includes terraforming and underground building.  Create huge underground structures.
+- Client side combat system that works with the server combat system.  Advanced targeting/hitbox system.
+- Siege combat.
+- Harvesting/Inventory/Crafting
+
+All of the above is of course multiplayer.  Siege weapons rotations and firing is all server authoritative and other players see exactly what you see.
+
+The building system and harvesting and crafting are all integrated into a complete game loop.  Terraforming and digging give resources that can be used to create objects that are placed using the building system, and then you can destroy it all with the combat system.
+
+If you are interested in beta testing contact chris@ochsnet.com.  Serious inquries only please.  I need people who are willing to provide feedback.  Beta testers get a free copy with updates for life.
+
 ## 3.0 Beta 1 is now out.  Documentation is being worked on.  See the REL3_0 branch for more information
 
 Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
