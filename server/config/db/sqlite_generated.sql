@@ -169,7 +169,7 @@ CREATE TABLE build_object_datas (
 
   build_object_datas_id varchar(1024) NOT NULL,
 
-  build_object_datas_data varchar(1024) DEFAULT NULL,
+  build_object_datas_data_text varchar(1024) DEFAULT NULL,
 
   build_object_datas_character_id varchar(1024) DEFAULT NULL,
 

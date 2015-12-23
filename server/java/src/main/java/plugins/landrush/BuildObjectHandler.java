@@ -141,7 +141,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			if (data == null) {
 				return null;
 			} else {
-				byte[] bytes = Base64.decodeBase64(data.data);
+				byte[] bytes = Base64.decodeBase64(data.dataText);
 				BuildObject buildObject = BuildObject.parseFrom(bytes);
 				cache.objectIndex.put(id, buildObject);
 			}
@@ -162,7 +162,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			data.zone = zone.name;
 			buildObject.version += 1;
 		} else {
-			byte[] bytes = Base64.decodeBase64(data.data);
+			byte[] bytes = Base64.decodeBase64(data.dataText);
 			existing = BuildObject.parseFrom(bytes);
 		}
 
@@ -176,7 +176,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			buildObject.version += 1;
 		}
 
-		data.data = Base64.encodeBase64String(buildObject.toByteArray());
+		data.dataText = Base64.encodeBase64String(buildObject.toByteArray());
 		io.gamemachine.orm.models.BuildObjectDatas.openTransaction();
 		BuildObjectDatas.db().save(data, true);
 		io.gamemachine.orm.models.BuildObjectDatas.commitTransaction();
@@ -322,7 +322,7 @@ public class BuildObjectHandler extends GameMessageActor {
 	private void load() {
 		List<BuildObjectDatas> datas = BuildObjectDatas.db().where("build_object_datas_zone = ?", zone.name);
 		for (BuildObjectDatas data : datas) {
-			byte[] bytes = Base64.decodeBase64(data.data);
+			byte[] bytes = Base64.decodeBase64(data.dataText);
 			BuildObject buildObject = BuildObject.parseFrom(bytes);
 			if (buildObject.state == BuildObject.State.Removed) {
 				continue;
@@ -330,7 +330,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			cache.objectIndex.put(buildObject.id, buildObject);
 			setGridAndVitals(buildObject);
 		}
-		logger.warn(cache.objectIndex.size() + " build objects loaded");
+		logger.warn(cache.objectIndex.size() + " build objects loaded for "+zone.name);
 	}
 
 	

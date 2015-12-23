@@ -189,7 +189,7 @@ CREATE TABLE build_object_datas (
 
   build_object_datas_id TEXT NOT NULL,
 
-  build_object_datas_data TEXT DEFAULT NULL,
+  build_object_datas_data_text TEXT DEFAULT NULL,
 
   build_object_datas_character_id TEXT DEFAULT NULL,
 

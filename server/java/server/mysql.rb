@@ -1,5 +1,5 @@
 
-
+DROP TABLE IF EXISTS <%= klass.underscore.pluralize %>;
 CREATE TABLE `<%= klass.underscore.pluralize %>` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   <% message.getFields.each do |field| %>

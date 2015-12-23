@@ -143,26 +143,34 @@ module GameMachine
         "#{klass.underscore}_#{field.name.underscore}"
       end
 
+      def text_field?(field)
+        field.name.match(/Text$/)
+      end
+      
       def sql_field(klass,field,dbtype,force_null=false)
         if dbtype == 'mysql'
           if field.isEnumField
-            return "`#{sql_column_name(klass,field)}` int(11),"
+            return "#{sql_column_name(klass,field)} int(11),"
           end
           txt = case field.getJavaType.to_s
           when 'boolean'
-            "`#{sql_column_name(klass,field)}` tinyint(4)"
+            "#{sql_column_name(klass,field)} tinyint(4)"
           when 'double'
-            "`#{sql_column_name(klass,field)}` double"
+            "#{sql_column_name(klass,field)} double"
           when 'float'
-            "`#{sql_column_name(klass,field)}` float"
+            "#{sql_column_name(klass,field)} float"
           when 'long'
-            "`#{sql_column_name(klass,field)}` bigint"
+            "#{sql_column_name(klass,field)} bigint"
           when 'int'
-            "`#{sql_column_name(klass,field)}` int(11)"
+            "#{sql_column_name(klass,field)} int(11)"
           when 'String'
-            "`#{sql_column_name(klass,field)}` varchar(1024)"
+            if text_field?(field)
+              "#{sql_column_name(klass,field)} TEXT"
+            else
+              "#{sql_column_name(klass,field)} varchar(256)"
+            end
           when 'ByteString'
-           "`#{sql_column_name(klass,field)}` varbinary(2048)"
+           "#{sql_column_name(klass,field)} varbinary(2048)"
           end
         elsif dbtype == 'postgres'
           if field.isEnumField
