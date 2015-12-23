@@ -2,6 +2,27 @@
 
 Game Machine is a modern platform for large scale realtime games such as mmo's and moba's.   Massive scalability and ease of use make it the most productive platform for creating complex multiplayer games.  
 
+#### Looking for beta testers for a new client side mmo framework
+
+LandRush is the companion to Game Machine for the Unity client.  It's been in development for over 8 months now and I'm ready to start
+testing it with a small group.  Core features are as follows.
+
+- Runtime world building/terraforming.  This provides a framework for placing objects in the world that are fully destructable by the combat system.  Also includes terraforming and underground building.  Create huge underground structures.
+- Player skill system.
+- Player items.
+- Player attributes/vitals.
+- Client side combat system that works with the server combat system.  Advanced targeting/hitbox system.
+- Siege combat.
+- Harvesting/Inventory/Crafting
+
+Combat system is flexible enough to handle most any type of system you can think of.  Skills trigger one or more effects which can be single target, self, aoe, aoe dot, or pbaoe.  Effects can be one shot or tick over time. Special damage modifiers for structures vs players, and siege vs players or structures.  Api hooks that let you control damage scaling and progression based on anything you like. 
+
+Players and player items have attributes such as health, stamina, resists, movement speed, etc..  These are user defined and fully integrated with the combat system.  
+
+The building system and harvesting and crafting are all integrated into a complete game loop.  Terraforming and digging give resources that can be used to create player items or objects that are placed using the building system, and then you can destroy it all with the combat system.
+
+If you are interested in beta testing contact chris@ochsnet.com.  Serious inquries only please.  I need people who are willing to provide feedback.  Beta testers get a free copy with updates for life.
+
 ## 3.0 Beta 1 is now out.  Documentation is being worked on.  See the REL3_0 branch for more information
 
 Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
