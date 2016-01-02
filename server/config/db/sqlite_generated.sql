@@ -73,6 +73,8 @@ CREATE TABLE vitals (
 
   vitals_update_id integer DEFAULT NULL,
 
+  vitals_death_time double precision DEFAULT NULL,
+
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
 CREATE TABLE territories (
@@ -174,6 +176,8 @@ CREATE TABLE build_object_datas (
   build_object_datas_character_id varchar(1024) DEFAULT NULL,
 
   build_object_datas_zone varchar(1024) DEFAULT NULL,
+
+  build_object_datas_group integer DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );

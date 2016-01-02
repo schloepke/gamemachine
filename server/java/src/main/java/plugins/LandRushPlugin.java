@@ -7,6 +7,7 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
+import plugins.landrush.BuildObjectGroupHandler;
 import plugins.landrush.BuildObjectHandler;
 import plugins.landrush.BuildableAreaManager;
 
@@ -25,5 +26,8 @@ public class LandRushPlugin extends Plugin {
 		
 		GameMessageRoute.add(BuildableAreaManager.name,BuildableAreaManager.name,false);
 		ActorUtil.createActor(BuildableAreaManager.class,BuildableAreaManager.name);
+		
+		GameMessageRoute.add(BuildObjectGroupHandler.name,BuildObjectGroupHandler.name,false);
+		ActorUtil.createActor(BuildObjectGroupHandler.class,BuildObjectGroupHandler.name);
 	}
 }

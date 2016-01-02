@@ -185,10 +185,9 @@ public class StatusEffectManager extends UntypedActor {
 		GameMachineLoader.getActorSystem().actorOf(Props.create(PassiveEffectHandler.class, "build_objects", zone),
 				PassiveEffectHandler.actorName("build_objects", zone));
 		
-		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsRegen.class, "default", zone),
-				VitalsRegen.actorName("default", zone));
-		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsRegen.class, "build_objects", zone),
-				VitalsRegen.actorName("build_objects", zone));
+		GameMachineLoader.getActorSystem().actorOf(Props.create(VitalsRegen.class, zone),
+				VitalsRegen.actorName(zone));
+		
 		
 		handlerZones.add(zone);
 	}

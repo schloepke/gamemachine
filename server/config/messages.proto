@@ -73,6 +73,9 @@ message NodeStatuses {
 
 message AgentTrackData {
   repeated TrackData trackData = 1;
+  optional sint32 x = 2;
+  optional sint32 y = 3;
+  optional sint32 z = 4;
 }
 
 message Agent {

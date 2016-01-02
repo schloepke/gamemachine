@@ -154,6 +154,35 @@ public class PlayerService {
 		}
 	}
 
+	public void createNpc(String playerId, String characterId, String prefab, Vitals.Template vitalsTemplate) {
+		delete(playerId);
+		
+		CharacterService characterService = CharacterService.instance();
+		String gameId = AppConfig.getDefaultGameId();
+		Zone zone = ZoneService.defaultZone();
+
+		Character character = characterService.find(playerId, characterId);
+
+		Player player = find(playerId);
+		if (player == null) {
+			player = create(playerId, gameId);
+		}
+
+		if (character == null) {
+			character = characterService.create(playerId, characterId, vitalsTemplate, null);
+		}
+
+		character.gameEntityPrefab = prefab;
+		character.vitalsTemplate = vitalsTemplate;
+		characterService.save(character);
+		
+		logout(playerId);
+		setRole(playerId, Player.Role.Npc);
+		setPassword(playerId, UUID.randomUUID().toString());
+		setCharacter(playerId, characterId);
+		setZone(playerId, zone);
+	}
+	
 	public void sendNotification(String playerId, String action) {
 		PlayerNotification playerNotification = new PlayerNotification();
 		playerNotification.playerId = playerId;
@@ -486,12 +515,11 @@ public class PlayerService {
 	}
 
 	public Player findByCharacterId(String characterId) {
-		for (Player player : players.values()) {
-			if (player.characterId.equals(characterId)) {
-				return player;
+			Character character = CharacterService.instance().find(characterId);
+			if (character == null) {
+				return null;
 			}
-		}
-		return null;
+			return find(character.playerId);
 	}
 
 	public void clearCache(String playerId) {

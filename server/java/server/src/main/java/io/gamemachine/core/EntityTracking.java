@@ -16,6 +16,7 @@ import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.objectdb.Cache;
 import io.gamemachine.regions.ZoneService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,6 +35,7 @@ public class EntityTracking extends UntypedActor {
 	public static String name = "fastpath_entity_tracking";
 
 	private PlayerService playerService;
+	public static Map<String,String> npcMap = new ConcurrentHashMap<String,String>();
 	
 	public EntityTracking() {
 		Commands.clientManagerRegister(name);
@@ -117,11 +119,29 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
-		Grid agentGrid;
+		Grid agentGrid = GridService.getInstance().getPlayerGrid(null, player.id);
 		for (TrackData trackData : agentTrackData.getTrackDataList()) {
-			agentGrid = GridService.getInstance().getPlayerGrid(trackData.gridName, player.id);
+			if (!npcMap.containsKey(trackData.id)) {
+				npcMap.put(trackData.id, player.id);
+			}
+			
 			setEntityLocation(player.id, agentGrid, trackData);
 		}
+		
+		 List<TrackData> trackDatas = new ArrayList<TrackData>();
+		 
+		for (TrackData trackData : agentGrid.getAll()) {
+			if (npcMap.containsKey(trackData.id)) {
+				continue;
+			}
+			
+			trackDatas.add(trackData);
+		}
+		
+		if (trackDatas.size() > 0) {
+			toNeighbors(player,trackDatas,false);
+		}
+		
 	}
 
 	private void handleTrackData(TrackData trackData, Player player) {
@@ -163,7 +183,7 @@ public class EntityTracking extends UntypedActor {
 			return;
 		}
 
-		if (player.role == Player.Role.Player) {
+		if (player.role == Player.Role.Player || player.role == Player.Role.AgentController) {
 			setEntityLocation(player.id, grid, trackData);
 		}
 		
@@ -174,7 +194,12 @@ public class EntityTracking extends UntypedActor {
 	}
 
 	private void removePlayerData(ClientManagerEvent event) {
+		logger.warn("Cleanup player "+event.player_id);
 		GridService.getInstance().removeEntityFromGrids(event.player_id);
+		for (String entityId : npcMap.keySet()) {
+			GridService.getInstance().removeEntityFromGrids(entityId);
+		}
+		npcMap.clear();
 	}
 
 	private void SendNeighbors(Grid grid, int x, int z, Player player, EntityType neighborType, int neighborsFlag) {
@@ -214,6 +239,7 @@ public class EntityTracking extends UntypedActor {
 		int count = 0;
 
 		for (TrackData trackData : trackDatas) {
+			
 			neighbors.addTrackData(trackData);
 
 			count++;

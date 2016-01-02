@@ -27,7 +27,6 @@ public class Connection {
 	private String gameId;
 	public long clientId;
 	public int ip;
-	private boolean playerIsAgent = false;
 	public String uuid;
 
 	public Connection(int protocol, int ip, ClientConnection clientConnection, String playerId, long clientId) {
@@ -38,7 +37,6 @@ public class Connection {
 		this.clientId = clientId;
 		PlayerService playerService = PlayerService.getInstance();
 		this.gameId = playerService.getGameId(playerId);
-		this.playerIsAgent = playerService.playerIsAgent(playerId);
 		this.uuid = UUID.randomUUID().toString();
 		playerService.setIp(this.playerId, this.ip);
 	}
@@ -84,10 +82,7 @@ public class Connection {
 		if (protocol == NetMessage.NETTY_UDP || protocol == NetMessage.SIMPLE_UDP) {
 			byte[] bytes = clientMessage.toByteArray();
 
-			// Don't count data transfers on local network
-			if (!playerIsAgent) {
 				GameLimits.addBytesTransferred(gameId, playerId,bytes.length);
-			}
 
 			if (protocol == NetMessage.SIMPLE_UDP) {
 				SimpleUdpServer.sendMessage(clientId, bytes);
@@ -98,9 +93,7 @@ public class Connection {
 
 			// Have to pass the game id through here so tcp encoder can call
 			// addBytesTransferred
-			if (!playerIsAgent) {
 				clientMessage.setGameId(gameId);
-			}
 
 			TcpServerHandler.sendMessage(clientId, clientMessage);
 		} else {

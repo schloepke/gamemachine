@@ -96,6 +96,7 @@ public class Grid {
 		private int y;
 		private int z;
 		private long lastSend = System.currentTimeMillis();
+		private int updateCount = 0;
 
 		public GridValue(TrackData trackData, int shortId) {
 			this.x = trackData.x;
@@ -235,6 +236,7 @@ public class Grid {
 				if (entityType == TrackData.EntityType.Any || trackData.entityType == entityType) {
 					Integer shortId = getShortId(trackData.id);
 					if (shortId == null) {
+						logger.warn("neighbors: Unable to obtain shortId for "+trackData.id);
 						continue;
 					}
 					trackData.shortId = shortId;
@@ -355,7 +357,9 @@ public class Grid {
 	public void RemoveExpired(Long max) {
 		List<String> ids = new ArrayList<String>();
 		for (TrackData td : objectIndex.values()) {
-			if (td.entityType == TrackData.EntityType.Player) {
+			if (td.entityType == TrackData.EntityType.Player ||
+					td.entityType == TrackData.EntityType.Npc ||
+					td.entityType == TrackData.EntityType.Vehicle) {
 				ids.add(td.id);
 			}
 		}
@@ -405,6 +409,7 @@ public class Grid {
 	public Boolean set(TrackData newTrackData) {
 		Integer shortId = getShortId(newTrackData.id);
 		if (shortId == null) {
+			logger.warn("set: Unable to obtain shortId");
 			return false;
 		}
 

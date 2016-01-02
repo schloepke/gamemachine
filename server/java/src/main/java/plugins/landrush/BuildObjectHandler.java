@@ -12,6 +12,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Strings;
+
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.CharacterService;
@@ -149,7 +151,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		return cache.objectIndex.get(id);
 	}
 
-	private static void save(BuildObject buildObject, String characterId, String origin) {
+	public static void save(BuildObject buildObject, String characterId, String origin) {
 		Zone zone =  CharacterService.instance().getZone(characterId);
 		BuildObjectCache cache = BuildObjectCache.get(zone.name);
 		
@@ -160,6 +162,7 @@ public class BuildObjectHandler extends GameMessageActor {
 			data.id = buildObject.id;
 			data.characterId = characterId;
 			data.zone = zone.name;
+			data.group = buildObject.group;
 			buildObject.version += 1;
 		} else {
 			byte[] bytes = Base64.decodeBase64(data.dataText);
@@ -209,7 +212,7 @@ public class BuildObjectHandler extends GameMessageActor {
 		save(existing, existing.ownerId, "system");
 	}
 
-	private static void setGridAndVitals(BuildObject buildObject) {
+	public static void setGridAndVitals(BuildObject buildObject) {
 		if (!buildObject.isTerrainEdit && !buildObject.isGroundBlock) {
 			if (buildObject.isDestructable) {
 				Grid grid = GridService.getInstance().getGrid(buildObject.zone, "build_objects");
@@ -296,7 +299,12 @@ public class BuildObjectHandler extends GameMessageActor {
 		if (bo.action == BuildObject.Action.UpdateProp) {
 			updateDoor(bo);
 		} else if (bo.action == BuildObject.Action.Save) {
-			save(bo, characterId, characterId);
+			if (!Strings.isNullOrEmpty(bo.ownerId) && bo.ownerId.equals("system")) {
+				save(bo, "system", "system");
+			} else {
+				save(bo, characterId, characterId);
+			}
+			
 		} else {
 			logger.warn("Invalid action " + bo.action);
 		}

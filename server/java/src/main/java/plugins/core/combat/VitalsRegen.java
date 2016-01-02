@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import akka.actor.UntypedActor;
-import io.gamemachine.grid.Grid;
-import io.gamemachine.grid.GridService;
 import io.gamemachine.messages.Vitals;
 import plugins.landrush.BuildObjectHandler;
 import scala.concurrent.duration.Duration;
@@ -19,18 +17,15 @@ public class VitalsRegen extends UntypedActor {
 	public static String name = VitalsRegen.class.getSimpleName();
 	private static final Logger logger = LoggerFactory.getLogger(VitalsRegen.class);
 	private Map<String, Long> deathTimer = new ConcurrentHashMap<String, Long>();
-	private long deathTime = 15000L;
 	private long outOfCombatTime = 10000L;
 	private String zone = null;
-	private Grid grid = null;
 	
-	public static String actorName(String gridName, String zone) {
-		return VitalsRegen.name + gridName + zone;
+	public static String actorName(String zone) {
+		return VitalsRegen.name + zone;
 	}
 	
-	public VitalsRegen(String gridName, String zone) {
+	public VitalsRegen(String zone) {
 		this.zone = zone;
-		grid = GridService.getInstance().getGrid(zone,gridName);
 	}
 	
 	@Override
@@ -64,8 +59,7 @@ public class VitalsRegen extends UntypedActor {
 			if (vitalsProxy.isDead()) {
 				if (deathTimer.containsKey(vitalsProxy.getEntityId())) {
 					Long timeDead = deathTimer.get(vitalsProxy.getEntityId());
-					Long timer = deathTime;
-					if ((System.currentTimeMillis() - timeDead) > timer) {
+					if ((System.currentTimeMillis() - timeDead) > vitalsProxy.getDeathTime()*1000L) {
 						revive(vitalsProxy);
 						deathTimer.remove(vitalsProxy.getEntityId());
 					}
@@ -117,7 +111,7 @@ public class VitalsRegen extends UntypedActor {
 	}
 	
 	private void die(VitalsProxy vitalsProxy) {
-		logger.warn("Die "+vitalsProxy.getEntityId());
+		logger.warn("Die "+vitalsProxy.getEntityId()+" "+vitalsProxy.getZoneName());
 		vitalsProxy.setDead(1);
 		vitalsProxy.set("health", 0);
 		vitalsProxy.set("stamina", 0);
@@ -126,7 +120,7 @@ public class VitalsRegen extends UntypedActor {
 	}
 
 	private void revive(VitalsProxy vitalsProxy) {
-		logger.warn("Revive "+vitalsProxy.getEntityId());
+		logger.warn("Revive "+vitalsProxy.getEntityId()+" "+vitalsProxy.getZoneName());
 		vitalsProxy.setDead(0);
 		vitalsProxy.reset();
 	}

@@ -21,7 +21,8 @@ module GameMachine
 
     def set_java_config
       JavaLib::AppConfig.set_env_root(ENV['APP_ROOT'])
-      JavaLib::AppConfig.set_env(GameMachine.env)
+      JavaLib::AppConfig.set_config_name(GameMachine.env)
+      JavaLib::AppConfig.set_env(config.environment)
       JavaLib::AppConfig.set_agent_secret(config.agent_secret)
       JavaLib::AppConfig.set_default_game_id(config.default_game_id)
       JavaLib::AppConfig.setWorldOffset(config.world_offset)

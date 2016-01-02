@@ -194,8 +194,15 @@ public class ActiveEffectHandler extends UntypedActor {
 							statusEffectTarget.location, grid)) {
 
 						VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
-
+						
+						if (targetProxy == null) {
+							logger.warning("Target no longer in grid");
+							statusEffect.ticksPerformed += 1;
+							continue;
+						}
+						
 						if (targetProxy.isDead()) {
+							statusEffect.ticksPerformed += 1;
 							continue;
 						}
 
@@ -209,6 +216,11 @@ public class ActiveEffectHandler extends UntypedActor {
 					}
 				} else {
 					VitalsProxy targetProxy = VitalsHandler.get(statusEffectTarget.targetEntityId);
+					if (targetProxy == null) {
+						logger.warning("Target no longer in grid");
+						statusEffect.ticksPerformed += 1;
+						continue;
+					}
 					applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy, statusEffect);
 				}
 				statusEffect.ticksPerformed += 1;
@@ -227,10 +239,10 @@ public class ActiveEffectHandler extends UntypedActor {
 		int effectCountFromOrigin = effectCount(targetProxy.getEntityId(), originProxy.getEntityId(),
 				statusEffect.id);
 		if (!statusEffect.allowMultipleFromSameOrigin && effectCountFromOrigin >= 2) {
-			logger.warning("Effect from same origin present");
+			//logger.warning("Effect from same origin present");
 			return 0;
 		} else if (effectLimitReached(targetProxy.getEntityId(), statusEffect.id)) {
-			logger.warning("Effect limit reached");
+			//logger.warning("Effect limit reached");
 			return 0;
 		}
 
@@ -257,7 +269,7 @@ public class ActiveEffectHandler extends UntypedActor {
 
 				// or group members
 				if (StatusEffectManager.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
-					logger.warning("GROUP DAMAGE");
+					//logger.warning("GROUP DAMAGE");
 					return 0;
 				}
 			}

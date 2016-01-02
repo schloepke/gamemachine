@@ -75,6 +75,8 @@ CREATE TABLE `vitals` (
 
   vitals_update_id int(11) DEFAULT NULL,
 
+  vitals_death_time float DEFAULT NULL,
+
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS territories;
@@ -188,6 +190,8 @@ CREATE TABLE `build_object_datas` (
   build_object_datas_character_id varchar(256) DEFAULT NULL,
 
   build_object_datas_zone varchar(256) DEFAULT NULL,
+
+  build_object_datas_group int(11) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

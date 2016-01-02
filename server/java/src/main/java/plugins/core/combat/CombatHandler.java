@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.CharacterService;
+import io.gamemachine.core.EntityTracking;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerMessage;
 import io.gamemachine.core.PlayerService;
@@ -14,6 +15,7 @@ import io.gamemachine.messages.SkillRequest;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffectTarget;
 import io.gamemachine.messages.TrackData;
@@ -37,11 +39,8 @@ public class CombatHandler extends GameMessageActor {
 
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
-		if (exactlyOnce(gameMessage)) {
-			if (gameMessage.skillRequest != null) {
-				doAttack(gameMessage.skillRequest);
-				setReply(gameMessage);
-			}
+		if (gameMessage.skillRequest != null) {
+			doAttack(gameMessage.skillRequest);
 		}
 	}
 
@@ -50,6 +49,12 @@ public class CombatHandler extends GameMessageActor {
 
 		Grid grid = GridService.getInstance().getGrid(zone, "default");
 		for (TrackData trackData : grid.getAll()) {
+			if (EntityTracking.npcMap.containsKey(trackData.id)) {
+				if (EntityTracking.npcMap.get(trackData.id).equals(playerId)) {
+					continue;
+				}
+			}
+							
 			if (!playerId.equals(trackData.id)) {
 				msg.skillRequest = skillRequest;
 				PlayerMessage.tell(msg, trackData.id);
@@ -73,11 +78,22 @@ public class CombatHandler extends GameMessageActor {
 		boolean sendToObjectGrid = false;
 		boolean sendToDefaultGrid = false;
 		
-		Zone zone =  PlayerService.getInstance().getZone(playerId);
+		skillRequest.playerSkill = PlayerSkillHandler.getTemplate(skillRequest.playerSkillId);
 		if (skillRequest.playerSkill == null) {
 			logger.warning("Attack without player skill, ignoring");
 			return;
 		}
+		
+		Player player = PlayerService.getInstance().findByCharacterId(skillRequest.attackerCharacterId);
+		if (player == null) {
+			logger.warning("Unable to find player with character id "+skillRequest.attackerCharacterId);
+			return;
+		} else {
+			skillRequest.originEntityId = player.id;
+		}
+		
+		Zone zone =  PlayerService.getInstance().getZone(skillRequest.originEntityId);
+		
 
 		if (Strings.isNullOrEmpty(skillRequest.attackerCharacterId)) {
 			logger.warning("Attack without attackerCharacterId, ignoring");
@@ -92,12 +108,12 @@ public class CombatHandler extends GameMessageActor {
 		}
 		
 		StatusEffectTarget statusEffectTarget = new StatusEffectTarget();
-		VitalsHandler.ensureCharacterVitals(playerId, zone.name);
+		VitalsHandler.ensureCharacterVitals(skillRequest.originEntityId, zone.name);
 		
 		statusEffectTarget.skillRequest = skillRequest;
 		
 		statusEffectTarget.originCharacterId = skillRequest.attackerCharacterId;
-		statusEffectTarget.originEntityId = playerId;
+		statusEffectTarget.originEntityId = skillRequest.originEntityId;
 				
 		if (skillRequest.playerSkill.category == PlayerSkill.Category.SingleTarget) {
 			if (Strings.isNullOrEmpty(skillRequest.targetId)) {
@@ -126,7 +142,7 @@ public class CombatHandler extends GameMessageActor {
 			
 		} else if (skillRequest.playerSkill.category == PlayerSkill.Category.Self) {
 			skillRequest.targetType = SkillRequest.TargetType.Character;
-			statusEffectTarget.targetEntityId = playerId;
+			statusEffectTarget.targetEntityId = skillRequest.originEntityId;
 			ensureTargetVitals(skillRequest.targetType, statusEffectTarget.targetEntityId, zone.name);
 			sendToDefaultGrid = true;
 			
@@ -144,9 +160,9 @@ public class CombatHandler extends GameMessageActor {
 			
 			Grid grid = GridService.getInstance().getGrid(zone.name,"default");
 			
-			TrackData td = grid.get(playerId);
+			TrackData td = grid.get(skillRequest.originEntityId);
 			if (td == null) {
-				logger.warning("TrackData not found for "+playerId);
+				logger.warning("TrackData not found for "+skillRequest.originEntityId);
 				return;
 			}
 			

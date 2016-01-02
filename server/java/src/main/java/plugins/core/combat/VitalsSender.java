@@ -12,8 +12,10 @@ import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.core.PlayerMessage;
+import io.gamemachine.core.PlayerService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.VitalsContainer;
@@ -41,22 +43,23 @@ public class VitalsSender extends UntypedActor {
 		for (GridSet gridSet : StatusEffectManager.gridsets) {
 			for (TrackData playerTrackData : gridSet.playerGrid.getAll()) {
 				if (playerTrackData.entityType == TrackData.EntityType.Player) {
+					Player player = PlayerService.getInstance().find(playerTrackData.id);
 					
 					List<List<VitalsProxy>> sublists = Lists.partition(livingVitals(gridSet.zone), 20);
 					for (List<VitalsProxy> sublist : sublists) {
-						sendVitalsToPlayer(gridSet.playerGrid, playerTrackData, sublist);
+						sendVitalsToPlayer(gridSet.playerGrid, player, playerTrackData, sublist);
 					}
 					
 					sublists = Lists.partition(objectVitals(gridSet.zone), 20);
 					for (List<VitalsProxy> sublist : sublists) {
-						sendVitalsToPlayer(gridSet.objectGrid, playerTrackData, sublist);
+						sendVitalsToPlayer(gridSet.objectGrid, player, playerTrackData, sublist);
 					}
 				}
 			}
 		}
 	}
 
-	private void sendVitalsToPlayer(Grid grid, TrackData playerTrackData, List<VitalsProxy> proxies) {
+	private void sendVitalsToPlayer(Grid grid, Player player, TrackData playerTrackData, List<VitalsProxy> proxies) {
 		VitalsUpdateContainer toSend = new VitalsUpdateContainer();
 		for (VitalsProxy proxy : proxies) {
 			TrackData vitalsTrackData = grid.get(proxy.getEntityId());
@@ -65,15 +68,20 @@ public class VitalsSender extends UntypedActor {
 			if (vitalsTrackData == null) {
 				continue;
 			}
-
-			double distance = AoeUtil.distance(vitalsTrackData, playerTrackData);
-			if (distance <= vitalsDistance) {
+			
+			if (player.role == Player.Role.AgentController) {
 				toSend.addVitalsUpdate(proxy.getVitalsUpdate().clone());
 			} else {
-				if (proxy.getType() == Vitals.VitalsType.Object) {
-					//logger.warning("Distance too far "+distance);
+				double distance = AoeUtil.distance(vitalsTrackData, playerTrackData);
+				if (distance <= vitalsDistance) {
+					toSend.addVitalsUpdate(proxy.getVitalsUpdate().clone());
+				} else {
+					if (proxy.getType() == Vitals.VitalsType.Object) {
+						//logger.warning("Distance too far "+distance);
+					}
 				}
 			}
+			
 		}
 
 		GameMessage msg = new GameMessage();

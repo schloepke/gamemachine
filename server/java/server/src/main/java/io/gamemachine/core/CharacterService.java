@@ -156,6 +156,9 @@ public class CharacterService {
 	
 	public Zone getZone(String characterId) {
 		Character character = find(characterId);
+		if (character == null) {
+			throw new RuntimeException("Character not found for id "+characterId);
+		}
 		return character.zone;
 	}
 

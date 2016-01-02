@@ -94,7 +94,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 			}
 		}
 
-		logger.debug(req.getUri());
+		logger.debug(req.getUri()+" "+AppConfig.getEnv());
 		if (req.getMethod() == POST) {
 			HttpPostRequestDecoder decoder = new HttpPostRequestDecoder(new DefaultHttpDataFactory(false), req);
 			for (InterfaceHttpData data : decoder.getBodyHttpDatas()) {
@@ -104,6 +104,19 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 			}
 
+			if (req.getUri().startsWith("/internal")) {
+				if (AppConfig.getEnv().equals("development")) {
+					if (req.getUri().startsWith("/internal/create_npc")) {
+						Vitals.Template template = Vitals.Template.valueOf(Integer.parseInt(params.get("vitalsTemplate")));
+						PlayerService.getInstance().createNpc(params.get("npcPlayerId"),  params.get("npcCharacterId"),params.get("prefab"), template);
+						Ok(ctx, "");
+						return;
+					}
+				}
+				NotAuthorized(ctx);
+				return;
+			}
+			
 			if (req.getUri().startsWith("/api")) {
 
 				if (req.getUri().startsWith("/api/client/login/")) {
@@ -178,6 +191,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				boolean isAdmin = PlayerService.getInstance().playerHasRole(playerId, Player.Role.Admin);
 				boolean authenticated = Authentication.hasValidAuthtoken(playerId, authtoken);
 
+				
 				if (req.getUri().startsWith("/api/game")) {
 					HttpHandler.Response response = HttpHandler.processRequest(req.getUri(), params, authenticated);
 					if (response.status == HttpHandler.Response.Status.NOT_AUTHORIZED) {
@@ -196,6 +210,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					return;
 				}
 
+				
 				if (!authenticated) {
 					logger.warn("Http attempt without authentication");
 					return;
@@ -317,6 +332,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					return;
 				}
 
+				
 				if (req.getUri().startsWith("/api/characters/set_current")) {
 					PlayerService.getInstance().setCharacter(playerId, params.get("characterId"));
 					Ok(ctx, "OK");
@@ -324,7 +340,7 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 				}
 				
 				if (req.getUri().startsWith("/api/characters/set_item_slots")) {
-					CharacterService.instance().setItemSlots(params.get("playerId"), params.get("characterId"), params.get("item_slots"));
+					CharacterService.instance().setItemSlots(params.get("characterPlayerId"), params.get("characterId"), params.get("item_slots"));
 					Ok(ctx, "OK");
 					return;
 				}

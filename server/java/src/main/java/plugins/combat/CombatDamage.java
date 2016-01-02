@@ -48,7 +48,7 @@ public class CombatDamage {
 		}
 
 		PlayerSkill skill = PlayerSkillHandler.findSkill(playerSkillId, character.id, true);
-		skill.level += new Random().nextFloat();
+		skill.level += (new Random().nextFloat() + 0.01f) / 10f;
 		PlayerSkillHandler.saveSkill(skill,character.id);
 		logger.warn("Skill up " + playerSkillId + " level " + skill.level);
 		

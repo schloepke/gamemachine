@@ -82,6 +82,7 @@ local_persistent_message Vitals {
   
   optional int32 updateId = 53;
   optional int32 recordId = 54;
+  optional float deathTime = 56;
 }
 
 local_message VitalsUpdateContainer {
@@ -322,6 +323,7 @@ local_persistent_message BuildObjectDatas {
   optional int32 recordId = 3;
   optional string characterId = 4;
   optional string zone = 5;
+  optional int32 group = 6;
 }
 
 local_message BuildObject {
@@ -374,7 +376,20 @@ local_message BuildObject {
   optional SlotInfo slotInfo = 40;
   optional string zone = 41;
   optional int32 version = 42;
+  optional int32 group = 43;
 }
+
+local_message BuildObjectGroup {
+   enum Action {
+     None = 0;
+     Reset = 1;
+     Destroy = 2;
+   }
+   optional int32 group = 1;
+   optional Action action = 2;
+   optional int64 placedAt = 3;
+   optional string ownerId = 4;
+ }
   
  local_message SlotInfo {
    required string placedBlockId = 1;
@@ -591,6 +606,8 @@ local_message SkillRequest {
   optional TargetType targetType = 5;
   optional GmTarget target = 6;
   optional bool relayOnly = 7;
+  optional string originEntityId = 8;
+  optional string playerSkillId = 9;
 }
 
 
@@ -615,6 +632,8 @@ persistent_message Player {
     Player = 0;
     AgentController = 1;
     Admin = 2;
+    Npc = 3;
+    System = 4;
   }
   
   required string id = 1;
@@ -1146,6 +1165,7 @@ message GameMessage {
   optional CharacterUpdate characterUpdate = 50;
   optional VitalsUpdateContainer vitalsUpdateContainer = 51;
   optional VitalsRequest vitalsRequest = 52;
+  optional BuildObjectGroup buildObjectGroup = 53;
 }
 
 message GameMessages {

@@ -69,6 +69,9 @@ public class VitalsProxy {
 		return vitals;
 	}
 	
+	public float getDeathTime() {
+		return vitals.deathTime;
+	}
 	public float getCombatRegenMod() {
 		return vitals.combatRegenMod;
 	}

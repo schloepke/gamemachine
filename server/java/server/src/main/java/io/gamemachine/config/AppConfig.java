@@ -14,6 +14,7 @@ public class AppConfig {
 	
 	private static boolean orm;
 	private static String env;
+	private static String configName;
 	public static String envRoot;
 	private static String defaultGameId;
 	private static int worldOffset;
@@ -24,9 +25,17 @@ public class AppConfig {
 	private static String agentSecret;
 	
 	public static Config getConfig() {
-		String path = AppConfig.envRoot+File.separator+"config"+File.separator+env+".conf";
+		String path = AppConfig.envRoot+File.separator+"config"+File.separator+configName+".conf";
 		File file = new File(path);
 		return ConfigFactory.parseFile(file);
+	}
+	
+	public static void setConfigName(String name) {
+		AppConfig.configName = name;
+	}
+	
+	public static String getConfigName() {
+		return AppConfig.configName;
 	}
 	
 	public static void setGridExpiration(long gridExpiration) {

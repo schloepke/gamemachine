@@ -1,7 +1,6 @@
 
 package plugins.core;
 
-import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import akka.event.Logging;
@@ -17,6 +16,13 @@ import io.gamemachine.messages.Vitals;
 
 public class PlayerSeed extends GameMessageActor {
 
+	public static class PlayerJson {
+		public String playerId;
+		public String characterId;
+		public String role;
+		public String password;
+	}
+	
 	public static String name = PlayerSeed.class.getSimpleName();
 	LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 	private PlayerService ps;
@@ -32,21 +38,23 @@ public class PlayerSeed extends GameMessageActor {
 		
 		Gson gson = new Gson();
 		String json = Plugin.getJsonConfig(PlayerSeed.class);
-		Player[] players = gson.fromJson(json, Player[].class);
+		PlayerJson[] players = gson.fromJson(json, PlayerJson[].class);
 		
-		for (Player template : players) {
-			template.role = Player.Role.AgentController;
-			Player player = ps.find(template.id);
+		for (PlayerJson template : players) {
+			Player.Role role = Player.Role.valueOf(template.role);
+			Player player = ps.find(template.playerId);
+			
+			
 			if (player == null) {
-				player = ps.create(template.id, gameId,template.role);
-				cs.create(template.id, template.characterId, Vitals.Template.PlayerTemplate, null);
+				player = ps.create(template.playerId, gameId,role);
+				cs.create(template.playerId, template.characterId, Vitals.Template.PlayerTemplate, null);
 			}
 
-			ps.setPassword(player.id, template.passwordHash);
+			ps.setPassword(player.id, template.password);
 			ps.setCharacter(player.id, template.characterId);
-			ps.setRole(player.id, template.role);
+			ps.setRole(player.id, role);
 			
-			logger.debug("Player "+template.id+" seeded with character "+template.characterId+" role "+template.role);
+			logger.debug("Player "+template.playerId+" seeded with character "+template.characterId+" role "+template.role);
 		}
 	}
 

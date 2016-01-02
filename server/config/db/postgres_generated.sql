@@ -75,6 +75,8 @@ CREATE TABLE vitals (
 
   vitals_update_id integer DEFAULT NULL,
 
+  vitals_death_time double precision DEFAULT NULL,
+
   CONSTRAINT vitals_pkey PRIMARY KEY (id)
 );
 alter table vitals owner to gamemachine;
@@ -194,6 +196,8 @@ CREATE TABLE build_object_datas (
   build_object_datas_character_id TEXT DEFAULT NULL,
 
   build_object_datas_zone TEXT DEFAULT NULL,
+
+  build_object_datas_group integer DEFAULT NULL,
 
   CONSTRAINT build_object_datas_pkey PRIMARY KEY (id)
 );
