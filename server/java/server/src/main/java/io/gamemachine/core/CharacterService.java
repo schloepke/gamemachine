@@ -15,7 +15,6 @@ import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.CharacterNotification;
 import io.gamemachine.messages.CharacterUpdate;
@@ -25,7 +24,6 @@ import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Vitals;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
-import io.protostuff.ByteString;
 
 public class CharacterService {
 
@@ -119,6 +117,7 @@ public class CharacterService {
 		Character character = find(characterId);
 		character.setItemSlotData(slotsData);
 		Character.db().save(character);
+		characters.put(character.id, character);
 		
 		byte[] bytes = Base64.decodeBase64(slotsData);
 		ItemSlots itemSlots = ItemSlots.parseFrom(bytes);
@@ -135,12 +134,14 @@ public class CharacterService {
 	public void SetUmaData(Character character, String umaData) {
 		character.setUmaData(umaData);
 		Character.db().save(character);
+		characters.put(character.id, character);
 	}
 
 	public void setItemSlots(String characterId, ItemSlots itemSlots) {
 		Character character = find(characterId);
 		character.itemSlotData = Base64.encodeBase64String(itemSlots.toByteArray());
 		Character.db().save(character);
+		characters.put(character.id, character);
 	}
 	
 	public ItemSlots getItemSlots(String characterId) {
@@ -218,5 +219,19 @@ public class CharacterService {
 		characters.setCharactersList(Character.db().findAll());
 		return characters.toByteArray();
 	}
-
+	
+	public void setGuild(Character character, String guildId) {
+		character.guildId = guildId;
+		Character.db().save(character);
+		characters.put(character.id, character);
+	}
+	
+	public Character setBindPoint(String characterId, String bindPoint) {
+		Character character = find(characterId);
+		character.bindPoint = bindPoint;
+		Character.db().save(character);
+		characters.put(character.id, character);
+		return character;
+	}
+	
 }

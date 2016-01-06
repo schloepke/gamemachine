@@ -23,10 +23,14 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.GameMessageActor;
 import io.gamemachine.core.PlayerService;
+import io.gamemachine.guild.GuildService;
 import io.gamemachine.messages.BuildObjects;
 import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Characters;
 import io.gamemachine.messages.GameMessage;
+import io.gamemachine.messages.GuildInfo;
+import io.gamemachine.messages.GuildInvites;
+import io.gamemachine.messages.Guilds;
 import io.gamemachine.messages.ItemSlots;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.Players;
@@ -339,12 +343,109 @@ public class HttpServerHandler extends SimpleChannelInboundHandler<FullHttpReque
 					return;
 				}
 				
+				if (req.getUri().startsWith("/api/characters/set_bind_point")) {
+					Character character = CharacterService.instance().setBindPoint(params.get("characterId"), params.get("bindPoint"));
+					Ok(ctx, character.toByteArray());
+					return;
+				}
+				
 				if (req.getUri().startsWith("/api/characters/set_item_slots")) {
 					CharacterService.instance().setItemSlots(params.get("characterPlayerId"), params.get("characterId"), params.get("item_slots"));
 					Ok(ctx, "OK");
 					return;
 				}
 
+				// Guilds
+				if (req.getUri().startsWith("/api/guild/list")) {
+					Guilds guilds = GuildService.instance().guildList();
+					if (guilds == null) {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					} else {
+						Ok(ctx, guilds.toByteArray());
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/character_guild")) {
+					GuildInfo info = GuildService.instance().getCharacterGuild(params.get("characterId"));
+					if (info == null) {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					} else {
+						Ok(ctx, info.toByteArray());
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/invites")) {
+					GuildInvites invites = GuildService.instance().getInvites(params.get("characterId"));
+					if (invites == null) {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					} else {
+						Ok(ctx, invites.toByteArray());
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/create")) {
+					GuildInfo info = GuildService.instance().create(params.get("characterId"), params.get("guildId"));
+					if (info == null) {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					} else {
+						Ok(ctx, info.toByteArray());
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/destroy")) {
+					Boolean status = GuildService.instance().destroy(params.get("characterId"), params.get("guildId"));
+					if (status) {
+						Ok(ctx, "OK");
+					} else {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/leave")) {
+					Boolean status = GuildService.instance().leave(params.get("characterId"), params.get("guildId"));
+					if (status) {
+						Ok(ctx, "OK");
+					} else {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/invite")) {
+					Boolean status = GuildService.instance().invite(params.get("from"), params.get("to"), params.get("guildId"));
+					if (status) {
+						Ok(ctx, "OK");
+					} else {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/decline_invite")) {
+					Boolean status = GuildService.instance().declineInvite(params.get("characterId"), params.get("guildId"));
+					if (status) {
+						Ok(ctx, "OK");
+					} else {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					}
+					return;
+				}
+				
+				if (req.getUri().startsWith("/api/guild/accept_invite")) {
+					GuildInfo info = GuildService.instance().acceptInvite(params.get("characterId"), params.get("guildId"));
+					if (info == null) {
+						sendError(ctx,HttpResponseStatus.BAD_REQUEST);
+					} else {
+						Ok(ctx, info.toByteArray());
+					}
+					return;
+				}
+				
 				if (isAdmin) {
 					if (req.getUri().startsWith("/api/admin/characters/list")) {
 						byte[] resp = CharacterService.instance().findPlayerCharacters(params.get("get_playerId"));

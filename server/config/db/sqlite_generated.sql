@@ -97,29 +97,15 @@ CREATE TABLE guilds (
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
-CREATE TABLE guild_members (
+CREATE TABLE guild_invites (
 
-  guild_members_guild_id varchar(1024) NOT NULL,
+  guild_invite_id varchar(1024) NOT NULL,
 
-  guild_members_player_id varchar(1024) NOT NULL,
+  guild_invite_to varchar(1024) NOT NULL,
 
-id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
-);
-CREATE TABLE guild_actions (
+  guild_invite_from varchar(1024) NOT NULL,
 
-  guild_action_action varchar(1024) NOT NULL,
-
-  guild_action_to varchar(1024) DEFAULT NULL,
-
-  guild_action_from varchar(1024) DEFAULT NULL,
-
-  guild_action_response varchar(1024) DEFAULT NULL,
-
-  guild_action_guild_id varchar(1024) DEFAULT NULL,
-
-  guild_action_invite_id varchar(1024) DEFAULT NULL,
-
-  guild_action_guild_name varchar(1024) DEFAULT NULL,
+  guild_invite_guild_id varchar(1024) DEFAULT NULL,
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
@@ -246,6 +232,10 @@ CREATE TABLE characters (
   character_region varchar(1024) DEFAULT NULL,
 
   character_item_slot_data varchar(1024) DEFAULT NULL,
+
+  character_guild_id varchar(1024) DEFAULT NULL,
+
+  character_bind_point varchar(1024) DEFAULT NULL,
 
       zone_zone_name varchar(1024) DEFAULT NULL,
     

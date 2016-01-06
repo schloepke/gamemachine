@@ -267,26 +267,21 @@ local_persistent_message Guild {
   optional string name = 6;
 }
 
-local_persistent_message GuildMembers {
-  required string guildId = 1;
-  required string playerId = 3;
-  optional int32 recordId = 2;
-}
-
-local_message GuildMemberList {
-  required string guildId = 1;
-  repeated string playerId = 2;
-}
-
-persistent_message GuildAction {
-  required string action = 1;
-  optional string to = 2;
-  optional string from = 3;
-  optional string response = 4;
+local_persistent_message GuildInvite {
+  required string id = 1;
+  required string to = 2;
+  required string from =3 ;
+  optional int32 recordId = 4;
   optional string guildId = 5;
-  optional int32 recordId = 6;
-  optional string inviteId = 7;
-  optional string guildName = 8;
+}
+
+local_message GuildInvites {
+  repeated GuildInvite guildInvite = 1;
+}
+
+local_message GuildInfo {
+  required Guild guild = 1;
+  repeated string characterId = 2;
 }
 
 local_message Guilds {
@@ -504,6 +499,8 @@ local_persistent_message Character {
   optional string gameEntityPrefab = 16;
   optional string region = 17;
   optional string itemSlotData = 18;
+  optional string guildId = 19;
+  optional string bindPoint = 20;
 }
   
 local_message ItemSlots {
@@ -766,6 +763,7 @@ local_persistent_message PlayerSkill {
     Melee = 5;
     Magic = 6;
     Siege = 7;
+    Tool = 8;
    }
    
    enum ProjectileBehavior {
@@ -1146,9 +1144,6 @@ message GameMessage {
   optional GmBounds bounds = 29;
   optional UseItem useItem = 30;
   optional TimeCycle timeCycle = 31;
-  optional Guilds guilds = 32;
-  optional GuildAction guildAction = 33;
-  optional GuildMemberList guildMemberList = 34;
   optional Territory territory = 35;
   optional Territories territories = 36;
   optional NpcData npcData = 39;

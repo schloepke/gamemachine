@@ -103,33 +103,17 @@ CREATE TABLE `guilds` (
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-DROP TABLE IF EXISTS guild_members;
-CREATE TABLE `guild_members` (
+DROP TABLE IF EXISTS guild_invites;
+CREATE TABLE `guild_invites` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
 
-  guild_members_guild_id varchar(256) NOT NULL,
+  guild_invite_id varchar(256) NOT NULL,
 
-  guild_members_player_id varchar(256) NOT NULL,
+  guild_invite_to varchar(256) NOT NULL,
 
-  PRIMARY KEY(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-DROP TABLE IF EXISTS guild_actions;
-CREATE TABLE `guild_actions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  guild_invite_from varchar(256) NOT NULL,
 
-  guild_action_action varchar(256) NOT NULL,
-
-  guild_action_to varchar(256) DEFAULT NULL,
-
-  guild_action_from varchar(256) DEFAULT NULL,
-
-  guild_action_response varchar(256) DEFAULT NULL,
-
-  guild_action_guild_id varchar(256) DEFAULT NULL,
-
-  guild_action_invite_id varchar(256) DEFAULT NULL,
-
-  guild_action_guild_name varchar(256) DEFAULT NULL,
+  guild_invite_guild_id varchar(256) DEFAULT NULL,
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -264,6 +248,10 @@ CREATE TABLE `characters` (
   character_region varchar(256) DEFAULT NULL,
 
   character_item_slot_data varchar(256) DEFAULT NULL,
+
+  character_guild_id varchar(256) DEFAULT NULL,
+
+  character_bind_point varchar(256) DEFAULT NULL,
 
       zone_zone_name varchar(256) DEFAULT NULL,
     

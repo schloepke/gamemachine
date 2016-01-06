@@ -40,7 +40,7 @@ public class CombatHandler extends GameMessageActor {
 	@Override
 	public void onGameMessage(GameMessage gameMessage) {
 		if (gameMessage.skillRequest != null) {
-			doAttack(gameMessage.skillRequest);
+			useSkill(gameMessage.skillRequest);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class CombatHandler extends GameMessageActor {
 		}
 	}
 	
-	private void doAttack(SkillRequest skillRequest) {
+	private void useSkill(SkillRequest skillRequest) {
 		boolean sendToObjectGrid = false;
 		boolean sendToDefaultGrid = false;
 		
@@ -94,7 +94,12 @@ public class CombatHandler extends GameMessageActor {
 		
 		Zone zone =  PlayerService.getInstance().getZone(skillRequest.originEntityId);
 		
-
+		// None is for non combat skills like warping to bind point.  Nothing implemented yet to handle these
+		if (skillRequest.playerSkill.weaponType == PlayerSkill.WeaponType.None) {
+			sendAttack(skillRequest,zone.name);
+			return;
+		}
+		
 		if (Strings.isNullOrEmpty(skillRequest.attackerCharacterId)) {
 			logger.warning("Attack without attackerCharacterId, ignoring");
 			return;

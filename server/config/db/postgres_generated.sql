@@ -106,38 +106,21 @@ CREATE TABLE guilds (
   CONSTRAINT guild_pkey PRIMARY KEY (id)
 );
 alter table guilds owner to gamemachine;
-DROP TABLE IF EXISTS guild_members;
-CREATE TABLE guild_members (
+DROP TABLE IF EXISTS guild_invites;
+CREATE TABLE guild_invites (
   id bigserial NOT NULL,
 
-  guild_members_guild_id TEXT NOT NULL,
+  guild_invite_id TEXT NOT NULL,
 
-  guild_members_player_id TEXT NOT NULL,
+  guild_invite_to TEXT NOT NULL,
 
-  CONSTRAINT guild_members_pkey PRIMARY KEY (id)
+  guild_invite_from TEXT NOT NULL,
+
+  guild_invite_guild_id TEXT DEFAULT NULL,
+
+  CONSTRAINT guild_invite_pkey PRIMARY KEY (id)
 );
-alter table guild_members owner to gamemachine;
-DROP TABLE IF EXISTS guild_actions;
-CREATE TABLE guild_actions (
-  id bigserial NOT NULL,
-
-  guild_action_action TEXT NOT NULL,
-
-  guild_action_to TEXT DEFAULT NULL,
-
-  guild_action_from TEXT DEFAULT NULL,
-
-  guild_action_response TEXT DEFAULT NULL,
-
-  guild_action_guild_id TEXT DEFAULT NULL,
-
-  guild_action_invite_id TEXT DEFAULT NULL,
-
-  guild_action_guild_name TEXT DEFAULT NULL,
-
-  CONSTRAINT guild_action_pkey PRIMARY KEY (id)
-);
-alter table guild_actions owner to gamemachine;
+alter table guild_invites owner to gamemachine;
 DROP TABLE IF EXISTS world_objects;
 CREATE TABLE world_objects (
   id bigserial NOT NULL,
@@ -272,6 +255,10 @@ CREATE TABLE characters (
   character_region TEXT DEFAULT NULL,
 
   character_item_slot_data TEXT DEFAULT NULL,
+
+  character_guild_id TEXT DEFAULT NULL,
+
+  character_bind_point TEXT DEFAULT NULL,
 
      zone_zone_name TEXT DEFAULT NULL,
     
