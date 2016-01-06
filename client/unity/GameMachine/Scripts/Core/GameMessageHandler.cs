@@ -24,7 +24,7 @@ namespace GameMachine.Core
 		private List<string> reliableMessageIds = new List<string> ();
 
 		static readonly GameMessageHandler _instance = new GameMessageHandler ();
-		public static GameMessageHandler Instance {
+		public static GameMessageHandler instance {
 			get {
 				return _instance;
 			}
@@ -37,6 +37,7 @@ namespace GameMachine.Core
 
 		public void SendGameMessages ()
 		{
+           
 			if (reliableMessages.Count >= 1) {
 				foreach (ReliableMessage reliableMessage in reliableMessages.Values) {
 					if (reliableMessage.attempts >= reliableMessage.maxAttempts) {

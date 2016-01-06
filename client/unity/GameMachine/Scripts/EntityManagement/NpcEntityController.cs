@@ -6,7 +6,7 @@ using GameMachine.Animation;
 
 namespace GameMachine {
     namespace Common {
-        public class NpcEntityController : MonoBehaviour, IGameEntityController {
+        public class NpcEntityController : MonoBehaviour, GameEntityController {
 
             public bool onBoat = false;
             public bool controllingBoat = false;
@@ -19,6 +19,7 @@ namespace GameMachine {
             private Quaternion activeGlobalPlatformRotation;
             public IGameEntity gameEntity;
             public float swimJumpSpeed = 0.5f;
+            public float playerSpeed = 1f;
             public float walkSpeed = 3;
             public float swimSpeed = 3;
             public float runSpeed = 6;
@@ -29,17 +30,10 @@ namespace GameMachine {
             public float slopeLimit = 55;
             public float antiBump = 0.75f;
 
-            public bool toggleRun = true;
-
-            public bool running = true;
-            private bool grounded = false;
             public float speed = 0;
-            private bool autorun = false;
             private Vector3 velocity = Vector3.zero;
-            private float inputX = 0;
-            private float inputY = 0;
+
             public Vector3 lastPosition = Vector3.zero;
-            private float animationSpeed = 1;
             public float moveSpeed = 0;
 
             private CharacterController characterController;
@@ -49,336 +43,214 @@ namespace GameMachine {
 
             public float swimLevel;
             public bool swimming = false;
-            private int swimDirection = 0;
-            private float swimVelocity = 0f;
-            public bool underWater = false;
             private Camera gameCam;
             private bool initialized = false;
-            private AnimationController animationController;
+            private DefaultAnimationController animationController;
+            private ITerrainCollision terrainCollisionHandler;
+            private Transform transformTarget;
+            public NavMeshAgent agent;
+            public bool useNavmesh = false;
+            public float pathEndThreshold = 0.1f;
+            private bool hasPath = false;
+            public bool stopped = false;
+            public Transform targetTransform;
+            public bool updateAgentDestination = false;
+            public Vector3 agentTarget;
+            public Vector3 serverTarget;
 
             void Start() {
 
                 gameEntity = gameObject.GetComponent<IGameEntity>() as IGameEntity;
                 inputController = gameObject.GetComponent<IGameEntityInput>() as IGameEntityInput;
 
+                terrainCollisionHandler = gameObject.GetComponent<ITerrainCollision>() as ITerrainCollision;
+                if (terrainCollisionHandler != null) {
+                    terrainCollisionHandler.Initialize();
+                }
+
                 characterController = GetComponent<CharacterController>();
 
                 characterController.slopeLimit = slopeLimit;
 
-                animationController = transform.GetComponentInChildren<AnimationController>();
+                animationController = transform.GetComponentInChildren<DefaultAnimationController>();
 
                 swimLevel = Settings.Instance().waterLevel - 1.5f;
                 initialized = true;
+            }
+
+            public bool AtEndOfPath() {
+                hasPath |= agent.hasPath;
+                if (hasPath && agent.remainingDistance <= agent.stoppingDistance + pathEndThreshold) {
+                    // Arrived
+                    hasPath = false;
+                    return true;
+                }
+                return false;
+            }
+
+            public void SetAgentTarget(Vector3 agentTarget) {
+                this.agentTarget = agentTarget;
+            }
+
+            public void SetTargetTransform(Transform targetTransform) {
+                this.targetTransform = targetTransform;
             }
 
             private void SetAnimation(AnimationName name) {
                 animationController.SetAnimation(name);
             }
 
-
-            void ServerMove(float y, float spd) {
+            void ServerMove(float y, float spd, Vector3 targetPosition) {
                 float speed = spd;
-                moveTo = gameEntity.GetServerLocation() - transform.position;
+                moveTo = targetPosition - transform.position;
                 moveTo = moveTo * speed;
                 moveTo.y = -antiBump;
                 moveY -= gravity * Time.deltaTime;
                 moveTo.y = moveY;
 
-                if (moveTo.magnitude > 0.1f) {
+                if (moveTo.magnitude > 0.01f) {
                     characterController.Move(moveTo * Time.deltaTime);
                 }
             }
 
             public void ManualUpdate() {
+                if (useNavmesh) {
+                    AgentUpdate();
+                } else {
+                    Vector3 targetPosition = gameEntity.GetTargetPosition();
+                    serverTarget = targetPosition;
+                    RemoteUpdate(targetPosition);
+                }
+            }
+
+            private void AgentUpdate() {
+
+                if (gameEntity.IsDead()) {
+                    SetAnimation(AnimationName.Dead);
+                    return;
+                }
+
+                if (agentTarget == Vector3.zero) {
+                    return;
+                }
+
+
+
+
+                if (playerSpeed == 0f) {
+                    agent.speed = walkSpeed;
+                    agent.acceleration = walkSpeed + 1f;
+                    speed = walkSpeed;
+                } else {
+                    agent.speed = runSpeed;
+                    agent.acceleration = runSpeed + 1f;
+                    speed = runSpeed;
+                }
+
+                agent.acceleration = speed;
+
+                moveSpeed = (transform.position - lastPosition).magnitude;
+                lastPosition = transform.position;
+
+                if (moveSpeed > 0.01f) {
+                    agent.updateRotation = true;
+                    SetAnimation(DefaultAnimationController.GetAnimationName(Vector3.forward, playerSpeed));
+                } else {
+                    if (targetTransform != null) {
+                        agent.updateRotation = false;
+                        Vector3 dir = (targetTransform.position - transform.position);
+                        RotateTowards(dir);
+                    } else {
+                        agent.updateRotation = true;
+                    }
+                    SetAnimation(AnimationName.Idle);
+                }
+
+
+
+                if (updateAgentDestination) {
+                    agent.SetDestination(agentTarget);
+                    updateAgentDestination = false;
+                }
+            }
+
+            private void RemoteUpdate(Vector3 targetPosition) {
+                playerSpeed = inputController.GetFloat(GMKeyCode.PlayerSpeed);
+                float distanceToTarget = Vector3.Distance(new Vector3(transform.position.x, targetPosition.y, transform.position.z), targetPosition);
+
+                if (terrainCollisionHandler != null) {
+                    terrainCollisionHandler.CollisionCheck();
+                }
+
                 if (gameEntity.IsDead()) {
                     velocity.y -= gravity * Time.deltaTime;
                     SetAnimation(AnimationName.Dead);
                     return;
                 }
 
-                // If on the ground, allow jumping
-                if (grounded) {
-                    if (inputController.GetBool(GMKeyCode.Jumping)) {
-                        velocity.y = jumpPower;
-                        grounded = false;
-                    }
-                }
 
-                if (inputController.GetBool(GMKeyCode.Running)) {
-                    running = true;
+
+                Quaternion wanted = Quaternion.Euler(0, inputController.GetFloat(GMKeyCode.Heading), 0);
+                transform.rotation = Quaternion.Slerp(transform.rotation, wanted, Time.deltaTime * speed);
+                onBoat = false;
+
+
+
+                if (inputController.GetFloat(GMKeyCode.PlayerSpeed) == 1f) {
+                    speed = runSpeed;
                 } else {
-                    running = false;
+                    speed = walkSpeed;
                 }
 
-                if (!gameEntity.IsPlayer()) {
-                    if (gameEntity.IsOtherPlayer()) {
-                        transform.rotation = Quaternion.Euler(0, inputController.GetFloat(GMKeyCode.Heading), 0);
-                    } else if (gameEntity.IsNpc()) {
-                        Vector3 dir = (gameEntity.GetServerLocation() - transform.position).normalized;
-                        // Zero out the y component of your forward vector to only get the direction in the X,Z plane
-                        dir.y = 0;
-                        if (dir != Vector3.zero) {
-                            float headingAngle = Quaternion.LookRotation(dir).eulerAngles.y;
-                            transform.rotation = Quaternion.Euler(0, headingAngle, 0);
-                        }
-
-                    }
-
-                }
-                Stage2();
-            }
-
-            void Stage2() {
-                if (gameEntity.IsPlayer()) {
-                    if (OnBoat()) {
-                        onBoat = true;
-                    } else {
-                        onBoat = false;
-                    }
-                } else {
-                    onBoat = false;
-                }
-
-
-                if (transform.position.y <= swimLevel) {
-                    swimDirection = 0;
-                    float angleY = inputController.GetFloat(GMKeyCode.AngleY);
-
-                    if (angleY >= 40f) {
-                        swimDirection = 1;
-                    }
-
-                    swimming = true;
-                    if (Mathf.Abs(transform.position.y - swimLevel) <= 0.1f) {
-                        underWater = false;
-                    } else {
-                        underWater = true;
-                        if (angleY <= -30f || Input.GetButton("Jump")) {
-                            swimDirection = 2;
-                        }
-
-                    }
-                    grounded = true;
-                } else {
-                    swimming = false;
-                }
-
-                animationSpeed = 1;
-                float input_modifier = (inputX != 0.0f && inputY != 0.0f) ? 0.7071f : 1.0f;
-
-                inputX = inputController.GetFloat(GMKeyCode.Haxis);
-                inputY = inputController.GetFloat(GMKeyCode.Vaxis);
-
-                // If autorun is enabled, set Y input to always be 1 until user uses the Y axis
-                if (autorun) {
-                    if (inputY == 0) {
-                        inputY = 1;
-                    } else {
-                        autorun = false;
-                    }
-                }
-
-                // If the user is not holding right-mouse button, rotate the player with the X axis instead of strafing
-                if (!inputController.GetBool(GMKeyCode.MouseRight) && inputX != 0) {
-                    transform.Rotate(new Vector3(0, inputX * (turnSpeed / 2.0f), 0));
-                    inputX = 0;
-
-                } else {
-                }
-
-                // Movement direction and speed
-                if (swimming) {
-                    speed = swimSpeed;
-                } else {
-                    if (inputY < 0) {
-                        speed = backSpeed;
-                    } else {
-                        if (running) {
-                            speed = runSpeed;
-                        } else {
-                            speed = walkSpeed;
-                        }
-                    }
-                }
-
-
-                // If on the ground, test to see if still on the ground and apply movement direction
-                if (grounded) {
-                    if (swimming) {
-                        velocity = new Vector3(inputX * input_modifier, -antiBump, inputY * input_modifier);
-                        velocity = transform.TransformDirection(velocity) * speed;
-                        //_velocity = new Vector3 (_velocity.x, y, _velocity.z);
-                    } else {
-                        velocity = new Vector3(inputX * input_modifier, -antiBump, inputY * input_modifier);
-                        velocity = transform.TransformDirection(velocity) * speed;
-                    }
-
-                    if (lastPosition == Vector3.zero) {
-                        lastPosition = transform.position;
-                    }
-                    moveSpeed = (transform.position - lastPosition).magnitude;
+                if (lastPosition == Vector3.zero) {
                     lastPosition = transform.position;
                 }
+                moveSpeed = (transform.position - lastPosition).magnitude;
+                lastPosition = transform.position;
 
-                // npc's always grounded
-                if (gameEntity.IsNpc()) {
-                    grounded = true;
-                } else {
-                    if (!Physics.Raycast(transform.position, -Vector3.up, 0.2f)) {
-                        grounded = false;
-                    }
+
+                UpdateAnimations(distanceToTarget);
+
+
+                velocity.y -= gravity * Time.deltaTime;
+
+                if (distanceToTarget >= characterController.radius * 2) {
+                    ServerMove(velocity.y, speed, targetPosition);
                 }
 
-                UpdateAnimations();
+            }
 
-                if (swimming) {
-                    if (swimDirection == 2) {
-                        swimVelocity = 2f;
-                    } else if (swimDirection == 1) {
-                        swimVelocity = -2f;
+            private void UpdateAnimations(float distanceToTarget) {
+                if (moveSpeed > 0.01f) {
+                    if (distanceToTarget <= characterController.radius * 2) {
+                        SetAnimation(AnimationName.Idle);
                     } else {
-                        swimVelocity = 0f;
-                    }
-
-                    velocity.y = swimVelocity;
-
-                } else {
-                    velocity.y -= gravity * Time.deltaTime;
-                }
-
-                if (gameEntity.IsPlayer()) {
-                    if (activePlatform == null) {
-                        characterController.Move(velocity * Time.deltaTime);
-                    } else {
-                        if (onBoat) {
-                            MoveOnPlatform();
-                            if (!controllingBoat) {
-                                characterController.Move(velocity * Time.deltaTime);
-                            }
-                            PlatformPostCalc();
-                        }
+                        SetAnimation(DefaultAnimationController.GetAnimationName(Vector3.forward, playerSpeed));
                     }
                 } else {
-                    ServerMove(velocity.y, speed);
+                    if (inputController.GetBool(GMKeyCode.Hidden)) {
+                        SetAnimation(AnimationName.CrouchIdle);
+                    } else {
+                        SetAnimation(AnimationName.Idle);
+                    }
                 }
             }
 
-            private void UpdateAnimations() {
-                if (!grounded) {
-                    SetAnimation(AnimationName.RunJump);
+            protected void RotateTowards(Vector3 dir) {
+
+                if (dir == Vector3.zero)
                     return;
-                }
 
-                if (moveSpeed > 0.01) {
-                    if (gameEntity.IsNpc()) {
-                        SetAnimation(AnimationName.Run);
-                    } else if (controllingBoat) {
-                        SetAnimation(AnimationName.Idle);
-                    } else if (swimming) {
-                        SetAnimation(AnimationName.Swim);
-                    } else if (running) {
+                Quaternion rot = transform.rotation;
+                Quaternion toTarget = Quaternion.LookRotation(dir);
 
-                        if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
-                            if (inputX < 0) {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.RunLeft);
-                                } else {
-                                    SetAnimation(AnimationName.RunLeft);
-                                }
-                            } else {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.RunRight);
-                                } else {
-                                    SetAnimation(AnimationName.RunRight);
-                                }
-                            }
-                        } else {
-                            if (inputY > 0) {
-                                SetAnimation(AnimationName.Run);
-                            } else if (inputY < 0) {
-                                SetAnimation(AnimationName.RunBack);
-                            }
+                rot = Quaternion.Slerp(rot, toTarget, 5f * Time.deltaTime);
+                Vector3 euler = rot.eulerAngles;
+                euler.z = 0;
+                euler.x = 0;
+                rot = Quaternion.Euler(euler);
 
-                        }
-
-                        animationSpeed = 1;
-                    } else if (inputController.GetBool(GMKeyCode.Hidden)) {
-                        if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
-                            if (inputX < 0) {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.CrouchLeft);
-                                } else if (inputY < 0) {
-                                    SetAnimation(AnimationName.CrouchRight);
-                                } else {
-                                    SetAnimation(AnimationName.CrouchLeft);
-                                }
-                            } else {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.CrouchRight);
-                                } else if (inputY < 0) {
-                                    SetAnimation(AnimationName.CrouchLeft);
-                                } else {
-                                    SetAnimation(AnimationName.CrouchRight);
-                                }
-                            }
-                        } else {
-                            if (inputY > 0) {
-                                SetAnimation(AnimationName.CrouchWalk);
-                            } else {
-                                SetAnimation(AnimationName.CrouchBack);
-                            }
-                        }
-
-                        animationSpeed = moveSpeed * 13 + 1;
-
-                        if (inputY < 0) {
-                            animationSpeed = -animationSpeed;
-                        }
-                    } else {
-                        if ((inputController.GetBool(GMKeyCode.MouseRight)) && inputX != 0) {
-                            if (inputX < 0) {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.IdleLeft);
-                                } else if (inputY < 0) {
-                                    SetAnimation(AnimationName.IdleRight);
-                                } else {
-                                    SetAnimation(AnimationName.IdleLeft);
-                                }
-                            } else {
-                                if (inputY > 0) {
-                                    SetAnimation(AnimationName.IdleRight);
-                                } else if (inputY < 0) {
-                                    SetAnimation(AnimationName.IdleLeft);
-                                } else {
-                                    SetAnimation(AnimationName.IdleRight);
-                                }
-                            }
-                        } else {
-                            if (inputY > 0) {
-                                SetAnimation(AnimationName.Walk);
-                            } else {
-                                SetAnimation(AnimationName.WalkBack);
-                            }
-                        }
-
-                        animationSpeed = moveSpeed * 13 + 1;
-
-                        if (inputY < 0) {
-                            animationSpeed = -animationSpeed;
-                        }
-                    }
-                } else {
-                    if (swimming) {
-                        SetAnimation(AnimationName.SwimIdle);
-                    } else {
-                        if (inputController.GetBool(GMKeyCode.Hidden)) {
-                            SetAnimation(AnimationName.CrouchIdle);
-                        } else {
-                            SetAnimation(AnimationName.Idle);
-                        }
-
-                    }
-                }
+                transform.rotation = rot;
             }
 
             public bool OnBoat() {
@@ -429,28 +301,28 @@ namespace GameMachine {
                 return initialized;
             }
 
-            public float GetSwimSpeed() {
-                return swimSpeed;
+            public float GetPlayerSpeed() {
+                return playerSpeed;
             }
 
-            public float GetRunSpeed() {
-                return runSpeed;
+            public void SetPlayerSpeed(float speed) {
+                playerSpeed = speed;
             }
 
-            public float GetWalkSpeed() {
-                return walkSpeed;
-            }
+            public void SetNetworkFields(NetworkFields networkFields) {
+                Vector3 forward = transform.forward;
+                forward.y = 0;
+                float heading = Quaternion.LookRotation(forward).eulerAngles.y;
 
-            public void SetSwimSpeed(float speed) {
-                swimSpeed = speed;
-            }
+                networkFields.SetPosition(transform.position);
+                networkFields.SetFloat(GMKeyCode.PlayerSpeed, GetPlayerSpeed());
+                networkFields.SetFloat(GMKeyCode.Heading, heading);
 
-            public void SetRunSpeed(float speed) {
-                runSpeed = speed;
-            }
-
-            public void SetWalkSpeed(float speed) {
-                walkSpeed = speed;
+                if (!gameEntity.IsNpc()) {
+                    networkFields.SetFloat(GMKeyCode.Vaxis, inputController.GetFloat(GMKeyCode.Vaxis));
+                    networkFields.SetFloat(GMKeyCode.Haxis, inputController.GetFloat(GMKeyCode.Haxis));
+                    networkFields.SetBool(GMKeyCode.MouseRight, inputController.GetBool(GMKeyCode.MouseRight));
+                }
             }
         }
     }

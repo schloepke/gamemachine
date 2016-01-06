@@ -5,7 +5,7 @@ namespace GameMachine {
     namespace Common {
         public interface IGameEntityInput {
 
-            void SetControllerType(string type);
+            void SetControllerType(ControllerType controllerType);
             bool GetBool(GMKeyCode code);
             float GetFloat(GMKeyCode code);
             int GetInt(GMKeyCode code);

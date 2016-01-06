@@ -22,7 +22,7 @@ namespace GameMachine.Core
             }
 
             string uri = prefix + hostname + ":" + httpPort + "/api/client/login/" + gameId;
-            Debug.Log ("Authenticating via " + uri);
+            //Debug.Log ("Authenticating via " + uri);
             var form = new WWWForm ();
             form.AddField ("username", username);
             form.AddField ("password", password);
@@ -33,7 +33,7 @@ namespace GameMachine.Core
                 Debug.Log(www.error);
                 error (www.error);
             } else {
-                Debug.Log(www.text);
+                //Debug.Log(www.text);
                 Dictionary<string, string> values = JsonConvert.DeserializeObject<Dictionary<string, string>> (www.text);
                 success (values);
             }

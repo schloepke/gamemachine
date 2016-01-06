@@ -3,7 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class CharacterOptions : MonoBehaviour {
 
             public string characterId;

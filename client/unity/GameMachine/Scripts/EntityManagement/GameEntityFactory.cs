@@ -39,18 +39,15 @@ namespace GameMachine {
 
             public IGameEntity Create() {
                 if (NetworkSettings.instance == null) {
-                    return Create(GameEntityType.Player);
+                    return CreateLocal(GameEntityType.Player);
                 } else {
                     if (NetworkSettings.instance.serverClient) {
                         return null;
                     } else {
-                        return Create(NetworkSettings.instance.username, NetworkSettings.instance.character, GameEntityType.Player);
+                        Vector3 spawnPoint = SpawnPoint.Instance().GetPlayerSpawnpoint(NetworkSettings.instance.character);
+                        return Create(NetworkSettings.instance.username, NetworkSettings.instance.character, GameEntityType.Player, spawnPoint, ControllerType.Local);
                     }
                 }
-            }
-
-            public IGameEntity Create(string entityId) {
-                throw new System.NotImplementedException();
             }
 
             private static GameObject GetEntityContainer() {
@@ -64,24 +61,44 @@ namespace GameMachine {
                 return container;
             }
 
-            public IGameEntity Create(GameEntityType entityType) {
-                Character character = new Character();
-                character.id = Settings.Instance().defaultCharacterId;
-                return Create(Settings.Instance().defaultEntityId, character, entityType);
+            private Vector3 GetSpawnpoint(GameEntityType entityType, Character character) {
+                Vector3 spawnPoint;
+                if (entityType == GameEntityType.Player) {
+                    spawnPoint = SpawnPoint.Instance().GetPlayerSpawnpoint(character);
+                } else {
+                    spawnPoint = SpawnPoint.Instance().GetPlayerSpawnpoint(character);
+                }
+                return spawnPoint;
             }
 
-            public IGameEntity Create(string entityId, Character character, TrackData trackData) {
-                SpawnPoint spawnPoint = GameComponent.Get<SpawnPoint>() as SpawnPoint;
-                Vector3 spawnPosition = GmUtil.Instance.TrackdataToVector3(trackData);
-                spawnPosition = spawnPoint.GroundedPosition(spawnPosition);
-                GameEntityType entityType = GameEntity.GameEntityTypeFromTrackData(trackData);
-                IGameEntity gameEntity = Create(entityId, character, entityType);
-                gameEntity.GetTransform().position = spawnPosition;
+            public IGameEntity CreateLocal(GameEntityType entityType) {
+                Character character = new Character();
+                character.id = Settings.Instance().defaultCharacterId;
+                Vector3 spawnPoint = SpawnPoint.Instance().GetPlayerSpawnpoint(character);
+                return Create(Settings.Instance().defaultEntityId, character, entityType, spawnPoint, ControllerType.Local);
+            }
+
+            public IGameEntity CreateLocalNpc(string entityId, Character character, Vector3 spawnPosition, GameObject prefab) {
+                GameObject go = GameObject.Instantiate(prefab, spawnPosition, Quaternion.identity) as GameObject;
                 SpawnPoint.Instance().spawned = true;
+
+                go.transform.parent = GetEntityContainer().transform;
+
+                GameEntity gameEntity = go.GetComponent<GameEntity>() as GameEntity;
+                LoadUmaModel(gameEntity);
+                gameEntity.Init(entityId, character, GameEntityType.Npc, ControllerType.Local);
                 return gameEntity;
             }
 
-            public IGameEntity Create(string entityId, Character character, GameEntityType entityType) {
+            public IGameEntity CreateFromNetwork(string entityId, Character character, TrackData trackData) {
+                Vector3 spawnPosition = GmUtil.TrackdataToVector3(trackData);
+                GameEntityType entityType = GameEntity.GameEntityTypeFromTrackData(trackData);
+                Vector3 spawnPoint = SpawnPoint.Instance().GetNpcSpawnpoint(spawnPosition);
+                IGameEntity gameEntity = Create(entityId, character, entityType, spawnPoint, ControllerType.Remote);
+                return gameEntity;
+            }
+
+            public IGameEntity Create(string entityId, Character character, GameEntityType entityType, Vector3 spawnPoint, ControllerType controllerType) {
                 GameObject go;
                 GameObject prefab = null;
 
@@ -96,12 +113,15 @@ namespace GameMachine {
                     throw new UnityException("Unable to spawn gameentity, no prefab found");
                 }
 
-                go = GameObject.Instantiate(prefab);
+                
+                go = GameObject.Instantiate(prefab, spawnPoint,Quaternion.identity) as GameObject;
+                SpawnPoint.Instance().spawned = true;
+
                 go.transform.parent = GetEntityContainer().transform;
 
                 GameEntity gameEntity = go.GetComponent<GameEntity>() as GameEntity;
                 LoadUmaModel(gameEntity);
-                gameEntity.Init(entityId, character, entityType);
+                gameEntity.Init(entityId, character, entityType, controllerType);
                 return gameEntity;
             }
 

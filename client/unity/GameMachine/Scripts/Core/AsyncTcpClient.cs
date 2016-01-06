@@ -30,6 +30,8 @@ namespace GameMachine.Core
         private bool connecting = false;
         private IPAddress address;
         private bool receivedPlayerConnected = false;
+        private long bytesIn;
+        private long bytesOut;
 
         // 0 = combined.  Single server setup where cluster/region is on one server, or where
         // you simply do not have regions.
@@ -57,6 +59,10 @@ namespace GameMachine.Core
             clientMessage.connection_type = connectionType;
             clientMessage.player = player;
             return clientMessage;
+        }
+
+        public void Reconnect() {
+
         }
 
         private void Connected ()
@@ -158,6 +164,7 @@ namespace GameMachine.Core
                 return;
             }
 
+            bytesOut += bytes.Length;
             NetworkStream networkStream = tcpClient.GetStream ();
             networkStream.BeginWrite (bytes, 0, bytes.Length, WriteCallback, null);
         }
@@ -166,6 +173,7 @@ namespace GameMachine.Core
         {
             NetworkStream networkStream = tcpClient.GetStream ();
             networkStream.EndWrite (result);
+            
         }
 
         private void ConnectCallback (IAsyncResult result)
@@ -215,6 +223,7 @@ namespace GameMachine.Core
             ClientMessage clientMessage;
 
             while (true) {
+
                 clientMessage = Deserialize (networkStream);
 
                 if (receivedPlayerConnected) {
@@ -259,6 +268,19 @@ namespace GameMachine.Core
 
         public void Send(byte[] bytes) {
             // noop
+        }
+
+        public long GetBytesIn() {
+            return bytesIn;
+        }
+
+        public long GetBytesOut() {
+            return bytesOut;
+        }
+
+        public void ResetBytes() {
+            bytesIn = 0L;
+            bytesOut = 0L;
         }
     }
 }

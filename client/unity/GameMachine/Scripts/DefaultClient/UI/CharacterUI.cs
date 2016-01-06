@@ -7,21 +7,14 @@ using GameMachine.HttpApi;
 using Characters = io.gamemachine.messages.Characters;
 using Character = io.gamemachine.messages.Character;
 using Player = io.gamemachine.messages.Player;
+using System;
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class CharacterUI : MonoBehaviour, ICharacterApi {
-
-            private Transform panel;
-
-            void Start() {
-                gameObject.GetComponent<Canvas>().enabled = false;
-                panel = transform.Find("panel");
-            }
 
             public void Load(string characterId) {
                 SetError("");
-                gameObject.GetComponent<Canvas>().enabled = true;
                 CreateButton().interactable = true;
                 NameInput().text = "";
             }
@@ -33,11 +26,11 @@ namespace GameMachine {
             }
 
             private InputField NameInput() {
-                return panel.transform.Find("name_input").GetComponent<InputField>();
+                return transform.Find("name_input").GetComponent<InputField>();
             }
 
             private Button CreateButton() {
-                return panel.transform.Find("create").GetComponent<Button>();
+                return transform.Find("create").GetComponent<Button>();
             }
 
             public void LoadCharacters() {
@@ -45,7 +38,7 @@ namespace GameMachine {
             }
 
             private void SetError(string text) {
-                panel.Find("error").Find("Text").GetComponent<Text>().text = text;
+                transform.Find("error").Find("Text").GetComponent<Text>().text = text;
                 CreateButton().interactable = true;
             }
 
@@ -79,6 +72,18 @@ namespace GameMachine {
 
             void ICharacterApi.OnCharacterGetError(string playerId, string characterId, string error) {
                 throw new System.NotImplementedException();
+            }
+
+            public void OnCharacterSetEquippedItems(string result) {
+                throw new NotImplementedException();
+            }
+
+            public void OnCharacterSetEquippedItemsError(string error) {
+                throw new NotImplementedException();
+            }
+
+            public void OnNpcCreated(bool status) {
+                throw new NotImplementedException();
             }
         }
     }

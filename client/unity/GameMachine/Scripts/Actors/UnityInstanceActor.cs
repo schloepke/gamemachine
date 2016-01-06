@@ -5,8 +5,8 @@ using GameMachine.Core;
 
 public class UnityInstanceActor : GameMessageActor {
 
-    private UnityInstanceStatus.State state = UnityInstanceStatus.State.Idle;
-    private UnityInstanceStatus.State requestedState = UnityInstanceStatus.State.None;
+    //private UnityInstanceStatus.State state = UnityInstanceStatus.State.Idle;
+    //private UnityInstanceStatus.State requestedState = UnityInstanceStatus.State.None;
 
     void Start() {
         Register();
@@ -18,7 +18,7 @@ public class UnityInstanceActor : GameMessageActor {
     }
 
     public override void OnGameMessage(GameMessage gameMessage) {
-        requestedState = gameMessage.unityInstanceStatus.requestedState;
+        //requestedState = gameMessage.unityInstanceStatus.requestedState;
         gameMessage.unityInstanceStatus.state = gameMessage.unityInstanceStatus.requestedState;
 
         Reply(gameMessage);

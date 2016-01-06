@@ -32,8 +32,13 @@ namespace GameMachine.Chat {
         private Dictionary<string, GameObject> groupMembers = new Dictionary<string, GameObject>();
         private bool chatActive = false;
         private bool groupWindowActive = false;
-
+        
         void Start() {
+            if (!GamePlayer.IsNetworked()) {
+                Destroy(this.gameObject);
+                return;
+            }
+
             canvas = gameObject.GetComponent<Canvas>() as Canvas;
             canvas.enabled = false;
             contentHolder = GameObject.Find("chat_text");
@@ -75,20 +80,19 @@ namespace GameMachine.Chat {
 
         void Update() {
             if (chatInput.isFocused) {
-                InputState.typing = true;
+                InputState.SetInput("chat", true);
             } else {
-                InputState.typing = false;
-            }
-            if (Input.GetKeyDown(KeyCode.K)) {
-                if (chatActive) {
-                    canvas.enabled = false;
-                    InputState.typing = false;
-                    InputState.chatfocus = false;
-                    InputState.chatdragging = false;
-                    chatActive = false;
-                } else {
-                    canvas.enabled = true;
-                    chatActive = true;
+                InputState.SetInput("chat", false);
+                if (!InputState.KeyInputActive() && Input.GetKeyDown(KeyBinds.Binding("Chat"))) {
+                    if (chatActive) {
+                        canvas.enabled = false;
+                        InputState.chatfocus = false;
+                        InputState.dragging = false;
+                        chatActive = false;
+                    } else {
+                        canvas.enabled = true;
+                        chatActive = true;
+                    }
                 }
             }
         }
@@ -103,11 +107,11 @@ namespace GameMachine.Chat {
         }
 
         public void StartDrag() {
-            InputState.chatdragging = true;
+            InputState.dragging = true;
         }
 
         public void EndDrag() {
-            InputState.chatdragging = false;
+            InputState.dragging = false;
         }
 
         public void AddMessage() {

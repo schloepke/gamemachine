@@ -19,7 +19,6 @@ namespace GameMachine {
             [Header("Populated post login")]
             public string characterId;
             public bool loggedIn = false;
-            public bool isAdmin = false;
             public int authtoken;
             public Character character;
 
@@ -29,10 +28,13 @@ namespace GameMachine {
             public int httpPort = 3000;
             public int udpPort = 24130;
             public int tcpPort = 8910;
+            
 
             [Header("Are we running as a server client/agent controller")]
             public bool serverClient = false;
             private string httpPrefix;
+
+            public bool showClientStats = false;
 
             void Awake() {
                 instance = this;

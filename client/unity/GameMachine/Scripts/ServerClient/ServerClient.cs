@@ -12,7 +12,7 @@ namespace GameMachine {
             public string startScene;
             public string mainScene;
             
-            public GameObject gameMachine;
+            public GameObject masterGameObject;
             private Login login;
             private App app;
 
@@ -32,8 +32,7 @@ namespace GameMachine {
                 Debug.Log("Logged in");
                 app = gameObject.GetComponent<App>() as App;
                 NetworkSettings.instance.loggedIn = true;
-                GameObject go = GameObject.Instantiate(gameMachine);
-                go.name = "GameMachine";
+                GameObject.Instantiate(masterGameObject);
                 PlayerApi.instance.GetPlayer(this);
 
                 if (!string.IsNullOrEmpty(mainScene)) {
@@ -55,7 +54,7 @@ namespace GameMachine {
             }
 
             private void Shutdown() {
-                GameObject go = GameObject.Find("GameMachine");
+                GameObject go = GameObject.Find(masterGameObject.name);
                 if (go != null) {
                     Destroy(go);
                 }
@@ -92,9 +91,6 @@ namespace GameMachine {
             }
 
             void IPlayerApi.OnPlayer(Player player) {
-                if (player.role == Player.Role.Admin) {
-                    NetworkSettings.instance.isAdmin = true;
-                }
                
             }
 

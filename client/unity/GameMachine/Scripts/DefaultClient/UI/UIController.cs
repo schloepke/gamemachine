@@ -1,50 +1,43 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 using GameMachine.Common;
-using Character = io.gamemachine.messages.Character;
+using io.gamemachine.messages;
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class UIController : MonoBehaviour {
 
             public static UIController instance;
-            private AdminUI adminUI;
-            private LoginUI loginUI;
-            private MainUI mainUI;
-            private CharactersUI charactersUI;
-            private CharacterUI characterUI;
-            private AccountUI accountUI;
-            private PasswordUI passwordUI;
-            private PlayerUI playerUI;
-            private DefaultClient.Client client;
+            public LoginUI loginUI;
+            public MainUI mainUI;
+            public CharactersUI charactersUI;
+            public CharacterUI characterUI;
+            public AccountUI accountUI;
+            public PasswordUI passwordUI;
+            public PlayerUI playerUI;
+            private DefaultClient client;
             private Login login;
-            public string mainScene;
 
             void Awake() {
                 instance = this;
+               
             }
 
-            // Use this for initialization
             void Start() {
-                adminUI = transform.Find("admin").GetComponent<AdminUI>();
-                mainUI = transform.Find("menu").GetComponent<MainUI>();
-                accountUI = transform.Find("account").GetComponent<AccountUI>();
-                loginUI = transform.Find("login").GetComponent<LoginUI>();
-                passwordUI = transform.Find("password").GetComponent<PasswordUI>();
-                charactersUI = transform.Find("characters").GetComponent<CharactersUI>();
-                characterUI = transform.Find("character").GetComponent<CharacterUI>();
-                playerUI = transform.Find("player").GetComponent<PlayerUI>();
+                ResetUI();
             }
 
             // Destroy UI when we load the first level
             private void OnLevelWasLoaded(int level) {
-                Destroy(this.gameObject);
+                if (level > 0) {
+                    Destroy(this.gameObject);
+                }
+               
             }
 
-            public void SetClient(DefaultClient.Client client) {
+            public void SetClient(DefaultClient client) {
                 this.client = client;
-                login = client.gameObject.AddComponent<GameMachine.Login>() as GameMachine.Login;
+                login = client.gameObject.AddComponent<Login>() as Login;
                 login.SetLoginUi(loginUI);
             }
 
@@ -60,74 +53,77 @@ namespace GameMachine {
 
             public void LoadMain() {
                 ResetUI();
-                mainUI.Load();
+                mainUI.gameObject.SetActive(true);
             }
 
             public void LoadPassword() {
                 ResetUI();
+                passwordUI.gameObject.SetActive(true);
                 passwordUI.Load();
             }
 
             public void LoadLogin() {
                 ResetUI();
+                loginUI.gameObject.SetActive(true);
                 loginUI.Load();
             }
 
             public void LoadCharacter(string characterId) {
                 ResetUI();
+                characterUI.gameObject.SetActive(true);
                 characterUI.Load(characterId);
             }
 
             public void LoadCharacters() {
                 ResetUI();
+                charactersUI.gameObject.SetActive(true);
                 charactersUI.Load();
             }
 
             public void LoadAccount() {
                 ResetUI();
+                accountUI.gameObject.SetActive(true);
                 accountUI.Load();
-            }
-
-            public void LoadAdmin() {
-                ResetUI();
-                adminUI.Load();
             }
 
             public void LoadPlayer(string playerId) {
                 ResetUI();
+                playerUI.gameObject.SetActive(true);
                 playerUI.playerId = playerId;
                 playerUI.Load(playerId);
             }
 
             public void OnCharacterSelected(Character character) {
+                if (character.zone == null) {
+                    Debug.Log("NULL2");
+                }
                 NetworkSettings.instance.character = character;
-                if (string.IsNullOrEmpty(client.zone.name)) {
+                if (string.IsNullOrEmpty(client.GetZone().name)) {
                     Debug.Log("Server assigned zone is null");
                 } else {
-                    if (character.zone.name != client.zone.name) {
-                        Debug.Log("Character zone " + character.zone.name + " != server assigned zone " + client.zone.name);
+                    if (character.zone.name != client.GetZone().name) {
+                        Debug.Log("Character zone " + character.zone.name + " != server assigned zone " + client.GetZone().name);
                     }
-                    if (!NetworkSettings.instance.sameAddress(client.zone.hostname, NetworkSettings.instance.hostname)) {
-                        Debug.Log("Not connected to correct region host, reconnecting to " + client.zone.hostname);
+                    if (!NetworkSettings.instance.sameAddress(client.GetZone().hostname, NetworkSettings.instance.hostname)) {
+                        Debug.Log("Not connected to correct region host, reconnecting to " + client.GetZone().hostname);
                         client.ReconnectToZone();
                     }
                 }
                 
                 
                 ResetUI();
-                Application.LoadLevel(mainScene);
+                Application.LoadLevel(client.mainScene);
             }
 
             public void ResetUI() {
                 Notice("", Color.white);
                 mainUI.Show();
-                adminUI.gameObject.GetComponent<Canvas>().enabled = false;
-                accountUI.gameObject.GetComponent<Canvas>().enabled = false;
-                loginUI.gameObject.GetComponent<Canvas>().enabled = false;
-                characterUI.gameObject.GetComponent<Canvas>().enabled = false;
-                charactersUI.gameObject.GetComponent<Canvas>().enabled = false;
-                passwordUI.gameObject.GetComponent<Canvas>().enabled = false;
-                playerUI.gameObject.GetComponent<Canvas>().enabled = false;
+                accountUI.gameObject.SetActive(false);
+                loginUI.gameObject.SetActive(false);
+                characterUI.gameObject.SetActive(false);
+                charactersUI.gameObject.SetActive(false);
+                passwordUI.gameObject.SetActive(false);
+                playerUI.gameObject.SetActive(false);
             }
 
         }

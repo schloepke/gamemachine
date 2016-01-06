@@ -10,20 +10,22 @@ using GmStats = io.gamemachine.messages.GmStats;
 
 namespace GameMachine {
     namespace Common {
-        public class StatsUI : MonoBehaviour, GameMachine.Core.Behavior {
+        public class StatsUI : MonoBehaviour, Behavior {
 
             private GameObject container;
             private GameObject template;
             private Canvas canvas;
-            public static StatsUI instance;
             public string routeName = "StatsHandler";
             private GameMessageHandler messageHandler;
             private bool active = false;
             private GmStats currentStats;
 
             void Start() {
-                instance = this;
-                messageHandler = GameMessageHandler.Instance;
+                if (!GamePlayer.IsNetworked()) {
+                    Destroy(this.gameObject);
+                    return;
+                }
+                messageHandler = GameMessageHandler.instance;
                 messageHandler.Register(this, "GmStats");
                 InvokeRepeating("SendRequest", 1f, 5f);
                 container = transform.Find("stats").gameObject;
@@ -35,7 +37,7 @@ namespace GameMachine {
 
             void Update() {
                 if (Input.GetKeyDown(KeyCode.F10)) {
-                    if (!InputState.KeyInputDisabled()) {
+                    if (!InputState.KeyInputActive()) {
                         if (active) {
                             active = false;
                             canvas.enabled = false;

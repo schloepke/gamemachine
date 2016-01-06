@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using TrackData = io.gamemachine.messages.TrackData;
 using io.gamemachine.messages;
 
 namespace GameMachine {
@@ -11,13 +9,15 @@ namespace GameMachine {
             bool IsNpc();
             bool IsOtherPlayer();
             GameEntityType GetGameEntityType();
-            Vector3 GetServerLocation();
-            IGameEntityController GetGameEntityController();
+            Vector3 GetTargetPosition();
+            void SetTargetPosition(Vector3 targetPosition);
+            GameEntityController GetGameEntityController();
             string GetEntityId();
             string GetCharacterId();
+            Character GetCharacter();
+            void SetCharacter(Character character);
             Transform GetTransform();
             TrackData GetTrackData();
-            void ResetTrackData();
             void UpdateFromTrackData(TrackData trackData, bool hasDelta);
             void Remove();
             NetworkFields GetNetworkFields();
@@ -26,12 +26,15 @@ namespace GameMachine {
             bool IsDead();
             void SetVitals(Vitals vitals);
             Vitals GetVitals();
-            
+            bool MovementDisabled();
             bool HasVitals();
             bool IsActive();
-            void SetActive(bool active);
+            void SetActive(bool active, bool setLocation);
             GameObject GetGameObject();
             void SetHealthbar(bool active, float percent);
+            bool IsLocalController();
+            ControllerType GetControllerType();
+            void SetShortId(int shortId);
         }
     }
 }

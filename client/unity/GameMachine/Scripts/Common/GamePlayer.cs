@@ -32,7 +32,17 @@ namespace GameMachine {
                 if (instance != null) {
                     return instance;
                 }
-                instance = GameObject.Find("GamePlayer").GetComponent<GamePlayer>() as GamePlayer;
+
+                GameObject go = GameObject.Find("GamePlayer");
+                if (go == null) {
+                    return null;
+                }
+
+                instance = go.GetComponent<GamePlayer>() as GamePlayer;
+                if (instance == null) {
+                    return null;
+                }
+
                 if (instance.useGameMachinePlayer) {
                     instance.gameEntity = GameEntityManager.GetPlayerEntity();
                     if (instance.gameEntity != null) {

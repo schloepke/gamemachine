@@ -9,15 +9,25 @@ using io.gamemachine.messages;
 namespace GameMachine {
     namespace Common {
 
-        public class GameEntityManager : MonoBehaviour, Trackable, ICharacterApi {
+        public class GameEntityManager : MonoBehaviour, ICharacterApi {
+
+            public static GameEntityManager instance;
+
             private static Dictionary<string, IGameEntity> gameEntities = new Dictionary<string, IGameEntity>();
             private static Dictionary<string, CharacterData> characters = new Dictionary<string, CharacterData>();
             private Dictionary<int, string> shortIdToEntityId = new Dictionary<int, string>();
             private Dictionary<string, float> lastUpdate = new Dictionary<string, float>();
+            private static Dictionary<string, string> characterToEntityId = new Dictionary<string, string>();
             private static IGameEntity playerEntity;
             private int badShortId = 0;
             private GameEntityFactory gameEntityFactory;
             public float characterTimeout = 2f;
+            
+            public delegate void OnPlayerCharacterLoaded(Character character);
+            public OnPlayerCharacterLoaded onPlayerCharacterLoaded;
+
+            public delegate void OnEntityLoaded(string entityId, Character character);
+            public OnEntityLoaded onEntityLoaded;
 
             public class CharacterData {
                 public Character character;
@@ -33,16 +43,41 @@ namespace GameMachine {
                 return gameEntities.Values.Where(entity => entity.IsActive());
             }
 
-            public static IGameEntity GetGameEntity(string id) {
-                if (gameEntities.ContainsKey(id)) {
-                    IGameEntity entity = gameEntities[id];
+            public static IGameEntity GetGameEntityByCharacterId(string characterId) {
+                if (playerEntity.GetCharacterId() == characterId) {
+                    return playerEntity;
+                }
+
+                if (characterToEntityId.ContainsKey(characterId)) {
+                    string entityId = characterToEntityId[characterId];
+                    return GetGameEntityById(entityId);
+                } else {
+                    if (NpcManager.instance != null) {
+                        return NpcManager.instance.GetEntityByCharacterId(characterId);
+                    } else {
+                        return null;
+                    }
+                }
+            }
+
+            public static IGameEntity GetGameEntityById(string entityId) {
+                if (playerEntity.GetEntityId() == entityId) {
+                    return playerEntity;
+                }
+
+                if (gameEntities.ContainsKey(entityId)) {
+                    IGameEntity entity = gameEntities[entityId];
                     if (entity.IsActive()) {
-                        return gameEntities[id];
+                        return gameEntities[entityId];
                     } else {
                         return null;
                     }
                 } else {
-                    return null;
+                    if (NpcManager.instance != null) {
+                        return NpcManager.instance.GetEntityById(entityId);
+                    } else {
+                        return null;
+                    }
                 }
             }
 
@@ -54,15 +89,24 @@ namespace GameMachine {
                 playerEntity = entity;
             }
 
-            public static void RemoveGameEntity(string entityId) {
+            public void RemoveGameEntity(string entityId, string characterId, int shortId) {
                 IGameEntity entity = gameEntities[entityId];
-                entity.SetActive(false);
-                entity.GetGameObject().SetActive(false);
+                gameEntities.Remove(entityId);
+                characters.Remove(characterId);
+                characterToEntityId.Remove(characterId);
+                shortIdToEntityId.Remove(shortId);
+                Destroy(entity.GetGameObject());
+                //Debug.Log("Remove " + entityId + " " + characterId);
+            }
+
+            void Awake() {
+                instance = this;
             }
 
             void Start() {
-                gameEntityFactory = GameEntityFactory.instance;
-                EntityTracking.Register(this);
+                if (GamePlayer.IsNetworked()) {
+                    gameEntityFactory = GameEntityFactory.instance;
+                }
             }
 
             public void TrackDataReceived(List<TrackData> trackDatas) {
@@ -73,6 +117,7 @@ namespace GameMachine {
                         continue;
                     }
 
+
                     if (string.IsNullOrEmpty(trackData.id)) {
                         if (trackData.shortId > 0) {
                             if (shortIdToEntityId.ContainsKey(trackData.shortId)) {
@@ -81,13 +126,15 @@ namespace GameMachine {
                                     entity = gameEntities[entityId];
                                     entity.UpdateFromTrackData(trackData, true);
                                     lastUpdate[entityId] = Time.time;
+                                } else {
+                                    Debug.Log("Entity not found: " + entityId);
                                 }
                             } else {
                                 //Debug.Log("Entity for shortId  " + trackData.shortId + " not found type=" + trackData.entityType);
                                 badShortId = trackData.shortId;
                             }
                         } else {
-                            Debug.Log("Null id with no shortId");
+                            Debug.Log("Null entityId with no shortId");
                         }
                     } else {
                         string entityId = trackData.id;
@@ -97,6 +144,12 @@ namespace GameMachine {
 
                         if (!gameEntities.ContainsKey(entityId)) {
 
+                            if (NpcManager.instance != null) {
+                                if (NpcManager.instance.GetEntityById(entityId) != null) {
+                                    //Debug.Log("Got local npc in trackdata "+entityId);
+                                    continue;
+                                }
+                            }
 
                             if (trackData.shortId == 0) {
                                 Debug.Log("No short id for " + entityId);
@@ -124,27 +177,42 @@ namespace GameMachine {
                                         characterData.lastLoadAttempt = Time.time;
                                         CharacterApi.instance.GetCharacter(entityId, trackData.characterId, this);
                                     }
+                                    //Debug.Log("Character not loaded " + trackData.characterId);
                                     continue;
                                 }
                                 
-                                entity = gameEntityFactory.Create(entityId, characterData.character, trackData);
-                                //entityObjects[entityId] = entity.GetGameObject();
-                                entity.SetActive(true);
+                                entity = gameEntityFactory.CreateFromNetwork(entityId, characterData.character, trackData);
+                                entity.SetShortId(trackData.shortId);
+                                entity.SetActive(true,false);
                                 gameEntities[entityId] = entity;
                                 shortIdToEntityId[trackData.shortId] = entityId;
+                                characterToEntityId[trackData.characterId] = entityId;
+
                                 lastUpdate[entityId] = Time.time;
+
+                                if (onPlayerCharacterLoaded != null) {
+                                    if (entity.IsOtherPlayer() || entity.IsNpc()) {
+                                        onPlayerCharacterLoaded(characterData.character);
+                                    }
+                                }
+
+                                if (onEntityLoaded != null) {
+                                    onEntityLoaded(entityId, characterData.character);
+                                }
                             }
                         }
 
 
                         entity = gameEntities[entityId];
 
-                        if (!entity.IsActive()) {
+                        if (entity.IsActive()) {
+                            entity.UpdateFromTrackData(trackData, false);
+                        } else {
                             entity.GetGameObject().SetActive(true);
-                            entity.SetActive(true);
+                            entity.UpdateFromTrackData(trackData, false);
+                            entity.SetActive(true, true);
                         }
 
-                        entity.UpdateFromTrackData(trackData, false);
                         lastUpdate[entityId] = Time.time;
                     }
                 }
@@ -157,6 +225,8 @@ namespace GameMachine {
                 CharacterData characterData = characters[character.id];
                 characterData.character = character;
                 characterData.loaded = true;
+
+                
             }
 
             void ICharacterApi.OnCharacterGetError(string playerId, string characterId, string error) {
@@ -165,25 +235,26 @@ namespace GameMachine {
                 CharacterApi.instance.GetCharacter(playerId, characterId, this);
             }
 
-            public TrackData UpdateTracking() {
-
+            public void UpdateTracking(bool getNeighbors) {
                 if (playerEntity == null) {
-                    return null;
+                    return;
                 }
-
+                
                 TrackData trackData = playerEntity.GetTrackData();
                 trackData.id = NetworkSettings.instance.username;
                 trackData.neighborEntityType = TrackData.EntityType.Any;
-                if (trackData.entityType == TrackData.EntityType.None) {
-                    trackData.entityType = TrackData.EntityType.Player;
-                }
-
-                if (badShortId != 0) {
-                    trackData.getNeighbors = 2;
-                    badShortId = 0;
+               
+                if (getNeighbors) {
+                    if (badShortId != 0) {
+                        trackData.getNeighbors = 2;
+                        badShortId = 0;
+                    } else {
+                        trackData.getNeighbors = 1;
+                    }
                 } else {
-                    trackData.getNeighbors = 1;
+                    trackData.getNeighbors = 0;
                 }
+               
 
                 trackData.id = NetworkSettings.instance.username;
                 Entity entity = new Entity();
@@ -195,33 +266,14 @@ namespace GameMachine {
                
                 //trackData.getNeighbors = 2;
                 //trackData.zone = ZoneHandler.instance.currentZoneNumber();
-                return null;
             }
-
-            public void UpdateTracking(TrackData trackData) {
-                trackData.id = NetworkSettings.instance.username;
-                trackData.entityType = TrackData.EntityType.Player;
-
-                if (badShortId != 0) {
-                    trackData.getNeighbors = 2;
-                    badShortId = 0;
-                } else {
-                    trackData.getNeighbors = 1;
-                }
-
-                Entity entity = new Entity();
-                entity.id = "0";
-                entity.trackData = trackData;
-                ActorSystem.instance.client.SendEntity(entity);
-            }
-
+            
             public void HandleTrackDataResponse(TrackDataResponse response) {
                 Debug.Log("TrackDataResponse=" + response.reason);
                 if (response.reason == TrackDataResponse.REASON.RESEND) {
 
                 }
             }
-
 
             void ICharacterApi.OnCharacterCreated(Character character) {
                 throw new NotImplementedException();
@@ -239,8 +291,6 @@ namespace GameMachine {
                 throw new NotImplementedException();
             }
 
-
-
             void ICharacterApi.OnCharacterDeleted(string characterId) {
                 throw new NotImplementedException();
             }
@@ -248,6 +298,7 @@ namespace GameMachine {
             void ICharacterApi.OnCharacterDeleteError(string error) {
                 throw new NotImplementedException();
             }
+
         }
     }
 }

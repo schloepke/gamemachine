@@ -1,27 +1,20 @@
-﻿using UnityEngine;
+﻿using GameMachine.HttpApi;
+using io.gamemachine.messages;
+using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
-using System.Linq;
-using GameMachine.Common;
-using GameMachine.HttpApi;
-using Characters = io.gamemachine.messages.Characters;
-using Character = io.gamemachine.messages.Character;
-using Player = io.gamemachine.messages.Player;
-using Players = io.gamemachine.messages.Players;
+
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class PlayerUI : MonoBehaviour, IPlayerApi, IAdminApi {
             private Transform panel;
             public string playerId;
 
             void Start() {
                 panel = transform.Find("panel");
-                gameObject.GetComponent<Canvas>().enabled = false;
             }
 
             public void Load(string playerId) {
-                gameObject.GetComponent<Canvas>().enabled = true;
                 panel.Find("player_id").GetComponent<Text>().text = playerId;
                 SetError("");
                 SetPasswordButton().interactable = true;
@@ -73,7 +66,6 @@ namespace GameMachine {
             }
 
             void IAdminApi.OnPlayerDeleted(string result) {
-                UIController.instance.LoadAdmin();
                 UIController.instance.Notice(result + " deleted", Color.red);
             }
 

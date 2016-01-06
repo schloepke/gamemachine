@@ -8,6 +8,7 @@ using Character = io.gamemachine.messages.Character;
 namespace GameMachine {
     namespace HttpApi {
         public interface ICharacterApi {
+            
             void OnCharacterCreated(Character character);
             void OnCharacterCreateError(string error);
 

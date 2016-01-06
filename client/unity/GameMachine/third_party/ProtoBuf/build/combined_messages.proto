@@ -1,0 +1,1645 @@
+package io.gamemachine.messages;
+option optimize_for = SPEED;
+
+
+// Used to by the entity tracking system to attack additional fields to your
+// tracking updates.  You can change any of the fields in TrackData to suit your
+// needs, but do NOT remove the message definition!
+
+message VitalsContainer {
+  repeated Vitals vitals = 1;
+}
+
+message Vitals {
+
+  enum Template {
+    PlayerTemplate = 0;
+    BuildObjectTemplate = 1;
+    NpcTemplate = 2;
+    GuardTemplate = 3;
+    CitizenTemplate = 4;
+    BanditTemplate = 5;
+    PlayerItemTemplate = 6;
+  }
+  
+  enum VitalsType {
+    None = 0;
+    Character = 1;
+    Object = 2;
+    BuildObject = 3;
+    PlayerItem = 4;
+  }
+ 
+   
+  enum Attribute {
+    SpellResist = 0;
+    ElementalResist = 1;
+    SpellPenetration = 2;
+    MagicRegen = 3;
+    HealthRegen = 4;
+    StaminaRegen = 5;
+    Armor = 6;
+    Magic = 7;
+    Health = 8;
+    Stamina = 9;
+    MovementSpeed = 10;
+    AbilitySpeed = 11;
+  }
+  
+  optional string characterId = 1;
+  optional int64 lastCombat = 5;
+  optional int32 dead = 6;
+  optional string entityId = 15;
+  optional VitalsType type = 18;
+  optional int32 spellResist = 22;
+  optional int32 elementalResist = 23;
+  optional int32 spellPenetration = 24;
+  optional int32 magicRegen = 25;
+  optional int32 healthRegen = 26;
+  optional int32 staminaRegen = 27;
+  optional int32 armor = 28;
+  optional int32 magic = 29;
+  optional int32 health = 30;
+  optional int32 stamina = 31;
+  optional int32 movementSpeed = 32;
+  optional int32 abilitySpeed = 33;
+  optional Template template = 34;
+  optional bool isBaseVitals = 35;
+  optional float combatRegenMod = 36;
+  optional bool inCombat = 37;
+  optional string zoneName = 38;
+ optional string id = 40;
+ 
+  optional int32 spellResistMax = 41;
+  optional int32 elementalResistMax = 42;
+  optional int32 spellPenetrationMax = 43;
+  optional int32 magicRegenMax = 44;
+  optional int32 healthRegenMax = 45;
+  optional int32 staminaRegenMax = 46;
+  optional int32 armorMax = 47;
+  optional int32 magicMax = 48;
+  optional int32 healthMax = 49;
+  optional int32 staminaMax = 50;
+  optional int32 movementSpeedMax = 51;
+  optional int32 abilitySpeedMax = 52;
+  
+  optional int32 updateId = 53;
+  optional int32 recordId = 54;
+  optional float deathTime = 56;
+}
+
+message VitalsUpdateContainer {
+  repeated VitalsUpdate vitalsUpdate = 1;
+}
+
+message VitalsRequest {
+  optional string entityId = 1;
+  optional Vitals.VitalsType vitalsType = 2;
+}
+
+message VitalsUpdate {
+  repeated string attribute = 1;
+  repeated int32 value = 2;
+  repeated int32 max = 3;
+  optional int32 dead = 4;
+  optional bool inCombat = 5;
+  optional int32 updateId = 6;
+}
+
+message StatusEffect {
+  enum Type {
+  	StatusEffectNone = 0;
+    AttributeDecrease = 1;
+    AttributeIncrease = 2;
+    AttributeMaxIncrease = 3;
+    AttributeMaxDecrease = 4;
+}
+
+  
+  enum DamageType {
+    DamageTypeNone = 0;
+    Physical = 1;
+    Magic = 2;
+    Elemental = 3;
+  }
+  
+  enum Resource {
+    ResourceNone = 0;
+    ResourceMagic = 1;
+    ResourceStamina = 2;
+  }
+  
+  optional Type type = 1;
+  optional string id = 2;
+  optional int32 duration = 3;
+  optional int32 ticks = 4;
+  optional int32 minValue = 6;
+  optional int32 maxValue = 7;
+  optional string particleEffect = 8;
+  optional DamageType damageType = 9;
+  optional string icon_path = 10;
+  optional string icon_uuid = 11;
+  optional int32 ticksPerformed = 12;
+  optional Resource resource = 13;
+  optional int32 resourceCost = 14;
+  optional int32 range = 15;
+  optional string attribute = 17;
+  optional int32 maxStacks = 18;
+  optional string effectPath = 19;
+  optional string effectUuid = 20;
+  optional UnityObject hitSound = 21;
+  optional UnityObject hitEffect = 22;
+  optional float buildObjectDamageModifier = 23;
+  optional bool allowMultipleFromSameOrigin = 24;
+}
+
+message StatusEffects {
+  repeated StatusEffect statusEffect = 1;
+}
+
+message TerrainEdit {
+  enum Type {
+  NONE = 0;
+  DETAIL = 1;
+  ALPHA = 2;
+  HEIGHT = 3;
+  TREE = 4;
+  }
+  
+  optional  int32 x = 1;
+  optional int32 y = 2;
+  optional int32 detailLayer = 3;
+  optional int32 value = 4;
+  optional Type type = 5;
+  optional string id = 6;
+  optional int32 recordId = 7;
+  optional int32 texture = 8;
+  optional float height = 9;
+  optional int64 createdAt = 10;
+  optional string terrain = 11;
+}
+
+message TerrainEdits {
+  repeated TerrainEdit terrainEdit = 1;
+}
+
+message GroundBlockObject {
+  enum Status {
+    NONE = 0;
+    PLACED = 1;
+    CLEARED = 2;
+    TOP = 3;
+  }
+   
+  repeated GmVector3 vertices = 1;
+  optional GmVector3 position = 2;
+  optional GmQuaternion rotation = 3;
+  optional string id = 4;
+  optional int32 verticeCount = 5;
+  optional string tag = 6;
+  optional string layer = 7;
+  optional sint32 gbLayer = 8;
+  optional bool molded = 9;
+  optional Status status = 10;
+  optional bool canRemove = 11;
+  optional bool isTop = 12;
+  optional sint32 gbType = 13;
+}
+
+message Ping {
+  optional string id = 1;
+}
+message Pong {
+  optional string id = 1;
+}
+
+message GmStats {
+  optional string id = 1;
+  optional string action = 2;
+  optional int64 messageCountIn = 3;
+  optional int64 messageCountOut = 4;
+  optional int64 messageCountInOut = 5;
+  optional int64 bytesOut = 6;
+  optional int32 connectionCount = 7;
+  optional int64 playerBytesOut = 8;
+  optional string playerId = 9;
+  optional int64 bytesPerMessageOut = 10;
+}
+
+message NpcData {
+  optional string id = 1;
+  optional GmVector3 spawnpoint = 2;
+  optional string leader = 3;
+  repeated string followers = 4;
+  optional string patrolRoute = 5;
+  optional Waypoint waypoint = 6;
+  enum NpcType {
+    None = 0;
+    Guard = 1;
+    Bandit = 2;
+    Animal = 3;
+    Civilian = 4;
+  }
+  optional NpcType npcType = 7;
+}
+
+message NpcDatas {
+  repeated NpcData npcData = 1;
+}
+
+message Waypoint {
+  optional string id = 1;
+  repeated GmVector3 position = 2;
+}
+
+message Territory {
+  required string id = 1;
+  required string owner = 2;
+  optional int32 recordId = 3;
+  optional string keep = 4;
+}
+
+message Territories {
+  repeated Territory territories = 1;
+}
+  
+message Guild {
+  required string id = 1;
+  required string ownerId = 4;
+  optional int32 recordId = 5;
+  optional string name = 6;
+}
+
+message GuildInvite {
+  required string id = 1;
+  required string to = 2;
+  required string from =3 ;
+  optional int32 recordId = 4;
+  optional string guildId = 5;
+}
+
+message GuildInvites {
+  repeated GuildInvite guildInvite = 1;
+}
+
+message GuildInfo {
+  required Guild guild = 1;
+  repeated string characterId = 2;
+}
+
+message Guilds {
+  repeated Guild guild = 1;
+}
+
+message WorldObject {
+  optional string playerItemId = 1;
+  optional int32 action = 2;
+  optional string id = 3;
+  optional int32 recordId = 4;
+  optional string ownerId = 5;
+  optional int32 x = 6;
+  optional int32 y = 7;
+  optional int32 z = 8;
+  optional int32 rx = 9;
+  optional int32 ry = 10;
+  optional int32 rz = 11;
+  optional int32 rw = 12;
+  optional int32 maxHealth = 13;
+  optional int32 health = 14;
+  optional string parentId = 15;
+  optional bool destructable = 16;
+  optional string prefab = 17;
+  optional int32 type = 18;
+  optional string grid = 19;
+  optional string currentUser = 20;
+  optional int32 state = 21;
+}
+
+message BuildObjectDatas {
+  required string id = 1;
+  optional string dataText = 2;
+  optional int32 recordId = 3;
+  optional string characterId = 4;
+  optional string zone = 5;
+  optional int32 group = 6;
+}
+
+message BuildObject {
+
+  enum Action {
+    None = 0;
+    Save = 1;
+    UpdateProp = 2;
+    SetHealth = 3;
+  }
+  
+  enum State {
+    Active = 0;
+    Removed = 1;
+    Destroyed = 2;
+  }
+  
+  optional string playerItemId = 1;
+  optional Action action = 2;
+  optional string id = 3;
+  optional int32 recordId = 4;
+  optional string ownerId = 5;
+  optional int32 x = 6;
+  optional int32 y = 7;
+  optional int32 z = 8;
+  optional int32 rx = 9;
+  optional int32 ry = 10;
+  optional int32 rz = 11;
+  optional int32 rw = 12;
+  optional int32 health = 14;
+  optional int32 templateId = 18;
+  optional string grid = 19;
+  optional int64 updatedAt = 22;
+  optional State state = 23;
+  optional int32 updateId = 24;
+  optional bool isFloor = 25;
+  optional bool isDestructable = 26;
+  optional bool hasDoor = 27;
+  optional int32 doorStatus = 28;
+  optional GroundBlockObject groundBlockObject = 29;
+  optional bool isGroundBlock = 30;
+  optional int32 chunk = 31;
+  optional TerrainEdit terrainEdit = 32;
+  optional bool isTerrainEdit = 33;
+  optional bytes customBytes = 34;
+  optional string customString = 35;
+  optional string textureId = 36;
+  optional bytes slots = 37;
+  optional int64 placedAt = 38;
+  optional SlotInfo slotInfo = 40;
+  optional string zone = 41;
+  optional int32 version = 42;
+  optional int32 group = 43;
+}
+
+message BuildObjectGroup {
+   enum Action {
+     None = 0;
+     Reset = 1;
+     Destroy = 2;
+   }
+   optional int32 group = 1;
+   optional Action action = 2;
+   optional int64 placedAt = 3;
+   optional string ownerId = 4;
+ }
+  
+ message SlotInfo {
+   required string placedBlockId = 1;
+   required string slotId = 2;
+ }
+ 
+ message BuildObjectSlot {
+   required string slotId = 1;
+   required string buildObjectId = 2;
+   optional int64 placedAt = 3;
+   optional bool buildOverTime = 4;
+   optional int32 buildTime = 5;
+ }
+ 
+ message BuildObjectSlots {
+   repeated BuildObjectSlot buildObjectSlot = 1;
+ }
+ 
+message BuildObjects {
+  enum Action {
+    None = 0;
+    GetStatus = 1;
+    PropUpdate = 2;
+    SetRotation = 3;
+    HttpSave = 4;
+  }
+  
+  repeated BuildObject buildObject = 1;
+  optional Action action = 2;
+  optional int32 requestedUpdateId = 3;
+  optional int32 currentUpdate = 4;
+}
+
+message BuildObjectChunk {
+  optional bytes data = 1;
+  optional int32 chunk = 2;
+}
+
+message BuildObjectChunks {
+  repeated BuildObjectChunk buildObjectChunk = 1;
+ }
+
+message BuildableArea {
+  required string id = 1;
+  required string ownerId = 2;
+  optional GmVector3 size = 3;
+  optional GmVector3 position = 4;
+  optional int32 recordId = 5;
+}
+
+message BuildableAreas {
+  enum Action {
+    None = 0;
+    GetAll = 1;
+    Claim = 2;
+    Register = 3;
+    Release = 4;
+  }
+  
+  repeated BuildableArea buildableArea = 1;
+  optional Action action = 2;
+  
+}
+ 
+message GmBounds {
+  optional GmVector3 min = 1;
+  optional GmVector3 max = 2;
+}
+
+
+message WorldObjects {
+  repeated WorldObject worldObject = 1;
+}
+
+message SiegeCommand {
+  enum Action {
+    ActionNone = 0;
+    SetRotation = 1;
+    Use = 2;
+    Release = 3;
+    Fire = 4;
+  }
+  
+  enum Result {
+    ResultNone = 0;
+    Approved = 1;
+    Declined = 2;
+  }
+  
+  optional Action action = 1;
+  optional BuildObject buildObject = 2;
+  optional Result result = 3;
+  optional string characterId = 4;
+  optional string buildObjectId = 5;
+  optional string playerSkillId = 6;
+}
+ 
+message Character {
+  required string id = 1;
+  optional string umaData = 2;
+  optional int32 recordId = 4;
+  required string playerId = 5;
+  optional int32 part = 6;
+  optional int32 parts = 7;
+  optional int32 worldx = 8;
+  optional int32 worldy = 9;
+  optional int32 worldz = 10;
+  optional Zone zone = 11;
+  optional bool includeUmaData = 12;
+  optional int32 level = 14;
+  optional Vitals.Template vitalsTemplate = 15;
+  optional string gameEntityPrefab = 16;
+  optional string region = 17;
+  optional string itemSlotData = 18;
+  optional string guildId = 19;
+  optional string bindPoint = 20;
+}
+  
+message ItemSlots {
+  repeated ItemSlot itemSlots = 1;
+}
+
+message ItemSlot {
+  optional string playerItemId = 1;
+  optional PlayerItem.Slot slot = 2;
+  optional string slotId = 3;
+  optional string playerItemName = 4;
+}
+
+message CharacterUpdate {
+  optional Character character = 1;
+}
+
+message Characters {
+  repeated Character characters = 1;
+  optional string id = 2;
+}
+
+message PvpGameMessage {
+  optional Character character = 1;
+  optional Characters characters = 2;
+  optional int32 command = 3;
+}
+
+message UseSkill {
+  required string id = 1;
+  optional string targetId = 2;
+  optional GmVector3 location = 3;
+  optional GmVector3 direction = 4;
+}
+
+message UseItem {
+  required string id = 1;
+  optional string targetId = 2;
+  optional string action = 3;
+  required string playerId = 4;
+}
+
+message StatusEffectTarget {
+  enum Action {
+    None = 0;
+    Apply = 1;
+    Remove = 2;
+  }
+  enum PassiveFlag {
+    NA = 0;
+    AutoRemove = 1;
+    ManualRemove = 2;
+  }
+ 
+  required string targetEntityId = 1;
+  optional GmVector3 location = 3;
+  repeated StatusEffect statusEffect = 5;
+  required string originCharacterId = 6;
+  optional int64 activeId = 8;
+  optional int64 lastTick = 9;
+  required Action action = 10;
+  required PassiveFlag passiveFlag = 11;
+  optional string originEntityId = 12;
+  optional SkillRequest skillRequest = 13;
+}
+
+
+message GmTarget {
+  enum Type {
+  	None = 0;
+    Block = 1;
+    GameEntity = 2;
+    Tree = 3;
+    Flag = 4;
+    Ground = 5;
+    Location = 6;
+  }
+  
+  optional Type type = 1;
+  optional string gameObjectId = 2;
+  optional string characterId = 3;
+  optional string blockId = 4;
+  optional GmVector3 location = 5;
+  optional string ownerId = 6;
+  optional string displayName = 7;
+}
+
+message SkillRequest {
+  enum TargetType {
+    None = 0;
+    Character = 1;
+    Object = 2;
+    BuildObject = 3;
+  }
+ 
+  optional string attackerCharacterId = 1;
+  optional string targetId = 2;
+  required PlayerSkill playerSkill = 3;
+  optional GmVector3 targetLocation = 4;
+  optional TargetType targetType = 5;
+  optional GmTarget target = 6;
+  optional bool relayOnly = 7;
+  optional string originEntityId = 8;
+  optional string playerSkillId = 9;
+}
+
+
+message Harvest {
+  required string id = 1;
+  optional int32 result = 2;
+  optional int64 harvestedAt = 3;
+  optional string characterId = 4;
+  optional string itemId = 5;
+}
+
+message CraftItem {
+  optional CraftableItem craftableItem = 1;
+  optional int32 result = 2;
+  optional string characterId = 3;
+  optional int32 craftedQuantity = 4;
+  optional string craftedId = 5;
+}
+
+message Player {
+  enum Role {
+    Player = 0;
+    AgentController = 1;
+    Admin = 2;
+    Npc = 3;
+    System = 4;
+  }
+  
+  required string id = 1;
+  optional bool authenticated = 2;
+  optional int32 authtoken = 3;
+  optional string passwordHash = 4;
+  optional string gameId = 5;
+  optional int32 recordId = 6;
+  optional Role role = 7;
+  optional bool locked = 8;
+  optional int32 ip = 9;
+  optional int64 ipChangedAt = 10;
+  optional string characterId = 11;
+  repeated Character characters = 12;
+  optional bool assignedUnityInstance = 13;
+  optional bool assigned = 14;
+}
+
+message TrackData {
+  optional sint32 ix = 1;
+  optional sint32 iy = 2;
+  optional sint32 iz = 3;
+  
+  optional string id = 4;
+  optional sint32 x = 5;
+  optional sint32 y = 6;
+  optional sint32 z = 7;
+
+  optional DynamicMessage dynamicMessage = 8;
+  optional string gridName = 9;
+  optional int32 getNeighbors = 10;
+  enum EntityType {
+    None = 0;
+    Any = 1;
+    Player = 2;
+    Npc = 3;
+    Object = 4;
+    All = 5;
+    BuildObject = 6;
+    Vehicle = 7;
+  }
+  optional EntityType neighborEntityType = 11;
+  required EntityType entityType = 12;
+
+  
+  optional int32 shortId = 13;
+  optional UserDefinedData userDefinedData = 14;
+  optional int32 broadcast = 15;
+  optional string characterId = 16;
+  optional sint32 rx = 17;
+  optional sint32 ry = 18;
+  optional sint32 rz = 19;
+  optional sint32 rw = 20;
+  optional int32 vaxis = 21;
+  optional int32 haxis = 22;
+  optional int32 speed = 23;
+  optional float velX = 24;
+  optional float velZ = 25;
+  optional int32 hidden = 27;
+  optional int32 yaxis = 28;
+}
+
+message UserDefinedData {
+  optional int32 command = 1;
+  optional int32 value = 2;
+  optional int32 userdefInt2 = 3;
+  optional int32 userdefInt3 = 4;
+  optional int32 userdefInt4 = 5;
+  optional int32 userdefInt5 = 6;
+  optional int32 userdefInt6 = 7;
+  optional int32 userdefInt7 = 8;
+  optional int32 userdefInt8 = 9;
+  optional int32 userdefInt9 = 10;
+  optional int32 userdefInt1 = 11;
+  optional int32 rx = 12;
+  optional int32 ry = 13;
+  optional int32 rz = 14;
+  optional int32 rw = 15;
+  optional sint32 x = 16;
+  optional sint32 y = 17;
+  optional sint32 z = 18;
+  
+  optional int32 userdefInt10 = 19;
+  optional int32 userdefInt11 = 20;
+  optional int32 userdefInt12 = 21;
+  optional int32 userdefInt13 = 22;
+  optional int32 userdefInt14 = 23;
+  optional int32 userdefInt15 = 24;
+}
+
+message DataRequest {
+  required string requester = 1;
+  required string name = 2;
+}
+
+message TimeCycle {
+  optional float currentTime = 1;
+  optional float dayCycleLength = 2;
+}
+	
+
+
+message DynamicMessage {
+  required string type = 1;
+  required bytes message = 2;
+}
+
+message UnityObject {
+  optional string path = 1;
+  optional string uuid = 2;
+  optional string name = 3;
+}
+
+message PlayerSkill {
+  enum Category {
+    SingleTarget = 0;
+	Aoe = 1;
+	Pbaoe = 2;
+	Self = 3;
+	AoeDot = 4;
+  }
+ 
+ 
+  enum WeaponType {
+    None = 0;
+    Arrow = 1;
+    Bullet = 2;
+    MagicProjectile = 3;
+    SiegeProjectile = 4;
+    Melee = 5;
+    Magic = 6;
+    Siege = 7;
+    Tool = 8;
+   }
+   
+   enum ProjectileBehavior {
+     StopOnFirstHit = 0;
+     ContinueOnPlayerHit = 1;
+   }
+   
+  required string id = 1;
+  optional int32 recordId = 3;
+  optional string icon_path = 6;
+  optional string description = 7;
+  required string characterId = 10;
+  
+  optional string statusEffectId = 13;
+  
+  optional int32 isComboPart = 16;
+  optional int32 isPassive = 17;
+  optional string icon_uuid = 19;
+  optional string statusEffects = 20;
+  optional Category category = 22;
+  
+  optional UnityObject useEffect = 29;
+  optional UnityObject icon = 30;
+  optional UnityObject useSound = 32;
+  
+  optional UnityObject projectile = 34;
+  optional int32 range = 35;
+  optional WeaponType weaponType = 36;
+  
+  optional UnityObject hitEffect = 37;
+  optional ProjectileBehavior projectileBehavior = 38;
+  optional bool targetCircle = 39;
+  optional float maxLevel = 40;
+  optional float level = 41;
+}
+
+
+
+message PlayerSkills {
+  repeated PlayerSkill playerSkill = 1;
+}
+
+message CraftableItem {
+  required string id = 1;
+  optional string item1 = 2;
+  optional int32 item1_quantity = 3;
+  optional string item2 = 4;
+  optional int32 item2_quantity = 5;
+  optional string item3 = 6;
+  optional int32 item3_quantity = 7;
+  optional string item4 = 8;
+  optional int32 item4_quantity = 9;
+  optional int32 recordId = 10;
+}
+
+message CraftingRecipes {
+  repeated CraftingRecipe craftingRecipes = 1;
+  required string itemCatalog = 2;
+}
+
+message CraftingReward {
+  required string id = 1;
+  required int32 quantity = 2;
+  required int32 level = 3;
+}
+
+message CraftingRecipe {
+  required string id = 1;
+  repeated CraftingElement elements = 2;
+  optional CraftingTool tool = 3;
+  required bool orderMatters = 4;
+  required float timeToComplete = 5;
+  repeated CraftingReward rewards = 6;
+  required int32 maxUses = 7;
+  required bool active = 8;
+}
+
+message CraftingTool {
+  required string id = 1;
+  required int32 level = 2;
+}
+
+message CraftingElement {
+  required string id = 1;
+  required int32 quantity = 2;
+  required int32 level = 3;
+  required int32 order = 4;
+}
+
+// Inventory messages
+
+message PlayerItem {
+
+  enum Category {
+    None = 0;
+    Currency = 1;
+    Trinket = 2;
+    Armor = 3;
+    Weapon = 4;
+    Consumable = 5;
+    CraftingResource = 6;
+    Tool = 7;
+    BuildingBlock = 8;
+    GroundBlock = 9;
+    Container = 10;
+    Projectile = 11;
+  }
+  
+  enum WeaponType {
+    OneHanded = 0;
+    TwoHanded = 1;
+  }
+  
+  enum Slot {
+    NoSlot = 0;
+    Shoulder = 1;
+    Chest = 2;
+    Waist = 3;
+    Head = 4;
+    Hands = 5;
+    Legs = 6;
+    Feet = 7;
+    Accessory = 8;
+    WeaponMain = 9;
+    WeaponOff = 10;
+  }
+  
+  required string id = 1;
+  required string name = 2;
+  required int32 quantity = 3;
+  optional string color = 4;
+  optional bool weapon = 5;
+  optional Cost cost = 8;
+  optional string playerId = 9;
+  optional int32 recordId = 10;
+  optional int32 harvestable = 12;
+  optional int32 craftingResource = 13;
+  optional int32 craftable = 14;
+  optional bool isConsumable = 16;
+  optional int32 type = 17;
+  optional int32 maxHealth = 18;
+  optional int32 health = 19;
+  optional int32 level = 20;
+  optional string characterId = 21;
+  optional string containerId = 22;
+  optional int32 updatedAt = 23;
+  
+  optional string locationId = 25;
+  optional int32 slotCount = 26;
+  optional bool stackable = 27;
+  optional string locationType = 28;
+  optional int32 stackMax = 29;
+  optional int32 containerSlot = 30;
+  optional string icon_uuid = 31;
+  optional string icon_path = 32;
+  optional string referenceId = 33;
+  required bool hidden = 34;
+  optional int32 maxQuantity = 35;
+  required bool active = 36;
+  required float weight = 37;
+  optional int32 templateBlockId = 38;
+  
+  optional Category category = 41;
+  optional UnityObject icon = 43;
+  
+  optional bool equipped = 50;
+  optional Slot slot = 51;
+  optional WeaponType weaponType = 52;
+}
+
+message ModelInfo {
+  optional float attachX = 1;
+  optional float attachY = 2;
+  optional float attachZ = 3;
+  optional float rotateX = 4;
+  optional float rotateY = 5;
+  optional float rotateZ = 6;
+  optional float scaleX = 7;
+  optional float scaleY = 8;
+  optional float scaleZ = 9;
+  optional string resource = 10;
+  optional string prefab = 11;
+  optional string weapon_type = 12;
+}
+
+message Cost {
+  required float amount = 1;
+  optional string currency = 2;
+}
+
+message Consumable {
+  required string type = 1;
+  required string size = 2;
+}
+
+message Weapon {
+  required int32 attack = 1;
+  required int32 delay = 2;
+}
+
+message RequestPlayerItems {
+  optional bool catalog = 1;
+  optional string characterId = 2;
+  optional int32 result = 3;
+  optional PlayerItems playerItems = 4;
+  optional string query = 5;
+}
+
+message PlayerItems {
+  optional bool catalog = 1;
+  repeated PlayerItem playerItem = 2;
+}
+
+message UpdatePlayerItem {
+  optional int32 result = 1;
+  optional PlayerItem playerItem = 2;
+}
+
+message AddPlayerItem {
+  required string id = 1;
+  optional int32 quantity = 2;
+  optional int32 result = 3;
+  optional string characterId = 4;
+  optional PlayerItem playerItem = 5;
+  optional string containerId = 6;
+}
+
+message RemovePlayerItem {
+  required string id = 1;
+  required int32 quantity = 2;
+  optional int32 result = 3;
+  optional string characterId = 4;
+}
+
+message Players {
+  repeated Player player = 1;
+}
+  
+// For testing
+message TestObject {
+  required string id = 12;
+  optional string optionalString = 1;
+  required string requiredString = 2;
+  repeated int32 numbers = 3;
+  optional bytes bstring = 4;
+  optional bool bvalue = 5;
+  optional double dvalue = 6;
+  optional float fvalue = 7;
+  optional int64 numbers64 = 8;
+  repeated Player player = 9;
+  optional int32 recordId = 10;
+  
+}
+
+message UnityGameMessage {
+  enum MessageType {
+  	None = 0;
+    Ask = 1;
+    Register = 2;
+    Tell = 3;
+  }
+  
+  required MessageType messageType = 1;
+  optional GameMessage gameMessage = 2;
+  optional int64 messageId = 3;
+  optional string playerId = 4;
+  optional string actorName = 5;
+  
+}
+
+message Zone {
+  required string name = 1;
+  required int32 number = 2;
+  required string region = 3;
+  required string hostname = 4;
+  optional bool isPublic = 5;
+  repeated string playerIds = 6;
+}
+
+message Zones {
+  repeated Zone zone = 1;
+  optional Zone current = 2;
+}
+
+message Region {
+  enum Status {
+		NONE = 0;
+		UP = 1;
+		DOWN = 2;
+		REQUEST_UP = 3;
+		REQUEST_DOWN = 4;
+	}
+	optional string id = 1;
+	optional Status status = 2;
+	optional string name = 3;
+	optional string unityClient = 4;
+}
+
+message RegionInfo {
+  required string id = 1;
+  optional int32 recordId = 2;
+  optional string node = 3;
+  optional bool assigned = 5;
+  optional int32 number = 6;
+  optional string hostname = 7;
+}
+
+message RegionInfos {
+  optional string id = 1;
+  repeated RegionInfo regionInfo = 2;
+  optional string playerRegion = 3;
+}
+
+
+message ProcessCommand {
+  enum Action {
+    None = 0;
+    Start = 1;
+    Stop = 2;
+    Restart = 3;
+  }
+  
+  required Action action = 1;
+  optional string startScript = 2;
+  optional string executable = 3;
+}
+
+
+message UnityInstanceData {
+  optional string scene = 1;
+  optional string role = 2;
+ }
+
+message UnityInstanceStatus {
+  enum State {
+    None = 0;
+    Idle = 1;
+    Running = 2;
+  }
+  
+  required string name = 1;
+  required State state = 2;
+  optional int32 recordId = 3;
+  optional Zone zone = 4;
+  required State requestedState = 5;
+  optional string playerId = 6;
+  optional UnityInstanceData data = 7;
+}
+
+message GameMessage {
+  // Used internally, do not change
+  optional string playerId = 1;
+  optional string messageId = 2;
+  optional int32 destinationId = 3;
+  optional string destination = 4;
+  optional string agentId = 5;
+  optional DynamicMessage dynamicMessage = 6;
+  optional PathData pathData = 7;
+    
+  // User modifiable
+  optional PlayerItems playerItems = 10;
+  optional AddPlayerItem addPlayerItem = 11;
+  optional RemovePlayerItem removePlayerItem = 12;
+  optional RequestPlayerItems requestPlayerItems = 13;
+  optional PvpGameMessage pvpGameMessage = 14;
+  optional Harvest harvest = 15;
+  optional int64 authtoken = 16;
+  optional int64 unityMessageId = 17;
+  optional CraftItem craftItem = 18;
+  optional UseSkill useSkill = 19;
+  optional PlayerSkills playerSkills = 20;
+  optional Vitals vitals = 21;
+  optional SkillRequest skillRequest = 22;
+  optional StatusEffect statusEffect = 23;
+  optional DataRequest dataRequest = 25;
+  optional WorldObjects worldObjects = 27;
+  optional SiegeCommand siegeCommand = 28;
+  optional GmBounds bounds = 29;
+  optional UseItem useItem = 30;
+  optional TimeCycle timeCycle = 31;
+  optional Territory territory = 35;
+  optional Territories territories = 36;
+  optional NpcData npcData = 39;
+  optional BuildObjects buildObjects = 40;
+  optional BuildableAreas buildableAreas = 41;
+  optional GmStats gmStats = 42;
+  optional Region region = 43;
+  optional BuildObjectChunks buildObjectChunks = 44;
+  optional TerrainEdits terrainEdits = 45;
+  optional UpdatePlayerItem updatePlayerItem = 46;
+  optional VitalsContainer vitalsContainer = 47;
+  optional ProcessCommand processCommand = 48;
+  optional UnityInstanceStatus unityInstanceStatus = 49;
+  optional CharacterUpdate characterUpdate = 50;
+  optional VitalsUpdateContainer vitalsUpdateContainer = 51;
+  optional VitalsRequest vitalsRequest = 52;
+  optional BuildObjectGroup buildObjectGroup = 53;
+}
+
+message GameMessages {
+  repeated GameMessage gameMessage = 1;
+}
+
+message PlayerNotification {
+  required string playerId = 1;
+  required string action = 2;
+}
+
+message CharacterNotification {
+  required string playerId = 1;
+  required string action = 2;
+  required string characterId = 3;
+}
+
+message TrackDataUpdate {
+  required string id = 1;
+  required DynamicMessage dynamicMessage = 2;
+}
+
+message TrackDataResponse {
+  required string id = 1;
+  enum REASON {
+    RESEND = 0;
+    VALIDATION_FAILED = 1;
+    REMOVED = 2;
+  }
+  optional REASON reason = 2;
+}
+
+message GameConfigs {
+  repeated GameConfig gameConfig = 1;
+}
+
+message GameConfig {
+  required string config = 1;
+  required int32 version = 2;
+  required string gameId = 3;
+}
+
+message TeamMemberSkill {
+  required string name = 1;
+  required int32 value = 2;
+  required string playerId = 3;
+}
+
+message Statistic {
+  required string name = 1;
+  required float value = 2;
+  required string type = 3;
+}
+
+message Statistics {
+  repeated Statistic statistic = 1;
+}
+
+message NodeStatus {
+  required int32 containerId = 1;
+  required string clusterName = 2;
+  required int32 lastUpdated = 3;
+  required string hostname = 4;
+  required int32 port = 5;
+  required int32 clientCount = 6;
+  required double loadAverage = 7;
+  required int32 heapUsed = 8;
+  optional Statistics statistics = 9;
+}
+
+message NodeStatuses {
+  repeated NodeStatus nodeStatus = 1;
+}
+
+message AgentTrackData {
+  repeated TrackData trackData = 1;
+  optional sint32 x = 2;
+  optional sint32 y = 3;
+  optional sint32 z = 4;
+}
+
+message Agent {
+  required string id = 1;
+  required string code = 2;
+  required string classname = 3;
+  optional bool remove = 5;
+  required string compileResult = 6;
+  required int32 concurrency = 7;
+}
+
+message AgentController {
+  repeated Agent agent = 1;
+  required Player player = 2;
+  required string gameId = 3;
+}
+
+
+
+message MonoMessage {
+  optional Entity entity = 1;
+  optional string klass = 2;
+}
+
+message DeliveryConfirmation {
+  required string messageId = 1;
+}
+
+message TrackEntity {
+  required bool value = 1;
+  optional bool internal = 2;
+  optional TrackData trackData = 3;
+}
+
+message PlayerLogout {
+  required string playerId = 1;
+  optional int32 authtoken = 2;
+}
+
+message PlayerConnect {
+  optional string playerId = 1;
+  optional string password = 2; 
+}
+
+message PlayerConnected {
+  optional int32 notused = 1;
+}
+
+message PlayerAuthenticated {
+  required string playerId = 1;
+  required int32 authtoken = 2;
+}
+
+message ErrorMessage {
+  required string code = 1;
+  required string message = 2;
+}
+
+message ChatInvite {
+  required string invitee = 1;
+  required string inviter = 2;
+  required string channelName = 4;
+  required string invite_id = 5;
+}
+
+message ChatBanned {
+  required string banned_id = 1;
+  required string channelNname = 2;
+  optional string reason = 3;
+}
+
+message ChatBannedList {
+  repeated ChatBanned chatBanned = 1;
+}
+
+message ChatChannels {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message ChatChannel {
+  required string name = 1;
+  optional Subscribers subscribers = 2;
+  optional string flags = 3;
+  optional string invite_id = 5;
+}
+
+message ChatRegister {
+  required string chatId = 1;
+  required string registerAs = 2;
+}
+
+message JoinChat {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message LeaveChat {
+  repeated ChatChannel chatChannel = 1;
+}
+
+message ChatMessage {
+  required ChatChannel chatChannel = 1;
+  required string message = 2;
+  required string type = 3;
+  optional string senderId = 4;
+  optional Entity entity = 5;
+  optional DynamicMessage dynamicMessage = 6;
+}
+
+message ChatStatus {
+  optional int32 notused = 1;
+}
+
+message ChatDestroy {
+  required string playerId = 1;
+}
+
+message ClientEvent {
+  required string event = 1;
+  required string clientId = 2;
+  required string senderId = 3;
+  optional string playerId = 4;
+}
+
+message ClientEvents {
+  repeated ClientEvent clientEvent = 1;
+}
+
+message ClientManagerUnregister {
+  optional string registerType = 1;
+  optional string name = 2;
+}
+
+message ClientManagerRegister {
+  optional string events = 1;
+  optional string registerType = 2;
+  optional string name = 3;
+}
+
+message ClientManagerEvent {
+  required string client_id = 1;
+  required string player_id = 2;
+  required string event = 3;
+}
+
+message Subscribers {
+  repeated string subscriberId = 1;
+}
+
+message Subscribe {
+  optional string topic = 1;
+  required string gameId = 2;
+}
+
+message Unsubscribe {
+  required string topic = 1;
+  required string gameId = 2;
+}
+
+message Publish {
+  optional string topic = 1;
+  required Entity message = 2;
+  optional string path = 3;
+  required string gameId = 4;
+}
+
+message ObjectdbDel {
+  required string entityId = 1;
+}
+
+message ObjectdbStatus {
+  required string entityId = 1;
+  required string status = 2;
+}
+
+message ObjectdbGet {
+  required string entityId = 1;
+  optional string playerId = 2;
+  optional string klass = 3;
+}
+
+message ObjectdbGetResponse {
+  required bool entityFound = 1;
+}
+
+message ObjectdbPut {
+  required Entity entity = 1;
+}
+
+message ObjectdbUpdate {
+  required string currentEntityId = 1;
+  optional string updateClass = 2;
+  required string updateMethod = 3;
+  required Entity updateEntity = 4;
+}
+
+message ClientConnection {
+  required string id = 1;
+  optional string gateway = 2;
+  optional string server = 3;
+  optional string type = 4;
+}
+
+message Name {
+  required string value = 1;
+}
+
+message GmQuaternion {
+  optional float x = 1;
+  optional float y = 2;
+  optional float z = 3;
+  optional float w = 4;
+}
+
+message GmVector3 {
+  optional float x = 1;
+  optional float y = 2;
+  optional float z = 3;
+  optional sint32 xi = 4;
+  optional sint32 yi = 5;
+  optional sint32 zi = 6;
+  optional sint32 vertice = 7;
+}
+
+
+message GridVerticle {
+  required float x = 1;
+  required float y = 2;
+  repeated GridNode gridNodes = 4;
+}
+
+message GridNode {
+  required GmVector3 point = 1;
+  optional float slope = 2;
+}
+
+message GridData {
+  repeated GridNode nodes = 1;
+  required int32 w = 2;
+  required int32 h = 3;
+  repeated GridVerticle gridVerticles = 4;
+}
+
+message TriangleMesh {
+  repeated GmVector3 vertices = 1;
+  repeated int32 indices = 2;
+}
+
+message TriangleMesh2 {
+  repeated float vertices = 1;
+  repeated int32 indices = 2;
+}
+
+message MeshNode {
+  required GmVector3 position = 1;
+  repeated GmVector3 connections = 2;
+}
+
+message GmMesh {
+  repeated MeshNode nodes = 1;
+}
+
+message PathData {
+  optional GmVector3 startPoint = 1;
+  optional GmVector3 endPoint = 2;
+  repeated GmVector3 nodes = 3;
+  optional string id = 4;
+}
+
+message EchoTest {
+  required string message = 1;
+}
+  
+message Neighbors {
+  repeated TrackData trackData = 1;
+}
+
+message Neighbor {
+  optional TrackData trackData = 1;
+  required GmVector3 location = 2;
+  required string id = 3;
+}
+
+message NeighborsRequest {
+  required string neighborEntityType = 1;
+  optional string gridName = 2;
+}
+
+message NativeBytes {
+  optional bytes bytes = 1;
+  repeated bytes byteArray = 2;
+}
+
+message CloudQueryResponse {
+  required string format = 1;
+  repeated string messageId = 2;
+  repeated bytes byteMessage = 3;
+  repeated string jsonMessage = 4;
+}
+
+message JsonEntity {
+  required string json = 1;
+  optional string klass = 2;
+}
+
+message JsonStorage {
+  required string json = 1;
+}
+
+message Regions {
+  required string regions = 1;
+}
+
+message PoisonPill {
+  optional int32 notused = 1;
+}
+
+message Entity {
+  optional Neighbors neighbors = 2;
+  optional ChatMessage chatMessage = 4;
+  optional ClientConnection clientConnection = 5;
+  optional EchoTest echoTest = 6;
+  required string id = 7;
+  optional Subscribe subscribe = 9;
+  optional Publish publish = 10;
+  optional ChatChannel chatChannel = 11;
+  optional JoinChat joinChat = 12;
+  optional LeaveChat leaveChat = 13;
+  optional Unsubscribe unsubscribe = 14;
+  optional ChatRegister chatRegister = 15;
+  optional ChatChannels chatChannels = 16;
+  optional ErrorMessage errorMessage = 17;
+  optional NeighborsRequest neighborsRequest = 21;
+  optional TrackEntity trackEntity = 22;
+  optional GmVector3 vector3 = 25;
+  optional EntityList entityList = 27;
+  optional bool  published = 29;
+  optional string entityType = 30;
+  optional PlayerAuthenticated playerAuthenticated = 37;
+  optional PlayerLogout playerLogout = 38;
+  optional bool sendToPlayer = 39;
+  optional Subscribers subscribers = 41;
+  optional bool save = 42;
+  optional ObjectdbGetResponse objectdbGetResponse = 44;
+  optional NativeBytes nativeBytes = 45;
+  optional ObjectdbGet objectdbGet = 46;
+  optional JsonEntity jsonEntity = 47;
+  optional string destination = 48;
+  optional bool json = 49;
+  optional string params = 50;
+  optional ChatStatus chatStatus = 51;
+  optional ChatBannedList chatBannedList = 52;
+  optional ChatInvite chatInvite = 53;
+  optional ClientManagerRegister clientManagerRegister = 54;
+  optional ClientManagerUnregister clientManagerUnregister = 55;
+  optional ClientEvent clientEvent = 56;
+  optional ClientEvents clientEvents = 57;
+  optional JsonStorage jsonStorage = 58;
+  optional ClientManagerEvent clientManagerEvent = 59;
+  optional Regions regions = 60;
+  optional bool fastpath = 61;
+  optional PoisonPill poisonPill = 62;
+  optional string senderId = 63;
+  optional AgentTrackData agentTrackData = 64;
+  optional TeamMemberSkill teamMemberSkill = 65;
+  optional TrackDataUpdate trackDataUpdate = 66;
+  optional TrackDataResponse trackDataResponse = 67;
+  optional GmMesh mesh = 68;
+  optional PathData pathData = 69;
+  optional ObjectdbStatus objectdbStatus = 70;
+  
+  optional PvpGameMessage pvpGameMessage = 1000;
+optional Player player = 1001;
+optional TrackData trackData = 1002;
+optional DynamicMessage dynamicMessage = 1003;
+optional PlayerSkills playerSkills = 1004;
+optional PlayerItems playerItems = 1005;
+optional Players players = 1006;
+optional TestObject testObject = 1007;
+optional UnityGameMessage unityGameMessage = 1008;
+optional GameMessage gameMessage = 1009;
+optional GameMessages gameMessages = 1010;
+}
+
+message EntityList {
+  repeated Entity entity = 1;
+}
+
+message ClientMessage {
+  repeated Entity entity = 1;
+  optional Player player = 2;
+  optional ClientConnection clientConnection = 4;
+  optional PlayerLogout playerLogout = 5;
+  optional PlayerConnect playerConnect = 7;
+  optional PlayerConnected playerConnected = 8;
+  optional int32 connection_type = 9;
+  optional uint64 sentAt = 10;
+  optional TrackData trackData = 11;
+  optional string gameId = 12;
+  optional UnityGameMessage unityGameMessage = 13;
+}

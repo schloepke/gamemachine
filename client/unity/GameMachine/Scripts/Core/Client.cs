@@ -15,6 +15,10 @@ namespace GameMachine.Core
         bool ReceivedPlayerConnected();
         void SendPlayerConnect();
         void Send(byte[] bytes);
+        void Reconnect();
+        long GetBytesIn();
+        long GetBytesOut();
+        void ResetBytes();
 	}
 }
 

@@ -11,7 +11,7 @@ using Player = io.gamemachine.messages.Player;
 using Players = io.gamemachine.messages.Players;
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class AdminUI : MonoBehaviour, IAdminApi, IPlayerApi {
             private Transform panel;
             private Transform result;

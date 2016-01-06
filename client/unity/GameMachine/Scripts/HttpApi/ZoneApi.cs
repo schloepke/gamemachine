@@ -4,6 +4,7 @@ using GameMachine.Common;
 using System.IO;
 using ProtoBuf;
 using io.gamemachine.messages;
+using System;
 
 namespace GameMachine {
     namespace HttpApi {
@@ -40,11 +41,11 @@ namespace GameMachine {
                 }
             }
 
-            public void SetZone(string zone, IZoneApi caller) {
-                StartCoroutine(SetZoneRoutine(zone, caller));
+            public void SetZone(string zone, Action<Zone> callback) {
+                StartCoroutine(SetZoneRoutine(zone, callback));
             }
 
-            public IEnumerator SetZoneRoutine(string zoneName, IZoneApi caller) {
+            public IEnumerator SetZoneRoutine(string zoneName, Action<Zone> callback) {
                 string uri = NetworkSettings.instance.BaseUri() + "/api/players/set_zone";
                 var form = new WWWForm();
                 form.AddField("playerId", NetworkSettings.instance.username);
@@ -54,11 +55,12 @@ namespace GameMachine {
                 yield return www;
 
                 if (www.error != null) {
-                    caller.OnSetZoneError(www.error);
+                    Debug.Log(www.error);
+                    callback(null);
                 } else {
                     MemoryStream stream = new MemoryStream(www.bytes);
                     Zone zone = Serializer.Deserialize<Zone>(stream);
-                    caller.OnSetZone(zone);
+                    callback(zone);
                 }
             }
 

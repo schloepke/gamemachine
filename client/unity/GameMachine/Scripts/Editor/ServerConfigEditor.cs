@@ -40,17 +40,53 @@ namespace GameMachine {
             }
         }
 
-        private void ShowConfig() {
-
-            EditorGUILayout.LabelField("Game Machine server", EditorStyles.boldLabel);
+        private void SetServerPath(string name) {
             prop = so.FindProperty("serverPath");
-            prop.stringValue = EditorGUILayout.TextField("Server path", prop.stringValue);
-            PlayerPrefs.SetString("serverPath", prop.stringValue);
+            if (GUILayout.Button(name, GUILayout.ExpandWidth(true))) {
+                string path = EditorUtility.OpenFolderPanel("Game Machine server folder", "C:/", null);
+                if (!string.IsNullOrEmpty(path)) {
+                    prop.stringValue = path;
+                }
+            }
+        }
+
+        private void ShowConfig() {
+            prop = so.FindProperty("gmcsPath");
+            prop.stringValue = EditorApplication.applicationContentsPath + "/Mono/bin/gmcs.bat";
+
+            EditorGUILayout.Separator();
+            EditorGUILayout.LabelField("Game Machine", EditorStyles.boldLabel);
+            EditorGUILayout.Separator();
+
+            string gmStartBash = serverConfig.serverPath + "/bin/game_machine.sh";
+            if (!File.Exists(gmStartBash)) {
+                EditorGUILayout.HelpBox(
+                @"Path to the game machine server.  This will end in 'server'",
+                MessageType.Info);
+                SetServerPath("Set Game Machine server folder");
+                return;
+            } else {
+                EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.LabelField("Game Machine folder is set correctly");
+                SetServerPath("Reset");
+                EditorGUILayout.EndHorizontal();
+                EditorGUILayout.Separator();
+            }
 
             prop = so.FindProperty("configName");
             prop.stringValue = EditorGUILayout.TextField("Config name", prop.stringValue);
 
             EditorGUILayout.Separator();
+
+            if (string.IsNullOrEmpty(serverConfig.gmcsPath)) {
+                EditorGUILayout.HelpBox("Unity installation path not set", MessageType.Error);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(serverConfig.serverPath)) {
+                EditorGUILayout.HelpBox("Game Machine server path not set", MessageType.Error);
+                return;
+            }
 
             if (ProcessTracker.HasProcess(gameMachineProcess)) {
                 //if (GUILayout.Button("Stop Server", GUILayout.Width(300))) {
@@ -58,15 +94,20 @@ namespace GameMachine {
                 //}
                 EditorGUILayout.LabelField("Game Machine is running");
             } else {
-                if (GUILayout.Button("Start Game Machine", GUILayout.Width(300))) {
+                if (GUILayout.Button("Start Game Machine", GUILayout.ExpandWidth(true))) {
                     RunGameMachine("server", serverConfig.configName);
                 }
-                if (GUILayout.Button("Build Game Machine (full)", GUILayout.Width(300))) {
+                EditorGUILayout.Separator();
+                if (GUILayout.Button("Build Game Machine (full)", GUILayout.ExpandWidth(true))) {
                     RunGameMachine("build clean", serverConfig.configName);
                 }
-
-                if (GUILayout.Button("Build Game Machine (compile only)", GUILayout.Width(300))) {
+                EditorGUILayout.Separator();
+                if (GUILayout.Button("Build Game Machine (compile only)", GUILayout.ExpandWidth(true))) {
                     RunGameMachine("build compile", serverConfig.configName);
+                }
+                EditorGUILayout.Separator();
+                if (GUILayout.Button("Build protocol buffers", GUILayout.ExpandWidth(true))) {
+                    BuildProtobuf();
                 }
             }
 
@@ -84,7 +125,7 @@ namespace GameMachine {
             prop.boolValue = EditorGUILayout.Toggle("Run headless", prop.boolValue);
             EditorGUILayout.Separator();
 
-           
+
 
             buildTarget = (BuildTarget)EditorGUILayout.EnumPopup("Target", buildTarget);
             EditorGUILayout.BeginVertical(GUILayout.Height(20));
@@ -95,7 +136,7 @@ namespace GameMachine {
                 lastUpdate = TimeUtil.EpochTime();
                 ProcessTracker.UpdateProcesses();
             }
-           
+
 
             if (ProcessTracker.HasProcess(unityProcess)) {
                 if (GUILayout.Button("Stop Unity", GUILayout.Width(300))) {
@@ -153,8 +194,7 @@ namespace GameMachine {
 
         private void RunGameMachine(string command, string config) {
             string envFile = serverConfig.serverPath + "/env.dat";
-            string clientMessages = Application.dataPath + "/GameMachine/Scripts/messages.cs";
-            string serverMessages = serverConfig.serverPath + "/messages.cs";
+
             string fileName;
 
             if (IsWindows()) {
@@ -175,14 +215,61 @@ namespace GameMachine {
             if (command.StartsWith("build")) {
                 proc.WaitForExit();
                 ProcessTracker.RemoveProcess(proc.Id);
-                Debug.Log("Copying messages.cs");
-                if (File.Exists(serverMessages)) {
-                    File.Delete(clientMessages);
-                    File.Copy(serverMessages, clientMessages);
+                if (command == "build clean") {
+                    BuildProtobuf();
                 }
+                
             }
         }
-        
+
+        private void BuildProtobuf() {
+            string buildDir = Application.dataPath + "/GameMachine/third_party/ProtoBuf/build";
+            string outDir = Application.dataPath + "/GameMachine/third_party/ProtoBuf/generated";
+            string serializerDll = outDir + "/GmSerializer.dll";
+            string messagesDll = outDir + "/messages.dll";
+            string clientMessages = buildDir + "/messages.cs";
+            string serverProto = serverConfig.serverPath + "/config/combined_messages.proto";
+            string clientProto = buildDir + "/combined_messages.proto";
+
+            if (File.Exists(serverProto)) {
+                File.Delete(clientProto);
+                File.Copy(serverProto, clientProto);
+            }
+
+            if (File.Exists(clientProto)) {
+                if (File.Exists(serializerDll)) {
+                    File.Delete(serializerDll);
+                }
+
+                if (File.Exists(messagesDll)) {
+                    File.Delete(messagesDll);
+                }
+
+
+                string cmd = buildDir + @"/ProtoGen/protogen.exe";
+                string arguments = " -i:combined_messages.proto -o:messages.cs";
+                System.Diagnostics.Process proc = ProcessTracker.Start("build_messages", cmd, arguments, buildDir);
+                proc.WaitForExit();
+                ProcessTracker.RemoveProcess(proc.Id);
+
+                arguments = " -r:../unity/protobuf-net.dll -target:library -out:../generated/messages.dll messages.cs";
+                proc = ProcessTracker.Start("compile_messages", serverConfig.gmcsPath, arguments, buildDir);
+                proc.WaitForExit();
+                ProcessTracker.RemoveProcess(proc.Id);
+
+                cmd = buildDir + "/Precompile/precompile.exe";
+                arguments = " ../generated/messages.dll ../unity/protobuf-net.dll -o:../generated/GmSerializer.dll -t:GmSerializer";
+                proc = ProcessTracker.Start("compile_serializer", cmd, arguments, buildDir);
+                proc.WaitForExit();
+                ProcessTracker.RemoveProcess(proc.Id);
+
+                File.Delete(clientMessages);
+            } else {
+                Debug.LogWarning("combined_messages.proto not found, not compiling");
+            }
+
+        }
+
         public static bool IsWindows() {
             return System.IO.Path.DirectorySeparatorChar == '\\';
         }

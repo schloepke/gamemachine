@@ -4,17 +4,20 @@ using System.Collections;
 using GameMachine.Common;
 
 namespace GameMachine {
-    namespace DefaultClient {
+    namespace ClientLib {
         public class MainUI : MonoBehaviour {
             public static MainUI instance;
-            private Transform panel;
-            
+
+            public GameObject account;
+            public GameObject login;
+            public GameObject password;
+            public GameObject quit;
+
             void Awake() {
                 instance = this;
             }
 
             void Start() {
-                panel = transform.Find("panel");
                 Show();
             }
 
@@ -30,37 +33,24 @@ namespace GameMachine {
                 UIController.instance.LoadPassword();
             }
 
-            public void LoadAdmin() {
-                UIController.instance.LoadAdmin();
-            }
-
             public void QuitApp() {
                 Application.Quit();
             }
 
             public void Show() {
                 if (NetworkSettings.instance.loggedIn) {
-                    panel.Find("account").gameObject.SetActive(false);
-                    panel.Find("login").gameObject.SetActive(false);
-                    panel.Find("password").gameObject.SetActive(false);
-                    panel.Find("quit").gameObject.SetActive(true);
-                    if (NetworkSettings.instance.isAdmin) {
-                        panel.Find("admin").gameObject.SetActive(true);
-                    }
+                    account.SetActive(false);
+                    login.SetActive(false);
+                    password.SetActive(false);
+                    quit.SetActive(false);
                 } else {
-                    panel.Find("account").gameObject.SetActive(true);
-                    panel.Find("login").gameObject.SetActive(true);
-                    panel.Find("quit").gameObject.SetActive(true);
-                    panel.Find("password").gameObject.SetActive(true);
-                    panel.Find("admin").gameObject.SetActive(false);
+                    account.SetActive(true);
+                    login.SetActive(true);
+                    password.SetActive(true);
+                    quit.SetActive(false);
                 }
             }
 
-            
-
-            public void Load() {
-                gameObject.GetComponent<Canvas>().enabled = true;
-            }
         }
     }
 }

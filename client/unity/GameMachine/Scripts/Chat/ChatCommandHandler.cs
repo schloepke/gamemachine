@@ -8,6 +8,7 @@ using GameMachine;
 using GameMachine.Core;
 using GameMachine.Common;
 using GameMachine.HttpApi;
+using GameMachine.ClientLib;
 
 namespace GameMachine.Chat {
 
@@ -39,21 +40,19 @@ namespace GameMachine.Chat {
 
             if (command.StartsWith("/speed")) {
                 command = command.Replace("/speed", "");
-                int speed = Int32.Parse(command);
+                //int speed = Int32.Parse(command);
                 //string characterId = GameEntityManager.GetPlayerEntity().GetCharacterId();
-                IGameEntityController controller = GameEntityManager.GetPlayerEntity().GetGameEntityController();
-                controller.SetRunSpeed(speed);
+                //GameEntityController controller = GameEntityManager.GetPlayerEntity().GetGameEntityController();
                 return CommandResult.Ok;
             } else if (command.StartsWith("/zone")) {
                 command = command.Replace("/zone", "").Trim();
-                //GameMachine.DefaultClient.Client.instance.currentZone = command;
-                //GameMachine.DefaultClient.Client.instance.setZone = true;
+                DefaultClient.instance.ConnectToZone(command);
                 return CommandResult.Ok;
             } else if (command.StartsWith("/count")) {
                 chatUI.LocalMessage(Color.yellow, GameEntityManager.GameEntityCount().ToString());
                 return CommandResult.Ok;
             } else if (command.StartsWith("/stuck")) {
-                
+                SpawnPoint.Instance().SpawnHome();
                 return CommandResult.Ok;
             } else if (command.StartsWith("/territories")) {
                
@@ -231,6 +230,18 @@ namespace GameMachine.Chat {
         }
 
         public void OnCharacterDeleteError(string error) {
+            throw new NotImplementedException();
+        }
+
+        public void OnCharacterSetEquippedItems(string result) {
+            throw new NotImplementedException();
+        }
+
+        public void OnCharacterSetEquippedItemsError(string error) {
+            throw new NotImplementedException();
+        }
+
+        public void OnNpcCreated(bool status) {
             throw new NotImplementedException();
         }
     }

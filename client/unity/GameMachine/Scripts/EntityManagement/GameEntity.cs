@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using io.gamemachine.messages;
 using System;
+using GameMachine.ClientLib;
 
 namespace GameMachine {
     namespace Common {
@@ -16,18 +17,20 @@ namespace GameMachine {
             private NetworkFields networkFieldsDef;
 
             private GameEntityType entityType = GameEntityType.None;
-            private string entityId;
+            public string entityId;
             private Character character;
             private IGameEntityInput inputController;
-            private Vector3 serverLocation;
+            private Vector3 targetPosition;
             private float lastUpdate;
-            private IGameEntityController gameEntityController;
+            private GameEntityController gameEntityController;
             private Transform spawnpoint;
             public float inactivityTimeout = 2f;
-            private bool canMove = true;
             private Vector3 networkSpawnPoint;
             private Vitals vitals = null;
             private bool active = false;
+            private ControllerType controllerType;
+            private float lastHeading;
+            public int shortId;
 
             public static GameEntityType GameEntityTypeFromTrackData(TrackData trackData) {
                 GameEntityType entityType;
@@ -63,7 +66,7 @@ namespace GameMachine {
 
 
             void Awake() {
-                gameEntityController = gameObject.GetComponent<IGameEntityController>() as IGameEntityController;
+                gameEntityController = gameObject.GetComponent<GameEntityController>() as GameEntityController;
                 inputController = gameObject.GetComponent<IGameEntityInput>() as IGameEntityInput;
                 networkFieldsDb.GetData();
                 networkFieldsDef = networkFieldsDb.Clone();
@@ -76,18 +79,19 @@ namespace GameMachine {
             }
 
             void Update() {
-                if (gameEntityController.IsInitialized() && canMove) {
+                if (gameEntityController.IsInitialized()) {
                     gameEntityController.ManualUpdate();
-                    if (!IsPlayer()) {
+                    if (!IsPlayer() && !IsLocalController()) {
                         UpdateHealthbar();
                         if (Time.time - lastUpdate > inactivityTimeout) {
-                            GameEntityManager.RemoveGameEntity(entityId);
+                            GameEntityManager.instance.RemoveGameEntity(entityId, character.id, shortId);
                         }
                     }
                 }
+
             }
 
-            public IGameEntityController GetGameEntityController() {
+            public GameEntityController GetGameEntityController() {
                 return gameEntityController;
             }
 
@@ -112,13 +116,20 @@ namespace GameMachine {
             }
 
             private void UpdateHealthbar() {
+                if (healthbarHealth == null) {
+                    return;
+                }
+
                 if (healthbarHealth.enabled) {
-                    Camera cam = GameEntityCamera.instance.cam;
-                    healthbar.transform.LookAt(healthbar.transform.position + cam.transform.rotation * Vector3.forward, cam.transform.rotation * Vector3.up);
+                    healthbar.transform.LookAt(healthbar.transform.position + Camera.main.transform.rotation * Vector3.forward, Camera.main.transform.rotation * Vector3.up);
                 }
             }
 
             public void SetHealthbar(bool active, float scale) {
+                if (healthbarHealth == null) {
+                    return;
+                }
+
                 healthbarHealth.enabled = active;
                 healthbarBg.enabled = active;
                 if (active) {
@@ -137,33 +148,26 @@ namespace GameMachine {
                 SetHealthbar(false, 0f);
             }
 
-            private void SetSpawnPoint(Character character) {
-                if (character.worldx != 0 && character.worldz != 0) {
-                    float x = GmUtil.Instance.IntToFloat(character.worldx);
-                    float y = GmUtil.Instance.IntToFloat(character.worldy);
-                    float z = GmUtil.Instance.IntToFloat(character.worldz);
-                    networkSpawnPoint = new Vector3(x, y, z);
-                }
-            }
-
-            public void Init(string entityId, Character character, GameEntityType entityType) {
+            public void Init(string entityId, Character character, GameEntityType entityType, ControllerType controllerType) {
                 this.character = character;
                 this.entityType = entityType;
                 this.entityId = entityId;
+                this.controllerType = controllerType;
 
                 gameObject.name = character.id;
                 gameObject.tag = Settings.Instance().gameEntityTag;
-                
 
-                if (this.entityType == GameEntityType.Player) {
-                    inputController.SetControllerType("local");
-                } else {
-                    inputController.SetControllerType("remote");
+                inputController.SetControllerType(controllerType);
+                if (controllerType == ControllerType.Remote) {
                     gameObject.layer = LayerMask.NameToLayer(Settings.Instance().gameEntityTag);
                     AddHealthbar();
                 }
+                
+                networkSpawnPoint = SpawnPoint.Instance().GetCharacterSpawnpoint(character);
 
-                SetSpawnPoint(character);
+                if (DefaultClient.OptimizeForServer()) {
+                    Destroy(gameObject.GetComponentInChildren<SkinnedMeshRenderer>());
+                }
             }
 
             public void Remove() {
@@ -171,16 +175,7 @@ namespace GameMachine {
             }
 
             public TrackData GetTrackData() {
-
-                Vector3 forward = transform.forward;
-                forward.y = 0;
-                float heading = Quaternion.LookRotation(forward).eulerAngles.y;
-
-                networkFieldsDef.SetPosition(transform.position);
-                networkFieldsDef.SetFloat(GMKeyCode.Heading, heading);
-                networkFieldsDef.SetFloat(GMKeyCode.Vaxis, inputController.GetFloat(GMKeyCode.Vaxis));
-                networkFieldsDef.SetFloat(GMKeyCode.Haxis, inputController.GetFloat(GMKeyCode.Haxis));
-                networkFieldsDef.SetBool(GMKeyCode.MouseRight, inputController.GetBool(GMKeyCode.MouseRight));
+                gameEntityController.SetNetworkFields(networkFieldsDef);
 
                 TrackData trackData = networkFieldsDef.GetTrackData();
 
@@ -195,9 +190,13 @@ namespace GameMachine {
 
                 networkFieldsDef.UpdateFromNetwork(trackData, hasDelta);
 
-                serverLocation = networkFieldsDef.GetPosition();
+                targetPosition = networkFieldsDef.GetPosition();
 
                 lastUpdate = Time.time;
+            }
+
+            public Character GetCharacter() {
+                return character;
             }
 
             public string GetCharacterId() {
@@ -216,10 +215,13 @@ namespace GameMachine {
                 throw new System.NotImplementedException();
             }
 
-            public Vector3 GetServerLocation() {
-                return serverLocation;
+            public Vector3 GetTargetPosition() {
+                return targetPosition;
             }
 
+            public void SetTargetPosition(Vector3 targetPosition) {
+                this.targetPosition = targetPosition;
+            }
 
             public NetworkFields GetNetworkFields() {
                 return networkFieldsDef;
@@ -230,6 +232,10 @@ namespace GameMachine {
                     return false;
                 }
                 return vitals.inCombat;
+            }
+            
+            public bool MovementDisabled() {
+                return InputState.CameraDisabled();
             }
 
             public bool IsDead() {
@@ -255,12 +261,31 @@ namespace GameMachine {
                 return active;
             }
 
-            public void SetActive(bool active) {
+            public void SetActive(bool active, bool setLocation) {
                 this.active = active;
+                if (setLocation) {
+                    transform.position = GetTargetPosition();
+                }
             }
 
             public GameObject GetGameObject() {
                 return gameObject;
+            }
+
+            public bool IsLocalController() {
+                return (controllerType == ControllerType.Local);
+            }
+
+            public ControllerType GetControllerType() {
+                return controllerType;
+            }
+
+            public void SetShortId(int shortId) {
+                this.shortId = shortId;
+            }
+
+            public void SetCharacter(Character character) {
+                this.character = character;
             }
         }
     }

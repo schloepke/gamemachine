@@ -77,9 +77,9 @@ namespace GameMachine {
             this.trackData = trackData;
             if (trackData.broadcast != 1) {
                 if (hasDelta) {
-                    position = GmUtil.Instance.TrackdataDeltaToVector3(trackData, position);
+                    position = GmUtil.TrackdataDeltaToVector3(trackData, position);
                 } else {
-                    position = GmUtil.Instance.TrackdataToVector3(trackData);
+                    position = GmUtil.TrackdataToVector3(trackData);
                 }
             }
         }
@@ -102,7 +102,7 @@ namespace GameMachine {
         public float GetFloat(GMKeyCode code) {
             FieldSet set = codeMap[code];
             int value = GetUserValue(set.gmField);
-            return GmUtil.Instance.IntToFloat(value);
+            return GmUtil.IntToFloat(value);
         }
 
         public Vector3 GetPosition() {
@@ -110,23 +110,23 @@ namespace GameMachine {
         }
 
         public Vector3 GetSecondaryVector3() {
-            return GmUtil.Instance.UserDefinedDataToVector3(trackData.userDefinedData);
+            return GmUtil.UserDefinedDataToVector3(trackData.userDefinedData);
         }
 
         public Quaternion GetRotation() {
-            return GmUtil.Instance.TrackdataToQuaternion(trackData);
+            return GmUtil.TrackdataToQuaternion(trackData);
         }
 
         public void SetPosition(Vector3 value) {
-            trackData = GmUtil.Instance.Vector3ToTrackData(value, trackData);
+            trackData = GmUtil.Vector3ToTrackData(value, trackData);
         }
 
         public void SetSecondaryVector3(Vector3 value) {
-            trackData.userDefinedData = GmUtil.Instance.Vector3ToUserDefinedData(value, trackData.userDefinedData);
+            trackData.userDefinedData = GmUtil.Vector3ToUserDefinedData(value, trackData.userDefinedData);
         }
 
         public void SetRotation(Quaternion value) {
-            trackData = GmUtil.Instance.QuaternionToTrackData(value, trackData);
+            trackData = GmUtil.QuaternionToTrackData(value, trackData);
         }
 
         public void SetInt(GMKeyCode code, int value) {
@@ -136,7 +136,7 @@ namespace GameMachine {
 
         public void SetFloat(GMKeyCode code, float value) {
             FieldSet set = codeMap[code];
-            int intValue = GmUtil.Instance.FloatToInt(value);
+            int intValue = GmUtil.FloatToInt(value);
             SetUserValue(set, intValue);
         }
 
@@ -157,7 +157,7 @@ namespace GameMachine {
                 case GmField.Position:
                     return GMKeyCode.Position;
                 case GmField.Speed:
-                    return GMKeyCode.Speed;
+                    return GMKeyCode.PlayerSpeed;
                 case GmField.Hidden:
                     return GMKeyCode.Hidden;
                 case GmField.SecondaryVector3:
@@ -199,7 +199,7 @@ namespace GameMachine {
         public List<GMKeyCode> Keycodes() {
             List<GMKeyCode> keycodes = Enum.GetValues(typeof(GMKeyCode)).Cast<GMKeyCode>().ToList();
             return keycodes.Where(k => k != GMKeyCode.Vaxis && k != GMKeyCode.Yaxis && k != GMKeyCode.Haxis && k != GMKeyCode.Position && k != GMKeyCode.Rotation &&
-            k != GMKeyCode.Hidden && k != GMKeyCode.Speed && k != GMKeyCode.SecondaryVector3).ToList();
+            k != GMKeyCode.Hidden && k != GMKeyCode.PlayerSpeed && k != GMKeyCode.SecondaryVector3).ToList();
         }
 
         public List<string> KeycodeNames() {

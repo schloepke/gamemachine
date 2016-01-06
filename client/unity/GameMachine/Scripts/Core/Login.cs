@@ -45,6 +45,9 @@ namespace GameMachine
                 app = gameObject.AddComponent<App>() as App;
             }
 
+            if (NetworkSettings.instance.showClientStats) {
+                app.showClientStats = true;
+            }
             app.Login(NetworkSettings.instance.gameId, NetworkSettings.instance.httpHost, NetworkSettings.instance.httpPort, user.username, user.password, success, error);
         }
 
@@ -94,7 +97,7 @@ namespace GameMachine
             }
 
 
-            Debug.Log("Authtoken: " + authtoken + " Protocol:" + NetworkSettings.instance.protocol + " Hostname:" + hostname + " port:" + port);
+            //Debug.Log("Authtoken: " + authtoken + " Protocol:" + NetworkSettings.instance.protocol + " Hostname:" + hostname + " port:" + port);
             App.AppStarted callback = OnAppStarted;
             app.OnAppStarted (callback);
 

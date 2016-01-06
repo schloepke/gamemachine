@@ -1,35 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.EventSystems;
+using System.Collections.Generic;
 
 namespace GameMachine {
     namespace Common {
         public class InputState {
 
-            public static bool UIActive() {
-                return (EventSystem.current.IsPointerOverGameObject());
-            }
+            public static HashSet<string> activeInputs = new HashSet<string>();
 
-            public static bool MovementDisabled() {
-                return typing;
-            }
-
+            public static bool dragging = false;
+            public static bool chatfocus = false;
+            public static bool cameraDisabled = false;
+            
             public static bool CameraDisabled() {
-                if (cameraDisabled || chatdragging || (chatfocus && Input.GetMouseButton(0))) {
+                bool isDead = false;
+                if (GamePlayer.IsNetworked()) {
+                    isDead = GamePlayer.Instance().gameEntity.IsDead();
+                }
+                
+                if (cameraDisabled || dragging || isDead || (chatfocus && Input.GetMouseButton(0))) {
                     return true;
                 } else {
                     return false;
                 }
             }
 
-            public static bool KeyInputDisabled() {
-                return typing;
+            public static bool KeyInputActive() {
+                return activeInputs.Count > 0;
             }
-
-            public static bool chatdragging = false;
-            public static bool chatfocus = false;
-            public static bool typing = false;
-            public static bool cameraDisabled = false;
+            
+            public static void SetInput(string key, bool active) {
+                if (active) {
+                    if (!activeInputs.Contains(key)) {
+                        activeInputs.Add(key);
+                    }
+                } else {
+                    if (activeInputs.Contains(key)) {
+                        activeInputs.Remove(key);
+                    }
+                }
+            }
+            
         }
     }
 }

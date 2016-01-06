@@ -1,17 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using GameMachine;
 using GameMachine.Common;
-using GameMachine.Core;
 using System.IO;
 using ProtoBuf;
-using System.Linq;
-using Characters = io.gamemachine.messages.Characters;
-using Character = io.gamemachine.messages.Character;
-using Players = io.gamemachine.messages.Players;
-using Player = io.gamemachine.messages.Player;
+using io.gamemachine.messages;
 
 namespace GameMachine {
     namespace HttpApi {

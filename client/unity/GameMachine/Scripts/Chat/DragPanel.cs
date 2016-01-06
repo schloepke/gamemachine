@@ -2,9 +2,10 @@
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using GameMachine.Common;
 
-namespace GameMachine.Chat {
-    public class DragPanel : MonoBehaviour, IPointerDownHandler, IDragHandler {
+namespace GameMachine {
+    public class DragPanel : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IDragHandler, IEndDragHandler {
 
         private Vector2 originalLocalPointerPosition;
         private Vector3 originalPanelLocalPosition;
@@ -14,6 +15,14 @@ namespace GameMachine.Chat {
         void Awake() {
             panelRectTransform = transform.parent as RectTransform;
             parentRectTransform = panelRectTransform.parent as RectTransform;
+        }
+
+        public void OnBeginDrag(PointerEventData eventData) {
+            InputState.dragging = true;
+        }
+
+        public void OnEndDrag(PointerEventData eventData) {
+            InputState.dragging = false;
         }
 
         public void OnPointerDown(PointerEventData data) {

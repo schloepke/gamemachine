@@ -8,27 +8,19 @@ namespace GameMachine {
     namespace Common {
         public class GameEntityInput : MonoBehaviour, IGameEntityInput {
 
-            public enum ControllerType {
-                Local,
-                Remote
-            }
-
             private ControllerType controllerType;
             private NetworkFields networkFields;
             private bool hidden = false;
+            private IGameEntity gameEntity;
 
-            void Awake() {
-                IGameEntity gameEntity = gameObject.GetComponent<IGameEntity>() as IGameEntity;
+            void Start() {
+                gameEntity = gameObject.GetComponent<IGameEntity>() as IGameEntity;
                 networkFields = gameEntity.GetNetworkFields();
             }
 
-
-            public void SetControllerType(string type) {
-                if (type == "local") {
-                    controllerType = ControllerType.Local;
-                } else {
-                    controllerType = ControllerType.Remote;
-                }
+            
+            public void SetControllerType(ControllerType controllerType) {
+                this.controllerType = controllerType;
             }
 
             public float GetFloat(GMKeyCode code) {
@@ -41,6 +33,8 @@ namespace GameMachine {
                         return Heading();
                     case GMKeyCode.AngleY:
                         return AngleY();
+                    case GMKeyCode.PlayerSpeed:
+                        return PlayerSpeed();
                     default:
                         throw new NotImplementedException("Invalid code");
                 }
@@ -56,10 +50,6 @@ namespace GameMachine {
                          return MouseRight();
                      case GMKeyCode.Jumping:
                         return Jumping();
-                     case GMKeyCode.Running:
-                        return Running();
-                     case GMKeyCode.Walking:
-                        return Walking();
                      case GMKeyCode.Hidden:
                          return Stealthed();
                     default:
@@ -83,7 +73,7 @@ namespace GameMachine {
 
             private bool Jumping() {
                 if (controllerType == ControllerType.Local) {
-                    if (!InputState.KeyInputDisabled() && Input.GetButtonDown("Jump")) {
+                    if (!InputState.KeyInputActive() && Input.GetButtonDown("Jump")) {
                         networkFields.SetBool(GMKeyCode.Jumping, true);
                         return true;
                     } else {
@@ -94,10 +84,17 @@ namespace GameMachine {
                 }
             }
 
+            private float PlayerSpeed() {
+                if (controllerType == ControllerType.Local) {
+                    return gameEntity.GetGameEntityController().GetPlayerSpeed();
+                } else {
+                    return networkFields.GetFloat(GMKeyCode.PlayerSpeed);
+                }
+            }
 
             private float Vaxis() {
                 if (controllerType == ControllerType.Local) {
-                    if (InputState.typing) {
+                    if (InputState.KeyInputActive()) {
                         return 0f;
                     } else {
                         return Input.GetAxis("Vertical");
@@ -106,12 +103,11 @@ namespace GameMachine {
                 } else {
                     return networkFields.GetFloat(GMKeyCode.Vaxis);
                 }
-               
             }
 
             private float Haxis() {
                 if (controllerType == ControllerType.Local) {
-                    if (InputState.typing) {
+                    if (InputState.KeyInputActive()) {
                         return 0f;
                     } else {
                         return Input.GetAxis("Horizontal");
@@ -142,14 +138,6 @@ namespace GameMachine {
                 } else {
                     return false;
                 }
-            }
-
-            private bool Running() {
-                return true;
-            }
-
-            private bool Walking() {
-                return false;
             }
 
             private bool Stealthed() {

@@ -13,7 +13,7 @@ namespace GameMachine {
         private Editor serverConfigEditor;
         private ServerConfig serverConfig;
 
-        [MenuItem("Window/GameMachine/Editor")]
+        [MenuItem("Window/GameMachine/Manager")]
         static void CreateWindow() {
             GameMachineEditor window = (GameMachineEditor)EditorWindow.GetWindow(typeof(GameMachineEditor));
             window.titleContent = new GUIContent("Game Machine");

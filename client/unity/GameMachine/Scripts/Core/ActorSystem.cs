@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Collections.Generic;
 using UnityEngine;
 using io.gamemachine.messages;
+using GameMachine.Common;
 
 namespace GameMachine.Core {
     public class ActorSystem : MonoBehaviour {
@@ -11,10 +12,8 @@ namespace GameMachine.Core {
         private Client regionClient;
         private Dictionary<string, UntypedActor> actors = new Dictionary<string, UntypedActor>();
         private Dictionary<string, MethodInfo> methods = new Dictionary<string, MethodInfo>();
-        private Dictionary<object, MethodInfo> invokeRepeatingMethods = new Dictionary<object, MethodInfo>();
         private List<Entity> entities = new List<Entity>();
         private List<Entity> regionEntities = new List<Entity>();
-        private EntityTracking entityTracking;
 
         public bool running = false;
 
@@ -22,12 +21,6 @@ namespace GameMachine.Core {
 
         void Awake() {
             instance = this;
-        }
-
-        public void InvokeRepeating(object target, string methodName) {
-            Type t = target.GetType();
-            MethodInfo m = t.GetMethod(methodName);
-            invokeRepeatingMethods[target] = m;
         }
 
         public void Activate(Client _client) {
@@ -92,7 +85,7 @@ namespace GameMachine.Core {
             entities.Add(entity);
         }
 
-        
+
         private void CreateMethodCache() {
             Entity entity = new Entity();
             foreach (PropertyInfo info in entity.GetType().GetProperties()) {
@@ -108,9 +101,18 @@ namespace GameMachine.Core {
         }
 
         public void AppUpdate(bool connected) {
-            foreach (object target in invokeRepeatingMethods.Keys) {
-                invokeRepeatingMethods[target].Invoke(target, null);
+            
+            if (NpcManager.instance != null) {
+                NpcManager.instance.UpdateTracking();
+                GameEntityManager.instance.UpdateTracking(false);
+            } else {
+                if (GameEntityManager.instance != null) {
+                    GameEntityManager.instance.UpdateTracking(true);
+                }
             }
+
+            
+
 
             if (regionEntities.Count >= 1) {
                 regionClient.SendEntities(regionEntities);
@@ -127,23 +129,28 @@ namespace GameMachine.Core {
         }
 
         private void DeliverQueuedMessages() {
-            if (entityTracking == null) {
-                if (actors.ContainsKey("EntityTracking")) {
-                    entityTracking = actors["EntityTracking"] as EntityTracking;
-                }
-            }
-
             Entity entity;
 
             for (int i = 0; i < ClientMessageQueue.entityQueue.Count; i++) {
                 if (ClientMessageQueue.entityQueue.TryDequeue(out entity)) {
-                    if (entity.neighbors != null || entity.trackDataResponse != null) {
-                        entityTracking.OnReceive(entity);
+
+                    bool trackDataFound = false;
+                    if (entity.trackDataResponse != null) {
+                        GameEntityManager.instance.HandleTrackDataResponse(entity.trackDataResponse);
+                        trackDataFound = true;
+                    }
+
+                    if (entity.neighbors != null) {
+                        GameEntityManager.instance.TrackDataReceived(entity.neighbors.trackData);
+                        trackDataFound = true;
+                    }
+                    if (trackDataFound) {
                         continue;
                     }
 
+
                     if (entity.gameMessages != null) {
-                        GameMessageHandler.Instance.DeliverMessages(entity.gameMessages);
+                        GameMessageHandler.instance.DeliverMessages(entity.gameMessages);
                         continue;
                     }
 

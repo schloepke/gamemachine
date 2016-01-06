@@ -8,6 +8,7 @@ namespace GameMachine.Core {
         private double lastEcho = -1000;
         private double echosPerSecond = 1.0f;
         public static float gameTickInterval = 0.060f;
+        public bool showClientStats = false;
         private double echoInterval;
         private double lastEchoReceived = 0;
         private AppStarted appStarted;
@@ -24,9 +25,10 @@ namespace GameMachine.Core {
         public float disconnectTime = 10f;
         public static Login.Protocol protocol;
 
+
         public delegate void AppStarted();
         public delegate void ConnectionTimeout();
-
+        
         public static void onRunning(object caller, string methodName) {
             onRunningCallbacks[caller] = methodName;
         }
@@ -61,9 +63,9 @@ namespace GameMachine.Core {
             }
 
             client.Start();
-           
+
             ConnectLoop();
-           
+
         }
 
         public void StartCoreActors() {
@@ -75,36 +77,29 @@ namespace GameMachine.Core {
             messenger.AddComponentSet("ChatInvite");
             ActorSystem.instance.RegisterActor(messenger);
 
-            EntityTracking entityTracking = new EntityTracking();
-            entityTracking.AddComponentSet("Neighbors");
-            actorSystem.RegisterActor(entityTracking);
-
-
             remoteEcho = new RemoteEcho();
             remoteEcho.AddComponentSet("EchoTest");
             actorSystem.RegisterActor(remoteEcho);
-            
+
             RemoteEcho.EchoReceived callback = OnEchoReceived;
             remoteEcho.OnEchoReceived(callback);
 
 
             running = true;
             RunOnRunningCallbacks();
-            Debug.Log("App running - waiting to verify connection");
+            //Debug.Log("App running - waiting to verify connection");
         }
 
         void SetEchoInterval() {
             echoInterval = 0.60 / echosPerSecond;
         }
-       
+
         void OnEchoReceived() {
-
-
             lastEchoReceived = Time.time;
         }
 
         void OnPlayerConnected() {
-            Debug.Log("Player Connected");
+            //Debug.Log("Player Connected");
             actorSystem = gameObject.GetComponent<ActorSystem>() as ActorSystem;
             actorSystem.Activate(client);
 
@@ -122,7 +117,10 @@ namespace GameMachine.Core {
 
             lastEchoReceived = Time.time;
             remoteEcho.Echo();
-            InvokeRepeating("UpdateNetwork", 0.010f, gameTickInterval);
+            InvokeRepeating("UpdateNetwork", 0.060f, gameTickInterval);
+            if (showClientStats) {
+                InvokeRepeating("UpdateStats", 1f, 1f);
+            }
         }
 
         void Start() {
@@ -130,25 +128,32 @@ namespace GameMachine.Core {
             SetEchoInterval();
         }
 
+        void UpdateStats() {
+            Debug.Log("Bytes in " + client.GetBytesIn());
+            Debug.Log("Bytes out " + client.GetBytesOut());
+            client.ResetBytes();
+        }
+
         void ConnectLoop() {
             if (client.ReceivedPlayerConnected()) {
                 OnPlayerConnected();
             } else {
                 client.SendPlayerConnect();
-                Debug.Log("Sent PlayerConnect");
+                //Debug.Log("Sent PlayerConnect");
                 Invoke("ConnectLoop", 2f);
             }
         }
 
         void OnApplicationQuit() {
             if (client != null) {
-                Debug.Log("Stopping client");
+                //Debug.Log("Stopping client");
                 client.Stop();
             }
         }
-
+        
 
         void UpdateNetwork() {
+           
             if (!running) {
                 return;
             }
@@ -166,6 +171,7 @@ namespace GameMachine.Core {
                     Debug.Log("Echo timeout");
                     if ((Time.time - lastEchoReceived) >= disconnectTime) {
                         connectionTimeout();
+                        client.Reconnect();
                     }
                 }
                 remoteEcho.Echo();
