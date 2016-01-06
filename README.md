@@ -18,7 +18,9 @@ Game Machine is a modern platform for large scale realtime games such as mmo's a
 
 - A relational database is now required.  Most of the nosql support is still present but is being deprecated.
 
-Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
+The documentation wiki is NOT updated yet for 3.0.  There should be an updated getting started guide and unitypackage downloads very shortly, in the next couple of days.
+
+[documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation)
 
 #### Highlights
 
