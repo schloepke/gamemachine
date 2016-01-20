@@ -4,9 +4,23 @@ Game Machine is a modern platform for large scale realtime games such as mmo's a
 
 
 
-## 3.0 Beta 1 is now out.  Documentation is being worked on.  See the REL3_0 branch for more information
+## 3.0 Release is out.  
 
-Visit our [documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation) for a getting started guide and downloads.
+3.0 is primarily a cleanup/bug fix branch with a lot of small refactoring of numerous systems.  Major changes of note:
+
+- Unity editor GUI to manage building and running Game Machine from inside Unity.  No need to use the command line at all anymore.
+ 
+- Protocol buffers are now built client side into their own dll.  We bake a serializer into the dll that avoids using reflection.  There are still some parts of the client that use reflection, but this is the start of a move to make Game Machine mobile friendly.
+
+- Lots of Utility for managing Unity processes that interact with Game machine.  For games that need to run Unity to handle stuff like physics and pathfinding.  Game machine can now auto create temporary users that your Unity instances can obtain via a shared secret, and auto login to Game machine in an automated fashion.  New process management system allows Game machine to manage pools of Unity instances.  The editor GUI has automated build tools for creating unique Unity installations that can run under the process management system.
+
+-  Game specific features such as a full combat and guild system were added.
+
+- A relational database is now required.  Most of the nosql support is still present but is being deprecated.
+
+The documentation wiki is NOT updated yet for 3.0.  There should be an updated getting started guide and unitypackage downloads very shortly, in the next couple of days.
+
+[documentation wiki](http://www.gamemachine.io/confluence/display/GMD/Game+Machine+Documentation)
 
 #### Highlights
 
