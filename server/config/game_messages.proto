@@ -103,6 +103,19 @@ local_message VitalsUpdate {
   optional int32 updateId = 6;
 }
 
+local_message CombatLog {
+
+  enum Type {
+    AttributeDecrease = 0;
+    AttributeIncrease = 1;
+  }
+  
+  optional string origin = 1;
+  optional string target = 2;
+  optional int32 value = 3;
+  optional Type type = 4;
+}
+
 local_message StatusEffect {
   enum Type {
   	StatusEffectNone = 0;
@@ -501,8 +514,39 @@ local_persistent_message Character {
   optional string itemSlotData = 18;
   optional string guildId = 19;
   optional string bindPoint = 20;
+  optional Factions.Faction faction = 22;
 }
+
+local_message Factions {
+  enum Faction {
+    Civilian = 0;
+    Bandit = 1;
+    Guard = 2;
+  }
+  optional Faction faction = 1;
+}
+
+local_message FactionStanding {
+  enum Type {
+    FactionToFaction = 0;
+    CharacterToFaction = 1;
+    CharacterToCharacter = 2;
+  }
   
+  optional Factions.Faction me = 1;
+  optional Factions.Faction them = 2;
+  optional float standing = 3;
+  optional string id = 4;
+  optional string meCharacterId = 5;
+  optional string themCharacterId = 6;
+  optional Type type = 7;
+}
+
+local_message FactionStandings {
+  repeated FactionStanding standings = 1;
+}
+
+
 local_message ItemSlots {
   repeated ItemSlot itemSlots = 1;
 }
@@ -1119,48 +1163,29 @@ message GameMessage {
   optional string messageId = 2;
   optional int32 destinationId = 3;
   optional string destination = 4;
-  optional string agentId = 5;
-  optional DynamicMessage dynamicMessage = 6;
-  optional PathData pathData = 7;
     
   // User modifiable
-  optional PlayerItems playerItems = 10;
-  optional AddPlayerItem addPlayerItem = 11;
-  optional RemovePlayerItem removePlayerItem = 12;
-  optional RequestPlayerItems requestPlayerItems = 13;
-  optional PvpGameMessage pvpGameMessage = 14;
-  optional Harvest harvest = 15;
-  optional int64 authtoken = 16;
-  optional int64 unityMessageId = 17;
-  optional CraftItem craftItem = 18;
-  optional UseSkill useSkill = 19;
-  optional PlayerSkills playerSkills = 20;
-  optional Vitals vitals = 21;
-  optional SkillRequest skillRequest = 22;
-  optional StatusEffect statusEffect = 23;
-  optional DataRequest dataRequest = 25;
-  optional WorldObjects worldObjects = 27;
-  optional SiegeCommand siegeCommand = 28;
-  optional GmBounds bounds = 29;
-  optional UseItem useItem = 30;
-  optional TimeCycle timeCycle = 31;
-  optional Territory territory = 35;
-  optional Territories territories = 36;
-  optional NpcData npcData = 39;
-  optional BuildObjects buildObjects = 40;
-  optional BuildableAreas buildableAreas = 41;
-  optional GmStats gmStats = 42;
-  optional Region region = 43;
-  optional BuildObjectChunks buildObjectChunks = 44;
-  optional TerrainEdits terrainEdits = 45;
-  optional UpdatePlayerItem updatePlayerItem = 46;
-  optional VitalsContainer vitalsContainer = 47;
-  optional ProcessCommand processCommand = 48;
-  optional UnityInstanceStatus unityInstanceStatus = 49;
-  optional CharacterUpdate characterUpdate = 50;
-  optional VitalsUpdateContainer vitalsUpdateContainer = 51;
-  optional VitalsRequest vitalsRequest = 52;
-  optional BuildObjectGroup buildObjectGroup = 53;
+  optional PlayerItems playerItems = 5;
+  optional PlayerSkills playerSkills = 6;
+  optional Vitals vitals = 7;
+  optional SkillRequest skillRequest = 8;
+  optional StatusEffect statusEffect = 9;
+  optional SiegeCommand siegeCommand = 10;
+  optional TimeCycle timeCycle = 11;
+  optional BuildObjects buildObjects = 12;
+  optional BuildableAreas buildableAreas = 13;
+  optional GmStats gmStats = 14;
+  optional Region region = 15;
+  
+  optional VitalsContainer vitalsContainer = 16;
+  optional ProcessCommand processCommand = 17;
+  optional UnityInstanceStatus unityInstanceStatus = 18;
+  optional CharacterUpdate characterUpdate = 19;
+  optional VitalsUpdateContainer vitalsUpdateContainer = 20;
+  optional VitalsRequest vitalsRequest = 21;
+  optional BuildObjectGroup buildObjectGroup = 22;
+  optional CombatLog combatLog = 23;
+  optional string agentId = 24;
 }
 
 message GameMessages {

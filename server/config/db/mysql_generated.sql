@@ -253,6 +253,8 @@ CREATE TABLE `characters` (
 
   character_bind_point varchar(256) DEFAULT NULL,
 
+  character_faction int(11),
+
       zone_zone_name varchar(256) DEFAULT NULL,
     
       zone_zone_number int(11) DEFAULT NULL,

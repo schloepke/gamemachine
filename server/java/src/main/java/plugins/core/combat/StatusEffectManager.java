@@ -17,11 +17,16 @@ import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.GameEntityManager;
 import io.gamemachine.core.GameEntityManagerService;
 import io.gamemachine.core.GameMachineLoader;
+import io.gamemachine.core.PlayerMessage;
+import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridService;
+import io.gamemachine.messages.CombatLog;
+import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.RegionInfo;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
+import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
 
@@ -29,6 +34,8 @@ public class StatusEffectManager extends UntypedActor {
 
 	private static final Logger logger = LoggerFactory.getLogger(StatusEffectManager.class);
 	public static String name = StatusEffectManager.class.getSimpleName();
+	
+	public static boolean combatLogEnabled = true;
 	
 	public static List<GridSet> gridsets = new ArrayList<GridSet>();
 	public static Set<String> handlerZones = new HashSet<String>();
@@ -139,6 +146,25 @@ public class StatusEffectManager extends UntypedActor {
 			vitalsProxy.subtract("magic", statusEffect.resourceCost);
 		}
 		return true;
+	}
+	
+	public static void sendCombatDamage(VitalsProxy origin, VitalsProxy target, int value, CombatLog.Type type, String zone) {
+		if (!combatLogEnabled) {
+			return;
+		}
+		
+		GameMessage msg = new GameMessage();
+
+		msg.combatLog = new CombatLog();
+		msg.combatLog.origin = origin.getEntityId();
+		msg.combatLog.target = target.getEntityId();
+		msg.combatLog.value = value;
+		msg.combatLog.type = type;
+		
+		Grid grid = GridService.getInstance().getGrid(zone, "default");
+		for (TrackData trackData : grid.getAll()) {
+			PlayerMessage.tell(msg, trackData.id);
+		}
 	}
 	
 	public StatusEffectManager() {

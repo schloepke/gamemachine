@@ -14,6 +14,7 @@ import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridService;
+import io.gamemachine.messages.CombatLog;
 import io.gamemachine.messages.PlayerSkill;
 import io.gamemachine.messages.StatusEffect;
 import io.gamemachine.messages.StatusEffectTarget;
@@ -39,7 +40,7 @@ public class ActiveEffectHandler extends UntypedActor {
 
 	public ActiveEffectHandler(String gridName, String zone) {
 		this.zone = zone;
-		grid = GridService.getInstance().getGrid(zone,gridName);
+		grid = GridService.getInstance().getGrid(zone, gridName);
 	}
 
 	@Override
@@ -70,7 +71,8 @@ public class ActiveEffectHandler extends UntypedActor {
 		applyEffects(statusEffectTarget);
 		statusEffectTarget.lastTick = System.currentTimeMillis();
 
-		StatusEffectManager.skillUsed(statusEffectTarget.skillRequest.playerSkill, statusEffectTarget.originCharacterId);
+		StatusEffectManager.skillUsed(statusEffectTarget.skillRequest.playerSkill,
+				statusEffectTarget.originCharacterId);
 		return activeId;
 	}
 
@@ -176,7 +178,8 @@ public class ActiveEffectHandler extends UntypedActor {
 		originProxy.setLastCombat(System.currentTimeMillis());
 
 		for (StatusEffect statusEffect : statusEffectTarget.getStatusEffectList()) {
-			//logger.warning("Status Effect "+statusEffect.id +" "+statusEffect.ticksPerformed+" "+statusEffect.ticks);
+			// logger.warning("Status Effect "+statusEffect.id +"
+			// "+statusEffect.ticksPerformed+" "+statusEffect.ticks);
 			if (statusEffect.ticksPerformed < statusEffect.ticks) {
 				// logger.warning("Tick " + statusEffect.ticksPerformed + " " +
 				// statusEffect.id);
@@ -194,13 +197,13 @@ public class ActiveEffectHandler extends UntypedActor {
 							statusEffectTarget.location, grid)) {
 
 						VitalsProxy targetProxy = VitalsHandler.fromTrackData(trackData, zone);
-						
+
 						if (targetProxy == null) {
 							logger.warning("Target no longer in grid");
 							statusEffect.ticksPerformed += 1;
 							continue;
 						}
-						
+
 						if (targetProxy.isDead()) {
 							statusEffect.ticksPerformed += 1;
 							continue;
@@ -210,7 +213,8 @@ public class ActiveEffectHandler extends UntypedActor {
 							convertToSingleTarget(statusEffectTarget, targetProxy.getEntityId());
 							continue;
 						} else {
-							applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy, statusEffect);
+							applyEffect(statusEffectTarget.skillRequest.playerSkill, originProxy, targetProxy,
+									statusEffect);
 						}
 
 					}
@@ -236,13 +240,12 @@ public class ActiveEffectHandler extends UntypedActor {
 			return 0;
 		}
 
-		int effectCountFromOrigin = effectCount(targetProxy.getEntityId(), originProxy.getEntityId(),
-				statusEffect.id);
+		int effectCountFromOrigin = effectCount(targetProxy.getEntityId(), originProxy.getEntityId(), statusEffect.id);
 		if (!statusEffect.allowMultipleFromSameOrigin && effectCountFromOrigin >= 2) {
-			//logger.warning("Effect from same origin present");
+			// logger.warning("Effect from same origin present");
 			return 0;
 		} else if (effectLimitReached(targetProxy.getEntityId(), statusEffect.id)) {
-			//logger.warning("Effect limit reached");
+			// logger.warning("Effect limit reached");
 			return 0;
 		}
 
@@ -269,12 +272,16 @@ public class ActiveEffectHandler extends UntypedActor {
 
 				// or group members
 				if (StatusEffectManager.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
-					//logger.warning("GROUP DAMAGE");
+					// logger.warning("GROUP DAMAGE");
 					return 0;
 				}
 			}
 
 			targetProxy.subtract(statusEffect.attribute, value);
+
+			StatusEffectManager.sendCombatDamage(originProxy, targetProxy, value, CombatLog.Type.AttributeDecrease,
+					targetProxy.getZoneName());
+
 		} else if (statusEffect.type == StatusEffect.Type.AttributeIncrease) {
 
 			if (targetProxy.getType() == Vitals.VitalsType.Character) {
@@ -282,6 +289,7 @@ public class ActiveEffectHandler extends UntypedActor {
 				if (targetProxy.getCharacterId().equals(originProxy.getCharacterId()) || StatusEffectManager
 						.inSameGroup(originProxy.getCharacterId(), targetProxy.getCharacterId())) {
 					targetProxy.add(statusEffect.attribute, value);
+					StatusEffectManager.sendCombatDamage(originProxy, targetProxy, value, CombatLog.Type.AttributeIncrease, targetProxy.getZoneName());
 				} else {
 					return 0;
 				}
@@ -290,7 +298,8 @@ public class ActiveEffectHandler extends UntypedActor {
 
 		if (value > 0) {
 			if (targetProxy.getType() == Vitals.VitalsType.BuildObject && statusEffect.attribute.equals("health")) {
-				BuildObjectHandler.setHealth(targetProxy.getEntityId(), targetProxy.get("health"), originProxy.getZoneName());
+				BuildObjectHandler.setHealth(targetProxy.getEntityId(), targetProxy.get("health"),
+						originProxy.getZoneName());
 			}
 
 			logger.warning(statusEffect.id + " target " + targetProxy.getEntityId() + " damage " + value + " type "

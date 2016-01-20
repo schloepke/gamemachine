@@ -1,25 +1,23 @@
 package io.gamemachine.core;
 
 
+import io.gamemachine.messages.DynamicMessage;
+import io.gamemachine.util.LocalLinkedBuffer;
 import io.protostuff.ByteString;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
 import io.protostuff.runtime.RuntimeSchema;
 
-import io.gamemachine.messages.DynamicMessage;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.util.LocalLinkedBuffer;
-
 public class DynamicMessageUtil {
 
 	private static String packageName = "user.messages.";
 	
-	public static <T> GameMessage toGameMessage(T message) {
-		DynamicMessage dynamicMessage = toDynamicMessage(message);
-		GameMessage gameMessage = new GameMessage();
-		gameMessage.setDynamicMessage(dynamicMessage);
-		return gameMessage;
-	}
+//	public static <T> GameMessage toGameMessage(T message) {
+//		DynamicMessage dynamicMessage = toDynamicMessage(message);
+//		GameMessage gameMessage = new GameMessage();
+//		gameMessage.setDynamicMessage(dynamicMessage);
+//		return gameMessage;
+//	}
 	
 	public static <T> DynamicMessage toDynamicMessage(T message) {
 		DynamicMessage dynamicMessage = new DynamicMessage();
@@ -29,9 +27,9 @@ public class DynamicMessageUtil {
 		return dynamicMessage;
 	}
 	
-	public static <T> T fromGameMessage(GameMessage gameMessage)  {
-		return deserialize(gameMessage.getDynamicMessage().getType(),gameMessage.getDynamicMessage().getMessage().toByteArray());
-	}
+//	public static <T> T fromGameMessage(GameMessage gameMessage)  {
+//		return deserialize(gameMessage.getDynamicMessage().getType(),gameMessage.getDynamicMessage().getMessage().toByteArray());
+//	}
 	
 	public static <T> T fromDynamicMessage(DynamicMessage dynamicMessage)  {
 		return deserialize(dynamicMessage.getType(),dynamicMessage.getMessage().toByteArray());

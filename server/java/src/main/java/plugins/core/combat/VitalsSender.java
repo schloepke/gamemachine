@@ -2,8 +2,6 @@ package plugins.core.combat;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import com.google.common.collect.Lists;
@@ -18,7 +16,6 @@ import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.Player;
 import io.gamemachine.messages.TrackData;
 import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.VitalsContainer;
 import io.gamemachine.messages.VitalsUpdateContainer;
 import scala.concurrent.duration.Duration;
 
@@ -26,7 +23,6 @@ public class VitalsSender extends UntypedActor {
 
 	public static String name = VitalsSender.class.getSimpleName();
 	private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
-	private Map<String, Integer> vitalTicks = new ConcurrentHashMap<String, Integer>();
 	private double vitalsDistance = 50;
 
 	@Override

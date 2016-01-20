@@ -237,6 +237,8 @@ CREATE TABLE characters (
 
   character_bind_point varchar(1024) DEFAULT NULL,
 
+  character_faction integer,
+
       zone_zone_name varchar(1024) DEFAULT NULL,
     
       zone_zone_number integer DEFAULT NULL,

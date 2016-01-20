@@ -260,6 +260,8 @@ CREATE TABLE characters (
 
   character_bind_point TEXT DEFAULT NULL,
 
+  character_faction integer,
+
      zone_zone_name TEXT DEFAULT NULL,
     
      zone_zone_number integer DEFAULT NULL,
