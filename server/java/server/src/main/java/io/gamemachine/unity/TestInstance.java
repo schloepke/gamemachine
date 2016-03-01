@@ -9,52 +9,52 @@ import io.gamemachine.messages.UnityInstanceData;
 
 public class TestInstance extends GameMessageActor {
 
-	private static final Logger log = LoggerFactory.getLogger(TestInstance.class);
-	private String name;
-	private UnityInstanceData data;
-	
-	public TestInstance(String name) {
-		this.name = name;
-		data = new UnityInstanceData();
-		data.role = "test";
-		UnityInstanceManager.requestInstance(name, data);
-		log.warn("test instance requested "+name);
-	}
+    private static final Logger log = LoggerFactory.getLogger(TestInstance.class);
+    private String name;
+    private UnityInstanceData data;
 
-	@Override
-	public void awake() {
-		scheduleOnce(100l, "tick");
-	}
+    public TestInstance(String name) {
+        this.name = name;
+        data = new UnityInstanceData();
+        data.role = "test";
+        UnityInstanceManager.requestInstance(name, data);
+        log.warn("test instance requested " + name);
+    }
 
-	@Override
-	public void onTick(String message) {
-		UnityInstance instance = UnityInstanceManager.findOrCreateByName(name, data);
-		if (instance != null && instance.running) {
-			String actorName = "ExampleActor";
+    @Override
+    public void awake() {
+        scheduleOnce(100l, "tick");
+    }
 
-			for (int i = 0; i < 10; i++) {
-				long startTime = System.nanoTime();
+    @Override
+    public void onTick(String message) {
+        UnityInstance instance = UnityInstanceManager.findOrCreateByName(name, data);
+        if (instance != null && instance.running) {
+            String actorName = "ExampleActor";
 
-				GameMessage gameMessage = new GameMessage();
-				GameMessage response = instance.ask(gameMessage, actorName, 20, 2);
-				long endTime = System.nanoTime();
-				long duration = (endTime - startTime) / 1000000;
-				
-				if (response == null) {
-					log.warn("No response " + name + " " + duration);
-				} else {
-					UnityInstanceTest.messageCount.getAndIncrement();
-				}
-			}
-		}
+            for (int i = 0; i < 10; i++) {
+                long startTime = System.nanoTime();
 
-		scheduleOnce(10l, "tick");
-	}
+                GameMessage gameMessage = new GameMessage();
+                GameMessage response = instance.ask(gameMessage, actorName, 20, 2);
+                long endTime = System.nanoTime();
+                long duration = (endTime - startTime) / 1000000;
 
-	@Override
-	public void onGameMessage(GameMessage gameMessage) {
-		// TODO Auto-generated method stub
+                if (response == null) {
+                    log.warn("No response " + name + " " + duration);
+                } else {
+                    UnityInstanceTest.messageCount.getAndIncrement();
+                }
+            }
+        }
 
-	}
+        scheduleOnce(10l, "tick");
+    }
+
+    @Override
+    public void onGameMessage(GameMessage gameMessage) {
+        // TODO Auto-generated method stub
+
+    }
 
 }

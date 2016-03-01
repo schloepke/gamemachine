@@ -8,18 +8,18 @@ import io.gamemachine.unity.UnityInstanceTest;
 
 public class TestRunner {
 
-	public static void run() {
-		
-		Config appConfig = AppConfig.getConfig();
-		boolean test = appConfig.getBoolean("gamemachine.test");
-		
-		if (test) {
-			unityInstanceTest();
-		}
-		
-	}
-	
-	public static void unityInstanceTest() {
-		ActorUtil.createActor(UnityInstanceTest.class,UnityInstanceTest.class.getSimpleName());
-	}
+    public static void run() {
+
+        Config appConfig = AppConfig.getConfig();
+        boolean test = appConfig.getBoolean("gamemachine.test");
+
+        if (test) {
+            unityInstanceTest();
+        }
+
+    }
+
+    public static void unityInstanceTest() {
+        ActorUtil.createActor(UnityInstanceTest.class, UnityInstanceTest.class.getSimpleName());
+    }
 }

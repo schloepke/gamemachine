@@ -282,11 +282,22 @@ message Name {
   required string value = 1;
 }
 
+message GmTransform {
+  optional string name = 1;
+  optional GmQuaternion rotation = 2;
+  optional GmVector3 position = 3;
+}
+
 message GmQuaternion {
   optional float x = 1;
   optional float y = 2;
   optional float z = 3;
   optional float w = 4;
+  optional int32 xi = 5;
+  optional int32 yi = 6;
+  optional int32 zi = 7;
+  optional int32 wi = 8;
+ 
 }
 
 message GmVector3 {
@@ -461,8 +472,10 @@ message ClientMessage {
   optional PlayerConnect playerConnect = 7;
   optional PlayerConnected playerConnected = 8;
   optional int32 connection_type = 9;
-  optional uint64 sentAt = 10;
+  optional float sentAt = 10;
   optional TrackData trackData = 11;
   optional string gameId = 12;
   optional UnityGameMessage unityGameMessage = 13;
+  optional UnityMessage unityMessage = 14;
+  
 }

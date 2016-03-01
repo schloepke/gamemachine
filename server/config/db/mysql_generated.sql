@@ -1,4 +1,32 @@
 
+DROP TABLE IF EXISTS boats;
+CREATE TABLE `boats` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+
+  boat_id varchar(256) DEFAULT NULL,
+
+  boat_zone varchar(256) DEFAULT NULL,
+
+  boat_x int(11) DEFAULT NULL,
+
+  boat_y int(11) DEFAULT NULL,
+
+  boat_z int(11) DEFAULT NULL,
+
+  boat_player_item_id varchar(256) DEFAULT NULL,
+
+  boat_owner_id varchar(256) DEFAULT NULL,
+
+  boat_heading int(11) DEFAULT NULL,
+
+  boat_dock_id varchar(256) DEFAULT NULL,
+
+  boat_state int(11),
+
+  boat_captain_id varchar(256) DEFAULT NULL,
+
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS vitals;
 CREATE TABLE `vitals` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -269,6 +297,26 @@ CREATE TABLE `characters` (
 
   PRIMARY KEY(`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DROP TABLE IF EXISTS faction_standings;
+CREATE TABLE `faction_standings` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+
+  faction_standing_me int(11),
+
+  faction_standing_them int(11),
+
+  faction_standing_standing float DEFAULT NULL,
+
+  faction_standing_id varchar(256) DEFAULT NULL,
+
+  faction_standing_me_character_id varchar(256) DEFAULT NULL,
+
+  faction_standing_them_character_id varchar(256) DEFAULT NULL,
+
+  faction_standing_type int(11),
+
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS players;
 CREATE TABLE `players` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -334,6 +382,8 @@ CREATE TABLE `player_skills` (
   player_skill_max_level float DEFAULT NULL,
 
   player_skill_level float DEFAULT NULL,
+
+  player_skill_delay float DEFAULT NULL,
 
       useEffect_unity_object_path varchar(256) DEFAULT NULL,
     

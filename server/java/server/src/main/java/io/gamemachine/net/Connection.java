@@ -18,100 +18,104 @@ import io.gamemachine.net.udp.SimpleUdpServer;
 
 public class Connection {
 
-	private static ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
-	private static final Logger logger = LoggerFactory.getLogger(Connection.class);
-	
-	public int protocol;
-	private ClientConnection clientConnection;
-	private String playerId;
-	private String gameId;
-	public long clientId;
-	public int ip;
-	public String uuid;
+    private static long startTime = System.currentTimeMillis();
+    private static ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<String, Connection>();
+    private static final Logger logger = LoggerFactory.getLogger(Connection.class);
 
-	public Connection(int protocol, int ip, ClientConnection clientConnection, String playerId, long clientId) {
-		this.protocol = protocol;
-		this.ip = ip;
-		this.clientConnection = clientConnection;
-		this.playerId = playerId;
-		this.clientId = clientId;
-		PlayerService playerService = PlayerService.getInstance();
-		this.gameId = playerService.getGameId(playerId);
-		this.uuid = UUID.randomUUID().toString();
-		playerService.setIp(this.playerId, this.ip);
-	}
+    public int protocol;
+    private ClientConnection clientConnection;
+    private String playerId;
+    private String gameId;
+    public long clientId;
+    public int ip;
+    public String uuid;
 
-	public static Connection getConnection(String playerId) {
-		return connections.get(playerId);
-	}
-	
-	public static String getId(String playerId) {
-		return connections.get(playerId).uuid;
-	}
-	
-	public static Set<String> getConnectedPlayerIds() {
-		return connections.keySet();
-	}
-	
-	public static boolean hasConnection(String playerId) {
-		return (connections.containsKey(playerId));
-	}
-	
-	public static void addConnection(String playerId, Connection connection) {
-		connections.put(playerId, connection);
-	}
+    public Connection(int protocol, int ip, ClientConnection clientConnection, String playerId, long clientId) {
+        this.protocol = protocol;
+        this.ip = ip;
+        this.clientConnection = clientConnection;
+        this.playerId = playerId;
+        this.clientId = clientId;
+        PlayerService playerService = PlayerService.getInstance();
+        this.gameId = playerService.getGameId(playerId);
+        this.uuid = UUID.randomUUID().toString();
+        playerService.setIp(this.playerId, this.ip);
+    }
 
-	public static void removeConnection(String playerId) {
-		if (connections.containsKey(playerId)) {
-			Connection connection = connections.get(playerId);
-			if (connection != null) {
-				if (connection.protocol == NetMessage.SIMPLE_UDP) {
-					SimpleUdpServer.removeClient(connection.clientId);
-				} else if (connection.protocol == NetMessage.NETTY_UDP) {
-					NettyUdpServerHandler.removeClient(connection.clientId);
-				} else if (connection.protocol == NetMessage.TCP) {
-					TcpServerHandler.removeClient(connection.clientId);
-				}
-			}
-			
-			connections.remove(playerId);
-		}
-	}
-	
-	public void sendToClient(ClientMessage clientMessage) {
-		if (protocol == NetMessage.NETTY_UDP || protocol == NetMessage.SIMPLE_UDP) {
-			byte[] bytes = clientMessage.toByteArray();
+    public static Connection getConnection(String playerId) {
+        return connections.get(playerId);
+    }
 
-				GameLimits.addBytesTransferred(gameId, playerId,bytes.length);
+    public static String getId(String playerId) {
+        return connections.get(playerId).uuid;
+    }
 
-			if (protocol == NetMessage.SIMPLE_UDP) {
-				SimpleUdpServer.sendMessage(clientId, bytes);
-			} else {
-				NettyUdpServerHandler.sendMessage(clientId, bytes);
-			}
-		} else if (protocol == NetMessage.TCP) {
+    public static Set<String> getConnectedPlayerIds() {
+        return connections.keySet();
+    }
 
-			// Have to pass the game id through here so tcp encoder can call
-			// addBytesTransferred
-				clientMessage.setGameId(gameId);
+    public static boolean hasConnection(String playerId) {
+        return (connections.containsKey(playerId));
+    }
 
-			TcpServerHandler.sendMessage(clientId, clientMessage);
-		} else {
-			throw new RuntimeException("Invalid protocol " + protocol);
-		}
-		GameLimits.incrementMessageCountOut(gameId);
-	}
+    public static void addConnection(String playerId, Connection connection) {
+        connections.put(playerId, connection);
+    }
 
-	public long getClientId() {
-		return clientId;
-	}
-	
-	public String getPlayerId() {
-		return playerId;
-	}
+    public static void removeConnection(String playerId) {
+        if (connections.containsKey(playerId)) {
+            Connection connection = connections.get(playerId);
+            if (connection != null) {
+                if (connection.protocol == NetMessage.SIMPLE_UDP) {
+                    SimpleUdpServer.removeClient(connection.clientId);
+                } else if (connection.protocol == NetMessage.NETTY_UDP) {
+                    NettyUdpServerHandler.removeClient(connection.clientId);
+                } else if (connection.protocol == NetMessage.TCP) {
+                    TcpServerHandler.removeClient(connection.clientId);
+                }
+            }
 
-	public ClientConnection getClientConnection() {
-		return clientConnection;
-	}
+            connections.remove(playerId);
+        }
+    }
+
+    public void sendToClient(ClientMessage clientMessage) {
+        float time = (System.currentTimeMillis() - startTime) / 1000f;
+        clientMessage.sentAt = time;
+
+        if (protocol == NetMessage.NETTY_UDP || protocol == NetMessage.SIMPLE_UDP) {
+            byte[] bytes = clientMessage.toByteArray();
+
+            GameLimits.addBytesTransferred(gameId, playerId, bytes.length);
+
+            if (protocol == NetMessage.SIMPLE_UDP) {
+                SimpleUdpServer.sendMessage(clientId, bytes);
+            } else {
+                NettyUdpServerHandler.sendMessage(clientId, bytes);
+            }
+        } else if (protocol == NetMessage.TCP) {
+
+            // Have to pass the game id through here so tcp encoder can call
+            // addBytesTransferred
+            clientMessage.setGameId(gameId);
+
+            TcpServerHandler.sendMessage(clientId, clientMessage);
+        } else {
+            throw new RuntimeException("Invalid protocol " + protocol);
+        }
+        GameLimits.incrementMessageCountOut(gameId);
+    }
+
+    public long getClientId() {
+        return clientId;
+    }
+
+    public String getPlayerId() {
+        return playerId;
+    }
+
+    public ClientConnection getClientConnection() {
+        return clientConnection;
+    }
 
 }

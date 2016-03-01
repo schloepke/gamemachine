@@ -87,7 +87,7 @@ module GameMachine
       end
 
       def load_plugins
-        require_relative '../../java/src/main/java/plugins/plugins.rb'
+        require_relative '../../java/server/src/user/java/plugins/plugins.rb'
 
         JavaLib::GameMachineLoader.start_java_game_actors
       end

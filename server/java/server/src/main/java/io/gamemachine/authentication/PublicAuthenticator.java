@@ -4,17 +4,17 @@ import io.gamemachine.messages.Player;
 
 public class PublicAuthenticator implements PlayerAuthenticator {
 
-	public PublicAuthenticator(Player player) {
-		
-	}
-	
-	@Override
-	public void setPassword(String password) {
-	}
+    public PublicAuthenticator(Player player) {
 
-	@Override
-	public boolean authenticate(String password) {
-		return true;
-	}
+    }
+
+    @Override
+    public void setPassword(String password) {
+    }
+
+    @Override
+    public boolean authenticate(String password) {
+        return true;
+    }
 
 }

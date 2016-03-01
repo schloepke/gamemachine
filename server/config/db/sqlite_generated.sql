@@ -1,4 +1,30 @@
 
+CREATE TABLE boats (
+
+  boat_id varchar(1024) DEFAULT NULL,
+
+  boat_zone varchar(1024) DEFAULT NULL,
+
+  boat_x integer DEFAULT NULL,
+
+  boat_y integer DEFAULT NULL,
+
+  boat_z integer DEFAULT NULL,
+
+  boat_player_item_id varchar(1024) DEFAULT NULL,
+
+  boat_owner_id varchar(1024) DEFAULT NULL,
+
+  boat_heading integer DEFAULT NULL,
+
+  boat_dock_id varchar(1024) DEFAULT NULL,
+
+  boat_state integer,
+
+  boat_captain_id varchar(1024) DEFAULT NULL,
+
+id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+);
 CREATE TABLE vitals (
 
   vitals_character_id varchar(1024) DEFAULT NULL,
@@ -253,6 +279,24 @@ CREATE TABLE characters (
 
 id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
 );
+CREATE TABLE faction_standings (
+
+  faction_standing_me integer,
+
+  faction_standing_them integer,
+
+  faction_standing_standing double precision DEFAULT NULL,
+
+  faction_standing_id varchar(1024) DEFAULT NULL,
+
+  faction_standing_me_character_id varchar(1024) DEFAULT NULL,
+
+  faction_standing_them_character_id varchar(1024) DEFAULT NULL,
+
+  faction_standing_type integer,
+
+id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+);
 CREATE TABLE players (
 
   player_id varchar(1024) NOT NULL,
@@ -314,6 +358,8 @@ CREATE TABLE player_skills (
   player_skill_max_level double precision DEFAULT NULL,
 
   player_skill_level double precision DEFAULT NULL,
+
+  player_skill_delay double precision DEFAULT NULL,
 
       useEffect_unity_object_path varchar(1024) DEFAULT NULL,
     

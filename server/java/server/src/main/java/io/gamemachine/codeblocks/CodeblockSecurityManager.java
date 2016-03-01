@@ -2,13 +2,13 @@ package io.gamemachine.codeblocks;
 
 
 public class CodeblockSecurityManager extends SecurityManager {
-	
+
 //	private boolean isRestricted() {
 //		for (Class<?> cls : getClassContext())
 //			if (cls.getClassLoader() instanceof CodeblockClassLoader)
 //				return true;
 //		return false;
 //	}
-	// Implement other checks based on isRestricted().
-	
+    // Implement other checks based on isRestricted().
+
 }

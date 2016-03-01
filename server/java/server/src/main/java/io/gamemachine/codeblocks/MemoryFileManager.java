@@ -12,17 +12,17 @@ import javax.tools.StandardJavaFileManager;
 import javax.tools.JavaFileObject.Kind;
 
 public class MemoryFileManager extends ForwardingJavaFileManager<StandardJavaFileManager> {
-	public Map<String, Output> map = new HashMap<String, Output>();
+    public Map<String, Output> map = new HashMap<String, Output>();
 
-	MemoryFileManager(JavaCompiler compiler) {
-		super(compiler.getStandardFileManager(new DiagnosticCollector<JavaFileObject>(), null, null));
-	}
+    MemoryFileManager(JavaCompiler compiler) {
+        super(compiler.getStandardFileManager(new DiagnosticCollector<JavaFileObject>(), null, null));
+    }
 
-	@Override
-	public Output getJavaFileForOutput(Location location, String name, Kind kind, FileObject source) {
-		//System.out.println("getJavaFileForOutput called with "+name);
-		Output mc = new Output(name, kind);
-		this.map.put(name, mc);
-		return mc;
-	}
+    @Override
+    public Output getJavaFileForOutput(Location location, String name, Kind kind, FileObject source) {
+        //System.out.println("getJavaFileForOutput called with "+name);
+        Output mc = new Output(name, kind);
+        this.map.put(name, mc);
+        return mc;
+    }
 }

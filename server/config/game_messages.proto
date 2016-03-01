@@ -3,8 +3,200 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+local_message GmNpc {
+  optional GmTransform transform = 1;
+  optional string testName = 2;
+  optional GmVector3 testVector = 3;
+  optional bool testBool = 4;
+  optional int32 testInt = 5;
+  optional GmQuaternion testRotation = 6;
+}
+
+local_message SyncObject {
+  enum Type {
+    None = 0;
+    GmNpc = 1;
+  }
+  
+  optional Type type = 1;
+  optional GmNpc gmNpc = 2;
+  optional string id = 3;
+  optional int64 lastUpdate = 4;
+}
+
+local_message SyncObjects {
+  repeated SyncObject syncObject = 1;
+}
+
+local_message UnityMessage {
+  optional SyncObjects syncObjects = 1;
+  optional string playerId = 2;
+  optional UnityEngineRequest unityEngineRequest = 3;
+  optional UnityEngineResponse unityEngineResponse = 4;
+  optional UnityInstanceUpdate unityInstanceUpdate = 5;
+}
+
+local_message UnityEngineRequest {
+    optional OverlapSphereRequest overlapSphereRequest = 1;
+    optional RaycastRequest raycastRequest = 2;
+    optional SphereCastRequest sphereCastRequest = 3;
+    optional InstantiateRequest instantiateRequest = 4;
+    optional DestroyRequest destroyRequest = 5;
+    optional PathRequest pathRequest = 6;
+}
+
+local_message UnityEngineResponse {
+    optional OverlapSphereResponse overlapSphereResponse = 1;
+    optional RaycastResponse raycastResponse = 2;
+    optional SphereCastResponse sphereCastResponse = 3;
+    optional InstantiateResponse instantiateResponse = 4;
+    optional DestroyResponse destroyResponse = 5;
+    optional PathResponse pathResponse = 6;
+}
+
+local_message GmGameObject {
+  optional string name = 1;
+  optional GmTransform transform = 2;
+}
+
+local_message UnityInstanceUpdate {
+  optional string playerId = 1;
+  optional string region = 2;
+}
+
+local_message PathRequest {
+  optional GmVector3 start = 1;
+  optional GmVector3 end = 2;
+  optional int32 messageId = 3;
+}
+
+local_message PathResponse {
+  enum Status {
+      None = 0;
+      Success = 1;
+      NotFound = 2;
+  }
+  optional Status status = 1;
+  repeated GmVector3 path = 2;
+  optional int32 messageId = 3;
+}
+
+local_message DestroyRequest {
+  optional string name = 1;
+  optional int32 messageId = 2;
+}
+
+local_message DestroyResponse {
+  enum Status {
+    None = 0;
+    Success = 1;
+    NotFound = 2;
+  }
+  optional Status status = 1;
+  optional int32 messageId = 2;
+}
+
+local_message InstantiateRequest {
+  optional string prefab = 1;
+  optional string name = 2;
+  optional GmVector3 position = 3;
+  optional GmQuaternion rotation = 4;
+  optional int32 messageId = 5;
+}
+
+local_message InstantiateResponse {
+  enum Status {
+    None = 0;
+    Success = 1;
+    PrefabNotFound = 2;
+    Duplicate = 3;
+  }
+  optional Status status = 1;
+  optional int32 messageId = 2;
+}
+
+local_message RaycastRequest {
+  required GmVector3 origin = 1;
+  required GmVector3 direction = 2;
+  required float maxDistance = 3;
+  optional string layerMask = 4;
+  optional bool all = 5;
+  optional int32 messageId = 6;
+}
+
+local_message RaycastResponse {
+   repeated GmGameObject gameObjects = 1;
+   optional bool hit = 2;
+   optional int32 messageId = 3;
+}
+
+local_message SphereCastRequest {
+  required GmVector3 origin = 1;
+  required float radius = 2;
+  required GmVector3 direction = 3;
+  optional string layerMask = 4;
+  required float maxDistance = 5;
+  optional bool all = 6;
+  optional int32 messageId = 7;
+}
+
+local_message SphereCastResponse {
+  repeated GmGameObject gameObjects = 1;
+  optional int32 messageId = 2;
+}
+
+local_message OverlapSphereRequest {
+  required GmVector3 origin = 1;
+  required float radius = 2;
+  optional string layerMask = 3;
+  optional int32 messageId = 4;
+}
+
+local_message OverlapSphereResponse {
+  repeated GmGameObject gameObjects = 1;
+  optional int32 messageId = 3;
+}
+
 local_message VitalsContainer {
   repeated Vitals vitals = 1;
+}
+
+local_persistent_message Boat {
+
+  enum State {
+    None = 0;
+    Docked = 1;
+    Active = 2;
+    Inactive = 3;
+  }
+  
+  optional string id = 1;
+  optional int32 recordId = 2;
+  optional string zone = 3;
+  optional sint32 x = 4;
+  optional sint32 y = 5;
+  optional sint32 z = 6;
+  optional string playerItemId = 7;
+  optional string ownerId = 8;
+  optional int32 heading = 9;
+  optional string dockId = 10;
+  optional State state = 11;
+  optional string captainId = 12;
+}
+
+local_message BoatAction {
+  enum Action {
+    None = 0;
+    Dock = 1;
+    Launch = 2;
+    Recover = 3;
+    UnDock = 4;
+    SetCaptain = 5;
+    Status = 6;
+  }
+  optional Boat boat = 1;
+  optional Action action = 2;
+  optional bool success = 3;
 }
 
 local_persistent_message Vitals {
@@ -17,6 +209,7 @@ local_persistent_message Vitals {
     CitizenTemplate = 4;
     BanditTemplate = 5;
     PlayerItemTemplate = 6;
+    BoatTemplate = 7;
   }
   
   enum VitalsType {
@@ -25,6 +218,7 @@ local_persistent_message Vitals {
     Object = 2;
     BuildObject = 3;
     PlayerItem = 4;
+    Boat = 5;
   }
  
    
@@ -519,14 +713,15 @@ local_persistent_message Character {
 
 local_message Factions {
   enum Faction {
-    Civilian = 0;
-    Bandit = 1;
-    Guard = 2;
+    None = 0;
+    Civilian = 1;
+    Bandit = 2;
+    Guard = 3;
   }
   optional Faction faction = 1;
 }
 
-local_message FactionStanding {
+local_persistent_message FactionStanding {
   enum Type {
     FactionToFaction = 0;
     CharacterToFaction = 1;
@@ -540,7 +735,9 @@ local_message FactionStanding {
   optional string meCharacterId = 5;
   optional string themCharacterId = 6;
   optional Type type = 7;
+  optional int32 recordId = 8;
 }
+
 
 local_message FactionStandings {
   repeated FactionStanding standings = 1;
@@ -621,6 +818,8 @@ local_message GmTarget {
     Flag = 4;
     Ground = 5;
     Location = 6;
+    Boat = 7;
+    Vehicle = 8;
   }
   
   optional Type type = 1;
@@ -630,6 +829,7 @@ local_message GmTarget {
   optional GmVector3 location = 5;
   optional string ownerId = 6;
   optional string displayName = 7;
+  optional string vehicleId = 8;
 }
 
 local_message SkillRequest {
@@ -638,6 +838,8 @@ local_message SkillRequest {
     Character = 1;
     Object = 2;
     BuildObject = 3;
+    Boat = 4;
+    Vehicle = 5;
   }
  
   optional string attackerCharacterId = 1;
@@ -715,6 +917,7 @@ message TrackData {
     All = 5;
     BuildObject = 6;
     Vehicle = 7;
+    Boat = 8;
   }
   optional EntityType neighborEntityType = 11;
   required EntityType entityType = 12;
@@ -842,6 +1045,7 @@ local_persistent_message PlayerSkill {
   optional bool targetCircle = 39;
   optional float maxLevel = 40;
   optional float level = 41;
+  optional float delay = 42;
 }
 
 
@@ -914,6 +1118,8 @@ local_persistent_message PlayerItem {
     GroundBlock = 9;
     Container = 10;
     Projectile = 11;
+    Boat = 12;
+    Vehicle = 13;
   }
   
   enum WeaponType {
@@ -1186,6 +1392,9 @@ message GameMessage {
   optional BuildObjectGroup buildObjectGroup = 22;
   optional CombatLog combatLog = 23;
   optional string agentId = 24;
+  optional FactionStanding factionStanding = 25;
+  optional FactionStandings factionStandings = 26;
+  optional BoatAction boatAction = 27;
 }
 
 message GameMessages {

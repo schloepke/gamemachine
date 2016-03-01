@@ -12,10 +12,10 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 
 public class HttpServerInitializer extends ChannelInitializer<SocketChannel> {
 
-	private final SslContext sslCtx;
+    private final SslContext sslCtx;
 
-	private String actorName;
-	
+    private String actorName;
+
     public HttpServerInitializer(SslContext sslCtx, String actorName) {
         this.sslCtx = sslCtx;
         this.actorName = actorName;

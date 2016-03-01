@@ -1,34 +1,31 @@
-
-
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'eclipse'
-apply plugin:'scala'
+apply plugin: 'scala'
 apply plugin: 'maven-publish'
 apply plugin: 'application'
 
 
-
 buildscript {
-  repositories {
-   jcenter()
-  
-  maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots/"
-        //url "https://plugins.gradle.org/m2/"
+    repositories {
+        jcenter()
+
+        maven {
+            url "https://oss.sonatype.org/content/repositories/snapshots/"
+            //url "https://plugins.gradle.org/m2/"
+        }
     }
-   }
-  dependencies {
-    classpath 'org.javalite:activejdbc:1.4.11'
-    classpath 'org.javalite:activejdbc-instrumentation:1.4.11'
-    //classpath "com.github.maiflai:gradle-scalatest:0.7"
-  }
+    dependencies {
+        classpath 'org.javalite:activejdbc:1.4.11'
+        classpath 'org.javalite:activejdbc-instrumentation:1.4.11'
+        //classpath "com.github.maiflai:gradle-scalatest:0.7"
+    }
 }
 //apply plugin: "com.github.maiflai.scalatest"
 
 group = 'io.gamemachine'
-  version = '1.1.0'
-  
+version = '1.1.0'
+
 
 description = """"""
 
@@ -36,69 +33,69 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 repositories {
-  flatDir(dirs: 'third_party')
-  mavenCentral()
-  maven {
+    flatDir(dirs: 'third_party')
+    mavenCentral()
+    maven {
         url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
- }
+}
 
 
 
- configurations.all {
-  resolutionStrategy {
-    //cacheDynamicVersionsFor 0, 'seconds'
-    //cacheChangingModulesFor 0, 'seconds'
-  }
+configurations.all {
+    resolutionStrategy {
+        //cacheDynamicVersionsFor 0, 'seconds'
+        //cacheChangingModulesFor 0, 'seconds'
+    }
 }
 
 dependencies {
-  compile 'org.slf4j:slf4j-api:1.7.12'
-  compile 'ch.qos.logback:logback-classic:1.1.3'
-  compile 'ch.qos.logback:logback-core:1.1.3'
-  compile 'org.codehaus.janino:janino:2.7.8'
-  compile group: 'com.typesafe.akka', name: "akka-actor_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-remote_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-testkit_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-kernel_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-agent_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-contrib_$scala_version", version:"$akka_version"
-  compile group: 'com.typesafe.akka', name: "akka-cluster_$scala_version", version:"$akka_version"
-  
-  compile 'io.protostuff:protostuff-uberjar:1.3.6'
-  compile 'io.protostuff:protostuff:1.3.6'
-  compile 'io.protostuff:protostuff-api:1.3.6'
-  compile 'io.protostuff:protostuff-core:1.3.6'
-  compile 'io.protostuff:protostuff-runtime:1.3.6'
-  compile 'io.protostuff:protostuff-compiler:1.3.6'
-  compile 'io.protostuff:protostuff-json:1.3.6'
-  
-  compile 'com.couchbase.client:couchbase-client:1.4.2'
-  //compile 'redis.clients:jedis:2.2.1'
-  compile 'org.mapdb:mapdb:1.0.8'
-  compile 'org.postgresql:postgresql:9.4-1203-jdbc41'
-  compile 'io.netty:netty-all:4.0.32.Final'
-  compile 'com.zaxxer:HikariCP:2.4.1'
-  compile 'mysql:mysql-connector-java:5.1.36'
-  compile 'org.apache.httpcomponents:httpclient:4.5.1'
-  compile 'org.mindrot:jbcrypt:0.3m'
-  compile 'com.google.guava:guava:18.0'
-  compile 'com.google.code.gson:gson:2.4'
-  
-  compile 'org.zeroturnaround:zt-exec:1.8'
-  //compile 'org.scalatest:scalatest_2.11:2.2.4'
-  //compile 'junit:junit:4.12'
-  compile 'org.javalite:activejdbc:1.4.11'
-  compile 'org.javalite:activejdbc-instrumentation:1.4.11'
- 
-  compile 'org.testng:testng:6.9.4'
-  //testCompile 'org.assertj:assertj-core:3.2.0'
-  testCompile 'org.assertj:assertj-core:2.2.0'
-  //compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
-  //compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
-  //compile "com.badlogicgames.gdx:gdx-ai:1.6.0"
-  //compile "com.github.xaguzman:pathfinding:0.2.6"
-  
+    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile 'ch.qos.logback:logback-core:1.1.3'
+    compile 'org.codehaus.janino:janino:2.7.8'
+    compile group: 'com.typesafe.akka', name: "akka-actor_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-remote_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-testkit_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-kernel_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-agent_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-contrib_2.11", version: "2.3.14"
+    compile group: 'com.typesafe.akka', name: "akka-cluster_2.11", version: "2.3.14"
+
+    compile 'io.protostuff:protostuff-uberjar:1.3.6'
+    compile 'io.protostuff:protostuff:1.3.6'
+    compile 'io.protostuff:protostuff-api:1.3.6'
+    compile 'io.protostuff:protostuff-core:1.3.6'
+    compile 'io.protostuff:protostuff-runtime:1.3.6'
+    compile 'io.protostuff:protostuff-compiler:1.3.6'
+    compile 'io.protostuff:protostuff-json:1.3.6'
+
+    compile 'com.couchbase.client:couchbase-client:1.4.2'
+    //compile 'redis.clients:jedis:2.2.1'
+    compile 'org.mapdb:mapdb:1.0.8'
+    compile 'org.postgresql:postgresql:9.4-1203-jdbc41'
+    compile 'io.netty:netty-all:4.0.32.Final'
+    compile 'com.zaxxer:HikariCP:2.4.1'
+    compile 'mysql:mysql-connector-java:5.1.36'
+    compile 'org.apache.httpcomponents:httpclient:4.5.1'
+    compile 'org.mindrot:jbcrypt:0.3m'
+    compile 'com.google.guava:guava:19.0'
+    compile 'com.google.code.gson:gson:2.4'
+
+    compile 'org.zeroturnaround:zt-exec:1.8'
+    //compile 'org.scalatest:scalatest_2.11:2.2.4'
+    //compile 'junit:junit:4.12'
+    compile 'org.javalite:activejdbc:1.4.11'
+    compile 'org.javalite:activejdbc-instrumentation:1.4.11'
+
+    compile 'org.testng:testng:6.9.4'
+    //testCompile 'org.assertj:assertj-core:3.2.0'
+    testCompile 'org.assertj:assertj-core:2.2.0'
+    //compile "com.badlogicgames.gdx:gdx-bullet:$gdxVersion"
+    //compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+    //compile "com.badlogicgames.gdx:gdx-ai:1.6.0"
+    //compile "com.github.xaguzman:pathfinding:0.2.6"
+
 }
 
 mainClassName = "io.gamemachine.process.CmdlineProcessRunner"
@@ -108,47 +105,51 @@ import org.javalite.instrumentation.Instrumentation
 
 sourceSets {
     main {
-        java.srcDirs = ['src/main/java', '../src/main/java'] 
+        java.srcDirs = ['src/main/java', 'src/user/java']
     }
 }
 
 
 task wrapper(type: Wrapper) {
-  gradleVersion = '2.9'
+    gradleVersion = '2.9'
 }
 
 
 task install_libs(type: Copy) {
-  into "$buildDir/../lib"
-    
-  from configurations.runtime
-  from "$buildDir/libs"
-  from "$buildDir/../local_lib/sqlite"
+    into "$buildDir/../lib"
+
+    from configurations.runtime
+    from "$buildDir/libs"
+    from "$buildDir/../local_lib/sqlite"
 }
 
-def addUrlIfNotPresent( to, what ) {
-    if ( !to || !what ) { return } 
+def addUrlIfNotPresent(to, what) {
+    if (!to || !what) {
+        return
+    }
     def urls = to.URLs.toList()
-    switch( what.class ) { 
-      case URL: what = new File( what.toURI() ); break
-      case String: what = new File( what ); break
-      case GString: what = new File( what.toString() ); break
-      case File: break; // ok
-      default:
-        println "Don't know how to deal with $what as it is not an URL nor a File"
-        System.exit( 1 )
+    switch (what.class) {
+        case URL: what = new File(what.toURI()); break
+        case String: what = new File(what); break
+        case GString: what = new File(what.toString()); break
+        case File: break; // ok
+        default:
+            println "Don't know how to deal with $what as it is not an URL nor a File"
+            System.exit(1)
     }
 
-    if ( what.directory && !what.exists() ) { what.mkdirs() }
+    if (what.directory && !what.exists()) {
+        what.mkdirs()
+    }
     def url = what.toURI().toURL()
-    if ( !urls.contains( url ) && ( what.directory || !urls.find{ it.path.endsWith( what.name ) } ) ) { 
-        to.addURL( url )
+    if (!urls.contains(url) && (what.directory || !urls.find { it.path.endsWith(what.name) })) {
+        to.addURL(url)
     }
 }
 
 compileJava.doLast {
     Instrumentation instrumentation = new Instrumentation()
-    
+
     instrumentation.outputDirectory = sourceSets.main.output.classesDir.getPath()
     addUrlIfNotPresent this.class.classLoader.rootLoader, sourceSets.main.output.classesDir.getPath()
     addUrlIfNotPresent Instrumentation.class.classLoader, sourceSets.main.output.classesDir.getPath()
@@ -169,7 +170,7 @@ publishing {
             }
         }
     }
-     repositories {
+    repositories {
         maven {
             //url "$buildDir/repo"
             url "/home/chris/maven-repo"
@@ -178,31 +179,31 @@ publishing {
 }
 
 task removeOldSnapshots(type: Exec) {
-  executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/server/1.0.4-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
+    executable "sh"
+    args "-c", "cd /home/chris/maven-repo;git rm -r io/gamemachine/server/1.0.4-SNAPSHOT;git commit -am 'remove last snapshot';git push origin master"
 }
 
 
 task publish_to_github(type: Exec, dependsOn: publish) {
-  executable "sh"
-  args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
+    executable "sh"
+    args "-c", "cd /home/chris/maven-repo;git add io/*;git commit -am 'release';git push origin master"
 }
 publish.dependsOn removeOldSnapshots
 publish.mustRunAfter removeOldSnapshots
 
 test {
-useTestNG()
-testLogging.showStandardStreams = true
-minHeapSize = "128m"
-maxHeapSize = "512m"
+    useTestNG()
+    testLogging.showStandardStreams = true
+    minHeapSize = "128m"
+    maxHeapSize = "512m"
 
- beforeTest { descriptor ->
-     logger.lifecycle("Running test: " + descriptor)
-  }
+    beforeTest { descriptor ->
+        logger.lifecycle("Running test: " + descriptor)
+    }
 
-  // listen to standard out and standard error of the test JVM(s)
-  onOutput { descriptor, event ->
-     logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message )
-  }
+    // listen to standard out and standard error of the test JVM(s)
+    onOutput { descriptor, event ->
+        logger.lifecycle("Test: " + descriptor + " produced standard out/err: " + event.message)
+    }
 }
 

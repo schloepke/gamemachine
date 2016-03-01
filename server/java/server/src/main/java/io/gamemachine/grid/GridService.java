@@ -20,93 +20,92 @@ import io.gamemachine.regions.ZoneService;
 
 public class GridService {
 
-	private static final Logger logger = LoggerFactory.getLogger(GridService.class);
+    private static final Logger logger = LoggerFactory.getLogger(GridService.class);
 
-	private static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
+    private static ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>> gameGrids = new ConcurrentHashMap<String, ConcurrentHashMap<String, Grid>>();
 
-	private String defaultGrid;
-	
-	private static class LazyHolder {
-		private static final GridService INSTANCE = new GridService();
-	}
+    private String defaultGrid;
 
-	public static GridService getInstance() {
-		return LazyHolder.INSTANCE;
-	}
+    private static class LazyHolder {
+        private static final GridService INSTANCE = new GridService();
+    }
 
-	private GridService() {
-		Config config = AppConfig.getConfig();
-		defaultGrid = config.getString("gamemachine.default_grid");
-	}
-	
-	public void removeEntityFromGrids(String entityId) {
-		for (String zone : gameGrids.keySet()) {
-			for (Grid grid : gameGrids.get(zone).values()) {
-				grid.remove(entityId);
-			}
-		}
-	}
-	
-	public void removeExpired() {
-		for (String zone : gameGrids.keySet()) {
-			for (Grid grid : gameGrids.get(zone).values()) {
-				grid.RemoveExpired(AppConfig.getGridExpiration());
-			}
-		}
-	}
-	
-	public List<Grid> getGrids() {
-		List<Grid> grids = new ArrayList<Grid>();
-		for (String zone : gameGrids.keySet()) {
-			for (Grid grid : gameGrids.get(zone).values()) {
-				grids.add(grid);
-			}
-		}
-		return grids;
-	}
-	
-	
+    public static GridService getInstance() {
+        return LazyHolder.INSTANCE;
+    }
 
-	public synchronized void createDefaultGrids() {
-		for (Zone zone : ZoneService.staticZones()) {
-			createForZone(zone.name);
-		}
-		logger.warn("Created grids for "+ZoneService.staticZones().size()+" zones");
-	}
-	
-	public synchronized void createForZone(String zone) {
-		gameGrids.put(zone, new ConcurrentHashMap<String,Grid>());
-		Map<String, Grid> grids = gameGrids.get(zone);
-		for (GridConfig gridConfig : GridConfigs.getGridConfigs()) {
-			Grid grid = Grid.createFromConfig(gridConfig, zone);
-			grids.put(gridConfig.name, grid);
-		}
-	}
-	
-	public void removeForZone(String zone) {
-		if (gameGrids.containsKey(zone)) {
-			gameGrids.remove(zone);
-		}
-	}
-	
-	public Grid getGrid(String zone, String name) {
-		if (Strings.isNullOrEmpty(name)) {
-			name = defaultGrid;
-		}
-		
-		if (gameGrids.containsKey(zone)) {
-			Map<String, Grid> grids = gameGrids.get(zone);
-			if (grids.containsKey(name)) {
-				return grids.get(name);
-			}
-		}
-		logger.warn("Grid not found for zone "+zone+" name "+name);
-		return null;
-	}
+    private GridService() {
+        Config config = AppConfig.getConfig();
+        defaultGrid = config.getString("gamemachine.default_grid");
+    }
 
-	public Grid getPlayerGrid(String name, String playerId) {
-		Zone zone =  PlayerService.getInstance().getZone(playerId);
-		return getGrid(zone.name,name);
-	}
-	
+    public void removeEntityFromGrids(String entityId) {
+        for (String zone : gameGrids.keySet()) {
+            for (Grid grid : gameGrids.get(zone).values()) {
+                grid.remove(entityId);
+            }
+        }
+    }
+
+    public void removeExpired() {
+        for (String zone : gameGrids.keySet()) {
+            for (Grid grid : gameGrids.get(zone).values()) {
+                grid.RemoveExpired(AppConfig.getGridExpiration());
+            }
+        }
+    }
+
+    public List<Grid> getGrids() {
+        List<Grid> grids = new ArrayList<Grid>();
+        for (String zone : gameGrids.keySet()) {
+            for (Grid grid : gameGrids.get(zone).values()) {
+                grids.add(grid);
+            }
+        }
+        return grids;
+    }
+
+
+    public synchronized void createDefaultGrids() {
+        for (Zone zone : ZoneService.staticZones()) {
+            createForZone(zone.name);
+        }
+        logger.warn("Created grids for " + ZoneService.staticZones().size() + " zones");
+    }
+
+    public synchronized void createForZone(String zone) {
+        gameGrids.put(zone, new ConcurrentHashMap<String, Grid>());
+        Map<String, Grid> grids = gameGrids.get(zone);
+        for (GridConfig gridConfig : GridConfigs.getGridConfigs()) {
+            Grid grid = Grid.createFromConfig(gridConfig, zone);
+            grids.put(gridConfig.name, grid);
+        }
+    }
+
+    public void removeForZone(String zone) {
+        if (gameGrids.containsKey(zone)) {
+            gameGrids.remove(zone);
+        }
+    }
+
+    public Grid getGrid(String zone, String name) {
+        if (Strings.isNullOrEmpty(name)) {
+            name = defaultGrid;
+        }
+
+        if (gameGrids.containsKey(zone)) {
+            Map<String, Grid> grids = gameGrids.get(zone);
+            if (grids.containsKey(name)) {
+                return grids.get(name);
+            }
+        }
+        logger.warn("Grid not found for zone " + zone + " name " + name);
+        return null;
+    }
+
+    public Grid getPlayerGrid(String name, String playerId) {
+        Zone zone = PlayerService.getInstance().getZone(playerId);
+        return getGrid(zone.name, name);
+    }
+
 }

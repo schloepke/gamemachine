@@ -1,4 +1,33 @@
 
+DROP TABLE IF EXISTS boats;
+CREATE TABLE boats (
+  id bigserial NOT NULL,
+
+  boat_id TEXT DEFAULT NULL,
+
+  boat_zone TEXT DEFAULT NULL,
+
+  boat_x integer DEFAULT NULL,
+
+  boat_y integer DEFAULT NULL,
+
+  boat_z integer DEFAULT NULL,
+
+  boat_player_item_id TEXT DEFAULT NULL,
+
+  boat_owner_id TEXT DEFAULT NULL,
+
+  boat_heading integer DEFAULT NULL,
+
+  boat_dock_id TEXT DEFAULT NULL,
+
+  boat_state integer,
+
+  boat_captain_id TEXT DEFAULT NULL,
+
+  CONSTRAINT boat_pkey PRIMARY KEY (id)
+);
+alter table boats owner to gamemachine;
 DROP TABLE IF EXISTS vitals;
 CREATE TABLE vitals (
   id bigserial NOT NULL,
@@ -277,6 +306,27 @@ CREATE TABLE characters (
   CONSTRAINT character_pkey PRIMARY KEY (id)
 );
 alter table characters owner to gamemachine;
+DROP TABLE IF EXISTS faction_standings;
+CREATE TABLE faction_standings (
+  id bigserial NOT NULL,
+
+  faction_standing_me integer,
+
+  faction_standing_them integer,
+
+  faction_standing_standing double precision DEFAULT NULL,
+
+  faction_standing_id TEXT DEFAULT NULL,
+
+  faction_standing_me_character_id TEXT DEFAULT NULL,
+
+  faction_standing_them_character_id TEXT DEFAULT NULL,
+
+  faction_standing_type integer,
+
+  CONSTRAINT faction_standing_pkey PRIMARY KEY (id)
+);
+alter table faction_standings owner to gamemachine;
 DROP TABLE IF EXISTS players;
 CREATE TABLE players (
   id bigserial NOT NULL,
@@ -343,6 +393,8 @@ CREATE TABLE player_skills (
   player_skill_max_level double precision DEFAULT NULL,
 
   player_skill_level double precision DEFAULT NULL,
+
+  player_skill_delay double precision DEFAULT NULL,
 
      useEffect_unity_object_path TEXT DEFAULT NULL,
     

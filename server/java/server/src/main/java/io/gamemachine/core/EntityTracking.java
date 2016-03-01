@@ -1,21 +1,5 @@
 package io.gamemachine.core;
 
-import io.gamemachine.grid.GridService;
-import io.gamemachine.grid.Grid;
-import io.gamemachine.messages.AgentTrackData;
-import io.gamemachine.messages.ClientManagerEvent;
-import io.gamemachine.messages.DynamicMessage;
-import io.gamemachine.messages.Entity;
-import io.gamemachine.messages.Neighbors;
-import io.gamemachine.messages.Player;
-import io.gamemachine.messages.TrackData;
-import io.gamemachine.messages.TrackDataResponse;
-import io.gamemachine.messages.TrackDataUpdate;
-import io.gamemachine.messages.Zone;
-import io.gamemachine.messages.TrackData.EntityType;
-import io.gamemachine.objectdb.Cache;
-import io.gamemachine.regions.ZoneService;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,184 +10,207 @@ import org.slf4j.LoggerFactory;
 
 import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
+import io.gamemachine.grid.Grid;
+import io.gamemachine.grid.GridService;
+import io.gamemachine.messages.AgentTrackData;
+import io.gamemachine.messages.ClientManagerEvent;
+import io.gamemachine.messages.Entity;
+import io.gamemachine.messages.Neighbors;
+import io.gamemachine.messages.Player;
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.messages.TrackData.EntityType;
+import io.gamemachine.messages.TrackDataResponse;
+import io.gamemachine.messages.TrackDataUpdate;
+import plugins.core.BoatManager;
 
 public class EntityTracking extends UntypedActor {
 
-	private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
-	private static MovementVerifier movementVerifier = null;
+    private static final Logger logger = LoggerFactory.getLogger(EntityTracking.class);
+    private static MovementVerifier movementVerifier = null;
 
-	public static String name = "fastpath_entity_tracking";
+    public static String name = "fastpath_entity_tracking";
 
-	private PlayerService playerService;
-	public static Map<String,String> npcMap = new ConcurrentHashMap<String,String>();
-	
-	public EntityTracking() {
-		Commands.clientManagerRegister(name);
-		playerService = PlayerService.getInstance();
-	}
+    private PlayerService playerService;
+    public static Map<String, String> npcMap = new ConcurrentHashMap<String, String>();
 
-	
-	private void updateTrackData(TrackDataUpdate update, Player player) {
-		if (player.role == Player.Role.Player) {
-			return;
-		}
-		
-	}
+    public EntityTracking() {
+        Commands.clientManagerRegister(name);
+        playerService = PlayerService.getInstance();
+    }
 
-	private boolean isValid(TrackData trackData,Player player) {
-		if (!player.id.equals(trackData.id)) {
-			return false;
-		}
-		
-		if (playerService.isAuthenticated(player.id)) {
-			return true;
-		} else if (player.role == Player.Role.AgentController) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	@Override
-	public void onReceive(Object message) throws Exception {
-		Player player;
 
-		if (message instanceof TrackData) {
-			TrackData trackData = (TrackData) message;
-			player = playerService.find(trackData.id);
-			if (player == null) {
-				logger.warn("Player for " + trackData.id + " is null");
-				return;
-			} else if (!isValid(trackData,player)) {
-				logger.warn("Invalid request trackdata.id=" + trackData.id + " playerId="+player.id);
-				return;
-			}
-			handleTrackData(trackData, player);
-			return;
-		}
+    private void updateTrackData(TrackDataUpdate update, Player player) {
+        if (player.role == Player.Role.Player) {
+            return;
+        }
 
-		if (message instanceof Entity) {
-			Entity entity = (Entity) message;
+    }
 
-			player = playerService.find(entity.player.id);
-			if (player == null) {
-				logger.warn("Player for " + entity.player.id + " is null");
-				return;
-			}
-			
-			if (entity.agentTrackData != null) {
-				handleAgentTrackData(entity.agentTrackData, player);
-				return;
-			}
+    private boolean isValid(TrackData trackData, Player player) {
+        if (!player.id.equals(trackData.id)) {
+            return false;
+        }
 
-			if (entity.trackDataUpdate != null) {
-				updateTrackData(entity.getTrackDataUpdate(), player);
-				return;
-			}
+        if (playerService.isAuthenticated(player.id)) {
+            return true;
+        } else if (player.role == Player.Role.AgentController) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-			if (!isValid(entity.trackData,player)) {
-				logger.warn("Invalid request trackdata.id=" + entity.trackData.id + " playerId="+player.id);
-				return;
-			}
-			
-			handleTrackData(entity.trackData, player);
+    @Override
+    public void onReceive(Object message) throws Exception {
+        Player player;
 
-		} else if (message instanceof ClientManagerEvent) {
-			ClientManagerEvent event = (ClientManagerEvent) message;
-			if (event.event.equals("disconnected")) {
-				removePlayerData(event);
-			}
-		} else {
-			unhandled(message);
-		}
-	}
+        if (message instanceof TrackData) {
+            TrackData trackData = (TrackData) message;
 
-	private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
-		Grid agentGrid = GridService.getInstance().getPlayerGrid(null, player.id);
-		for (TrackData trackData : agentTrackData.getTrackDataList()) {
-			if (!npcMap.containsKey(trackData.id)) {
-				npcMap.put(trackData.id, player.id);
-			}
-			
-			setEntityLocation(player.id, agentGrid, trackData);
-		}
-		
-		 List<TrackData> trackDatas = new ArrayList<TrackData>();
-		 
-		for (TrackData trackData : agentGrid.getAll()) {
-			if (npcMap.containsKey(trackData.id)) {
-				continue;
-			}
-			
-			trackDatas.add(trackData);
-		}
-		
-		if (trackDatas.size() > 0) {
-			toNeighbors(player,trackDatas,false);
-		}
-		
-	}
+            player = playerService.find(trackData.id);
+            if (player == null) {
+                logger.warn("Player for " + trackData.id + " is null");
+                return;
+            } else if (!isValid(trackData, player)) {
+                logger.warn("Invalid request trackdata.id=" + trackData.id + " playerId=" + player.id);
+                return;
+            }
+            handleTrackData(trackData, player);
+            return;
+        }
 
-	private void handleTrackData(TrackData trackData, Player player) {
-		Grid grid = GridService.getInstance().getPlayerGrid(trackData.gridName, player.id);
+        if (message instanceof Entity) {
+            Entity entity = (Entity) message;
 
-		if (grid == null) {
-			logger.warn("No grid found for " + player.id);
-			return;
-		}
+            player = playerService.find(entity.player.id);
+            if (player == null) {
+                logger.warn("Player for " + entity.player.id + " is null");
+                return;
+            }
 
-		if (trackData.broadcast == 1) {
-			List<TrackData> trackDatas = grid.neighbors(player.id, trackData.x, trackData.y,
-					trackData.neighborEntityType, 2);
+            if (entity.agentTrackData != null) {
+                handleAgentTrackData(entity.agentTrackData, player);
+                return;
+            }
 
-			if (trackDatas == null) {
-				return;
-			}
+            if (entity.trackDataUpdate != null) {
+                updateTrackData(entity.getTrackDataUpdate(), player);
+                return;
+            }
 
-			TrackData broadcastTrackData = new TrackData();
-			broadcastTrackData.x = trackData.x;
-			broadcastTrackData.y = trackData.y;
-			broadcastTrackData.z = trackData.z;
-			broadcastTrackData.userDefinedData = trackData.userDefinedData;
-			broadcastTrackData.broadcast = 1;
-			broadcastTrackData.id = player.id;
-			broadcastTrackData.entityType = TrackData.EntityType.Player;
+            if (entity.trackData.entityType == TrackData.EntityType.Boat) {
+                if (BoatManager.isBoatActive(entity.trackData.id)) {
+                    Grid grid = GridService.getInstance().getPlayerGrid("boats", player.id);
+                    grid.set(entity.trackData);
+                }
 
-			for (TrackData tdata : trackDatas) {
-				if (tdata.entityType == TrackData.EntityType.Player) {
-					Entity playerMessage = new Entity();
-					playerMessage.id = "b";
-					Neighbors neighbors = new Neighbors();
-					neighbors.addTrackData(broadcastTrackData);
-					playerMessage.setNeighbors(neighbors);
-					PlayerMessage.tell(playerMessage, tdata.id);
-					// logger.warn("Broadcast sent to " + tdata.id);
-				}
-			}
-			return;
-		}
+                return;
+            }
 
-		if (player.role == Player.Role.Player || player.role == Player.Role.AgentController) {
-			setEntityLocation(player.id, grid, trackData);
-		}
-		
+            if (!isValid(entity.trackData, player)) {
+                logger.warn("Invalid request trackdata.id=" + entity.trackData.id + " playerId=" + player.id);
+                return;
+            }
 
-		if (trackData.getNeighbors >= 1) {
-			SendNeighbors(grid, trackData.x, trackData.z, player, trackData.neighborEntityType, trackData.getNeighbors);
-		}
-	}
 
-	private void removePlayerData(ClientManagerEvent event) {
-		logger.warn("Cleanup player "+event.player_id);
-		GridService.getInstance().removeEntityFromGrids(event.player_id);
-		for (String entityId : npcMap.keySet()) {
-			GridService.getInstance().removeEntityFromGrids(entityId);
-		}
-		npcMap.clear();
-	}
+            handleTrackData(entity.trackData, player);
 
-	private void SendNeighbors(Grid grid, int x, int z, Player player, EntityType neighborType, int neighborsFlag) {
-		List<TrackData> trackDatas;
+        } else if (message instanceof ClientManagerEvent) {
+            ClientManagerEvent event = (ClientManagerEvent) message;
+            if (event.event.equals("disconnected")) {
+                removePlayerData(event);
+            }
+        } else {
+            unhandled(message);
+        }
+    }
+
+    private void handleAgentTrackData(AgentTrackData agentTrackData, Player player) {
+        Grid agentGrid = GridService.getInstance().getPlayerGrid(null, player.id);
+        for (TrackData trackData : agentTrackData.getTrackDataList()) {
+            if (!npcMap.containsKey(trackData.id)) {
+                npcMap.put(trackData.id, player.id);
+            }
+
+            setEntityLocation(player.id, agentGrid, trackData);
+        }
+
+        List<TrackData> trackDatas = new ArrayList<TrackData>();
+
+        for (TrackData trackData : agentGrid.getAll()) {
+            if (npcMap.containsKey(trackData.id)) {
+                continue;
+            }
+
+            trackDatas.add(trackData);
+        }
+
+        if (trackDatas.size() > 0) {
+            toNeighbors(player, trackDatas, false);
+        }
+
+    }
+
+    private void handleTrackData(TrackData trackData, Player player) {
+        Grid grid = GridService.getInstance().getPlayerGrid(trackData.gridName, player.id);
+
+        if (grid == null) {
+            logger.warn("No grid found for " + player.id);
+            return;
+        }
+
+        if (trackData.broadcast == 1) {
+            List<TrackData> trackDatas = grid.neighbors(player.id, trackData.x, trackData.y,
+                    trackData.neighborEntityType, 2);
+
+            if (trackDatas == null) {
+                return;
+            }
+
+            TrackData broadcastTrackData = new TrackData();
+            broadcastTrackData.x = trackData.x;
+            broadcastTrackData.y = trackData.y;
+            broadcastTrackData.z = trackData.z;
+            broadcastTrackData.userDefinedData = trackData.userDefinedData;
+            broadcastTrackData.broadcast = 1;
+            broadcastTrackData.id = player.id;
+            broadcastTrackData.entityType = TrackData.EntityType.Player;
+
+            for (TrackData tdata : trackDatas) {
+                if (tdata.entityType == TrackData.EntityType.Player) {
+                    Entity playerMessage = new Entity();
+                    playerMessage.id = "b";
+                    Neighbors neighbors = new Neighbors();
+                    neighbors.addTrackData(broadcastTrackData);
+                    playerMessage.setNeighbors(neighbors);
+                    PlayerMessage.tell(playerMessage, tdata.id);
+                    // logger.warn("Broadcast sent to " + tdata.id);
+                }
+            }
+            return;
+        }
+
+        if (player.role == Player.Role.Player || player.role == Player.Role.AgentController) {
+            setEntityLocation(player.id, grid, trackData);
+        }
+
+
+        if (trackData.getNeighbors >= 1) {
+            SendNeighbors(grid, trackData.x, trackData.z, player, trackData.neighborEntityType, trackData.getNeighbors);
+        }
+    }
+
+    private void removePlayerData(ClientManagerEvent event) {
+        logger.warn("Cleanup player " + event.player_id);
+        GridService.getInstance().removeEntityFromGrids(event.player_id);
+        for (String entityId : npcMap.keySet()) {
+            GridService.getInstance().removeEntityFromGrids(entityId);
+        }
+        npcMap.clear();
+    }
+
+    private void SendNeighbors(Grid grid, int x, int z, Player player, EntityType neighborType, int neighborsFlag) {
+        List<TrackData> trackDatas;
 //		boolean isAgentController = (player.role == Player.Role.AgentController);
 //
 //		if (neighborType != null && neighborType == EntityType.All) {
@@ -217,73 +224,77 @@ public class EntityTracking extends UntypedActor {
 //			trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
 //		}
 
-		trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
-		
-		if (trackDatas.size() >= 1) {
-			toNeighbors(player, trackDatas, false);
-		}
-	}
+        trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
 
-	private void SendToGateway(Player player, Neighbors neighbors) {
-		Entity playerMessage = new Entity();
-		playerMessage.setNeighbors(neighbors);
-		//playerMessage.setPlayer(player);
-		//playerMessage.setId(player.id);
-		ActorSelection sel = ActorUtil.getSelectionByName(player.id);
-		sel.tell(playerMessage, getSelf());
-	}
+        // Add boats
+        Grid boatGrid = GridService.getInstance().getPlayerGrid("boats", player.id);
+        trackDatas.addAll(boatGrid.neighbors(player.id, x, z, TrackData.EntityType.Boat, neighborsFlag));
 
-	private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
-		Neighbors neighbors = new Neighbors();
-		int size = 30;
-		int count = 0;
+        if (trackDatas.size() >= 1) {
+            toNeighbors(player, trackDatas, false);
+        }
+    }
 
-		for (TrackData trackData : trackDatas) {
-			
-			neighbors.addTrackData(trackData);
+    private void SendToGateway(Player player, Neighbors neighbors) {
+        Entity playerMessage = new Entity();
+        playerMessage.setNeighbors(neighbors);
+        //playerMessage.setPlayer(player);
+        //playerMessage.setId(player.id);
+        ActorSelection sel = ActorUtil.getSelectionByName(player.id);
+        sel.tell(playerMessage, getSelf());
+    }
 
-			count++;
-			if (count >= size) {
-				SendToGateway(player, neighbors);
-				count = 0;
-				neighbors = new Neighbors();
-			}
-		}
-		SendToGateway(player, neighbors);
-	}
+    private void toNeighbors(Player player, List<TrackData> trackDatas, boolean isAgentController) {
+        Neighbors neighbors = new Neighbors();
+        int size = 30;
+        int count = 0;
 
-	private void sendTrackDataResponse(String playerId, String id, TrackDataResponse.REASON reason) {
-		Entity entity = new Entity();
-		entity.id = "0";
-		TrackDataResponse response = new TrackDataResponse();
-		response.id = id;
-		response.reason = reason;
-		entity.setTrackDataResponse(response);
-		PlayerMessage.tell(entity, playerId);
-	}
-	
-	private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
+        for (TrackData trackData : trackDatas) {
+
+            neighbors.addTrackData(trackData);
+
+            count++;
+            if (count >= size) {
+                SendToGateway(player, neighbors);
+                count = 0;
+                neighbors = new Neighbors();
+            }
+        }
+        SendToGateway(player, neighbors);
+    }
+
+    private void sendTrackDataResponse(String playerId, String id, TrackDataResponse.REASON reason) {
+        Entity entity = new Entity();
+        entity.id = "0";
+        TrackDataResponse response = new TrackDataResponse();
+        response.id = id;
+        response.reason = reason;
+        entity.setTrackDataResponse(response);
+        PlayerMessage.tell(entity, playerId);
+    }
+
+    private void setEntityLocation(String playerId, Grid grid, TrackData trackData) {
 
 
-		if (trackData.entityType == EntityType.Player) {
-			if (!trackData.id.equals(playerId)) {
-				return;
-			}
-			if (movementVerifier != null) {
-				if (!movementVerifier.verify(trackData)) {
-					sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.VALIDATION_FAILED);
-					return;
-				}
-			}
-		}
-		
-		if (!grid.set(trackData)) {
+        if (trackData.entityType == EntityType.Player) {
+            if (!trackData.id.equals(playerId)) {
+                return;
+            }
+            if (movementVerifier != null) {
+                if (!movementVerifier.verify(trackData)) {
+                    sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.VALIDATION_FAILED);
+                    return;
+                }
+            }
+        }
 
-			// Resend is most likely from a TrackData that contains a delta, but
-			// where we never received an initial
-			// TrackData with the full coordinates.
-			sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
-		}
-	}
+        if (!grid.set(trackData)) {
+
+            // Resend is most likely from a TrackData that contains a delta, but
+            // where we never received an initial
+            // TrackData with the full coordinates.
+            sendTrackDataResponse(playerId, trackData.id, TrackDataResponse.REASON.RESEND);
+        }
+    }
 
 }

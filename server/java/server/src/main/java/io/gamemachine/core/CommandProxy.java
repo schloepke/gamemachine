@@ -2,8 +2,8 @@ package io.gamemachine.core;
 
 public class CommandProxy {
 
-	public static void test(Object obj) {
-		System.out.println(obj.getClass().getName());
+    public static void test(Object obj) {
+        System.out.println(obj.getClass().getName());
 
-	}
+    }
 }
