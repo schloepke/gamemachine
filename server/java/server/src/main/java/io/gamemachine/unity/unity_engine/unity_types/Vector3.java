@@ -1,4 +1,4 @@
-package io.gamemachine.unity.unity_engine;
+package io.gamemachine.unity.unity_engine.unity_types;
 
 import io.gamemachine.messages.GmVector3;
 

@@ -13,6 +13,7 @@ import io.gamemachine.messages.TrackData.EntityType;
 import io.gamemachine.regions.ZoneService;
 import io.gamemachine.unity.UnitySync;
 import io.gamemachine.unity.unity_engine.*;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
 
@@ -47,8 +48,8 @@ public class NpcEntity extends GameMessageActor implements UnityEngineHandler {
 
     public NpcEntity(String playerId, String characterId, int mapSize, int startPoint) {
         id = playerId;
-        this.mapSize = mapSize;
-        this.startPoint = startPoint;
+        this.mapSize = 2000;
+        this.startPoint = 0;
         state = State.Idle;
         engine = new UnityEngine("default", this);
         UnitySync.registerHandler(this, id);
@@ -105,6 +106,7 @@ public class NpcEntity extends GameMessageActor implements UnityEngineHandler {
             return;
         }
 
+        engine.findPath(position,target);
         move();
         double dist = position.distance2d(target);
         if (dist <= 2) {
@@ -167,8 +169,8 @@ public class NpcEntity extends GameMessageActor implements UnityEngineHandler {
 
     private Vector3 randVector() {
         Vector3 np = new Vector3();
-        np.x = randFloat(startPoint, startPoint + mapSize);
-        np.z = randFloat(startPoint, startPoint + mapSize);
+        np.x = randFloat(startPoint, startPoint + 50);
+        np.z = randFloat(startPoint, startPoint + 50);
         np.y = 40f;
         return np;
     }
@@ -196,6 +198,11 @@ public class NpcEntity extends GameMessageActor implements UnityEngineHandler {
             } else {
                 logger.warning("Destroy error " + destroyResult.status.toString());
             }
+        } else if (result instanceof PathResult) {
+            PathResult pathResult = (PathResult)result;
+            if (pathResult.status != PathResponse.Status.Success) {
+                logger.warning("Path error "+pathResult.status.toString());
+            }
         }
     }
 
@@ -203,7 +210,7 @@ public class NpcEntity extends GameMessageActor implements UnityEngineHandler {
     public void componentUpdated(Object object) {
         if (object instanceof GmNpc) {
             GmNpc gmNpc = (GmNpc) object;
-            position = Vector3.fromGmVector3(gmNpc.transform.position);
+            //position = Vector3.fromGmVector3(gmNpc.transform.position);
         }
     }
 

@@ -5,7 +5,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.gamemachine.messages.*;
 import io.gamemachine.net.Connection;
 import io.gamemachine.unity.UnityMessageHandler;
-import io.gamemachine.unity.UnitySync;
+import io.gamemachine.unity.unity_engine.unity_types.GameObject;
+import io.gamemachine.unity.unity_engine.unity_types.Quaternion;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
 public class UnityEngine {
 
@@ -36,6 +38,8 @@ public class UnityEngine {
             clientMessage.unityMessage.unityEngineRequest.destroyRequest = (DestroyRequest) request;
         } else if (request instanceof PathRequest) {
             clientMessage.unityMessage.unityEngineRequest.pathRequest = (PathRequest) request;
+        } else if (request instanceof UnityConfigRequest) {
+            clientMessage.unityMessage.unityEngineRequest.unityConfigRequest = (UnityConfigRequest) request;
         }
 
         Connection connection = UnityMessageHandler.getConnection(region);
@@ -50,6 +54,7 @@ public class UnityEngine {
        return UnityMessageHandler.isAlive(region);
     }
 
+    // Handle unity responses
     public void sphereCastResponse(SphereCastResponse response) {
         SphereCastResult result = new SphereCastResult();
         for (GmGameObject gmGo : response.gameObjects) {
@@ -89,12 +94,34 @@ public class UnityEngine {
 
     public void pathResponse(PathResponse response) {
         PathResult result = new PathResult();
-        for (GmVector3 vec : response.path) {
-            result.path.add(Vector3.fromGmVector3(vec));
+
+        if (result.status == PathResponse.Status.Success && result.path != null) {
+            for (GmVector3 vec : response.path) {
+                result.path.add(Vector3.fromGmVector3(vec));
+            }
         }
+
         result.status = response.status;
         handler.onEngineResult(result);
     }
+
+    public void unityConfigResponse(UnityConfigResponse response) {
+        UnityConfigResult result = new UnityConfigResult();
+        result.npcGroupDefs = response.npcGroupDef;
+
+        handler.onEngineResult(result);
+    }
+
+
+    // Send unity requests
+
+    public void unityConfigRequest() {
+        UnityConfigRequest request = new UnityConfigRequest();
+        request.messageId = requestId.getAndIncrement();
+
+        SendRequest(request,request.messageId);
+    }
+
     public void findPath(Vector3 start, Vector3 end) {
         PathRequest request = new PathRequest();
         request.start = Vector3.toGmVector3(start);

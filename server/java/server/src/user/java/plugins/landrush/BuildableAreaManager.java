@@ -31,11 +31,11 @@ public class BuildableAreaManager extends GameMessageActor {
             if (areas.action == BuildableAreas.Action.GetAll) {
 
             } else if (areas.action == BuildableAreas.Action.Claim) {
-                BuildableArea area = areas.getBuildableArea(0);
+                BuildableArea area = areas.buildableArea.get(0);
                 claim(area);
 
             } else if (areas.action == BuildableAreas.Action.Release) {
-                BuildableArea area = areas.getBuildableArea(0);
+                BuildableArea area = areas.buildableArea.get(0);
                 release(area);
             }
 

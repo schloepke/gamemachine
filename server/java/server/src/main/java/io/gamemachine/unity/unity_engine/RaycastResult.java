@@ -1,5 +1,7 @@
 package io.gamemachine.unity.unity_engine;
 
+import io.gamemachine.unity.unity_engine.unity_types.GameObject;
+
 import java.util.ArrayList;
 import java.util.List;
 

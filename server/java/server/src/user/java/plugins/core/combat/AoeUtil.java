@@ -8,7 +8,7 @@ import io.gamemachine.grid.GridService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.GmVector3;
 import io.gamemachine.messages.TrackData;
-import io.gamemachine.unity.unity_engine.Vector3;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
 public class AoeUtil {
 

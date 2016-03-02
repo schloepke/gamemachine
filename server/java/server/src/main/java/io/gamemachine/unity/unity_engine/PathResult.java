@@ -1,10 +1,10 @@
 package io.gamemachine.unity.unity_engine;
 
 import io.gamemachine.messages.PathResponse;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by chris on 3/1/2016.

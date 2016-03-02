@@ -768,9 +768,9 @@ private static final Logger logger = LoggerFactory.getLogger(<%=klass%>.class);
 		return this;
 	}
 
-	public <%=get_type(field) %> get<%=field_name %>(int index)  {
-        return <%=field.name%> == null ? null : <%=field.name%>.get(index);
-    }
+	//public <%=get_type(field) %> get<%=field_name %>(int index)  {
+    //    return <%=field.name%> == null ? null : <%=field.name%>.get(index);
+    //}
 
     public int get<%=field_name %>Count()  {
         return <%=field.name%> == null ? 0 : <%=field.name%>.size();

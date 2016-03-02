@@ -51,13 +51,14 @@ public class NpcDemo {
 
             if (character == null) {
                 character = cs.create(playerId, characterId, Vitals.Template.NpcTemplate, null);
-                character.gameEntityPrefab = "npc1";
-                cs.save(character);
             }
+            character.gameEntityPrefab = "default";
+            cs.save(character);
 
             ps.setCharacter(playerId, characterId);
             PlayerService.getInstance().setZone(playerId, zone);
-            GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId, mapSize, startPoint));
+            //GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId, mapSize, startPoint));
+            GameMachineLoader.getActorSystem().actorOf(Props.create(LandrushNpc.class, playerId, characterId));
         }
         logger.warn("NpcDemo started with " + npcCount + " npc's");
     }

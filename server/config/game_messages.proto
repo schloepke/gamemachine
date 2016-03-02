@@ -12,6 +12,43 @@ local_message GmNpc {
   optional GmQuaternion testRotation = 6;
 }
 
+
+local_message NpcDef {
+  enum WeaponType {
+    None = 0;
+    Melee = 1;
+    Ranged = 2;
+  }
+
+  optional WeaponType weaponType = 1;
+  optional string prefabName = 2;
+  optional int32 count = 3;
+  optional string weaponName = 4;
+  optional float agroRange = 5;
+  optional float rangedDistance = 6;
+  optional float meleeDistance = 7;
+  optional float leashDistance = 8;
+}
+
+local_message NpcGroupDef {
+  repeated NpcDef npcDef = 1;
+  optional GmWaypointRoute waypointRoute = 2;
+  optional string name = 3;
+}
+
+local_message GmWaypoint {
+  optional GmVector3 position = 1;
+  optional int32 order = 2;
+}
+
+local_message GmWaypointRoute {
+  repeated GmWaypoint waypoints = 1;
+}
+local_message GmGameObject {
+  optional string name = 1;
+  optional GmTransform transform = 2;
+}
+
 local_message SyncObject {
   enum Type {
     None = 0;
@@ -43,6 +80,7 @@ local_message UnityEngineRequest {
     optional InstantiateRequest instantiateRequest = 4;
     optional DestroyRequest destroyRequest = 5;
     optional PathRequest pathRequest = 6;
+    optional UnityConfigRequest unityConfigRequest = 7;
 }
 
 local_message UnityEngineResponse {
@@ -52,16 +90,22 @@ local_message UnityEngineResponse {
     optional InstantiateResponse instantiateResponse = 4;
     optional DestroyResponse destroyResponse = 5;
     optional PathResponse pathResponse = 6;
+    optional UnityConfigResponse unityConfigResponse = 7;
 }
 
-local_message GmGameObject {
-  optional string name = 1;
-  optional GmTransform transform = 2;
-}
 
 local_message UnityInstanceUpdate {
   optional string playerId = 1;
   optional string region = 2;
+}
+
+local_message UnityConfigRequest {
+  optional int32 messageId = 1;
+}
+
+local_message UnityConfigResponse {
+  optional int32 messageId = 1;
+  repeated NpcGroupDef npcGroupDef = 2;
 }
 
 local_message PathRequest {
@@ -75,6 +119,7 @@ local_message PathResponse {
       None = 0;
       Success = 1;
       NotFound = 2;
+      Busy = 3;
   }
   optional Status status = 1;
   repeated GmVector3 path = 2;

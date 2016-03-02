@@ -36,20 +36,11 @@ public class Store {
         this.serialization = serialization;
         logger.info("Entity serialization is " + serialization);
 
-        if (storeName.equals("gamecloud")) {
-            this.store = (Storable) new CloudStore();
-            this.store.connect();
-        } else if (storeName.equals("jdbc")) {
+        if (storeName.equals("jdbc")) {
             this.store = (Storable) new JdbcStore();
-            this.store.connect();
-        } else if (storeName.equals("couchbase")) {
-            this.store = (Storable) new CouchbaseStore();
             this.store.connect();
         } else if (storeName.equals("memory")) {
             this.store = (Storable) new MemoryStore();
-            this.store.connect();
-        } else if (storeName.equals("file")) {
-            this.store = (Storable) new FileStore();
             this.store.connect();
         }
     }

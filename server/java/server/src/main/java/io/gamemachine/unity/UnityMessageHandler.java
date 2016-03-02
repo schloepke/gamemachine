@@ -21,17 +21,13 @@ import scala.concurrent.duration.Duration;
 
 public class UnityMessageHandler extends UntypedActor {
 
-    private static Map<String,UnityInstanceData> instances = new ConcurrentHashMap<String,UnityInstanceData>();
+    public static Map<String,UnityInstanceData> instances = new ConcurrentHashMap<String,UnityInstanceData>();
     public static String name = UnityMessageHandler.class.getSimpleName();
     private static final Logger logger = LoggerFactory.getLogger(UnityMessageHandler.class);
 
     private ActorSelection unitySync = ActorUtil.getSelectionByName(UnitySync.name);
     private static Map<Integer,UnityEngine> engineRequests = new ConcurrentHashMap<Integer,UnityEngine>();
-    private long tickInterval = 5000L;
 
-    public UnityMessageHandler() {
-        scheduleOnce(tickInterval,"updateAlive");
-    }
 
     @Override
     public void onReceive(Object message) throws Exception {
@@ -45,11 +41,7 @@ public class UnityMessageHandler extends UntypedActor {
             } else if (unityMessage.unityInstanceUpdate != null) {
                 updateUnityInstance(unityMessage.unityInstanceUpdate);
             }
-        } else if (message instanceof String) {
-            updateAlive();
-            scheduleOnce(tickInterval,"updateAlive");
         }
-
     }
 
     public static void addEngineRequest(int id, UnityEngine unityEngine) {
@@ -83,15 +75,6 @@ public class UnityMessageHandler extends UntypedActor {
         return null;
     }
 
-    private void updateAlive() {
-        for (String key : instances.keySet()) {
-            UnityInstanceData data = instances.get(key);
-            if (System.currentTimeMillis() - data.lastUpdate > 5000L) {
-                instances.remove(key);
-            }
-        }
-    }
-
     private void HandleUnityEngineResponse(UnityEngineResponse response) {
         UnityEngine engine;
         if (response.overlapSphereResponse != null) {
@@ -116,17 +99,13 @@ public class UnityMessageHandler extends UntypedActor {
             engineRequests.remove(response.destroyResponse.messageId);
         } else if (response.pathResponse != null) {
             engine = engineRequests.get(response.pathResponse.messageId);
-            engine.pa(response.pathResponse);
-            engineRequests.remove(response.destroyResponse.messageId);
+            engine.pathResponse(response.pathResponse);
+            engineRequests.remove(response.pathResponse.messageId);
+        } else if (response.unityConfigResponse != null) {
+            engine = engineRequests.get(response.unityConfigResponse.messageId);
+            engine.unityConfigResponse(response.unityConfigResponse);
+            engineRequests.remove(response.unityConfigResponse.messageId);
         }
-    }
-
-    public final void scheduleOnce(long delay, String message) {
-        getContext()
-                .system()
-                .scheduler()
-                .scheduleOnce(Duration.create(delay, TimeUnit.MILLISECONDS), getSelf(), message, getContext().dispatcher(),
-                        null);
     }
 
 }

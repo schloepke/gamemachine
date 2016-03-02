@@ -20,24 +20,15 @@ public class UnitySync extends UntypedActor {
 
     public static String name = UnitySync.class.getSimpleName();
     private static final Logger logger = LoggerFactory.getLogger(UnitySync.class);
-    private static long expireTime = 3L;
+
     private static Map<SyncObject.Type, Field> fields = new ConcurrentHashMap<SyncObject.Type, Field>();
 
-    private static Map<String, SyncObject> syncObjects = new ConcurrentHashMap<String, SyncObject>();
+    public static Map<String, SyncObject> syncObjects = new ConcurrentHashMap<String, SyncObject>();
 
-    private static Map<String, UnityEngineHandler> handlers = new ConcurrentHashMap<String, UnityEngineHandler>();
-
-    public UnitySync() {
-        scheduleOnce(2000L, "checkExpired");
-    }
+    public static Map<String, UnityEngineHandler> handlers = new ConcurrentHashMap<String, UnityEngineHandler>();
 
     @Override
     public void onReceive(Object message) throws Exception {
-        if (message instanceof String) {
-            checkExpired();
-            return;
-        }
-
         if (message instanceof SyncObjects) {
             SyncObjects syncObjects = (SyncObjects) message;
             for (SyncObject syncObject : syncObjects.syncObject) {
@@ -66,22 +57,7 @@ public class UnitySync extends UntypedActor {
         }
     }
 
-    private void checkExpired() {
-        for (SyncObject syncObject : syncObjects.values()) {
-            if (System.currentTimeMillis() - syncObject.lastUpdate > 2000) {
-                syncObjects.remove(syncObject.id);
-                UnityEngineHandler handler = handlers.get(syncObject.id);
-                if (handler == null) {
-                    logger.warn("Handler not found for syncObject "+syncObject.id);
-                } else {
-                    handler.componentRemoved(syncObject.id);
-                    handlers.remove(syncObject.id);
-                }
 
-            }
-        }
-        scheduleOnce(2000L, "checkExpired");
-    }
 
     private void set(SyncObject syncObject) {
         syncObject.lastUpdate = System.currentTimeMillis();

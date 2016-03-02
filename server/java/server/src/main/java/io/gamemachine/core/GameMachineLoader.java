@@ -3,6 +3,9 @@ package io.gamemachine.core;
 import java.util.ArrayList;
 
 import io.gamemachine.unity.*;
+import io.gamemachine.unity.UnityPeriodic;
+import io.gamemachine.unity.unity_old.UnityGameMessageHandler;
+import io.gamemachine.unity.unity_old.UnityInstanceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +16,6 @@ import io.gamemachine.config.AppConfig;
 import io.gamemachine.config.GameLimits;
 import io.gamemachine.grid.GridExpiration;
 import io.gamemachine.grid.GridService;
-import io.gamemachine.messages.GameConfig;
 import io.gamemachine.objectdb.DbActor;
 import io.gamemachine.process.AkkaProcessRunner;
 import io.gamemachine.process.UnityProcessManager;
@@ -63,8 +65,11 @@ public class GameMachineLoader {
     public static void startIncoming(int nodeCount) {
         actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(Incoming.class)), Incoming.name);
 
-        actorSystem.actorOf(Props.create(UnityMessageHandler.class), UnityMessageHandler.name);
-        actorSystem.actorOf(Props.create(UnitySync.class), UnitySync.name);
+        actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnityMessageHandler.class)), UnityMessageHandler.name);
+        actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnitySync.class)), UnitySync.name);
+
+        actorSystem.actorOf(Props.create(UnityPeriodic.class), UnityPeriodic.name);
+        //actorSystem.actorOf(Props.create(UnitySync.class), UnitySync.name);
     }
 
     public static void startCacheUpdateHandler() {

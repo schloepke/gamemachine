@@ -4,7 +4,7 @@ import com.typesafe.config.Config;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.ActorUtil;
-import io.gamemachine.unity.UnityInstanceTest;
+import io.gamemachine.unity.unity_old.UnityInstanceTest;
 
 public class TestRunner {
 
