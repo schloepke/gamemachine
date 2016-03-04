@@ -1,6 +1,6 @@
 package io.gamemachine.unity.unity_engine;
 
-import io.gamemachine.messages.SyncObject;
+import io.gamemachine.unity.unity_engine.engine_results.UnityEngineResult;
 
 /**
  * Created by chris on 2/28/2016.

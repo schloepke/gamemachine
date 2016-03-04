@@ -3,6 +3,14 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
+local_persistent_message NpcName {
+  optional string id = 1;
+  optional string firstName = 2;
+  optional string lastName = 3;
+  optional int32 recordId = 4;
+  optional bool taken = 5;
+}
+
 local_message GmNpc {
   optional GmTransform transform = 1;
   optional string testName = 2;
@@ -12,28 +20,26 @@ local_message GmNpc {
   optional GmQuaternion testRotation = 6;
 }
 
+local_message GmSpawn {
 
-local_message NpcDef {
-  enum WeaponType {
-    None = 0;
-    Melee = 1;
-    Ranged = 2;
+  enum AiType {
+    Civilian = 0;
+    Guard = 1;
+    AggressiveMob = 2;
+    PassiveMob = 3;
   }
 
-  optional WeaponType weaponType = 1;
-  optional string prefabName = 2;
-  optional int32 count = 3;
-  optional string weaponName = 4;
-  optional float agroRange = 5;
-  optional float rangedDistance = 6;
-  optional float meleeDistance = 7;
-  optional float leashDistance = 8;
+  optional string prefabName = 1;
+  optional string weaponName = 3;
+  optional GmVector3 spawnPosition = 4;
+  optional AiType aiType = 5;
 }
 
-local_message NpcGroupDef {
-  repeated NpcDef npcDef = 1;
+local_message GmSpawnGroup {
+  repeated GmSpawn spawn = 1;
   optional GmWaypointRoute waypointRoute = 2;
   optional string name = 3;
+  optional GmVector3 spawnPosition = 4;
 }
 
 local_message GmWaypoint {
@@ -70,7 +76,7 @@ local_message UnityMessage {
   optional string playerId = 2;
   optional UnityEngineRequest unityEngineRequest = 3;
   optional UnityEngineResponse unityEngineResponse = 4;
-  optional UnityInstanceUpdate unityInstanceUpdate = 5;
+  optional UnityRegionUpdate unityRegionUpdate = 5;
 }
 
 local_message UnityEngineRequest {
@@ -94,9 +100,11 @@ local_message UnityEngineResponse {
 }
 
 
-local_message UnityInstanceUpdate {
+local_message UnityRegionUpdate {
   optional string playerId = 1;
   optional string region = 2;
+  optional GmVector3 position = 3;
+  optional float size = 4;
 }
 
 local_message UnityConfigRequest {
@@ -105,7 +113,8 @@ local_message UnityConfigRequest {
 
 local_message UnityConfigResponse {
   optional int32 messageId = 1;
-  repeated NpcGroupDef npcGroupDef = 2;
+  repeated GmSpawnGroup spawnGroups = 2;
+  repeated GmSpawn spawns = 3;
 }
 
 local_message PathRequest {
@@ -754,6 +763,9 @@ local_persistent_message Character {
   optional string guildId = 19;
   optional string bindPoint = 20;
   optional Factions.Faction faction = 22;
+  optional string ownerId = 23;
+  optional string firstName = 24;
+  optional string lastName = 25;
 }
 
 local_message Factions {

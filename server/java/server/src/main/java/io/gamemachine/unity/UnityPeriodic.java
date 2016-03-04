@@ -3,7 +3,7 @@ package io.gamemachine.unity;
 import akka.actor.UntypedActor;
 import io.gamemachine.messages.SyncObject;
 import io.gamemachine.unity.unity_engine.UnityEngineHandler;
-import io.gamemachine.unity.unity_engine.UnityInstanceData;
+import io.gamemachine.unity.unity_engine.RegionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.concurrent.duration.Duration;
@@ -59,10 +59,10 @@ public class UnityPeriodic extends UntypedActor {
     }
 
     private void updateAlive() {
-        for (String key : UnityMessageHandler.instances.keySet()) {
-            UnityInstanceData data = UnityMessageHandler.instances.get(key);
+        for (String key : UnityMessageHandler.regions.keySet()) {
+            RegionData data = UnityMessageHandler.regions.get(key);
             if (System.currentTimeMillis() - data.lastUpdate > 5000L) {
-                UnityMessageHandler.instances.remove(key);
+                UnityMessageHandler.regions.remove(key);
             }
         }
     }

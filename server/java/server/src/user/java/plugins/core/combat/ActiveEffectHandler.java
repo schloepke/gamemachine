@@ -304,7 +304,7 @@ public class ActiveEffectHandler extends UntypedActor {
                         originProxy.getZoneName());
             }
 
-            logger.warning(statusEffect.id + " target " + targetProxy.getEntityId() + " damage " + value + " type "
+            logger.warning(statusEffect.id + " moveTarget " + targetProxy.getEntityId() + " damage " + value + " type "
                     + statusEffect.type + " health " + targetProxy.get("health"));
         }
 

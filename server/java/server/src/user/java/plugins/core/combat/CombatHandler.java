@@ -70,7 +70,7 @@ public class CombatHandler extends GameMessageActor {
         } else if (targetType == SkillRequest.TargetType.BuildObject) {
             VitalsHandler.ensure(entityId, Vitals.VitalsType.BuildObject, zone);
         } else {
-            throw new RuntimeException("Invalid target type " + targetType);
+            throw new RuntimeException("Invalid moveTarget type " + targetType);
         }
     }
 

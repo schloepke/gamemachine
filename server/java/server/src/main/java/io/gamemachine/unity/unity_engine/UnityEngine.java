@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import io.gamemachine.messages.*;
 import io.gamemachine.net.Connection;
 import io.gamemachine.unity.UnityMessageHandler;
+import io.gamemachine.unity.unity_engine.engine_results.*;
 import io.gamemachine.unity.unity_engine.unity_types.GameObject;
 import io.gamemachine.unity.unity_engine.unity_types.Quaternion;
 import io.gamemachine.unity.unity_engine.unity_types.Vector3;
@@ -107,7 +108,8 @@ public class UnityEngine {
 
     public void unityConfigResponse(UnityConfigResponse response) {
         UnityConfigResult result = new UnityConfigResult();
-        result.npcGroupDefs = response.npcGroupDef;
+        result.spawnGroups = response.spawnGroups;
+        result.spawns = response.spawns;
 
         handler.onEngineResult(result);
     }

@@ -1,4 +1,4 @@
-package io.gamemachine.unity.unity_old;
+package io.gamemachine.unity_old;
 
 import io.gamemachine.messages.GameMessage;
 import io.gamemachine.messages.UnityInstanceStatus;

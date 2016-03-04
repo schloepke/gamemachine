@@ -22,7 +22,7 @@ public abstract class Plugin {
     private static final Logger logger = LoggerFactory.getLogger(Plugin.class);
     private static Map<String, Config> configs = new ConcurrentHashMap<String, Config>();
 
-    private static String pluginPath = AppConfig.envRoot + File.separator + "java" + File.separator + "server" + File.separator + "src" + File.separator + "user" + File.separator + "java" + File.separator + "plugins";
+    public static String pluginPath = AppConfig.envRoot + File.separator + "java" + File.separator + "server" + File.separator + "src" + File.separator + "user" + File.separator + "java" + File.separator + "plugins";
 
     public abstract void start();
 

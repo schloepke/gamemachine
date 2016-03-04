@@ -1,4 +1,16 @@
 
+CREATE TABLE npc_names (
+
+  npc_name_id varchar(1024) DEFAULT NULL,
+
+  npc_name_first_name varchar(1024) DEFAULT NULL,
+
+  npc_name_last_name varchar(1024) DEFAULT NULL,
+
+  npc_name_taken boolean DEFAULT NULL,
+
+id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+);
 CREATE TABLE boats (
 
   boat_id varchar(1024) DEFAULT NULL,
@@ -264,6 +276,12 @@ CREATE TABLE characters (
   character_bind_point varchar(1024) DEFAULT NULL,
 
   character_faction integer,
+
+  character_owner_id varchar(1024) DEFAULT NULL,
+
+  character_first_name varchar(1024) DEFAULT NULL,
+
+  character_last_name varchar(1024) DEFAULT NULL,
 
       zone_zone_name varchar(1024) DEFAULT NULL,
     

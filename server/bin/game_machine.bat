@@ -3,7 +3,7 @@ title "Game Machine"
 set GM_HOME=%~dp0..
 set GM_CLASSPATH=%GM_HOME%\java\server\lib\*
 
-set MAX_HEAP=500m
+set MAX_HEAP=800m
 
 set JAVA_OPTS=-Xmx%MAX_HEAP%
 

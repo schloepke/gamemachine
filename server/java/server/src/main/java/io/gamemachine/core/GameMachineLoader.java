@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import io.gamemachine.unity.*;
 import io.gamemachine.unity.UnityPeriodic;
-import io.gamemachine.unity.unity_old.UnityGameMessageHandler;
-import io.gamemachine.unity.unity_old.UnityInstanceManager;
+import io.gamemachine.unity_old.UnityGameMessageHandler;
+import io.gamemachine.unity_old.UnityInstanceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

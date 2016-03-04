@@ -1,14 +1,15 @@
 package io.gamemachine.unity;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
 
 import io.gamemachine.messages.UnityEngineResponse;
-import io.gamemachine.messages.UnityInstanceUpdate;
+import io.gamemachine.messages.UnityRegionUpdate;
 import io.gamemachine.net.Connection;
 import io.gamemachine.unity.unity_engine.UnityEngine;
-import io.gamemachine.unity.unity_engine.UnityInstanceData;
+import io.gamemachine.unity.unity_engine.RegionData;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,12 +17,11 @@ import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.messages.UnityMessage;
-import scala.concurrent.duration.Duration;
 
 
 public class UnityMessageHandler extends UntypedActor {
 
-    public static Map<String,UnityInstanceData> instances = new ConcurrentHashMap<String,UnityInstanceData>();
+    public static Map<String,RegionData> regions = new ConcurrentHashMap<String,RegionData>();
     public static String name = UnityMessageHandler.class.getSimpleName();
     private static final Logger logger = LoggerFactory.getLogger(UnityMessageHandler.class);
 
@@ -38,8 +38,8 @@ public class UnityMessageHandler extends UntypedActor {
                 unitySync.tell(unityMessage.syncObjects, null);
             } else if (unityMessage.unityEngineResponse != null) {
                 HandleUnityEngineResponse(unityMessage.unityEngineResponse);
-            } else if (unityMessage.unityInstanceUpdate != null) {
-                updateUnityInstance(unityMessage.unityInstanceUpdate);
+            } else if (unityMessage.unityRegionUpdate != null) {
+                updateRegionData(unityMessage.unityRegionUpdate);
             }
         }
     }
@@ -49,27 +49,53 @@ public class UnityMessageHandler extends UntypedActor {
     }
 
     public static boolean isAlive(String region) {
-        return instances.containsKey(region);
-    }
+        if (!regions.containsKey(region)) {
+            return false;
+        }
 
-    private void updateUnityInstance(UnityInstanceUpdate update) {
-        UnityInstanceData data;
-        if (instances.containsKey(update.region)) {
-            data = instances.get(update.region);
-            data.region = update.region;
-            data.lastUpdate = System.currentTimeMillis();
+        RegionData data = regions.get(region);
+        if (System.currentTimeMillis() - data.lastUpdate > 20L) {
+            return false;
         } else {
-            data = new UnityInstanceData();
-            data.playerId = update.playerId;
-            data.region = update.region;
-            data.lastUpdate = System.currentTimeMillis();
-            instances.put(data.region,data);
+            return true;
         }
     }
 
+    public static void setRegionStatus(String region, RegionData.Status status) {
+        regions.get(region).status = status;
+    }
+
+    public static Collection<RegionData> getRegions() {
+        return regions.values();
+    }
+
+    public static RegionData getRegionData(String region) {
+        if (regions.containsKey(region)) {
+            return regions.get(region);
+        } else {
+            return null;
+        }
+    }
+
+    private void updateRegionData(UnityRegionUpdate update) {
+        RegionData data;
+        if (!regions.containsKey(update.region)) {
+            data = new RegionData();
+        } else {
+            data = regions.get(update.region);
+        }
+
+        data.playerId = update.playerId;
+        data.region = update.region;
+        data.position = Vector3.fromGmVector3(update.position);
+        data.size = update.size;
+        data.lastUpdate = System.currentTimeMillis();
+        regions.put(data.region,data);
+    }
+
     public static Connection getConnection(String region) {
-        if (instances.containsKey(region)) {
-            return Connection.getConnection(instances.get(region).playerId);
+        if (regions.containsKey(region)) {
+            return Connection.getConnection(regions.get(region).playerId);
         }
 
         return null;

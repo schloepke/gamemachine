@@ -1,4 +1,4 @@
-package io.gamemachine.unity.unity_engine;
+package io.gamemachine.unity.unity_engine.engine_results;
 
 import io.gamemachine.unity.unity_engine.unity_types.GameObject;
 

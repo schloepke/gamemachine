@@ -226,6 +226,18 @@ public class CharacterService {
         return characters.toByteArray();
     }
 
+    public void setName(String characterId, String firstName, String lastName) {
+        Character character = find(characterId);
+        if (character == null) {
+            throw new RuntimeException("Character not found "+characterId);
+        }
+        character.firstName = firstName;
+        character.lastName = lastName;
+
+        Character.db().save(character);
+        characters.put(character.id, character);
+    }
+
     public void setGuild(Character character, String guildId) {
         character.guildId = guildId;
         Character.db().save(character);

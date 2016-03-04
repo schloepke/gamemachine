@@ -58,9 +58,15 @@ public class NpcDemo {
             ps.setCharacter(playerId, characterId);
             PlayerService.getInstance().setZone(playerId, zone);
             //GameMachineLoader.getActorSystem().actorOf(Props.create(NpcEntity.class, playerId, characterId, mapSize, startPoint));
-            GameMachineLoader.getActorSystem().actorOf(Props.create(LandrushNpc.class, playerId, characterId));
+            GameMachineLoader.getActorSystem().actorOf(Props.create(LandrushNpc.class, playerId, characterId,"default"));
         }
         logger.warn("NpcDemo started with " + npcCount + " npc's");
+    }
+
+    public class NameGenerator {
+
+
+
     }
 
 }

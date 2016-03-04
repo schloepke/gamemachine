@@ -2,11 +2,14 @@ package io.gamemachine.unity.unity_engine.unity_types;
 
 import io.gamemachine.messages.GmVector3;
 
+import java.util.Random;
+
 public class Vector3 {
     public double x = 0;
     public double y = 0;
     public double z = 0;
 
+    private static  Random rand = new Random();
     public static Vector3 zero = new Vector3();
 
     public static Vector3 fromGmVector3(GmVector3 gmVec) {
@@ -78,6 +81,7 @@ public class Vector3 {
         z = other.z;
         return this;
     }
+
 
     public boolean isEqualTo(Vector3 other) {
         return (x == other.x && y == other.y && z == other.z);
