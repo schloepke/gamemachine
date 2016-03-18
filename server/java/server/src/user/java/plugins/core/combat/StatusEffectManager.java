@@ -134,13 +134,13 @@ public class StatusEffectManager extends UntypedActor {
 
         if (statusEffect.resource == StatusEffect.Resource.ResourceStamina) {
             if (vitalsProxy.get("stamina") < statusEffect.resourceCost) {
-                logger.warn("Insufficient stamina needed " + statusEffect.resourceCost);
+                //logger.warn("Insufficient stamina needed " + statusEffect.resourceCost);
                 return false;
             }
             vitalsProxy.subtract("stamina", statusEffect.resourceCost);
         } else if (statusEffect.resource == StatusEffect.Resource.ResourceMagic) {
             if (vitalsProxy.get("magic") < statusEffect.resourceCost) {
-                logger.warn("Insufficient magic needed " + statusEffect.resourceCost);
+                //logger.warn("Insufficient magic needed " + statusEffect.resourceCost);
                 return false;
             }
             vitalsProxy.subtract("magic", statusEffect.resourceCost);

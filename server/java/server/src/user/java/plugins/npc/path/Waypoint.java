@@ -1,4 +1,4 @@
-package io.gamemachine.unity.Path;
+package plugins.npc.path;
 
 import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
@@ -8,4 +8,9 @@ import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 public class Waypoint {
     public int order;
     public Vector3 position;
+
+    public Waypoint(Vector3 position, int order) {
+        this.position = position;
+        this.order = order;
+    }
 }

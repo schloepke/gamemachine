@@ -3,7 +3,38 @@
 // tracking updates.  You can change any of the fields in TrackData to suit your
 // needs, but do NOT remove the message definition!
 
-local_persistent_message NpcName {
+
+local_message Vectors {
+  repeated GmVector3 vector = 1;
+}
+
+local_message NpcUpdate {
+  enum Command {
+    None = 0;
+    Guard = 1;
+    Attack = 2;
+    Retreat = 3;
+    Stay = 4;
+    ChangeGroup = 5;
+    ChangeFaction = 6;
+    SetLeader = 7;
+  }
+
+  optional Command command = 1;
+  optional string target = 2;
+  optional int32 health = 3;
+  optional bool isDead = 4;
+  optional Factions.Faction faction = 5;
+  optional string groupId = 6;
+  optional string leaderId = 7;
+}
+
+local_message SyncComponentMessage {
+  optional string id = 1;
+  optional NpcUpdate npcUpdate = 2;
+}
+
+local_message NpcName {
   optional string id = 1;
   optional string firstName = 2;
   optional string lastName = 3;
@@ -11,45 +42,42 @@ local_persistent_message NpcName {
   optional bool taken = 5;
 }
 
-local_message GmNpc {
-  optional GmTransform transform = 1;
-  optional string testName = 2;
-  optional GmVector3 testVector = 3;
-  optional bool testBool = 4;
-  optional int32 testInt = 5;
-  optional GmQuaternion testRotation = 6;
-}
-
-local_message GmSpawn {
+local_message NpcData {
+  enum Action {
+    Waypoint = 0;
+    Attack = 1;
+    Guard = 2;
+    Leash = 3;
+  }
 
   enum AiType {
     Civilian = 0;
-    Guard = 1;
-    AggressiveMob = 2;
-    PassiveMob = 3;
+    Soldier = 1;
+    Mob = 2;
   }
-
-  optional string prefabName = 1;
-  optional string weaponName = 3;
-  optional GmVector3 spawnPosition = 4;
-  optional AiType aiType = 5;
+  optional GmTransform transform = 1;
+  optional string moveTarget = 2;
+  optional string combatTarget = 3;
+  optional bool hasLos = 4;
+  optional float combatTargetDistance = 5;
+  optional float heading = 6;
+  optional Action action = 7;
+  optional string referenceId = 8;
+  optional Factions.Faction faction = 9;
+  optional string id = 10;
+  optional float combatRange = 11;
+  optional AiType aiType = 12;
+  optional string leaderId = 13;
 }
 
-local_message GmSpawnGroup {
-  repeated GmSpawn spawn = 1;
-  optional GmWaypointRoute waypointRoute = 2;
-  optional string name = 3;
-  optional GmVector3 spawnPosition = 4;
+local_message NpcGroupData {
+  repeated NpcData npcData = 1;
+  optional string leader = 3;
+  optional Factions.Faction faction = 4;
+  optional string referenceId = 5;
+  optional string id = 6;
 }
 
-local_message GmWaypoint {
-  optional GmVector3 position = 1;
-  optional int32 order = 2;
-}
-
-local_message GmWaypointRoute {
-  repeated GmWaypoint waypoints = 1;
-}
 local_message GmGameObject {
   optional string name = 1;
   optional GmTransform transform = 2;
@@ -58,11 +86,11 @@ local_message GmGameObject {
 local_message SyncObject {
   enum Type {
     None = 0;
-    GmNpc = 1;
+    NpcData = 1;
   }
   
   optional Type type = 1;
-  optional GmNpc gmNpc = 2;
+  optional NpcData npcData = 2;
   optional string id = 3;
   optional int64 lastUpdate = 4;
 }
@@ -77,6 +105,9 @@ local_message UnityMessage {
   optional UnityEngineRequest unityEngineRequest = 3;
   optional UnityEngineResponse unityEngineResponse = 4;
   optional UnityRegionUpdate unityRegionUpdate = 5;
+  optional GroupSpawnRequest groupSpawnRequest = 6;
+  optional SyncComponentMessage syncComponentMessage = 7;
+  optional SpawnRequest spawnRequest = 8;
 }
 
 local_message UnityEngineRequest {
@@ -86,7 +117,7 @@ local_message UnityEngineRequest {
     optional InstantiateRequest instantiateRequest = 4;
     optional DestroyRequest destroyRequest = 5;
     optional PathRequest pathRequest = 6;
-    optional UnityConfigRequest unityConfigRequest = 7;
+
 }
 
 local_message UnityEngineResponse {
@@ -96,7 +127,6 @@ local_message UnityEngineResponse {
     optional InstantiateResponse instantiateResponse = 4;
     optional DestroyResponse destroyResponse = 5;
     optional PathResponse pathResponse = 6;
-    optional UnityConfigResponse unityConfigResponse = 7;
 }
 
 
@@ -107,14 +137,15 @@ local_message UnityRegionUpdate {
   optional float size = 4;
 }
 
-local_message UnityConfigRequest {
-  optional int32 messageId = 1;
+local_message GroupSpawnRequest {
+  optional NpcGroupData npcGroupData = 1;
+  optional string region = 3;
 }
 
-local_message UnityConfigResponse {
-  optional int32 messageId = 1;
-  repeated GmSpawnGroup spawnGroups = 2;
-  repeated GmSpawn spawns = 3;
+local_message SpawnRequest {
+  optional NpcData npcData = 1;
+  optional string groupReferenceId = 2;
+  optional string region = 3;
 }
 
 local_message PathRequest {
@@ -170,8 +201,8 @@ local_message InstantiateResponse {
 }
 
 local_message RaycastRequest {
-  required GmVector3 origin = 1;
-  required GmVector3 direction = 2;
+  required string originId = 1;
+  required string targetId = 2;
   required float maxDistance = 3;
   optional string layerMask = 4;
   optional bool all = 5;
@@ -484,31 +515,6 @@ local_message GmStats {
   optional int64 bytesPerMessageOut = 10;
 }
 
-local_message NpcData {
-  optional string id = 1;
-  optional GmVector3 spawnpoint = 2;
-  optional string leader = 3;
-  repeated string followers = 4;
-  optional string patrolRoute = 5;
-  optional Waypoint waypoint = 6;
-  enum NpcType {
-    None = 0;
-    Guard = 1;
-    Bandit = 2;
-    Animal = 3;
-    Civilian = 4;
-  }
-  optional NpcType npcType = 7;
-}
-
-local_message NpcDatas {
-  repeated NpcData npcData = 1;
-}
-
-local_message Waypoint {
-  optional string id = 1;
-  repeated GmVector3 position = 2;
-}
 
 local_persistent_message Territory {
   required string id = 1;
@@ -877,6 +883,7 @@ local_message GmTarget {
     Location = 6;
     Boat = 7;
     Vehicle = 8;
+    Npc = 9;
   }
   
   optional Type type = 1;
@@ -975,6 +982,7 @@ message TrackData {
     BuildObject = 6;
     Vehicle = 7;
     Boat = 8;
+    AllPlayers = 9;
   }
   optional EntityType neighborEntityType = 11;
   required EntityType entityType = 12;

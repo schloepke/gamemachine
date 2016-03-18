@@ -1,6 +1,5 @@
 package plugins.npc;
 
-import com.google.common.base.Strings;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
 import io.gamemachine.core.PlayerService;
@@ -8,9 +7,11 @@ import io.gamemachine.messages.*;
 import io.gamemachine.messages.Character;
 import io.gamemachine.regions.ZoneService;
 import io.gamemachine.unity.unity_engine.RegionData;
-import plugins.MyGameConfig;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,34 +19,18 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class NpcService {
 
-    private static int generateCount = 20000;
-    private static HashSet<String> names = new HashSet<>();
-
-    private static Random rand = new Random();
+    private static final Logger logger = LoggerFactory.getLogger(NpcService.class);
+    private HashSet<String> taken = new HashSet<>();
     private CharacterService cs;
     private PlayerService ps;
-    private List<NpcName> takenNames = new ArrayList<>();
-    private List<NpcName> freeNames = new ArrayList<>();
-    private Map<String,List<Npc>> npcs = new ConcurrentHashMap<>();
-    private int nameCount;
+    private Map<String,ArrayBlockingQueue<Npc>> npcs = new ConcurrentHashMap<>();
 
     private NpcService() {
-        NpcStaticNames.loadNames();
         ps = PlayerService.getInstance();
         cs = CharacterService.instance();
 
-        List<NpcName> npcNames = NpcName.db().findAll();
-        nameCount = npcNames.size();
-        for (NpcName npcName : npcNames) {
-            if (npcName.taken) {
-                takenNames.add(npcName);
-            } else {
-                freeNames.add(npcName);
-            }
-        }
-
-        if (nameCount < generateCount) {
-            generateNames();
+        for (Character character : Character.db().findAll()) {
+            taken.add(character.id);
         }
 
         populateRegions();
@@ -59,79 +44,73 @@ public class NpcService {
         return LazyHolder.INSTANCE;
     }
 
-    private void generateNames() {
-        while (nameCount < generateCount) {
-            String firstName = getFirstname();
-            String lastName = getLastname();
-            String fullName = firstName+" "+lastName;;
 
-            if (!names.contains(fullName)) {
-                names.add(fullName);
+    private HashSet<NpcName> getNames(int count) {
+        HashSet<NpcName> names = new HashSet<>();
 
-                NpcName npcName = NpcName.db().findFirst("npc_name_id = ?", fullName);
-                if (npcName != null) {
-                    continue;
-                }
-
-                npcName = new NpcName();
-                npcName.id = fullName;
-                npcName.firstName = firstName;
-                npcName.lastName = lastName;
-                NpcName.db().save(npcName);
-                freeNames.add(npcName);
-                nameCount++;
+        while(names.size() < count) {
+            NpcName npcName = new NpcName();
+            npcName.firstName = NpcStaticNames.getFirstname();
+            npcName.lastName = NpcStaticNames.getLastname();
+            npcName.id = npcName.firstName+" "+npcName.lastName;
+            if (!taken.contains(npcName.id)) {
+                names.add(npcName);
             }
         }
+
+        return names;
     }
 
     private void populateRegions() {
-        for (RegionData data : MyGameConfig.regions) {
+        for (RegionData data : RegionData.regions.values()) {
             createForRegion(data.region,(int)data.size);
         }
     }
 
     public void createForRegion(String region, int count) {
-        if (!npcs.containsKey(region)) {
-            npcs.put(region, new ArrayList<>());
+        if (npcs.containsKey(region)) {
+            return;
+        } else {
+            npcs.put(region, new ArrayBlockingQueue<>(count));
         }
 
-        List<Character> characters = Character.db().where("character_region = ?", region);
+        List<Character> characters = Character.db().where("character_owner_id = ?",region);
         for (Character character : characters) {
             Npc npc = new Npc();
-            npc.character = character;
+            npc.id = character.id;
             npcs.get(region).add(npc);
         }
-        if (npcs.size() >= count) {
+
+        int remaining = count - characters.size();
+        if (remaining == 0) {
             return;
         }
 
-        while (npcs.get(region).size() < count) {
-            Npc npc = getNpc("region",region);
+        HashSet<NpcName> npcNames = getNames(remaining);
+        for (NpcName npcName : npcNames) {
+            Npc npc = createNpc(npcName,region);
             npcs.get(region).add(npc);
         }
-
+        logger.warn("Npcs created for region "+region);
     }
 
-    public Npc getNpc(String ownerId, String region) {
+    public Npc getNpc(String region) {
+        return npcs.get(region).poll();
+    }
 
-        NpcName npcName = freeNames.remove(0);
-        takenNames.add(npcName);
+    public void releaseNpc(String region, Npc npc) {
+        npcs.get(region).add(npc);
+    }
 
-        String characterId = npcName.id;
-        String playerId = ownerId+"_"+characterId;
+    public boolean npcExists(String characterId) {
+        Character character = Character.db().findFirst("character_id = ?", characterId);
+        return character != null;
+    }
 
-        Character character = cs.find(playerId, characterId);
-        if (character != null) {
-            throw new RuntimeException("Duplicate character "+characterId);
-        }
+    public Npc createNpc(NpcName npcName, String ownerId) {
 
-        Player player = ps.find(playerId);
-        if (player != null) {
-            throw new RuntimeException("Duplicate player "+playerId);
-        }
-
-        player = ps.create(playerId, AppConfig.getDefaultGameId());
-        character = cs.create(playerId, characterId, Vitals.Template.NpcTemplate, null);
+        Player player = ps.create(npcName.id, AppConfig.getDefaultGameId());
+        Character character = cs.create(npcName.id, npcName.id, Vitals.Template.NpcTemplate, null);
 
         character.ownerId = ownerId;
         character.gameEntityPrefab = "default";
@@ -140,20 +119,12 @@ public class NpcService {
 
         cs.save(character);
 
-        ps.setCharacter(playerId, characterId);
-        PlayerService.getInstance().setZone(playerId, ZoneService.defaultZone());
+        ps.setCharacter(npcName.id, npcName.id);
+        PlayerService.getInstance().setZone(npcName.id, ZoneService.defaultZone());
 
         Npc npc = new Npc();
-        npc.character = character;
+        npc.id = character.id;
         return npc;
-    }
-
-    private static String getFirstname() {
-        return NpcStaticNames.syl2.get(rand.nextInt(NpcStaticNames.syl2.size()));
-    }
-
-    private static String getLastname() {
-        return NpcStaticNames.syl3.get(rand.nextInt(NpcStaticNames.syl3.size()));
     }
 
 }

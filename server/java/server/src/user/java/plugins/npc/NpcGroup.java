@@ -2,13 +2,12 @@ package plugins.npc;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Created by chris on 3/3/2016.
+ * Created by chris on 3/12/2016.
  */
 public class NpcGroup {
-    public Map<String,Npc> npcs = new ConcurrentHashMap<>();
+    public String id;
     public Npc leader;
+    public List<Npc> members = new ArrayList<>();
 }

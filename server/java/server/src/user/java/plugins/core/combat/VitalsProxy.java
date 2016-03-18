@@ -73,6 +73,9 @@ public class VitalsProxy {
     public float getDeathTime() {
         return vitals.deathTime;
     }
+    public void setDeathTime(float deathTime) {
+        vitals.deathTime = deathTime;
+    }
 
     public float getCombatRegenMod() {
         return vitals.combatRegenMod;

@@ -1,6 +1,8 @@
 package io.gamemachine.unity.unity_engine.unity_types;
 
 import io.gamemachine.messages.GmVector3;
+import io.gamemachine.messages.TrackData;
+import io.gamemachine.util.Mathf;
 
 import java.util.Random;
 
@@ -14,6 +16,14 @@ public class Vector3 {
 
     public static Vector3 fromGmVector3(GmVector3 gmVec) {
         return new Vector3(gmVec.x,gmVec.y,gmVec.z);
+    }
+
+    public static Vector3 fromTrackData(TrackData td) {
+        Vector3 vec = new Vector3();
+        vec.x = Mathf.ToDouble(td.x);
+        vec.y = Mathf.ToDouble(td.y);
+        vec.z = Mathf.ToDouble(td.z);
+        return vec;
     }
 
     public static GmVector3 toGmVector3(Vector3 vec) {

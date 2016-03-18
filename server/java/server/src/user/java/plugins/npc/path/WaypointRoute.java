@@ -1,6 +1,7 @@
-package io.gamemachine.unity.Path;
+package plugins.npc.path;
 
 import com.google.common.collect.Lists;
+import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,11 +42,11 @@ public class WaypointRoute {
         return wpIndex;
     }
 
-    public Waypoint CurrentWaypoint() {
+    public Waypoint currentWaypoint() {
         if (currentWaypoint == null) {
             return nextWaypoint();
         } else {
-            return currentWaypoint;
+            return nextWaypoint();
         }
     }
 

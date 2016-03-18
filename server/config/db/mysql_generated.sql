@@ -1,18 +1,4 @@
 
-DROP TABLE IF EXISTS npc_names;
-CREATE TABLE `npc_names` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-
-  npc_name_id varchar(256) DEFAULT NULL,
-
-  npc_name_first_name varchar(256) DEFAULT NULL,
-
-  npc_name_last_name varchar(256) DEFAULT NULL,
-
-  npc_name_taken tinyint(4) DEFAULT NULL,
-
-  PRIMARY KEY(`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS boats;
 CREATE TABLE `boats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,

@@ -3,6 +3,7 @@ package plugins.npc;
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
+import com.google.common.base.Strings;
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.*;
@@ -11,13 +12,13 @@ import io.gamemachine.unity.UnitySync;
 import io.gamemachine.unity.unity_engine.*;
 import io.gamemachine.unity.unity_engine.engine_results.DestroyResult;
 import io.gamemachine.unity.unity_engine.engine_results.InstantiateResult;
-import io.gamemachine.unity.unity_engine.engine_results.PathResult;
 import io.gamemachine.unity.unity_engine.engine_results.UnityEngineResult;
 import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import io.gamemachine.util.Mathf;
+import plugins.core.combat.CombatHandler;
+import plugins.core.combat.PlayerSkillHandler;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
-import plugins.npc.path.Waypoint;
 import scala.concurrent.duration.Duration;
 
 import java.util.Random;
@@ -27,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by chris on 3/1/2016.
  */
-public class NpcBase extends UntypedActor {
+public class SyncedNpc extends UntypedActor {
 
     private LoggingAdapter logger = Logging.getLogger(getContext().system(), this);
 
@@ -41,6 +42,8 @@ public class NpcBase extends UntypedActor {
     protected long idleInterval = 1000L;
     protected long startingInterval = 1000L;
     protected long regionUpdateInterval = 5000L;
+    protected long combatInterval = 1000L;
+    protected long lastCombatUpdate;
     protected double speed = 5d;
     protected Vector3 moveTarget = Vector3.zero;
     protected Random rand;
@@ -54,6 +57,7 @@ public class NpcBase extends UntypedActor {
     protected long lastPathRequest;
     protected boolean targetReached = false;
     protected InpcCombatAi combatAi;
+    protected NpcData gmNpc;
 
     public enum State {
         Idle,
@@ -61,7 +65,7 @@ public class NpcBase extends UntypedActor {
         Running
     }
 
-    public NpcBase(String characterId, String region) {
+    public SyncedNpc(String characterId, String region) {
         id = characterId;
         this.region = region;
         npc = Npc.npcs.get(id);
@@ -77,43 +81,12 @@ public class NpcBase extends UntypedActor {
         UnitySync.registerHandler(getSelf(), id);
     }
 
-    @Override
-    public void onReceive(Object message) throws Exception {
-        if (message instanceof HandlerMessage) {
-            HandlerMessage handlerMessage = (HandlerMessage)message;
-            if (handlerMessage.type == HandlerMessage.Type.EngineResult) {
-                onEngineResult((UnityEngineResult)handlerMessage.message);
-            } else if (handlerMessage.type == HandlerMessage.Type.ComponentAdd) {
-                componentAdded(handlerMessage.message);
-            } else if (handlerMessage.type == HandlerMessage.Type.ComponentUpdate) {
-                componentUpdated(handlerMessage.message);
-            } else if (handlerMessage.type == HandlerMessage.Type.ComponentRemove) {
-                componentRemoved((String)handlerMessage.message);
-            }
-            return;
-        }
 
-        String command = (String)message;
-
-        if (command.equals(State.Running.toString())) {
-            doRunning();
-            tick();
-        } else if (command.equals(State.Starting.toString())) {
-            doStarting();
-            tick();
-        } else if (command.equals(State.Idle.toString())) {
-            doIdle();
-            tick();
-        } else if (command.equals("regionUpdate")) {
-            regionUpdate();
-            scheduleOnce(regionUpdateInterval, "regionUpdate");
-        }
-
-    }
 
     @Override
     public void postStop() {
         grid.remove(id);
+        UnitySync.unregisterHandler(id);
         logger.warning("Npc stopping "+npc.id);
     }
 
@@ -173,55 +146,18 @@ public class NpcBase extends UntypedActor {
     }
 
     protected void move() {
-        if (moveTarget == Vector3.zero) {
-            return;
-        }
 
-        double deltatime = deltaTime();
-
-        if (deltatime > 0.1) {
-            logger.warning("Deltatime warning "+deltatime);
-            return;
-        }
-
-        double distanceToTarget = position.distance2d(moveTarget);
-        if (distanceToTarget <= 0.5) {
-            targetReached = true;
-            return;
-        }
-
-        targetReached = false;
-
-        Vector3 dir = Vector3.zero();
-        dir.x = moveTarget.x - position.x;
-        dir.z = moveTarget.z - position.z;
-        dir.normalizeLocal();
-
-
-        double x = (dir.x * speed * deltatime);
-        double z = (dir.z * speed * deltatime);
-
-        //logger.warning("position "+position.toString()+ " dist "+distanceToTarget+" x "+x+" * "+dir.x+" * 5 * "+deltatime);
-        //logger.warning("position "+position.toString()+ " dist "+distanceToTarget+" z "+x+" * "+dir.z+" * 5 * "+deltatime);
-
-        position.x += x;
-        position.z += z;
     }
 
-    protected double deltaTime() {
-        return (System.currentTimeMillis() - lastUpdate) / 1000d;
-    }
 
-    protected void initTrackData() {
+    private void initTrackData() {
         trackData = new TrackData();
         trackData.id = id;
         trackData.entityType = TrackData.EntityType.Npc;
         trackData.userDefinedData = new UserDefinedData();
     }
 
-
-
-    protected void sendTrackData() {
+    private void sendTrackData() {
         trackData.setX(Mathf.toInt(position.x + worldOffset));
         trackData.setY(Mathf.toInt(position.y + worldOffset));
         trackData.setZ(Mathf.toInt(position.z + worldOffset));
@@ -230,107 +166,110 @@ public class NpcBase extends UntypedActor {
     }
 
 
-    protected Vector3 randomStart() {
-        Vector3 max = new Vector3(regionData.position.x+regionData.size,0d,regionData.position.z+regionData.size);
-        return Mathf.randomInRange(regionData.position, max);
-    }
-
-    protected Vector3 randomMove(Vector3 min, Vector3 max, Vector3 pos, double range) {
-        Vector3 np = new Vector3();
-        double startX = Mathf.randomRange(pos.x-(range/2),pos.x+(range/2));
-        if (startX < min.x) {
-            startX = min.x;
-        } else if (startX > max.x) {
-            startX = max.x;
-        }
-        double startZ = Mathf.randomRange(pos.z-(range/2),pos.z+(range/2));
-        if (startZ < min.z) {
-            startZ = min.z;
-        } else if (startZ > max.z) {
-            startZ = max.z;
-        }
-        return new Vector3(startX,0d,startZ);
-    }
-
-    // User configurable
-
-    protected void doStarting() {
-        position = npc.position;
-        setState(State.Running);
-    }
-
-    protected void doIdle() {
+    private void doStarting() {
+        //position = npc.position;
+        //engine.instantiate("npc",id,npc.position, Quaternion.identity);
 
     }
 
-    protected void doRunning() {
+    private void doIdle() {
+
+    }
+
+    private void doRunning() {
         if (vitalsProxy.isDead()) {
-            sendTrackData();
+            vitalsProxy.setDeathTime(90000f);
+            grid.remove(id);
+            //engine.destroy(id);
+            //sendTrackData();
             lastUpdate = System.currentTimeMillis();
+            sendSync();
             return;
         }
 
         npc.setPosition(npc.id,position);
-        updateTarget();
+        //updateTarget();
 
-        move();
+        //move();
 
         lastUpdate = System.currentTimeMillis();
         sendTrackData();
 
-        if (combatAi != null) {
-            combatAi.update(position);
+       if (System.currentTimeMillis() - lastCombatUpdate > combatInterval) {
+           combatUpdate();
+           sendSync();
+           lastCombatUpdate = System.currentTimeMillis();
+       }
+    }
+
+    protected void combatUpdate() {
+        if (gmNpc == null) {
+            return;
         }
-    }
 
-    protected void updateTarget() {
-
-        if (moveTarget == Vector3.zero || targetReached) {
-            if (path.size() > 0) {
-                moveTarget = path.poll();
-                return;
-            }
-
-            if (System.currentTimeMillis() - lastPathRequest < 500) {
-                return;
-            }
-
-            Vector3 wanted;
-
-            if (npc.isLeader()) {
-                if (npc.hasRoute()) {
-                    Waypoint wp = npc.route.currentWaypoint();
-                    if (wp.position.distance2d(position) <= 0.5) {
-                        wp = npc.route.nextWaypoint();
-                    }
-                    wanted = wp.position;
-                    //logger.warning("wanted "+wanted.toString());
-                } else {
-                    wanted = randomMoveInRegion(100D);
-
-                }
-            } else if (npc.hasLeader()) {
-                wanted = npc.getLeader().position;
-            } else {
-                wanted = randomMoveInRegion(100D);
-            }
-
-            if (wanted == null) {
-                logger.warning("Wanted is null");
-                return;
-            }
-            findPath(position,wanted);
+        if (Strings.isNullOrEmpty(gmNpc.combatTarget)) {
+            return;
         }
+
+        SkillRequest request = createAttack();
+        GameMessage gameMessage = new GameMessage();
+        gameMessage.skillRequest = request;
+
+        //logger.warning("Attack "+gmNpc.combatTarget);
+        //logger.warning("Health "+vitalsProxy.get("health"));
+        CombatHandler.tell(gameMessage,id,CombatHandler.name);
     }
 
-    protected Vector3 randomMoveInRegion(double distance) {
-        Vector3 max = new Vector3(regionData.position.x+regionData.size,0d,regionData.position.z+regionData.size);
-        return randomMove(regionData.position, max, position, distance);
+    private SkillRequest createAttack() {
+        SkillRequest skillRequest = new SkillRequest();
+        skillRequest.originEntityId = id;
+        skillRequest.attackerCharacterId = id;
+        skillRequest.playerSkillId = "Hammer blow";
+        skillRequest.targetId = gmNpc.combatTarget;
+        skillRequest.playerSkill = PlayerSkillHandler.getTemplate(skillRequest.playerSkillId);
+        return skillRequest;
     }
 
-    protected void findPath(Vector3 start, Vector3 end) {
-        engine.findPath(start, end);
-        lastPathRequest = System.currentTimeMillis();
+    public void sendSync() {
+        SyncComponentMessage msg = new SyncComponentMessage();
+        msg.id = id;
+        msg.npcUpdate = new NpcUpdate();
+        msg.npcUpdate.health = vitalsProxy.get("health");
+        msg.npcUpdate.isDead = vitalsProxy.isDead();
+        engine.syncComponentMessage(msg);
+    }
+
+    @Override
+    public void onReceive(Object message) throws Exception {
+        if (message instanceof HandlerMessage) {
+            HandlerMessage handlerMessage = (HandlerMessage)message;
+            if (handlerMessage.type == HandlerMessage.Type.EngineResult) {
+                onEngineResult((UnityEngineResult)handlerMessage.message);
+            } else if (handlerMessage.type == HandlerMessage.Type.ComponentAdd) {
+                componentAdded(handlerMessage.message);
+            } else if (handlerMessage.type == HandlerMessage.Type.ComponentUpdate) {
+                componentUpdated(handlerMessage.message);
+            } else if (handlerMessage.type == HandlerMessage.Type.ComponentRemove) {
+                componentRemoved((String)handlerMessage.message);
+            }
+            return;
+        }
+
+        String command = (String)message;
+
+        if (command.equals(State.Running.toString())) {
+            doRunning();
+            tick();
+        } else if (command.equals(State.Starting.toString())) {
+            doStarting();
+            tick();
+        } else if (command.equals(State.Idle.toString())) {
+            doIdle();
+            tick();
+        } else if (command.equals("regionUpdate")) {
+            regionUpdate();
+            scheduleOnce(regionUpdateInterval, "regionUpdate");
+        }
     }
 
     public void onEngineResult(UnityEngineResult result) {
@@ -351,28 +290,20 @@ public class NpcBase extends UntypedActor {
             } else {
                 logger.warning("Destroy error " + destroyResult.status.toString());
             }
-        } else if (result instanceof PathResult) {
-            PathResult pathResult = (PathResult)result;
-            if (pathResult.status != PathResponse.Status.Success) {
-                logger.warning("Path error "+pathResult.status.toString());
-            } else {
-                path.clear();
-                //logger.warning("paths "+pathResult.path.size());
-                for (Vector3 vec : pathResult.path) {
-                    path.add(vec);
-                }
-            }
         }
     }
 
     public void componentUpdated(Object object) {
-        if (object instanceof NpcData) {
-            NpcData gmNpc = (NpcData) object;
-            //position = Vector3.fromGmVector3(gmNpc.transform.position);
+        SyncObject syncObject = (SyncObject)object;
+
+        if (syncObject.npcData != null) {
+            gmNpc = syncObject.npcData;
+            position = Vector3.fromGmVector3(gmNpc.transform.position);
         }
     }
 
     public void componentRemoved(String objectId) {
+        gmNpc = null;
         setState(State.Idle);
         logger.warning("Component removed " + objectId);
     }

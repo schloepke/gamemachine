@@ -2,6 +2,7 @@ package io.gamemachine.unity.unity_engine;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import akka.actor.ActorRef;
 import io.gamemachine.messages.*;
 import io.gamemachine.net.Connection;
 import io.gamemachine.unity.UnityMessageHandler;
@@ -14,9 +15,9 @@ public class UnityEngine {
 
     private static AtomicInteger requestId = new AtomicInteger();
     private String region;
-    private UnityEngineHandler handler;
+    private ActorRef handler;
 
-    public UnityEngine(String region, UnityEngineHandler handler) {
+    public UnityEngine(String region, ActorRef handler) {
         this.region = region;
         this.handler = handler;
     }
@@ -39,8 +40,8 @@ public class UnityEngine {
             clientMessage.unityMessage.unityEngineRequest.destroyRequest = (DestroyRequest) request;
         } else if (request instanceof PathRequest) {
             clientMessage.unityMessage.unityEngineRequest.pathRequest = (PathRequest) request;
-        } else if (request instanceof UnityConfigRequest) {
-            clientMessage.unityMessage.unityEngineRequest.unityConfigRequest = (UnityConfigRequest) request;
+        } else if (request instanceof SyncComponentMessage) {
+            clientMessage.unityMessage.syncComponentMessage = (SyncComponentMessage)request;
         }
 
         Connection connection = UnityMessageHandler.getConnection(region);
@@ -52,76 +53,78 @@ public class UnityEngine {
     }
 
     public boolean isAlive() {
-       return UnityMessageHandler.isAlive(region);
+       return RegionData.isAlive(region);
     }
 
+    private void tellHandler(Object message) {
+        HandlerMessage handlerMessage = new HandlerMessage(HandlerMessage.Type.EngineResult);
+        handlerMessage.message = message;
+        handler.tell(handlerMessage,null);
+    }
     // Handle unity responses
     public void sphereCastResponse(SphereCastResponse response) {
         SphereCastResult result = new SphereCastResult();
         for (GmGameObject gmGo : response.gameObjects) {
             result.gameObjects.add(GameObject.fromGmGameObject(gmGo));
         }
-        handler.onEngineResult(result);
+        tellHandler(result);
     }
 
     public void overlapSphereResponse(OverlapSphereResponse response) {
         OverlapSphereResult result = new OverlapSphereResult();
-        for (GmGameObject gmGo : response.gameObjects) {
-            result.gameObjects.add(GameObject.fromGmGameObject(gmGo));
+        if (response.gameObjects != null) {
+            for (GmGameObject gmGo : response.gameObjects) {
+                result.gameObjects.add(GameObject.fromGmGameObject(gmGo));
+            }
         }
-        handler.onEngineResult(result);
+
+        tellHandler(result);
     }
 
     public void raycastResponse(RaycastResponse response) {
         RaycastResult result = new RaycastResult();
-        for (GmGameObject gmGo : response.gameObjects) {
-            result.gameObjects.add(GameObject.fromGmGameObject(gmGo));
+        if (response.gameObjects != null) {
+            for (GmGameObject gmGo : response.gameObjects) {
+                result.gameObjects.add(GameObject.fromGmGameObject(gmGo));
+            }
         }
+
         result.hit = response.hit;
-        handler.onEngineResult(result);
+        tellHandler(result);
     }
 
     public void instantiateResponse(InstantiateResponse response) {
         InstantiateResult result = new InstantiateResult();
         result.status = response.status;
-        handler.onEngineResult(result);
+        tellHandler(result);
     }
 
     public void destroyResponse(DestroyResponse response) {
         DestroyResult result = new DestroyResult();
         result.status = response.status;
-        handler.onEngineResult(result);
+        tellHandler(result);
     }
 
     public void pathResponse(PathResponse response) {
         PathResult result = new PathResult();
 
-        if (result.status == PathResponse.Status.Success && result.path != null) {
+        if (response.status == PathResponse.Status.Success && response.path != null) {
             for (GmVector3 vec : response.path) {
                 result.path.add(Vector3.fromGmVector3(vec));
             }
         }
 
         result.status = response.status;
-        handler.onEngineResult(result);
+        tellHandler(result);
     }
 
-    public void unityConfigResponse(UnityConfigResponse response) {
-        UnityConfigResult result = new UnityConfigResult();
-        result.spawnGroups = response.spawnGroups;
-        result.spawns = response.spawns;
-
-        handler.onEngineResult(result);
-    }
 
 
     // Send unity requests
 
-    public void unityConfigRequest() {
-        UnityConfigRequest request = new UnityConfigRequest();
-        request.messageId = requestId.getAndIncrement();
 
-        SendRequest(request,request.messageId);
+    public void syncComponentMessage(SyncComponentMessage message) {
+        SendRequest(message,requestId.getAndIncrement());
     }
 
     public void findPath(Vector3 start, Vector3 end) {
@@ -177,10 +180,10 @@ public class UnityEngine {
         SendRequest(request,request.messageId);
     }
 
-    public void raycast(Vector3 origin, Vector3 direction, float distance, String layerMask) {
+    public void raycast(String originId, String targetId, float distance, String layerMask) {
         RaycastRequest request = new RaycastRequest();
-        request.origin = Vector3.toGmVector3(origin);
-        request.direction = Vector3.toGmVector3(direction);
+        request.originId = originId;
+        request.targetId = targetId;
         request.maxDistance = distance;
         request.layerMask = layerMask;
         request.messageId = requestId.getAndIncrement();

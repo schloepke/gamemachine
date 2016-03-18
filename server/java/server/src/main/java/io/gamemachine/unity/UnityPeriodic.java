@@ -1,9 +1,9 @@
 package io.gamemachine.unity;
 
+import akka.actor.ActorRef;
 import akka.actor.UntypedActor;
 import io.gamemachine.messages.SyncObject;
-import io.gamemachine.unity.unity_engine.UnityEngineHandler;
-import io.gamemachine.unity.unity_engine.RegionData;
+import io.gamemachine.unity.unity_engine.HandlerMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.concurrent.duration.Duration;
@@ -33,10 +33,7 @@ public class UnityPeriodic extends UntypedActor {
 
         if (message instanceof String) {
             String command = (String)message;
-            if (command.equals("updateAlive")) {
-                updateAlive();
-                scheduleOnce(checkAliveInterval,"updateAlive");
-            } else if (command.equals("checkExpired")) {
+            if (command.equals("checkExpired")) {
                 checkExpired();
                 scheduleOnce(checkExpiredInterval, "checkExpired");
             }
@@ -47,25 +44,19 @@ public class UnityPeriodic extends UntypedActor {
         for (SyncObject syncObject : UnitySync.syncObjects.values()) {
             if (System.currentTimeMillis() - syncObject.lastUpdate > expireTime) {
                 UnitySync.syncObjects.remove(syncObject.id);
-                UnityEngineHandler handler = UnitySync.handlers.get(syncObject.id);
+                ActorRef handler = UnitySync.handlers.get(syncObject.id);
                 if (handler == null) {
                     logger.warn("Handler not found for syncObject "+syncObject.id);
                 } else {
-                    handler.componentRemoved(syncObject.id);
+                    HandlerMessage handlerMessage = new HandlerMessage(HandlerMessage.Type.ComponentRemove);
+                    handlerMessage.message = syncObject.id;
+                    handler.tell(handlerMessage,getSelf());
                     UnitySync.handlers.remove(syncObject.id);
                 }
             }
         }
     }
 
-    private void updateAlive() {
-        for (String key : UnityMessageHandler.regions.keySet()) {
-            RegionData data = UnityMessageHandler.regions.get(key);
-            if (System.currentTimeMillis() - data.lastUpdate > 5000L) {
-                UnityMessageHandler.regions.remove(key);
-            }
-        }
-    }
 
     public final void scheduleOnce(long delay, String message) {
         getContext()

@@ -3,6 +3,7 @@ package io.gamemachine.net.tcp;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.MathHelper;
 import io.gamemachine.core.NetMessage;
+import io.gamemachine.core.SystemActors;
 import io.gamemachine.messages.ClientMessage;
 import io.gamemachine.messages.UnityGameMessage;
 import io.gamemachine.net.udp.NettyUdpServerHandler.ClientAddress;
@@ -36,12 +37,9 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage>
 
     private static ConcurrentHashMap<Long, ClientAddress> clients = new ConcurrentHashMap<Long, ClientAddress>();
     private static final Logger logger = LoggerFactory.getLogger(TcpServerHandler.class);
-    private ActorSelection inbound;
-    private ActorSelection rpc;
 
     public TcpServerHandler() {
-        this.inbound = ActorUtil.getSelectionByName(Incoming.name);
-        this.rpc = ActorUtil.getSelectionByName(UnityMessageHandler.name);
+
     }
 
     public static void removeClient(long clientId) {
@@ -77,13 +75,13 @@ public class TcpServerHandler extends SimpleChannelInboundHandler<ClientMessage>
         }
 
         if (clientMessage.unityMessage != null) {
-            rpc.tell(clientMessage.unityMessage, null);
+            SystemActors.unityMessageActor.tell(clientMessage.unityMessage, null);
             return;
         }
 
         NetMessage netMessage = new NetMessage(NetMessage.TCP, ip, clientId);
         netMessage.clientMessage = clientMessage;
-        this.inbound.tell(netMessage, null);
+        SystemActors.incomingActor.tell(netMessage, null);
     }
 
     @Override

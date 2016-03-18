@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import io.gamemachine.messages.*;
+import io.gamemachine.messages.Character;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +17,6 @@ import akka.actor.ActorRef;
 import akka.contrib.pattern.DistributedPubSubMediator;
 import io.gamemachine.chat.ChatMediator;
 import io.gamemachine.config.AppConfig;
-import io.gamemachine.messages.Character;
-import io.gamemachine.messages.CharacterNotification;
-import io.gamemachine.messages.CharacterUpdate;
-import io.gamemachine.messages.Characters;
-import io.gamemachine.messages.GameMessage;
-import io.gamemachine.messages.ItemSlots;
-import io.gamemachine.messages.Vitals;
-import io.gamemachine.messages.Zone;
 import io.gamemachine.regions.ZoneService;
 
 public class CharacterService {
@@ -234,6 +228,16 @@ public class CharacterService {
         character.firstName = firstName;
         character.lastName = lastName;
 
+        Character.db().save(character);
+        characters.put(character.id, character);
+    }
+
+    public void setFaction(String characterId, Factions.Faction faction) {
+        Character character = find(characterId);
+        if (character == null) {
+            throw new RuntimeException("Character not found "+characterId);
+        }
+        character.faction = faction;
         Character.db().save(character);
         characters.put(character.id, character);
     }

@@ -105,7 +105,7 @@ public class CombatHandler extends GameMessageActor {
             return;
         }
 
-        logger.warning("Attack " + skillRequest.attackerCharacterId + " " + skillRequest.targetId + " skill " + skillRequest.playerSkill.id + " " + skillRequest.playerSkill.statusEffects);
+        //logger.warning("Attack " + skillRequest.attackerCharacterId + " " + skillRequest.targetId + " skill " + skillRequest.playerSkill.id + " " + skillRequest.playerSkill.statusEffects);
 
         if (skillRequest.relayOnly) {
             sendAttack(skillRequest, zone.name);

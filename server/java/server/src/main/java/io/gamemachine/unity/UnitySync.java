@@ -1,13 +1,12 @@
 package io.gamemachine.unity;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import io.gamemachine.unity.unity_engine.UnityEngineHandler;
+import akka.actor.ActorRef;
+import io.gamemachine.unity.unity_engine.HandlerMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,7 @@ public class UnitySync extends UntypedActor {
 
     public static Map<String, SyncObject> syncObjects = new ConcurrentHashMap<String, SyncObject>();
 
-    public static Map<String, UnityEngineHandler> handlers = new ConcurrentHashMap<String, UnityEngineHandler>();
+    public static Map<String, ActorRef> handlers = new ConcurrentHashMap<String, ActorRef>();
 
     @Override
     public void onReceive(Object message) throws Exception {
@@ -33,13 +32,16 @@ public class UnitySync extends UntypedActor {
             SyncObjects syncObjects = (SyncObjects) message;
             for (SyncObject syncObject : syncObjects.syncObject) {
                 set(syncObject);
-
             }
         }
     }
 
-    public static void registerHandler(UnityEngineHandler handler, String id) {
+    public static void registerHandler(ActorRef handler, String id) {
         handlers.put(id,handler);
+    }
+
+    public static void unregisterHandler(String id) {
+        handlers.remove(id);
     }
 
     public static Object get(String id) {
@@ -62,13 +64,20 @@ public class UnitySync extends UntypedActor {
     private void set(SyncObject syncObject) {
         syncObject.lastUpdate = System.currentTimeMillis();
 
-        UnityEngineHandler handler = handlers.get(syncObject.id);
-        if (handler != null) {
-            if (!syncObjects.containsKey(syncObject.id)) {
-                handler.componentAdded(syncObject);
-            } else {
-                handler.componentUpdated(syncObject);
-            }
+        ActorRef handler = handlers.get(syncObject.id);
+        if (handler == null) {
+            logger.warn("No handler for "+syncObject.id);
+            return;
+        }
+
+        if (!syncObjects.containsKey(syncObject.id)) {
+            HandlerMessage handlerMessage = new HandlerMessage(HandlerMessage.Type.ComponentAdd);
+            handlerMessage.message = syncObject;
+            handler.tell(handlerMessage,getSelf());
+        } else {
+            HandlerMessage handlerMessage = new HandlerMessage(HandlerMessage.Type.ComponentUpdate);
+            handlerMessage.message = syncObject;
+            handler.tell(handlerMessage,getSelf());
         }
 
         syncObjects.put(syncObject.id, syncObject);

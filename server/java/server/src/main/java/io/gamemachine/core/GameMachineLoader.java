@@ -63,10 +63,10 @@ public class GameMachineLoader {
     }
 
     public static void startIncoming(int nodeCount) {
-        actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(Incoming.class)), Incoming.name);
+        SystemActors.incomingActor = actorSystem.actorOf(new RoundRobinPool(nodeCount).props(Props.create(Incoming.class)), Incoming.name);
 
-        actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnityMessageHandler.class)), UnityMessageHandler.name);
-        actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnitySync.class)), UnitySync.name);
+        SystemActors.unityMessageActor = actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnityMessageHandler.class)), UnityMessageHandler.name);
+        SystemActors.unitySyncActor = actorSystem.actorOf(new RoundRobinPool(50).props(Props.create(UnitySync.class)), UnitySync.name);
 
         actorSystem.actorOf(Props.create(UnityPeriodic.class), UnityPeriodic.name);
         //actorSystem.actorOf(Props.create(UnitySync.class), UnitySync.name);

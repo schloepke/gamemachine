@@ -242,10 +242,10 @@ public class ActiveEffectHandler extends UntypedActor {
 
         int effectCountFromOrigin = effectCount(targetProxy.getEntityId(), originProxy.getEntityId(), statusEffect.id);
         if (!statusEffect.allowMultipleFromSameOrigin && effectCountFromOrigin >= 2) {
-            // logger.warning("Effect from same origin present");
+            logger.warning("Effect from same origin present");
             return 0;
         } else if (effectLimitReached(targetProxy.getEntityId(), statusEffect.id)) {
-            // logger.warning("Effect limit reached");
+            logger.warning("Effect limit reached");
             return 0;
         }
 
@@ -263,12 +263,14 @@ public class ActiveEffectHandler extends UntypedActor {
 
         if (statusEffect.type == StatusEffect.Type.AttributeDecrease) {
             if (targetProxy.get("health") <= 0) {
+                logger.warning("health = 0");
                 return 0;
             }
             if (targetProxy.getType() == Vitals.VitalsType.Character) {
                 // no damage to self unless category is Self
                 if (playerSkill.category != PlayerSkill.Category.Self
                         && targetProxy.getCharacterId().equals(originProxy.getCharacterId())) {
+                    logger.warning("Self Damage");
                     return 0;
                 }
 

@@ -11,6 +11,14 @@ public class Mathf {
 
     private static Random rand = new Random();
 
+    public static int toInt(double num) {
+        return (int) Math.round(num * 100l);
+    }
+
+    public static double ToDouble(int i) {
+        return i / 100D;
+    }
+
     public static double randomRange(double min, double max) {
         return rand.nextInt((int) ((max - min) + 1)) + min;
     }

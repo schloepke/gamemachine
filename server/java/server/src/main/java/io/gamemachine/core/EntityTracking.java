@@ -213,13 +213,18 @@ public class EntityTracking extends UntypedActor {
         List<TrackData> trackDatas;
 //		boolean isAgentController = (player.role == Player.Role.AgentController);
 //
-		if (neighborType != null && neighborType == EntityType.All) {
-			trackDatas = grid.getAll();
+		if (neighborType != null) {
+            if (neighborType == EntityType.AllPlayers) {
+                trackDatas = grid.getAllOfType(EntityType.Player);
+            } else {
+                trackDatas = grid.getAll();
+            }
+
 		} else {
             trackDatas = grid.neighbors(player.id, x, z, neighborType, neighborsFlag);
 		}
 
-        // Add boats
+        // ComponentAdd boats
         Grid boatGrid = GridService.getInstance().getPlayerGrid("boats", player.id);
         trackDatas.addAll(boatGrid.neighbors(player.id, x, z, TrackData.EntityType.Boat, neighborsFlag));
 

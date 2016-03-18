@@ -310,7 +310,6 @@ message GmVector3 {
   optional sint32 vertice = 7;
 }
 
-
 message GridVerticle {
   required float x = 1;
   required float y = 2;

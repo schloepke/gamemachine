@@ -9,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.PriorityBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import com.sun.media.jfxmedia.track.Track;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -206,6 +207,33 @@ public class Grid {
         return cells;
     }
 
+    public ArrayList<TrackData> neighbors(int px, int pz, EntityType entityType) {
+        ArrayList<TrackData> result;
+        Collection<TrackData> trackDatas;
+        result = new ArrayList<TrackData>();
+
+        int x = (px + goffset) / this.scaleFactor;
+        int z = (pz + goffset) / this.scaleFactor;
+        Set<Integer> cells = cellsWithinBounds(x, z);
+        for (int cell : cells) {
+            trackDatas = gridValuesInCell(cell);
+            if (trackDatas == null) {
+                continue;
+            }
+
+            for (TrackData trackData : trackDatas) {
+                if (trackData == null) {
+                    continue;
+                }
+
+                if (entityType == TrackData.EntityType.Any || trackData.entityType == entityType) {
+                    result.add(trackData);
+                }
+            }
+        }
+        return result;
+    }
+
     public ArrayList<TrackData> neighbors(String playerId, int px, int pz, EntityType entityType, int optsFlag) {
         ArrayList<TrackData> result;
         Collection<TrackData> trackDatas;
@@ -325,6 +353,21 @@ public class Grid {
             return null;
         }
         return neighbors(playerId, gridValue.x, gridValue.z, entityType, optsFlag);
+    }
+
+    public List<TrackData> getAllOfType(TrackData.EntityType entityType) {
+        List<TrackData> trackdatas = new ArrayList<TrackData>();
+        for (TrackData td : objectIndex.values()) {
+            if (td.entityType != entityType) {
+                continue;
+            }
+            Integer shortId = getShortId(td.id);
+            if (shortId != null) {
+                td.shortId = shortId;
+            }
+            trackdatas.add(td);
+        }
+        return trackdatas;
     }
 
     public List<TrackData> getAll() {
