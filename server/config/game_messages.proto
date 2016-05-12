@@ -1,11 +1,16 @@
 
-// Used to by the entity tracking system to attack additional fields to your
-// tracking updates.  You can change any of the fields in TrackData to suit your
-// needs, but do NOT remove the message definition!
-
 
 local_message Vectors {
   repeated GmVector3 vector = 1;
+}
+
+local_message NpcRequest {
+  enum Command {
+    None = 0;
+    Convert = 1;
+  }
+  optional Command command = 1;
+  optional string characterId = 2;
 }
 
 local_message NpcUpdate {
@@ -25,7 +30,7 @@ local_message NpcUpdate {
   optional int32 health = 3;
   optional bool isDead = 4;
   optional Factions.Faction faction = 5;
-  optional string groupId = 6;
+  optional NpcGroupConfig groupConfig = 6;
   optional string leaderId = 7;
 }
 
@@ -42,7 +47,7 @@ local_message NpcName {
   optional bool taken = 5;
 }
 
-local_message NpcData {
+local_message NpcSyncData {
   enum Action {
     Waypoint = 0;
     Attack = 1;
@@ -68,14 +73,29 @@ local_message NpcData {
   optional float combatRange = 11;
   optional AiType aiType = 12;
   optional string leaderId = 13;
+  optional string prefab = 14;
+  optional float playerSpeed = 15;
 }
 
-local_message NpcGroupData {
-  repeated NpcData npcData = 1;
+local_message NpcGroupConfig {
+  repeated NpcConfig npcConfig = 1;
   optional string leader = 3;
   optional Factions.Faction faction = 4;
-  optional string referenceId = 5;
   optional string id = 6;
+  optional string ownerId = 7;
+  optional string region = 8;
+}
+
+local_persistent_message NpcGroupDatas {
+  optional string id = 1;
+  optional int32 recordId = 2;
+  optional string data = 3;
+}
+
+local_message NpcConfig {
+  optional string id = 1;
+  optional string referenceId = 2;
+  optional string prefab = 3;
 }
 
 local_message GmGameObject {
@@ -86,11 +106,11 @@ local_message GmGameObject {
 local_message SyncObject {
   enum Type {
     None = 0;
-    NpcData = 1;
+    NpcSyncData = 1;
   }
   
   optional Type type = 1;
-  optional NpcData npcData = 2;
+  optional NpcSyncData npcSyncData = 2;
   optional string id = 3;
   optional int64 lastUpdate = 4;
 }
@@ -138,12 +158,13 @@ local_message UnityRegionUpdate {
 }
 
 local_message GroupSpawnRequest {
-  optional NpcGroupData npcGroupData = 1;
+  optional NpcGroupConfig npcGroupConfig = 1;
   optional string region = 3;
 }
 
+
 local_message SpawnRequest {
-  optional NpcData npcData = 1;
+  optional NpcConfig npcConfig = 1;
   optional string groupReferenceId = 2;
   optional string region = 3;
 }
@@ -772,6 +793,7 @@ local_persistent_message Character {
   optional string ownerId = 23;
   optional string firstName = 24;
   optional string lastName = 25;
+  optional string groupId = 26;
 }
 
 local_message Factions {
@@ -1003,6 +1025,7 @@ message TrackData {
   optional float velZ = 25;
   optional int32 hidden = 27;
   optional int32 yaxis = 28;
+  optional int32 doNotSet = 29;
 }
 
 local_message UserDefinedData {
@@ -1460,6 +1483,7 @@ message GameMessage {
   optional FactionStanding factionStanding = 25;
   optional FactionStandings factionStandings = 26;
   optional BoatAction boatAction = 27;
+  optional NpcRequest npcRequest = 28;
 }
 
 message GameMessages {

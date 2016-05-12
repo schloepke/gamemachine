@@ -1,4 +1,15 @@
 
+DROP TABLE IF EXISTS npc_group_datas;
+CREATE TABLE npc_group_datas (
+  id bigserial NOT NULL,
+
+  npc_group_datas_id TEXT DEFAULT NULL,
+
+  npc_group_datas_data TEXT DEFAULT NULL,
+
+  CONSTRAINT npc_group_datas_pkey PRIMARY KEY (id)
+);
+alter table npc_group_datas owner to gamemachine;
 DROP TABLE IF EXISTS boats;
 CREATE TABLE boats (
   id bigserial NOT NULL,
@@ -296,6 +307,8 @@ CREATE TABLE characters (
   character_first_name TEXT DEFAULT NULL,
 
   character_last_name TEXT DEFAULT NULL,
+
+  character_group_id TEXT DEFAULT NULL,
 
      zone_zone_name TEXT DEFAULT NULL,
     

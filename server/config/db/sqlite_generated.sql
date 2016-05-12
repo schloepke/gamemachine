@@ -1,4 +1,12 @@
 
+CREATE TABLE npc_group_datas (
+
+  npc_group_datas_id varchar(1024) DEFAULT NULL,
+
+  npc_group_datas_data varchar(1024) DEFAULT NULL,
+
+id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL
+);
 CREATE TABLE boats (
 
   boat_id varchar(1024) DEFAULT NULL,
@@ -270,6 +278,8 @@ CREATE TABLE characters (
   character_first_name varchar(1024) DEFAULT NULL,
 
   character_last_name varchar(1024) DEFAULT NULL,
+
+  character_group_id varchar(1024) DEFAULT NULL,
 
       zone_zone_name varchar(1024) DEFAULT NULL,
     

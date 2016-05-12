@@ -191,7 +191,9 @@ public class EntityTracking extends UntypedActor {
         }
 
         if (player.role == Player.Role.Player || player.role == Player.Role.AgentController) {
-            setEntityLocation(player.id, grid, trackData);
+            if (trackData.doNotSet == 0) {
+                setEntityLocation(player.id, grid, trackData);
+            }
         }
 
 

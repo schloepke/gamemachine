@@ -13,11 +13,9 @@ import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import akka.actor.ActorSelection;
 import akka.actor.UntypedActor;
-import io.gamemachine.core.ActorUtil;
 import io.gamemachine.messages.UnityMessage;
-import plugins.npc.NpcManager;
+import io.gamemachine.unity.unity_engine.NpcManager;
 
 
 public class UnityMessageHandler extends UntypedActor {
@@ -42,7 +40,7 @@ public class UnityMessageHandler extends UntypedActor {
 
                 updateRegionData(unityMessage.unityRegionUpdate);
             } else if (unityMessage.groupSpawnRequest != null) {
-                NpcManager.spawn(unityMessage.groupSpawnRequest);
+                NpcManager.saveSpawnGroup(unityMessage.groupSpawnRequest);
             }
         }
     }

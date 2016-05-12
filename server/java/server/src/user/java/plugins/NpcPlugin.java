@@ -3,7 +3,7 @@ package plugins;
 import io.gamemachine.core.ActorUtil;
 import io.gamemachine.core.Plugin;
 import io.gamemachine.routing.GameMessageRoute;
-import plugins.npc.NpcManager;
+import io.gamemachine.unity.unity_engine.NpcManager;
 
 public class NpcPlugin extends Plugin {
 

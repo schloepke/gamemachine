@@ -1,15 +1,12 @@
 package io.gamemachine.unity.unity_engine;
 
+import akka.actor.ActorRef;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.grid.GridService;
-import io.gamemachine.messages.NpcData;
-import io.gamemachine.messages.NpcGroupData;
 
 import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -33,8 +30,9 @@ public class RegionData {
     public Vector3 position;
     public float size;
     public Status status;
-    public List<NpcGroupData> gmNpcGroups = new ArrayList<>();
-    public List<NpcData> gmNpcs = new ArrayList<>();
+
+    private Map<String, ActorRef> npcActors = new ConcurrentHashMap<>();
+    private Map<String, Npc> npcs = new ConcurrentHashMap<>();
 
     static {
 
@@ -48,6 +46,38 @@ public class RegionData {
         data.size = size;
         data.status = Status.Inactive;
         regions.put(data.region,data);
+    }
+
+    public Collection<Npc> getNpcs() {
+        return npcs.values();
+    }
+
+    public void addNpc(Npc npc) {
+        npcs.put(npc.id,npc);
+    }
+
+    public Npc getNpc(String id) {
+        return npcs.get(id);
+    }
+
+    public void clearNpcs() {
+        npcs.clear();
+    }
+
+    public Collection<ActorRef> getNpcActors() {
+        return npcActors.values();
+    }
+
+    public void addNpcActor(String id, ActorRef ref) {
+        npcActors.put(id,ref);
+    }
+
+    public ActorRef getNpcActor(String id) {
+        return npcActors.get(id);
+    }
+
+    public void clearNpcActors() {
+        npcActors.clear();
     }
 
     public static Grid getPlayerGrid(String region) {
@@ -78,6 +108,15 @@ public class RegionData {
 
     public static Collection<RegionData> getRegions() {
         return regions.values();
+    }
+
+    public static RegionData getRegionByZone(String zone) {
+        for (RegionData regionData : regions.values()) {
+            if (regionData.zone.equals(zone)) {
+                return regionData;
+            }
+        }
+        return null;
     }
 
     public static RegionData getRegionData(String region) {

@@ -1,4 +1,4 @@
-package plugins.npc;
+package io.gamemachine.unity.unity_engine;
 
 import io.gamemachine.core.Plugin;
 

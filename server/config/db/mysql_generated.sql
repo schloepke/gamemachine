@@ -1,4 +1,14 @@
 
+DROP TABLE IF EXISTS npc_group_datas;
+CREATE TABLE `npc_group_datas` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+
+  npc_group_datas_id varchar(256) DEFAULT NULL,
+
+  npc_group_datas_data varchar(256) DEFAULT NULL,
+
+  PRIMARY KEY(`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS boats;
 CREATE TABLE `boats` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -288,6 +298,8 @@ CREATE TABLE `characters` (
   character_first_name varchar(256) DEFAULT NULL,
 
   character_last_name varchar(256) DEFAULT NULL,
+
+  character_group_id varchar(256) DEFAULT NULL,
 
       zone_zone_name varchar(256) DEFAULT NULL,
     

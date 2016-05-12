@@ -1,4 +1,4 @@
-package plugins.npc;
+package io.gamemachine.unity.unity_engine;
 
 import io.gamemachine.config.AppConfig;
 import io.gamemachine.core.CharacterService;
@@ -6,7 +6,6 @@ import io.gamemachine.core.PlayerService;
 import io.gamemachine.messages.*;
 import io.gamemachine.messages.Character;
 import io.gamemachine.regions.ZoneService;
-import io.gamemachine.unity.unity_engine.RegionData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

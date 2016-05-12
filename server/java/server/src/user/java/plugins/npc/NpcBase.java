@@ -17,7 +17,6 @@ import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import io.gamemachine.util.Mathf;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
-import plugins.npc.path.Waypoint;
 import scala.concurrent.duration.Duration;
 
 import java.util.Random;
@@ -64,7 +63,8 @@ public class NpcBase extends UntypedActor {
     public NpcBase(String characterId, String region) {
         id = characterId;
         this.region = region;
-        npc = Npc.npcs.get(id);
+        RegionData regionData = RegionData.getRegionData(region);
+        npc = regionData.getNpc(id);
 
         rand = new Random();
         state = State.Idle;
@@ -270,7 +270,7 @@ public class NpcBase extends UntypedActor {
             return;
         }
 
-        npc.setPosition(npc.id,position);
+        npc.position = position;
         updateTarget();
 
         move();
@@ -285,7 +285,7 @@ public class NpcBase extends UntypedActor {
 
     protected void updateTarget() {
 
-        if (moveTarget == Vector3.zero || targetReached) {
+       /* if (moveTarget == Vector3.zero || targetReached) {
             if (path.size() > 0) {
                 moveTarget = path.poll();
                 return;
@@ -320,7 +320,7 @@ public class NpcBase extends UntypedActor {
                 return;
             }
             findPath(position,wanted);
-        }
+        }*/
     }
 
     protected Vector3 randomMoveInRegion(double distance) {
@@ -366,9 +366,9 @@ public class NpcBase extends UntypedActor {
     }
 
     public void componentUpdated(Object object) {
-        if (object instanceof NpcData) {
-            NpcData gmNpc = (NpcData) object;
-            //position = Vector3.fromGmVector3(gmNpc.transform.position);
+        if (object instanceof NpcSyncData) {
+            NpcSyncData gmNpc = (NpcSyncData) object;
+            //position = Vector3.fromGmVector3(npcSyncData.transform.position);
         }
     }
 

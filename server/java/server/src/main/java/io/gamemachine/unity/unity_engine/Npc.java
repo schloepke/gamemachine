@@ -1,8 +1,6 @@
-package plugins.npc;
+package io.gamemachine.unity.unity_engine;
 
-import akka.actor.ActorRef;
 import com.google.common.base.Strings;
-import io.gamemachine.messages.Character;
 import io.gamemachine.messages.Factions;
 import io.gamemachine.unity.unity_engine.unity_types.Vector3;
 import plugins.npc.path.WaypointRoute;
@@ -21,8 +19,6 @@ public class Npc {
         Leash
     }
 
-    public static Map<String,Npc> npcs = new ConcurrentHashMap<>();
-
     public NpcGroup group;
     public String id;
     public String leader;
@@ -30,7 +26,8 @@ public class Npc {
     public Vector3 position;
     public Vector3 target;
     public WaypointRoute route;
-    Factions.Faction faction;
+    public Factions.Faction faction;
+    public String ownerId;
 
     public boolean isLeader() {
         return id.equals(leader);
@@ -40,24 +37,8 @@ public class Npc {
         return !Strings.isNullOrEmpty(leader) && !id.equals(leader);
     }
 
-    public Npc getLeader() {
-        return npcs.get(leader);
-    }
-
     public boolean hasRoute() {
         return route != null;
-    }
-
-    public static void setPosition(String id, Vector3 position) {
-        npcs.get(id).position = position;
-    }
-
-    public static Vector3 getPosition(String id) {
-        return npcs.get(id).position;
-    }
-
-    public static void setTarget(String id, Vector3 position) {
-        npcs.get(id).target = position;
     }
 
     public String getActorName() {

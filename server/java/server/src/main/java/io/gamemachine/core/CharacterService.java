@@ -242,6 +242,26 @@ public class CharacterService {
         characters.put(character.id, character);
     }
 
+    public void setPrefab(String characterId, String prefab) {
+        Character character = find(characterId);
+        if (character == null) {
+            throw new RuntimeException("Character not found "+characterId);
+        }
+        character.gameEntityPrefab = prefab;
+        Character.db().save(character);
+        characters.put(character.id, character);
+    }
+
+    public void setRegion(String characterId, String region) {
+        Character character = find(characterId);
+        if (character == null) {
+            throw new RuntimeException("Character not found "+characterId);
+        }
+        character.region = region;
+        Character.db().save(character);
+        characters.put(character.id, character);
+    }
+
     public void setGuild(Character character, String guildId) {
         character.guildId = guildId;
         Character.db().save(character);

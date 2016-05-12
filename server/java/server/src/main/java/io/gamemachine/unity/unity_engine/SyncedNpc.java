@@ -1,15 +1,16 @@
-package plugins.npc;
+package io.gamemachine.unity.unity_engine;
 
 import akka.actor.UntypedActor;
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
 import com.google.common.base.Strings;
 import io.gamemachine.config.AppConfig;
+import io.gamemachine.core.CharacterService;
 import io.gamemachine.grid.Grid;
 import io.gamemachine.messages.*;
+import io.gamemachine.messages.Character;
 import io.gamemachine.regions.ZoneService;
 import io.gamemachine.unity.UnitySync;
-import io.gamemachine.unity.unity_engine.*;
 import io.gamemachine.unity.unity_engine.engine_results.DestroyResult;
 import io.gamemachine.unity.unity_engine.engine_results.InstantiateResult;
 import io.gamemachine.unity.unity_engine.engine_results.UnityEngineResult;
@@ -19,6 +20,7 @@ import plugins.core.combat.CombatHandler;
 import plugins.core.combat.PlayerSkillHandler;
 import plugins.core.combat.VitalsHandler;
 import plugins.core.combat.VitalsProxy;
+import plugins.npc.InpcCombatAi;
 import scala.concurrent.duration.Duration;
 
 import java.util.Random;
@@ -57,7 +59,7 @@ public class SyncedNpc extends UntypedActor {
     protected long lastPathRequest;
     protected boolean targetReached = false;
     protected InpcCombatAi combatAi;
-    protected NpcData gmNpc;
+    protected NpcSyncData npcSyncData;
 
     public enum State {
         Idle,
@@ -68,7 +70,8 @@ public class SyncedNpc extends UntypedActor {
     public SyncedNpc(String characterId, String region) {
         id = characterId;
         this.region = region;
-        npc = Npc.npcs.get(id);
+        RegionData regionData = RegionData.getRegionData(region);
+        npc = regionData.getNpc(id);
 
         rand = new Random();
         state = State.Idle;
@@ -187,7 +190,7 @@ public class SyncedNpc extends UntypedActor {
             return;
         }
 
-        npc.setPosition(npc.id,position);
+        npc.position = position;
         //updateTarget();
 
         //move();
@@ -203,11 +206,27 @@ public class SyncedNpc extends UntypedActor {
     }
 
     protected void combatUpdate() {
-        if (gmNpc == null) {
+        if (npcSyncData == null) {
             return;
         }
 
-        if (Strings.isNullOrEmpty(gmNpc.combatTarget)) {
+        if (Strings.isNullOrEmpty(npcSyncData.combatTarget)) {
+            return;
+        }
+
+
+        Character character = CharacterService.instance().find(npcSyncData.combatTarget);
+        if (character == null) {
+            return;
+        }
+
+        VitalsProxy targetVitals = VitalsHandler.get(character.playerId, ZoneService.defaultZone().name);
+        if (targetVitals.isDead()) {
+            return;
+        }
+
+        TrackData trackData = grid.get(character.playerId);
+        if (trackData == null) {
             return;
         }
 
@@ -215,28 +234,48 @@ public class SyncedNpc extends UntypedActor {
         GameMessage gameMessage = new GameMessage();
         gameMessage.skillRequest = request;
 
-        //logger.warning("Attack "+gmNpc.combatTarget);
+        //logger.warning("Attack "+npcSyncData.combatTarget);
         //logger.warning("Health "+vitalsProxy.get("health"));
         CombatHandler.tell(gameMessage,id,CombatHandler.name);
     }
 
     private SkillRequest createAttack() {
+        GmTarget target = new GmTarget();
+        target.characterId = npcSyncData.combatTarget;
+        target.type = GmTarget.Type.GameEntity;
+
         SkillRequest skillRequest = new SkillRequest();
+        skillRequest.target = target;
         skillRequest.originEntityId = id;
         skillRequest.attackerCharacterId = id;
         skillRequest.playerSkillId = "Hammer blow";
-        skillRequest.targetId = gmNpc.combatTarget;
+        skillRequest.targetId = npcSyncData.combatTarget;
         skillRequest.playerSkill = PlayerSkillHandler.getTemplate(skillRequest.playerSkillId);
+
+
+
+
         return skillRequest;
     }
 
     public void sendSync() {
+        SyncComponentMessage msg = getSyncMessage();
+        engine.syncComponentMessage(msg);
+    }
+
+    private void sendConvert() {
+        SyncComponentMessage msg = getSyncMessage();
+        msg.npcUpdate.command = NpcUpdate.Command.ChangeGroup;
+        engine.syncComponentMessage(msg);
+    }
+
+    private SyncComponentMessage getSyncMessage() {
         SyncComponentMessage msg = new SyncComponentMessage();
         msg.id = id;
         msg.npcUpdate = new NpcUpdate();
         msg.npcUpdate.health = vitalsProxy.get("health");
         msg.npcUpdate.isDead = vitalsProxy.isDead();
-        engine.syncComponentMessage(msg);
+        return msg;
     }
 
     @Override
@@ -251,6 +290,14 @@ public class SyncedNpc extends UntypedActor {
                 componentUpdated(handlerMessage.message);
             } else if (handlerMessage.type == HandlerMessage.Type.ComponentRemove) {
                 componentRemoved((String)handlerMessage.message);
+            }
+            return;
+        }
+
+        if (message instanceof NpcRequest) {
+            NpcRequest npcRequest = (NpcRequest)message;
+            if (npcRequest.command == NpcRequest.Command.Convert) {
+
             }
             return;
         }
@@ -296,14 +343,21 @@ public class SyncedNpc extends UntypedActor {
     public void componentUpdated(Object object) {
         SyncObject syncObject = (SyncObject)object;
 
-        if (syncObject.npcData != null) {
-            gmNpc = syncObject.npcData;
-            position = Vector3.fromGmVector3(gmNpc.transform.position);
+        if (syncObject.npcSyncData != null) {
+            npcSyncData = syncObject.npcSyncData;
+            position = Vector3.fromGmVector3(npcSyncData.transform.position);
+            trackData.speed = Mathf.toInt(npcSyncData.playerSpeed);
+            trackData.userDefinedData.userdefInt1 = Mathf.toInt(npcSyncData.heading);
+
+            if (npc.group.leader == npc) {
+                //logger.warning(position.toString());
+                //logger.warning(npcSyncData.moveTarget);
+            }
         }
     }
 
     public void componentRemoved(String objectId) {
-        gmNpc = null;
+        npcSyncData = null;
         setState(State.Idle);
         logger.warning("Component removed " + objectId);
     }

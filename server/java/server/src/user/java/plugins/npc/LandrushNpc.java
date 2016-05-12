@@ -3,7 +3,7 @@ package plugins.npc;
 
 import akka.event.Logging;
 import akka.event.LoggingAdapter;
-import plugins.npc.NpcBase;
+import io.gamemachine.unity.unity_engine.SyncedNpc;
 
 public class LandrushNpc extends SyncedNpc {
 
