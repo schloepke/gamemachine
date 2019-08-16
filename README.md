@@ -1,3 +1,9 @@
+# Game Machine is basically dead, if nobody has noticed.
+When I created Game Machine it wasn't possible to do it in .NET, the tools were not there.  But times have changed, and it makes more sense in most cases to use .NET.
+
+My suggestion for smaller studios and teams is use Orleans.  Teams with skilled backend engineers who are funded or established, there are some advantages to Akka.NET.  The basic difference is Orleans is easy, but slow.  Akka.NET requires a decent amount of up front architecture to be built, but starts to be more interesting at scale and over a longer period of use.
+
+
 # Welcome to Game Machine
 
 Game Machine is a modern platform for large scale realtime games such as mmo's and moba's.   Massive scalability and ease of use make it the most productive platform for creating complex multiplayer games.  
